@@ -31,13 +31,59 @@ class sqldb extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *create tables with fields from json schema
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-   
+        #get schema from jsonValidator
+        $json = app('App\Http\Controllers\jsonValidator')->index();
+        $json = json_decode(json_encode($json), true);
+        $json = $json['resource'][0]; 
+        print_r($json['field']);  
+        if($json['connector'][0]['database'] == 'sqlite'){
+
+            $json['connector'][0]['database'] =  __DIR__.
+            '/../../../database//devless-rec.sqlite3';
+
+        }
+         $conn = array(
+            'driver'    => $json['connector'][0]['driver'],
+            'host'      => $json['connector'][0]['host'],
+            'database'  => $json['connector'][0]['database'],
+            'username'  => $json['connector'][0]['username'],
+            'password'  => $json['connector'][0]['password'],
+            'charset'   => $json['connector'][0]['charset'],
+            'collation' => $json['connector'][0]['collation'],
+            'prefix'    => $json['connector'][0]['prefix'],
+            );
+
+         die();    
+         $newtableschema = array(
+            'tablename' => $json['name'],
+           'colnames' => array('One', 'Two', 'Three', 'Four')
+           );
+    //      try{
+    //          \Schema::connection('DB_CONFIG_NAME')->create($newtableschema['tablename'], function($table) use($newtableschema) {
+
+    // // So now you can access the $newtableschema variable here
+    // // Rest of your code...
+    //             $table->string('name');
+    //         });
+    //      }
+    //      catch(\Exception $e){
+    //         echo $e->getMessage().'<br>';
+    //         print "*****************************";
+    //         print_r($e->getCode()).'<br>';
+    //         print "*****************************";
+    //         print_r($e->getTrace()).'<br>';
+    //         print "*****************************";  
+
+    //     }
+    
+
 
 }
 
@@ -50,6 +96,13 @@ class sqldb extends Controller
     public function show($id)
     {
         //
+          \Config::set('database.connections.DB_CONFIG_NAME', $conn);
+
+         $DB = \DB::connection('DB_CONFIG_NAME');
+         $users = $DB->table('role')->join('app','role.id','=','app.role_id')->select('role.*','app.*')->get() ;
+
+         $users = (array)$users;
+         echo  json_encode($users).",";
     }
 
     /**

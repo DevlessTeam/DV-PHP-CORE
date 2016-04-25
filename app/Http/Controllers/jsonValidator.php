@@ -9,6 +9,15 @@ use App\Http\Controllers\Controller;
 
 class jsonValidator extends Controller
 {
+
+    public $ERROR_HEAP = [
+    'Maximum stack depth exceeded',
+    'Underflow or the modes mismatch',
+    'Unexpected control character found',
+    'Syntax error, malformed JSON',
+    'Malformed UTF-8 characters, possibly incorrectly encoded',
+    'Unknown error',
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -18,102 +27,106 @@ class jsonValidator extends Controller
     {
         //
         $JSON[] = <<<EOT
-[  
-   {  
-      "id":3,
-      "name":"file_manager",
-      "description":"An application for managing file services.",
-      "is_active":1,
-      "created_date":"2016-04-14 10:03:51",
-      "last_modified_date":"2016-04-14 10:03:51",
-      "created_by_id":null,
-      "last_modified_by_id":1,
-      "api_key":"b5cb82af7b5d4130f36149f90aa2746782e59a872ac70454ac188743cb55b0ba",
-      "type":3,
-      "path":"filemanager\/index.html",
-      "url":null,
-      "storage_service_id":null,
-      "storage_container":null,
-      "requires_fullscreen":0,
-      "allow_fullscreen_toggle":1,
-      "toggle_location":"top",
-      "role_id":1
-   },
-   {  
-      "id":4,
-      "name":"add_angular2",
-      "description":"An address book app for Angular 2 showing user registration, user login, and CRUD.",
-      "is_active":1,
-      "created_date":"2016-04-14 10:04:16",
-      "last_modified_date":"2016-04-14 10:04:16",
-      "created_by_id":1,
-      "last_modified_by_id":1,
-      "api_key":"c9ef892c38f3828609a3714dc369e3b8127796f6953b1ed4da01b093c4f7f9e5",
-      "type":1,
-      "path":"add_angular2\/index.html",
-      "url":"index.html",
-      "storage_service_id":3,
-      "storage_container":"AddAngular2",
-      "requires_fullscreen":0,
-      "allow_fullscreen_toggle":1,
-      "toggle_location":"top",
-      "role_id":1
-   },
-   {  
-      "id":5,
-      "name":"Devless_Ecommerce_Module",
-      "description":"Manage your ecommerce platform with ease",
-      "is_active":1,
-      "created_date":"2016-04-14 14:05:35",
-      "last_modified_date":"2016-04-14 14:05:35",
-      "created_by_id":1,
-      "last_modified_by_id":1,
-      "api_key":"3fc57b743aa359814fcfa466b8057897e8ecf201d1c7782ecb94692fb1db89ee",
-      "type":1,
-      "path":"ecommerce",
-      "url":null,
-      "storage_service_id":3,
-      "storage_container":"ecommerce",
-      "requires_fullscreen":0,
-      "allow_fullscreen_toggle":1,
-      "toggle_location":"top",
-      "role_id":1
-   }
-]
-EOT;
-//var_dump(json_decode($JSON));
-var_dump($JSON[0]);
-foreach ($JSON as $string) {
-    json_decode($string);
 
-    switch (json_last_error()) {
-        case JSON_ERROR_NONE:
-            echo ' - No errors';
-        break;
-        case JSON_ERROR_DEPTH:
-            echo ' - Maximum stack depth exceeded';
-        break;
-        case JSON_ERROR_STATE_MISMATCH:
-            echo ' - Underflow or the modes mismatch';
-        break;
-        case JSON_ERROR_CTRL_CHAR:
-            echo ' - Unexpected control character found';
-        break;
-        case JSON_ERROR_SYNTAX:
-            echo ' - Syntax error, malformed JSON';
-        break;
-        case JSON_ERROR_UTF8:
-            echo ' - Malformed UTF-8 characters, possibly incorrectly encoded';
-        break;
-        default:
-            echo ' - Unknown error';
-        break;
-    }
-
-    echo PHP_EOL;
+{  
+   "resource":[  
+      {  
+         "name":"orders",
+         "description":null,
+         "primary_key":null,
+         "field":[  
+            {  
+               "name":"customer",
+               "type":"reference",
+               "db_type":"integer",
+               "length":null,
+               "precision":null,
+               "scale":null,
+               "default":null,
+               "required":true,
+               "allow_null":false,
+               "fixed_length":false,
+               "supports_multibyte":false,
+               "is_primary_key":false,
+               "is_unique":false,
+               "is_index":false,
+               "is_foreign_key":true,
+               "ref_table":"customers",
+               "ref_fields":"id",
+               "validation":null
+            }
+         ],
+         "related":[  
+            {  
+               "name":"products_by_product",
+               "always_fetch":false,
+               "type":"belongs_to",
+               "field":"product",
+               "ref_table":"products",
+               "ref_fields":"id"
+            }
+         ],
+         "connector":[  
+            {  
+               "driver":"mysql",
+               "host":"127.0.0.1",
+               "database":"devless-rec",
+               "username":"root",
+               "password":"password",
+               "charset":"utf8",
+               "collation":"utf8_unicode_ci",
+               "prefix":""
+            }
+         ],
+         "access":31
+      }
+   ]
 }
 
+EOT;
+//var_dump(json_decode($JSON));
+#var_dump($JSON[0]);
+$ERROR_STACK = 0; 
+foreach ($JSON as $string) {
+    json_decode($string);
+    switch (json_last_error()) {
+        case JSON_ERROR_NONE:
+            #echo ' - No errors';
+        break;
+        case JSON_ERROR_DEPTH:
+            #echo ' - Maximum stack depth exceeded';
+            $ERROR_STACK = 1;
+        break;
+        case JSON_ERROR_STATE_MISMATCH:
+            #echo ' - Underflow or the modes mismatch';
+            $ERROR_STACK = 2;
+        break;
+        case JSON_ERROR_CTRL_CHAR:
+            #echo ' - Unexpected control character found';
+            $ERROR_STACK = 3;
+        break;
+        case JSON_ERROR_SYNTAX:
+            #echo ' - Syntax error, malformed JSON';
+            $ERROR_STACK = 4;
+        break;
+        case JSON_ERROR_UTF8:
+            #echo ' - Malformed UTF-8 characters, possibly incorrectly encoded';
+            $ERROR_STACK = 5;
+        break;
+        default:
+            $ERROR_STACK = 6;
+        break;
     }
+
+    #echo PHP_EOL;
+ }
+
+   if($ERROR_STACK == 0 ){
+          return json_decode($JSON[0]);
+    }else{
+        return $this->ERROR_HEAP[$ERROR_STACK];
+    }
+}
 
     /**
      * Show the form for creating a new resource.
@@ -145,7 +158,7 @@ foreach ($JSON as $string) {
     public function show($id)
     {
         //
-        # silence is golden 
+
     }
 
     /**
