@@ -145,6 +145,7 @@ foreach ($JSON as $string) {
     public function show($id)
     {
         //
+        # silence is golden 
     }
 
     /**
