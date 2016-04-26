@@ -41,14 +41,17 @@ class sqldb extends Controller
         #get schema from jsonValidator
         $json = app('App\Http\Controllers\jsonValidator')->index();
         $json = json_decode(json_encode($json), true);
-        $json = $json['resource'][0]; 
-        print_r($json['field']);  
+        $
+        $json = $json['resource'][0];  
+        #check json status and structure before processing 
+       print  strlen(sizeof($json['field']));
         if($json['connector'][0]['database'] == 'sqlite'){
 
             $json['connector'][0]['database'] =  __DIR__.
             '/../../../database//devless-rec.sqlite3';
 
         }
+        #connectors mysql pgsql sqlsrv sqlite
          $conn = array(
             'driver'    => $json['connector'][0]['driver'],
             'host'      => $json['connector'][0]['host'],
@@ -60,28 +63,14 @@ class sqldb extends Controller
             'prefix'    => $json['connector'][0]['prefix'],
             );
 
-         die();    
+         die(); 
+
+         #foreach()   
+         $columns = [];
          $newtableschema = array(
             'tablename' => $json['name'],
            'colnames' => array('One', 'Two', 'Three', 'Four')
            );
-    //      try{
-    //          \Schema::connection('DB_CONFIG_NAME')->create($newtableschema['tablename'], function($table) use($newtableschema) {
-
-    // // So now you can access the $newtableschema variable here
-    // // Rest of your code...
-    //             $table->string('name');
-    //         });
-    //      }
-    //      catch(\Exception $e){
-    //         echo $e->getMessage().'<br>';
-    //         print "*****************************";
-    //         print_r($e->getCode()).'<br>';
-    //         print "*****************************";
-    //         print_r($e->getTrace()).'<br>';
-    //         print "*****************************";  
-
-    //     }
     
 
 
@@ -139,3 +128,23 @@ class sqldb extends Controller
         //
     }
 }
+
+
+//      try{
+    //          \Schema::connection('DB_CONFIG_NAME')->create($newtableschema['tablename'], function($table) use($newtableschema) {
+
+    // // So now you can access the $newtableschema variable here
+    // // Rest of your code...
+    //             $table->string('name');
+    //         });
+    //      }
+    //      catch(\Exception $e){
+    //         echo $e->getMessage().'<br>';
+    //         print "*****************************";
+    //         print_r($e->getCode()).'<br>';
+    //         print "*****************************";
+    //         print_r($e->getTrace()).'<br>';
+    //         print "*****************************";  
+
+    //     }
+    
