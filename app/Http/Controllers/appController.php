@@ -17,6 +17,8 @@ class appController extends Controller
     public function index()
     {
         //
+        #dd("i stopped here");
+        return "";
     }
 
     /**

@@ -7,7 +7,7 @@ use Closure;
 class AfterMiddleware
 {
     /**
-     * Handle an incoming request.
+     * Handle an outgoing  result.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -16,10 +16,11 @@ class AfterMiddleware
     public function handle($request, Closure $next)
     {
            $response = $next($request);
-
-        // Perform action
-
-        return $response;
         
+        // Perform action
+        echo 'this is the after processor'; 
+        dd($response);
+        return $response;
+            
     }
 }

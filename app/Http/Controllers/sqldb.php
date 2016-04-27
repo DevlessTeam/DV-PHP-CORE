@@ -39,7 +39,7 @@ class sqldb extends Controller
     public function store(Request $request)
     {
         #get schema from jsonValidator
-        $json = app('App\Http\Controllers\jsonValidator')->index();
+        $json = app('App\Http\Controllers\Validator')->index();
         $json = json_decode(json_encode($json), true);
         $
         $json = $json['resource'][0];  
@@ -102,7 +102,9 @@ class sqldb extends Controller
      */
     public function edit($id)
     {
-        //
+        //email
+        
+       # $result = app('App\Http\Controllers\Validator')->validschema($json['field']['db_type']);
     }
 
     /**

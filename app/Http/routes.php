@@ -27,7 +27,7 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::get('log', function ()    {
         // Matches The "/api/v1/us" URL
         return "logs from here";
-    });
+    })->middleware(['jsonValidator']);
 
     #schema end point  
     Route::resource('schema','schemaController');
