@@ -18,8 +18,6 @@ class AfterMiddleware
            $response = $next($request);
         
         // Perform action
-        echo 'this is the after processor'; 
-        dd($response);
         return $response;
             
     }

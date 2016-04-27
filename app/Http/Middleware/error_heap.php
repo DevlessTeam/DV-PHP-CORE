@@ -4,7 +4,7 @@
 class ErrorHeap{
     
     public $ERROR_HEAP = [
-        800 => 'Sorry something went wrong with payload(check json data)',
+        800 => 'Sorry something went wrong with payload(check json format)',
         801 => 'Underflow or the modes mismatch',
         802 => 'Unexpected control character found',
         803 => 'Syntax error, malformed JSON',

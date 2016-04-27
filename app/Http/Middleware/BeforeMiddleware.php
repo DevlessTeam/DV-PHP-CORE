@@ -16,7 +16,6 @@ class BeforeMiddleware
     public function handle($request, Closure $next)
     {
 
-        dd($request);
         return $next($request);
     }
 }
