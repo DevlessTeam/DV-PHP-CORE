@@ -29,7 +29,8 @@ class Handler extends ExceptionHandler
      * @return void
      */
     public function report(Exception $e)
-    {
+    {   
+        
         return parent::report($e);
     }
 
@@ -45,7 +46,14 @@ class Handler extends ExceptionHandler
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }
-
-        return parent::render($request, $e);
+            return response()->json([
+                    'status_code' =>700,
+                    'message'=>[],
+                    'payload'=>[
+                    'message' => $e->getMessage(),
+                    'file'    => $e->getFile(),
+                    'line'     =>$e->getLine()
+                    ]
+                    ]);
     }
 }
