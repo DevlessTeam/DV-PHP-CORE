@@ -1,6 +1,7 @@
 <?php
 namespace App\Helpers;
 use Validator;
+use App\Helpers\Response as response;
 /* 
  * @author eddymens <eddymens@devless.io>
 *composed of most common used classes and functions 
@@ -19,6 +20,12 @@ class Helper
         #600 => 'Data type does not exist',
         #601 => 'reference column column name does not exist',
         #602 => 'database schema could not be created',
+        #603 => 'table could not be created',
+        604  =>  'service resource does not exist',
+        605 =>   'could not find service type',
+        606 =>    'Created database Schema succefully',
+        607 =>    'Could not find the right DB method',
+        700 => 'Internal system error',
         ];
     /**
      * fetch message based on error code 
@@ -47,14 +54,11 @@ class Helper
         }
         else
         {
-            self::error_message($stack);
+            $msg = self::error_message($stack);
         }
-        $premature_response = [
-            'status_code' => $stack,
-            'message' => $msg,
-            'payload' => []
-        ];
-        dd(json_encode($premature_response));
+        $response = response::respond($stack, $msg, []); 
+           
+         dd($response);
     }
     
      /**

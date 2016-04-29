@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class core extends Controller
+use App\Http\Controllers\CoreController as core;
+class ScriptController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -83,5 +84,21 @@ class core extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    public function run_script($resource,$payload)
+    {
+        //payload 
+        $core = new core(); 
+        $event = [
+            'method' => $payload['method'],
+            'params' => $payload['params'],
+            'calls'  => $payload['script']
+        ];
+        if($payload['pre_set'] == 1){$core->pre_script($resource,$payload);}
+        $result = eval("\$event = \$event;".$payload['script']);
+        if($payload['post_set'] == 1){$core->post_script($resource,$payload);}
+        #$core->post_script($resource,$payload);
+        return $result;   
     }
 }

@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'default' => 'sqlite',#env('DB_CONNECTION', 'sqlite'),
+    'default' => 'mysql',#env('DB_CONNECTION', 'sqlite'),
 
     /*
     |--------------------------------------------------------------------------
@@ -54,10 +54,10 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'      => env('DB_HOST', 'localhost'),
-            'database'  => env('DB_DATABASE', 'forge'),
-            'username'  => env('DB_USERNAME', 'forge'),
-            'password'  => env('DB_PASSWORD', ''),
+            'host'      => '127.0.0.1',//env('DB_HOST', 'localhost'),
+            'database'  => 'devless_production',//env('DB_DATABASE', 'forge'),
+            'username'  => 'root',//env('DB_USERNAME', 'forge'),
+            'password'  => 'password',//env('DB_PASSWORD', ''),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',

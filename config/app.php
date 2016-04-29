@@ -148,6 +148,8 @@ return [
         Devless\core\coreServiceProvider::class,
 
         'JeroenG\Packager\PackagerServiceProvider',
+        "Laralib\L5scaffold\GeneratorsServiceProvider",
+
 
 
     ],

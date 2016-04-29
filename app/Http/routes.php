@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
     # $exitCode = Artisan::call('command:name', ['--option' => 'foo']);
-    return 'welcome';
+    return 'welcome to devless (login soon comes here)';
 });
 
 Route::group(['prefix' => 'api/v1'], function () {
@@ -25,27 +25,32 @@ Route::group(['prefix' => 'api/v1'], function () {
 
     #view system logs 
     Route::get('log', function ()    {
-        // Matches The "/api/v1/us" URL
         return "logs from here";
     })->middleware(['jsonValidator']);
 
-    #schema end point  
-    Route::resource('schema','schemaController');
+    #schema end points  
+    Route::post('schema','schemaController@store');
   
-    #app end points  
-    Route::resource('app','appController');
-
-     #service end points  
-    Route::resource('service','serviceController');
+   
     
     #config end points
     Route::resource('config', 'configController');
     
+     #service end points  
+    Route::get('service/{resource}','serviceController@resource');
+    Route::post('service/{resource}','serviceController@resource');
+    Route::patch('service/{resource}','serviceController@resource');
+    Route::delete('service/{resource}','serviceController@resource');
+    
+    
+    
     
 });
-Route::get('/sql', 'sqldb@store');
-
-Route::get('/json', 'jsonValidatorController@index');
-
+     #service views  
+    Route::resource('services','serviceController');
+    
+    #app views 
+    Route::resource("apps","AppController");
+    
 
 

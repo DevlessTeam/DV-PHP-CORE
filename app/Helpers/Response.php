@@ -4,10 +4,10 @@ namespace App\Helpers;
 *@author Eddymens <eddymens@devless.io
  */
 
-class Response implements Helper
+class Response extends Helper
 {
     //
-    public static function responsed($status_code, $message, $payload)
+    public static function respond($status_code, $message=null, $payload)
     {
         $response = [
             'status_code'=>$status_code,

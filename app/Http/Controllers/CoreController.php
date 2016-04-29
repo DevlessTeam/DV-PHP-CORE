@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class appController extends Controller
+class CoreController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +17,6 @@ class appController extends Controller
     public function index()
     {
         //
-        #dd("i stopped here");
-        return "";
     }
 
     /**
@@ -85,5 +83,19 @@ class appController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    public function pre_script($resource, $payload)
+    {
+        //
+        dd("pre script called",$payload);
+        
+    }
+    
+    public function post_script($resource, $payload)
+    {
+        //
+        dd("post script called".$payload);
+        
     }
 }
