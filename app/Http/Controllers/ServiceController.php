@@ -132,10 +132,26 @@ class ServiceController extends Controller {
         public function resource(Request $request, $resource)
         {   
             $method = $request->method();
-            parse_str($request->getQueryString(), $parameters);
-            $get_params = $parameters;
+            #check method type and get payload accordingly 
+             if(in_array($method,['POST','DELETE','PATCH']))
+            {
+                 $parameters = $request['resource'];
+                 
+             }
+             else if($method == 'GET')  
+            {
+                 $parameters = Helper::query_string();
+                 
+            }
+            else
+            {
+                Helper::interrupt(608, 'Request method '.$method.
+                        ' is not supported');        
+            }
+                    
+                 
             //$resource
-            return $this->assign_to_service($resource,$method,$get_params);
+            return $this->assign_to_service($resource,$method,$parameters);
         }
         
        
@@ -147,9 +163,9 @@ class ServiceController extends Controller {
          * @param array $method http verb
 	 * @return Response
 	 */
-        public function assign_to_service($resource, $method, $param)
+        public function assign_to_service($resource, $method, $parameters)
         {
-  
+
             if($current_service = serviceModel::where('name', $resource)->
                     where('active',1)->first())
                      {
@@ -162,7 +178,7 @@ class ServiceController extends Controller {
                             'post_set' => $current_service->post_set,
                             'calls' =>  $current_service->calls,
                             'method' => $method,
-                            'params' => $param   
+                            'params' => $parameters   
                                                          ];
                             $schema = new schema(); 
                             $schema->access_db($resource,$payload);
@@ -179,7 +195,7 @@ class ServiceController extends Controller {
                             'post_set' => $current_service->post_set,
                             'calls' =>  $current_service->calls,
                             'method' => $method,
-                             'params'=>$param   
+                             'params'=>$parameters   
                                                         ];
                         
                             $script = new script;

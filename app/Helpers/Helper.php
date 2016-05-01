@@ -1,7 +1,7 @@
 <?php
 namespace App\Helpers;
 use Validator;
-use App\Helpers\Response as response;
+use App\Helpers\Response as Response;
 /* 
  * @author eddymens <eddymens@devless.io>
 *composed of most common used classes and functions 
@@ -23,9 +23,14 @@ class Helper
         #603 => 'table could not be created',
         604  =>  'service resource does not exist',
         605 =>   'could not find service type',
-        606 =>    'Created database Schema succefully',
-        607 =>    'Could not find the right DB method',
-        700 => 'Internal system error',
+        606 =>   'created database Schema succefully',
+        607 =>   'could not find the right DB method',
+        608 =>   'request method not supported',
+        609 =>   'data has been added to table successfully',
+        610 =>   'query paramter does not exist',
+        611 =>   'table name is not set',
+        612 =>   'query parameters not set',
+        700 => 'internal system error',
         ];
     /**
      * fetch message based on error code 
@@ -56,7 +61,7 @@ class Helper
         {
             $msg = self::error_message($stack);
         }
-        $response = response::respond($stack, $msg, []); 
+        $response = Response::respond($stack, $msg, []); 
            
          dd($response);
     }
@@ -81,5 +86,19 @@ class Helper
         {
             return $state->messages();
         }
+    }
+    
+    public static function query_string()
+    {
+         $query  = explode('&', $_SERVER['QUERY_STRING']);
+         $params = array();
+  
+        foreach( $query as $param )
+            {
+             
+              list($name, $value) = explode('=', $param, 2);
+              $params[urldecode($name)][] = urldecode($value);
+            }
+            return $params;
     }
 }
