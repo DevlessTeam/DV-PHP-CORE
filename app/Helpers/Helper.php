@@ -30,7 +30,9 @@ class Helper
         610 =>   'query paramter does not exist',
         611 =>   'table name is not set',
         612 =>   'query parameters not set',
-        700 => 'internal system error',
+        613 =>   'dropped table succefully',
+        614 =>   '',
+        700 =>   'internal system error',
         ];
     /**
      * fetch message based on error code 

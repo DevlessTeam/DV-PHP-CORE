@@ -10,7 +10,8 @@ use App\Helpers\Helper;
 #use App\Helpers\SchemaHelper;
 use App\Exceptions\Handler as error;
 use Illuminate\Filesystem\Filesystem as files;
-use App\Helpers\Response as Response;        
+use App\Helpers\Response as Response;  
+use \Illuminate\Database\Schema\Blueprint as Blueprint;
 class schemaController extends Controller
 {
     public  $db_types = [
@@ -44,16 +45,7 @@ class schemaController extends Controller
         
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function get_data($table_name, $payload)
-    {
-        //
-    }
-
+  
     /**
      * Store a newly created resource in storage.
      *
@@ -79,53 +71,111 @@ class schemaController extends Controller
      */
     public function add_data($resource, $payload)
     {
-        #setup db connection 
-        $connector = $this->connector($payload);
-        $db = \DB::connection('DYNAMIC_DB_CONFIG');
-        foreach($payload['params'] as $new_table){
-        $output = $db->table($new_table['name'])->insert($new_table['field']);
+            #setup db connection 
+            $connector = $this->connector($payload);
+            $db = \DB::connection('DYNAMIC_DB_CONFIG');
+            foreach($payload['params'] as $new_table){
+            $output = $db->table($new_table['name'])->insert($new_table['field']);
+            }
+            if($output)
+            {
+                Helper::interrupt(609,'Data has been added to '.$new_table['name']
+                        .' table succefully');
+            }
+            //remember to add field validation 
         }
-        if($output)
+
+        /**
+         * Show the form for editing the specified resource.
+         *
+         * @param  int  $id
+         * @return \Illuminate\Http\Response
+         */
+        public function edit($id)
         {
-            Helper::interrupt(609,'Data has been added to '.$new_table['name']
-                    .' table succefully');
+            //
         }
-        //remember to add field validation 
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        /**
+         * Update the specified resource in storage.
+         *
+         * @param  string  $resource 
+         * @param array $payload payload 
+         * @return 
+         */
+        public function update($resource, $payload)
+        {
+            //
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        /**
+         * Remove the specified resource from storage.
+         *
+         * @param  string  $resource
+         * @param array $payload payload from request 
+         * @return \Illuminate\Http\Response
+         */
+        public function destroy($resource, $payload)
+        {
+            //
+            $connector = explode(',',$payload['db_definition']);
+            $connector = $this->connector($payload);
+            $db =   \DB::connection('DYNAMIC_DB_CONFIG');
+            //check if table name is set 
+
+         $table_name = $payload['params'][0]['name'];
+         $destroy_query = '$db->table("'.$table_name.'")';
+         if(isset($payload['params'][0]['params'][0]['drop']))
+         {
+             if($payload['params'][0]['params'][0]['drop'])
+             {
+             \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
+             Helper::interrupt(613);
+             $task = 'drop';
+             }
+         }
+         if(isset($payload['params'][0]['params'][0]['where'] ))
+         {
+             if($payload['params'][0]['params'][0]['where'] == true  )
+            {
+
+             $where = $payload['params'][0]['params'][0]['where'];
+             $destroy_query = $destroy_query.'->where('.$where.')';
+             $task ='where';
+
+
+            }
+         }
+         if(isset($payload['params'][0]['params'][0]['truncate'] ) )
+        {
+
+             if($payload['params'][0]['params'][0]['truncate'] == true)
+             {
+                $destroy_query = $destroy_query.'->truncate()';
+                $task ='truncate';
+             }
+        }
+        else if(isset($payload['params'][0]['params'][0]['delete'] ))
+        {
+
+            if($payload['params'][0]['params'][0]['delete'] == true)
+            {
+
+                  
+                $destroy_query = $destroy_query.'->delete()';
+                $task ='deleted';  
+
+            }   
+
+        } 
+
+             $destroy_query = $destroy_query.';';   
+             $result = eval('return'.$destroy_query);
+             Helper::interrupt(614, 'The table has been'.$task);
+             
     }
+        
     
     public function db_query($resource, $payload)
     {
@@ -141,10 +191,17 @@ class schemaController extends Controller
             (isset($payload['params']['size']))?
             $complete_query = $base_query
                     . '->take('.$payload['params']['size'][0].')' :
-            $complete_query = 
-                    $base_query.'->take(100)' ;    
-            unset($payload['params']['table'],$payload['params']['size'][0],$payload['params']['relation']);
-           
+            $complete_query = $base_query.'->take(100)' ;    
+            
+            if(isset($payload['params']['relation']))
+            {
+               $wanted_relationships = $payload['params']['relation'];
+               $table_name = $payload['params']['table'];
+               $related = $this->find_relations($table_name, $wanted_relationships, $db);
+               unset($payload['params']['relation']);}
+               
+            unset($payload['params']['table'],$payload['params']['size'][0]
+                    );    
             foreach($payload['params'] as $key => $query)
             {
                 foreach($query as $one)
@@ -175,7 +232,7 @@ class schemaController extends Controller
             }
             $complete_query = 'return '.$complete_query.'->get();';
             $output = eval($complete_query);
-            #$output['related'] = $related;
+            $output['related'] = $related;
             $response = Response::respond(612,"Got response sucessfully",$output);
             dd(json_decode($response),$response);
             
@@ -205,7 +262,7 @@ class schemaController extends Controller
             
 
             \Schema::connection('DYNAMIC_DB_CONFIG')->
-            create($json['name'],function(\Illuminate\Database\Schema\Blueprint 
+            create($json['name'],function(Blueprint 
                     $table) 
                 use($json,$db_type)
                 {       
@@ -311,7 +368,7 @@ class schemaController extends Controller
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
             ->unsigned();
             $table->foreign($field['ref_table'].'_id')->references('id')
-            ->on($field['ref_table']);
+            ->on($field['ref_table'])->onDelete('cascade');
         }
         else if($column_type == 3)
         {
@@ -319,17 +376,18 @@ class schemaController extends Controller
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
             ->unsigned();
             $table->foreign($field['ref_table'].'_id')->references('id')
-            ->on($field['ref_table'])->default($field['default']);
+            ->on($field['ref_table'])->default($field['default'])
+            ->onDelete('cascade');
         }
         else if($column_type == 2)
         { 
             $table->$db_type[$field['field_type']]
-            ($field['name'])->default($field['default']); 
+            ($field['name'])->default($field['default'])->onDelete('cascade'); 
         }
         else if($column_type == 1)
         {
             $table->$db_type[$field['field_type']]
-            ($field['name']); 
+            ($field['name'])->onDelete('cascade'); 
         }
         else
         {
@@ -356,11 +414,11 @@ class schemaController extends Controller
             }
             else if($payload['method'] == 'PATCH')
             {
-                
+                $this->update($resource, $payload);
             }
             else if($payload['method'] == 'DELETE')
             {
-                
+                $this->destroy($resource, $payload);
             }
             else
             {
@@ -408,5 +466,37 @@ class schemaController extends Controller
         
     }
     
-  #  public function 
+   private function find_relations($table_name, $wanted_relationships, $db)
+   {
+       
+       //simulations of getting relations from table meta   
+       $table_models = [
+        'orders' => [
+            'products'
+        ],
+        'products' => [
+            'orders'
+        ]  
+       ];
+       $related = [];
+       foreach ($wanted_relationships as $relationship)
+       {
+           if($relationship == '*')
+           {
+               //check the model and grab all relations 
+               foreach($table_models[$table_name[0]] as $table)
+               {
+                         $related[$table] = $db->table($table)->get();
+                         
+               }
+              
+           }
+           else
+           {
+                $related[$relationship] = $db->table($relationship)->get();
+           }
+       }
+            return $related;
+        
+   }
 }
