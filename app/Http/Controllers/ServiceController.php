@@ -173,11 +173,11 @@ class ServiceController extends Controller {
         public function assign_to_service($service, $resource, $method,
                 $parameters)
         {
-
+          
             if($current_service = serviceModel::where('name', $service)->
                     where('active',1)->first())
                      {
-                
+                     
                     if($resource == 'db'){
                      
                             $payload = [

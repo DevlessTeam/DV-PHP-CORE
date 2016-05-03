@@ -2,6 +2,7 @@
 namespace App\Helpers;
 use Validator;
 use App\Helpers\Response as Response;
+
 /* 
  * @author eddymens <eddymens@devless.io>
 *composed of most common used classes and functions 
@@ -21,7 +22,7 @@ class Helper
         #601 => 'reference column column name does not exist',
         #602 => 'database schema could not be created',
         #603 => 'table could not be created',
-        604  =>  'service resource does not exist',
+        604  =>  'service resource does not exist or is not active',
         605 =>   'no such service type try (script or db)',
         606 =>   'created database Schema succefully',
         607 =>   'could not find the right DB method',
@@ -93,9 +94,10 @@ class Helper
     
     public static function query_string()
     {
+        if(isset( $_SERVER['QUERY_STRING'])){
          $query  = explode('&', $_SERVER['QUERY_STRING']);
          $params = array();
-  
+        
         foreach( $query as $param )
             {
              
@@ -103,5 +105,11 @@ class Helper
               $params[urldecode($name)][] = urldecode($value);
             }
             return $params;
+        }
+        else
+        {
+            $param = "";
+            return $param;
+        }
     }
 }

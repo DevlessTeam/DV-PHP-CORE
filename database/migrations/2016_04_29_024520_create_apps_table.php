@@ -12,10 +12,11 @@ class CreateAppsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('apps', function(Blueprint $table) {
+            Schema::create('apps', function(Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->text('description');
+            $table->string('api_token');
             $table->string('token')->default('edd2m3nes');
             $table->timestamps();
         });
