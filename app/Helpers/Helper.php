@@ -22,7 +22,7 @@ class Helper
         #602 => 'database schema could not be created',
         #603 => 'table could not be created',
         604  =>  'service resource does not exist',
-        605 =>   'could not find service type',
+        605 =>   'no such service type try (script or db)',
         606 =>   'created database Schema succefully',
         607 =>   'could not find the right DB method',
         608 =>   'request method not supported',
@@ -31,7 +31,8 @@ class Helper
         611 =>   'table name is not set',
         612 =>   'query parameters not set',
         613 =>   'dropped table succefully',
-        614 =>   '',
+        614 =>   'parameters where or data  not set',
+        615 =>   'delete action not set',   
         700 =>   'internal system error',
         ];
     /**

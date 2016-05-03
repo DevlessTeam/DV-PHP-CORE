@@ -37,10 +37,10 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::resource('config', 'configController');
     
      #service end points  
-    Route::get('service/{resource}','serviceController@resource');
-    Route::post('service/{resource}','serviceController@resource');
-    Route::patch('service/{resource}','serviceController@resource');
-    Route::delete('service/{resource}','serviceController@resource');
+    Route::get('service/{service}/{resource}','serviceController@resource');
+    Route::post('service/{service}/{resource}','serviceController@resource');
+    Route::patch('service/{service}/{resource}','serviceController@resource');
+    Route::delete('service/{service}/{resource}','serviceController@resource');
     
     
     

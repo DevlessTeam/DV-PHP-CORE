@@ -98,15 +98,15 @@ class ServiceController extends Controller {
 		$service = Service::findOrFail($id);
 
 		$service->name = $request->input("name");
-        $service->description = $request->input("description");
-        $service->type = $request->input("type");
-        $service->db_definition = $request->input("db_definition");
-        $service->script = $request->input("script");
-        $service->pre_script = $request->input("pre_script");
-        $service->post_script = $request->input("post_script");
-        $service->pre_set = $request->input("pre_set");
-        $service->post_set = $request->input("post_set");
-        $service->active = $request->input("active");
+                $service->description = $request->input("description");
+                $service->type = $request->input("type");
+                $service->db_definition = $request->input("db_definition");
+                $service->script = $request->input("script");
+                $service->pre_script = $request->input("pre_script");
+                $service->post_script = $request->input("post_script");
+                $service->pre_set = $request->input("pre_set");
+                $service->post_set = $request->input("post_set");
+                $service->active = $request->input("active");
 
 		$service->save();
 
@@ -128,9 +128,15 @@ class ServiceController extends Controller {
                         'Item deleted successfully.');
 	}
         
-        //
-        public function resource(Request $request, $resource)
-        {   
+        /**
+	 *Refer request to the right service 
+	 * @param string  $service  service to be accessed
+         * @param string $resource resource to be accessed
+	 * @return Response
+	 */
+        public function resource(Request $request, $service, $resource)
+        {  
+            $resource = strtolower($resource);$service = strtolower($service);
             $method = $request->method();
             #check method type and get payload accordingly 
              if(in_array($method,['POST','DELETE','PATCH']))
@@ -151,7 +157,8 @@ class ServiceController extends Controller {
                     
                  
             //$resource
-            return $this->assign_to_service($resource,$method,$parameters);
+            return $this->assign_to_service($service, $resource, $method, 
+                    $parameters);
         }
         
        
@@ -163,14 +170,15 @@ class ServiceController extends Controller {
          * @param array $method http verb
 	 * @return Response
 	 */
-        public function assign_to_service($resource, $method, $parameters)
+        public function assign_to_service($service, $resource, $method,
+                $parameters)
         {
 
-            if($current_service = serviceModel::where('name', $resource)->
+            if($current_service = serviceModel::where('name', $service)->
                     where('active',1)->first())
                      {
                 
-                    if($current_service->type == 0){
+                    if($resource == 'db'){
                      
                             $payload = [
                             'db_definition' =>$current_service->db_definition, 
@@ -185,7 +193,7 @@ class ServiceController extends Controller {
                             
                               
                     } 
-                    else if($current_service->type == 1)
+                    else if($resource == 'script')
                           {
                              
                         

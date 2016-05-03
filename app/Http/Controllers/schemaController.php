@@ -98,7 +98,6 @@ class schemaController extends Controller
 
         /**
          * Update the specified resource in storage.
-         *
          * @param  string  $resource 
          * @param array $payload payload 
          * @return 
@@ -106,6 +105,28 @@ class schemaController extends Controller
         public function update($resource, $payload)
         {
             //
+            $connector = explode(',',$payload['db_definition']);
+            $connector = $this->connector($payload);
+            $db =   \DB::connection('DYNAMIC_DB_CONFIG');
+
+            if(isset($payload['params'][0]['name'],
+                    $payload['params'][0]['params'][0]['where'],
+                        $payload['params'][0]['params'][0]['data']))
+            {
+                $table_name = $payload['params'][0]['name'];
+                $where  = $payload['params'][0]['params'][0]['where'];
+                $explotion = explode(',', $where);
+                $data =  $payload['params'][0]['params'][0]['data'];
+                $db->table($table_name)
+                ->where($explotion[0],$explotion[1])
+                ->update($data[0]);
+
+            }
+            else
+            {
+                Helper::interrupt(614); 
+            }
+            
 
         }
 
@@ -169,11 +190,20 @@ class schemaController extends Controller
             }   
 
         } 
+        else if(isset($payload['params'][0]['params'][0]['drop'] )){
 
-             $destroy_query = $destroy_query.';';   
-             $result = eval('return'.$destroy_query);
-             Helper::interrupt(614, 'The table has been'.$task);
+            $destroy_query = $destroy_query.'->drop()';
+            $task ='dropped';  
              
+        }
+        else
+        {
+            Helper::interrupt(615);
+        }
+        $destroy_query = $destroy_query.';';   
+        $result = eval('return'.$destroy_query);
+        dd($result);
+        Helper::interrupt(614, 'The table has been '.$task);
     }
         
     
