@@ -71,13 +71,15 @@ class schemaController extends Controller
      */
     public function add_data($resource, $payload)
     {       
-            $payload['table'] = (array)$payload['tableMeta'][0]['schema'];
-            dd((array)$payload['table']['schema']);
+            #$payload['table'] = (array)$payload['tableMeta'][0]['schema'];
+            #dd((array)$payload['table']['schema']);
             #setup db connection 
             $connector = $this->connector($payload);
             $db = \DB::connection('DYNAMIC_DB_CONFIG');
             foreach($payload['params'] as $table){
-            $result = Helper::field_check($this->db_type($table['field']), 
+                #['field_type']
+            dd($payload['tableMeta'][0],$table['field']);
+            $result = Helper::field_check($this->db_types[$table['field']], 
                     $table['field']);   
             $output = $db->table($table['name'])->insert($table['field']);
             }
@@ -538,7 +540,7 @@ class schemaController extends Controller
             return $related;
         
    }
-   private function table_meta($schema)
+   private function set_table_meta($schema)
    {
        
        \DB::table('tableMeta')->insert(['schema'=>  json_encode($schema),
@@ -546,5 +548,28 @@ class schemaController extends Controller
        
        
        return true;
+   }
+   private function get_tableMeta($service_id)
+   {
+       $tableMeta =\DB::table('tableMeta')->
+                                where('service_id',$service_id)->get();
+                        $tableMeta = json_decode(json_encode($tableMeta),true);
+                        $count = 0;
+                        foreach($tableMeta as $table)
+                        {
+                            $tableMeta[$count]['schema'] = 
+                               (array)json_decode($tableMeta[$count]['schema']);
+
+                             $tableMeta[$count]['schema'] = 
+                             json_decode(json_encode($tableMeta
+                                [$count]['schema']),true);
+                            $count ++;
+                            return $tableMeta;
+                        }
+   }
+   
+   private function get_field()
+   {
+       $this->get_tableMeta($service);
    }
 }

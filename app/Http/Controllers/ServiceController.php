@@ -177,8 +177,7 @@ class ServiceController extends Controller {
             if($current_service = serviceModel::where('name', $service)->
                     where('active',1)->first())
                      {
-                        $tableMeta =\DB::table('tableMeta')->
-                                where('service_id',$current_service->id)->get();
+                        
                         
                     if($resource == 'db'){
                      
