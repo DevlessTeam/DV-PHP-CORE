@@ -177,16 +177,20 @@ class ServiceController extends Controller {
             if($current_service = serviceModel::where('name', $service)->
                     where('active',1)->first())
                      {
-                     
+                        $tableMeta =\DB::table('tableMeta')->
+                                where('service_id',$current_service->id)->get();
+                        
                     if($resource == 'db'){
                      
                             $payload = [
+                            'id'=>$current_service->id,    
                             'db_definition' =>$current_service->db_definition, 
                             'pre_set' => $current_service->pre_set,
                             'post_set' => $current_service->post_set,
                             'calls' =>  $current_service->calls,
                             'method' => $method,
-                            'params' => $parameters   
+                            'params' => $parameters,   
+                            'tableMeta' => $tableMeta
                                                          ];
                             $schema = new schema(); 
                             $schema->access_db($resource,$payload);
@@ -198,16 +202,41 @@ class ServiceController extends Controller {
                              
                         
                             $payload = [
+                            'id'=>$current_service->id,
+                            'db_definition' =>$current_service->db_definition,     
                             'script' =>  $current_service->script, 
                             'pre_set' => $current_service->pre_set,
                             'post_set' => $current_service->post_set,
                             'calls' =>  $current_service->calls,
                             'method' => $method,
-                             'params'=>$parameters   
+                             'params'=>$parameters,   
+                            'tableMeta' => $tableMeta   
                                                         ];
                         
                             $script = new script;
                             $script->run_script($resource,$payload);
+                          }
+                          else if($resource == 'schema')
+                          {
+                             
+                        
+                            $payload = [
+                            'id'=>$current_service->id,  
+                            'db_definition' =>$current_service->db_definition,     
+                            'script' =>  $current_service->script, 
+                            'pre_set' => $current_service->pre_set,
+                            'post_set' => $current_service->post_set,
+                            'calls' =>  $current_service->calls,
+                            'method' => $method,
+                             'params'=>$parameters,   
+                            'tableMeta' => $tableMeta   
+                                                        ];
+                            //temporal 
+                            $payload['db_definition'] =
+                            'driver=mysql,hostname=127.0.0.1,database=devless-rec,username=root,password=password';
+                           
+                            $schema = new schema;
+                            $schema->create_schema($resource, $payload);
                           }
                           else
                           {

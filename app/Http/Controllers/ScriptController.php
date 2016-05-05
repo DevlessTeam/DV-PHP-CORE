@@ -90,6 +90,7 @@ class ScriptController extends Controller
     {
         //payload 
         $core = new core(); 
+        
         $event = [
             'method' => $payload['method'],
             'params' => $payload['params'],

@@ -37,12 +37,13 @@ class AppController extends Controller {
 	 * @return Response
 	 */
 	public function store(Request $request)
-	{
+	{       $user_login = 1;
+                $app_name = 'zowy';
 		$app = new App();
-
 		$app->name = $request->input("name");
-        $app->description = $request->input("description");
-        $app->token = $request->input("token");
+                $app->description = $request->input("description");
+                $app->api_key = $request->input("name");
+                $app->token = md5(uniqid(1, true));
 
 		$app->save();
 

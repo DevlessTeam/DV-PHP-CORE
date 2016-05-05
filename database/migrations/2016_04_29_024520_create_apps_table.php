@@ -16,7 +16,7 @@ class CreateAppsTable extends Migration {
             $table->increments('id');
             $table->string('name');
             $table->text('description');
-            $table->string('api_token');
+            $table->string('api_key');
             $table->string('token')->default('edd2m3nes');
             $table->timestamps();
         });

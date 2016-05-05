@@ -70,16 +70,20 @@ class schemaController extends Controller
      * 
      */
     public function add_data($resource, $payload)
-    {
+    {       
+            $payload['table'] = (array)$payload['tableMeta'][0]['schema'];
+            dd((array)$payload['table']['schema']);
             #setup db connection 
             $connector = $this->connector($payload);
             $db = \DB::connection('DYNAMIC_DB_CONFIG');
-            foreach($payload['params'] as $new_table){
-            $output = $db->table($new_table['name'])->insert($new_table['field']);
+            foreach($payload['params'] as $table){
+            $result = Helper::field_check($this->db_type($table['field']), 
+                    $table['field']);   
+            $output = $db->table($table['name'])->insert($table['field']);
             }
             if($output)
             {
-                Helper::interrupt(609,'Data has been added to '.$new_table['name']
+                Helper::interrupt(609,'Data has been added to '.$table['name']
                         .' table succefully');
             }
             //remember to add field validation 
@@ -202,19 +206,24 @@ class schemaController extends Controller
         }
         $destroy_query = $destroy_query.';';   
         $result = eval('return'.$destroy_query);
-        dd($result);
         Helper::interrupt(614, 'The table has been '.$task);
     }
         
     
+    /**
+    * query a particular table for data .
+    *
+    * @param  string  $resource
+    * @param array $payload payload from request 
+    * @return \Illuminate\Http\Response
+    */
     public function db_query($resource, $payload)
     {
         $connector = explode(',',$payload['db_definition']);
         $connector = $this->connector($payload);
         $db =   \DB::connection('DYNAMIC_DB_CONFIG');
         //check if table name is set 
-        
-        if($payload['params']['table'])
+        if(isset($payload['params']['table']))
        {    
             $base_query = '$db->table("'.$payload['params']['table'][0].'")';
             //check if pagination is set 
@@ -222,7 +231,7 @@ class schemaController extends Controller
             $complete_query = $base_query
                     . '->take('.$payload['params']['size'][0].')' :
             $complete_query = $base_query.'->take(100)' ;    
-            
+            $related =[];
             if(isset($payload['params']['relation']))
             {
                $wanted_relationships = $payload['params']['relation'];
@@ -264,7 +273,7 @@ class schemaController extends Controller
             $output = eval($complete_query);
             $output['related'] = $related;
             $response = Response::respond(612,"Got response sucessfully",$output);
-            dd(json_decode($response),$response);
+            echo ($response);
             
         }
       else{
@@ -274,18 +283,18 @@ class schemaController extends Controller
     #remember to allow  expand db elements 
     public function create_schema($resource, array $json)
     {
-      $json = $json[0];  
+        
       #set path incase connector is sqlite
-      
-    
+
+    $id = $json['id'];
         #connectors mysql pgsql sqlsrv sqlite
-    $connector = $json['connector'][0];
-    $conn = $this->db_socket($connector['driver'], $connector['host'], 
-            $connector['database'],$connector['username'],$connector['password']);
+    $connector = explode(',',$json['db_definition']);
+    $connector = $this->connector($json);
      #dynamically create columns with schema builder 
     $db_type = $this->db_types;
     $table_meta_data = []; 
-    
+    $json = $json['params'][0];
+    $json['id'] = $id;
      if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
                 hasTable($json['name'])) 
         {
@@ -296,19 +305,19 @@ class schemaController extends Controller
                     $table) 
                 use($json,$db_type)
                 {       
-                #$col_name = $json['field'][0]['name'];
                 #default field
                     $table->increments('id');
                 #per  field 
                     foreach($json['field'] as $field ){
                         #checks if fieldType and references exist    
                         $this->field_check( $field, $field['ref_table']); 
-
                         #generate columns 
                         $this->column_generator($field, $table, $db_type);
 
                     }
+            //store table_meta details 
             });
+            $this->table_meta($json);
             Helper::interrupt(606);
         }
     else
@@ -318,7 +327,7 @@ class schemaController extends Controller
 
 }
     /**
-     *check if fields exist
+     *check if field exist
      *
      * @param column fields (array)  $field
      * @param  table_name   $table_name
@@ -439,7 +448,7 @@ class schemaController extends Controller
             }
             else if($payload['method'] == 'POST')
             {
-               
+
                 $this->add_data($resource, $payload);
             }
             else if($payload['method'] == 'PATCH')
@@ -528,5 +537,14 @@ class schemaController extends Controller
        }
             return $related;
         
+   }
+   private function table_meta($schema)
+   {
+       
+       \DB::table('tableMeta')->insert(['schema'=>  json_encode($schema),
+               'table_name'=> $schema['name'],'service_id'=>$schema['id']]);
+       
+       
+       return true;
    }
 }

@@ -24,7 +24,7 @@ class Helper
         #603 => 'table could not be created',
         604  =>  'service resource does not exist or is not active',
         605 =>   'no such service type try (script or db)',
-        606 =>   'created database Schema succefully',
+        606 =>   'created database Schema successfully',
         607 =>   'could not find the right DB method',
         608 =>   'request method not supported',
         609 =>   'data has been added to table successfully',
@@ -67,18 +67,19 @@ class Helper
         }
         $response = Response::respond($stack, $msg, []); 
            
-         dd($response);
+         die($response);
     }
     
      /**
      * check the validility of a field type
      *uses laravel validator 
-     * @param (array) list of fields to check  $field_names
-     * @param (array) parameters to check against $check_against
-     * @return json 
+     * @param string   $field_value
+     * @param string parameters to check against $check_against
+     * @return boolean 
      */
     public static function field_check( $field_value, $check_against)
     {
+        
         $state = Validator::make(
             ['name' => $field_value],
                 ['name' => $check_against]
