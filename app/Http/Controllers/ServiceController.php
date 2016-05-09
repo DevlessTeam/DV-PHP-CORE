@@ -189,7 +189,7 @@ class ServiceController extends Controller {
                             'calls' =>  $current_service->calls,
                             'method' => $method,
                             'params' => $parameters,   
-                            'tableMeta' => $tableMeta
+                            
                                                          ];
                             $schema = new schema(); 
                             $schema->access_db($resource,$payload);
@@ -209,7 +209,7 @@ class ServiceController extends Controller {
                             'calls' =>  $current_service->calls,
                             'method' => $method,
                              'params'=>$parameters,   
-                            'tableMeta' => $tableMeta   
+                               
                                                         ];
                         
                             $script = new script;
@@ -228,7 +228,7 @@ class ServiceController extends Controller {
                             'calls' =>  $current_service->calls,
                             'method' => $method,
                              'params'=>$parameters,   
-                            'tableMeta' => $tableMeta   
+                              
                                                         ];
                             //temporal 
                             $payload['db_definition'] =

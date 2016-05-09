@@ -70,25 +70,24 @@ class schemaController extends Controller
      * 
      */
     public function add_data($resource, $payload)
-    {       
-            #$payload['table'] = (array)$payload['tableMeta'][0]['schema'];
-            #dd((array)$payload['table']['schema']);
+    {       $service_id = $payload['id'];
             #setup db connection 
             $connector = $this->connector($payload);
             $db = \DB::connection('DYNAMIC_DB_CONFIG');
             foreach($payload['params'] as $table){
-                #['field_type']
-            dd($payload['tableMeta'][0],$table['field']);
-            $result = Helper::field_check($this->db_types[$table['field']], 
-                    $table['field']);   
-            $output = $db->table($table['name'])->insert($table['field']);
+                 //check field if valide proceed with adding data 
+                $this->
+                    validate_fields($table['name'], $service_id, $table['field']);
+               
+                 $output = $db->table($table['name'])->insert($table['field']);
             }
+            
             if($output)
             {
                 Helper::interrupt(609,'Data has been added to '.$table['name']
                         .' table succefully');
             }
-            //remember to add field validation 
+           
         }
 
         /**
@@ -312,7 +311,7 @@ class schemaController extends Controller
                 #per  field 
                     foreach($json['field'] as $field ){
                         #checks if fieldType and references exist    
-                        $this->field_check( $field, $field['ref_table']); 
+                        $this->field_type_exist( $field, $field['ref_table']); 
                         #generate columns 
                         $this->column_generator($field, $table, $db_type);
 
@@ -335,7 +334,7 @@ class schemaController extends Controller
      * @param  table_name   $table_name
      * @return true
      */
-    public function field_check( $field, $col_name)
+    public function field__type_exist( $field, $col_name)
     {      
             #check if soft data type has equivalent db type
         if(!isset($this->db_types[$field['field_type']]))
@@ -549,6 +548,10 @@ class schemaController extends Controller
        
        return true;
    }
+   /*
+    * validate entry data against schema field type
+    * @param string  $service_id
+    */
    private function get_tableMeta($service_id)
    {
        $tableMeta =\DB::table('tableMeta')->
@@ -564,12 +567,71 @@ class schemaController extends Controller
                              json_decode(json_encode($tableMeta
                                 [$count]['schema']),true);
                             $count ++;
-                            return $tableMeta;
+                            
                         }
+                        return $tableMeta;
    }
    
-   private function get_field()
+   /*
+    * validate entry data against schema field type
+    * @param string $table_name 
+    * @param string $service_id
+    * @param array  $field_names
+    */
+   private function validate_fields($table_name,$service_id, $field_names)
    {
-       $this->get_tableMeta($service);
+       
+       $table_meta = $this->get_tableMeta($service_id);
+       
+       foreach($table_meta as $schema)
+       {
+           $hit = 0;
+           if($schema['schema']['name'] == $table_name)
+           { 
+               
+                foreach($schema['schema']['field'] as $fields)
+                {
+                    foreach($field_names as $field_type => $field_value)
+                    {
+                        if($fields['name'] == $field_type)
+                        {
+                            $err_msg = 
+                               Helper::field_check($field_value[$fields['name']],
+                                       $fields['name']);
+                            
+                            if($err_msg == "true")
+                            {
+                                
+                                //dd(debug_backtrace());
+                                die($err_msg);
+                                return $err_msg;
+                            }
+                            else
+                            {
+                                echo "something";
+                                die($err_msg);
+                            }
+                            
+                        }
+                         
+                    }
+                }
+                $hit = 1;
+           }
+           
+          
+       }
+       if($hit == 0)
+           {
+               dd('no such table in the service');
+           }
+       
+      dd();
+      
    }
 }
+
+
+//given table_name, service_id, 
+
+//get schema for table  and compare field type of field with field name 
