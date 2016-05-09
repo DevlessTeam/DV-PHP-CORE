@@ -75,11 +75,13 @@ class schemaController extends Controller
             $connector = $this->connector($payload);
             $db = \DB::connection('DYNAMIC_DB_CONFIG');
             foreach($payload['params'] as $table){
-                 //check field if valide proceed with adding data 
-                $this->
-                    validate_fields($table['name'], $service_id, $table['field']);
-               
-                 $output = $db->table($table['name'])->insert($table['field']);
+                 //check field if valid proceed with adding data 
+                
+                $table_data = $this->
+                    validate_fields($table['name'],
+                           $service_id, $table['field'], true);
+                
+                 $output = $db->table($table['name'])->insert($table_data);
             }
             
             if($output)
@@ -157,6 +159,7 @@ class schemaController extends Controller
              if($payload['params'][0]['params'][0]['drop'])
              {
              \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
+             \Schema::dropIfExists($table_name);
              Helper::interrupt(613);
              $task = 'drop';
              }
@@ -286,7 +289,6 @@ class schemaController extends Controller
     {
         
       #set path incase connector is sqlite
-
     $id = $json['id'];
         #connectors mysql pgsql sqlsrv sqlite
     $connector = explode(',',$json['db_definition']);
@@ -318,7 +320,7 @@ class schemaController extends Controller
                     }
             //store table_meta details 
             });
-            $this->table_meta($json);
+            $this->set_table_meta($json);
             Helper::interrupt(606);
         }
     else
@@ -334,7 +336,7 @@ class schemaController extends Controller
      * @param  table_name   $table_name
      * @return true
      */
-    public function field__type_exist( $field, $col_name)
+    public function field_type_exist( $field, $col_name)
     {      
             #check if soft data type has equivalent db type
         if(!isset($this->db_types[$field['field_type']]))
@@ -401,12 +403,13 @@ class schemaController extends Controller
     public function column_generator($field, $table, $db_type)
     {
         $column_type = $this->check_premise($field);
-        
+        $unique = "";
+        if($field['is_unique'] == 'true'){$unique = 'unique';}
         if($column_type == 4)
         {
             
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
-            ->unsigned();
+            ->unsigned()->$unique();
             $table->foreign($field['ref_table'].'_id')->references('id')
             ->on($field['ref_table'])->onDelete('cascade');
         }
@@ -414,7 +417,7 @@ class schemaController extends Controller
         {
             
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
-            ->unsigned();
+            ->unsigned()->$unique();
             $table->foreign($field['ref_table'].'_id')->references('id')
             ->on($field['ref_table'])->default($field['default'])
             ->onDelete('cascade');
@@ -422,16 +425,18 @@ class schemaController extends Controller
         else if($column_type == 2)
         { 
             $table->$db_type[$field['field_type']]
-            ($field['name'])->default($field['default'])->onDelete('cascade'); 
+            ($field['name'])->default($field['default'])->onDelete('cascade')
+                    ->$unique(); 
         }
         else if($column_type == 1)
         {
             $table->$db_type[$field['field_type']]
-            ($field['name'])->onDelete('cascade'); 
+            ($field['name'])->onDelete('cascade')->$unique(); 
         }
         else
         {
-            Helper::interrupt(602, 'Database schema could not be created');
+            Helper::interrupt(602, 
+                    'For some reason database schema could not be created');
         }
     }
    /*
@@ -578,43 +583,49 @@ class schemaController extends Controller
     * @param string $service_id
     * @param array  $field_names
     */
-   private function validate_fields($table_name,$service_id, $field_names)
+   private function validate_fields($table_name,$service_id, $table_data, 
+           $check_password=false)
    {
        
        $table_meta = $this->get_tableMeta($service_id);
-       
+       $new_table_data = [];
        foreach($table_meta as $schema)
        {
-           $hit = 0;
+           $hit = 0; $check = 0; $count = 0;
            if($schema['schema']['name'] == $table_name)
            { 
                
-                foreach($schema['schema']['field'] as $fields)
+                foreach($table_data as $field_unit)
                 {
-                    foreach($field_names as $field_type => $field_value)
+                    foreach($field_unit as $field => $field_value)
                     {
-                        if($fields['name'] == $field_type)
-                        {
-                            $err_msg = 
-                               Helper::field_check($field_value[$fields['name']],
-                                       $fields['name']);
-                            
-                            if($err_msg == "true")
+                            foreach($schema['schema']['field'] as $fields)
                             {
                                 
-                                //dd(debug_backtrace());
-                                die($err_msg);
-                                return $err_msg;
+                                $new_table_data = [$field   => $field_value];
+                                
+                                if($fields['name'] == $field)
+                                {
+                                    $err_msg = 
+                                       Helper::field_check($field_value,
+                                               $fields['field_type']);
+                                    if($check_password == "true" &&
+                                            $fields['field_type'] )
+                                        {$table_data[$count]['password']=
+                          Helper::password_hash($table_data[$count]['password']);
+                                        }
+                                    if(!$err_msg == "true")
+                                    {
+                                        
+                                         Helper::interrupt(616, $err_msg);
+                                        
+                                        
+                                    }
+                                        
+                                }
                             }
-                            else
-                            {
-                                echo "something";
-                                die($err_msg);
-                            }
-                            
-                        }
-                         
                     }
+                    $count++;
                 }
                 $hit = 1;
            }
@@ -622,16 +633,24 @@ class schemaController extends Controller
           
        }
        if($hit == 0)
-           {
-               dd('no such table in the service');
-           }
-       
-      dd();
-      
+       {
+            Helper::interrupt(617);
+       }
+
+        if($check_password == "true")
+        {
+
+           return $table_data;
+        }
+        else
+        {
+           return true; 
+        }
    }
+        
 }
 
 
-//given table_name, service_id, 
-
-//get schema for table  and compare field type of field with field name 
+//test drop and drop meta
+// required and default 
+//unqiue setting to sql directly 
