@@ -41,7 +41,7 @@ class ServiceController extends Controller {
 	 * @return Response
 	 */
 	public function store(Request $request)
-	{
+	{       //convert word inputs to lowercase
 		$service = new Service();
 
 		$service->name = $request->input("name");
@@ -95,6 +95,7 @@ class ServiceController extends Controller {
 	 */
 	public function update(Request $request, $id)
 	{
+                //convert name inputs to lowercase
 		$service = Service::findOrFail($id);
 
 		$service->name = $request->input("name");
@@ -129,15 +130,30 @@ class ServiceController extends Controller {
 	}
         
         /**
-	 *Refer request to the right service 
+        * all api calls go through api method  
+        * @param array  $request request params 
+        * @param string  $service  service to be accessed
+        * @param string $resource resource to be accessed
+        * @return Response
+        */
+        public function api(Request $request, $service, $resource)
+        {
+            $this->resource($request, $service, $resource);
+        }
+        
+        /**
+	 * Refer request to the right service and resource  
+         * @param array  $request request params 
 	 * @param string  $service  service to be accessed
          * @param string $resource resource to be accessed
 	 * @return Response
 	 */
-        public function resource(Request $request, $service, $resource)
+        public function resource($request, $service, $resource, $internal_access=false)
         {  
-            $resource = strtolower($resource);$service = strtolower($service);
-            $method = $request->method();
+            $resource = strtolower($resource);
+            $service = strtolower($service);
+            ($internal_access == true)? $method = $request['method'] :
+                $method = $request->method();
             #check method type and get payload accordingly 
              if(in_array($method,['POST','DELETE','PATCH']))
             {
@@ -164,16 +180,17 @@ class ServiceController extends Controller {
        
         
         /**
-	 * Remove the specified resource from storage.
+	 * assign request to a devless service .
 	 *
+         * @param $service name of service to be access 
 	 * @param  string  $resource
          * @param array $method http verb
+         * @param array $parameter contains all parameters passed from route
 	 * @return Response
 	 */
         public function assign_to_service($service, $resource, $method,
                 $parameters)
         {
-          
             if($current_service = serviceModel::where('name', $service)->
                     where('active',1)->first())
                      {
@@ -211,7 +228,7 @@ class ServiceController extends Controller {
                              'params'=>$parameters,   
                                
                                                         ];
-                        
+                            
                             $script = new script;
                             $script->run_script($resource,$payload);
                           }

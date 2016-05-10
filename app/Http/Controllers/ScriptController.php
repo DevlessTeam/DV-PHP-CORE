@@ -7,15 +7,17 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Http\Controllers\CoreController as core;
+use App\Http\Controllers\CoreController as Core;
+use App\Http\Controllers\ServiceController as Service;
 
-use GuzzleHttp;
 
 class ScriptController extends Controller
 {
     public function internal_services()
-    {
-        
+    {   
+        $service = new Service();
+        $request ;
+        $output = $service->resource($request, "auth", "db", $internal_access=true);
     }
      /*
      * script execution sandbox
@@ -27,7 +29,7 @@ class ScriptController extends Controller
     public function run_script($resource,$payload)
     {
         //payload 
-        $core = new core(); 
+        #$core = new Core(); 
         
         $event = [
             'method' => $payload['method'],
@@ -41,3 +43,21 @@ class ScriptController extends Controller
         return $result;   
     }
 }
+
+
+
+/*
+ *  [
+ "resource" => [0 => [
+        "name" => "auth",
+        "field" =>  [
+                        0 => [
+                        "email" => "chales@gmail.com",
+                        "password" => "password"
+                        ]
+                    ],
+                    
+    ]],
+        "method" => "POST"
+];
+ */

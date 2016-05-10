@@ -28,19 +28,17 @@ Route::group(['prefix' => 'api/v1'], function () {
         return "logs from here";
     })->middleware(['jsonValidator']);
 
-    #schema end points  
-    Route::post('schema','schemaController@store');
-  
+   
    
     
     #config end points
-    Route::resource('config', 'configController');
+    Route::resource('system', 'SystemController');
     
      #service end points  
-    Route::get('service/{service}/{resource}','serviceController@resource');
-    Route::post('service/{service}/{resource}','serviceController@resource');
-    Route::patch('service/{service}/{resource}','serviceController@resource');
-    Route::delete('service/{service}/{resource}','serviceController@resource');
+    Route::get('service/{service}/{resource}','serviceController@api');
+    Route::post('service/{service}/{resource}','serviceController@api');
+    Route::patch('service/{service}/{resource}','serviceController@api');
+    Route::delete('service/{service}/{resource}','serviceController@api');
     
     
     
