@@ -230,8 +230,8 @@ class ServiceController extends Controller {
                             'params'=>$parameters,   
                               
                                                         ];
-                            $schema = new schema;
-                            $schema->create_schema($resource, $payload);
+                            $db = new Db();
+                            $db->create_schema($resource, $payload);
                           }
                           else
                           {
