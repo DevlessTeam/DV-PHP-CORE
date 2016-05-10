@@ -40,6 +40,7 @@ class Helper
         616 => 'caught unknown data type',
         617 =>  'no such table belongs to the service',
         618 =>  'validator type does not exist',
+        619 =>  'table was updated successfully',
         700 => 'internal system error',
     ];
     
@@ -91,7 +92,7 @@ class Helper
             $msg = self::error_message($stack);
         }
         $response = Response::respond($stack, $msg, []); 
-           
+         
          die($response);
     }
     

@@ -12,7 +12,7 @@ use App\Exceptions\Handler as error;
 use Illuminate\Filesystem\Filesystem as files;
 use App\Helpers\Response as Response;  
 use \Illuminate\Database\Schema\Blueprint as Blueprint;
-class schemaController extends Controller
+class DbController extends Controller
 {
     public  $db_types = [
     'text'      => 'string',
@@ -34,21 +34,10 @@ class schemaController extends Controller
     'take'     => 'take',
     'relation' => 'relation'
     ];
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-        
-    }
-
+   
   
     /**
-     * Store a newly created resource in storage.
-     *
+     * create new table schema .
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      * api/v1/schema
@@ -72,13 +61,13 @@ class schemaController extends Controller
     public function add_data($resource, $payload)
     {       $service_id = $payload['id'];
             #setup db connection 
-            $connector = $this->connector($payload);
+            $connector = $this->_connector($payload);
             $db = \DB::connection('DYNAMIC_DB_CONFIG');
             foreach($payload['params'] as $table){
                  //check field if valid proceed with adding data 
                 
                 $table_data = $this->
-                    validate_fields($table['name'],
+                    _validate_fields($table['name'],
                            $service_id, $table['field'], true);
                 
                  $output = $db->table($table['name'])->insert($table_data);
@@ -93,17 +82,6 @@ class schemaController extends Controller
         }
 
         /**
-         * Show the form for editing the specified resource.
-         *
-         * @param  int  $id
-         * @return \Illuminate\Http\Response
-         */
-        public function edit($id)
-        {
-            //
-        }
-
-        /**
          * Update the specified resource in storage.
          * @param  string  $resource 
          * @param array $payload payload 
@@ -113,7 +91,7 @@ class schemaController extends Controller
         {
             //
             $connector = explode(',',$payload['db_definition']);
-            $connector = $this->connector($payload);
+            $connector = $this->_connector($payload);
             $db =   \DB::connection('DYNAMIC_DB_CONFIG');
 
             if(isset($payload['params'][0]['name'],
@@ -127,6 +105,9 @@ class schemaController extends Controller
                 $db->table($table_name)
                 ->where($explotion[0],$explotion[1])
                 ->update($data[0]);
+                
+                Helper::interrupt(619, 
+                        'table '.$payload['params'][0]['name']." updated successfuly");
 
             }
             else
@@ -148,7 +129,7 @@ class schemaController extends Controller
         {
             //
             $connector = explode(',',$payload['db_definition']);
-            $connector = $this->connector($payload);
+            $connector = $this->_connector($payload);
             $db =   \DB::connection('DYNAMIC_DB_CONFIG');
             //check if table name is set 
 
@@ -224,7 +205,7 @@ class schemaController extends Controller
     public function db_query($resource, $payload)
     {
         $connector = explode(',',$payload['db_definition']);
-        $connector = $this->connector($payload);
+        $connector = $this->_connector($payload);
         $db =   \DB::connection('DYNAMIC_DB_CONFIG');
         //check if table name is set 
         if(isset($payload['params']['table']))
@@ -240,7 +221,7 @@ class schemaController extends Controller
             {
                $wanted_relationships = $payload['params']['relation'];
                $table_name = $payload['params']['table'];
-               $related = $this->find_relations($table_name, $wanted_relationships, $db);
+               $related = $this->_find_relations($table_name, $wanted_relationships, $db);
                unset($payload['params']['relation']);}
                
             unset($payload['params']['table'],$payload['params']['size'][0]
@@ -288,11 +269,11 @@ class schemaController extends Controller
     public function create_schema($resource, array $json)
     {
         
-      #set path incase connector is sqlite
+      #set path in case connector is sqlite
     $id = $json['id'];
         #connectors mysql pgsql sqlsrv sqlite
     $connector = explode(',',$json['db_definition']);
-    $connector = $this->connector($json);
+    $connector = $this->_connector($json);
      #dynamically create columns with schema builder 
     $db_type = $this->db_types;
     $table_meta_data = []; 
@@ -320,7 +301,7 @@ class schemaController extends Controller
                     }
             //store table_meta details 
             });
-            $this->set_table_meta($json);
+            $this->_set_table_meta($json);
             Helper::interrupt(606);
         }
     else
@@ -494,8 +475,13 @@ class schemaController extends Controller
          }
          \Config::set('database.connections.DYNAMIC_DB_CONFIG', $conn);
     }
-    
-    private function connector($payload)
+    /*
+     * access different database connections
+     * 
+     * @param $payload request parameters
+     * @return boolean
+     */
+    private function _connector($payload)
     {
         $connector = explode(',',$payload['db_definition']);
         $index = 0;
@@ -508,10 +494,10 @@ class schemaController extends Controller
          $this->db_socket($connector[0], $connector[1], 
             $connector[2],$connector[3],$connector[4]);
           
-        
+        return true;
     }
     
-   private function find_relations($table_name, $wanted_relationships, $db)
+   private function _find_relations($table_name, $wanted_relationships, $db)
    {
        
        //simulations of getting relations from table meta   
@@ -544,7 +530,7 @@ class schemaController extends Controller
             return $related;
         
    }
-   private function set_table_meta($schema)
+   private function _set_table_meta($schema)
    {
        
        \DB::table('tableMeta')->insert(['schema'=>  json_encode($schema),
@@ -555,9 +541,12 @@ class schemaController extends Controller
    }
    /*
     * validate entry data against schema field type
+    *
     * @param string  $service_id
+    *
+    * @return array
     */
-   private function get_tableMeta($service_id)
+   private function _get_tableMeta($service_id)
    {
        $tableMeta =\DB::table('tableMeta')->
                                 where('service_id',$service_id)->get();
@@ -579,38 +568,38 @@ class schemaController extends Controller
    
    /*
     * validate entry data against schema field type
+    *
     * @param string $table_name 
     * @param string $service_id
     * @param array  $field_names
+    * @return boolean
     */
-   private function validate_fields($table_name,$service_id, $table_data, 
+   private function _validate_fields($table_name,$service_id, $table_data, 
            $check_password=false)
    {
        
-       $table_meta = $this->get_tableMeta($service_id);
-       $new_table_data = [];
+       $table_meta = $this->_get_tableMeta($service_id);
+       $hit = 0; $check = 0; $count = 0;
        foreach($table_meta as $schema)
        {
-           $hit = 0; $check = 0; $count = 0;
+          
+          
            if($schema['schema']['name'] == $table_name)
            { 
-               
+             
                 foreach($table_data as $field_unit)
                 {
                     foreach($field_unit as $field => $field_value)
                     {
                             foreach($schema['schema']['field'] as $fields)
                             {
-                                
-                                $new_table_data = [$field   => $field_value];
-                                
                                 if($fields['name'] == $field)
                                 {
                                     $err_msg = 
                                        Helper::field_check($field_value,
                                                $fields['field_type']);
                                     if($check_password == "true" &&
-                                            $fields['field_type'] )
+                                            $fields['field_type']== "password" )
                                         {$table_data[$count]['password']=
                           Helper::password_hash($table_data[$count]['password']);
                                         }
@@ -632,6 +621,7 @@ class schemaController extends Controller
            
           
        }
+       
        if($hit == 0)
        {
             Helper::interrupt(617);
@@ -651,6 +641,5 @@ class schemaController extends Controller
 }
 
 
-//test drop and drop meta
-// required and default 
-//unqiue setting to sql directly 
+//TODO:test drop and drop meta
+//TODO:prefix tables      

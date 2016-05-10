@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Service as serviceModel;
 use App\Helpers\Helper;
 use App\Http\Controllers\ScriptController as script ;
-use App\Http\Controllers\schemaController as schema;
+use App\Http\Controllers\DbController as Db;
 
 class ServiceController extends Controller {
 
@@ -191,8 +191,8 @@ class ServiceController extends Controller {
                             'params' => $parameters,   
                             
                                                          ];
-                            $schema = new schema(); 
-                            $schema->access_db($resource,$payload);
+                            $db = new Db(); 
+                            $db->access_db($resource,$payload);
                             
                               
                     } 
@@ -225,15 +225,11 @@ class ServiceController extends Controller {
                             'script' =>  $current_service->script, 
                             'pre_set' => $current_service->pre_set,
                             'post_set' => $current_service->post_set,
-                            'calls' =>  $current_service->calls,
+                            'calls' =>  $current_service->calls,  
                             'method' => $method,
                             'params'=>$parameters,   
                               
                                                         ];
-                            //temporal 
-                            $payload['db_definition'] =
-                            'driver=mysql,hostname=127.0.0.1,database=devless-rec,username=root,password=password';
-                           
                             $schema = new schema;
                             $schema->create_schema($resource, $payload);
                           }
