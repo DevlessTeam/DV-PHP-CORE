@@ -10,14 +10,29 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\CoreController as Core;
 use App\Http\Controllers\ServiceController as Service;
 
+use \App\Helpers\Helper as Helper;
+
 
 class ScriptController extends Controller
 {
-    public function internal_services()
+    
+     /*
+     * Call on services from within scripts and views 
+     * 
+     * @param json $payload request payload
+     * @param string $service_name 
+     * @param string $resource 
+     * @param string $method
+     * @return array|object  
+     */
+    public static function internal_services($json_payload, $service_name, $resource, $method)
     {   
         $service = new Service();
-        $request ;
-        $output = $service->resource($request, "auth", "db", $internal_access=true);
+        $request = [
+        "resource" => json_decode($json_payload),
+        "method" => $method
+        ];
+        $output = $service->resource($request, $service_name, $resource, $internal_access=true);
     }
      /*
      * script execution sandbox
@@ -27,18 +42,20 @@ class ScriptController extends Controller
      * @return array  
      */
     public function run_script($resource,$payload)
-    {
-        //payload 
-        #$core = new Core(); 
-        
-        $event = [
+    { 
+        //available methods
+        $json = '';
+        $EVENT = [
             'method' => $payload['method'],
             'params' => $payload['params'],
-            'calls'  => $payload['script']
+            'script'  => $payload['script']
         ];
-        #if($payload['pre_set'] == 1){$core->pre_script($resource,$payload);}
-        $result = eval("\$event = \$event;".$payload['script']);
-        #if($payload['post_set'] == 1){$core->post_script($resource,$payload);}
+        $service = '$this->internal_services';
+//NB: position matters here
+$code = <<<EOT
+$payload[script];
+EOT;
+        $result = eval($code);
         
         return $result;   
     }
@@ -46,18 +63,3 @@ class ScriptController extends Controller
 
 
 
-/*
- *  [
- "resource" => [0 => [
-        "name" => "auth",
-        "field" =>  [
-                        0 => [
-                        "email" => "chales@gmail.com",
-                        "password" => "password"
-                        ]
-                    ],
-                    
-    ]],
-        "method" => "POST"
-];
- */

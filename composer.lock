@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "79835cafdc6574fb644951cbbed20b9f",
-    "content-hash": "728b4908e59c1664b3acb1dc4a2826fd",
+    "hash": "0f10378e88482cd9822379287827276a",
+    "content-hash": "8a78a6dd6b09b02ce5b859567c82dc2f",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -60,6 +60,65 @@
                 "preload"
             ],
             "time": "2015-11-09 22:51:51"
+        },
+        {
+            "name": "corveda/php-sandbox",
+            "version": "v2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Corveda/PHPSandbox.git",
+                "reference": "3535a44dbe361e68616bc2a2913d9d022d328835"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Corveda/PHPSandbox/zipball/3535a44dbe361e68616bc2a2913d9d022d328835",
+                "reference": "3535a44dbe361e68616bc2a2913d9d022d328835",
+                "shasum": ""
+            },
+            "require": {
+                "jeremeamia/functionparser": "*",
+                "nikic/php-parser": "2.*",
+                "php": ">=5.4"
+            },
+            "replace": {
+                "fieryprophet/php-sandbox": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.*",
+                "symfony/yaml": "~2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "PHPSandbox\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Elijah Horton",
+                    "email": "elijah@corveda.com"
+                },
+                {
+                    "name": "Corveda, LLC."
+                }
+            ],
+            "description": "A PHP library that can be used to run PHP code in a sandboxed environment",
+            "homepage": "https://phpsandbox.org/",
+            "keywords": [
+                "blacklist",
+                "parser",
+                "php",
+                "sandbox",
+                "whitelist"
+            ],
+            "time": "2016-02-11 09:35:22"
         },
         {
             "name": "danielstjules/stringy",
@@ -474,6 +533,53 @@
                 }
             ],
             "time": "2015-04-20 18:58:01"
+        },
+        {
+            "name": "jeremeamia/FunctionParser",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jeremeamia/FunctionParser.git",
+                "reference": "035b52000b88ea8d72a6647dd4cd39f080cf7ada"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jeremeamia/FunctionParser/zipball/035b52000b88ea8d72a6647dd4cd39f080cf7ada",
+                "reference": "035b52000b88ea8d72a6647dd4cd39f080cf7ada",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "FunctionParser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeremy Lindblom"
+                }
+            ],
+            "description": "Function parser for PHP functions, methods, and closures",
+            "homepage": "https://github.com/jeremeamia/FunctionParser",
+            "keywords": [
+                "closure",
+                "function",
+                "parser",
+                "tokenizer"
+            ],
+            "time": "2015-02-02 17:30:47"
         },
         {
             "name": "jeremeamia/SuperClosure",

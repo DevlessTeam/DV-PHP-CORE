@@ -7,8 +7,9 @@ use App\Service;
 use Illuminate\Http\Request;
 use App\Service as serviceModel;
 use App\Helpers\Helper;
-use App\Http\Controllers\ScriptController as script ;
+use App\Http\Controllers\ScriptController as Script ;
 use App\Http\Controllers\DbController as Db;
+use App\Http\Controllers\ViewController as View;
 
 class ServiceController extends Controller {
 
@@ -153,23 +154,11 @@ class ServiceController extends Controller {
             $resource = strtolower($resource);
             $service = strtolower($service);
             ($internal_access == true)? $method = $request['method'] :
-                $method = $request->method();
+            $method = $request->method();
+            $method = strtoupper($method);
             #check method type and get payload accordingly 
-             if(in_array($method,['POST','DELETE','PATCH']))
-            {
-                 $parameters = $request['resource'];
-                 
-             }
-             else if($method == 'GET')  
-            {
-                 $parameters = Helper::query_string();
-                 
-            }
-            else
-            {
-                Helper::interrupt(608, 'Request method '.$method.
-                        ' is not supported');        
-            }
+            
+            $parameters = $this->get_params($method, $request);
                     
                  
             //$resource
@@ -189,82 +178,86 @@ class ServiceController extends Controller {
 	 * @return Response
 	 */
         public function assign_to_service($service, $resource, $method,
-                $parameters)
-        {
-            if($current_service = serviceModel::where('name', $service)->
-                    where('active',1)->first())
-                     {
+                $parameters=null)
+        {       
+                $current_service = $this->service_exist($service);
+                $payload = [
+                    'id'=>$current_service->id,  
+                    'service_name' =>$current_service->name,
+                    'db_definition' =>$current_service->db_definition, 
+                    'pre_set' => $current_service->pre_set,
+                    'post_set' => $current_service->post_set,
+                    'calls' =>  $current_service->calls,
+                    'method' => $method,
+                    'params' => $parameters, 
+                ]; 
+                //keep names of resources in the singular
+                 switch ($resource)
+                 {
+                    case 'db':
                         
-                        
-                    if($resource == 'db'){
-                     
-                            $payload = [
-                            'id'=>$current_service->id,    
-                            'db_definition' =>$current_service->db_definition, 
-                            'pre_set' => $current_service->pre_set,
-                            'post_set' => $current_service->post_set,
-                            'calls' =>  $current_service->calls,
-                            'method' => $method,
-                            'params' => $parameters,   
-                            
-                                                         ];
-                            $db = new Db(); 
+                        $db = new Db(); 
                             $db->access_db($resource,$payload);
+                            break;    
                             
-                              
-                    } 
-                    else if($resource == 'script')
-                          {
-                             
+                    case 'script':
                         
-                            $payload = [
-                            'id'=>$current_service->id,
-                            'db_definition' =>$current_service->db_definition,     
-                            'script' =>  $current_service->script, 
-                            'pre_set' => $current_service->pre_set,
-                            'post_set' => $current_service->post_set,
-                            'calls' =>  $current_service->calls,
-                            'method' => $method,
-                             'params'=>$parameters,   
-                               
-                                                        ];
-                            
-                            $script = new script;
+                         $script = new script;
                             $script->run_script($resource,$payload);
-                          }
-                          else if($resource == 'schema')
-                          {
-                             
-                        
-                            $payload = [
-                            'id'=>$current_service->id,  
-                            'db_definition' =>$current_service->db_definition,     
-                            'script' =>  $current_service->script, 
-                            'pre_set' => $current_service->pre_set,
-                            'post_set' => $current_service->post_set,
-                            'calls' =>  $current_service->calls,  
-                            'method' => $method,
-                            'params'=>$parameters,   
-                              
-                                                        ];
-                            $db = new Db();
+                            break;
+                            
+                    case 'schema':
+                        $db = new Db();
                             $db->create_schema($resource, $payload);
-                          }
-                          else
-                          {
-                                Helper::interrupt(605);
-                          }
+                            break;
+                    
+                    case 'views':
+                        return $payload;
+                        
+                    default:
+                        Helper::interrupt(605); 
+                 }
+                      
+                 
             
                     
             }
-            else
-            {
-                
-                Helper::interrupt(604);
-            }       
+                 
             
           
-            //check for pre and post 
             
-        }
+            
+            public function service_exist($service_name)
+            {
+                if($current_service = serviceModel::where('name', $service_name)->
+                    where('active',1)->first())
+                     {
+                             return $current_service;
+                     }
+                     else
+                     {
+                         Helper::interrupt(604);
+                     }
+            }
+            
+            public function get_params($method, $request)
+            {
+                    if(in_array($method,['POST','DELETE','PATCH']))
+                {
+                     $parameters = $request['resource'];
+
+                 }
+                 else if($method == 'GET')  
+                {
+                     $parameters = Helper::query_string();
+
+                }
+                else
+                {
+                    Helper::interrupt(608, 'Request method '.$method.
+                            ' is not supported');        
+                }
+                return $parameters;
+            }
+        //check for pre and post 
 }

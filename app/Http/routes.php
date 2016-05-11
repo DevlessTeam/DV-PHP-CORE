@@ -16,6 +16,9 @@ Route::get('/', function () {
     return 'welcome to devless (login soon comes here)';
 });
 
+#views route 
+Route::resource('service/{service}/{resource}/{template}', 'ViewController@access_views');
+  
 Route::group(['prefix' => 'api/v1'], function () {
 	#check system status 
     Route::get('status', function ()    {
@@ -32,7 +35,7 @@ Route::group(['prefix' => 'api/v1'], function () {
    
     
     #config end points
-    Route::resource('system', 'SystemController');
+    Route::resource('system', 'serviceController@api');
     
      #service end points  
     Route::get('service/{service}/{resource}','serviceController@api');

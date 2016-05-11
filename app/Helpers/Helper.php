@@ -25,8 +25,8 @@ class Helper
         601 => 'reference column column name does not exist',
         602 => 'database schema could not be created',
         603 => 'table could not be created',
-        604  =>'service resource does not exist or is not active',
-        605 => 'no such service type try (script or db)',
+        604  =>'service  does not exist or is not active',
+        605 => 'no such service resource try (script  db or view)',
         606 => 'created database Schema successfully',
         607 => 'could not find the right DB method',
         608 => 'request method not supported',
@@ -194,4 +194,6 @@ class Helper
     {
         (Hash::check($user_input, $hash))?  true :  false;
     }
+    
+    
 }
