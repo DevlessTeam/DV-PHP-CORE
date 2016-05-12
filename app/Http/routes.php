@@ -17,7 +17,7 @@ Route::get('/', function () {
 });
 
 #views route 
-Route::resource('service/{service}/{resource}/{template}', 'ViewController@access_views');
+Route::resource('service/{service}/{resource}/{template}/', 'ViewController@access_views');
   
 Route::group(['prefix' => 'api/v1'], function () {
 	#check system status 

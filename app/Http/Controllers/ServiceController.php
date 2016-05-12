@@ -131,7 +131,7 @@ class ServiceController extends Controller {
 	}
         
         /**
-        * all api calls go through api method  
+        * all api calls go through here
         * @param array  $request request params 
         * @param string  $service  service to be accessed
         * @param string $resource resource to be accessed
@@ -171,7 +171,7 @@ class ServiceController extends Controller {
         /**
 	 * assign request to a devless service .
 	 *
-         * @param $service name of service to be access 
+         * @param string $service name of service to be access 
 	 * @param  string  $resource
          * @param array $method http verb
          * @param array $parameter contains all parameters passed from route
@@ -188,6 +188,7 @@ class ServiceController extends Controller {
                     'pre_set' => $current_service->pre_set,
                     'post_set' => $current_service->post_set,
                     'calls' =>  $current_service->calls,
+                    'script' => $current_service->script,
                     'method' => $method,
                     'params' => $parameters, 
                 ]; 
@@ -226,7 +227,12 @@ class ServiceController extends Controller {
             
           
             
-            
+            /*
+             * get parameters from request
+             * 
+             * @param string $service_name name of service 
+             * return array of service values 
+             */
             public function service_exist($service_name)
             {
                 if($current_service = serviceModel::where('name', $service_name)->
@@ -240,6 +246,13 @@ class ServiceController extends Controller {
                      }
             }
             
+            /*
+             * get parameters from request
+             * 
+             * @param string $method reuquest method type 
+             * @param array $request request parameters 
+             * return array of parameters
+             */
             public function get_params($method, $request)
             {
                     if(in_array($method,['POST','DELETE','PATCH']))
