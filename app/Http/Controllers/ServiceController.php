@@ -155,9 +155,11 @@ class ServiceController extends Controller {
             $service = strtolower($service);
             ($internal_access == true)? $method = $request['method'] :
             $method = $request->method();
-            $method = strtoupper($method);
-            #check method type and get payload accordingly 
             
+            
+            $method = strtoupper($method);
+            
+            #check method type and get payload accordingly 
             $parameters = $this->get_params($method, $request);
                     
                  

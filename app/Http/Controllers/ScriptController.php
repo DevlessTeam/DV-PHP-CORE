@@ -45,7 +45,6 @@ class ScriptController extends Controller
     public function run_script($resource,$payload)
     { 
         //available methods
-        $json = '';
         $EVENT = [
             'method' => $payload['method'],
             'params' => $payload['params'],
@@ -59,11 +58,12 @@ class ScriptController extends Controller
 $code = <<<EOT
         
  \$GLOBALS['script_class'] = \$script_class;
-function service(\$me){
+function service(\$json_payload, \$service_name, \$resource, \$method){
       
-call_user_func_array(array(\$GLOBALS['script_class'], 'internal_services'),array("1","2","3",\$me));
+call_user_func_array(array(\$GLOBALS['script_class'], 'internal_services'),array(\$json_payload, 
+    \$service_name, \$resource, \$method));
  }
-service('me');
+
 $payload[script];
 EOT;
 
