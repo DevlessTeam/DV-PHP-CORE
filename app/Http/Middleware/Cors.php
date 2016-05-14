@@ -4,10 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class AfterMiddleware
+class Cors
 {
     /**
-     * Handle an outgoing  result.
+     * Enable cors.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -15,11 +15,9 @@ class AfterMiddleware
      */
     public function handle($request, Closure $next)
     {
-           $response = $next($request);
-        
-        // Perform action
-        return $response ->header('Access-Control-Allow-Origin', '*')
+          
+         return $next($request)
+            ->header('Access-Control-Allow-Origin', '*')
             ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-            
     }
 }

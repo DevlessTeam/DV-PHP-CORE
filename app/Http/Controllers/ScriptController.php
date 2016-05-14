@@ -26,13 +26,15 @@ class ScriptController extends Controller
      * @return array|object  
      */
     public function internal_services($json_payload, $service_name, $resource, $method)
-    {   
+    {
+        $json_payload = json_decode($json_payload,true);
         $service = new Service();
         $request = [
-        "resource" => json_decode($json_payload),
+        "resource" => $json_payload['resource'],
         "method" => $method
         ];
         $output = $service->resource($request, $service_name, $resource, $internal_access=true);
+        return $output;
     }
     
      /*
@@ -51,7 +53,6 @@ class ScriptController extends Controller
             'script'  => $payload['script']
         ];
         $script_class = new ScriptController;
-        //$this->internal_services($json_payload, $service_name, $resource, $method);
         
 
 //NB: position matters here
@@ -60,7 +61,7 @@ $code = <<<EOT
  \$GLOBALS['script_class'] = \$script_class;
 function service(\$json_payload, \$service_name, \$resource, \$method){
       
-call_user_func_array(array(\$GLOBALS['script_class'], 'internal_services'),array(\$json_payload, 
+return call_user_func_array(array(\$GLOBALS['script_class'], 'internal_services'),array(\$json_payload, 
     \$service_name, \$resource, \$method));
  }
 

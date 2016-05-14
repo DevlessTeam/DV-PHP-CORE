@@ -19,7 +19,7 @@ Route::get('/', function () {
 #views route 
 Route::resource('service/{service}/{resource}/{template}/', 'ViewController@access_views');
   
-Route::group(['prefix' => 'api/v1'], function () {
+Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
 	#check system status 
     Route::get('status', function ()    {
         // Matches The "/api/v1/us" URL

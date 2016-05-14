@@ -65,7 +65,6 @@ class DbController extends Controller
             $db = \DB::connection('DYNAMIC_DB_CONFIG');
             foreach($payload['params'] as $table){
                  //check field if valid proceed with adding data 
-                
                 $table_data = $this->
                     _validate_fields($table['name'],
                            $service_id, $table['field'], true);
@@ -132,7 +131,6 @@ class DbController extends Controller
             $connector = $this->_connector($payload);
             $db =   \DB::connection('DYNAMIC_DB_CONFIG');
             //check if table name is set 
-
          $table_name = $payload['params'][0]['name'];
          $destroy_query = '$db->table("'.$table_name.'")';
          if(isset($payload['params'][0]['params'][0]['drop']))
@@ -151,19 +149,24 @@ class DbController extends Controller
             {
 
              $where = $payload['params'][0]['params'][0]['where'];
+             $where = str_replace(",", "','", $where);
+             $where = "'".$where."'";
              $destroy_query = $destroy_query.'->where('.$where.')';
              $task ='where';
 
 
             }
          }
+         $element = 'row';
          if(isset($payload['params'][0]['params'][0]['truncate'] ) )
         {
 
              if($payload['params'][0]['params'][0]['truncate'] == true)
              {
                 $destroy_query = $destroy_query.'->truncate()';
-                $task ='truncate';
+                $tasked ='truncated';$task = 'truncate';
+                
+                
              }
         }
         else if(isset($payload['params'][0]['params'][0]['delete'] ))
@@ -174,15 +177,17 @@ class DbController extends Controller
 
                   
                 $destroy_query = $destroy_query.'->delete()';
-                $task ='deleted';  
-
+                $tasked ='deleted'; $task = 'delete'; 
+                
+             
             }   
 
         } 
         else if(isset($payload['params'][0]['params'][0]['drop'] )){
 
             $destroy_query = $destroy_query.'->drop()';
-            $task ='dropped';  
+            $tasked ='dropped';  $task = 'drop';
+            $element = 'table';
              
         }
         else
@@ -191,7 +196,9 @@ class DbController extends Controller
         }
         $destroy_query = $destroy_query.';';   
         $result = eval('return'.$destroy_query);
+        if($result == false){Helper::interrupt(614, 'could not '.$task.' '.$element);}
         Helper::interrupt(614, 'The table has been '.$task);
+            
     }
         
     
@@ -224,13 +231,21 @@ class DbController extends Controller
                $related = $this->_find_relations($table_name, $wanted_relationships, $db);
                unset($payload['params']['relation']);}
                
+               if(isset($payload['params']['order']))
+            {
+               $order_by = $payload['params']['order'];
+               $table_name = $payload['params']['table'];
+              $complete_query = $base_query
+                    . '->orderBy("'.$payload['params']['order'][0].'" )' ;
+                  unset($payload['params']['order']);}
+               
             unset($payload['params']['table'],$payload['params']['size'][0]
                     );    
             foreach($payload['params'] as $key => $query)
             {
                 foreach($query as $one)
                 {
-                    #prepare query for order and which 
+                    #prepare query for order and where
                     if(isset($this->query_params[$key]))
                     {   
                         
@@ -592,18 +607,22 @@ class DbController extends Controller
                     foreach($field_unit as $field => $field_value)
                     {
                             foreach($schema['schema']['field'] as $fields)
-                            {
+                            {  
                                 if($fields['name'] == $field)
                                 {
+                                    //pass field_type and value to validate 
                                     $err_msg = 
                                        Helper::field_check($field_value,
                                                $fields['field_type']);
+                                    
                                     if($check_password == "true" &&
                                             $fields['field_type']== "password" )
                                         {$table_data[$count]['password']=
                           Helper::password_hash($table_data[$count]['password']);
+                                         
                                         }
-                                    if(!$err_msg == "true")
+                                        
+                                    if(is_object($err_msg) == true)
                                     {
                                         
                                          Helper::interrupt(616, $err_msg);

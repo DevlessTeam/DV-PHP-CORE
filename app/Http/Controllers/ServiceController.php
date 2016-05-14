@@ -156,13 +156,21 @@ class ServiceController extends Controller {
             ($internal_access == true)? $method = $request['method'] :
             $method = $request->method();
             
-            
             $method = strtoupper($method);
+            #check method type and get payload accordingly
+         
+            if($internal_access == true)
+            {
+                $parameters = $request['resource'];
+                
+            }
+            else
+            {
+                $parameters = $this->get_params($method, $request);
+                
+            }
             
-            #check method type and get payload accordingly 
-            $parameters = $this->get_params($method, $request);
-                    
-                 
+            
             //$resource
             return $this->assign_to_service($service, $resource, $method, 
                     $parameters);
@@ -226,9 +234,6 @@ class ServiceController extends Controller {
                     
             }
                  
-            
-          
-            
             /*
              * get parameters from request
              * 
@@ -257,12 +262,13 @@ class ServiceController extends Controller {
              */
             public function get_params($method, $request)
             {
-                    if(in_array($method,['POST','DELETE','PATCH']))
+                if(in_array($method,['POST','DELETE','PATCH']))
                 {
                      $parameters = $request['resource'];
+                     
 
-                 }
-                 else if($method == 'GET')  
+                }
+                else if($method == 'GET')  
                 {
                      $parameters = Helper::query_string();
 

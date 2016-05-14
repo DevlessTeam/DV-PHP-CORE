@@ -3,6 +3,7 @@ namespace App\Helpers;
 use Validator;
 use App\Helpers\Response as Response;
 use Hash;
+use Response as output;
 /* 
  * @author eddymens <eddymens@devless.io>
 *composed of most common used classes and functions 
@@ -36,11 +37,12 @@ class Helper
         612 => 'query parameters not set',
         613 => 'dropped table succefully',
         614 => 'parameters where or data  not set',
-        615 => 'delete action not set',   
+        615 => 'delete action not set ',   
         616 => 'caught unknown data type',
         617 =>  'no such table belongs to the service',
         618 =>  'validator type does not exist',
         619 =>  'table was updated successfully',
+        620 =>  'could not delete table',
         700 => 'internal system error',
     ];
     
@@ -92,8 +94,10 @@ class Helper
             $msg = self::error_message($stack);
         }
         $response = Response::respond($stack, $msg, []); 
-         
-         die($response);
+        header('Access-Control-Allow-Origin', '*');
+        header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+        die($response);
+        
     }
     
      /**
