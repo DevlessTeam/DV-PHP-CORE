@@ -12,13 +12,14 @@
 */
 
 Route::get('/', function () {
-    # $exitCode = Artisan::call('command:name', ['--option' => 'foo']);
     return 'welcome to devless (login soon comes here)';
 });
 
 #views route 
 Route::resource('service/{service}/{resource}/{template}/', 'ViewController@access_views');
-  
+
+Route::get('assets/{sublevels?}', 'ViewController@static_files')->where('sublevels', '.*');
+
 Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
 	#check system status 
     Route::get('status', function ()    {

@@ -28,4 +28,10 @@ class ViewController extends Controller
         
         return view('auth.index')->with($payload);
     }
+    
+    public function static_files(Request $request)
+    {
+        
+        return response(file_get_contents('../resources/'.$request->path()))->header('Content-Type', 'text/css');
+    }
 }
