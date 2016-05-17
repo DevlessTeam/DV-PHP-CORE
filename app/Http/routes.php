@@ -57,6 +57,7 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
     
     #change token
     Route::put('generatetoken','AppController@update');
+    Route::delete('destroy_table', 'SystemApiController@delete_table');
     
 
 

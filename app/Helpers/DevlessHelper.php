@@ -10,7 +10,12 @@ use App\Helpers\Helper as Helper;
 class DevlessHelper extends Helper
 {
     //
-    
+    /**
+     * set paramters for notification plate
+     * 
+     * @param type $message
+     * @param type $message_color
+     */
     public static function flash($message,$message_color="#736F6F")
     {
         $custom_colors = 
