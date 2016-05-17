@@ -43,6 +43,7 @@ class Helper
         618 =>  'validator type does not exist',
         619 =>  'table was updated successfully',
         620 =>  'could not delete table',
+        621 =>  'Could not find asset file',
         700 => 'internal system error',
     ];
     

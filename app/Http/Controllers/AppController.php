@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\App;
 use Illuminate\Http\Request;
-
+use \App\Helpers\DevlessHelper as DLH;
 class AppController extends Controller {
 
 	/**
@@ -15,9 +15,9 @@ class AppController extends Controller {
 	 */
 	public function index()
 	{
-		$apps = App::orderBy('id', 'desc')->paginate(10);
+		$app = App::first();
 
-		return view('apps.index', compact('apps'));
+		return view('app.edit', compact('app'));
 	}
 
 	/**
@@ -27,7 +27,7 @@ class AppController extends Controller {
 	 */
 	public function create()
 	{
-		return view('apps.create');
+		return view('app.create');
 	}
 
 	/**
@@ -47,7 +47,7 @@ class AppController extends Controller {
 
 		$app->save();
 
-		return redirect()->route('apps.index')->with('message', 'Item created successfully.');
+		return redirect()->route('app.index')->with('message', 'Item created successfully.');
 	}
 
 	/**
@@ -83,17 +83,23 @@ class AppController extends Controller {
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function update(Request $request, $id)
+	public function update(Request $request)
 	{
-		$app = App::findOrFail($id);
+		if($app = App::first())
+                {
+                $app->name = $request->input("name");
+                $app->description = $request->input("description");
+                $app->api_key = $_SERVER['SERVER_NAME'];
+                #$app->token = $request->input("token");
 
-		$app->name = $request->input("name");
-        $app->description = $request->input("description");
-        $app->token = $request->input("token");
-
-		$app->save();
-
-		return redirect()->route('apps.index')->with('message', 'Item updated successfully.');
+		($app->save())? DLH::flash("App updated successfully", 'success'):
+                    DLH::flash("Changes did not take effect", 'error');
+                }
+                else
+                {
+                    DLH::flash("Could not get app properties", 'error');
+                }
+		return back();
 	}
 
 	/**
@@ -107,7 +113,7 @@ class AppController extends Controller {
 		$app = App::findOrFail($id);
 		$app->delete();
 
-		return redirect()->route('apps.index')->with('message', 'Item deleted successfully.');
+		return redirect()->route('app.index')->with('message', 'Item deleted successfully.');
 	}
 
 }

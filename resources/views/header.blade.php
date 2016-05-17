@@ -17,7 +17,7 @@
     <link href="/assets/js/switchery/switchery.min.css" rel="stylesheet" type="text/css" media="screen" />
 
     <!--Form Wizard-->
-    <link rel="stylesheet" type="text/css" href="assets/css/jquery.steps.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/jquery.steps.css" />
 
     <!--common style-->
     <link href="/assets/css/style.css" rel="stylesheet">
@@ -45,7 +45,7 @@
                 <!--logo and logo icon start-->
                 <div class="logo dark-logo-bg hidden-xs hidden-sm">
                     <a href="index.html">
-                        <img src="assets/img/logo-icon.png" alt="">
+                        <img src="/assets/img/logo-icon.png" alt="">
                         <!--<i class="fa fa-maxcdn"></i>-->
                         <span class="brand-name">Devless</span>
                     </a>
@@ -53,7 +53,7 @@
 
                 <div class="icon-logo dark-logo-bg hidden-xs hidden-sm">
                     <a href="index.html">
-                        <img src="assets/img/logo-icon.png" alt="">
+                        <img src="/assets/img/logo-icon.png" alt="">
                         <!--<i class="fa fa-maxcdn"></i>-->
                     </a>
                 </div>

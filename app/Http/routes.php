@@ -52,7 +52,7 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
     Route::resource('services','serviceController');
     
     #app views 
-    Route::resource("apps","AppController");
+    Route::resource("app",'AppController');
     
 
 

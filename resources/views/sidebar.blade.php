@@ -3,7 +3,7 @@
             <!--responsive view logo start-->
             <div class="logo dark-logo-bg visible-xs-* visible-sm-*">
                 <a href="index.php">
-                    <img src="img/logo-icon.png" alt="">
+                    <img src="/img/logo-icon.png" alt="">
                     <!--<i class="fa fa-maxcdn"></i>-->
                     <span class="brand-name">Devless</span>
                 </a>
@@ -18,7 +18,7 @@
                 <!--sidebar nav start-->
                 <ul class="nav nav-pills nav-stacked side-navigation">
                     <li>
-                        <h3 class="navigation-title">Navigation</h3>
+                        <h3 class="navigation-title">Menu</h3>
                     </li>
                     <li><a href="index.php"><span>Home</span></a></li>
                     <li><a href="app.php"><span>App</span></a></li>
