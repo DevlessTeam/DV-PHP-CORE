@@ -51,8 +51,12 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
      #service views  
     Route::resource('services','serviceController');
     
+    
     #app views 
     Route::resource("app",'AppController');
+    
+    #change token
+    Route::put('generatetoken','AppController@update');
     
 
 

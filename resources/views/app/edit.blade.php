@@ -26,8 +26,6 @@
                     </header>
                     <div class="panel-body">
                          <form action="{{ route('app.update') }}" class="form-horizontal" method="POST">
-                            <input type="hidden" name="_method" value="PUT">
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="form-group @if($errors->has('name')) has-error @endif" >
                                 <label for="name" class="col-lg-2 col-sm-2 control-label">App Name</label>
                                 <div class="col-lg-10">
@@ -59,9 +57,11 @@
                                 <label for="token-field" class="col-lg-2 col-sm-2 control-label">Token</label>
                                 <div class="col-lg-10">
                                     <div class="input-group m-b-10" >
-                                        <input type="text" readonly value="{{$app->token}}" class="form-control">
+                                        <input type="text" id="token" readonly value="{{$app->token}}" class="form-control">
                                         <span class="input-group-btn">
-                                            <button class="btn btn-white" type="button">Generate Token</button>
+                                             <input type="hidden" name="_method" value="PUT">
+                                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                             <button class="btn btn-white" onclick="update_token()" type="button">Regenerate Token</button>
                                         </span>
                                     </div>
                                     @if($errors->has("token"))
@@ -71,7 +71,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-lg-offset-2 col-lg-10">
-                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="submit" class="btn btn-primary pull-right">Save</button>
                                 </div>
                             </div>
                         </form>
@@ -81,4 +81,39 @@
         </div>
     </div>
     <!--body wrapper end-->
+    <script>
+    function generate_token(){
+            var settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": "{{route('app.update')}}",
+          "method": "PUT",
+          "headers": {
+            "content-type": "application/json",
+            "cache-control": "no-cache",
+          },
+          "processData": false,
+          "data": "{\"action\":\"regen\"}"
+        }
+
+        $.ajax(settings).done(function (response) {
+          console.log(response);
+          $result = JSON.parse(response)
+          if($result.status_code == 622){
+              $("#token").val($result.payload.new_token);
+          }
+          else{
+              
+              alert("token could not be updated");
+          }
+        });
+    }
+    function update_token(message){
+        if(confirm("Do you want to update token")){
+            generate_token();
+        }else{
+            return false;
+        }
+    }
+    </script>
 @endsection

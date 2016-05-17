@@ -83,8 +83,15 @@ class ServiceController extends Controller {
 	public function edit($id)
 	{
 		$service = Service::findOrFail($id);
-
-		return view('services.edit', compact('service'));
+                $table_meta = \App\TableMeta::where('service_id',$id)->get();
+                $count = 0;
+                foreach($table_meta as $each_table_meta)
+                {
+                    $table_meta[$count]  = (json_decode($each_table_meta->schema, true));
+                    $count++;
+                }
+                
+		return view('services.edit', compact('service','table_meta'));
 	}
 
 	/**
@@ -191,7 +198,8 @@ class ServiceController extends Controller {
                 $parameters=null)
         {       
                 $current_service = $this->service_exist($service);
-                $payload = [
+                $payload = 
+                    [
                     'id'=>$current_service->id,  
                     'service_name' =>$current_service->name,
                     'db_definition' =>$current_service->db_definition, 

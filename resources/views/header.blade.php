@@ -31,39 +31,10 @@
 
 
 </head>
-<body class="sticky-header">
+<body onload="init()" class="sticky-header">
 
     <section>
 
          @include('sidebar')
-        <!-- body content start-->
-        <div class="body-content" style="min-height: 800px;">
-
-            <!-- header section start-->
-            <div class="header-section">
-
-                <!--logo and logo icon start-->
-                <div class="logo dark-logo-bg hidden-xs hidden-sm">
-                    <a href="index.html">
-                        <img src="/assets/img/logo-icon.png" alt="">
-                        <!--<i class="fa fa-maxcdn"></i>-->
-                        <span class="brand-name">Devless</span>
-                    </a>
-                </div>
-
-                <div class="icon-logo dark-logo-bg hidden-xs hidden-sm">
-                    <a href="index.html">
-                        <img src="/assets/img/logo-icon.png" alt="">
-                        <!--<i class="fa fa-maxcdn"></i>-->
-                    </a>
-                </div>
-                <!--logo and logo icon end-->
-
-                <!--toggle button start-->
-                <a class="toggle-btn"><i class="fa fa-outdent"></i></a>
-                <!--toggle button end-->
-
-
-
-            </div>
+       
             <!-- header section end-->

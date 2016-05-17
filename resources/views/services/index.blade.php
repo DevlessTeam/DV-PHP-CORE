@@ -1,16 +1,66 @@
 @extends('layout')
 
 @section('header')
-    <div class="page-header clearfix">
-        <h1>
-            <i class="glyphicon glyphicon-align-justify"></i> Services
-            <a class="btn btn-success pull-right" href="{{ route('services.create') }}"><i class="glyphicon glyphicon-plus"></i> Create</a>
-        </h1>
-
-    </div>
+<!-- page head start-->
+<div class="page-head">
+    <h3>Service</h3><span class="sub-title">Service/</span>
+</div>
+<!-- page head end-->
+   
 @endsection
 
 @section('content')
+
+<!--body wrapper start-->
+<div class="wrapper">
+    <div class="row">
+         <div class="col-lg-3 col-sm-6 m-b-30">
+                <div class="panel panel-danger">
+                    <div class="panel-header"><br><h4><center>Add Service</center></h4></div>
+                    <div class="panel-body">
+                        <a href="{{ route('services.create') }}">
+                        <center><i class="fa fa-plus fa-5x" aria-hidden="true"></i></center>
+                        </a>
+                        <br>
+                        
+           
+                    </div>
+                </div>
+                
+            </div>
+        @if($services->count())
+             @foreach($services as $service)
+            <div class="col-lg-3 col-sm-6 m-b-30">
+                <div class="panel panel-danger">
+                    <div class="panel-header"><br><h4><center>{{strtoupper($service->name)}}</center></h4></div>
+                    <div class="panel-body">
+                        <center>{{$service->description}}</center>
+                        <br><br>
+                        <center>
+                        <div class="btn-group" role="group">
+                            <a type="button" href="{{ route('services.edit', $service->id) }}" class="btn btn-default">Edit</a>
+                            <a type="button" href="/service/{{$service->name}}/views/index/" target="_blank" class="btn btn-default">Console</a>
+                            <button type="button" class="btn btn-default">Delete</button>
+                        </div>
+                        </center> 
+           
+                    </div>
+                </div>
+                
+            </div>
+            @endforeach 
+        {!! $services->render() !!}
+            @else
+                <h3 class="text-center alert alert-info">Empty!</h3>
+            @endif
+    </div>
+</div><!--body wrapper end-->
+
+
+@endsection
+
+<!--
+
     <div class="row">
         <div class="col-md-12">
             @if($services->count())
@@ -67,6 +117,4 @@
             @endif
 
         </div>
-    </div>
-
-@endsection
+    </div>-->

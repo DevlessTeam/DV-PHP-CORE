@@ -13,7 +13,7 @@ class CreateTableMetaTable extends Migration
     public function up()
     {
         //
-        Schema::create('tableMeta', function($table){
+        Schema::create('table_meta', function($table){
            $table->increments('id');
            $table->string('table_name');
            $table->json('validation');

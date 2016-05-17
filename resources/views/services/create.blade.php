@@ -1,13 +1,151 @@
 @extends('layout')
 
 @section('header')
-    <div class="page-header">
-        <h1><i class="glyphicon glyphicon-plus"></i> Services / Create </h1>
-    </div>
+    
 @endsection
 
 @section('content')
     @include('error')
+
+<!--body wrapper start-->
+<div class="wrapper service-add">
+
+<div class="row">
+    <div class="col-md-12">
+        <!--progress bar start-->
+        <section class="panel-">
+            <header class="panel-heading">
+                Add Service - Configuration
+            </header>
+            <div class="panel-body no-pad">
+
+                <form id="basic-form" action="#">
+                    <div>
+                        <h3>Database Config</h3>
+                        <section>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label " for="userName">Service Name *</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" id="userName" name="userName" type="text" class="required">
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label">Description</label>
+                                <div class="col-lg-10">
+                                    <textarea name="" class="form-control" id="" cols="30" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label">Database Type</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control">
+                                        <option>SQLite</option>
+                                        <option>MySQL</option>
+                                        <option>Postsgres</option>
+                                        <option>SqlSrv</option>
+                                        <option>MongoDB</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label " for="userName">Database Name *</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" id="userName" name="userName" type="text" class="required">
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label " for="userName">Username *</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" id="userName" name="userName" type="text" class="required">
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label " for="password"> Password *</label>
+                                <div class="col-lg-10">
+                                    <input id="password" name="password" type="text" class="required form-control">
+
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label " for="userName">Database Host *</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" id="userName" name="userName" type="text" class="required" value="http://127.0.0.1">
+                                </div>
+                            </div>
+                        </section>
+                        <h3>Create Table</h3>
+                        <section>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label" for="name"> Table Name *</label>
+                                <div class="col-lg-10">
+                                    <input id="name" name="name" type="text" class="required form-control">
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label" for="name"> Field Name *</label>
+                                <div class="col-lg-10">
+                                    <input id="name" name="name" type="text" class="required form-control">
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label">Field Type</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control">
+                                        <option>Text</option>
+                                        <option>Numbers</option>
+                                        <option>Content</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label" for="name"> Field Name *</label>
+                                <div class="col-lg-10">
+                                    <input id="name" name="name" type="text" class="required form-control">
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label">Field Type</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control">
+                                        <option>Text</option>
+                                        <option>Numbers</option>
+                                        <option>Content</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label" for="name"> Field Name *</label>
+                                <div class="col-lg-10">
+                                    <input id="name" name="name" type="text" class="required form-control">
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-lg-2 control-label">Field Type</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control">
+                                        <option>Text</option>
+                                        <option>Numbers</option>
+                                        <option>Content</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </section>
+                        <h3>Add Script</h3>
+                        <section>
+                            Editor comes here
+                        </section>
+                    </div>
+                </form>
+
+            </div>
+        </section>
+
+    </div>
+
+</div>
+</div>
+<!--body wrapper end-->
+
 
     <div class="row">
         <div class="col-md-12">
@@ -100,4 +238,9 @@
 
         </div>
     </div>
+    
+
 @endsection
+
+
+

@@ -1,11 +1,13 @@
 <?php namespace App\Http\Controllers;
+use App\App;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\App;
 use Illuminate\Http\Request;
+
 use \App\Helpers\DevlessHelper as DLH;
+use App\Helpers\Response as Response;
 class AppController extends Controller {
 
 	/**
@@ -42,7 +44,7 @@ class AppController extends Controller {
 		$app = new App();
 		$app->name = $request->input("name");
                 $app->description = $request->input("description");
-                $app->api_key = $request->input("name");
+                $app->api_key = $_SERVER['SERVER_NAME'];
                 $app->token = md5(uniqid(1, true));
 
 		$app->save();
@@ -84,16 +86,28 @@ class AppController extends Controller {
 	 * @return Response
 	 */
 	public function update(Request $request)
-	{
+	{  
 		if($app = App::first())
                 {
-                $app->name = $request->input("name");
-                $app->description = $request->input("description");
-                $app->api_key = $_SERVER['SERVER_NAME'];
-                #$app->token = $request->input("token");
+                    if(isset($request['action']))
+                    {
+                        $new_token = $app->token = md5(uniqid(1, true));
+                        if($app->save())
+                        {
+                            return Response::respond(622,null,['new_token'=>$new_token]);
+                }
+                        else
+                        {
+                            return Response::respond(623);
+                        }
+                    }    
+                    $app->name = $request->input("name");
+                    $app->description = $request->input("description");
+                    $app->api_key = $_SERVER['SERVER_NAME'];
+                    #$app->token = $request->input("token");
 
-		($app->save())? DLH::flash("App updated successfully", 'success'):
-                    DLH::flash("Changes did not take effect", 'error');
+                    ($app->save())? DLH::flash("App updated successfully", 'success'):
+                        DLH::flash("Changes did not take effect", 'error');
                 }
                 else
                 {

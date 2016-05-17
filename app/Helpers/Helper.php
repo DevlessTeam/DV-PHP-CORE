@@ -44,6 +44,8 @@ class Helper
         619 =>  'table was updated successfully',
         620 =>  'could not delete table',
         621 =>  'Could not find asset file',
+        622 =>  'Token updated succefully',
+        623 =>  'Token could not be updated',
         700 => 'internal system error',
     ];
     

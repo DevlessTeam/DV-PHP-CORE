@@ -137,10 +137,10 @@ class DbController extends Controller
          {
              if($payload['params'][0]['params'][0]['drop'])
              {
-             \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
-             \Schema::dropIfExists($table_name);
-             Helper::interrupt(613);
-             $task = 'drop';
+                \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
+                \DB::table('table_metas')->where('table_name',$table_name)->delete();
+                Helper::interrupt(613);
+                $task = 'drop';
              }
          }
          if(isset($payload['params'][0]['params'][0]['where'] ))
@@ -183,17 +183,11 @@ class DbController extends Controller
             }   
 
         } 
-        else if(isset($payload['params'][0]['params'][0]['drop'] )){
-
-            $destroy_query = $destroy_query.'->drop()';
-            $tasked ='dropped';  $task = 'drop';
-            $element = 'table';
-             
-        }
         else
         {
             Helper::interrupt(615);
         }
+        
         $destroy_query = $destroy_query.';';   
         $result = eval('return'.$destroy_query);
         if($result == false){Helper::interrupt(614, 'could not '.$task.' '.$element);}
