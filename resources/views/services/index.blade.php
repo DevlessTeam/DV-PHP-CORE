@@ -32,9 +32,9 @@
              @foreach($services as $service)
             <div class="col-lg-3 col-sm-6 m-b-30">
                 <div class="panel panel-danger">
-                    <div class="panel-header"><br><h4><center>{{strtoupper($service->name)}}</center></h4></div>
+                    <div class="panel-header"><br><h4><center>{{substr(strtoupper($service->name),0,10)}}</center></h4></div>
                     <div class="panel-body">
-                        <center>{{$service->description}}</center>
+                        <center>{{substr($service->description, 0, 20)}}@if(strlen($service->description)>20)...@endif</center>
                         <br><br>
                         <center>
                         <div class="btn-group" role="group">

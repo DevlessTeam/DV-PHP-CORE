@@ -10,6 +10,7 @@ use App\Helpers\Helper;
 use App\Http\Controllers\ScriptController as Script ;
 use App\Http\Controllers\DbController as Db;
 use App\Http\Controllers\ViewController as View;
+use Session;
 
 class ServiceController extends Controller {
 
@@ -104,22 +105,28 @@ class ServiceController extends Controller {
 	public function update(Request $request, $id)
 	{
                 //convert name inputs to lowercase
-		$service = Service::findOrFail($id);
+		if($service = Service::findOrFail($id))
+                {
+                    
+                    $driver = $request->input('driver');$hostname = $request->input('hostname');
+                    $username = $request->input('username');$password = $request->input('password');
+                    $database_name = $request->input('database');
+                    
+                    //put together p pdo cred    
+                    $db_definition =  'driver='.$driver.',hostname='.$hostname.','
+                            . 'database='.$database_name.',username='.$username.',password='.$password;     
+                    
+                    $service->name = strtolower($request->input("name"));
+                    $service->description = $request->input("description");
+                    $service->db_definition = $db_definition;
+                    #$service->script = $request->input("script");
+                    $service->active = $request->input("active");
+                    #$service->public = $request->input("public");
 
-		$service->name = $request->input("name");
-                $service->description = $request->input("description");
-                $service->type = $request->input("type");
-                $service->db_definition = $request->input("db_definition");
-                $service->script = $request->input("script");
-                $service->pre_script = $request->input("pre_script");
-                $service->post_script = $request->input("post_script");
-                $service->pre_set = $request->input("pre_set");
-                $service->post_set = $request->input("post_set");
-                $service->active = $request->input("active");
-
-		$service->save();
-
-		return redirect()->route('services.index')->with('message', 'Item updated successfully.');
+                    $service->save();
+                
+                }   
+		return back();
 	}
 
 	/**
@@ -180,7 +187,7 @@ class ServiceController extends Controller {
             
             //$resource
             return $this->assign_to_service($service, $resource, $method, 
-                    $parameters);
+                    $parameters,$internal_access);
         }
         
        
@@ -192,12 +199,26 @@ class ServiceController extends Controller {
 	 * @param  string  $resource
          * @param array $method http verb
          * @param array $parameter contains all parameters passed from route
+         * @param boolean $internal_service true if service is being called internally
 	 * @return Response
 	 */
         public function assign_to_service($service, $resource, $method,
-                $parameters=null)
+                $parameters=null,$internal_access=false)
         {       
                 $current_service = $this->service_exist($service);
+                //set temporal login id
+                Session::put('user',1);
+                //Session::forget('user');
+                //check access right 
+                $is_it_public = $current_service->public;
+                $am_i_logged_in = session()->has('user');
+                $accessed_internally = $internal_access;
+                
+                if($is_it_public == 1 || $am_i_logged_in == true || 
+                        $accessed_internally == true)
+                {
+                    
+                
                 $payload = 
                     [
                     'id'=>$current_service->id,  
@@ -230,7 +251,7 @@ class ServiceController extends Controller {
                             $db->create_schema($resource, $payload);
                             break;
                     
-                    case 'views':
+                    case 'view':
                         return $payload;
                         
                     default:
@@ -238,7 +259,11 @@ class ServiceController extends Controller {
                  }
                       
                  
-            
+                }
+                else
+                {
+                    Helper::interrupt(624);
+                }
                     
             }
                  

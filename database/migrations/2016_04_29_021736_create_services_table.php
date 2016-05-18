@@ -16,13 +16,9 @@ class CreateServicesTable extends Migration {
             $table->increments('id');
             $table->string('name');
             $table->text('description');
-            $table->integer('type');
-            $table->json('db_definition');
+            $table->text('db_definition');
             $table->text('script');
-            $table->text('pre_script');
-            $table->text('post_script');
-            $table->boolean('pre_set');
-            $table->boolean('post_set');
+            $table->boolean('public');
             $table->boolean('active');
             $table->integer('calls');
             $table->timestamps();

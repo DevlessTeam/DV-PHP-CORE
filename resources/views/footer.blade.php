@@ -13,8 +13,7 @@
     </section>
 
 <!-- Placed js at the end of the document so the pages load faster -->
-<script src='/assets/js/jquery-1.10.2.min.js'>
-<script src="assets/js/jquery-1.10.2.min.js"></script>
+<script src='/assets/js/jquery-1.10.2.min.js'></script>
 <script src="/assets/js/jquery-migrate.js"></script>
 <script src="/assets/js/bootstrap.min.js"></script>
 <!--notification pan-->
@@ -49,11 +48,14 @@
 
 <!--common scripts for all pages-->
 <script src="/assets/js/scripts.js"></script>
+<!-- Ace Editor -->
+<script src="/assets/js/ace/ace.js" type="text/javascript" ></script>
+<script src="/assets/js/ace/theme-github.js" type="text/javascript" ></script>
+<script src="/assets/js/ace/mode-php.js" type="text/javascript" ></script>
+<script src="/assets/js/ace/jquery-ace.min.js" type="text/javascript" ></script>
+
+<!--common scripts for all pages-->
+<script src="/assets/js/scripts.js"></script>
 @include('notifier')
-<script type="text/javascript">
-    var editor = ace.edit("editor");
-    editor.resize();
-    editor.getSession().setUseWrapMode(true);
-</script>
 </body>
 </html>

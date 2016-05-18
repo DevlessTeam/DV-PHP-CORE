@@ -1,111 +1,15 @@
 @extends('layout')
 
 @section('header')
-    <div class="page-header">
-        <h1><i class="glyphicon glyphicon-edit"></i> Services / Edit #{{$service->id}}</h1>
-    </div>
+   <!-- page head start-->
+            <div class="page-head">
+                <h3>Service</h3><span class="sub-title">Welcome to
+                Devless</span>
 @endsection
 
 @section('content')
     @include('error')
 
-    <div class="row">
-        <div class="col-md-12">
-
-            <form action="{{ route('services.update', $service->id) }}" method="POST">
-                <input type="hidden" name="_method" value="PUT">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-                <div class="form-group @if($errors->has('name')) has-error @endif">
-                       <label for="name-field">Name</label>
-                    <input type="text" id="name-field" name="name" class="form-control" value="{{ $service->name }}"/>
-                       @if($errors->has("name"))
-                        <span class="help-block">{{ $errors->first("name") }}</span>
-                       @endif
-                    </div>
-                    <div class="form-group @if($errors->has('description')) has-error @endif">
-                       <label for="description-field">Description</label>
-                    <textarea class="form-control" id="description-field" rows="3" name="description">{{ $service->description }}</textarea>
-                       @if($errors->has("description"))
-                        <span class="help-block">{{ $errors->first("description") }}</span>
-                       @endif
-                    </div>
-                    <div class="form-group @if($errors->has('type')) has-error @endif">
-                       <label for="type-field">Type</label>
-                    <input type="text" id="type-field" name="type" class="form-control" value="{{ $service->type }}"/>
-                       @if($errors->has("type"))
-                        <span class="help-block">{{ $errors->first("type") }}</span>
-                       @endif
-                    </div>
-                    <div class="form-group @if($errors->has('db_definition')) has-error @endif">
-                       <label for="db_definition-field">Db_definition</label>
-                    <input type="text" id="db_definition-field" name="db_definition" class="form-control" value="{{ $service->db_definition }}"/>
-                       @if($errors->has("db_definition"))
-                        <span class="help-block">{{ $errors->first("db_definition") }}</span>
-                       @endif
-                    </div>
-                    <div class="form-group @if($errors->has('script')) has-error @endif">
-                       <label for="script-field">Script</label>
-                    <textarea class="form-control" id="script-field" rows="3" name="script">{{ $service->script }}</textarea>
-                       @if($errors->has("script"))
-                        <span class="help-block">{{ $errors->first("script") }}</span>
-                       @endif
-                    </div>
-                    <div class="form-group @if($errors->has('pre_script')) has-error @endif">
-                       <label for="pre_script-field">Pre_script</label>
-                    <textarea class="form-control" id="pre_script-field" rows="3" name="pre_script">{{ $service->pre_script }}</textarea>
-                       @if($errors->has("pre_script"))
-                        <span class="help-block">{{ $errors->first("pre_script") }}</span>
-                       @endif
-                    </div>
-                    <div class="form-group @if($errors->has('post_script')) has-error @endif">
-                       <label for="post_script-field">Post_script</label>
-                    <textarea class="form-control" id="post_script-field" rows="3" name="post_script">{{ $service->post_script }}</textarea>
-                       @if($errors->has("post_script"))
-                        <span class="help-block">{{ $errors->first("post_script") }}</span>
-                       @endif
-                    </div>
-                    <div class="form-group @if($errors->has('pre_set')) has-error @endif">
-                       <label for="pre_set-field">Pre_set</label>
-                    <input type="text" id="pre_set-field" name="pre_set" class="form-control" value="{{ $service->pre_set }}"/>
-                       @if($errors->has("pre_set"))
-                        <span class="help-block">{{ $errors->first("pre_set") }}</span>
-                       @endif
-                    </div>
-                    <div class="form-group @if($errors->has('post_set')) has-error @endif">
-                       <label for="post_set-field">Post_set</label>
-                    <input type="text" id="post_set-field" name="post_set" class="form-control" value="{{ $service->post_set }}"/>
-                       @if($errors->has("post_set"))
-                        <span class="help-block">{{ $errors->first("post_set") }}</span>
-                       @endif
-                    </div>
-                    <div class="form-group @if($errors->has('active')) has-error @endif">
-                       <label for="active-field">Active</label>
-                    <input type="text" id="active-field" name="active" class="form-control" value="{{ $service->active }}"/>
-                       @if($errors->has("active"))
-                        <span class="help-block">{{ $errors->first("active") }}</span>
-                       @endif
-                    </div>
-                    <div class="form-group @if($errors->has('calls')) has-error @endif">
-                       <label for="calls-field">Calls</label>
-                    <input type="text" id="calls-field" name="calls" class="form-control" value="{{ $service->calls }}"/>
-                       @if($errors->has("calls"))
-                        <span class="help-block">{{ $errors->first("calls") }}</span>
-                       @endif
-                    </div>
-                <div class="well well-sm">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <a class="btn btn-link pull-right" href="{{ route('services.index') }}"><i class="glyphicon glyphicon-backward"></i>  Back</a>
-                </div>
-            </form>
-
-        </div>
-    </div>
-   
-<!-- page head start-->
-            <div class="page-head">
-                <h3>Service</h3><span class="sub-title">Welcome to
-                Devless</span>
             </div><!-- page head end-->
             <!--body wrapper start-->
             <div class="wrapper no-pad">
@@ -125,6 +29,18 @@
                                         <span class="help-block">{{ $errors->first("name") }}</span>
                                      @endif
                                 </div>
+                                 <div  class="form-group @if($errors->has('active')) has-error @endif">
+                                    <label for="active-field">State</label>
+                                    <?php $options = ['Inactive','Active'] ?>
+                                    <select class="form-control"  name="active" id="active-field">
+                                        @foreach($options as $option_index => $option)
+                                        <option @if($service->active == $option_index )selected @endif value="{{$option_index}}">{{$option}}</option>
+                                        @endforeach
+                                    </select>
+                                     @if($errors->has("active"))
+                                        <span class="help-block">{{ $errors->first("active") }}</span>
+                                     @endif
+                                </div>
                                  
                                 
                                 <div class="form-group">
@@ -135,9 +51,7 @@
                                         <span class="help-block">{{ $errors->first("description") }}</span>
                                         @endif
                                     </div>
-                                </div><button class="btn btn-info" type=
-                                "submit">Update</button>
-                            </form>
+                                </div>
                         </div>
                     </aside>
                     <aside class="p-aside">
@@ -155,37 +69,55 @@
                                     </li>
                                 </ul>
                             </header>
+                           
                             <div class="panel-body">
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="jus">
                                         <form role="form">
                                             <div class="form-group">
                                                 <label for="g-title">Name</label>
-                                                <input class="form-control" id="database"
+                                                <input class="form-control" name="database" id="database"
                                                 placeholder="" type="text">
-                                            </div>
+                                                
+                                        @if($errors->has("database"))
+                                        <span class="help-block">{{ $errors->first("database") }}</span>
+                                        @endif
+                                         </div>
+                                            
                                             <div class="form-group">
-                                                <label for="g-txt">Database Type</label>
-                                                <select id="db-type"  class="form-control m-b-10">
+                                                <label for="g-txt" >Database Type</label>
+                                                <select id="db-type" name="driver"  class="form-control m-b-10">
                                                     <option value="sqlite">SQLite</option>
                                                     <option value="mysql">MySQL</option>
                                                     <option value="">Postgress</option>
                                                     <option value="">SQL Server</option>
                                                 </select>
+                                                 @if($errors->has("driver"))
+                                                  <span class="help-block">{{ $errors->first("driver") }}</span>
+                                                @endif
                                             </div>
                                             <div class="form-group">
                                                 <label for="g-txt">Host Name</label>
-                                                <input class="form-control" id="hostname"
+                                                <input class="form-control" name="hostname" id="hostname"
                                                 placeholder="" type="text" value="127.0.0.1">
+                                                 @if($errors->has("hostname"))
+                                                  <span class="help-block">{{ $errors->first("hostname") }}</span>
+                                                @endif
                                             </div>
                                             <div class="form-group">
                                                 <label for="g-txt">Username</label>
-                                                <input class="form-control" id="username"
+                                                <input class="form-control" name="username" id="username"
                                                 placeholder="" type="text" value="root">
+                                                @if($errors->has("username"))
+                                                  <span class="help-block">{{ $errors->first("username") }}</span>
+                                                @endif
                                             </div>
                                             <div class="form-group">
                                                 <label for="g-txt">Password</label>
-                                                <input class="form-control" id="password" placeholder="" type="password">
+                                                <input class="form-control" id="password"name="password" placeholder="" type="password">
+                                                @if($errors->has("password"))
+                                                  <span class="help-block">{{ $errors->first("password") }}</span>
+                                                @endif
                                             </div>
                                             <button class="btn btn-info" type=
                                             "submit">Update</button>
@@ -199,25 +131,26 @@
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
+                                 @if(sizeOf($table_meta) > 0)
                                 <tr>
                                     <th>#</th>
                                     <th>Table Name</th>
                                     <th>Description</th>
                                     <th>#N0 of Fields</th>
                                     
-                                    <th>options</th>
+                                    <th>Options</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                 @if(sizeOf($table_meta) > 0)
+                                
                                     @foreach($table_meta as $table_data)
-                                <tr>
+                                <tr id="{{$table_data['name']}}">
                                     <th scope="row">1</th>
                                     <td>{{$table_data['name']}}</td>
                                     <td>{{$table_data['description']}}</td>
                                     <td>{{sizeOf($table_data['field'])}} field(s)</td>
                                     <td><button class="btn btn-default">View Data</button>
-                                        <button class="btn btn-danger">Destroy Table</button></td>
+                                        <button onclick="destroy_table('{{$table_data['name']}}','{{$service->name}}')" class="btn btn-danger">Destroy Table</button></td>
                                 </tr>
                                     @endforeach
                                  @else
@@ -225,17 +158,23 @@
                                 @endif
                             </tbody>
                         </table>
+                         <button class="btn btn-info " type="button" >New Table  </button>
                     </div>
                 </section>
                                     </div>
-                                    <div class="tab-pane" id="jtab">
-<pre id="script-editor">
+                                                                   <div class="tab-pane" id="jtab">
+
+                                                                       
+<textarea class="code-area" name="script" rows="20" style="width: 100%">
+
 @if(!$service->script == "")
+<?php echo "<?php \n"; ?>
 {{$service->script}}
 @else
+<?php echo "<?php \n ";  ?> 
  echo "Happy scripting";
 @endif
-</pre>
+</textarea>
 <button class="btn btn-info" type="submit">Run</button>
                                     </div>
                                 </div>
@@ -244,9 +183,6 @@
                     </aside>
                 </div>
             </div><!--body wrapper end-->
-
-
-
 <!--body wrapper end-->
 <script>
     //split db_definition and populate field
@@ -268,24 +204,34 @@
     }
     function init(){
         db_definition();
+        $('.code-area').ace({ theme: 'github', lang: 'php' })
     }
-    function destroy_table(table_name){
-        var settings = {
-      "async": true,
-      "crossDomain": true,
-      "url": "/api/v1/service/auth/db",
-      "method": "DELETE",
-      "headers": {
-        "content-type": "application/json",
-        "cache-control": "no-cache"
-      },
-      "processData": false,
-      "data": "{  \n   \"resource\":[  \n      {  \n         \"name\":"+testtable+",\n         \"params\":[  \n            {  \n               \"drop\":\"true\"    \n            }\n         ]\n      }\n\n    ]\n}        "
-    }
+    function destroy_table(table_name, service_name){
+            var settings = {
+           "async": true,
+           "crossDomain": true,
+           "url": "/api/v1/service/"+service_name+"/db",
+           "method": "DELETE",
+           "headers": {
+             "content-type": "application/json",
+             "cache-control": "no-cache",
+           },
+           "processData": false,
+            "data": "{\"resource\":[{\"name\":\""+table_name+"\",\"params\":[{\"drop\":\"true\"}]}]}"
+           }
 
-    $.ajax(settings).done(function (response) {
-      console.log(response);
-    });
+         $.ajax(settings).done(function (response) {
+           console.log(response);
+           response_object = JSON.parse(response);
+           status_code = response_object.status_code;
+           if (status_code == 613) {
+                $("").fadeOut();
+           }
+           else
+           {
+               alert('could not delete table ');
+           }
+         });
     }
-</script>    
+</script> 
 @endsection

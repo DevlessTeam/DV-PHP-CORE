@@ -46,6 +46,7 @@ class Helper
         621 =>  'Could not find asset file',
         622 =>  'Token updated succefully',
         623 =>  'Token could not be updated',
+        624 =>  'Sorry this is not an open endpoint',
         700 => 'internal system error',
     ];
     
