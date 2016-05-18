@@ -145,8 +145,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        Devless\core\coreServiceProvider::class,
-
+       
         'JeroenG\Packager\PackagerServiceProvider',
         "Laralib\L5scaffold\GeneratorsServiceProvider",
 

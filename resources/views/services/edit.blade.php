@@ -4,13 +4,73 @@
    <!-- page head start-->
             <div class="page-head">
                 <h3>Service</h3><span class="sub-title">Welcome to
-                Devless</span>
+                Devless</span>            </div><!-- page head end-->
 @endsection
 
 @section('content')
     @include('error')
+<div id="schema-table" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
-            </div><!-- page head end-->
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add Tables</h4>
+      </div>
+      <div class="modal-body">
+          <form id="form">
+         <div  class="form-group">
+            <label for="name-field">Table Name</label>
+            <input type="text" id="name-field" name="name" class="form-control" value="{{ $service->name }}"/>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+                <textarea class="form-control" id="description" rows="3" name="description">{{ $service->description }}</textarea>
+        </div>
+          <HR>
+          <center> Add Fields </center>
+          
+          <div class="fields" id="fields">
+            <div  class="form-group">
+            <label for="name-field">Field Name</label>
+            <input type="text" id="name-field" name="field-name" class="form-control" value="{{ $service->name }}"/>
+             </div>
+           <div  class="form-group">
+            <label for="field-type">Field Type</label>
+            <?php $options = ['TEXT','TEXTAREA','PASSWORD','INTEGER','MONEY','PASSWORD','PERCENTAGE','URL','TIMESTAMP','BOOLEAN','EMAIL','REFERENCE'] ?>
+            <select class="form-control"  name="field-type" id="field-type">
+                @foreach($options as  $option)
+                <option value="{{$option}}">{{$option}}</option>
+                @endforeach
+            </select>
+        </div>
+          <div class="form-group">
+           <label for="default-field">Default Value(optional)</label>
+            <input type="text" id="defualt" name="default" class="form-control" value="{{ $service->name }}"/>
+           </div>
+            
+            <div class="form-group">
+                <label for="option-field">Field Options</label>
+                
+                  <input type="checkbox" id="required"  name="required"/>REQUIRED?
+              
+              
+                  <input type="checkbox" id="validate" name="validate"/>VALIDATE?
+              
+              
+                    <input type="checkbox" id="unique" name="unique"/> UNIQUE FIELD?
+            </div>
+      </div>
+              <div class="dynamic-space"></div>
+          
+      <div class="modal-footer">
+          <button type="button" onclick="append_field()" class="btn btn-info pull-left" >Add a Field</button>
+        <button type="button" class="btn btn-info pull-right" >Create Table</button>
+      </div>
+      </div></form></div>
+  </div>
+</div>
             <!--body wrapper start-->
             <div class="wrapper no-pad">
                 <div class="profile-desk">
@@ -114,7 +174,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="g-txt">Password</label>
-                                                <input class="form-control" id="password"name="password" placeholder="" type="password">
+                                                <input class="form-control" id="password" name="password" placeholder="" type="password">
                                                 @if($errors->has("password"))
                                                   <span class="help-block">{{ $errors->first("password") }}</span>
                                                 @endif
@@ -158,7 +218,7 @@
                                 @endif
                             </tbody>
                         </table>
-                         <button class="btn btn-info " type="button" >New Table  </button>
+                        <button type="button" class="btn btn-info " data-toggle="modal" data-target="#schema-table">New Table</button>
                     </div>
                 </section>
                                     </div>
@@ -185,8 +245,8 @@
             </div><!--body wrapper end-->
 <!--body wrapper end-->
 <script>
+    
     //split db_definition and populate field
-
     function db_definition(){
         var db_cred = '{{$service->db_definition}}';
         var sub_db_definition = db_cred.split(",")
@@ -202,10 +262,13 @@
         
         }
     }
+    //page initial run 
     function init(){
+        window.count = 0;
         db_definition();
         $('.code-area').ace({ theme: 'github', lang: 'php' })
     }
+    //destroy table
     function destroy_table(table_name, service_name){
             var settings = {
            "async": true,
@@ -221,9 +284,10 @@
            }
 
          $.ajax(settings).done(function (response) {
+             
            console.log(response);
            response_object = JSON.parse(response);
-           status_code = response_object.status_code;
+           status_code = response_object.status_code;s
            if (status_code == 613) {
                 $("").fadeOut();
            }
@@ -232,6 +296,55 @@
                alert('could not delete table ');
            }
          });
+    }
+    
+  function append_field(){	
+	field_names = ['name', 'description', 'field-name', 'field-type', 'default', 
+            'required', 'validate', 'unique'];
+
+	old_fields = $('.fields').clone();
+        field_names.forEach(
+	function(i){
+            field_name = i+window.count;
+            old_fields.find('#'+i).attr('name', field_name );
+       }
+               
+                
+	)
+	new_fields = old_fields;
+        
+        $( ".dynamic-space").append(new_fields);
+        window.new_fields = new_fields;
+        window.count = window.count + 1 ;
+        create_table()
+    }
+
+    
+    function create_table(){
+         $.fn.serializeObject = function()
+        {
+            var o = {};
+            var a = this.serializeArray();
+            console.log(a)
+            $.each(a, function() {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+        
+        object = window.new_fields.serializeObject();
+        console.log(object);
+        
+    }
+    function add_field(){
+        
     }
 </script> 
 @endsection

@@ -11,6 +11,7 @@ use App\Http\Controllers\ScriptController as Script ;
 use App\Http\Controllers\DbController as Db;
 use App\Http\Controllers\ViewController as View;
 use Session;
+use \App\Helpers\DevlessHelper as DLH;
 
 class ServiceController extends Controller {
 
@@ -112,7 +113,7 @@ class ServiceController extends Controller {
                     $username = $request->input('username');$password = $request->input('password');
                     $database_name = $request->input('database');
                     
-                    //put together p pdo cred    
+                    //put together  pdo cred    
                     $db_definition =  'driver='.$driver.',hostname='.$hostname.','
                             . 'database='.$database_name.',username='.$username.',password='.$password;     
                     
@@ -123,7 +124,8 @@ class ServiceController extends Controller {
                     $service->active = $request->input("active");
                     #$service->public = $request->input("public");
 
-                    $service->save();
+                     ($service->save())? DLH::flash("Service updated successfully", 'success'):
+                        DLH::flash("Changes did not take effect", 'error');
                 
                 }   
 		return back();

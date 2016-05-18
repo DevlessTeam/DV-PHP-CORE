@@ -43,8 +43,6 @@
 <!--wizard initialization-->
 <script src="/assets/js/wizard-init.js" type="text/javascript"></script>
 
-<!-- Ace Editor -->
-<script src="https://ace.c9.io/build/src/ace.js"></script>
 
 <!--common scripts for all pages-->
 <script src="/assets/js/scripts.js"></script>
@@ -53,9 +51,6 @@
 <script src="/assets/js/ace/theme-github.js" type="text/javascript" ></script>
 <script src="/assets/js/ace/mode-php.js" type="text/javascript" ></script>
 <script src="/assets/js/ace/jquery-ace.min.js" type="text/javascript" ></script>
-
-<!--common scripts for all pages-->
-<script src="/assets/js/scripts.js"></script>
 @include('notifier')
 </body>
 </html>
