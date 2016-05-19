@@ -11,18 +11,18 @@
     <title>Devless 0.01</title>
 
     <!--right slidebar-->
-    <link href="/assets/css/slidebars.css" rel="stylesheet">
+    <link href="{{ url('/css/slidebars.css') }}" rel="stylesheet">
 
     <!--switchery-->
-    <link href="/assets/js/switchery/switchery.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="{{url('/js/switchery/switchery.min.css')}}" rel="stylesheet" type="text/css" media="screen" />
 
     <!--Form Wizard-->
-    <link rel="stylesheet" type="text/css" href="/assets/css/jquery.steps.css" />
+    <link rel="stylesheet" type="text/css" href="{{ url('/css/jquery.steps.css') }}" />
 
     <!--common style-->
-    <link href="/assets/css/style.css" rel="stylesheet">
-    <link href="/assets/css/style-responsive.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/assets/css/custom.css">
+    <link href="{{ url('/css/style.css') }}" rel="stylesheet">
+    <link href="{{ url('/css/style-responsive.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url('/css/custom.css')}}">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
@@ -35,5 +35,5 @@
 
     <section>
 
-       
+
             <!-- header section end-->
