@@ -22,7 +22,7 @@
           <form id="form">
          <div  class="form-group">
             <label for="name-field">Table Name</label>
-            <input type="text" id="name-field" name="name" class="form-control" value="{{ $service->name }}"/>
+            <input type="text" id="name" name="name" class="form-control" value="{{ $service->name }}"/>
         </div>
         <div class="form-group">
             <label for="description">Description</label>
@@ -35,7 +35,7 @@
             <div  class="form-group">
             <label for="name-field">Field Name</label>
             <button type="button" class="btn btn-danger pull-right" id="delete-field" onclick="destroy_field('removeIndicator')">Remove</button>
-            <input type="text" id="name-field"  name="field-name" class="form-control" value="{{ $service->name }}"/>
+            <input type="text" id="field-name"  name="field-name" class="form-control" value="{{ $service->name }}"/>
              </div>
            <div  class="form-group">
             <label for="field-type">Field Type</label>
@@ -268,7 +268,9 @@
         window.count = 0;
         window.main_old_fields =  $('.removeIndicator').clone();
         db_definition();
-        $('.code-area').ace({ theme: 'github', lang: 'php' })
+        $('.code-area').ace({ theme: 'github', lang: 'php' });
+        window.schema_json = {"resource":[{"name":"","description":"","field":[]}]  }        
+        window.field = {"name":"","field_type":"","default":null,"required":true,"is_unique":true,"ref_table":"","validation":true}
     }
     //destroy table
     function destroy_table(table_name, service_name){
@@ -287,7 +289,6 @@
 
          $.ajax(settings).done(function (response) {
              
-           console.log(response);
            response_object = JSON.parse(response);
            status_code = response_object.status_code;s
            if (status_code == 613) {
@@ -352,13 +353,36 @@
         return [value];
         });
         count = 0
-       array.forEach(function(i){
+        jQuery(
+            function($)
+            {
+              count = 0 ;
+              $.each($('#form')[0].elements,
+                     function(i,o)
+                     {
+                      var _this=$(o);
+                      alert('id:'+_this.attr('id')+'\nname:'+_this.attr('name'));
+                      
+                      //get first two 
+//                      skip next two 
+//                      get for 6 times 
+                      skip two 
+//                      
+                     })
+
+            }
+          );
         
-         if(count == 2){
+       console.log(array);
+       
+        
+         
              console.log(i);
-         }
+             
+             //use this value to create field appendages
+         
          count++;
-       })
+       
         
         
     }
