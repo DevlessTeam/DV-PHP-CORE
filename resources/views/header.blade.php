@@ -35,6 +35,5 @@
 
     <section>
 
-         @include('sidebar')
        
             <!-- header section end-->

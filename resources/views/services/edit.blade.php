@@ -31,10 +31,11 @@
           <HR>
           <center> Add Fields </center>
           
-          <div class="fields" id="fields">
+          <div class="removeIndicator" id="fields" >
             <div  class="form-group">
             <label for="name-field">Field Name</label>
-            <input type="text" id="name-field" name="field-name" class="form-control" value="{{ $service->name }}"/>
+            <button type="button" class="btn btn-danger pull-right" id="delete-field" onclick="destroy_field('removeIndicator')">Remove</button>
+            <input type="text" id="name-field"  name="field-name" class="form-control" value="{{ $service->name }}"/>
              </div>
            <div  class="form-group">
             <label for="field-type">Field Type</label>
@@ -66,7 +67,7 @@
           
       <div class="modal-footer">
           <button type="button" onclick="append_field()" class="btn btn-info pull-left" >Add a Field</button>
-        <button type="button" class="btn btn-info pull-right" >Create Table</button>
+          <button type="button" ONclick="create_table()" class="btn btn-info pull-right" >Create Table</button>
       </div>
       </div></form></div>
   </div>
@@ -265,7 +266,7 @@
     //page initial run 
     function init(){
         window.count = 0;
-        window.main_old_fields =  $('.fields').clone();
+        window.main_old_fields =  $('.removeIndicator').clone();
         db_definition();
         $('.code-area').ace({ theme: 'github', lang: 'php' })
     }
@@ -308,16 +309,23 @@
 	function(i){
             field_name = i+window.count;
             old_fields.find('#'+i).attr('name', field_name );
+            
        }
                
                 
-	)
+	)   
+       
 	new_fields = old_fields;
         
         $( ".dynamic-space").append(new_fields);
-        window.new_fields = new_fields;
+        old_fields.attr('class', 'fields'+window.count);
+        old_fields.contents().each(function () {
+            if (this.nodeType === 3) this.nodeValue = $.trim($(this).text()).replace(/removeIndicator/g, "fields"+window.count)
+            if (this.nodeType === 1) $(this).html( $(this).html().replace(/removeIndicator/g, "fields"+window.count) )
+            })
         window.count = window.count + 1 ;
-        create_table()
+        
+        
     }
 
     
@@ -338,13 +346,24 @@
             });
             return o;
         };
-        console.log(window.new_fields);
-        object = window.new_fields.serializeObject();
-        console.log(object);
+        
+        object = $('#form').serializeObject();
+        var array = $.map(object, function(value, index) {
+        return [value];
+        });
+        count = 0
+       array.forEach(function(i){
+        
+         if(count == 2){
+             console.log(i);
+         }
+         count++;
+       })
+        
         
     }
-    function add_field(){
-        
-    }
+   function destroy_field(field_id){
+       $('.'+field_id).remove();
+   }
 </script> 
 @endsection
