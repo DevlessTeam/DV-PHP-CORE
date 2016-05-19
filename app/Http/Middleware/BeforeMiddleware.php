@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use DB;
 use Closure;
 
 class BeforeMiddleware
@@ -15,6 +16,14 @@ class BeforeMiddleware
      */
     public function handle($request, Closure $next)
     {
+
+      if (DB::table('apps')->first() == null && \Request::path() != 'setup') {
+
+          return redirect('/setup');
+
+        } elseif (DB::table('apps')->first() && \Request::path() == 'setup') {
+          return redirect('/');
+        }
 
         return $next($request);
     }

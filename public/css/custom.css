@@ -1,0 +1,12 @@
+pre {
+    min-height: 200px;
+}
+.service-add .wizard > .steps > ul > li {
+    width: 33.33%;
+}
+.service-add .wizard > .content {
+	min-height: 440px;
+}
+.border-bottom {
+	border-bottom: 1px solid #eff2f7;
+}

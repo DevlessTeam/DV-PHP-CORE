@@ -21,7 +21,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\PayloadValidator::class,
         \App\Http\Middleware\BeforeMiddleware::class,
         \App\Http\Middleware\AfterMiddleware::class,
-        
+
     ];
 
     /**
@@ -34,5 +34,6 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'cors' => \App\Http\Middleware\Cors::class,
+        'user.auth' => \App\Http\Middleware\UserAuthentication::class,
     ];
 }

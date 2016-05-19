@@ -6,7 +6,7 @@
     <h3>Service</h3><span class="sub-title">Service/</span>
 </div>
 <!-- page head end-->
-   
+
 @endsection
 
 @section('content')
@@ -22,11 +22,11 @@
                         <center><i class="fa fa-plus fa-5x" aria-hidden="true"></i></center>
                         </a>
                         <br>
-                        
-           
+
+
                     </div>
                 </div>
-                
+
             </div>
         @if($services->count())
              @foreach($services as $service)
@@ -42,16 +42,14 @@
                             <a type="button" href="/service/{{$service->name}}/views/index/" target="_blank" class="btn btn-default">Console</a>
                             <button type="button" class="btn btn-default">Delete</button>
                         </div>
-                        </center> 
-           
+                        </center>
+
                     </div>
                 </div>
-                
+
             </div>
-            @endforeach 
+            @endforeach
         {!! $services->render() !!}
-            @else
-                <h3 class="text-center alert alert-info">Empty!</h3>
             @endif
     </div>
 </div><!--body wrapper end-->

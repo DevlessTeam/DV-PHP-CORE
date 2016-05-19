@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY', 'SomeRandomString'),
+    'key' => 'ohaeHWVx2VDBwAHD2xEI5YCWUwrsHeiE',
 
     'cipher' => 'AES-256-CBC',
 
@@ -145,7 +145,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-       
+
         'JeroenG\Packager\PackagerServiceProvider',
         "Laralib\L5scaffold\GeneratorsServiceProvider",
 
