@@ -139,7 +139,7 @@ class DbController extends Controller
              {
                 \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
                 \DB::table('table_metas')->where('table_name',$table_name)->delete();
-                Helper::interrupt(613);
+                Helper::interrupt(613,'dropped table succefully');
                 $task = 'drop';
              }
          }
@@ -188,10 +188,10 @@ class DbController extends Controller
             Helper::interrupt(615);
         }
         
-        $destroy_query = $destroy_query.';';   
+        $destroy_query = $destroy_query.';'; 
         $result = eval('return'.$destroy_query);
-        if($result == false){Helper::interrupt(614, 'could not '.$task.' '.$element);}
-        Helper::interrupt(614, 'The table has been '.$task);
+        if($result == false && $result != null){Helper::interrupt(614, 'could not '.$task.' '.$element);}
+        Helper::interrupt(626, 'The table or field has been '.$task);
             
     }
         
@@ -218,6 +218,7 @@ class DbController extends Controller
                     . '->take('.$payload['params']['size'][0].')' :
             $complete_query = $base_query.'->take(100)' ;    
             $related =[];
+            
             if(isset($payload['params']['relation']))
             {
                $wanted_relationships = $payload['params']['relation'];
@@ -229,21 +230,21 @@ class DbController extends Controller
             {
                $order_by = $payload['params']['order'];
                $table_name = $payload['params']['table'];
-              $complete_query = $base_query
+              $complete_query = $complete_query
                     . '->orderBy("'.$payload['params']['order'][0].'" )' ;
                   unset($payload['params']['order']);}
-               
-            unset($payload['params']['table'],$payload['params']['size'][0]
-                    );    
+            unset($payload['params']['table'],$payload['params']['size']
+                    ); 
             foreach($payload['params'] as $key => $query)
             {
                 foreach($query as $one)
-                {
+                {  
                     #prepare query for order and where
                     if(isset($this->query_params[$key]))
                     {   
                         
                         $query_params = explode(',', $one);
+                        
                         if(isset($query_params[1],$query_params[0])){
                         $complete_query = $complete_query.
                                 '->'.$this->query_params[$key].'("'.$query_params[0].
@@ -266,7 +267,7 @@ class DbController extends Controller
             $complete_query = 'return '.$complete_query.'->get();';
             $output = eval($complete_query);
             $output['related'] = $related;
-            $response = Response::respond(612,"Got response sucessfully",$output);
+            $response = Response::respond(625,null,$output);
             echo ($response);
             
         }
@@ -542,7 +543,7 @@ class DbController extends Controller
    private function _set_table_meta($schema)
    {
        
-       \DB::table('tableMeta')->insert(['schema'=>  json_encode($schema),
+       \DB::table('table_metas')->insert(['schema'=>  json_encode($schema),
                'table_name'=> $schema['name'],'service_id'=>$schema['id']]);
        
        
@@ -557,7 +558,7 @@ class DbController extends Controller
     */
    private function _get_tableMeta($service_id)
    {
-       $tableMeta =\DB::table('tableMeta')->
+       $tableMeta =\DB::table('table_metas')->
                                 where('service_id',$service_id)->get();
                         $tableMeta = json_decode(json_encode($tableMeta),true);
                         $count = 0;

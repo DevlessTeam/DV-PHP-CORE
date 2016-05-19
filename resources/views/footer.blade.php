@@ -1,4 +1,3 @@
-@include('header')
             <!--footer section start-->
             <footer>
                 2016 &copy; Devless.

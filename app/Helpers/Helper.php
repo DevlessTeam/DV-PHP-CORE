@@ -15,6 +15,7 @@ class Helper
      * application error heap
      * @var type 
      */
+    
     public static  $ERROR_HEAP = 
     [
         #JSON HEAP
@@ -28,14 +29,14 @@ class Helper
         603 => 'table could not be created',
         604  =>'service  does not exist or is not active',
         605 => 'no such service resource try (script  db or view)',
-        606 => 'created database Schema successfully',
+        606 => 'created table successfully',
         607 => 'could not find the right DB method',
         608 => 'request method not supported',
         609 => 'data has been added to table successfully',
         610 => 'query paramter does not exist',
         611 => 'table name is not set',
         612 => 'query parameters not set',
-        613 => 'dropped table succefully',
+        613 => 'database has been deleted successfully',
         614 => 'parameters where or data  not set',
         615 => 'delete action not set ',   
         616 => 'caught unknown data type',
@@ -47,6 +48,7 @@ class Helper
         622 =>  'Token updated succefully',
         623 =>  'Token could not be updated',
         624 =>  'Sorry this is not an open endpoint',
+        625 =>  'Got response successfully',
         700 => 'internal system error',
     ];
     
@@ -74,7 +76,7 @@ class Helper
     * @return string or null  
     **/
     public static function error_message($stack)
-    {
+    {  
         if(isset(self::$ERROR_HEAP[$stack]))
             return self::$ERROR_HEAP[$stack];
         else
@@ -101,6 +103,7 @@ class Helper
         header('Access-Control-Allow-Origin', '*');
         header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
         die($response);
+        
         
     }
     

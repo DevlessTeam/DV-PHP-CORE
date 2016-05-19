@@ -265,6 +265,7 @@
     //page initial run 
     function init(){
         window.count = 0;
+        window.main_old_fields =  $('.fields').clone();
         db_definition();
         $('.code-area').ace({ theme: 'github', lang: 'php' })
     }
@@ -302,7 +303,7 @@
 	field_names = ['name', 'description', 'field-name', 'field-type', 'default', 
             'required', 'validate', 'unique'];
 
-	old_fields = $('.fields').clone();
+	old_fields = window.main_old_fields.clone();
         field_names.forEach(
 	function(i){
             field_name = i+window.count;
@@ -325,7 +326,6 @@
         {
             var o = {};
             var a = this.serializeArray();
-            console.log(a)
             $.each(a, function() {
                 if (o[this.name] !== undefined) {
                     if (!o[this.name].push) {
@@ -338,7 +338,7 @@
             });
             return o;
         };
-        
+        console.log(window.new_fields);
         object = window.new_fields.serializeObject();
         console.log(object);
         

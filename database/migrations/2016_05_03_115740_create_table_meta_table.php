@@ -13,7 +13,7 @@ class CreateTableMetaTable extends Migration
     public function up()
     {
         //
-        Schema::create('table_meta', function($table){
+        Schema::create('table_metas', function($table){
            $table->increments('id');
            $table->string('table_name');
            $table->json('validation');
@@ -23,7 +23,7 @@ class CreateTableMetaTable extends Migration
            $table->boolean('access');
            $table->integer('service_id')->unsigned();   
            $table->timestamps();
-           
+           $table->foreign('service_id')->references('id')->on('services');
           
         });
     }
