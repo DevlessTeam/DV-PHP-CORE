@@ -301,10 +301,12 @@ class DbController extends Controller
                 {       
                 #default field
                     $table->increments('id');
-                #per  field 
+                     #per  field 
                     foreach($json['field'] as $field ){
-                        #checks if fieldType and references exist    
-                        $this->field_type_exist( $field, $field['ref_table']); 
+                        
+                        $field['field_type'] = strtolower($field['field_type']);
+                        #checks if fieldType and references exist
+                        $this->field_type_exist($field); 
                         #generate columns 
                         $this->column_generator($field, $table, $db_type);
 
@@ -327,8 +329,9 @@ class DbController extends Controller
      * @param  table_name   $table_name
      * @return true
      */
-    public function field_type_exist( $field, $col_name)
+    public function field_type_exist( $field)
     {      
+        
             #check if soft data type has equivalent db type
         if(!isset($this->db_types[$field['field_type']]))
         {   
@@ -336,10 +339,10 @@ class DbController extends Controller
             Helper::interrupt(600, $field['field_type'].' does not exist');
             
         }
-        if($field['field_type'] == "reference")
+        if(strtolower($field['field_type']) == "reference")
         {    
             if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
-                hasTable($col_name, $field['ref_table'])) 
+                hasTable($field['ref_table'])) 
             {
                
                          //

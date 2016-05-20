@@ -67,7 +67,7 @@
           
       <div class="modal-footer">
           <button type="button" onclick="append_field()" class="btn btn-info pull-left" >Add a Field</button>
-          <button type="button" ONclick="create_table()" class="btn btn-info pull-right" >Create Table</button>
+          <button type="button" ONclick="create_table('{{$service->name}}')" class="btn btn-info pull-right" >Create Table</button>
       </div>
       </div></form></div>
   </div>
@@ -289,7 +289,7 @@
          $.ajax(settings).done(function (response) {
              
            response_object = JSON.parse(response);
-           status_code = response_object.status_code;s
+           status_code = response_object.status_code;
            if (status_code == 613) {
                 $("").fadeOut();
            }
@@ -329,7 +329,7 @@
     }
 
     
-    function create_table(){
+    function create_table(service_name){
          $.fn.serializeObject = function()
         {
             var o = {};
@@ -389,7 +389,7 @@
             console.log("number of fields are:",len);
             for (var i = 0; i < len; i++) {
                 position = ((len-1)*7)
-                if(form_array[5+position] == ""){ _default = "null";}else{_default = form_array[5+position]; console.log("what defualt had",form_array[5+position]); }
+                if(form_array[5+position] == ""){ _default = "null";}else{_default = form_array[5+position]; }
                 window.schema_json.resource[0].field[i] = {  
                     "name":form_array[3+position],
                     "field_type":form_array[4+position],
@@ -397,10 +397,10 @@
                     "required":form_array[6+position],
                     "validation":form_array[7+position],
                     "is_unique":form_array[8+position],
-                    "ref_table":form_array[9+position]
+                    "ref_table": ""
                  };
             }
-               table_schema =  JSON.stringify(window.schema_json)
+               table_schema =  JSON.stringify(window.schema_json);
                var settings = {
                 "async": true,
                 "crossDomain": true,
@@ -411,18 +411,29 @@
                   "cache-control": "no-cache",
                 },
                 "processData": false,
-                "data": 
+                "data": table_schema
               }
 
             $.ajax(settings).done(function (response) {
               console.log(response);
+              response_object = JSON.parse(response);
+              status_code = response_object.status_code;
+              message = response_object.message;
+              if(status_code == 606){
+                  
+                  
+                    location.reload();
+                  
+              }else{
+                  alert(message);
+              }
             });
             }
             else{
                 alert('Sorry seems you have no fields set ');
             }
   
-              console.log()  
+              
         
         
     }
