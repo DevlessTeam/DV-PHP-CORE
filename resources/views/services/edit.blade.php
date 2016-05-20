@@ -48,7 +48,7 @@
         </div>
           <div class="form-group">
            <label for="default-field">Default Value(optional)</label>
-            <input type="text" id="defualt" name="default" class="form-control" value="{{ $service->name }}"/>
+            <input type="text" id="default" name="default" class="form-control" />
            </div>
             
             <div class="form-group">
@@ -67,7 +67,7 @@
           
       <div class="modal-footer">
           <button type="button" onclick="append_field()" class="btn btn-info pull-left" >Add a Field</button>
-          <button type="button" ONclick="create_table()" class="btn btn-info pull-right" >Create Table</button>
+          <button type="button" ONclick="create_table('{{$service->name}}')" class="btn btn-info pull-right" >Create Table</button>
       </div>
       </div></form></div>
   </div>
@@ -270,7 +270,6 @@
         db_definition();
         $('.code-area').ace({ theme: 'github', lang: 'php' });
         window.schema_json = {"resource":[{"name":"","description":"","field":[]}]  }        
-        window.field = {"name":"","field_type":"","default":null,"required":true,"is_unique":true,"ref_table":"","validation":true}
     }
     //destroy table
     function destroy_table(table_name, service_name){
@@ -290,7 +289,7 @@
          $.ajax(settings).done(function (response) {
              
            response_object = JSON.parse(response);
-           status_code = response_object.status_code;s
+           status_code = response_object.status_code;
            if (status_code == 613) {
                 $("").fadeOut();
            }
@@ -309,7 +308,7 @@
         field_names.forEach(
   function(i){
             field_name = i+window.count;
-            old_fields.find('#'+i).attr('name', field_name );
+            old_fields.find('#'+i).attr('name', field_name ).attr('id', field_name );
             
        }
                
@@ -330,7 +329,7 @@
     }
 
     
-    function create_table(){
+    function create_table(service_name){
          $.fn.serializeObject = function()
         {
             var o = {};
@@ -357,32 +356,84 @@
             function($)
             {
               count = 0 ;
+              form_array = [];
               $.each($('#form')[0].elements,
                      function(i,o)
                      {
                       var _this=$(o);
-                      alert('id:'+_this.attr('id')+'\nname:'+_this.attr('name'));
-                      
-                      //get first two 
-//                      skip next two 
-//                      get for 6 times 
- //                     skip two 
-//                      
+                      field_id = _this.attr('id');
+                        
+                       if(typeof field_id == "string" && field_id.indexOf("validate")>= 0){
+                           form_array[count] = $('#'+_this.attr('id')).is(':checked'); 
+                       }
+                       else if(typeof field_id == "string" && field_id.indexOf("required")>= 0){
+                           form_array[count] = $('#'+_this.attr('id')).is(':checked'); 
+                       }
+                       else if(typeof field_id == "string" && field_id.indexOf("unique")>= 0){
+                           form_array[count] = $('#'+_this.attr('id')).is(':checked'); 
+                       }else{
+                           form_array[count] = $('#'+_this.attr('id')).val(); 
+                       }
+                        
+                         
+                    count++;
                      })
-                count++;        
+                
             }
           );
-        
-       console.log(array);
-       
-        
-         
-             console.log(i);
-             
-             //use this value to create field appendages
-         
-         count++;
-       
+            
+            if(form_array.length > 4){
+            window.schema_json.resource[0].name = form_array[0];
+            window.schema_json.resource[0].description = form_array[1];
+            var len = ((form_array.length)-4)/7;
+            console.log("number of fields are:",len);
+            for (var i = 0; i < len; i++) {
+                position = ((len-1)*7)
+                if(form_array[5+position] == ""){ _default = "null";}else{_default = form_array[5+position]; }
+                window.schema_json.resource[0].field[i] = {  
+                    "name":form_array[3+position],
+                    "field_type":form_array[4+position],
+                    "default":_default,
+                    "required":form_array[6+position],
+                    "validation":form_array[7+position],
+                    "is_unique":form_array[8+position],
+                    "ref_table": ""
+                 };
+            }
+               table_schema =  JSON.stringify(window.schema_json);
+               var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": "/api/v1/service/"+service_name+"/schema",
+                "method": "POST",
+                "headers": {
+                  "content-type": "application/json",
+                  "cache-control": "no-cache",
+                },
+                "processData": false,
+                "data": table_schema
+              }
+
+            $.ajax(settings).done(function (response) {
+              console.log(response);
+              response_object = JSON.parse(response);
+              status_code = response_object.status_code;
+              message = response_object.message;
+              if(status_code == 606){
+                  
+                  
+                    location.reload();
+                  
+              }else{
+                  alert(message);
+              }
+            });
+            }
+            else{
+                alert('Sorry seems you have no fields set ');
+            }
+  
+              
         
         
     }
@@ -391,3 +442,6 @@
    }
 </script> 
 @endsection
+
+
+ 
