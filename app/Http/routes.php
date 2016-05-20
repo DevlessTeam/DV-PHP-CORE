@@ -48,6 +48,8 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
     Route::patch('service/{service}/{resource}','ServiceController@api');
     Route::delete('service/{service}/{resource}','ServiceController@api');
 
+    #api_doc views
+    Route::resource('console', 'ApiDocController');
 
 
 
@@ -63,4 +65,6 @@ Route::group(['middleware' => 'user.auth'], function () {
   #change token
   Route::put('generatetoken','AppController@update');
   Route::delete('destroy_table', 'SystemApiController@delete_table');
+
+
 });
