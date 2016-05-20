@@ -361,42 +361,68 @@
                      function(i,o)
                      {
                       var _this=$(o);
-                       
-                       if(typeof $('#'+_this.attr('id')).val() != 'undefined'){
-                                form_array[count] = $('#'+_this.attr('id')).val(); 
-                        }               
-                          console.log($('#'+_this.attr('id')).val(), count);
-                  
+                      field_id = _this.attr('id');
+                        
+                       if(typeof field_id == "string" && field_id.indexOf("validate")>= 0){
+                           form_array[count] = $('#'+_this.attr('id')).is(':checked'); 
+                       }
+                       else if(typeof field_id == "string" && field_id.indexOf("required")>= 0){
+                           form_array[count] = $('#'+_this.attr('id')).is(':checked'); 
+                       }
+                       else if(typeof field_id == "string" && field_id.indexOf("unique")>= 0){
+                           form_array[count] = $('#'+_this.attr('id')).is(':checked'); 
+                       }else{
+                           form_array[count] = $('#'+_this.attr('id')).val(); 
+                       }
+                        
+                         
                     count++;
                      })
                 
             }
           );
-            console.log(form_array);
+            
             if(form_array.length > 4){
             window.schema_json.resource[0].name = form_array[0];
             window.schema_json.resource[0].description = form_array[1];
-            var len = ((form_array.length)-2)/7;
+            var len = ((form_array.length)-4)/7;
             console.log("number of fields are:",len);
             for (var i = 0; i < len; i++) {
                 position = ((len-1)*7)
-                if(form_array[5+position] == ""){default = null }
+                if(form_array[5+position] == ""){ _default = "null";}else{_default = form_array[5+position]; console.log("what defualt had",form_array[5+position]); }
                 window.schema_json.resource[0].field[i] = {  
                     "name":form_array[3+position],
                     "field_type":form_array[4+position],
-                    "default":form_array[5+position],
+                    "default":_default,
                     "required":form_array[6+position],
-                    "is_unique":form_array[7+position],
-                    "ref_table":form_array[8+position],
-                    "validation":form_array[9+position]
+                    "validation":form_array[7+position],
+                    "is_unique":form_array[8+position],
+                    "ref_table":form_array[9+position]
                  };
             }
+               table_schema =  JSON.stringify(window.schema_json)
+               var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": "/api/v1/service/"+service_name+"/schema",
+                "method": "POST",
+                "headers": {
+                  "content-type": "application/json",
+                  "cache-control": "no-cache",
+                },
+                "processData": false,
+                "data": 
+              }
+
+            $.ajax(settings).done(function (response) {
+              console.log(response);
+            });
             }
             else{
                 alert('Sorry seems you have no fields set ');
             }
   
- 
+              console.log()  
         
         
     }
@@ -407,14 +433,4 @@
 @endsection
 
 
- switch(count){
-                          case 0:
-                           window.schema_json.resource[0].name = 
-                                 $('#'+_this.attr('id')).val()  
-                         
-                          case 1:
-                               window.schema_json.resource[0].description = 
-                                 $('#'+_this.attr('id')).val()  
-                      }
-                      
-                      if(count)
+ 
