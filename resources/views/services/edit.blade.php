@@ -301,22 +301,22 @@
          });
     }
     
-  function append_field(){	
-	field_names = ['name', 'description', 'field-name', 'field-type', 'default', 
+  function append_field(){  
+  field_names = ['name', 'description', 'field-name', 'field-type', 'default', 
             'required', 'validate', 'unique'];
 
-	old_fields = window.main_old_fields.clone();
+  old_fields = window.main_old_fields.clone();
         field_names.forEach(
-	function(i){
+  function(i){
             field_name = i+window.count;
             old_fields.find('#'+i).attr('name', field_name );
             
        }
                
                 
-	)   
+  )   
        
-	new_fields = old_fields;
+  new_fields = old_fields;
         
         $( ".dynamic-space").append(new_fields);
         old_fields.attr('class', 'fields'+window.count);
@@ -366,10 +366,10 @@
                       //get first two 
 //                      skip next two 
 //                      get for 6 times 
-                      skip two 
+ //                     skip two 
 //                      
                      })
-
+                count++;        
             }
           );
         
