@@ -79,7 +79,6 @@
                  <label for="req_payload" class="col-lg-2 col-sm-2 control-label">Request Payload</label>
                  <div class="col-lg-10">
                    <div id="editor" style="height: 300px;"></div>
-                   <input type="text" id="req_input" name="req_payload" class="form-control">
                  </div>
                </div>
              </div>
@@ -127,12 +126,5 @@
        var editor = ace.edit("editor");
        editor.setTheme("ace/theme/xcode");
        editor.getSession().setMode("ace/mode/json");
-
-       if (editor.length > 0) {
-         $('#form').onSumbit(function() {
-           var code = editor.getValue();
-           $('#req_input').val(code);
-         });
-       }
    </script>
 @endsection
