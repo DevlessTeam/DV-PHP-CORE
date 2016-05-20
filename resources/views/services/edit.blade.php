@@ -48,7 +48,7 @@
         </div>
           <div class="form-group">
            <label for="default-field">Default Value(optional)</label>
-            <input type="text" id="defualt" name="default" class="form-control" value="{{ $service->name }}"/>
+            <input type="text" id="default" name="default" class="form-control" />
            </div>
             
             <div class="form-group">
@@ -270,7 +270,6 @@
         db_definition();
         $('.code-area').ace({ theme: 'github', lang: 'php' });
         window.schema_json = {"resource":[{"name":"","description":"","field":[]}]  }        
-        window.field = {"name":"","field_type":"","default":null,"required":true,"is_unique":true,"ref_table":"","validation":true}
     }
     //destroy table
     function destroy_table(table_name, service_name){
@@ -309,7 +308,7 @@
         field_names.forEach(
   function(i){
             field_name = i+window.count;
-            old_fields.find('#'+i).attr('name', field_name );
+            old_fields.find('#'+i).attr('name', field_name ).attr('id', field_name );
             
        }
                
@@ -357,32 +356,47 @@
             function($)
             {
               count = 0 ;
+              form_array = [];
               $.each($('#form')[0].elements,
                      function(i,o)
                      {
                       var _this=$(o);
-                      alert('id:'+_this.attr('id')+'\nname:'+_this.attr('name'));
-                      
-                      //get first two 
-//                      skip next two 
-//                      get for 6 times 
- //                     skip two 
-//                      
+                       
+                       if(typeof $('#'+_this.attr('id')).val() != 'undefined'){
+                                form_array[count] = $('#'+_this.attr('id')).val(); 
+                        }               
+                          console.log($('#'+_this.attr('id')).val(), count);
+                  
+                    count++;
                      })
-                count++;        
+                
             }
           );
-        
-       console.log(array);
-       
-        
-         
-             console.log(i);
-             
-             //use this value to create field appendages
-         
-         count++;
-       
+            console.log(form_array);
+            if(form_array.length > 4){
+            window.schema_json.resource[0].name = form_array[0];
+            window.schema_json.resource[0].description = form_array[1];
+            var len = ((form_array.length)-2)/7;
+            console.log("number of fields are:",len);
+            for (var i = 0; i < len; i++) {
+                position = ((len-1)*7)
+                if(form_array[5+position] == ""){default = null }
+                window.schema_json.resource[0].field[i] = {  
+                    "name":form_array[3+position],
+                    "field_type":form_array[4+position],
+                    "default":form_array[5+position],
+                    "required":form_array[6+position],
+                    "is_unique":form_array[7+position],
+                    "ref_table":form_array[8+position],
+                    "validation":form_array[9+position]
+                 };
+            }
+            }
+            else{
+                alert('Sorry seems you have no fields set ');
+            }
+  
+ 
         
         
     }
@@ -391,3 +405,16 @@
    }
 </script> 
 @endsection
+
+
+ switch(count){
+                          case 0:
+                           window.schema_json.resource[0].name = 
+                                 $('#'+_this.attr('id')).val()  
+                         
+                          case 1:
+                               window.schema_json.resource[0].description = 
+                                 $('#'+_this.attr('id')).val()  
+                      }
+                      
+                      if(count)
