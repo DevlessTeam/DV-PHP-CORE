@@ -11,7 +11,7 @@
                     </a>
                 </div>
 
-               
+
                 <!--logo and logo icon end-->
 
                 <!--toggle button start-->
@@ -43,8 +43,8 @@
                     </li>
                     <li><a href="#"><span>Schema Data</span></a></li>
                     <li><a href="#"><span>Config</span></a></li>
-                    <li><a href="#"><span>Api Docs</span></a></li>
-                   
+                    <li><a href="{{ route('api.v1.console.index')}}"><span>Api Docs</span></a></li>
+
                 </ul>
             </div>
         </div>
@@ -52,5 +52,5 @@
         <div class="body-content" style="min-height: 800px;">
 
             <!-- header section start-->
-            
+
         <!-- sidebar left end-->
