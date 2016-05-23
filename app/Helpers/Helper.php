@@ -4,25 +4,25 @@ use Validator;
 use App\Helpers\Response as Response;
 use Hash;
 use Response as output;
-/* 
+/*
  * @author eddymens <eddymens@devless.io>
-*composed of most common used classes and functions 
+*composed of most common used classes and functions
 */
 
 class Helper
 {
     /**
      * application error heap
-     * @var type 
+     * @var type
      */
-    
-    public static  $ERROR_HEAP = 
+
+    public static  $ERROR_HEAP =
     [
         #JSON HEAP
         400 => 'Sorry something went wrong with payload(check json format)',
         #SCHEMA HEAP
         500 => 'first schema error',
-        # error code for custom messages 
+        # error code for custom messages
         600 => 'Data type does not exist',
         601 => 'reference column column name does not exist',
         602 => 'database schema could not be created',
@@ -38,7 +38,7 @@ class Helper
         612 => 'query parameters not set',
         613 => 'database has been deleted successfully',
         614 => 'parameters where or data  not set',
-        615 => 'delete action not set ',   
+        615 => 'delete action not set ',
         616 => 'caught unknown data type',
         617 =>  'no such table belongs to the service',
         618 =>  'validator type does not exist',
@@ -52,12 +52,12 @@ class Helper
         626 =>  'saved script',
         700 => 'internal system error',
     ];
-    
+
     /**
-     * convert soft types to validator rules 
-     * @var string 
+     * convert soft types to validator rules
+     * @var string
      */
-    private static $validator_type = 
+    private static $validator_type =
     [
         'text'      => 'string',
         'textarea'   => 'string',
@@ -69,15 +69,15 @@ class Helper
         'timestamp'  => 'timestamp',
         'boolean'    => 'boolean',
         'email'      => 'email',
-        'reference'  => 'integer',    
+        'reference'  => 'integer',
     ];
     /**
-     * fetch message based on error code 
+     * fetch message based on error code
     * @param  stack  $stack
-    * @return string or null  
+    * @return string or null
     **/
     public static function error_message($stack)
-    {  
+    {
         if(isset(self::$ERROR_HEAP[$stack]))
             return self::$ERROR_HEAP[$stack];
         else
@@ -85,12 +85,12 @@ class Helper
               return null;
             }
     }
-    
+
     /**
-     * stops request processing and returns error payload 
+     * stops request processing and returns error payload
      *
      * @param  error code  $stack
-     * @return json 
+     * @return json
      */
     public static function  interrupt($stack, $message=null){
         if($message !==null){
@@ -100,27 +100,27 @@ class Helper
         {
             $msg = self::error_message($stack);
         }
-        $response = Response::respond($stack, $msg, []); 
+        $response = Response::respond($stack, $msg, []);
         header('Access-Control-Allow-Origin', '*');
         header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
         die($response);
-        
-        
+
+
     }
-    
+
      /**
      * check the validility of a field type
-     * uses laravel validator 
+     * uses laravel validator
      * @param string   $field_value
      * @param string parameters to check against $check_against
-     * @return boolean 
+     * @return boolean
      */
     public static function field_check( $field_value, $check_against)
-    {   
+    {
         //convert check against to field_name for err_msg
         $field_name = $check_against;
-        
-        //check if multiple rules are used 
+
+        //check if multiple rules are used
         if(strpos($check_against, '|'))
         {
             $rules = explode("|", $check_against);
@@ -138,19 +138,14 @@ class Helper
         }
         else
         {
-            
-<<<<<<< HEAD
-            //single validator rule
+
+            //single validator rule convert field type check to lowercase
             $check_against = strtolower($check_against);
-            
-=======
-            //single validator rule  
->>>>>>> parent of d58196b... convert field type check to lowercase
             $check_against = Helper::$validator_type[$check_against] ;
-        
+
         }
-                
-        
+
+
         $state = Validator::make(
             [$field_name => $field_value],
                 [$field_name => $check_against]
@@ -163,20 +158,20 @@ class Helper
             return $state->messages();
         }
     }
-    
+
      /**
-     * get url parameters 
-     * @return array 
+     * get url parameters
+     * @return array
      **/
     public static function query_string()
     {
         if(isset( $_SERVER['QUERY_STRING'])){
          $query  = explode('&', $_SERVER['QUERY_STRING']);
          $params = array();
-        
+
         foreach( $query as $param )
             {
-             
+
               list($name, $value) = explode('=', $param, 2);
               $params[urldecode($name)][] = urldecode($value);
             }
@@ -188,8 +183,8 @@ class Helper
             return $param;
         }
     }
-    
-    
+
+
     /**
      * Hash password
      * @param type $password
@@ -201,7 +196,7 @@ class Helper
     {
         return Hash::make($password);
     }
-    
+
     /**
      * compare password hash
      * @param string $user_input
@@ -212,6 +207,6 @@ class Helper
     {
         (Hash::check($user_input, $hash))?  true :  false;
     }
-    
-    
+
+
 }
