@@ -71,8 +71,10 @@
 
                <div class="form-group">
                  <label for="where" class="col-lg-2 col-sm-2 control-label">Where</label>
-                 <div class="col-lg-10" >
+                 <div class="col-lg-5" >
                    <input type="text" id="key-field" class="form-control" name="key" placeholder="key">
+                 </div>
+                 <div class="col-lg-5" >
                    <input type="text" id="value-field" class="form-control" name="value" placeholder="value">
                  </div>
                </div>
