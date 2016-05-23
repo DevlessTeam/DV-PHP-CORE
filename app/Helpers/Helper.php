@@ -139,13 +139,9 @@ class Helper
         else
         {
             
-<<<<<<< HEAD
+
             //single validator rule
             $check_against = strtolower($check_against);
-            
-=======
-            //single validator rule  
->>>>>>> parent of d58196b... convert field type check to lowercase
             $check_against = Helper::$validator_type[$check_against] ;
         
         }
