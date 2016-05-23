@@ -33,10 +33,10 @@
                  <div class="col-lg-10">
                    <select id="operation" name="operation" class="form-control m-b-10">
                         <option disabled selected value> -- select an operation -- </option>
-                        <option value="retrieve_all">GET</option>
-                        <option value="create">POST </option>
-                        <option value="update">UPDATE </option>
-                        <option vallue="delete">DELETE </option>
+                        <option value="retrieve_all">QUERY TABLE (GET)</option>
+                        <option value="create">ADD RECORD (POST) </option>
+                        <option value="update">UPDATE RECORD(PATCH) </option>
+                        <option vallue="delete">DELETE RECORD (DELETE) </option>
                     </select>
                  </div>
                </div>
@@ -50,7 +50,7 @@
 
                <div class="form-group">
                  <div class="col-lg-offset-2 col-lg-10">
-                   <button type="submit" class="btn btn-primary pull-right">Send</button>
+                   <button type="submit" class="btn btn-info pull-right">Send</button>
                  </div>
                </div>
            </div>
@@ -71,8 +71,10 @@
 
                <div class="form-group">
                  <label for="where" class="col-lg-2 col-sm-2 control-label">Where</label>
-                 <div class="col-lg-10" >
+                 <div class="col-lg-5" >
                    <input type="text" id="key-field" class="form-control" name="key" placeholder="key">
+                 </div>
+                 <div class="col-lg-5" >
                    <input type="text" id="value-field" class="form-control" name="value" placeholder="value">
                  </div>
                </div>
@@ -80,7 +82,7 @@
                <div class="form-group">
                  <label for="size" class="col-lg-2 col-sm-2 control-label">Size</label>
                  <div class="col-lg-10">
-                   <input type="text" id="size-field" class="form-control" >
+                   <input type="number" id="size-field" class="form-control" >
                  </div>
                </div>
              </div>
@@ -148,9 +150,6 @@
          document.getElementById('request').style.display = 'none';
          document.getElementById('response').style.display = 'none';
 
-         //JSON schema
-         var json = {"resource":[{"name":"","field":[]}]  }
-         console.log(json);
 
          //Handles URL generation
          var service_name;
@@ -169,15 +168,17 @@
            $('#api_url').val('api/v1/service/'+service_name+'/db');
          });
 
-         //text for payload
+         //texteditor for payload
          var editor = ace.edit("editor");
          editor.setTheme("ace/theme/xcode");
          editor.getSession().setMode("ace/mode/json");
 
          // Handles the form rendering
          var request_type;
+         var name;
          $('#operation').change(function () {
            request_type = $(this).val();
+           var name = $('#table option:selected').text();
 
            if (request_type == "retrieve_all") {
              $('#query').show();
@@ -185,11 +186,23 @@
              $('#response').hide();
 
            } else {
-            //  $.get('/api/v1/schema/'+service_name, function(data){
-            //    editor.setValue(
-            //      '{"resource":[{"name":"authentication","params":[{"where":"id,1","data":[{"username": "james"}]}]}]}'
-            //    );
-            //  });
+             $.get('/console/'+service_name+'/schema', function(data){
+               var schema = data;
+               var values = {};
+               for (var i = 0; i < schema.length; i++) {
+                 values[schema[i].name] = "";
+               };
+               if (request_type === 'create'){
+                 var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+name+'","field":['+JSON.stringify(values)+']}]}'), undefined, 4);
+               } else if (request_type === 'update') {
+                 console.log("message");
+
+               } else {
+                 console.log("delete");
+
+               }
+               editor.setValue(json);
+             });
 
              $('#body_params').show();
              $('#query').hide();
@@ -198,15 +211,13 @@
 
          });
 
-
         // Handling requests and response
          $('#form_data').submit(function(e){
            e.preventDefault();
 
            // Handles GET requests
-           if (request_type == "retrieve_all") {
+           if (request_type === "retrieve_all") {
 
-             var name = $('#table option:selected').text();
              var order = $('#order-field').val();
              var key = $('#key-field').val();
              var value = $('#value-field').val();
@@ -216,6 +227,12 @@
                $('#response').show();
                $('#response-field').html(JSON.stringify(JSON.parse(data), undefined, 4));
              });
+           } else {
+             $.post('api/v1/service/'+service_name+'/db', JSON.parse(editor.getValue()))
+                .done(function(data){
+                  $('#response').show();
+                  $('#response-field').html(JSON.stringify(JSON.parse(data), undefined, 4));
+                });
            }
 
          });
