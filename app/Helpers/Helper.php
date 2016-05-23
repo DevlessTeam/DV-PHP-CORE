@@ -141,6 +141,7 @@ class Helper
             
             //single validator rule
             $check_against = strtolower($check_against);
+            
             $check_against = Helper::$validator_type[$check_against] ;
         
         }
