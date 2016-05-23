@@ -195,11 +195,9 @@
                if (request_type === 'create'){
                  var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+name+'","field":['+JSON.stringify(values)+']}]}'), undefined, 4);
                } else if (request_type === 'update') {
-                 console.log("message");
-
+                 var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+name+'","params":[{"where":"id, ","data":[{"key":"value"}]}]}]}'), undefined, 4);
                } else {
-                 console.log("delete");
-
+                 var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+name+'","params":[{"delete":"true","where":"id, "}]}]}'), undefined, 4);
                }
                editor.setValue(json);
              });
