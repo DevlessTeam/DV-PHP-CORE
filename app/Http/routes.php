@@ -24,10 +24,12 @@ Route::resource('service/{service}/{resource}/{template}/', 'ViewController@acce
 
 Route::get('assets/{sublevels?}', 'ViewController@static_files')->where('sublevels', '.*');
 
+#routes for only endpoints 
 Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
-	#check system status
+    
+    #check system status
     Route::get('status', function ()    {
-        // Matches The "/api/v1/us" URL
+        
         return "healthy";
     });
 

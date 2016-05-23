@@ -88,8 +88,7 @@ class DbController extends Controller
          */
         public function update($resource, $payload)
         {
-            //
-            $connector = explode(',',$payload['db_definition']);
+            
             $connector = $this->_connector($payload);
             $db =   \DB::connection('DYNAMIC_DB_CONFIG');
 
@@ -126,8 +125,7 @@ class DbController extends Controller
          */
         public function destroy($resource, $payload)
         {
-            //
-            $connector = explode(',',$payload['db_definition']);
+            
             $connector = $this->_connector($payload);
             $db =   \DB::connection('DYNAMIC_DB_CONFIG');
             //check if table name is set 
@@ -205,7 +203,6 @@ class DbController extends Controller
     */
     public function db_query($resource, $payload)
     {
-        $connector = explode(',',$payload['db_definition']);
         $connector = $this->_connector($payload);
         $db =   \DB::connection('DYNAMIC_DB_CONFIG');
         //check if table name is set 
@@ -279,11 +276,12 @@ class DbController extends Controller
     public function create_schema($resource, array $json)
     {
         
-      #set path in case connector is sqlite
+    #set path in case connector is sqlite
     $id = $json['id'];
-        #connectors mysql pgsql sqlsrv sqlite
-    $connector = explode(',',$json['db_definition']);
+    
+    #connectors mysql pgsql sqlsrv sqlite
     $connector = $this->_connector($json);
+    
      #dynamically create columns with schema builder 
     $db_type = $this->db_types;
     $table_meta_data = []; 
@@ -434,7 +432,7 @@ class DbController extends Controller
     }
    /*
     * access the schema class from this method
-    * @param string resource name $resource 
+    * @param string resource name $resource     
     * @param array payload $payload 
     */    
     public function access_db($resource, $payload)
@@ -467,12 +465,12 @@ class DbController extends Controller
     public function db_socket($driver, $host, $database,$username, $password,
             $charset='utf8', $prefix='', $collation='utf8_unicode_ci')
     {
-            if($driver == 'sqlite'){
+        if($driver == 'sqlite')
+        {
             $database =  __DIR__.
             '/../../../database/devless-rec.sqlite3';
-
         }
-         $conn = array(
+        $conn = array(
         'driver'    => $driver,
         'host'      => $host,
         'database'  => $database,
@@ -493,18 +491,33 @@ class DbController extends Controller
      * @param $payload request parameters
      * @return boolean
      */
-    private function _connector($payload)
+    private function _connector($connector_params)
     {
-        $connector = explode(',',$payload['db_definition']);
-        $index = 0;
-        foreach($connector as $conn)
+        
+        $driver = $connector_params['driver'];
+        
+        //get current database else connect to remote
+        if($driver == 'default')
         {
-            $connector[$index] = substr($conn, ($pos = strpos($conn, '=')) 
-                 !== false ? $pos + 1 : 0);
-            $index++;
+            $default_database = config('database.default');
+            $default_connector = config('database.connections.'.$default_database);
+            
+            $driver   = $default_connector['driver'];
+            $hostname = (isset($default_connector['hostname']))? $default_connector['hostname']:
+                        $default_connector['host'];
+            $database = $default_connector['database'];
+            $username = $default_connector['username'];
+            $password = $default_connector['password'];
         }
-         $this->db_socket($connector[0], $connector[1], 
-            $connector[2],$connector[3],$connector[4]);
+        else
+        {
+            $driver   = $connector_params['driver'];
+            $hostname = $connector_params['hostname'];
+            $database = $connector_params['database'];
+            $username = $connector_params['username'];
+            $password = $connector_params['password'];
+        }
+        $this->db_socket($driver, $hostname, $database, $username, $password);
           
         return true;
     }
@@ -576,6 +589,18 @@ class DbController extends Controller
                             
                         }
                         return $tableMeta;
+   }
+   
+   /*
+    * Check if a connection can be made to database
+    * @param array $connection_params (hostname,username,password,driver,)
+    * 
+    */
+   public function check_db_connection(array $connection_params){
+       
+       $connector = $this->_connector($connection_params);
+       //dd(\DB::connection('DYNAMIC_DB_CONFIG'));
+       return true; 
    }
    
    /*

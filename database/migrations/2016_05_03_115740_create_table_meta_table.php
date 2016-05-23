@@ -23,7 +23,8 @@ class CreateTableMetaTable extends Migration
            $table->boolean('access');
            $table->integer('service_id')->unsigned();   
            $table->timestamps();
-           $table->foreign('service_id')->references('id')->on('services');
+           $table->foreign('service_id')->references('id')->on('services')
+                   ->onDelete('cascade');
           
         });
     }

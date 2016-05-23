@@ -7,7 +7,7 @@
          <div class="modal-body">
             <div id="left">
       <div>
-    <center><font color="white">{{Session::get('flash_message')}}</font>
+          <center><p><font color="white">{{Session::get('flash_message')}}</font></p>
     </center>
    
          </div>

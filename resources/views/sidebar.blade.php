@@ -35,15 +35,15 @@
                     </li>
                     <li><a href="{{route('app.index')}}"><span>App</span></a></li>
                     <li class="menu-list">
-                        <a href="#"><span>Service</span></a>
+                        <a href="#"><span>Services</span></a>
                         <ul class="child-list">
                             <li><a href="{{ route('services.index') }}">All Services</a></li>
                             <li><a href="{{ route('services.create') }}">Add New</a></li>
                         </ul>
                     </li>
-                    <li><a href="#"><span>Schema Data</span></a></li>
-                    <li><a href="#"><span>Config</span></a></li>
+                    <li><a href="#"><span>Data Tables</span></a></li>
                     <li><a href="{{ route('api.v1.console.index')}}"><span>Api Docs</span></a></li>
+                    <li><a href="#"><span>Import/Export Services</span></a></li>
 
                 </ul>
             </div>

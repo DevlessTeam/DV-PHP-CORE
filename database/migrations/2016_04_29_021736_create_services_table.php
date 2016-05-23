@@ -16,7 +16,11 @@ class CreateServicesTable extends Migration {
             $table->increments('id');
             $table->string('name');
             $table->text('description');
-            $table->text('db_definition');
+            $table->text('driver');
+            $table->text('hostname');
+            $table->text('username');
+            $table->text('password');
+            $table->text('database');
             $table->text('script');
             $table->boolean('public');
             $table->boolean('active');
