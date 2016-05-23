@@ -688,7 +688,7 @@ class DbController extends Controller
         }
         else
         {
-           return true; 
+           return true;  
         }
    }
         
