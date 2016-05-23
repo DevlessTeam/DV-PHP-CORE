@@ -34,7 +34,8 @@ class ViewController extends Controller
     private function _fetch_view($service, $template, $payload)
     {
         
-        return view('auth.index')->with($payload);
+        return view('service_views.'.$service.'.'.$template)->with('payload', $payload);
+        
     }
     
     public function static_files(Request $request)

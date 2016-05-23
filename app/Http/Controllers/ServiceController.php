@@ -47,31 +47,38 @@ class ServiceController extends Controller {
 	{       //convert word inputs to lowercase
 		$service = new Service();
 
-		 //convert name inputs to lowercase
-		if($service = Service::findOrFail($id))
-                {
-                    
-                    $driver = $request->input('driver');$hostname = $request->input('hostname');
-                    $username = $request->input('username');$password = $request->input('password');
-                    $database_name = $request->input('database');
-                    
-                    //put together  pdo cred    
-                    $db_definition =  'driver='.$driver.',hostname='.$hostname.','
-                            . 'database='.$database_name.',username='.$username.',password='.$password;     
-                    
-                    $service->name = strtolower($request->input("name"));
+		  
+		    $service->name = strtolower($request->input("name"));
                     $service->description = $request->input("description");
-                    $service->db_definition = $db_definition;
-                    #$service->script = $request->input("script");
-                    $service->active = $request->input("active");
-                    #$service->public = $request->input("public");
+                    $service->username = $request->input("username");
+                    $service->password = $request->input('password');
+                    $service->database = $request->input('database');
+                    $service->hostname = $request->input('hostname');
+                    $service->driver = $request->input('driver');
+                    $service->active = 1;
+                    $service->script = 'echo "Happy Coding";';
 
-                     ($service->save())? DLH::flash("Service updated successfully", 'success'):
-                        DLH::flash("Changes did not take effect", 'error');
+                    $connection = 
+                    [
+                        'username' => $service->username,
+                        'password' => $service->password,
+                        'database' => $service->database,
+                        'hostname' => $service->hostname,
+                        'driver'   => $service->driver,
+                    ];
+                    $db = new Db();
+
+                    if(!$db->check_db_connection($connection)){
+                        
+                         DLH::flash("Sorry connection could not be made to Database", 'error');
+                    }
+                    else
+                    {
+                    
+                     ($service->save())? DLH::flash("Service created successfully", 'success'):
+                        DLH::flash("Service could not be created", 'error');
+                    }
                 
-                }
-		$service->save();
-
 		return redirect()->route('services.index')->with('message', 'Item created successfully.');
 	}
 
@@ -117,7 +124,7 @@ class ServiceController extends Controller {
 	 */
 	public function update(Request $request, $id)
 	{
-                //convert name inputs to lowercase
+                
 		if($service = Service::findOrFail($id))
                 {
                     if($request->input('call_type') =='solo')
@@ -126,24 +133,36 @@ class ServiceController extends Controller {
                         $service->save();
                         Helper::interrupt(626);
                     }
-                    $driver = $request->input('driver');$hostname = $request->input('hostname');
-                    $username = $request->input('username');$password = $request->input('password');
-                    $database_name = $request->input('database');
-                    
-                    //put together  pdo cred    
-                    $db_definition =  'driver='.$driver.',hostname='.$hostname.','
-                            . 'database='.$database_name.',username='.$username.',password='.$password;     
                     
                     $service->name = strtolower($request->input("name"));
                     $service->description = $request->input("description");
-                    $service->db_definition = $db_definition;
-                    #$service->script = $request->input("script");
+                    $service->username = $request->input("username");
+                    $service->password = $request->input('password');
+                    $service->database = $request->input('database');
+                    $service->hostname = $request->input('hostname');
+                    $service->driver = $request->input('driver');
                     $service->active = $request->input("active");
-                    #$service->public = $request->input("public");
-
+                    
+                    $connection = 
+                    [
+                        'username' => $service->username,
+                        'password' => $service->password,
+                        'database' => $service->database,
+                        'hostname' => $service->hostname,
+                        'driver'   => $service->driver,
+                    ];
+                    $db = new Db();
+                    dd($db->check_db_connection($connection));
+                    if(!$db->check_db_connection($connection)){
+                        
+                         DLH::flash("Sorry connection could not be made to Database", 'error');
+                    }
+                    else
+                    {
+                    
                      ($service->save())? DLH::flash("Service updated successfully", 'success'):
                         DLH::flash("Changes did not take effect", 'error');
-                
+                    }
                 }   
 		return back();
 	}
@@ -157,10 +176,16 @@ class ServiceController extends Controller {
 	public function destroy($id)
 	{
 		$service = Service::findOrFail($id);
-		$service->delete();
+		if($service->delete())
+                {
+                    DLH::flash("Service deleted successfully", 'success');
+                }
+                else
+                {
+                    DLH::flash("Service could not be deleted", 'error');
+                }
 
-		return redirect()->route('services.index')->with('message', 
-                        'Item deleted successfully.');
+		return redirect()->route('services.index');
 	}
         
         /**
@@ -242,10 +267,13 @@ class ServiceController extends Controller {
                     [
                     'id'=>$current_service->id,  
                     'service_name' =>$current_service->name,
-                    'db_definition' =>$current_service->db_definition, 
-                    'pre_set' => $current_service->pre_set,
-                    'post_set' => $current_service->post_set,
+                    'database' =>$current_service->database, 
+                    'driver' => $current_service->driver,
+                    'hostname' => $current_service->hostname,
+                    'username' => $current_service->username,    
+                    'password' => $current_service->password,   
                     'calls' =>  $current_service->calls,
+                    #'public' => $current_service->public,    
                     'script' => $current_service->script,
                     'method' => $method,
                     'params' => $parameters, 

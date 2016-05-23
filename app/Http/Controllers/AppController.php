@@ -49,7 +49,7 @@ class AppController extends Controller {
 
 		$app->save();
 
-		return redirect()->route('app.index')->with('message', 'Item created successfully.');
+		return redirect()->route('app.index');
 	}
 
 	/**
@@ -127,7 +127,7 @@ class AppController extends Controller {
 		$app = App::findOrFail($id);
 		$app->delete();
 
-		return redirect()->route('app.index')->with('message', 'Item deleted successfully.');
+		return redirect()->route('app.index');
 	}
 
 }

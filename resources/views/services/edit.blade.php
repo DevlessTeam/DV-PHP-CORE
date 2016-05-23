@@ -22,11 +22,11 @@
           <form id="form">
          <div  class="form-group">
             <label for="name-field">Table Name</label>
-            <input type="text" id="name" name="name" class="form-control" value="{{ $service->name }}"/>
+            <input type="text" id="name" name="name" class="form-control" placeholder="Table Name"/>
         </div>
         <div class="form-group">
             <label for="description">Description</label>
-                <textarea class="form-control" id="description" rows="3" name="description">{{ $service->description }}</textarea>
+                <textarea class="form-control" id="description" rows="3" name="description"></textarea>
         </div>
           <HR>
           <center> Add Fields </center>
@@ -35,7 +35,7 @@
             <div  class="form-group">
             <label for="name-field">Field Name</label>
             <button type="button" class="btn btn-danger pull-right" id="delete-field" onclick="destroy_field('removeIndicator')">Remove</button>
-            <input type="text" id="field-name"  name="field-name" class="form-control" value="{{ $service->name }}"/>
+            <input type="text" id="field-name"  name="field-name" class="form-control" placeholder="Field Name"/>
              </div>
            <div  class="form-group">
             <label for="field-type">Field Type</label>
@@ -146,7 +146,7 @@
                                             <div class="form-group">
                                                 <label for="g-title">Name</label>
                                                 <input class="form-control" name="database" id="database"
-                                                placeholder="" type="text">
+                                                placeholder="Database Name" value="{{$service->database}}" type="text">
                                                 
                                         @if($errors->has("database"))
                                         <span class="help-block">{{ $errors->first("database") }}</span>
@@ -156,10 +156,11 @@
                                             <div class="form-group">
                                                 <label for="g-txt" >Database Type</label>
                                                 <select id="db-type" name="driver"  class="form-control m-b-10">
-                                                    <option value="sqlite">SQLite</option>
-                                                    <option value="mysql">MySQL</option>
-                                                    <option value="">Postgress</option>
-                                                    <option value="">SQL Server</option>
+                                                    <?php $options = ['Default'=>'default','Sqlite'=>'sqlite',
+                                                        'MySql'=>'mysql','Postgres'=>'Pgsql','SQL Server'=>'sqlsrv'];?>
+                                                    @foreach($options as $option_index => $option_value )
+                                                    <option value="{{$option_value}}" @if($option_value == $service->driver)selected @endif >{{$option_index}}</option>
+                                                    @endforeach
                                                 </select>
                                                  @if($errors->has("driver"))
                                                   <span class="help-block">{{ $errors->first("driver") }}</span>
@@ -168,7 +169,7 @@
                                             <div class="form-group">
                                                 <label for="g-txt">Host Name</label>
                                                 <input class="form-control" name="hostname" id="hostname"
-                                                placeholder="" type="text" value="127.0.0.1">
+                                                       type="text" placeholder="127.0.0.1" value="{{$service->hostname}}">
                                                  @if($errors->has("hostname"))
                                                   <span class="help-block">{{ $errors->first("hostname") }}</span>
                                                 @endif
@@ -176,14 +177,14 @@
                                             <div class="form-group">
                                                 <label for="g-txt">Username</label>
                                                 <input class="form-control" name="username" id="username"
-                                                placeholder="" type="text" value="root">
+                                                        type="text" placeholder="root" value="{{$service->username}}">
                                                 @if($errors->has("username"))
                                                   <span class="help-block">{{ $errors->first("username") }}</span>
                                                 @endif
                                             </div>
                                             <div class="form-group">
                                                 <label for="g-txt">Password</label>
-                                                <input class="form-control" id="password" name="password" placeholder="" type="password">
+                                                <input class="form-control" id="password" name="password" placeholder="password" value="{{$service->password}}" type="password">
                                                 @if($errors->has("password"))
                                                   <span class="help-block">{{ $errors->first("password") }}</span>
                                                 @endif
@@ -246,12 +247,9 @@
 </textarea>
                                                                        <br>                                                            
 
-<button class="btn btn-info " onlick="run_script" type="button"> Run </button>
+                                                                       <button class="btn btn-info " onclick="run_script()" type="button"> Save </button><br><br>
 <span id="code-console" class="code-console" style="background-color:black;margin-left:14%;width:400px;height:300px;color:greenyellow">
-    {"status_code":700,"message":"SQLSTATE[42S02]: Base table or view not found: 1146 Table 'devless-rec.demoauth' doesn't exist (SQL: select * from `demoauth` where `email` = makena@gmail.com order by `email` asc limit 100)","payload":[]}
-
-    
-</span>
+   </span>
                                     </div>
                                 </div>
                             </div>
@@ -262,28 +260,10 @@
 <!--body wrapper end-->
 <script>
     
-    //split db_definition and populate field
-    function db_definition(){
-        var db_cred = '{{$service->db_definition}}';
-        var sub_db_definition = db_cred.split(",")
-        for(i=0; i< sub_db_definition.length; i++){
-            
-           var db_cred =sub_db_definition[i].split("=");
-           $('#'+db_cred[0]).val(db_cred[1]);
-           if(db_cred[0] == "driver"){
-               driver_type = db_cred[1].toLowerCase();
-               $("#db-type").val(driver_type);
-           }
-           
-        
-        }
-    }
-    //page initial run 
+    //page init function
     function init(){
         window.count = 0;
         window.main_old_fields =  $('.removeIndicator').clone();
-        db_definition();
-        //set_script();
         window.schema_json = {"resource":[{"name":"","description":"","field":[]}]  }        
     }
     //destroy table
@@ -466,7 +446,8 @@
        setTimeout(function(){ $('.code-box').ace({ theme: 'github', lang: 'php'}); }, 1);
    }
    
-   function run__script(id,service){
+   function run_script(){
+       
        var form = new FormData();
 form.append("call_type", "solo");
 form.append("script", $('.code-box').val());
@@ -475,7 +456,7 @@ form.append("_method", "PUT");
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url": "/services/".id,
+  "url": "{{ route('services.update', $service->id) }}",
   "method": "POST",
   "headers": {
     "cache-control": "no-cache",
@@ -487,7 +468,14 @@ var settings = {
 }
 
 $.ajax(settings).done(function (response) {
-  console.log(response);
+  result = JSON.parse(response);
+  console.log(result);
+   (result.status_code == 626)?$('.code-console').css('color','greenyellow')
+ : $('.code-console').css('color','red');
+
+  $('.code-console').html('<font size="3">'+result.message+'</font>');
+      
+  
 });
    }
 </script> 
