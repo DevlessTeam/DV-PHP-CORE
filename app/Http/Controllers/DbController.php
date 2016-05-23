@@ -599,7 +599,7 @@ class DbController extends Controller
    public function check_db_connection(array $connection_params){
        
        $connector = $this->_connector($connection_params);
-       //dd(\DB::connection('DYNAMIC_DB_CONFIG'));
+       dd(\DB::connection('DYNAMIC_DB_CONFIG')->table('kofi')->delete());
        return true; 
    }
    

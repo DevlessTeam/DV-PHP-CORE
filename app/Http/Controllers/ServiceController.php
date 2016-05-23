@@ -47,7 +47,7 @@ class ServiceController extends Controller {
 	{       //convert word inputs to lowercase
 		$service = new Service();
 
-		
+		  
 		    $service->name = strtolower($request->input("name"));
                     $service->description = $request->input("description");
                     $service->username = $request->input("username");
@@ -67,6 +67,7 @@ class ServiceController extends Controller {
                         'driver'   => $service->driver,
                     ];
                     $db = new Db();
+
                     if(!$db->check_db_connection($connection)){
                         
                          DLH::flash("Sorry connection could not be made to Database", 'error');
@@ -151,6 +152,7 @@ class ServiceController extends Controller {
                         'driver'   => $service->driver,
                     ];
                     $db = new Db();
+                    dd($db->check_db_connection($connection));
                     if(!$db->check_db_connection($connection)){
                         
                          DLH::flash("Sorry connection could not be made to Database", 'error');

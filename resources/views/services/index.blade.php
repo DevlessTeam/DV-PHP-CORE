@@ -39,7 +39,7 @@
                         <center>
                         <div class="btn-group" role="group">
                             <a type="button" href="{{ route('services.edit', $service->id) }}" class="btn btn-default">Edit</a>
-                            <a type="button" href="/service/{{$service->name}}/views/index/" target="_blank" class="btn btn-default">Console</a>
+                            <a type="button" href="/service/{{$service->name}}/view/index/" target="_blank" class="btn btn-default">Console</a>
                              <form action="{{ route('services.destroy', $service->id) }}" method="POST" style="display: inline;" onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false };">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
