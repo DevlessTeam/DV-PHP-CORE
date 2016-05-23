@@ -60,16 +60,17 @@ class DbController extends Controller
      */
     public function add_data($resource, $payload)
     {       $service_id = $payload['id'];
+            $service_name = $payload['service_name'];
             #setup db connection 
             $connector = $this->_connector($payload);
             $db = \DB::connection('DYNAMIC_DB_CONFIG');
             foreach($payload['params'] as $table){
-                 //check field if valid proceed with adding data 
+                 //check data against field type before adding data 
                 $table_data = $this->
                     _validate_fields($table['name'],
                            $service_id, $table['field'], true);
                 
-                 $output = $db->table($table['name'])->insert($table_data);
+                 $output = $db->table($service_name.'_'.$table['name'])->insert($table_data);
             }
             
             if($output)
@@ -91,12 +92,13 @@ class DbController extends Controller
             
             $connector = $this->_connector($payload);
             $db =   \DB::connection('DYNAMIC_DB_CONFIG');
-
+            $service_name = $payload['service_name']; 
+            
             if(isset($payload['params'][0]['name'],
                     $payload['params'][0]['params'][0]['where'],
                         $payload['params'][0]['params'][0]['data']))
             {
-                $table_name = $payload['params'][0]['name'];
+                $table_name = $service_name.'_'.$payload['params'][0]['name'];
                 $where  = $payload['params'][0]['params'][0]['where'];
                 $explotion = explode(',', $where);
                 $data =  $payload['params'][0]['params'][0]['data'];
@@ -126,10 +128,11 @@ class DbController extends Controller
         public function destroy($resource, $payload)
         {
             
-            $connector = $this->_connector($payload);
-            $db =   \DB::connection('DYNAMIC_DB_CONFIG');
-            //check if table name is set 
-         $table_name = $payload['params'][0]['name'];
+         $connector = $this->_connector($payload);
+         $db =   \DB::connection('DYNAMIC_DB_CONFIG');
+         //check if table name is set 
+         $service_name = $payload['service_name'];   
+         $table_name = $service_name.'_'.$payload['params'][0]['name'];
          $destroy_query = '$db->table("'.$table_name.'")';
          if(isset($payload['params'][0]['params'][0]['drop']))
          {
@@ -203,12 +206,13 @@ class DbController extends Controller
     */
     public function db_query($resource, $payload)
     {
+        $service_name = $payload['service_name'];
         $connector = $this->_connector($payload);
         $db =   \DB::connection('DYNAMIC_DB_CONFIG');
         //check if table name is set 
         if(isset($payload['params']['table']))
        {    
-            $base_query = '$db->table("'.$payload['params']['table'][0].'")';
+            $base_query = '$db->table("'.$service_name.'_'.$payload['params']['table'][0].'")';
             //check if pagination is set 
             (isset($payload['params']['size']))?
             $complete_query = $base_query
@@ -272,35 +276,43 @@ class DbController extends Controller
           Helper::interrupt(611);
       }
           }
-    #remember to allow  expand db elements 
-    public function create_schema($resource, array $json)
+         
+    /**
+     *Create a service table 
+     *
+     * @param array resource
+     * @param  array $payload
+     * @return true
+     */      
+    public function create_schema($resource, array $payload)
     {
         
     #set path in case connector is sqlite
-    $id = $json['id'];
-    
+    $id = $payload['id'];
+    $service_name = $payload['service_name'];
     #connectors mysql pgsql sqlsrv sqlite
-    $connector = $this->_connector($json);
+    $connector = $this->_connector($payload);
     
      #dynamically create columns with schema builder 
     $db_type = $this->db_types;
     $table_meta_data = []; 
-    $json = $json['params'][0];
-    $json['id'] = $id;
+    $payload = $payload['params'][0];
+    $payload['id'] = $id;
+    $table_name = $service_name.'_'.$payload['name'];
      if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
-                hasTable($json['name'])) 
+                hasTable($table_name )) 
         {
             
 
             \Schema::connection('DYNAMIC_DB_CONFIG')->
-            create($json['name'],function(Blueprint 
+            create($table_name ,function(Blueprint 
                     $table) 
-                use($json,$db_type)
+                use($payload,$db_type)
                 {       
                 #default field
                     $table->increments('id');
                      #per  field 
-                    foreach($json['field'] as $field ){
+                    foreach($payload['field'] as $field ){
                         $field['field_type'] = strtolower($field['field_type']);
                         #checks if fieldType and references exist
                         $this->field_type_exist($field); 
@@ -310,15 +322,16 @@ class DbController extends Controller
                     }
             //store table_meta details 
             });
-            $this->_set_table_meta($json);
+            $this->_set_table_meta($payload);
             Helper::interrupt(606);
         }
     else
     {
-    Helper::interrupt(603, $json['name']." table already exist");
+    Helper::interrupt(603, $table_name ." table already exist");
     }
 
 }
+          
     /**
      *check if field exist
      *
@@ -599,7 +612,7 @@ class DbController extends Controller
    public function check_db_connection(array $connection_params){
        
        $connector = $this->_connector($connection_params);
-       dd(\DB::connection('DYNAMIC_DB_CONFIG')->table('kofi')->delete());
+       //dd(\DB::connection('DYNAMIC_DB_CONFIG')->table('kofi')->delete());
        return true; 
    }
    
