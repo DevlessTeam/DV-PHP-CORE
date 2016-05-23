@@ -1,0 +1,3 @@
+
+var ApiGen = ApiGen || {};
+ApiGen.elements = [["c","App\\Http\\Controllers\\AppController"],["c","App\\Http\\Controllers\\Auth\\AuthController"],["c","App\\Http\\Controllers\\Auth\\PasswordController"],["c","App\\Http\\Controllers\\configController"],["c","App\\Http\\Controllers\\Controller"],["c","App\\Http\\Controllers\\CoreController"],["c","App\\Http\\Controllers\\DbController"],["c","App\\Http\\Controllers\\ScriptController"],["c","App\\Http\\Controllers\\ServiceController"],["c","App\\Http\\Controllers\\SystemApiController"],["c","App\\Http\\Controllers\\UserController"],["c","App\\Http\\Controllers\\ViewController"]];

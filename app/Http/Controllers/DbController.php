@@ -303,7 +303,6 @@ class DbController extends Controller
                     $table->increments('id');
                      #per  field 
                     foreach($json['field'] as $field ){
-                        
                         $field['field_type'] = strtolower($field['field_type']);
                         #checks if fieldType and references exist
                         $this->field_type_exist($field); 

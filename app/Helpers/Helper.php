@@ -49,6 +49,7 @@ class Helper
         623 =>  'Token could not be updated',
         624 =>  'Sorry this is not an open endpoint',
         625 =>  'Got response successfully',
+        626 =>  'saved script',
         700 => 'internal system error',
     ];
     

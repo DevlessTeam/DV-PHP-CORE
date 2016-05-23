@@ -47,17 +47,29 @@ class ServiceController extends Controller {
 	{       //convert word inputs to lowercase
 		$service = new Service();
 
-		$service->name = $request->input("name");
-        $service->description = $request->input("description");
-        $service->type = $request->input("type");
-        $service->db_definition = $request->input("db_definition");
-        $service->script = $request->input("script");
-        $service->pre_script = $request->input("pre_script");
-        $service->post_script = $request->input("post_script");
-        $service->pre_set = $request->input("pre_set");
-        $service->post_set = $request->input("post_set");
-        $service->active = $request->input("active");
+		 //convert name inputs to lowercase
+		if($service = Service::findOrFail($id))
+                {
+                    
+                    $driver = $request->input('driver');$hostname = $request->input('hostname');
+                    $username = $request->input('username');$password = $request->input('password');
+                    $database_name = $request->input('database');
+                    
+                    //put together  pdo cred    
+                    $db_definition =  'driver='.$driver.',hostname='.$hostname.','
+                            . 'database='.$database_name.',username='.$username.',password='.$password;     
+                    
+                    $service->name = strtolower($request->input("name"));
+                    $service->description = $request->input("description");
+                    $service->db_definition = $db_definition;
+                    #$service->script = $request->input("script");
+                    $service->active = $request->input("active");
+                    #$service->public = $request->input("public");
 
+                     ($service->save())? DLH::flash("Service updated successfully", 'success'):
+                        DLH::flash("Changes did not take effect", 'error');
+                
+                }
 		$service->save();
 
 		return redirect()->route('services.index')->with('message', 'Item created successfully.');
@@ -108,7 +120,12 @@ class ServiceController extends Controller {
                 //convert name inputs to lowercase
 		if($service = Service::findOrFail($id))
                 {
-                    
+                    if($request->input('call_type') =='solo')
+                    {
+                        $service->script = $request->input('script');
+                        $service->save();
+                        Helper::interrupt(626);
+                    }
                     $driver = $request->input('driver');$hostname = $request->input('hostname');
                     $username = $request->input('username');$password = $request->input('password');
                     $database_name = $request->input('database');

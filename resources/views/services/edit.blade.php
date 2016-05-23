@@ -46,6 +46,14 @@
                 @endforeach
             </select>
         </div>
+        <div  class="form-group">
+            <label for="field-reference">Reference Table</label>
+            <select class="form-control"  name="field-reference" id="field-reference">
+                @foreach($table_meta as $table_data)
+                <option value="{{$table_data['name']}}">{{$table_data['name']}}</option>
+                @endforeach
+            </select>
+        </div>
           <div class="form-group">
            <label for="default-field">Default Value(optional)</label>
             <input type="text" id="default" name="default" class="form-control" />
@@ -126,7 +134,7 @@
                                         <a data-toggle="tab" href="#mtab">Tables</a>
                                     </li>
                                     <li class="">
-                                        <a data-toggle="tab" href="#jtab">Script</a>
+                                        <a data-toggle="tab" onclick="set_script()" href="#jtab">Script</a>
                                     </li>
                                 </ul>
                             </header>
@@ -211,7 +219,7 @@
                                     <td>{{$table_data['description']}}</td>
                                     <td>{{sizeOf($table_data['field'])}} field(s)</td>
                                     <td><button class="btn btn-default">View Data</button>
-                                        <button onclick="destroy_table('{{$table_data['name']}}','{{$service->name}}')" class="btn btn-danger">Destroy Table</button></td>
+                                        <button onclick="destroy_table('{{$table_data['name']}}','{{$service->name}}')" class="btn btn-danger btn-sm">Delete Table</button></td>
                                 </tr>
                                     @endforeach
                                  @else
@@ -219,6 +227,7 @@
                                 @endif
                             </tbody>
                         </table>
+                        <br>
                         <button type="button" class="btn btn-info " data-toggle="modal" data-target="#schema-table">New Table</button>
                     </div>
                 </section>
@@ -226,17 +235,23 @@
                                                                    <div class="tab-pane" id="jtab">
 
                                                                        
-<textarea class="code-area" name="script" rows="20" style="width: 100%">
+<textarea class="code-box" name="script" rows="20" style="width: 100%">
 
 @if(!$service->script == "")
-<?php echo "<?php \n"; ?>
 {{$service->script}}
 @else
-<?php echo "<?php \n ";  ?> 
  echo "Happy scripting";
 @endif
+
 </textarea>
-<button class="btn btn-info" type="submit">Run</button>
+                                                                       <br>                                                            
+
+<button class="btn btn-info " onlick="run_script" type="button"> Run </button>
+<span id="code-console" class="code-console" style="background-color:black;margin-left:14%;width:400px;height:300px;color:greenyellow">
+    {"status_code":700,"message":"SQLSTATE[42S02]: Base table or view not found: 1146 Table 'devless-rec.demoauth' doesn't exist (SQL: select * from `demoauth` where `email` = makena@gmail.com order by `email` asc limit 100)","payload":[]}
+
+    
+</span>
                                     </div>
                                 </div>
                             </div>
@@ -268,7 +283,7 @@
         window.count = 0;
         window.main_old_fields =  $('.removeIndicator').clone();
         db_definition();
-        $('.code-area').ace({ theme: 'github', lang: 'php' });
+        //set_script();
         window.schema_json = {"resource":[{"name":"","description":"","field":[]}]  }        
     }
     //destroy table
@@ -291,7 +306,7 @@
            response_object = JSON.parse(response);
            status_code = response_object.status_code;
            if (status_code == 613) {
-                $("").fadeOut();
+                $("#"+table_name).remove();
            }
            else
            {
@@ -385,22 +400,24 @@
             if(form_array.length > 4){
             window.schema_json.resource[0].name = form_array[0];
             window.schema_json.resource[0].description = form_array[1];
-            var len = ((form_array.length)-4)/7;
+            var len = ((form_array.length)-4)/8;
             console.log("number of fields are:",len);
-            for (var i = 0; i < len; i++) {
-                position = ((len-1)*7)
-                if(form_array[5+position] == ""){ _default = "null";}else{_default = form_array[5+position]; }
-                window.schema_json.resource[0].field[i] = {  
+            for (var i = 1; i <= len; i++) {
+                position = ((len-i)*8) 
+                if(form_array[6+position] == ""){ _default = null;}else{_default = form_array[6+position]; }
+                window.schema_json.resource[0].field[i-1] = {  
                     "name":form_array[3+position],
                     "field_type":form_array[4+position],
+                    "ref_table":form_array[5+position],
                     "default":_default,
-                    "required":form_array[6+position],
-                    "validation":form_array[7+position],
-                    "is_unique":form_array[8+position],
-                    "ref_table": ""
+                    "required":form_array[7+position],
+                    "validation":form_array[8+position],
+                    "is_unique":form_array[9+position],
+                    
                  };
+                 console.log(3+position,form_array[3+position])
             }
-               table_schema =  JSON.stringify(window.schema_json);
+               table_schema =   JSON.stringify(window.schema_json);
                var settings = {
                 "async": true,
                 "crossDomain": true,
@@ -419,12 +436,16 @@
               response_object = JSON.parse(response);
               status_code = response_object.status_code;
               message = response_object.message;
+              if(status_code == 700){
+                  alert(message);   
+              }
               if(status_code == 606){
                   
                   
                     location.reload();
                   
               }else{
+                  
                   alert(message);
               }
             });
@@ -439,6 +460,35 @@
     }
    function destroy_field(field_id){
        $('.'+field_id).remove();
+   }
+   function set_script(){
+       
+       setTimeout(function(){ $('.code-box').ace({ theme: 'github', lang: 'php'}); }, 1);
+   }
+   
+   function run__script(id,service){
+       var form = new FormData();
+form.append("call_type", "solo");
+form.append("script", $('.code-box').val());
+form.append("_method", "PUT");
+
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "/services/".id,
+  "method": "POST",
+  "headers": {
+    "cache-control": "no-cache",
+  },
+  "processData": false,
+  "contentType": false,
+  "mimeType": "multipart/form-data",
+  "data": form
+}
+
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
    }
 </script> 
 @endsection
