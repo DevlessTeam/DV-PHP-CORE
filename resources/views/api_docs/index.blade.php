@@ -222,8 +222,15 @@
              var size = $('#size-field').val();
 
              $.get('api/v1/service/'+service_name+'/db?table='+name+'&where='+key+','+value+'&size='+size, function(data) {
-               $('#response').show();
-               $('#response-field').html(JSON.stringify(JSON.parse(data), undefined, 4));
+               console.log(data);
+                if(data.status_code == 625){
+                    $('#response').show();
+                    $('#response-field').html(JSON.stringify(JSON.parse(data), undefined, 4));
+               }
+               else{
+                   
+                   alert(data.payload.message);
+               }
              });
            } else {
              $.post('api/v1/service/'+service_name+'/db', JSON.parse(editor.getValue()))
