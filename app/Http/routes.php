@@ -61,6 +61,6 @@ Route::group(['middleware' => 'user.auth'], function () {
   #api_doc views
   Route::get('console', 'ApiDocController@index');
   Route::get('console/{console?}', 'ApiDocController@edit');
-  Route::get('schema/{schema?}', 'ApiDocController@schema');
+  Route::get('console/{schema?}/schema', 'ApiDocController@schema');
 
 });
