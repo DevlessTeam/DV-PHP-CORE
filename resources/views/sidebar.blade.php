@@ -41,10 +41,14 @@
                             <li><a href="{{ route('services.create') }}">Add New</a></li>
                         </ul>
                     </li>
-                    <li><a href="#"><span>Data Tables</span></a></li>
-                    <li><a href="{{ route('api.v1.console.index')}}"><span>Api Docs</span></a></li>
-                    <li><a href="#"><span>Import/Export Services</span></a></li>
 
+                    <li><a href="#"><span>Data Tables</span></a></li>
+
+                    <li><a href="{{ url('console') }}"><span>Api Docs</span></a></li>
+                        
+                    
+                    <li><a href="#"><span>Import/Export Services</span></a></li>
+    
                 </ul>
             </div>
         </div>

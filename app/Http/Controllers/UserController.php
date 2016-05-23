@@ -16,9 +16,8 @@ class UserController extends Controller
   // TODO: Session store needs to authenticate with a session table for security
   public function getLogin()
   {
-    if(\Session::has('user_id'))
+    if(\Session::has('user'))
     {
-      // DB::table('users')->where('id', \Session::get('user_id'))->first();
       return redirect('/services');
     } else {
       return view('auth.index');
@@ -35,7 +34,7 @@ class UserController extends Controller
     $user = DB::table('users')->where('email', $request->input('email'))->first();
     if (Hash::check($request->input('password'), $user->password))
     {
-      $request->session()->put('user_id', $user->id);
+      $request->session()->put('user', $user->id);
       DLH::flash('You are logged in', 'success');
       return redirect('services');
     } else {
@@ -46,7 +45,7 @@ class UserController extends Controller
 
   public function getLogout()
   {
-    \Session::forget('user_id');
+    \Session::forget('user');
     \Session::flush();
     return redirect('/');
   }
@@ -83,7 +82,7 @@ class UserController extends Controller
     $app->token = $request->input('app_token');
 
     if ($user->save() && $app->save()) {
-      $request->session()->put('user_id', $user->id);
+      $request->session()->put('user', $user->id);
       DLH::flash('Setup successful. Welcome to Devless', 'success');
       return redirect('services');
     }
