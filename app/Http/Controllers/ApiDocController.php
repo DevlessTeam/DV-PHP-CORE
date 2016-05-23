@@ -26,9 +26,9 @@ class ApiDocController extends Controller {
 	 */
 	public function schema($table_name)
 	{
-		$schema_data = \DB::table('table_metas')->where('table_name', $table_name)->first();
-		$schema = json_decode($schema_data->schema);
-	 	return $schema->field;
+			$schema_data = \DB::table('table_metas')->where('table_name', $table_name)->first();
+			$schema = json_decode($schema_data->schema);
+			return $schema->field;
 	}
 
 	/**
@@ -39,13 +39,7 @@ class ApiDocController extends Controller {
 	 */
 	public function store(Request $request)
 	{
-		// $api_doc = new ApiDoc();
-			dd($request);
-
-
-		// $api_doc->save();
-
-		// return redirect()->route('api_docs.index')->with('message', 'Item created successfully.');
+		
 	}
 
 	/**

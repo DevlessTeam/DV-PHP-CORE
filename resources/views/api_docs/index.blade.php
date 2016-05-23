@@ -36,7 +36,7 @@
                         <option value="retrieve_all">QUERY TABLE (GET)</option>
                         <option value="create">ADD RECORD (POST) </option>
                         <option value="update">UPDATE RECORD(PATCH) </option>
-                        <option vallue="delete">DELETE RECORD (DELETE) </option>
+                        <option value="delete">DELETE RECORD (DELETE) </option>
                     </select>
                  </div>
                </div>
@@ -160,7 +160,6 @@
 
            $.get('console/'+service_id, function(data) {
              var table = data;
-             var table_name = [];
              for (var i = 0; i < table.length; i++) {
                $("#table").append("<option>"+$.parseJSON(table[i].schema).name+"</option>");
              }
@@ -175,29 +174,29 @@
 
          // Handles the form rendering
          var request_type;
-         var name;
+         var table_name;
          $('#operation').change(function () {
+          //  $('#response-field').val("");
            request_type = $(this).val();
-           var name = $('#table option:selected').text();
-
+           table_name = $('#table option:selected').text();
            if (request_type == "retrieve_all") {
              $('#query').show();
              $('#body_params').hide();
              $('#response').hide();
 
            } else {
-             $.get('/console/'+service_name+'/schema', function(data){
+             $.get('/console/'+table_name+'/schema', function(data){
                var schema = data;
                var values = {};
                for (var i = 0; i < schema.length; i++) {
                  values[schema[i].name] = "";
                };
                if (request_type === 'create'){
-                 var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+name+'","field":['+JSON.stringify(values)+']}]}'), undefined, 4);
+                 var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+table_name+'","field":['+JSON.stringify(values)+']}]}'), undefined, 4);
                } else if (request_type === 'update') {
-                 var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+name+'","params":[{"where":"id, ","data":[{"key":"value"}]}]}]}'), undefined, 4);
+                 var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+table_name+'","params":[{"where":"id, ","data":[{"key":"value"}]}]}]}'), undefined, 4);
                } else {
-                 var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+name+'","params":[{"delete":"true","where":"id, "}]}]}'), undefined, 4);
+                 var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+table_name+'","params":[{"delete":"true","where":"id, "}]}]}'), undefined, 4);
                }
                editor.setValue(json);
              });
@@ -212,32 +211,92 @@
         // Handling requests and response
          $('#form_data').submit(function(e){
            e.preventDefault();
+           $('#response-field').text('');
 
            // Handles GET requests
            if (request_type === "retrieve_all") {
 
-             var order = $('#order-field').val();
-             var key = $('#key-field').val();
-             var value = $('#value-field').val();
-             var size = $('#size-field').val();
+               var order = $('#order-field').val();
+               var key = $('#key-field').val();
+               var value = $('#value-field').val();
+               var size = $('#size-field').val();
 
-             $.get('api/v1/service/'+service_name+'/db?table='+name+'&where='+key+','+value+'&size='+size, function(data) {
-               console.log(data);
-                if(data.status_code == 625){
-                    $('#response').show();
-                    $('#response-field').html(JSON.stringify(JSON.parse(data), undefined, 4));
+               if (size == '' && order == '' && key != '' && value != '') {
+                 $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&where='+key+','+value, function(data) {
+                   $('#response').show();
+                   $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                 });
+               } else if (size == '' && order != '' && key != '' && value != '') {
+                 $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&where='+key+','+value+'&order='+order, function(data) {
+                   $('#response').show();
+                   $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                 });
+               } else if (size != '' && key == '' && value == '' && order == '') {
+                 $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&size='+size, function(data) {
+                   $('#response').show();
+                   $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                 });
+               } else if (size != '' && order != '' & key == '' && value == '') {
+                 $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&size='+size+'&order='+order , function(data) {
+                   $('#response').show();
+                   $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                 });
+               } else if (size != '' && key != '' && value == '') {
+                   $('#response').show();
+                   $('#response-field').text(JSON.stringify(JSON.parse('{"status_code":612,"message":"query parameters not set","payload":[]}'), undefined, 4));
+
+               } else if (key == '' && order == '' && size == '' && value == '') {
+                 $.get('api/v1/service/'+service_name+'/db?table='+table_name, function(data) {
+                   $('#response').show();
+                   $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                 });
+
+               } else {
+
+                 $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&where='+key+','+value+'&size='+size, function(data) {
+                   if (data.status_code == 700){
+                     $('#response').show();
+                     $('#response-field').text(JSON.stringify(data.payload.message));
+                   } else {
+                     $('#response').show();
+                     $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                   }
+                 });
                }
-               else{
-                   
-                   alert(data.payload.message);
-               }
-             });
-           } else {
+
+           } else if (request_type === "create"){
              $.post('api/v1/service/'+service_name+'/db', JSON.parse(editor.getValue()))
                 .done(function(data){
-                  $('#response').show();
-                  $('#response-field').html(JSON.stringify(JSON.parse(data), undefined, 4));
+                  console.log(data);
+                  if (JSON.parse(data).status_code == 609) {
+                    $('#response').show();
+                    $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                  } else {
+                    $('#response').show();
+                    $('#response-field').text(JSON.stringify(data.payload.message, undefined, 4));
+                  }
                 });
+           } else if (request_type === "update") {
+             $.ajax({
+               url: "api/v1/service/"+service_name+"/db",
+               type: "PATCH",
+               data: JSON.parse(editor.getValue())
+             })
+              .done(function(data) {
+                $('#response').show();
+                $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+             })
+
+           } else {
+             $.ajax({
+               url: "api/v1/service/"+service_name+"/db",
+               type: "DELETE",
+               data: JSON.parse(editor.getValue())
+             })
+             .done(function(data) {
+               $('#response').show();
+               $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+             })
            }
 
          });
