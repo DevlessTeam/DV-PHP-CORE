@@ -59,4 +59,34 @@ class ViewController extends Controller
             return Response::respond(621);
         }
     }
+    
+    public function create_views($service_name, $type)
+    {
+
+        switch ($type)
+        {
+            case "init" :
+                $source_path = '../resources/views/welcome.blade.php';
+                $destination_path = '../resources/views/service_views/'.$service_name;
+                
+                if(mkdir($destination_path))
+                {
+                  $is_saved = (copy($source_path, $destination_path.'/index.blade.php'))?true 
+                          : false;
+                  
+                  return $is_saved;
+                }
+                else
+                {
+                    return false;
+                }
+                
+                
+            default:
+                return false;
+        }
+        
+        
+        
+    }
 }

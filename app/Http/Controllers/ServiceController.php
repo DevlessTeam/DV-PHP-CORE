@@ -12,6 +12,7 @@ use App\Http\Controllers\DbController as Db;
 use App\Http\Controllers\ViewController as View;
 use Session;
 use \App\Helpers\DevlessHelper as DLH;
+use App\Http\Controllers\ViewController as DvViews;
 
 class ServiceController extends Controller {
 
@@ -44,11 +45,13 @@ class ServiceController extends Controller {
 	 * @return Response
 	 */
 	public function store(Request $request)
-	{       //convert word inputs to lowercase
-		$service = new Service();
+	{       
 
-		  
-		    $service->name = strtolower($request->input("name"));
+                    $service = new Service();
+                    $service_name = strtolower($request->input("name"));
+                    
+                     
+		    $service->name = $service_name;
                     $service->description = $request->input("description");
                     $service->username = $request->input("username");
                     $service->password = $request->input('password');
@@ -74,12 +77,17 @@ class ServiceController extends Controller {
                     }
                     else
                     {
-                    
-                     ($service->save())? DLH::flash("Service created successfully", 'success'):
+                       //create initial views for service 
+                        $views = new DvViews();
+                        $type = "init";
+                         
+                     ($service->save() && $views->create_views($service_name, $type) )
+                                        ? 
+                        DLH::flash("Service created successfully", 'success'):
                         DLH::flash("Service could not be created", 'error');
                     }
                 
-		return redirect()->route('services.index')->with('message', 'Item created successfully.');
+                    return redirect()->route('services.index');
 	}
 
 	/**
@@ -176,6 +184,7 @@ class ServiceController extends Controller {
 	public function destroy($id)
 	{
 		$service = Service::findOrFail($id);
+                
 		if($service->delete())
                 {
                     DLH::flash("Service deleted successfully", 'success');

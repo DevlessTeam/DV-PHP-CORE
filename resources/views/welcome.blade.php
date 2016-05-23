@@ -1,4 +1,4 @@
-<center><h1><u>Auth index view</u></h1></center>
+<center><h1><u>Welcome!</u></h1></center>
 <p>Get started with Lean Views</p>
 <p> Lean views provide an easy way to create simple management consoles for a service </p>
 
