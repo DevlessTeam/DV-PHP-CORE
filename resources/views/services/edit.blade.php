@@ -134,7 +134,7 @@
                                         <a data-toggle="tab" href="#mtab">Tables</a>
                                     </li>
                                     <li class="">
-                                        <a data-toggle="tab" href="#jtab">Script</a>
+                                        <a data-toggle="tab" onclick="set_script()" href="#jtab">Script</a>
                                     </li>
                                 </ul>
                             </header>
@@ -235,17 +235,23 @@
                                                                    <div class="tab-pane" id="jtab">
 
                                                                        
-<textarea class="code-area" name="script" rows="20" style="width: 100%">
+<textarea class="code-box" name="script" rows="20" style="width: 100%">
 
 @if(!$service->script == "")
-<?php echo "<?php \n"; ?>
 {{$service->script}}
 @else
-<?php echo "<?php \n ";  ?> 
  echo "Happy scripting";
 @endif
+
 </textarea>
-<button class="btn btn-info" type="submit">Run</button>
+                                                                       <br>                                                            
+
+<button class="btn btn-info " onlick="run_script" type="button"> Run </button>
+<span id="code-console" class="code-console" style="background-color:black;margin-left:14%;width:400px;height:300px;color:greenyellow">
+    {"status_code":700,"message":"SQLSTATE[42S02]: Base table or view not found: 1146 Table 'devless-rec.demoauth' doesn't exist (SQL: select * from `demoauth` where `email` = makena@gmail.com order by `email` asc limit 100)","payload":[]}
+
+    
+</span>
                                     </div>
                                 </div>
                             </div>
@@ -277,7 +283,7 @@
         window.count = 0;
         window.main_old_fields =  $('.removeIndicator').clone();
         db_definition();
-        $('.code-area').ace({ theme: 'github', lang: 'php' });
+        //set_script();
         window.schema_json = {"resource":[{"name":"","description":"","field":[]}]  }        
     }
     //destroy table
@@ -454,6 +460,35 @@
     }
    function destroy_field(field_id){
        $('.'+field_id).remove();
+   }
+   function set_script(){
+       
+       setTimeout(function(){ $('.code-box').ace({ theme: 'github', lang: 'php'}); }, 1);
+   }
+   
+   function run__script(id,service){
+       var form = new FormData();
+form.append("call_type", "solo");
+form.append("script", $('.code-box').val());
+form.append("_method", "PUT");
+
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "/services/".id,
+  "method": "POST",
+  "headers": {
+    "cache-control": "no-cache",
+  },
+  "processData": false,
+  "contentType": false,
+  "mimeType": "multipart/form-data",
+  "data": form
+}
+
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
    }
 </script> 
 @endsection
