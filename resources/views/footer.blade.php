@@ -46,7 +46,7 @@
 <!--common scripts for all pages-->
 <script src="{{ url('/js/scripts.js') }}"></script>
 <!-- Ace Editor -->
-@if(!\Request::path() == 'console')
+@if(\Request::path() != 'console')
   <script src="{{ url('/js/ace/ace.js') }}" type="text/javascript" ></script>
   <script src="{{ url('/js/ace/theme-github.js') }}" type="text/javascript" ></script>
   <script src="{{ url('/js/ace/mode-php.js') }}" type="text/javascript" ></script>
