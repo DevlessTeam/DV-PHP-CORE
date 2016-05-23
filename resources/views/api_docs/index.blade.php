@@ -231,6 +231,7 @@
              $.post('api/v1/service/'+service_name+'/db', JSON.parse(editor.getValue()))
                 .done(function(data){
                   $('#response').show();
+          console.log(data);
                   $('#response-field').html(JSON.stringify(JSON.parse(data), undefined, 4));
                 });
            }
