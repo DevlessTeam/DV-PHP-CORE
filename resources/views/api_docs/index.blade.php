@@ -209,7 +209,6 @@
 
          });
 
-
         // Handling requests and response
          $('#form_data').submit(function(e){
            e.preventDefault();
