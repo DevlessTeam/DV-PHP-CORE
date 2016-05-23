@@ -1,17 +1,12 @@
 <?php namespace App\Http\Controllers;
 
+use App\Service;
+use App\TableMeta;
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use App\ApiDoc;
-use Illuminate\Http\Request;
-
 class ApiDocController extends Controller {
-
-	public function __construct()
-	{
-		$this->middleware('user.auth');
-	}
 
 	/**
 	 * Display a listing of the resource.
@@ -20,18 +15,20 @@ class ApiDocController extends Controller {
 	 */
 	public function index()
 	{
-
-		return view('api_docs.index', compact('api_docs'));
+		$services = Service::all();
+		return view('api_docs.index', compact('services'));
 	}
 
 	/**
-	 * Show the form for creating a new resource.
+	 *Get schema to generate request payload
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public function schema($table_name)
 	{
-		return view('api_docs.create');
+		$schema_data = \DB::table('table_metas')->where('table_name', $table_name)->first();
+		$schema = json_decode($schema_data->schema);
+	 	return $schema->field;
 	}
 
 	/**
@@ -59,8 +56,6 @@ class ApiDocController extends Controller {
 	 */
 	public function show($id)
 	{
-		$api_doc = ApiDoc::findOrFail($id);
-
 		return view('api_docs.show', compact('api_doc'));
 	}
 
@@ -72,9 +67,8 @@ class ApiDocController extends Controller {
 	 */
 	public function edit($id)
 	{
-		$api_doc = ApiDoc::findOrFail($id);
-
-		return view('api_docs.edit', compact('api_doc'));
+		$tables = \DB::table('table_metas')->where('service_id', $id)->get();
+		return $tables;
 	}
 
 	/**
@@ -87,8 +81,6 @@ class ApiDocController extends Controller {
 	public function update(Request $request, $id)
 	{
 		$api_doc = ApiDoc::findOrFail($id);
-
-
 
 		$api_doc->save();
 
@@ -108,5 +100,4 @@ class ApiDocController extends Controller {
 
 		return redirect()->route('api_docs.index')->with('message', 'Item deleted successfully.');
 	}
-
 }

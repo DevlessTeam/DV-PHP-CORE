@@ -10,7 +10,6 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
 Route::get('/', 'UserController@getLogin');
 
 Route::post('login', 'UserController@postLogin');
@@ -36,9 +35,6 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
         return "logs from here";
     })->middleware(['jsonValidator']);
 
-
-
-
     #config end points
     Route::resource('system', 'ServiceController@api');
 
@@ -47,10 +43,6 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
     Route::post('service/{service}/{resource}','ServiceController@api');
     Route::patch('service/{service}/{resource}','ServiceController@api');
     Route::delete('service/{service}/{resource}','ServiceController@api');
-
-    #api_doc views
-    Route::resource('console', 'ApiDocController');
-
 
 
 });
@@ -66,5 +58,9 @@ Route::group(['middleware' => 'user.auth'], function () {
   Route::put('generatetoken','AppController@update');
   Route::delete('destroy_table', 'SystemApiController@delete_table');
 
+  #api_doc views
+  Route::get('console', 'ApiDocController@index');
+  Route::get('console/{console?}', 'ApiDocController@edit');
+  Route::get('schema/{schema?}', 'ApiDocController@schema');
 
 });

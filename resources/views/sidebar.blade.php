@@ -43,7 +43,7 @@
                     </li>
                     <li><a href="#"><span>Schema Data</span></a></li>
                     <li><a href="#"><span>Config</span></a></li>
-                    <li><a href="{{ route('api.v1.console.index')}}"><span>Api Docs</span></a></li>
+                    <li><a href="{{ url('console') }}"><span>Api Docs</span></a></li>
 
                 </ul>
             </div>
