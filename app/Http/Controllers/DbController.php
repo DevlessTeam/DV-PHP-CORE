@@ -198,7 +198,7 @@ class DbController extends Controller
         
     
     /**
-    * query a particular table for data .
+    * query a table.
     *
     * @param  string  $resource
     * @param array $payload payload from request 
@@ -213,28 +213,26 @@ class DbController extends Controller
         if(isset($payload['params']['table']))
        {    
             $base_query = '$db->table("'.$service_name.'_'.$payload['params']['table'][0].'")';
-            //check if pagination is set 
+            
+            $table_name = $payload['params']['table'];
             (isset($payload['params']['size']))?
             $complete_query = $base_query
                     . '->take('.$payload['params']['size'][0].')' :
-            $complete_query = $base_query.'->take(100)' ;    
+            $complete_query = $base_query.'->take(100)' ;   
+            (isset($payload['params']['related']))? $queried_table_list = 
+                    $payload['params']['related'] : false;
+            
+            unset($payload['params']['related']);
             $related =[];
             
-            if(isset($payload['params']['relation']))
-            {
-               $wanted_relationships = $payload['params']['relation'];
-               $table_name = $payload['params']['table'];
-               $related = $this->_find_relations($table_name, $wanted_relationships, $db);
-               unset($payload['params']['relation']);}
                
                if(isset($payload['params']['order']))
             {
                $order_by = $payload['params']['order'];
-               $table_name = $payload['params']['table'];
-              $complete_query = $complete_query
+               $complete_query = $complete_query
                     . '->orderBy("'.$payload['params']['order'][0].'" )' ;
-                  unset($payload['params']['order']);}
-            unset($payload['params']['table'],$payload['params']['size']
+                unset($payload['params']['order']);}
+                unset($payload['params']['table'],$payload['params']['size']
                     ); 
             foreach($payload['params'] as $key => $query)
             {
@@ -267,6 +265,17 @@ class DbController extends Controller
             }
             $complete_query = 'return '.$complete_query.'->get();';
             $output = eval($complete_query);
+            if(sizeof($output) == 1 && isset($queried_table_list))
+            {
+                
+                $output = json_decode(json_encode($output),true);
+                  $wanted_relationships = $queried_table_list;
+                 $related = $this->_get_related_tables($service_name,
+                         $table_name,$output[0], $wanted_relationships, $db); 
+                 
+
+            
+            }
             $output['related'] = $related;
             $response = Response::respond(625,null,$output);
             echo ($response);
@@ -307,12 +316,13 @@ class DbController extends Controller
             \Schema::connection('DYNAMIC_DB_CONFIG')->
             create($table_name ,function(Blueprint 
                     $table) 
-                use($payload,$db_type)
+                use($payload,$db_type,$service_name)
                 {       
                 #default field
                     $table->increments('id');
                      #per  field 
                     foreach($payload['field'] as $field ){
+                        $field['ref_table'] = $service_name.'_'.$field['ref_table'];
                         $field['field_type'] = strtolower($field['field_type']);
                         #checks if fieldType and references exist
                         $this->field_type_exist($field); 
@@ -369,7 +379,7 @@ class DbController extends Controller
      * @param  column fields (array)  $field
      * @return int 
      */
-    public function check_premise($field)
+    public function check_column_constraints($field)
     {   
         #create column with default and reference 
         if($field['field_type'] =='reference' && $field['default'] !== null)
@@ -406,7 +416,7 @@ class DbController extends Controller
      */
     public function column_generator($field, $table, $db_type)
     {
-        $column_type = $this->check_premise($field);
+        $column_type = $this->check_column_constraints($field);
         $unique = "";
         if($field['is_unique'] == 'true'){$unique = 'unique';}
         if($column_type == 4)
@@ -535,37 +545,62 @@ class DbController extends Controller
         return true;
     }
     
-   private function _find_relations($table_name, $wanted_relationships, $db)
+    /*
+     * get related tables
+     * @params $table_name
+     * @param $payload request parameters
+     * @params $wanted_relationships names fo table to get 
+     * @params $db db connection
+     * @return array
+     */
+   private function _get_related_tables($service_name, $table_name, 
+           $output, $wanted_related_tables, $db)
    {
-       
-       //simulations of getting relations from table meta   
-       $table_models = [
-        'orders' => [
-            'products'
-        ],
-        'products' => [
-            'orders'
-        ]  
-       ];
-       $related = [];
-       foreach ($wanted_relationships as $relationship)
+      
+      $table_meta =  $db->table('table_metas')->where('table_name',$table_name)->get();
+      $table_schema = json_decode($table_meta[0]->schema);
+      $table_fields = $table_schema->field;
+      
+      
+       $related_tables = [];
+       foreach ($wanted_related_tables as $each_wanted_table)
        {
-           if($relationship == '*')
+           if($each_wanted_table == '*')
            {
-               //check the model and grab all relations 
-               foreach($table_models[$table_name[0]] as $table)
-               {
-                         $related[$table] = $db->table($table)->get();
-                         
-               }
-              
+                //check the model and grab all relations 
+                foreach($table_fields as $each_)
+                {
+                    $referenced_table = $each_->ref_table;
+                    $indexed_referenced_table = $service_name.'_'.$referenced_table;
+                    $indexed_table = $service_name.'_'.$table_name[0];
+                    $referenced_id = ($output[$indexed_referenced_table.'_id']);
+                    
+                     $related_tables[$referenced_table] = $db->table($indexed_referenced_table)
+                            ->where('id',$referenced_id)->get();
+                    
+                }
            }
            else
-           {
-                $related[$relationship] = $db->table($relationship)->get();
+           {      
+                    foreach($table_fields as $each_)
+                    {
+                        $each_referenced_field = $each_->ref_table;
+                        $referenced_field = $service_name.'_'.
+                                $each_referenced_field.'_id';
+                        if(isset($output[$referenced_field]) &&
+                                $each_referenced_field == $each_wanted_table)
+                        {
+                                $related_tables[$each_wanted_table] = $db->
+                                table($service_name.'_'.$each_wanted_table)
+                                        ->where('id',$output[$referenced_field])->get();
+                                
+                        }
+                        
+                    }
+                    
            }
        }
-            return $related;
+            return $related_tables;
         
    }
    private function _set_table_meta($schema)
@@ -577,6 +612,7 @@ class DbController extends Controller
        
        return true;
    }
+   
    /*
     * validate entry data against schema field type
     *
