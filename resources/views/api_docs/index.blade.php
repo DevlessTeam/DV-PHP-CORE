@@ -85,6 +85,12 @@
                    <input type="number" id="size-field" class="form-control" >
                  </div>
                </div>
+               <div class="form-group">
+                 <label for="related" class="col-lg-2 col-sm-2 control-label">Related</label>
+                 <div class="col-lg-10">
+                   <input type="text" id="related-field" class="form-control" >
+                 </div>
+               </div>
              </div>
            </div>
          </section>
@@ -220,6 +226,7 @@
                var key = $('#key-field').val();
                var value = $('#value-field').val();
                var size = $('#size-field').val();
+               var related = $('#related-field').val();
 
                if (size == '' && order == '' && key != '' && value != '') {
                  $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&where='+key+','+value, function(data) {
@@ -245,7 +252,37 @@
                    $('#response').show();
                    $('#response-field').text(JSON.stringify(JSON.parse('{"status_code":612,"message":"query parameters not set","payload":[]}'), undefined, 4));
 
-               } else if (key == '' && order == '' && size == '' && value == '') {
+               } else if(related != '' && key == '' && value == '' && order == '' && size == '') {
+                 $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&related='+related, function(data){
+                   $('#response').show()
+                   $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                 });
+               } else if(related != '' && key == '' && value == '' && order == '' && size != '') {
+                 $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&related='+related+'&size='+size, function(data){
+                   $('#response').show()
+                   $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                 });
+               } else if(related != '' && key == '' && value == '' && order != '' && size == '') {
+                 $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&related='+related+'&order='+order, function(data){
+                   $('#response').show()
+                   $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                 });
+               } else if (related != '' && key != '' && value != '' && size == '' && order == '') {
+                 $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&related='+related+'&where='+key+','+value, function(data){
+                   $('#response').show()
+                   $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                 });
+               } else if (related != '' && key != '' && value != '' && size != '' && order == '') {
+                 $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&related='+related+'&where='+key+','+value+'&size='+size, function(data){
+                   $('#response').show()
+                   $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                 });
+               } else if (related != '' && key != '' && value != '' && size != '' && order != '') {
+                 $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&related='+related+'&where='+key+','+value+'&size='+size+'&order='+order, function(data){
+                   $('#response').show()
+                   $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                 });
+               } else if (key == '' && order == '' && size == '' && value == '' && related == '') {
                  $.get('api/v1/service/'+service_name+'/db?table='+table_name, function(data) {
                    $('#response').show();
                    $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
