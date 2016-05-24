@@ -279,8 +279,13 @@
                  });
                } else if (related != '' && key != '' && value != '' && size != '' && order != '') {
                  $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&related='+related+'&where='+key+','+value+'&size='+size+'&order='+order, function(data){
-                   $('#response').show()
-                   $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                   if(data.status_code == 700){
+                     $('#response').show()
+                     $('#response-field').text(JSON.stringify(data, undefined, 4));
+                   } else {
+                     $('#response').show()
+                     $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                   }
                  });
                } else if (key == '' && order == '' && size == '' && value == '' && related == '') {
                  $.get('api/v1/service/'+service_name+'/db?table='+table_name, function(data) {
@@ -304,7 +309,6 @@
            } else if (request_type === "create"){
              $.post('api/v1/service/'+service_name+'/db', JSON.parse(editor.getValue()))
                 .done(function(data){
-                  console.log(data);
                   if (JSON.parse(data).status_code == 609) {
                     $('#response').show();
                     $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
