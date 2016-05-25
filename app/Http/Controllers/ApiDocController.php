@@ -37,9 +37,10 @@ class ApiDocController extends Controller {
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function store(Request $request)
+	public function script($service_name)
 	{
-		
+		$script = \DB::table('services')->where('name', $service_name)->value('script');
+		return $script;
 	}
 
 	/**
