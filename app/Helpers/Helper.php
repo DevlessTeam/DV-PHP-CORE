@@ -4,6 +4,7 @@ use Validator;
 use App\Helpers\Response as Response;
 use Hash;
 use Response as output;
+use Session;
 /*
  * @author eddymens <eddymens@devless.io>
 *composed of most common used classes and functions
@@ -50,6 +51,9 @@ class Helper
         624 =>  'Sorry this is not an open endpoint',
         625 =>  'Got response successfully',
         626 =>  'saved script',
+        627 =>  'Sorry no such resource or resource is private',
+        628 =>  'Sorry User is not authenticated, try logging in ',
+        629 =>  'Sorry table could not be updated',
         700 => 'internal system error',
     ];
 
@@ -204,8 +208,45 @@ class Helper
      */
     public static function compare_hash($user_input, $hash)
     {
-        (Hash::check($user_input, $hash))?  true :  false;
+        return (Hash::check($user_input, $hash))?  true :  false;
     }
 
-
+    public static function is_user_login()
+    {
+       
+        return Session()->has('user');
+    }
+    
+    public static function get_authenticated_user_cred()
+   {
+        
+        #if(!Session()->has('public_user_token')){self::interrupt(628);}
+        $user_cred =
+                [
+                    'id' =>2,#Session('public_user_id'),
+                    'token' =>12345,#Session('public_user_token'),
+                    
+                ];
+        return $user_cred;
+   }
+   
+   public static function set_session($key, $value)
+   {
+       return Session::put($key, $value);
+   } 
+   
+   public static function get_session($key, $value)
+   {
+       return Session($key);
+   }
+        
+   public static function verify_user_token($incoming_token)
+   {
+       $user_cred = $this->get_authenticated_user_cred();
+       
+       return ($incoming_token == $user_cred['token'])? true:false;
+   }
+   
+  
+   
 }

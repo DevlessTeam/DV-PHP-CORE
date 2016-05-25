@@ -22,6 +22,8 @@ class CreateServicesTable extends Migration {
             $table->text('password');
             $table->text('database');
             $table->text('script');
+            $table->text('resource_access_right');
+                 // ->default('{"query":1,"create":2,"read":0,"update":1,"delete":1,"schema":0}');
             $table->boolean('public');
             $table->boolean('active');
             $table->integer('calls');

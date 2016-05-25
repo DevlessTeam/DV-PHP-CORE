@@ -12,6 +12,7 @@ use App\Http\Controllers\ServiceController as Service;
 
 use \App\Helpers\Helper as Helper;
 
+use Session;
 
 class ScriptController extends Controller
 {
@@ -53,13 +54,13 @@ class ScriptController extends Controller
             'script'  => $payload['script']
         ];
         $script_class = new ScriptController;
-        
+       
 
 //NB: position matters here
 $code = <<<EOT
         
  \$GLOBALS['script_class'] = \$script_class;
-function service(\$json_payload, \$service_name, \$resource, \$method){
+function DvService(\$json_payload, \$service_name, \$resource, \$method){
       
 return call_user_func_array(array(\$GLOBALS['script_class'], 'internal_services'),array(\$json_payload, 
     \$service_name, \$resource, \$method));

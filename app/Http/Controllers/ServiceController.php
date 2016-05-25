@@ -58,6 +58,8 @@ class ServiceController extends Controller {
                     $service->database = $request->input('database');
                     $service->hostname = $request->input('hostname');
                     $service->driver = $request->input('driver');
+                    $service->resource_access_right = 
+                            '{"query":0,"create":0,"update":0,"delete":0,"schema":0}';
                     $service->active = 1;
                     $service->script = 'echo "Happy Coding";';
 
@@ -131,7 +133,7 @@ class ServiceController extends Controller {
 	 * @return Response
 	 */
 	public function update(Request $request, $id)
-	{
+	{   
                 
 		if($service = Service::findOrFail($id))
                 {
@@ -160,7 +162,6 @@ class ServiceController extends Controller {
                         'driver'   => $service->driver,
                     ];
                     $db = new Db();
-                    dd($db->check_db_connection($connection));
                     if(!$db->check_db_connection($connection)){
                         
                          DLH::flash("Sorry connection could not be made to Database", 'error');
@@ -216,10 +217,10 @@ class ServiceController extends Controller {
          * @param string $resource resource to be accessed
 	 * @return Response
 	 */
-        public function resource($request, $service, $resource, $internal_access=false)
+        public function resource($request, $service_name, $resource, $internal_access=false)
         {  
             $resource = strtolower($resource);
-            $service = strtolower($service);
+            $service_name = strtolower($service_name);
             ($internal_access == true)? $method = $request['method'] :
             $method = $request->method();
             
@@ -239,7 +240,7 @@ class ServiceController extends Controller {
             
             
             //$resource
-            return $this->assign_to_service($service, $resource, $method, 
+            return $this->assign_to_service($service_name, $resource, $method, 
                     $parameters,$internal_access);
         }
         
@@ -255,64 +256,63 @@ class ServiceController extends Controller {
          * @param boolean $internal_service true if service is being called internally
 	 * @return Response
 	 */
-        public function assign_to_service($service, $resource, $method,
+        public function assign_to_service($service_name, $resource, $method,
                 $parameters=null,$internal_access=false)
         {       
-                $current_service = $this->service_exist($service);
-                //set temporal login id
-                Session::put('user',1);
-                //Session::forget('user');
-                //check access right 
+                $current_service = $this->service_exist($service_name);
+               
+                //check service access right 
                 $is_it_public = $current_service->public;
-                $am_i_logged_in = session()->has('user');
+                $is_admin = Helper::is_user_login();
                 $accessed_internally = $internal_access;
                 
-                if($is_it_public == 1 || $am_i_logged_in == true || 
+                if($is_it_public == 0 || $is_admin == true || 
                         $accessed_internally == true)
                 {
-                    
-                
-                $payload = 
-                    [
-                    'id'=>$current_service->id,  
-                    'service_name' =>$current_service->name,
-                    'database' =>$current_service->database, 
-                    'driver' => $current_service->driver,
-                    'hostname' => $current_service->hostname,
-                    'username' => $current_service->username,    
-                    'password' => $current_service->password,   
-                    'calls' =>  $current_service->calls,
-                    #'public' => $current_service->public,    
-                    'script' => $current_service->script,
-                    'method' => $method,
-                    'params' => $parameters, 
-                ]; 
-                //keep names of resources in the singular
-                 switch ($resource)
-                 {
-                    case 'db':
-                        
-                        $db = new Db(); 
-                            $db->access_db($resource,$payload);
-                            break;    
-                            
-                    case 'script':
-                        
-                         $script = new script;
-                            $script->run_script($resource,$payload);
-                            break;
-                            
-                    case 'schema':
-                        $db = new Db();
-                            $db->create_schema($resource, $payload);
-                            break;
-                    
-                    case 'view':
-                        return $payload;
-                        
-                    default:
-                        Helper::interrupt(605); 
-                 }
+
+                    $resource_access_right = $this->_get_resource_access_right($current_service);
+                    $payload = 
+                        [
+                        'id'=>$current_service->id,  
+                        'service_name' =>$current_service->name,
+                        'database' =>$current_service->database, 
+                        'driver' => $current_service->driver,
+                        'hostname' => $current_service->hostname,
+                        'username' => $current_service->username,    
+                        'password' => $current_service->password,   
+                        'calls' =>  $current_service->calls,
+                        #'public' => $current_service->public, 
+                        'resource_access_right' =>$resource_access_right,    
+                        'script' => $current_service->script,
+                        'method' => $method,
+                        'params' => $parameters, 
+                    ]; 
+                    //keep names of resources in the singular
+                     switch ($resource)
+                     {
+                        case 'db':
+
+                            $db = new Db(); 
+                                $db->access_db($resource,$payload);
+                                break;    
+
+                        case 'script':
+
+                             $script = new script;
+                                $script->run_script($resource,$payload);
+                                break;
+
+                        case 'schema':
+                            $db = new Db();
+                                $db->create_schema($resource, $payload);
+                                break;
+
+                        case 'view':
+                            return $payload;
+
+                        default:
+                            Helper::interrupt(605); 
+                     }
                       
                  
                 }
@@ -369,5 +369,34 @@ class ServiceController extends Controller {
                 }
                 return $parameters;
             }
+            /*
+             * get and convert resource_access_right to array
+             * @param object $service service payload
+             * @return array resource access right
+             */
+            private function _get_resource_access_right($service)
+            {
+                 $resource_access_right = $service->resource_access_right;
+                 
+                 $resource_access_right = json_decode($resource_access_right, true);
+                
+                 return $resource_access_right;
+            }
+            
+            
+            public function check_resource_access_right_type($access_type)
+            {
+                $is_user_login = Helper::is_user_login();
+                
+                if( ! $is_user_login && $access_type == 0 ){Helper::interrupt(627);}//private
+                else if($access_type == 1){return false;}//public
+                else if($access_type == 2){return true;}//authentication required
+                
+                return true;
+            }
+
+                
+
+           
         //check for pre and post 
 }

@@ -12,6 +12,7 @@ use App\Exceptions\Handler as error;
 use Illuminate\Filesystem\Filesystem as files;
 use App\Helpers\Response as Response;  
 use \Illuminate\Database\Schema\Blueprint as Blueprint;
+use App\Http\Controllers\ServiceController as Service;
 class DbController extends Controller
 {
     public  $db_types = [
@@ -34,7 +35,52 @@ class DbController extends Controller
     'take'     => 'take',
     'relation' => 'relation'
     ];
-   
+    
+    
+   /*
+    * access db functions based on request method type
+    * @param string resource name $resource     
+    * @param array payload $payload 
+    */    
+    public function access_db($resource, $payload)
+    {
+            
+            $payload['user_id'] = "";
+            
+            if($payload['method'] == 'GET')
+            {  
+               $db_action = 'query'; 
+               $payload = $this->set_auth_id_if_required($db_action, $payload);   
+               $this->db_query($resource, $payload);
+               
+            }
+            
+            else if($payload['method'] == 'POST')
+            {
+                $db_action = 'create';
+                $payload = $this->set_auth_id_if_required($db_action, $payload);   
+                $this->add_data($resource, $payload);
+            }
+            
+            else if($payload['method'] == 'PATCH')
+            {
+                $db_action = 'update';
+                $payload = $this->set_auth_id_if_required($db_action, $payload);   
+                $this->update($resource, $payload);
+            }
+            
+            else if($payload['method'] == 'DELETE')
+            {
+                $db_action = 'delete';
+                $payload = $this->set_auth_id_if_required($db_action, $payload);    
+                $this->destroy($resource, $payload);
+            }
+            else
+            {
+                Helper::interrupt(607);
+            }
+            
+    }
   
     /**
      * create new table schema .
@@ -61,16 +107,22 @@ class DbController extends Controller
     public function add_data($resource, $payload)
     {       $service_id = $payload['id'];
             $service_name = $payload['service_name'];
+            
             #setup db connection 
             $connector = $this->_connector($payload);
+            
             $db = \DB::connection('DYNAMIC_DB_CONFIG');
+            
             foreach($payload['params'] as $table){
-                 //check data against field type before adding data 
-                $table_data = $this->
-                    _validate_fields($table['name'],
-                           $service_id, $table['field'], true);
+                $table_name = $table['name'];
                 
-                 $output = $db->table($service_name.'_'.$table['name'])->insert($table_data);
+                 //check data against field type before adding data 
+                $table_data = $this-> _validate_fields($table_name,$service_name, 
+                        $table['field'], true);
+                
+                //assigning autheticated user id 
+                $table_data[0]['devless_user_id'] = $payload['user_id'];
+                $output = $db->table($service_name.'_'.$table['name'])->insert($table_data);
             }
             
             if($output)
@@ -102,13 +154,30 @@ class DbController extends Controller
                 $where  = $payload['params'][0]['params'][0]['where'];
                 $explotion = explode(',', $where);
                 $data =  $payload['params'][0]['params'][0]['data'];
-                $db->table($table_name)
-                ->where($explotion[0],$explotion[1])
-                ->update($data[0]);
                 
-                Helper::interrupt(619, 
-                        'table '.$payload['params'][0]['name']." updated successfuly");
-
+                if($payload['user_id'] !== "")
+                {
+                    $result = $db->table($table_name)
+                        ->where($explotion[0],$explotion[1])
+                        ->where('devless_user_id',$payload['user_id'])
+                        ->update($data[0]);
+                }
+                else
+                {
+                    $result = $db->table($table_name)
+                        ->where($explotion[0],$explotion[1])
+                        ->update($data[0]);
+                }
+                
+                if($result == 1)
+                {
+                    Helper::interrupt(619, 
+                            'table '.$payload['params'][0]['name']." updated successfuly");
+                }
+                else
+                {
+                    Helper::interrupt(629, 'Table '.$payload['params'][0]['name']." could not be updated");
+                }
             }
             else
             {
@@ -127,73 +196,84 @@ class DbController extends Controller
          */
         public function destroy($resource, $payload)
         {
-            
-         $connector = $this->_connector($payload);
-         $db =   \DB::connection('DYNAMIC_DB_CONFIG');
-         //check if table name is set 
-         $service_name = $payload['service_name'];   
-         $table_name = $service_name.'_'.$payload['params'][0]['name'];
-         $destroy_query = '$db->table("'.$table_name.'")';
-         if(isset($payload['params'][0]['params'][0]['drop']))
-         {
-             if($payload['params'][0]['params'][0]['drop'])
-             {
-                \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
-                \DB::table('table_metas')->where('table_name',$table_name)->delete();
-                Helper::interrupt(613,'dropped table succefully');
-                $task = 'drop';
-             }
-         }
-         if(isset($payload['params'][0]['params'][0]['where'] ))
-         {
-             if($payload['params'][0]['params'][0]['where'] == true  )
-            {
 
-             $where = $payload['params'][0]['params'][0]['where'];
-             $where = str_replace(",", "','", $where);
-             $where = "'".$where."'";
-             $destroy_query = $destroy_query.'->where('.$where.')';
-             $task ='where';
+                $connector = $this->_connector($payload);
+                $db =   \DB::connection('DYNAMIC_DB_CONFIG');
+                //check if table name is set 
+                $service_name = $payload['service_name'];   
+                $table_name = $service_name.'_'.$payload['params'][0]['name'];
+
+                if($payload['user_id'] !== "")
+                {
+                    $destroy_query = '$db->table("'.$table_name.'")->where("devless_user_id",'.$user_id.')';
+
+                }
+                else
+               {
+
+                    $destroy_query = '$db->table("'.$table_name.'")';
+               }    
+
+                if(isset($payload['params'][0]['params'][0]['drop']))
+                {
+                    if($payload['params'][0]['params'][0]['drop'])
+                    {
+                       \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
+                       \DB::table('table_metas')->where('table_name',$table_name)->delete();
+                       Helper::interrupt(613,'dropped table succefully');
+                       $task = 'drop';
+                    }
+                }
+                if(isset($payload['params'][0]['params'][0]['where'] ))
+                {
+                    if($payload['params'][0]['params'][0]['where'] == true  )
+                   {
+
+                    $where = $payload['params'][0]['params'][0]['where'];
+                    $where = str_replace(",", "','", $where);
+                    $where = "'".$where."'";
+                    $destroy_query = $destroy_query.'->where('.$where.')';
+                    $task ='where';
 
 
-            }
-         }
-         $element = 'row';
-         if(isset($payload['params'][0]['params'][0]['truncate'] ) )
-        {
+                   }
+                }
+                $element = 'row';
+                if(isset($payload['params'][0]['params'][0]['truncate'] ) )
+               {
 
-             if($payload['params'][0]['params'][0]['truncate'] == true)
-             {
-                $destroy_query = $destroy_query.'->truncate()';
-                $tasked ='truncated';$task = 'truncate';
-                
-                
-             }
-        }
-        else if(isset($payload['params'][0]['params'][0]['delete'] ))
-        {
+                    if($payload['params'][0]['params'][0]['truncate'] == true)
+                    {
+                       $destroy_query = $destroy_query.'->truncate()';
+                       $tasked ='truncated';$task = 'truncate';
 
-            if($payload['params'][0]['params'][0]['delete'] == true)
-            {
 
-                  
-                $destroy_query = $destroy_query.'->delete()';
-                $tasked ='deleted'; $task = 'delete'; 
-                
-             
-            }   
+                    }
+               }
+               else if(isset($payload['params'][0]['params'][0]['delete'] ))
+               {
 
-        } 
-        else
-        {
-            Helper::interrupt(615);
-        }
-        
-        $destroy_query = $destroy_query.';'; 
-        $result = eval('return'.$destroy_query);
-        if($result == false && $result != null){Helper::interrupt(614, 'could not '.$task.' '.$element);}
-        Helper::interrupt(626, 'The table or field has been '.$task);
-            
+                   if($payload['params'][0]['params'][0]['delete'] == true)
+                   {
+
+
+                       $destroy_query = $destroy_query.'->delete()';
+                       $tasked ='deleted'; $task = 'delete'; 
+
+
+                   }   
+
+               } 
+               else
+               {
+                   Helper::interrupt(615);
+               }
+
+               $destroy_query = $destroy_query.';'; 
+               $result = eval('return'.$destroy_query);
+               if($result == false && $result != null){Helper::interrupt(614, 'could not '.$task.' '.$element);}
+               Helper::interrupt(626, 'The table or field has been '.$task);
+
     }
         
     
@@ -212,8 +292,17 @@ class DbController extends Controller
         //check if table name is set 
         if(isset($payload['params']['table']))
        {    
-            $base_query = '$db->table("'.$service_name.'_'.$payload['params']['table'][0].'")';
-            
+            if($payload['user_id'] !== "" ){
+                
+                $user_id = $payload['user_id'];
+                 $base_query = '$db->table("'.$service_name.'_'.$payload['params']['table'][0].'")'
+                    . '->where("devless_user_id",'.$user_id.')';
+            }
+            else
+            {
+                 $base_query = '$db->table("'.$service_name.'_'.$payload['params']['table'][0].'")';
+                    
+            }
             $table_name = $payload['params']['table'];
             (isset($payload['params']['size']))?
             $complete_query = $base_query
@@ -264,20 +353,20 @@ class DbController extends Controller
                 
             }
             $complete_query = 'return '.$complete_query.'->get();';
-            $output = eval($complete_query);
-            if(sizeof($output) == 1 && isset($queried_table_list))
+            $query_output = eval($complete_query);
+            if(sizeof($query_output) == 1 && isset($queried_table_list))
             {
                 
-                $output = json_decode(json_encode($output),true);
+                $query_output = json_decode(json_encode($query_output),true);
                   $wanted_relationships = $queried_table_list;
-                 $related = $this->_get_related_tables($service_name,
-                         $table_name,$output[0], $wanted_relationships, $db); 
+                 $related = $this->_get_related_tables($payload, $table_name, $query_output[0], 
+                         $wanted_relationships, $db); 
                  
 
             
             }
-            $output['related'] = $related;
-            $response = Response::respond(625,null,$output);
+            $query_output['related'] = $related;
+            $response = Response::respond(625,null,$query_output);
             echo ($response);
             
         }
@@ -320,6 +409,7 @@ class DbController extends Controller
                 {       
                 #default field
                     $table->increments('id');
+                    $table->integer('devless_user_id');
                      #per  field 
                     foreach($payload['field'] as $field ){
                         $field['ref_table'] = $service_name.'_'.$field['ref_table'];
@@ -453,38 +543,7 @@ class DbController extends Controller
                     'For some reason database schema could not be created');
         }
     }
-   /*
-    * access the schema class from this method
-    * @param string resource name $resource     
-    * @param array payload $payload 
-    */    
-    public function access_db($resource, $payload)
-    {
-        
-                
-            if($payload['method'] == 'GET')
-            {
-                $this->db_query($resource, $payload);
-            }
-            else if($payload['method'] == 'POST')
-            {
-
-                $this->add_data($resource, $payload);
-            }
-            else if($payload['method'] == 'PATCH')
-            {
-                $this->update($resource, $payload);
-            }
-            else if($payload['method'] == 'DELETE')
-            {
-                $this->destroy($resource, $payload);
-            }
-            else
-            {
-                Helper::interrupt(607);
-            }
-            
-    }
+   
     public function db_socket($driver, $host, $database,$username, $password,
             $charset='utf8', $prefix='', $collation='utf8_unicode_ci')
     {
@@ -553,14 +612,13 @@ class DbController extends Controller
      * @params $db db connection
      * @return array
      */
-   private function _get_related_tables($service_name, $table_name, 
+   private function _get_related_tables($payload,$table_name, 
            $output, $wanted_related_tables, $db)
-   {
-      
+   {    
+      $service_name = $payload['service_name']; 
       $table_meta =  $db->table('table_metas')->where('table_name',$table_name)->get();
       $table_schema = json_decode($table_meta[0]->schema);
       $table_fields = $table_schema->field;
-      
       
        $related_tables = [];
        foreach ($wanted_related_tables as $each_wanted_table)
@@ -569,14 +627,28 @@ class DbController extends Controller
            {
                 //check the model and grab all relations 
                 foreach($table_fields as $each_)
-                {
-                    $referenced_table = $each_->ref_table;
-                    $indexed_referenced_table = $service_name.'_'.$referenced_table;
-                    $indexed_table = $service_name.'_'.$table_name[0];
-                    $referenced_id = ($output[$indexed_referenced_table.'_id']);
+                { 
+                    if($each_->ref_table !== null &&
+                            $each_->ref_table !== "" )
+                    {
+                        
+                        $referenced_table = $each_->ref_table;
+                        $indexed_referenced_table = $service_name.'_'.$referenced_table;
+                        $indexed_table = $service_name.'_'.$table_name[0];
+                        $referenced_id = ($output[$indexed_referenced_table.'_id']);
+                        if($payload['user_id'] !== "" )
+                        {
+                            $user_id = $payload['user_id'];   
+                            $related_tables[$referenced_table] = $db->table($indexed_referenced_table)
+                                   ->where('id',$referenced_id)->where('devless_user_id',$user_id)->get();
+                        }
                     
-                     $related_tables[$referenced_table] = $db->table($indexed_referenced_table)
-                            ->where('id',$referenced_id)->get();
+                        else
+                        {
+                            $related_tables[$referenced_table] = $db->table($indexed_referenced_table)
+                                ->where('id',$referenced_id)->get();
+                        }
+                    }
                     
                 }
            }
@@ -590,9 +662,19 @@ class DbController extends Controller
                         if(isset($output[$referenced_field]) &&
                                 $each_referenced_field == $each_wanted_table)
                         {
+                            if($payload['user_id'] !== "" ){
                                 $related_tables[$each_wanted_table] = $db->
                                 table($service_name.'_'.$each_wanted_table)
-                                        ->where('id',$output[$referenced_field])->get();
+                                        ->where('id',$output[$referenced_field])
+                                        ->where('devless_user_id',$user_id)->get();
+                            }
+                            else
+                            {
+                                $related_tables[$each_wanted_table] = $db->
+                                table($service_name.'_'.$each_wanted_table)
+                                        ->where('id',$output[$referenced_field])
+                                        ->get();
+                            }
                                 
                         }
                         
@@ -614,29 +696,20 @@ class DbController extends Controller
    }
    
    /*
-    * validate entry data against schema field type
+    *Get table meta 
     *
     * @param string  $service_id
     *
     * @return array
     */
-   private function _get_tableMeta($service_id)
+   private function _get_tableMeta($table_name)
    {
        $tableMeta =\DB::table('table_metas')->
-                                where('service_id',$service_id)->get();
+                                where('table_name',$table_name)->first();
                         $tableMeta = json_decode(json_encode($tableMeta),true);
                         $count = 0;
-                        foreach($tableMeta as $table)
-                        {
-                            $tableMeta[$count]['schema'] = 
-                               (array)json_decode($tableMeta[$count]['schema']);
-
-                             $tableMeta[$count]['schema'] = 
-                             json_decode(json_encode($tableMeta
-                                [$count]['schema']),true);
-                            $count ++;
-                            
-                        }
+                        $tableMeta['schema'] = json_decode($tableMeta['schema'],true);
+                        
                         return $tableMeta;
    }
    
@@ -652,7 +725,48 @@ class DbController extends Controller
        return true; 
    }
    
+   
    /*
+    * mandatory db choes from system 
+    * 
+    */
+   private function system_schema_jobs()
+   {
+       $user_cred = Helper::get_authenticated_user_cred();
+       $user_id = $user_cred['id'];
+       $jobs = 
+               [
+                   'query' => $user_id,
+                   'update' => $user_id,
+                   'create' => $user_id,
+                   'delete' => $user_id,
+                   'schema' => '',
+               ];
+       return $jobs;
+   }
+   
+   /*
+    * add user id to payload
+    * @param $db_action
+    * @param $payload
+    * @return $payload || boolean
+    */
+   private function set_auth_id_if_required($db_action, $payload)
+   {
+        $service = new Service();
+        $access_type = $payload['resource_access_right']; 
+        $authentication_required = 
+               $service->check_resource_access_right_type($access_type[$db_action]);
+                        
+        $user_cred = Helper::get_authenticated_user_cred();
+
+        ($authentication_required)?$payload['user_id'] = $user_cred['id']:false; 
+
+        
+        return $payload;
+   }
+   
+   /*TODO:needs serious refactoring 
     * validate entry data against schema field type
     *
     * @param string $table_name 
@@ -660,24 +774,20 @@ class DbController extends Controller
     * @param array  $field_names
     * @return boolean
     */
-   private function _validate_fields($table_name,$service_id, $table_data, 
+   private function _validate_fields($table_name,$service_name, $table_data, 
            $check_password=false)
    {
        
-       $table_meta = $this->_get_tableMeta($service_id);
+       $table_meta = $this->_get_tableMeta($table_name);
+       $schema = $table_meta['schema'];
        $hit = 0; $check = 0; $count = 0;
-       foreach($table_meta as $schema)
-       {
-          
-          
-           if($schema['schema']['name'] == $table_name)
-           { 
-             
+       
+       
                 foreach($table_data as $field_unit)
                 {
                     foreach($field_unit as $field => $field_value)
                     {
-                            foreach($schema['schema']['field'] as $fields)
+                            foreach($schema['field'] as $fields)
                             {  
                                 if($fields['name'] == $field)
                                 {
@@ -707,10 +817,10 @@ class DbController extends Controller
                     $count++;
                 }
                 $hit = 1;
-           }
+           
            
           
-       }
+       
        
        if($hit == 0)
        {
@@ -727,9 +837,6 @@ class DbController extends Controller
            return true;  
         }
    }
-        
+       
+   
 }
-
-
-//TODO:test drop and drop meta
-//TODO:prefix tables      
