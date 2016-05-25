@@ -263,7 +263,7 @@ class ServiceController extends Controller {
                
                 //check service access right 
                 $is_it_public = $current_service->public;
-                $is_admin = Helper::is_user_login();
+                $is_admin = Helper::is_admin_login();
                 $accessed_internally = $internal_access;
                 
                 if($is_it_public == 0 || $is_admin == true || 
@@ -386,7 +386,7 @@ class ServiceController extends Controller {
             
             public function check_resource_access_right_type($access_type)
             {
-                $is_user_login = Helper::is_user_login();
+                $is_user_login = Helper::is_admin_login();
                 
                 if( ! $is_user_login && $access_type == 0 ){Helper::interrupt(627);}//private
                 else if($access_type == 1){return false;}//public

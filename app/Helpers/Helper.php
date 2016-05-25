@@ -211,7 +211,7 @@ class Helper
         return (Hash::check($user_input, $hash))?  true :  false;
     }
 
-    public static function is_user_login()
+    public static function is_admin_login()
     {
        
         return Session()->has('user');
@@ -219,14 +219,21 @@ class Helper
     
     public static function get_authenticated_user_cred()
    {
-        
+    
+        //TODO: handle token
         #if(!Session()->has('public_user_token')){self::interrupt(628);}
+        
         $user_cred =
                 [
                     'id' =>2,#Session('public_user_id'),
                     'token' =>12345,#Session('public_user_token'),
                     
                 ];
+        if(self::is_admin_login())
+        {
+            $user_cred['id'] = "";
+            $user_cred['token'] = "";
+        }
         return $user_cred;
    }
    
