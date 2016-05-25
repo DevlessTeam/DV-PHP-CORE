@@ -37,6 +37,7 @@
                         <option value="create">ADD RECORD (POST) </option>
                         <option value="update">UPDATE RECORD(PATCH) </option>
                         <option value="delete">DELETE RECORD (DELETE) </option>
+                        <option value="script">RUN SCRIPT </option>
                     </select>
                  </div>
                </div>
@@ -190,8 +191,16 @@
              $('#body_params').hide();
              $('#response').hide();
 
+           } else if (request_type == "script") {
+             $.get('/console/'+service_name+'/script', function (data) {
+               editor.setValue(data)
+               $('#body_params').show();
+               $('#query').hide();
+               $('#response').hide();
+             })
+
            } else {
-             $.get('/console/'+table_name+'/schema', function(data){
+             $.get('/console/'+table_name+'/schema', function (data) {
                var schema = data;
                var values = {};
                for (var i = 0; i < schema.length; i++) {
@@ -201,7 +210,7 @@
                  var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+table_name+'","field":['+JSON.stringify(values)+']}]}'), undefined, 4);
                } else if (request_type === 'update') {
                  var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+table_name+'","params":[{"where":"id, ","data":[{"key":"value"}]}]}]}'), undefined, 4);
-               } else {
+               } else if (request_type === 'delete') {
                  var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+table_name+'","params":[{"delete":"true","where":"id, "}]}]}'), undefined, 4);
                }
                editor.setValue(json);
@@ -328,7 +337,7 @@
                 $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
              })
 
-           } else {
+           } else if (request_type === "delete") {
              $.ajax({
                url: "api/v1/service/"+service_name+"/db",
                type: "DELETE",
@@ -338,6 +347,17 @@
                $('#response').show();
                $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
              })
+           } else {
+             $.post('api/v1/'+service_name+'/script', editor.getValue())
+                .done(function(data) {
+                  if (data.status_code == 700) {
+                    $('#response').show();
+                    $('#response-field').text(JSON.stringify(data, undefined, 4));
+                  } else {
+                    $('#response').show();
+                    $('#response-field').text(JSON.stringify(data, undefined, 4));
+                  }
+                })
            }
 
          });

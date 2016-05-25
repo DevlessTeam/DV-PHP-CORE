@@ -23,12 +23,12 @@ Route::resource('service/{service}/{resource}/{template}/', 'ViewController@acce
 
 Route::get('assets/{sublevels?}', 'ViewController@static_files')->where('sublevels', '.*');
 
-#routes for only endpoints 
+#routes for only endpoints
 Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
-    
+
     #check system status
     Route::get('status', function ()    {
-        
+
         return "healthy";
     });
 
@@ -64,5 +64,5 @@ Route::group(['middleware' => 'user.auth'], function () {
   Route::get('console', 'ApiDocController@index');
   Route::get('console/{console?}', 'ApiDocController@edit');
   Route::get('console/{schema?}/schema', 'ApiDocController@schema');
-
+  Route::get('console/{script?}/script', 'ApiDocController@script');
 });
