@@ -47,11 +47,18 @@ class ScriptController extends Controller
      */
     public function run_script($resource,$payload)
     { 
+        $service = new Service();
+        $access_type = $payload['resource_access_right']; 
+        $authentication_required = 
+               $service->check_resource_access_right_type($access_type["script"]);
+        $user_cred = Helper::get_authenticated_user_cred();
         //available methods
         $EVENT = [
             'method' => $payload['method'],
             'params' => $payload['params'],
-            'script'  => $payload['script']
+            'script'  => $payload['script'],
+            'user_id' => $user_cred['id'],
+            'user_token' => $user_cred['token']
         ];
         $script_class = new ScriptController;
        

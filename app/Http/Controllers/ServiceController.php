@@ -59,7 +59,7 @@ class ServiceController extends Controller {
                     $service->hostname = $request->input('hostname');
                     $service->driver = $request->input('driver');
                     $service->resource_access_right = 
-                            '{"query":0,"create":0,"update":0,"delete":0,"schema":0}';
+                            '{"query":0,"create":0,"update":0,"delete":0,"schema":0,"script":0}';
                     $service->active = 1;
                     $service->script = 'echo "Happy Coding";';
 
