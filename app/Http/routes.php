@@ -64,11 +64,12 @@ Route::group(['middleware' => 'user.auth'], function () {
   #api_doc views
   Route::get('console', 'ApiDocController@index');
   Route::get('console/privacy', 'ApiDocController@privacy');
-  Route::post('console/privacy', 'ApiDocController@privacy_chanage');
+  Route::get('console/{serviceId?}/get', 'ApiDocController@privacy_chanage');
+  Route::put('console/{privacy}', 'ApiDocController@persist_privacy');
   Route::get('console/{console?}', 'ApiDocController@edit');
   Route::get('console/{schema?}/schema', 'ApiDocController@schema');
   Route::get('console/{script?}/script', 'ApiDocController@script');
-  
+
   #Service MIgrator
-  Route::resource("migrate","ServiceMigrationController"); 
+  Route::resource("migrate","ServiceMigrationController");
 });
