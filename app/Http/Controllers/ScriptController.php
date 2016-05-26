@@ -52,7 +52,8 @@ class ScriptController extends Controller
         $authentication_required = 
                $service->check_resource_access_right_type($access_type["script"]);
         $user_cred = Helper::get_authenticated_user_cred();
-        //available methods
+        
+        //available internal params 
         $EVENT = [
             'method' => $payload['method'],
             'params' => $payload['params'],
