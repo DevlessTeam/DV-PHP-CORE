@@ -21,7 +21,8 @@ Route::post('setup', 'UserController@postRegister');
 #views route
 Route::resource('service/{service}/{resource}/{template}/', 'ViewController@access_views');
 
-Route::get('assets/{sublevels?}', 'ViewController@static_files')->where('sublevels', '.*');
+
+//Route::get('assets/{sublevels?}', 'ViewController@static_files')->where('sublevels', '.*');
 
 #routes for only endpoints
 Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
@@ -32,7 +33,7 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
         return "healthy";
     });
 
-    #view system logs
+    #system logs
     Route::get('log', function ()    {
         return "logs from here";
     })->middleware(['jsonValidator']);
@@ -40,7 +41,7 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
     #config end points
     Route::resource('system', 'ServiceController@api');
 
-     #service end points
+    #service end points
     Route::get('service/{service}/{resource}','ServiceController@api');
     Route::post('service/{service}/{resource}','ServiceController@api');
     Route::patch('service/{service}/{resource}','ServiceController@api');
@@ -67,4 +68,7 @@ Route::group(['middleware' => 'user.auth'], function () {
   Route::get('console/{console?}', 'ApiDocController@edit');
   Route::get('console/{schema?}/schema', 'ApiDocController@schema');
   Route::get('console/{script?}/script', 'ApiDocController@script');
+  
+  #Service MIgrator
+  Route::resource("migrate","ServiceMigrationController"); 
 });
