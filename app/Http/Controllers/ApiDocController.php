@@ -49,9 +49,9 @@ class ApiDocController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function privacy()
 	{
-		return view('api_docs.show', compact('api_doc'));
+		return view('api_docs.show');
 	}
 
 	/**

@@ -44,11 +44,19 @@
 
                     <li><a href="#"><span>Data Tables</span></a></li>
 
-                    <li><a href="{{ url('console') }}"><span>Api Docs</span></a></li>
-                        
-                    
+
+                    <li class="menu-list">
+                        <a href="#"><span>API Console</span></a>
+                        <ul class="child-list">
+                            <li><a href="{{ url('console/privacy') }}">Privacy</a></li>
+                            <li><a href="{{ url('console') }}">Console</a></li>
+                        </ul>
+                    </li>
+                    {{-- <li><a href="{{ url('console') }}"><span>Api Docs</span></a></li> --}}
+
+
                     <li><a href="#"><span>Import/Export Services</span></a></li>
-    
+
                 </ul>
             </div>
         </div>
