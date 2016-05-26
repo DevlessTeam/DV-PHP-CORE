@@ -305,7 +305,8 @@
                } else {
 
                  $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&where='+key+','+value+'&size='+size, function(data) {
-                   if (data.status_code == 700){
+        console.log('data is here',data);           
+        if (data.status_code == 700){
                      $('#response').show();
                      $('#response-field').text(JSON.stringify(data.payload.message));
                    } else {
