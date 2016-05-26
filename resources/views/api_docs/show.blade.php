@@ -39,6 +39,7 @@
                     <label for="query" class="col-lg-2 col-sm-2 control-label">Query Access</label>
                     <div class="col-lg-4">
                       <select id="query" name="query" class="form-control m-b-10">
+                        <option disabled selected value> -- select a service -- </option>
                         <option value="0">PRIVATE</option>
                         <option value="1">PUBLIC </option>
                         <option value="2">AUTHENTICATE </option>
@@ -49,6 +50,7 @@
                     <label for="create" class="col-lg-2 col-sm-2 control-label">Create Access</label>
                     <div class="col-lg-4">
                       <select id="create" name="create" class="form-control m-b-10">
+                        <option disabled selected value> -- select a service -- </option>
                         <option value="0">PRIVATE</option>
                         <option value="1">PUBLIC </option>
                         <option value="2">AUTHENTICATE </option>
@@ -59,6 +61,7 @@
                     <label for="update" class="col-lg-2 col-sm-2 control-label">Update Access</label>
                     <div class="col-lg-4">
                       <select id="update" name="update" class="form-control m-b-10">
+                        <option disabled selected value> -- select a service -- </option>
                         <option value="0">PRIVATE</option>
                         <option value="1">PUBLIC </option>
                         <option value="2">AUTHENTICATE </option>
@@ -69,6 +72,7 @@
                     <label for="delete" class="col-lg-2 col-sm-2 control-label">Delete Access</label>
                     <div class="col-lg-4">
                       <select id="delete" name="delete" class="form-control m-b-10">
+                        <option disabled selected value> -- select a service -- </option>
                         <option value="0">PRIVATE</option>
                         <option value="1">PUBLIC </option>
                         <option value="2">AUTHENTICATE </option>
@@ -79,6 +83,7 @@
                     <label for="schema" class="col-lg-2 col-sm-2 control-label">Schema Access</label>
                     <div class="col-lg-4">
                       <select id="schema" name="schema" class="form-control m-b-10">
+                        <option disabled selected value> -- select a service -- </option>
                         <option value="0">PRIVATE</option>
                         <option value="1">PUBLIC </option>
                         <option value="2">AUTHENTICATE </option>
@@ -89,6 +94,7 @@
                     <label for="script" class="col-lg-2 col-sm-2 control-label">Script Access</label>
                     <div class="col-lg-4">
                       <select id="script" name="script" class="form-control m-b-10">
+                        <option disabled selected value> -- select a service -- </option>
                         <option value="0">PRIVATE</option>
                         <option value="1">PUBLIC </option>
                         <option value="2">AUTHENTICATE </option>
