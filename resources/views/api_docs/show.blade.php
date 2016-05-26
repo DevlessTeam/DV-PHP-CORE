@@ -1,5 +1,18 @@
 @extends('api_docs.apidoc')
 
+@section('header')
+
+<!-- page head start-->
+    <div class="page-head">
+        <h3>
+          API Console
+        </h3>
+        <span class="sub-title">Privacy/</span>
+
+    </div>
+    <!-- page head end-->
+@endsection
+
 @section('content')
   <section>
     <div class="wrapper">
