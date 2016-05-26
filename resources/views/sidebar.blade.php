@@ -47,8 +47,8 @@
                     <li><a href="{{ url('console') }}"><span>Api Docs</span></a></li>
                         
                     
-                    <li><a href="#"><span>Import/Export Services</span></a></li>
-    
+                    <li><a href="{{route('migrate.index')}}"><span>Import/Export Services</span></a></li>
+                    
                 </ul>
             </div>
         </div>

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Helpers;
+use Alchemy\Zippy\Zippy;
 use Session;
 /* 
 *@author Eddymens <eddymens@devless.io
@@ -32,7 +33,95 @@ class DevlessHelper extends Helper
         session::flash('color', $notification_color);
         session::flash('flash_message', $message);
     }
+    
+    /*
+     * @param $service_name 
+     * @return service_object
+     */
+    public static function get_service_components($service_name)
+    {
+        $service = \DB::table('services')
+                ->where('name',$service_name)->first();
+        
+        $tables = \DB::table('table_metas')
+                ->where('service_id',$service->id)->get();
+        
+        $views_folder =$service_name;
+        
+        $service_components['service'] = $service;
+        $service_components['tables'] = $tables;
+        $service_components['views_folder'] = $views_folder;
+        
+        $service_components = self::convert_to_json($service_components);
+                
+        return $service_components;
+    }
+
+
+    public static function convert_to_json($service_components)
+    {
+            
+        $formatted_service_components = json_encode($service_components,true);
+        
+        return $formatted_service_components;
+        
+    }
+    
+    public static function export_service($zipped_service_name)
+    {
+        //export the service
+        return null;
+    }
+    
+    public static function zip_folder($service_folder_name)
+    {
+        
+        // Load Zippy
+        $zippy = Zippy::load();
+                // Creates an archive.zip that contains a directory "folder" that contains
+        // files contained in "/path/to/directory" recursively
+        $archive = $zippy->create('dv.pkg', array(
+            $service_folder_name => $service_folder_name
+        ), true);
+
+       return true;     
+
+    }
+    
+    public static function add_service_to_folder($service_name,$service_components)
+    {
+        $temporal_service_path = $service_name;
+        $new_assets_path = $service_name.'/assets';
+        $views_directory = config('devless')['views_directory'].$service_name;
+        
+        mkdir($temporal_service_path);
+        mkdir($new_assets_path);
+        
+        //move asset files to temporal folder
+        self::recurse_copy($views_directory, $new_assets_path);
+        
+        $fb = fopen($service_name.'/service.json','w');
+        $fb = fwrite($fb, $service_components);
+        
+       //return folder_name
+        return $temporal_service_path;
+            
+    }
+    
+    public static function recurse_copy($src,$dst)
+    { 
+        $dir = opendir($src); 
+        @mkdir($dst); 
+        while(false !== ( $file = readdir($dir)) ) { 
+            if (( $file != '.' ) && ( $file != '..' )) { 
+                if ( is_dir($src . '/' . $file) ) { 
+                    recurse_copy($src . '/' . $file,$dst . '/' . $file); 
+                } 
+                else { 
+                    copy($src . '/' . $file,$dst . '/' . $file); 
+                } 
+            } 
+        } 
+        closedir($dir); 
+    } 
 }
-
-
- 

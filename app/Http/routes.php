@@ -53,7 +53,7 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
 Route::group(['middleware' => 'user.auth'], function () {
   #service views
   Route::resource('services','ServiceController');
-
+  
   #app views
   Route::resource("app",'AppController');
 
