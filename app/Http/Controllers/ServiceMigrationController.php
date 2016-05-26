@@ -15,9 +15,9 @@ class ServiceMigrationController extends Controller {
 	 */
 	public function index()
 	{
-		$service_migrations = ServiceMigration::orderBy('id', 'desc')->paginate(10);
 
-		return view('service_migrations.index', compact('service_migrations'));
+
+		return view('service_migrations.index');
 	}
 
 	/**

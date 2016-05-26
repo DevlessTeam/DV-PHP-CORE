@@ -22,7 +22,7 @@ Route::post('setup', 'UserController@postRegister');
 Route::resource('service/{service}/{resource}/{template}/', 'ViewController@access_views');
 
 
-//Route::get('assets/{sublevels?}', 'ViewController@static_files')->where('sublevels', '.*');
+Route::get('assets/{sublevels?}', 'ViewController@static_files')->where('sublevels', '.*');
 
 #routes for only endpoints
 Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
