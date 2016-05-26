@@ -42,7 +42,7 @@
                         </ul>
                     </li>
 
-                    <li><a href="#"><span>Data Tables</span></a></li>
+                    <li><a href="{{ url('datatable') }}"><span>Data Tables</span></a></li>
 
 
                     <li class="menu-list">

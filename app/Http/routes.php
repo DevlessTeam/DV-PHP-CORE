@@ -72,4 +72,7 @@ Route::group(['middleware' => 'user.auth'], function () {
 
   #Service MIgrator
   Route::resource("migrate","ServiceMigrationController");
+
+  #Datatable Route
+  Route::get('datatable', 'DatatableController@index');
 });
