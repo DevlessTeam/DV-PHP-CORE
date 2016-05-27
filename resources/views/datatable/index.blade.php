@@ -37,8 +37,8 @@
           <h3 id="empty_handler" class="text-center alert alert-info" style="margin: -20px;">Empty!</h3>
           <tr class="hideme">
             <td></td>
-            <td colspan="">
-              <div>
+            <td id="colspan">
+              <div id="text_input">
               </div>
               <div style="clear: left"></div>
               <div class="col-lg-offset-1 col-lg-1">
@@ -71,6 +71,7 @@
     });
 
     var entries;
+    var keys;
     $('#table_name').change(function(data) {
       var table_entries = $('#service option:selected').text() + '_' + $('#table_name option:selected').text();
       $.get('/datatable/'+table_entries+'/entries', function(data) {
@@ -83,6 +84,10 @@
 
         entries = data;
         buildHtmlTable();
+        details();
+        for (var x = 0; x < entries.length; x++) {
+          keys = Object.keys(entries[x]);
+        }
       });
     });
     function buildHtmlTable() {
@@ -90,7 +95,7 @@
 
       for (var i = 0 ; i < entries.length ; i++) {
         var row$ = $('<tr/>');
-        row$.append($('<td />').addClass('details-control'));
+        row$.append($('<td/>').addClass('details-control'));
         for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
           var cellValue = entries[i][columns[colIndex]];
 
@@ -117,6 +122,15 @@
       $("#excelDataTable").append(headerTr$);
 
       return columnSet;
+    }
+
+    function details() {
+      $('.details-control').click(function() {
+        for (var i = 0; i < keys.length; i++) {
+          $('#colspan').attr('colspan="'+ keys.length +'"');
+          $('#text_input').html('<label for="inputEmail1" class="col-lg-1 col-sm-1 control-label text-right"></label>');
+        }
+      })
     }
 
   }());
