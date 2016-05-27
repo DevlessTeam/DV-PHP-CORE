@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-
+use App\Helpers\DevlessHelper as DVL;
 class AfterMiddleware
 {
     /**
@@ -15,11 +15,18 @@ class AfterMiddleware
      */
     public function handle($request, Closure $next)
     {
-           $response = $next($request);
-        
-        
-        return $response ->header('Access-Control-Allow-Origin', '*')
+        $response = $next($request);
+        $no_header = DVL::header_required($request);
+        if($no_header)
+        {
+            return $response;
+        }
+        else
+        {
+             return $response ->header('Access-Control-Allow-Origin', '*')
             ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+          
+        }
             
     }
 }

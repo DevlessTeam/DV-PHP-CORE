@@ -201,6 +201,29 @@ class ServiceController extends Controller {
 		return redirect()->route('services.index');
 	}
         
+        
+          /**
+           * download service packages
+           * @param $request
+           * @param $filename
+           * 
+           */
+          public function download_service_package($filename)
+          {
+              
+              $file_path = DLH::get_file($filename);
+              if($file_path)
+              {
+                  // Send Download
+                     return \Response::download($file_path, $filename
+                     )->deleteFileAfterSend(true);
+              }
+              else
+              {
+                  DLH::flash("could not download files");
+               }
+              
+          }
         /**
         * all api calls go through here
         * @param array  $request request params 
@@ -397,7 +420,8 @@ class ServiceController extends Controller {
                 
                 return true;
             }
-
+            
+          
                 
 
            

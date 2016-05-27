@@ -75,4 +75,8 @@ Route::group(['middleware' => 'user.auth'], function () {
 
   #Datatable Route
   Route::get('datatable', 'DatatableController@index');
-});
+  
+  #Download Route
+  Route::get('download/{filename}', 'ServiceController@download_service_package')
+    ->where('filename', '[A-Za-z0-9\-\_\.]+');
+    });

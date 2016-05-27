@@ -88,21 +88,12 @@
     function init(){
         @if(session('package'))auto_download('{{session('package')}}') @endif
     }
-function auto_download(package_name){
+    function auto_download(package_name){
 
-$.ajax({
-    url: package_name,
-    type: 'GET',
-    success: function() {
-        console.log(package_name);
-        window.location = package_name;
-        
+    url = 'download/'+package_name,        
+     win = window.open(url, '_blank');
+    win.focus();
     }
-});
-
-
-
-}
 
 
  </script>   

@@ -7,7 +7,7 @@ use Session;
 *@author Eddymens <eddymens@devless.io
  */
 use App\Helpers\Helper as Helper;
-
+use Illuminate\Support\Facades\Storage as Storage;
 class DevlessHelper extends Helper
 {
     //
@@ -68,7 +68,7 @@ class DevlessHelper extends Helper
     }
     
     
-    public static function zip_folder($service_folder_name)
+    public static function zip_folder($service_folder_path)
     {
         
         // Load Zippy
@@ -76,20 +76,20 @@ class DevlessHelper extends Helper
                 //Creates a service_folder_name.pkg 
                 //that contains a directory "folder" that contains
         //files contained in "service_folder_name" recursively
-        $archive = $zippy->create($service_folder_name.'.zip', array(
-            $service_folder_name => $service_folder_name
+        $archive = $zippy->create($service_folder_path.'.zip', array(
+            $service_folder_path => $service_folder_path
         ), true);
         
-       rename($service_folder_name.'.zip',$service_folder_name.'.pkg');
-       self::deleteDirectory($service_folder_name);
-       return $service_folder_name.'.pkg';     
+       rename($service_folder_path.'.zip',$service_folder_path.'.pkg');
+       self::deleteDirectory($service_folder_path);
+       return basename($service_folder_path.'.pkg');     
 
     }
     
     public static function add_service_to_folder($service_name,$service_components)
     {
-        $temporal_service_path = $service_name;
-        $new_assets_path = $service_name.'/assets';
+        $temporal_service_path = storage_path().'/'.$service_name;
+        $new_assets_path = storage_path().'/'.$service_name.'/assets';
         $views_directory = config('devless')['views_directory'].$service_name;
         
         mkdir($temporal_service_path);
@@ -98,7 +98,7 @@ class DevlessHelper extends Helper
         //move asset files to temporal folder
         self::recurse_copy($views_directory, $new_assets_path);
         
-        $fb = fopen($service_name.'/service.json','w');
+        $fb = fopen($temporal_service_path.'/service.json','w');
         $fb = fwrite($fb, $service_components);
         
        //return folder_name
@@ -153,6 +153,29 @@ class DevlessHelper extends Helper
         }
 
         return rmdir($dir);
+    }
+    
+    public static function get_file($filename)
+    {
+        
+        $file_path = storage_path().'/'.$filename;
+        if (!file_exists($file_path))
+        {
+            return false;
+        }
+
+        return $file_path;
+    }
+    
+    public static  function set_file($file_path)
+    {
+        return null;
+    }
+
+
+    public static function header_required($request)
+    {
+       return  substr($request->path(), 0, 9 ) === "download/";
     }
             
 }
