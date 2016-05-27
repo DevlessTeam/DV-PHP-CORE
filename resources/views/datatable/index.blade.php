@@ -35,6 +35,20 @@
           <table id="excelDataTable" class="schema-table table" cellspacing="0" width="100%">
           </table>
           <h3 id="empty_handler" class="text-center alert alert-info" style="margin: -20px;">Empty!</h3>
+          <tr class="hideme">
+            <td></td>
+            <td colspan="">
+              <div>
+              </div>
+              <div style="clear: left"></div>
+              <div class="col-lg-offset-1 col-lg-1">
+                <button type="submit" class="btn btn-success">Update</button>
+              </div>
+              <div class="col-lg-1">
+                <button type="submit" class="btn btn-danger">Cancel</button>
+              </div>
+            </td>
+          </tr>
         </section>
       </div>
     </div>
