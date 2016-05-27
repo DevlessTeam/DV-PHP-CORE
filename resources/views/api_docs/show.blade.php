@@ -5,7 +5,7 @@
 <!-- page head start-->
     <div class="page-head">
         <h3>
-          API Console
+          Privacy
         </h3>
         <span class="sub-title">Privacy/</span>
 
@@ -16,8 +16,8 @@
 @section('content')
   <section>
     <div class="wrapper">
-      <div class="row">
-        <div class="col-lg-8 col-md-offset-2">
+      {{-- <div class="row"> --}}
+        <div class="col-lg-9 col-md-offset-1">
           <form id="form_data" class="form-horizontal" method="post">
             <input type="hidden" name="_method" value="PUT">
             <section class="panel">
@@ -26,8 +26,9 @@
               </header>
               <div class="panel-body">
                 <div class="form-group" >
+                  <div class="row">
                   <label for="service" class="col-lg-2 col-sm-2 control-label">Service</label>
-                  <div class="col-lg-10">
+                  <div class="col-lg-9 col-md-9 col-sm-10">
                     <select id="service" name="service" class="form-control m-b-10">
                       <option disabled selected value> -- select a service -- </option>
                       @foreach($services as $service)
@@ -35,11 +36,12 @@
                       @endforeach
                     </select>
                   </div>
-                  <div>
+                  </div>
+                  <div class="row">
                     <label for="query" class="col-lg-2 col-sm-2 control-label">Query Access</label>
-                    <div class="col-lg-4">
+                    <div class="col-lg-9 col-md-9 col-sm-10">
                       <select id="query" name="query" class="form-control m-b-10">
-                        <option disabled selected value> -- select a service -- </option>
+                        <option disabled selected value> -- select a right -- </option>
                         <option value="0">PRIVATE</option>
                         <option value="1">PUBLIC </option>
                         <option value="2">AUTHENTICATE </option>
@@ -47,54 +49,56 @@
                     </div>
                   </div>
                   <div>
-                    <label for="create" class="col-lg-2 col-sm-2 control-label">Create Access</label>
-                    <div class="col-lg-4">
-                      <select id="create" name="create" class="form-control m-b-10">
-                        <option disabled selected value> -- select a service -- </option>
-                        <option value="0">PRIVATE</option>
-                        <option value="1">PUBLIC </option>
-                        <option value="2">AUTHENTICATE </option>
-                      </select>
+                    <div class="row">
+                      <label for="create" class="col-lg-2 col-sm-2 control-label">Create Access</label>
+                      <div class="col-lg-9 col-md-9 col-sm-10">
+                        <select id="create" name="create" class="form-control m-b-10">
+                          <option disabled selected value> -- select a right -- </option>
+                          <option value="0">PRIVATE</option>
+                          <option value="1">PUBLIC </option>
+                          <option value="2">AUTHENTICATE </option>
+                        </select>
+                      </div>
                     </div>
                   </div>
-                  <div>
+                  <div class="row">
                     <label for="update" class="col-lg-2 col-sm-2 control-label">Update Access</label>
-                    <div class="col-lg-4">
+                    <div class="col-lg-9 col-md-9 col-sm-10">
                       <select id="update" name="update" class="form-control m-b-10">
-                        <option disabled selected value> -- select a service -- </option>
+                        <option disabled selected value> -- select a right -- </option>
                         <option value="0">PRIVATE</option>
                         <option value="1">PUBLIC </option>
                         <option value="2">AUTHENTICATE </option>
                       </select>
                     </div>
                   </div>
-                  <div>
+                  <div class="row">
                     <label for="delete" class="col-lg-2 col-sm-2 control-label">Delete Access</label>
-                    <div class="col-lg-4">
+                    <div class="col-lg-9 col-md-9 col-sm-10">
                       <select id="delete" name="delete" class="form-control m-b-10">
-                        <option disabled selected value> -- select a service -- </option>
+                        <option disabled selected value> -- select a right -- </option>
                         <option value="0">PRIVATE</option>
                         <option value="1">PUBLIC </option>
                         <option value="2">AUTHENTICATE </option>
                       </select>
                     </div>
                   </div>
-                  <div>
+                  <div class="row">
                     <label for="schema" class="col-lg-2 col-sm-2 control-label">Schema Access</label>
-                    <div class="col-lg-4">
+                    <div class="col-lg-9 col-md-9 col-sm-10">
                       <select id="schema" name="schema" class="form-control m-b-10">
-                        <option disabled selected value> -- select a service -- </option>
+                        <option disabled selected value> -- select a right -- </option>
                         <option value="0">PRIVATE</option>
                         <option value="1">PUBLIC </option>
                         <option value="2">AUTHENTICATE </option>
                       </select>
                     </div>
                   </div>
-                  <div>
+                  <div class="row">
                     <label for="script" class="col-lg-2 col-sm-2 control-label">Script Access</label>
-                    <div class="col-lg-4">
+                    <div class="col-lg-9 col-md-9 col-sm-10">
                       <select id="script" name="script" class="form-control m-b-10">
-                        <option disabled selected value> -- select a service -- </option>
+                        <option disabled selected value> -- select a right -- </option>
                         <option value="0">PRIVATE</option>
                         <option value="1">PUBLIC </option>
                         <option value="2">AUTHENTICATE </option>
@@ -104,7 +108,7 @@
                 </div>
 
                 <div class="form-group">
-                  <div class="col-lg-offset-2 col-lg-10">
+                  <div class="col-lg-offset-2 col-lg-9">
                     <button type="submit" class="btn btn-info pull-right">Save</button>
                   </div>
                 </div>
@@ -113,7 +117,7 @@
           </form>
         </div>
       </div>
-    </div>
+    {{-- </div> --}}
   </section>
 
   <script>

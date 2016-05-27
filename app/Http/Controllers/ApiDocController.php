@@ -1,7 +1,6 @@
 <?php namespace App\Http\Controllers;
 
 use App\Service;
-use App\TableMeta;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

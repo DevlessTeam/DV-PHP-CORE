@@ -73,10 +73,18 @@ Route::group(['middleware' => 'user.auth'], function () {
   #Service MIgrator
   Route::resource("migrate","ServiceMigrationController");
 
-  #Datatable Route
-  Route::get('datatable', 'DatatableController@index');
+ 
   
   #Download Route
   Route::get('download/{filename}', 'ServiceController@download_service_package')
     ->where('filename', '[A-Za-z0-9\-\_\.]+');
+  
+  #Datatable Route
+  Route::get('datatable', 'DatatableController@index');
+  Route::get('datatable/{datatable?}', 'DatatableController@create');
+  Route::get('datatable/{entries?}/entries', 'DatatableController@show');
+
     });
+
+   
+
