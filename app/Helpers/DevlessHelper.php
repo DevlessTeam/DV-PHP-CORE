@@ -67,13 +67,6 @@ class DevlessHelper extends Helper
         
     }
     
-    public static function download($zipped_service_name)
-    {
-        
-        //export the service
-        return response()->download($zipped_service_name.'.pkg');
-        
-    }
     
     public static function zip_folder($service_folder_name)
     {
@@ -88,8 +81,8 @@ class DevlessHelper extends Helper
         ), true);
         
        rename($service_folder_name.'.zip',$service_folder_name.'.pkg');
-       
-       return $archive;     
+       self::deleteDirectory($service_folder_name);
+       return $service_folder_name.'.pkg';     
 
     }
     
@@ -117,16 +110,49 @@ class DevlessHelper extends Helper
     { 
         $dir = opendir($src); 
         @mkdir($dst); 
-        while(false !== ( $file = readdir($dir)) ) { 
-            if (( $file != '.' ) && ( $file != '..' )) { 
-                if ( is_dir($src . '/' . $file) ) { 
+        while(false !== ( $file = readdir($dir)) ) 
+        { 
+            if (( $file != '.' ) && ( $file != '..' ))
+            { 
+                if ( is_dir($src . '/' . $file) )
+                { 
                     recurse_copy($src . '/' . $file,$dst . '/' . $file); 
                 } 
-                else { 
+                else 
+                { 
                     copy($src . '/' . $file,$dst . '/' . $file); 
                 } 
             } 
         } 
         closedir($dir); 
     } 
+    
+    public static function deleteDirectory($dir) {
+        if (!file_exists($dir))
+        {
+            return true;
+        }
+
+        if (!is_dir($dir)) 
+        {
+            return unlink($dir);
+        }
+
+        foreach (scandir($dir) as $item) 
+        {
+            if ($item == '.' || $item == '..')
+            {
+                continue;
+            }
+
+            if (!self::deleteDirectory($dir . DIRECTORY_SEPARATOR . $item))
+            {
+                return false;
+            }
+
+        }
+
+        return rmdir($dir);
+    }
+            
 }

@@ -3,6 +3,7 @@
 @section('header')
    <!-- page head start-->
             <div class="page-head">
+                
                 <h3>Migrate Services</h3><span class="sub-title"></span> 
             </div><!-- page head end-->
 @endsection
@@ -83,10 +84,28 @@
                         
                    
                 </div><!--body wrapper end-->
+<script>
+    function init(){
+        @if(session('package'))auto_download('{{session('package')}}') @endif
+    }
+function auto_download(package_name){
+
+$.ajax({
+    url: package_name,
+    type: 'GET',
+    success: function() {
+        console.log(package_name);
+        window.location = package_name;
+        
+    }
+});
 
 
 
-    
+}
+
+
+ </script>   
 @endsection
 
 

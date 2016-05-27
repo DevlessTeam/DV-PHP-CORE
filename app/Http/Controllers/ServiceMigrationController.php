@@ -53,7 +53,7 @@ class ServiceMigrationController extends Controller {
                 else if($migration_type == "export")
                 {
                     $service_name  = $request->input('service_name');
-                    return Migration::export_service($service_name);
+                    $zipped_service_name = Migration::export_service($service_name);
                 }
                 else
                 {
@@ -62,7 +62,10 @@ class ServiceMigrationController extends Controller {
                             
             }
                 
-            	return redirect()->route('service_migrations.index');
+
+                
+               
+            	return redirect()->route('migrate.index')->with('package',$zipped_service_name);
 	}
 
 	/**

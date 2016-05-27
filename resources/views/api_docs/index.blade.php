@@ -1,9 +1,21 @@
-  @extends('api_docs.apidoc')
+@extends('api_docs.apidoc')
+
+@section('header')
+
+<!-- page head start-->
+    <div class="page-head">
+        <h3>
+          API Console 
+        </h3>
+        <span class="sub-title">Console/</span>
+
+    </div>
+    <!-- page head end-->
+@endsection
 
 @section('content')
   <section>
 
-   <!--body wrapper start-->
    <div class="wrapper">
      <div class="row">
        <div class="col-lg-8 col-md-offset-2">
@@ -40,6 +52,18 @@
                         <option value="script">RUN SCRIPT </option>
                     </select>
                  </div>
+                 <div id="runscript">
+                   <label for="script_method" class="col-lg-2 col-sm-2 control-label">Script Method</label>
+                   <div class="col-lg-10">
+                     <select id="script_method" name="script_method" class="form-control m-b-10">
+                          {{-- <option disabled selected value> -- select an operation -- </option> --}}
+                          <option value="GET">GET</option>
+                          <option value="POST">POST </option>
+                          <option value="UPDATE">PATCH </option>
+                          <option value="DELETE">DELETE </option>
+                      </select>
+                   </div>
+                </div>
                </div>
 
                <div class="form-group">
@@ -156,7 +180,7 @@
          document.getElementById('body_params').style.display = 'none';
          document.getElementById('request').style.display = 'none';
          document.getElementById('response').style.display = 'none';
-
+         document.getElementById('runscript').style.display = 'none';
 
          //Handles URL generation
          var service_name;
@@ -171,7 +195,6 @@
                $("#table").append("<option>"+$.parseJSON(table[i].schema).name+"</option>");
              }
            })
-           $('#api_url').val('api/v1/service/'+service_name+'/db');
          });
 
          //texteditor for payload
@@ -183,20 +206,23 @@
          var request_type;
          var table_name;
          $('#operation').change(function () {
-          //  $('#response-field').val("");
+          $('#api_url').val('api/v1/service/'+service_name+'/db');
            request_type = $(this).val();
            table_name = $('#table option:selected').text();
            if (request_type == "retrieve_all") {
              $('#query').show();
              $('#body_params').hide();
              $('#response').hide();
+             $('#runscript').hide();
 
            } else if (request_type == "script") {
              $.get('/console/'+service_name+'/script', function (data) {
                editor.setValue(data)
                $('#body_params').show();
+               $('#runscript').show();
                $('#query').hide();
                $('#response').hide();
+               $('#api_url').val('api/v1/service/'+service_name+'/script');
              })
 
            } else {
@@ -219,6 +245,7 @@
              $('#body_params').show();
              $('#query').hide();
              $('#response').hide();
+             $('#runscript').hide();
            }
 
          });
@@ -305,7 +332,7 @@
                } else {
 
                  $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&where='+key+','+value+'&size='+size, function(data) {
-        console.log('data is here',data);           
+        console.log('data is here',data);
         if (data.status_code == 700){
                      $('#response').show();
                      $('#response-field').text(JSON.stringify(data.payload.message));
@@ -349,16 +376,24 @@
                $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
              })
            } else {
-             $.post('api/v1/'+service_name+'/script', editor.getValue())
-                .done(function(data) {
-                  if (data.status_code == 700) {
-                    $('#response').show();
-                    $('#response-field').text(JSON.stringify(data, undefined, 4));
-                  } else {
-                    $('#response').show();
-                    $('#response-field').text(JSON.stringify(data, undefined, 4));
-                  }
-                })
+
+             var method_type = $('#script_method').val();
+             var json = '{"resource":['+editor.getValue()+']}';
+
+             $.ajax({
+               url: "/api/v1/service/"+service_name+"/script",
+               type: method_type,
+               data: json,
+             })
+             .done(function(data) {
+               if (data.status_code == 700) {
+                 $('#response').show();
+                 $('#response-field').text(JSON.stringify(data, undefined, 4));
+               } else {
+                 $('#response').show();
+                 $('#response-field').text(JSON.stringify(data, undefined, 4));
+               }
+             });
            }
 
          });

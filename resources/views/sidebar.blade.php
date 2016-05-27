@@ -42,13 +42,29 @@
                         </ul>
                     </li>
 
-                    <li><a href="#"><span>Data Tables</span></a></li>
+                    <li><a href="{{ url('datatable') }}"><span>Data Tables</span></a></li>
 
+
+                    <li class="menu-list">
+                        <a href="#"><span>API Console</span></a>
+                        <ul class="child-list">
+                            <li><a href="{{ url('console/privacy') }}">Privacy</a></li>
+                            <li><a href="{{ url('console') }}">Console</a></li>
+                        </ul>
+                    </li>
+                    {{-- <li><a href="{{ url('console') }}"><span>Api Docs</span></a></li> --}}
+
+
+<<<<<<< HEAD
                     <li><a href="{{ url('console') }}"><span>Api Docs</span></a></li>
                         
                     
                     <li><a href="{{route('migrate.index')}}"><span>Import/Export Services</span></a></li>
                     
+=======
+                    <li><a href="#"><span>Import/Export Services</span></a></li>
+
+>>>>>>> 2378bee916fed3dc3e3bbd2ebdc984e31af1b05b
                 </ul>
             </div>
         </div>

@@ -184,9 +184,12 @@ class ServiceController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		$service = Service::findOrFail($id);
-                
-		if($service->delete())
+                $service = Service::findOrFail($id);
+                $service_name = $service->name;
+                $view_path = config('devless')['views_directory'];
+                $assets_path = $view_path.$service_name;
+		
+		if(DLH::deleteDirectory($assets_path ) && $service->delete())
                 {
                     DLH::flash("Service deleted successfully", 'success');
                 }

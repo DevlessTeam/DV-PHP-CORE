@@ -5,6 +5,7 @@ use App\TableMeta;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use \App\Helpers\DevlessHelper as DLH;
 
 class ApiDocController extends Controller {
 
@@ -49,9 +50,10 @@ class ApiDocController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function privacy()
 	{
-		return view('api_docs.show', compact('api_doc'));
+		$services = Service::all();
+		return view('api_docs.show', compact('services'));
 	}
 
 	/**
@@ -73,13 +75,10 @@ class ApiDocController extends Controller {
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function update(Request $request, $id)
+	public function privacy_chanage($id)
 	{
-		$api_doc = ApiDoc::findOrFail($id);
-
-		$api_doc->save();
-
-		return redirect()->route('api_docs.index')->with('message', 'Item updated successfully.');
+		$service = Service::findOrFail($id);
+		return $service->resource_access_right;
 	}
 
 	/**
@@ -88,11 +87,23 @@ class ApiDocController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function persist_privacy(Request $request, $id)
 	{
-		$api_doc = ApiDoc::findOrFail($id);
-		$api_doc->delete();
-
-		return redirect()->route('api_docs.index')->with('message', 'Item deleted successfully.');
+		$service = Service::findOrFail($id);
+		$json = array(
+			'query' =>	$request->input('query'),
+			'create' =>	$request->input('create'),
+			'update' =>	$request->input('update'),
+			'delete' =>	$request->input('delete'),
+			'schema' =>	$request->input('schema'),
+			'script' =>	$request->input('script')
+		);
+		$service->resource_access_right = json_encode($json);
+		if ($service->save()) {
+			DLH::flash('Access Rights Updated Successfully', 'success');
+		} else {
+			DLH::flash('Error Updating Access Rights', 'error');
+		}
+		return back();
 	}
 }

@@ -17,7 +17,7 @@ class AfterMiddleware
     {
            $response = $next($request);
         
-        // Perform action
+        
         return $response ->header('Access-Control-Allow-Origin', '*')
             ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
             
