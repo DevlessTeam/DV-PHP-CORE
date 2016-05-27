@@ -67,10 +67,12 @@ class DevlessHelper extends Helper
         
     }
     
-    public static function export_service($zipped_service_name)
+    public static function download($zipped_service_name)
     {
+        
         //export the service
-        return null;
+        return response()->download($zipped_service_name.'.pkg');
+        
     }
     
     public static function zip_folder($service_folder_name)
@@ -78,13 +80,16 @@ class DevlessHelper extends Helper
         
         // Load Zippy
         $zippy = Zippy::load();
-                // Creates an archive.zip that contains a directory "folder" that contains
-        // files contained in "/path/to/directory" recursively
-        $archive = $zippy->create('dv.pkg', array(
+                //Creates a service_folder_name.pkg 
+                //that contains a directory "folder" that contains
+        //files contained in "service_folder_name" recursively
+        $archive = $zippy->create($service_folder_name.'.zip', array(
             $service_folder_name => $service_folder_name
         ), true);
-
-       return true;     
+        
+       rename($service_folder_name.'.zip',$service_folder_name.'.pkg');
+       
+       return $archive;     
 
     }
     

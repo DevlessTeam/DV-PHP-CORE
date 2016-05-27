@@ -25,8 +25,8 @@ class Migration extends Helper
                                     ://or
         $devlessfunc::flash('failed to create files(630)','error');  
         
-        //$outcome=$devlessfunc::export($zipped_service_components);
-        $outcome = 0;
+        $outcome=$devlessfunc::download($folder_name);
+        
         
         return $outcome;
     }

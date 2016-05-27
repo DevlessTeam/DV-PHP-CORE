@@ -53,7 +53,7 @@ class ServiceMigrationController extends Controller {
                 else if($migration_type == "export")
                 {
                     $service_name  = $request->input('service_name');
-                    Migration::export_service($service_name);
+                    return Migration::export_service($service_name);
                 }
                 else
                 {
