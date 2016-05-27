@@ -125,7 +125,7 @@
       $('#service').change(function() {
         var service = $('#service').val();
         $('#form_data').attr('action', '/console/'+service);
-        $.get('/console/'+3+'/get', function (data) {
+        $.get('/console/'+service+'/get', function (data) {
           var write_access = JSON.parse(data);
           $('#query').val(write_access.query);
           $('#create').val(write_access.create);
