@@ -41,10 +41,14 @@
                             <li><a href="{{ route('services.create') }}">Add New</a></li>
                         </ul>
                     </li>
-
                     <li><a href="{{ url('datatable') }}"><span>Data Tables</span></a></li>
-
                     <li><a href="{{ url('console/privacy') }}"><span>Privacy</span></a></li>
+                    <li class="menu-list">
+                      <a href="#"><span>Privacy</span></a>
+                      <ul class="child-list">
+                        <li><a href="{{ url('console/privacy') }}">API</a></li>
+                      </ul>
+                    </li>
                     <li><a href="{{ url('console') }}"><span>API Console</span></a></li>
                     <li><a href="{{route('migrate.index')}}"><span>Import/Export Services</span></a></li>
                 </ul>
