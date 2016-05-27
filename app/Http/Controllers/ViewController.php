@@ -67,7 +67,8 @@ class ViewController extends Controller
         {
             case "init" :
                 $source_path = '../resources/views/welcome.blade.php';
-                $destination_path = '../resources/views/service_views/'.$service_name;
+                $destination_path = config('devless')['views_directory'].$service_name;
+                
                 
                 if(mkdir($destination_path))
                 {

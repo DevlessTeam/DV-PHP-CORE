@@ -8,7 +8,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
         "jeroen-g/laravel-packager": "^1.4",
-        "corveda/php-sandbox": "^2.0"
+        "corveda/php-sandbox": "^2.0",
+        "alchemy/zippy": "^0.3.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

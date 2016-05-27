@@ -253,6 +253,7 @@ h1,h2,h3,h4,h5 {
 .sidebar-left {
     height: 100%;
     left: 0;
+    overflow: scroll;
     position: fixed;
     top: 50px;
     width: 240px;

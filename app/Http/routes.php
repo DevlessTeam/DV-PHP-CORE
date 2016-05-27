@@ -53,7 +53,7 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
 Route::group(['middleware' => 'user.auth'], function () {
   #service views
   Route::resource('services','ServiceController');
-
+  
   #app views
   Route::resource("app",'AppController');
 
@@ -73,8 +73,18 @@ Route::group(['middleware' => 'user.auth'], function () {
   #Service MIgrator
   Route::resource("migrate","ServiceMigrationController");
 
+ 
+  
+  #Download Route
+  Route::get('download/{filename}', 'ServiceController@download_service_package')
+    ->where('filename', '[A-Za-z0-9\-\_\.]+');
+  
   #Datatable Route
   Route::get('datatable', 'DatatableController@index');
   Route::get('datatable/{datatable?}', 'DatatableController@create');
   Route::get('datatable/{entries?}/entries', 'DatatableController@show');
-});
+
+    });
+
+   
+

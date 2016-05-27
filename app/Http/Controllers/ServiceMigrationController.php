@@ -4,8 +4,11 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\ServiceMigration;
-use Illuminate\Http\Request;
+use App\Service;
 
+use Illuminate\Http\Request;
+use App\Helpers\Migration as Migration;
+use \App\Helpers\DevlessHelper as DLH;
 class ServiceMigrationController extends Controller {
 
 	/**
@@ -15,9 +18,10 @@ class ServiceMigrationController extends Controller {
 	 */
 	public function index()
 	{
-
-
-		return view('service_migrations.index');
+                
+                $services = Service::orderBy('id', 'desc')->get();
+                
+		return view('service_migrations.index', compact('services'));
 	}
 
 	/**
@@ -31,20 +35,37 @@ class ServiceMigrationController extends Controller {
 	}
 
 	/**
-	 * Store a newly created resource in storage.
+	 * export or import services
 	 *
 	 * @param Request $request
 	 * @return Response
 	 */
 	public function store(Request $request)
-	{
-		$service_migration = new ServiceMigration();
+	{    
+            $migration_type = $request->input('io_type');
+            if($migration_type != null)
+            {
+                if($migration_type == "import")
+                {
+                    $service_file = $request->file('service_file');
+                    Migration::import_service($service_file);
+                }
+                else if($migration_type == "export")
+                {
+                    $service_name  = $request->input('service_name');
+                    $zipped_service_name = Migration::export_service($service_name);
+                }
+                else
+                {
+                      DLH::flash("No appropriate action found", 'error');
+                }
+                            
+            }
+                
 
-		$service_migration->service_name = $request->input("service_name");
-
-		$service_migration->save();
-
-		return redirect()->route('service_migrations.index')->with('message', 'Item created successfully.');
+               
+               
+            	return redirect()->route('migrate.index')->with('package',$zipped_service_name);
 	}
 
 	/**
