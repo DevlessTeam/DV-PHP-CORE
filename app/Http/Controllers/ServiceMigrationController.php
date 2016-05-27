@@ -42,25 +42,36 @@ class ServiceMigrationController extends Controller {
 	 */
 	public function store(Request $request)
 	{    
-            $migration_type = $request->input('io_type');
-            if($migration_type != null)
-            {
-                if($migration_type == "import")
-                {
-                    $service_file = $request->file('service_file');
-                    Migration::import_service($service_file);
-                }
-                else if($migration_type == "export")
-                {
-                    $service_name  = $request->input('service_name');
-                    $zipped_service_name = Migration::export_service($service_name);
-                }
-                else
-                {
-                      DLH::flash("No appropriate action found", 'error');
-                }
-                            
-            }
+                    $migration_type = $request->input('io_type');
+                    
+                    if($migration_type == "import")
+                    {
+                            $zipped_file_name = "";
+                            if ($request->hasFile('service_file'))
+                            {
+                                $service_file = $request->file('service_file');
+                                dd($service_file);
+                                Migration::import_service($service_file);
+                            }
+                            else
+                            {
+                                DLH::flash("Service could not be uploaded", 'error');
+                            }
+                    }
+
+
+                    else if($migration_type == "export")
+                    {
+                            $service_name  = $request->input('service_name');
+                            $zipped_service_name = Migration::export_service($service_name);
+                    }
+
+                    else
+                    {
+                          DLH::flash("No appropriate action found", 'error');
+                    }
+
+            
                 
 
                

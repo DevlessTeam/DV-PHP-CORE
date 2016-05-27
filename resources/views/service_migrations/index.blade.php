@@ -79,11 +79,7 @@
     
                                         </div>
                                     </div>
-                                </div>
-                            </section>
-                        
-                   
-                </div><!--body wrapper end-->
+                               
 <script>
     function init(){
         @if(session('package'))auto_download('{{session('package')}}') @endif

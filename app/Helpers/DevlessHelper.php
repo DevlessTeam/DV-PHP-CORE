@@ -76,13 +76,17 @@ class DevlessHelper extends Helper
                 //Creates a service_folder_name.pkg 
                 //that contains a directory "folder" that contains
         //files contained in "service_folder_name" recursively
+        
+        $folder_name = basename($service_folder_path);
+        
         $archive = $zippy->create($service_folder_path.'.zip', array(
-            $service_folder_path => $service_folder_path
+            $folder_name => $service_folder_path
         ), true);
+        
         
        rename($service_folder_path.'.zip',$service_folder_path.'.pkg');
        self::deleteDirectory($service_folder_path);
-       return basename($service_folder_path.'.pkg');     
+       return $folder_name.'.pkg';     
 
     }
     
@@ -92,8 +96,12 @@ class DevlessHelper extends Helper
         $new_assets_path = storage_path().'/'.$service_name.'/assets';
         $views_directory = config('devless')['views_directory'].$service_name;
         
-        mkdir($temporal_service_path);
-        mkdir($new_assets_path);
+        if(!file_exists($temporal_service_path) && !file_exists($new_assets_path))
+        {
+            mkdir($temporal_service_path);
+            mkdir($new_assets_path);
+        
+        }
         
         //move asset files to temporal folder
         self::recurse_copy($views_directory, $new_assets_path);
