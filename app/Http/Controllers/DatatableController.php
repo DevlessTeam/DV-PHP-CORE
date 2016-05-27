@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Service;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -16,7 +17,8 @@ class DatatableController extends Controller
      */
     public function index()
     {
-      return view('datatable.index');  
+      $services = Service::all();
+      return view('datatable.index', compact('services'));
     }
 
     /**
@@ -24,9 +26,9 @@ class DatatableController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        //
+      return \DB::table('table_metas')->where('service_id', $id)->get();
     }
 
     /**
@@ -46,9 +48,9 @@ class DatatableController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($name)
     {
-        //
+        return \DB::table($name)->get();
     }
 
     /**
