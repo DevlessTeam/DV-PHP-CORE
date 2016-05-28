@@ -17,8 +17,6 @@ class DevlessHelper extends Helper
      * @param type $message
      * @param type $message_color
      */
-    public static $devless_pkg_ext = '.srv';
-    
     public static function flash($message,$message_color="#736F6F")
     {
         $custom_colors = 
@@ -84,9 +82,9 @@ class DevlessHelper extends Helper
     }
     
     
-    public static function zip_folder($service_folder_path)
+    public static function zip_folder($service_folder_path,$extension)
     {
-        $dvext = self::$devless_pkg_ext;
+        $dvext = $extension;
         // Load Zippy
         $zippy = Zippy::load();
                 //Creates a service_folder_name.pkg 
@@ -107,10 +105,10 @@ class DevlessHelper extends Helper
     }
     
     
-    public static function unzip_package($service_folder_path, $destroy_zip=false)
+    public static function unzip_package($service_folder_path, $extension, $destroy_zip=false)
     {
             $zippy = Zippy::load(); 
-            $dvext = self::$devless_pkg_ext;
+            $dvext = $extension;
             $service_basename = basename($service_folder_path);
             
             $state = 

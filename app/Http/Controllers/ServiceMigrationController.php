@@ -12,12 +12,13 @@ use \App\Helpers\DevlessHelper as DLH;
 class ServiceMigrationController extends Controller {
 
 	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
+	* Display a listing of the resource.
+	*
+	* @return Response
+	*/
 	public function index()
 	{
+
                 
                 $services = Service::orderBy('id', 'desc')->get();
                 $app = App::first();
@@ -26,22 +27,23 @@ class ServiceMigrationController extends Controller {
 	}
 
 	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
+	* Show the form for creating a new resource.
+	*
+	* @return Response
+	*/
 	public function create()
 	{
 		return view('service_migrations.create');
 	}
 
 	/**
-	 * export or import services
-	 *
-	 * @param Request $request
-	 * @return Response
-	 */
+	* export or import services
+	*
+	* @param Request $request
+	* @return Response
+	*/
 	public function store(Request $request)
+
 	{    
                     $migration_type = $request->input('io_type');
                     
@@ -102,15 +104,14 @@ class ServiceMigrationController extends Controller {
 
                
                
-            	return redirect()->route('migrate.index')->with('package',$zipped_service_name);
-	}
-
+                    return redirect()->route('migrate.index')->with('package',$zipped_service_name);
+                }
 	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+	* Display the specified resource.
+	*
+	* @param  int  $id
+	* @return Response
+	*/
 	public function show($id)
 	{
 		$service_migration = ServiceMigration::findOrFail($id);
@@ -119,11 +120,11 @@ class ServiceMigrationController extends Controller {
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+	* Show the form for editing the specified resource.
+	*
+	* @param  int  $id
+	* @return Response
+	*/
 	public function edit($id)
 	{
 		$service_migration = ServiceMigration::findOrFail($id);
@@ -132,12 +133,12 @@ class ServiceMigrationController extends Controller {
 	}
 
 	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @param Request $request
-	 * @return Response
-	 */
+	* Update the specified resource in storage.
+	*
+	* @param  int  $id
+	* @param Request $request
+	* @return Response
+	*/
 	public function update(Request $request, $id)
 	{
 		$service_migration = ServiceMigration::findOrFail($id);
@@ -150,11 +151,11 @@ class ServiceMigrationController extends Controller {
 	}
 
 	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+	* Remove the specified resource from storage.
+	*
+	* @param  int  $id
+	* @return Response
+	*/
 	public function destroy($id)
 	{
 		$service_migration = ServiceMigration::findOrFail($id);
