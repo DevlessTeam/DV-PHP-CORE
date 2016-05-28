@@ -387,50 +387,48 @@ class DbController extends Controller
     public function create_schema($resource, array $payload)
     {
         
-    #set path in case connector is sqlite
-    $id = $payload['id'];
-    $service_name = $payload['service_name'];
-    #connectors mysql pgsql sqlsrv sqlite
-    $connector = $this->_connector($payload);
     
-     #dynamically create columns with schema builder 
-    $db_type = $this->db_types;
-    $table_meta_data = []; 
-    $payload = $payload['params'][0];
-    $payload['id'] = $id;
-    $table_name = $service_name.'_'.$payload['name'];
-     if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
-                hasTable($table_name )) 
+        $service_name = $payload['service_name'];
+        #connectors mysql pgsql sqlsrv sqlite
+        $connector = $this->_connector($payload);
+
+         #dynamically create columns with schema builder 
+        $db_type = $this->db_types;
+        $table_meta_data = []; 
+        $payload = $payload['params'][0];
+        $table_name = $service_name.'_'.$payload['name'];
+         if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
+                    hasTable($table_name )) 
+            {
+
+
+                \Schema::connection('DYNAMIC_DB_CONFIG')->
+                create($table_name ,function(Blueprint 
+                        $table) 
+                    use($payload,$db_type,$service_name)
+                    {       
+                    #default field
+                        $table->increments('id');
+                        $table->integer('devless_user_id');
+                         #per  field 
+                        foreach($payload['field'] as $field ){
+                            $field['ref_table'] = $service_name.'_'.$field['ref_table'];
+                            $field['field_type'] = strtolower($field['field_type']);
+                            #checks if fieldType and references exist
+                            $this->field_type_exist($field); 
+                            #generate columns 
+                            $this->column_generator($field, $table, $db_type);
+
+                        }
+                //store table_meta details 
+                });
+                $this->_set_table_meta($payload);
+                Helper::interrupt(606);
+            }
+        else
         {
-            
-
-            \Schema::connection('DYNAMIC_DB_CONFIG')->
-            create($table_name ,function(Blueprint 
-                    $table) 
-                use($payload,$db_type,$service_name)
-                {       
-                #default field
-                    $table->increments('id');
-                    $table->integer('devless_user_id');
-                     #per  field 
-                    foreach($payload['field'] as $field ){
-                        $field['ref_table'] = $service_name.'_'.$field['ref_table'];
-                        $field['field_type'] = strtolower($field['field_type']);
-                        #checks if fieldType and references exist
-                        $this->field_type_exist($field); 
-                        #generate columns 
-                        $this->column_generator($field, $table, $db_type);
-
-                    }
-            //store table_meta details 
-            });
-            $this->_set_table_meta($payload);
-            Helper::interrupt(606);
+        Helper::interrupt(603, $table_name ." table already exist");
         }
-    else
-    {
-    Helper::interrupt(603, $table_name ." table already exist");
-    }
 
 }
           
