@@ -42,7 +42,6 @@
                         </ul>
                     </li>
                     <li><a href="{{ url('datatable') }}"><span>Data Tables</span></a></li>
-                    <li><a href="{{ url('console/privacy') }}"><span>Privacy</span></a></li>
                     <li class="menu-list">
                       <a href="#"><span>Privacy</span></a>
                       <ul class="child-list">
@@ -50,7 +49,7 @@
                       </ul>
                     </li>
                     <li><a href="{{ url('console') }}"><span>API Console</span></a></li>
-                    <li><a href="{{route('migrate.index')}}"><span>Import/Export Services</span></a></li>
+                    <li><a href="{{route('migrate.index')}}"><span>Import/Export </span></a></li>
                 </ul>
             </div>
         </div>
