@@ -5,7 +5,7 @@ namespace App\Helpers;
 
 use App\Helpers\DevlessHelper as DVHelper;
 /**
- * Description of Migration
+ *Migrate services in and out of devless
  *
  * @author eddymens <eddymens@devless.io>
  */
@@ -25,14 +25,16 @@ class Migration extends Helper
                                     ://or
         $devlessfunc::flash('failed to create files(630)','error');  
         
-        //$outcome=$devlessfunc::download($folder_name);
         
         
         return $zipped_service_name;
     }
 
-    public static function import_service($folder_content)
-    {
+    public static function import_service($service_package_name)
+    {       
+        
+            $devlessfunc = new DVHelper();
+            $devlessfunc::unzip_package(storage_path().'/'.$service_package_name,true);
             //unzip service folder
             //get items from file 
             //move asset folder to resource
@@ -44,4 +46,30 @@ class Migration extends Helper
             //
             //put data and file in right folders  (check if exists)
     }
+    
+    public static function export_app($app_name)
+    {
+        $package_name = $app_name;
+        $devlessfunc = new DVHelper();
+        $services_components = $devlessfunc::get_all_services();
+        $service_list = json_decode($services_components,true)['services'];
+        
+        foreach($service_list as $service)
+        {
+            $package_name= ($devlessfunc::add_service_to_folder($service['name'], 
+                $services_components,$app_name));
+        }
+        
+        ($package_name)?
+        $zipped_package_name = $devlessfunc::zip_folder($package_name)
+                                    ://or
+        $devlessfunc::flash('failed to create files(630)','error');  
+        
+        
+        
+        return $zipped_package_name;
+        
+    }
 }
+
+//get service.json file 

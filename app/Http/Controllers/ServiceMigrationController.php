@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\ServiceMigration;
 use App\Service;
-
+use App\App;
 use Illuminate\Http\Request;
 use App\Helpers\Migration as Migration;
 use \App\Helpers\DevlessHelper as DLH;
@@ -20,8 +20,9 @@ class ServiceMigrationController extends Controller {
 	{
                 
                 $services = Service::orderBy('id', 'desc')->get();
+                $app = App::first();
                 
-		return view('service_migrations.index', compact('services'));
+		return view('service_migrations.index', compact('services'))->with('app',$app);
 	}
 
 	/**
@@ -47,11 +48,27 @@ class ServiceMigrationController extends Controller {
                     if($migration_type == "import")
                     {
                             $zipped_file_name = "";
-                            if ($request->hasFile('service_file'))
+                            
+
+                            if ($request->file('service_file')->isValid())
                             {
-                                $service_file = $request->file('service_file');
-                                dd($service_file);
-                                Migration::import_service($service_file);
+                                
+                                $service_archive_object =$request->file('service_file');
+                                
+                                $service_package_name = $service_archive_object->getClientOriginalName();
+                                
+                                if(!file_exists(storage_path().'/'.$service_package_name))
+                                {
+                                     $service_archive_object->move(storage_path(),$service_package_name);
+                                     
+                                }
+                                else
+                                {
+                                    DLH::flash("Service seems to already exist", 'error'); 
+                                }
+                               
+                                
+                                Migration::import_service($service_package_name);
                             }
                             else
                             {
@@ -62,10 +79,19 @@ class ServiceMigrationController extends Controller {
 
                     else if($migration_type == "export")
                     {
+                         if ($request->input('service_name') == "*")
+                         {     
+                            $app_name = $request->input('app_name');
+                            $zipped_service_name = Migration::export_app($app_name);
+                        }
+                        else
+                        {
                             $service_name  = $request->input('service_name');
                             $zipped_service_name = Migration::export_service($service_name);
+                        }
+                            
                     }
-
+                    
                     else
                     {
                           DLH::flash("No appropriate action found", 'error');

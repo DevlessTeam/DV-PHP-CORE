@@ -35,6 +35,7 @@
                                              <form action="{{ route('migrate.store') }}" method="POST">
                                              <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                              <input type="hidden" name="io_type" value="export"/>
+                                             <input type="hidden" name="app_name" value="{{$app->name}}"/>
                                                 <div class="form-group  @if($errors->has('service_export')) has-error @endif">
                                                     <br><br><br>
                                                     <label for="g-title">Select Service to export</label>
@@ -42,11 +43,11 @@
                                                          @foreach($services as $option_index => $option_value )
                                                     <option value="{{$option_value->name}}">{{$option_value->name}}</option>
                                                     @endforeach
-                                                       
+                                                    <option value="*">Entire App ({{$app->name}})</option>   
                                                     </select>
                                                     @if($errors->has("service_export"))
                                                         <span class="help-block">{{ $errors->first("service_export") }}</span>
-                                                    @endif
+                                                    @endif  
                                                 </div>
                                                 
                                                 <br><br><br>

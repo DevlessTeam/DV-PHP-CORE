@@ -17,6 +17,8 @@ class DevlessHelper extends Helper
      * @param type $message
      * @param type $message_color
      */
+    public static $devless_pkg_ext = '.srv';
+    
     public static function flash($message,$message_color="#736F6F")
     {
         $custom_colors = 
@@ -35,6 +37,7 @@ class DevlessHelper extends Helper
     }
     
     /*
+     * get service_component from db 
      * @param $service_name 
      * @return service_object
      */
@@ -57,7 +60,20 @@ class DevlessHelper extends Helper
         return $service_components;
     }
 
-
+    public static function get_all_services()
+    {
+        $services = \DB::table('services')->get();
+        $tables = \DB::table('table_metas')->get();
+        
+        $services_components['services'] = $services;
+        $services_components['tables'] = $tables;
+       
+        $services_components = self::convert_to_json($services_components);
+        
+        return $services_components;
+       
+    }
+    
     public static function convert_to_json($service_components)
     {
             
@@ -70,7 +86,7 @@ class DevlessHelper extends Helper
     
     public static function zip_folder($service_folder_path)
     {
-        
+        $dvext = self::$devless_pkg_ext;
         // Load Zippy
         $zippy = Zippy::load();
                 //Creates a service_folder_name.pkg 
@@ -84,33 +100,75 @@ class DevlessHelper extends Helper
         ), true);
         
         
-       rename($service_folder_path.'.zip',$service_folder_path.'.pkg');
+       rename($service_folder_path.'.zip',$service_folder_path.$dvext);
        self::deleteDirectory($service_folder_path);
-       return $folder_name.'.pkg';     
+       return $folder_name.$dvext;     
 
     }
     
-    public static function add_service_to_folder($service_name,$service_components)
+    
+    public static function unzip_package($service_folder_path, $destroy_zip=false)
     {
-        $temporal_service_path = storage_path().'/'.$service_name;
-        $new_assets_path = storage_path().'/'.$service_name.'/assets';
+            $zippy = Zippy::load(); 
+            $dvext = self::$devless_pkg_ext;
+            $service_basename = basename($service_folder_path);
+            
+            $state = 
+                 (rename($service_folder_path,$service_basename.'zip'))? true:false;
+            
+            // Open an archive
+            $archive = $zippy->open($service_folder_path);
+
+            
+            if(!$archive->extract($service_basename))
+            {
+                return false ;
+            }
+            
+            ($destroy_zip)?$this->deleteDirectory($service_folder_path.'zip')
+                                    :
+                            null;
+       
+            return $state;
+    }
+    
+    
+    public static function add_service_to_folder($service_name,$service_components,
+            $package_name = null)
+    {
+        if($package_name == null){$package_name  = $service_name; }
+        
+        $temporal_package_path = storage_path().'/'.$package_name;
+        
+        $service_schema_path = $temporal_package_path.'/service.json';
+        
+        $new_assets_path = storage_path().'/'.$package_name.'/view_assets/';
+        
+        $service_view_path = $new_assets_path.'/'.$service_name;
+        
         $views_directory = config('devless')['views_directory'].$service_name;
         
-        if(!file_exists($temporal_service_path) && !file_exists($new_assets_path))
+        if(!file_exists($temporal_package_path) && !file_exists($service_view_path))
         {
-            mkdir($temporal_service_path);
+            mkdir($temporal_package_path);
             mkdir($new_assets_path);
-        
+            
         }
         
+        
+        if(!file_exists($service_view_path)){mkdir($service_view_path);}
+        
         //move asset files to temporal folder
-        self::recurse_copy($views_directory, $new_assets_path);
+        self::recurse_copy($views_directory, $service_view_path);
         
-        $fb = fopen($temporal_service_path.'/service.json','w');
-        $fb = fwrite($fb, $service_components);
-        
-       //return folder_name
-        return $temporal_service_path;
+        if(!file_exists($service_schema_path))
+        {
+            $fb = fopen($service_schema_path,'w');
+            $fb = fwrite($fb, $service_components);
+        }
+       
+        //return folder_name
+        return $temporal_package_path;
             
     }
     
@@ -181,9 +239,5 @@ class DevlessHelper extends Helper
     }
 
 
-    public static function header_required($request)
-    {
-       return  substr($request->path(), 0, 9 ) === "download/";
-    }
             
 }
