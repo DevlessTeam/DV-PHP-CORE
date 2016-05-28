@@ -29,25 +29,8 @@ class Migration extends Helper
         
         return $zipped_service_name;
     }
-
-    public static function import_service($service_package_name)
-    {       
-        
-            $devlessfunc = new DVHelper();
-            $devlessfunc::unzip_package(storage_path().'/'.$service_package_name,true);
-            //unzip service folder
-            //get items from file 
-            //move asset folder to resource
-            ////get service json
-            //insert service record into service table 
-            //get id for creating table   
-            //create related tables first if not found stop 
-            //now create remaining tables 
-            //
-            //put data and file in right folders  (check if exists)
-    }
     
-    public static function export_app($app_name)
+     public static function export_app($app_name)
     {
         $package_name = $app_name;
         $devlessfunc = new DVHelper();
@@ -70,6 +53,27 @@ class Migration extends Helper
         return $zipped_package_name;
         
     }
+
+    public static function import_service($service_package_name)
+    {       
+        
+            $devlessfunc = new DVHelper();
+            $service_path = storage_path().'/'.$service_package_name;
+            
+            $folder_path = $devlessfunc::expand_package($service_path, true);
+            
+            $install_state = $devlessfunc::install_service($folder_path);
+            
+            return $install_state;
+
+    }
+    
+    public static function import_app($app_package_name)
+    {
+        return true;
+    }
+    
+   
 }
 
 //get service.json file 

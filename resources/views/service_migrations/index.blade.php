@@ -39,7 +39,7 @@
                                              <input type="hidden" name="app_name" value="{{$app->name}}"/>
                                                 <div class="form-group  @if($errors->has('service_export')) has-error @endif">
                                                     <br><br><br>
-                                                    <label for="g-title">Select Service to export</label>
+                                                    <label for="g-title">Select Service/App to export</label>
                                                      <select name="service_name" class="form-control m-b-10">
                                                          @foreach($services as $option_index => $option_value )
                                                     <option value="{{$option_value->name}}">{{$option_value->name}}</option>

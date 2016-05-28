@@ -105,29 +105,36 @@ class DevlessHelper extends Helper
     }
     
     
-    public static function unzip_package($service_folder_path, $extension, $destroy_zip=false)
-    {
-            $zippy = Zippy::load(); 
-            $dvext = $extension;
+    public static function expand_package($service_folder_path,$delete_package)
+    {   
+            $zip = new \ZipArchive;
+            
             $service_basename = basename($service_folder_path);
+            $state_or_payload = true;
             
-            $state = 
-                 (rename($service_folder_path,$service_basename.'zip'))? true:false;
+            //convert from srv/pkg to zip
+            $new_service_folder_path = preg_replace('"\.srv$"', '.zip', $service_folder_path);
+            $state_or_payload = 
+                 (rename($service_folder_path,$new_service_folder_path))? $new_service_folder_path
+                    :false;
             
-            // Open an archive
-            $archive = $zippy->open($service_folder_path);
-
-            
-            if(!$archive->extract($service_basename))
+            $res = $zip->open($new_service_folder_path);
+            if ($res === TRUE)
             {
-                return false ;
+                 $zip->extractTo(config('devless')['views_directory']);
+                 $zip->close();
+                 
+                 self::deleteDirectory($new_service_folder_path);   
+                 $state_or_payload = ($delete_package)? self::deleteDirectory($service_folder_path):false;
+            }     
+            else 
+            {
+                return false;
             }
             
-            ($destroy_zip)?$this->deleteDirectory($service_folder_path.'zip')
-                                    :
-                            null;
-       
-            return $state;
+            $folder_name = preg_replace('"\.srv$"', '', $service_basename);
+            $exported_folder_path = config('devless')['views_directory'].$folder_name;
+            return $exported_folder_path;
     }
     
     
@@ -231,9 +238,52 @@ class DevlessHelper extends Helper
         return $file_path;
     }
     
-    public static  function set_file($file_path)
+    public static function install_service($service_path)
     {
-        return null;
+        $service_file_path = $service_path.'/service.json';
+        $fh = fopen($service_file_path, 'r');
+        $service_json = fread($fh, filesize($service_file_path));
+        fclose($fh);
+        
+        $service_object = json_decode($service_json,true);
+        if(!isset($service_object['service'][0]))
+        {
+            unset($service_object['service']['id']);
+            \DB::table('services')->insert($service_object['service']);
+            $service_id = \DB::getPdo()->lastInsertId();
+        }
+        else
+        {
+             foreach($service_object['service'] as $service )
+            {
+
+                unset($service['id']);
+                $service_object['service_id'] = $service_id;
+                \DB::table('services')->insert($service);
+
+            }
+        }
+        if(!isset($service_object['tables'][0]))
+        {
+            unset($service_object['tables']['id']);
+            $service_object['tables']['service_id'] = $service_id;
+            \DB::table('table_metas')->insert($service_object['tables']);
+            
+        }   
+        else
+        {
+            foreach ($service_object['tables'] as $service_table )
+            {
+                unset($service_table['id']);
+                dd($service_table);
+                \DB::table('table_metas')->insert($service_table);
+            }
+        }
+    }
+    
+    public static function install_views()
+    {
+        return true;
     }
 
 

@@ -200,11 +200,13 @@ class DbController extends Controller
                 $connector = $this->_connector($payload);
                 $db =   \DB::connection('DYNAMIC_DB_CONFIG');
                 //check if table name is set 
-                $service_name = $payload['service_name'];   
-                $table_name = $service_name.'_'.$payload['params'][0]['name'];
-
+                $service_name = $payload['service_name']; 
+                $ORG_table_name = $payload['params'][0]['name'];
+                $table_name = $service_name.'_'.$ORG_table_name;
+                
                 if($payload['user_id'] !== "")
                 {
+                    $user_id = $payload['user_id'];
                     $destroy_query = '$db->table("'.$table_name.'")->where("devless_user_id",'.$user_id.')';
 
                 }
@@ -219,7 +221,7 @@ class DbController extends Controller
                     if($payload['params'][0]['params'][0]['drop'])
                     {
                        \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
-                       \DB::table('table_metas')->where('table_name',$table_name)->delete();
+                   \DB::table('table_metas')->where('table_name',$ORG_table_name)->delete();
                        Helper::interrupt(613,'dropped table succefully');
                        $task = 'drop';
                     }
@@ -796,10 +798,11 @@ class DbController extends Controller
                                        Helper::field_check($field_value,
                                                $fields['field_type']);
                                     
-                                    if($check_password == "true" &&
-                                            $fields['field_type']== "password" )
-                                        {$table_data[$count]['password']=
-                          Helper::password_hash($table_data[$count]['password']);
+                                    if($check_password == true &&
+                                            strtolower($fields['field_type'])== "password" )
+                                        {
+                                            $table_data[$count]['password']=
+                                                    Helper::password_hash($table_data[$count]['password']);
                                          
                                         }
                                         

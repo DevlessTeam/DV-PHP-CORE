@@ -44,7 +44,8 @@ class ServiceMigrationController extends Controller {
 	*/
 	public function store(Request $request)
 
-	{    
+	{           
+                    $zipped_service_name = "";
                     $migration_type = $request->input('io_type');
                     
                     if($migration_type == "import")
@@ -61,16 +62,21 @@ class ServiceMigrationController extends Controller {
                                 
                                 if(!file_exists(storage_path().'/'.$service_package_name))
                                 {
-                                     $service_archive_object->move(storage_path(),$service_package_name);
-                                     
+                                    
+                                 if($service_archive_object->move(storage_path(),$service_package_name))
+                                     {
+                                         
+                                            Migration::import_service($service_package_name);
+                                            dd('after import');
+                                     }
                                 }
                                 else
                                 {
-                                    DLH::flash("Service seems to already exist", 'error'); 
+                                    DLH::flash("Service seems to already exist or in storage", 'error'); 
                                 }
                                
                                 
-                                Migration::import_service($service_package_name);
+                                
                             }
                             else
                             {

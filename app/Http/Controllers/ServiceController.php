@@ -414,17 +414,11 @@ class ServiceController extends Controller {
             {
                 $is_user_login = Helper::is_admin_login();
                 
-                if($is_user_login )
-                {
-                    return true;
-                }
-                else
-                {
-                    if( $access_type == 0 ){Helper::interrupt(627);}//private
-                    else if($access_type == 1){return false;}//public
-                    else if($access_type == 2){return true;}//authentication required
-                }
+                if( ! $is_user_login && $access_type == 0 ){Helper::interrupt(627);}//private
+                else if($access_type == 1){return false;}//public
+                else if($access_type == 2){return true;}//authentication required
                 
+                return true;
             }
             
           
