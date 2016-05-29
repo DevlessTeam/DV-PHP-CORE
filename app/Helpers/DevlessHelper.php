@@ -241,7 +241,7 @@ class DevlessHelper extends Helper
     
     public static function install_service($service_path)
     {
-        $schema_builder = new DvSchema();
+        $builder = new DvSchema();
         $service_file_path = $service_path.'/service.json';
         $fh = fopen($service_file_path, 'r');
         $service_json = fread($fh, filesize($service_file_path));
@@ -249,63 +249,51 @@ class DevlessHelper extends Helper
         
         $service_object = json_decode($service_json,true);
         $service_id = [];
-        $service_names = [];
+        $service_name = [];
+        $service_id_map = [];
+        $install_services = function($service) use(&$service_id, &$service_name, &$service_id_map )
+        {
+                $old_service_id = $service['id']; 
+                $service_name[$old_service_id] = $service['name'];
+                unset($service['id']);
+                \DB::table('services')->insert($service);
+                $new_service_id = \DB::getPdo()->lastInsertId();
+                $service_id_map[$old_service_id] = $new_service_id ;
+        };
         if(!isset($service_object['service'][0]))
         {
-            $old_service_id = $service_object['service']['id']; 
-            $service_id[$old_service_id] = "";
-            unset($service_object['service']['id']);
-            $service_name[$old_service_id] = $service_object['service']['name']; 
-            \DB::table('services')->insert($service_object['service']);
-            $new_service_id = \DB::getPdo()->lastInsertId();
-            $service_id_map[$old_service_id] = $new_service_id ;
+            $install_services($service_object['service']);
         }
         else
         {
              foreach($service_object['service'] as $service )
             {
-                $old_service_id = $service['id']; 
-                unset($service['id']);
-                $service_name[$old_service_id] = $service['name'];
-                \DB::table('services')->insert($service);
-                $new_service_id = \DB::getPdo()->lastInsertId();
-                $service_id_map[$old_service_id] = $new_service_id ;
-
+                 $install_services($service);
             }
         }
-        if(!isset($service_object['tables'][0]))
+        //get meta from service_table 
+        $table_meta_install = function($service_table) use (&$service_id_map, &$builder,
+                &$service_name )
         {
-            $old_service_id = $service_object['tables']['service_id'];
-            $new_service_id = $service_id_map[$old_service_id];
-            $service_object['tables']['service_id'] = $new_service_id;
-            unset($service_object['tables']['id']);
-            \DB::table('table_metas')->insert($service_object['tables']);
-            $service_object['tables']['field'] = json_decode($service_object['tables']['field'],true);
-            $resource = 'schema';
-            $service_object['tables']['service_name'] = $service_name[$old_service_id];
-            $service_object['tables']['driver'] = "default";
-            $service_object['tables']['params'] = [0 =>$service_object['tables']['field']];
-            $schema_builder->create_schema($resource,$service_object['tables']);
-            
-        }   
-        else
-        { 
-            foreach ($service_object['tables'] as $service_table )
-            {
-                
                 $old_service_id = $service_table['service_id'];
                 $new_service_id = $service_id_map[$old_service_id];
-                $service_table['service_id'] = $new_service_id;
-                unset($service_table['id']);
-                \DB::table('table_metas')->insert($service_table);
-                $service_table['field'] = $service_table['schema'];
-                unset($service_table['schema']);
-                $service_table['field'] = json_decode($service_table['field'],true);
+                $service_table['schema'] = json_decode($service_table['schema'],true);
                 $resource = 'schema';
                 $service_table['service_name'] = $service_name[$old_service_id];
                 $service_table['driver'] = "default";
-                $service_table['params'] = [0 =>$service_table['field']];
-                $schema_builder->create_schema($resource,$service_table);
+                $service_table['schema']['id'] = $new_service_id ;
+                $service_table['params'] = [0 =>$service_table['schema']];
+                $builder->create_schema($resource,$service_table);
+        };
+        if(!isset($service_object['tables'][0]))
+        {
+                $table_meta_install($service_object['tables']);
+        }   
+        else
+        {
+            foreach ($service_object['tables'] as $service_table )
+            {   
+               $table_meta_install($service_table);
             }
         }
     }
@@ -314,9 +302,9 @@ class DevlessHelper extends Helper
     {
         return true;
     }
-
+    
+    
+    
     
             
 }
-
-
