@@ -15,8 +15,13 @@ class DatatableController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+      if ($request->service_name && $request->table_name) {
+        $service = \DB::table('services')->where('name', $request->service_name)->first();
+        $tables = \DB::table('table_metas')->where('service_id', $service->id)->get();
+        return view('datatable.index', compact('service', 'tables'));
+      }
       $services = Service::all();
       return view('datatable.index', compact('services'));
     }

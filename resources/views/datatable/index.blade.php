@@ -17,16 +17,26 @@
         <label for="service" class="col-lg-2 col-sm-2 control-label">Service </label>
         <div class="col-md-3">
           <select id="service" name="service" class="form-control m-b-10">
-            <option disabled selected value> -- select a service -- </option>
-            @foreach($services as $service)
-              <option value="{{$service->id}}">{{$service->name}}</option>
-            @endforeach
+            @if(\Request::has('service_name'))
+                <option value="{{$service->id}}">{{$service->name}}</option>
+            @else
+              <option disabled selected value> -- select a service -- </option>
+              @foreach($services as $service)
+                <option value="{{$service->id}}">{{$service->name}}</option>
+              @endforeach
+            @endif
           </select>
         </div>
         <label for="table_name" class="col-sm-2 control-label col-md-offset-1">Table </label>
         <div class="col-md-3">
           <select id="table_name" name="table_name" class="form-control m-b-10">
-            <option disabled selected value> -- select a table -- </option>
+            @if(\Request::has('table_name'))
+              @foreach($tables as $table)
+                <option value="{{$table->id}}">{{$table->table_name}}</option>
+              @endforeach
+            @else
+              <option disabled selected value> -- select a table -- </option>
+            @endif
           </select>
         </div>
       </div>
@@ -45,6 +55,27 @@
 
     document.getElementById('empty_handler').style.display = 'none';
 
+    var entries;
+
+    function tableCall(table_entries) {
+      $.get('/datatable/'+table_entries+'/entries', function(data) {
+        $('#excelDataTable').html(' ');
+        $('#empty_handler').hide();
+
+        if (data.length == 0){
+          $('#empty_handler').show();
+        }
+
+        entries = data;
+        buildHtmlTable();
+      });
+    }
+
+    if ($('#service').val() != '' && $('#table_name').val() != '') {
+      var tb_name = $('#service option:selected').text() + '_' + $('#table_name option:selected').text();
+      tableCall(tb_name);
+    }
+
     var service_id;
     $('#service').change(function() {
       service_id = $('#service').val();
@@ -57,25 +88,11 @@
       });
     });
 
-    var entries;
-    var keys;
     $('#table_name').change(function(data) {
       var table_entries = $('#service option:selected').text() + '_' + $('#table_name option:selected').text();
-      $.get('/datatable/'+table_entries+'/entries', function(data) {
-        $('#excelDataTable').html(' ');
-        $('#empty_handler').hide();
-
-        if (data.length == 0){
-          $('#empty_handler').show();
-        }
-
-        entries = data;
-        buildHtmlTable();
-        for (var x = 0; x < entries.length; x++) {
-          keys = Object.keys(entries[x]);
-        }
-      });
+      tableCall(table_entries);
     });
+
     function buildHtmlTable() {
       var columns = addAllColumnHeaders(entries);
 
