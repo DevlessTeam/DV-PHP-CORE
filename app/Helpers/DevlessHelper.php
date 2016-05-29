@@ -281,7 +281,10 @@ class DevlessHelper extends Helper
                 $resource = 'schema';
                 $service_table['service_name'] = $service_name[$old_service_id];
                 $service_table['driver'] = "default";
-                $service_table['schema']['id'] = $new_service_id ;
+                $service_table['schema']['service_id'] = $new_service_id ;
+                $service_table['service_id'] = $new_service_id ;
+                $service_table['schema']['id'] = $new_service_id;
+                $service_table['id'] = $new_service_id;
                 $service_table['params'] = [0 =>$service_table['schema']];
                 $builder->create_schema($resource,$service_table);
         };
@@ -309,6 +312,7 @@ class DevlessHelper extends Helper
         $system_view_directory = config('devless')['views_directory'];
         $service_view_directory = $system_view_directory.$service_name.'/view_assets';
         self::recurse_copy($service_view_directory,$system_view_directory); 
+        self::deleteDirectory($service_view_directory);
         
         return true;
     }
