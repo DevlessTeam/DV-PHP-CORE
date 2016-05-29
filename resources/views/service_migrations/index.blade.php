@@ -44,7 +44,9 @@
                                                          @foreach($services as $option_index => $option_value )
                                                     <option value="{{$option_value->name}}">{{$option_value->name}}</option>
                                                     @endforeach
-                                                    <option value="*">Entire App ({{$app->name}})</option>   
+                                                    @if(sizeof($services) !== 0)
+                                                        <option value="*">Entire App ({{$app->name}})</option>   
+                                                    @endif
                                                     </select>
                                                     @if($errors->has("service_export"))
                                                         <span class="help-block">{{ $errors->first("service_export") }}</span>

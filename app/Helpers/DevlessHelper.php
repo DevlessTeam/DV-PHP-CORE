@@ -61,10 +61,10 @@ class DevlessHelper extends Helper
 
     public static function get_all_services()
     {
-        $services = \DB::table('services')->get();
+        $services = \DB::table('service')->get();
         $tables = \DB::table('table_metas')->get();
         
-        $services_components['services'] = $services;
+        $services_components['service'] = $services;
         $services_components['tables'] = $tables;
        
         $services_components = self::convert_to_json($services_components);
@@ -115,6 +115,7 @@ class DevlessHelper extends Helper
             
             //convert from srv/pkg to zip
             $new_service_folder_path = preg_replace('"\.srv$"', '.zip', $service_folder_path);
+            $new_service_folder_path = preg_replace('"\.pkg$"', '.zip', $service_folder_path);
             $state_or_payload = 
                  (rename($service_folder_path,$new_service_folder_path))? $new_service_folder_path
                     :false;
@@ -243,6 +244,8 @@ class DevlessHelper extends Helper
     {
         $builder = new DvSchema();
         $service_file_path = $service_path.'/service.json';
+        $service_file_path = preg_replace('"\.srv"', '', $service_file_path);
+        $service_file_path = preg_replace('"\.pkg"', '', $service_file_path);
         $fh = fopen($service_file_path, 'r');
         $service_json = fread($fh, filesize($service_file_path));
         fclose($fh);
@@ -262,6 +265,7 @@ class DevlessHelper extends Helper
         };
         if(!isset($service_object['service'][0]))
         {
+            
             $install_services($service_object['service']);
         }
         else
