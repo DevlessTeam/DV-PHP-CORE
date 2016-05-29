@@ -16,15 +16,20 @@ class BeforeMiddleware
      */
     public function handle($request, Closure $next)
     {
-
-      if (DB::table('apps')->first() == null && \Request::path() != 'setup') {
+       $app_exists = DB::table('apps')->first(); 
+       $request_path = \Request::path(); 
+       
+      if($app_exists == null && $request_path != 'setup')
+      {
 
           return redirect('/setup');
-
-        } elseif (DB::table('apps')->first() && \Request::path() == 'setup') {
+      } 
+      else if ($app_exists == null && $request_path != 'setup') 
+      {
           return redirect('/');
-        }
+      }
 
         return $next($request);
     }
 }
+

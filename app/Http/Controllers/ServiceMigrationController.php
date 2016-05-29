@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\ServiceMigration;
 use App\Service;
-
+use App\App;
 use Illuminate\Http\Request;
 use App\Helpers\Migration as Migration;
 use \App\Helpers\DevlessHelper as DLH;
@@ -19,9 +19,11 @@ class ServiceMigrationController extends Controller {
 	public function index()
 	{
 
-		$services = Service::orderBy('id', 'desc')->get();
-
-		return view('service_migrations.index', compact('services'));
+                
+                $services = Service::orderBy('id', 'desc')->get();
+                $app = App::first();
+                
+		return view('service_migrations.index', compact('services'))->with('app',$app);
 	}
 
 	/**
@@ -41,39 +43,75 @@ class ServiceMigrationController extends Controller {
 	* @return Response
 	*/
 	public function store(Request $request)
-	{
-		$migration_type = $request->input('io_type');
 
-		if($migration_type == "import")
-		{
-			$zipped_file_name = "";
-			if ($request->hasFile('service_file'))
-			{
-				$service_file = $request->file('service_file');
-				dd($service_file);
-				Migration::import_service($service_file);
-			}
-			else
-			{
-				DLH::flash("Service could not be uploaded", 'error');
-			}
-		}
+	{           
+                    $zipped_service_name = "";
+                    $migration_type = $request->input('io_type');
+                    
+                    if($migration_type == "import")
+                    {
+                            $zipped_file_name = "";
+                            
+
+                            if ($request->file('service_file')->isValid())
+                            {
+                                
+                                $service_archive_object =$request->file('service_file');
+                                
+                                $service_package_name = $service_archive_object->getClientOriginalName();
+                                
+                                if(!file_exists(storage_path().'/'.$service_package_name))
+                                {
+                                    
+                                 if($service_archive_object->move(storage_path(),$service_package_name))
+                                     {
+                                         
+                                            Migration::import_service($service_package_name);
+                                            dd('after import');
+                                     }
+                                }
+                                else
+                                {
+                                    DLH::flash("Service seems to already exist or in storage", 'error'); 
+                                }
+                               
+                                
+                                
+                            }
+                            else
+                            {
+                                DLH::flash("Service could not be uploaded", 'error');
+                            }
+                    }
 
 
-		else if($migration_type == "export")
-		{
-			$service_name  = $request->input('service_name');
-			$zipped_service_name = Migration::export_service($service_name);
-		}
+                    else if($migration_type == "export")
+                    {
+                         if ($request->input('service_name') == "*")
+                         {     
+                            $app_name = $request->input('app_name');
+                            $zipped_service_name = Migration::export_app($app_name);
+                        }
+                        else
+                        {
+                            $service_name  = $request->input('service_name');
+                            $zipped_service_name = Migration::export_service($service_name);
+                        }
+                            
+                    }
+                    
+                    else
+                    {
+                          DLH::flash("No appropriate action found", 'error');
+                    }
 
-		else
-		{
-			DLH::flash("No appropriate action found", 'error');
-		}
+            
+                
 
-		return redirect()->route('migrate.index')->with('package',$zipped_service_name);
-	}
-
+               
+               
+                    return redirect()->route('migrate.index')->with('package',$zipped_service_name);
+                }
 	/**
 	* Display the specified resource.
 	*

@@ -200,11 +200,13 @@ class DbController extends Controller
                 $connector = $this->_connector($payload);
                 $db =   \DB::connection('DYNAMIC_DB_CONFIG');
                 //check if table name is set 
-                $service_name = $payload['service_name'];   
-                $table_name = $service_name.'_'.$payload['params'][0]['name'];
-
+                $service_name = $payload['service_name']; 
+                $ORG_table_name = $payload['params'][0]['name'];
+                $table_name = $service_name.'_'.$ORG_table_name;
+                
                 if($payload['user_id'] !== "")
                 {
+                    $user_id = $payload['user_id'];
                     $destroy_query = '$db->table("'.$table_name.'")->where("devless_user_id",'.$user_id.')';
 
                 }
@@ -219,7 +221,7 @@ class DbController extends Controller
                     if($payload['params'][0]['params'][0]['drop'])
                     {
                        \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
-                       \DB::table('table_metas')->where('table_name',$table_name)->delete();
+                   \DB::table('table_metas')->where('table_name',$ORG_table_name)->delete();
                        Helper::interrupt(613,'dropped table succefully');
                        $task = 'drop';
                     }
@@ -385,50 +387,48 @@ class DbController extends Controller
     public function create_schema($resource, array $payload)
     {
         
-    #set path in case connector is sqlite
-    $id = $payload['id'];
-    $service_name = $payload['service_name'];
-    #connectors mysql pgsql sqlsrv sqlite
-    $connector = $this->_connector($payload);
     
-     #dynamically create columns with schema builder 
-    $db_type = $this->db_types;
-    $table_meta_data = []; 
-    $payload = $payload['params'][0];
-    $payload['id'] = $id;
-    $table_name = $service_name.'_'.$payload['name'];
-     if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
-                hasTable($table_name )) 
+        $service_name = $payload['service_name'];
+        #connectors mysql pgsql sqlsrv sqlite
+        $connector = $this->_connector($payload);
+
+         #dynamically create columns with schema builder 
+        $db_type = $this->db_types;
+        $table_meta_data = []; 
+        $payload = $payload['params'][0];
+        $table_name = $service_name.'_'.$payload['name'];
+         if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
+                    hasTable($table_name )) 
+            {
+
+
+                \Schema::connection('DYNAMIC_DB_CONFIG')->
+                create($table_name ,function(Blueprint 
+                        $table) 
+                    use($payload,$db_type,$service_name)
+                    {       
+                    #default field
+                        $table->increments('id');
+                        $table->integer('devless_user_id');
+                         #per  field 
+                        foreach($payload['field'] as $field ){
+                            $field['ref_table'] = $service_name.'_'.$field['ref_table'];
+                            $field['field_type'] = strtolower($field['field_type']);
+                            #checks if fieldType and references exist
+                            $this->field_type_exist($field); 
+                            #generate columns 
+                            $this->column_generator($field, $table, $db_type);
+
+                        }
+                //store table_meta details 
+                });
+                $this->_set_table_meta($payload);
+                Helper::interrupt(606);
+            }
+        else
         {
-            
-
-            \Schema::connection('DYNAMIC_DB_CONFIG')->
-            create($table_name ,function(Blueprint 
-                    $table) 
-                use($payload,$db_type,$service_name)
-                {       
-                #default field
-                    $table->increments('id');
-                    $table->integer('devless_user_id');
-                     #per  field 
-                    foreach($payload['field'] as $field ){
-                        $field['ref_table'] = $service_name.'_'.$field['ref_table'];
-                        $field['field_type'] = strtolower($field['field_type']);
-                        #checks if fieldType and references exist
-                        $this->field_type_exist($field); 
-                        #generate columns 
-                        $this->column_generator($field, $table, $db_type);
-
-                    }
-            //store table_meta details 
-            });
-            $this->_set_table_meta($payload);
-            Helper::interrupt(606);
+        Helper::interrupt(603, $table_name ." table already exist");
         }
-    else
-    {
-    Helper::interrupt(603, $table_name ." table already exist");
-    }
 
 }
           
@@ -796,10 +796,11 @@ class DbController extends Controller
                                        Helper::field_check($field_value,
                                                $fields['field_type']);
                                     
-                                    if($check_password == "true" &&
-                                            $fields['field_type']== "password" )
-                                        {$table_data[$count]['password']=
-                          Helper::password_hash($table_data[$count]['password']);
+                                    if($check_password == true &&
+                                            strtolower($fields['field_type'])== "password" )
+                                        {
+                                            $table_data[$count]['password']=
+                                                    Helper::password_hash($table_data[$count]['password']);
                                          
                                         }
                                         

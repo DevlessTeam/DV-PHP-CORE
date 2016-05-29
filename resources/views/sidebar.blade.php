@@ -50,7 +50,7 @@
                       </ul>
                     </li>
                     <li><a href="{{ url('console') }}"><span>API Console</span></a></li>
-                    <li><a href="{{route('migrate.index')}}"><span>Import/Export Services</span></a></li>
+                    <li><a href="{{route('migrate.index')}}"><span>Import/Export </span></a></li>
                 </ul>
             </div>
         </div>

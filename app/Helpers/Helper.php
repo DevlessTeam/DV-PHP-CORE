@@ -232,8 +232,8 @@ class Helper
                 ];
         if(self::is_admin_login())
         {
-            $user_cred['id'] = "";
-            $user_cred['token'] = "";
+            $user_cred['id'] = 0;
+            $user_cred['token'] = 12345;
         }
         return $user_cred;
    }
