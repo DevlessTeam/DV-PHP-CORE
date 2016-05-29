@@ -452,7 +452,7 @@ header section
     display: block;
     content: '';
 }
-.toggle-header {
+.toggle-btn {
     width: 55px;
     height: 60px;
     line-height: 30px;
