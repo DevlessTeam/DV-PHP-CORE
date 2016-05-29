@@ -61,7 +61,7 @@ class DevlessHelper extends Helper
 
     public static function get_all_services()
     {
-        $services = \DB::table('service')->get();
+        $services = \DB::table('services')->get();
         $tables = \DB::table('table_metas')->get();
         
         $services_components['service'] = $services;
@@ -279,18 +279,24 @@ class DevlessHelper extends Helper
         $table_meta_install = function($service_table) use (&$service_id_map, &$builder,
                 &$service_name )
         {
-                $old_service_id = $service_table['service_id'];
-                $new_service_id = $service_id_map[$old_service_id];
-                $service_table['schema'] = json_decode($service_table['schema'],true);
-                $resource = 'schema';
-                $service_table['service_name'] = $service_name[$old_service_id];
-                $service_table['driver'] = "default";
-                $service_table['schema']['service_id'] = $new_service_id ;
-                $service_table['service_id'] = $new_service_id ;
-                $service_table['schema']['id'] = $new_service_id;
-                $service_table['id'] = $new_service_id;
-                $service_table['params'] = [0 =>$service_table['schema']];
-                $builder->create_schema($resource,$service_table);
+                if(sizeof($service_table) !== 0)
+                {
+                    $old_service_id = $service_table['service_id'];
+                    $new_service_id = $service_id_map[$old_service_id];
+                    $service_table['schema'] = json_decode($service_table['schema'],true);
+                    $resource = 'schema';
+                    $service_table['service_name'] = $service_name[$old_service_id];
+                    $service_table['driver'] = "default";
+                    $service_table['schema']['service_id'] = $new_service_id ;
+                    $service_table['service_id'] = $new_service_id ;
+                    $service_table['schema']['id'] = $new_service_id;
+                    $service_table['id'] = $new_service_id;
+                    $service_table['params'] = [0 =>$service_table['schema']];
+                    $builder->create_schema($resource,$service_table);
+
+                }
+               
+                
         };
         if(!isset($service_object['tables'][0]))
         {
