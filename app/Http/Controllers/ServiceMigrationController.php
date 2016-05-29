@@ -67,8 +67,8 @@ class ServiceMigrationController extends Controller {
                                      {
                                          
                                         $import_state = Migration::import_service($service_package_name);
-                                        ($import_state)? DLH::flash("Service installed successfully", 'greeen'):
-                                        DLH::flash("Sorry service could not be installed", 'red');
+                                        ($import_state)? DLH::flash("Service installed successfully", 'success'):
+                                        DLH::flash("Sorry service could not be installed", 'error');
                                      }
                                 }
                                 else

@@ -692,6 +692,7 @@ class DbController extends Controller
    }
    private function _set_table_meta($schema)
    {
+       
          
        \DB::table('table_metas')->insert(['schema'=>  json_encode($schema),
                'table_name'=> $schema['name'],'service_id'=>$schema['id']]);
