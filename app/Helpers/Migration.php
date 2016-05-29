@@ -63,6 +63,7 @@ class Migration extends Helper
             $folder_path = $devlessfunc::expand_package($service_path, true);
             
             $install_state = $devlessfunc::install_service($folder_path);
+            $install_state = $devlessfunc::install_views($service_package_name );
             
             return $install_state;
 
