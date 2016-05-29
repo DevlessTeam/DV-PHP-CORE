@@ -19,6 +19,7 @@
         <div class="col-lg-10 col-md-offset-1">
 
           <section class="isolate-tabs">
+              <br><br>
             <header class="panel-heading tab-dark">
               <ul class="nav nav-tabs nav-justified">
                 <li class="active">
@@ -39,13 +40,15 @@
                     <input type="hidden" name="app_name" value="{{$app->name}}"/>
                     <div class="form-group  @if($errors->has('service_export')) has-error @endif">
                       <br><br><br>
-                      <label for="g-title" class="col-lg-2 col-sm-2 control-label">Select Service/App to export</label>
+                      <label for="g-title" class="col-lg-2 col-sm-2 control-label">Select Service/App</label>
                       <div class="col-lg-10">
                         <select name="service_name" class="form-control m-b-10">
                           @foreach($services as $option_index => $option_value )
                             <option value="{{$option_value->name}}">{{$option_value->name}}</option>
                           @endforeach
-                          <option value="*">Entire App ({{$app->name}})</option>
+                          @if(sizeof($services) !== 0)
+                            <option value="*">Entire App ({{$app->name}})</option>   
+                          @endif
                         </select>
                         @if($errors->has("service_export"))
                           <span class="help-block">{{ $errors->first("service_export") }}</span>
