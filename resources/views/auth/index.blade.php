@@ -5,7 +5,11 @@
     <!--body wrapper start-->
     <div class="wrapper">
       <div class="row">
-        <div class="col-lg-6 col-md-offset-3">
+        <a href="https://devless.io">
+          <img src="{{url('/img/logo.png')}}" height="50" alt="Devless">
+          <span class="brand-name" style="font-size: 50px; color: #fff; position: relative; top: 10px;">Devless</span>
+        </a>
+        <div class="col-lg-6 col-md-offset-3" style="position: fixed; top:20%;">
           <section class="panel">
             <header class="panel-heading">
               Login
@@ -34,7 +38,7 @@
 
                 <div class="form-group">
                   <div class="col-lg-offset-2 col-lg-10">
-                    <button type="submit" class="btn btn-primary pull-right">Login</button>
+                    <button type="submit" class="btn btn-info pull-right">Login</button>
                   </div>
                 </div>
               </form>

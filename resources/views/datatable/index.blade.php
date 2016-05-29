@@ -18,7 +18,7 @@
         <div class="col-md-3">
           <select id="service" name="service" class="form-control m-b-10">
             @if(\Request::has('service_name'))
-                <option value="{{$service->id}}">{{$service->name}}</option>
+              <option value="{{$service->id}}">{{$service->name}}</option>
             @else
               <option disabled selected value> -- select a service -- </option>
               @foreach($services as $service)
@@ -47,6 +47,12 @@
           </table>
           <h3 id="empty_handler" class="text-center alert alert-info" style="margin: -20px;">Empty!</h3>
         </section>
+        <nav id="page-nav">
+          <ul class="pager">
+            <li><a href="#" id="previous">Previous</a></li>
+            <li><a href="#" id="next">Next</a></li>
+          </ul>
+        </nav>
       </div>
     </div>
   </div>
@@ -54,16 +60,18 @@
   window.onload(function() {
 
     document.getElementById('empty_handler').style.display = 'none';
+    document.getElementById('page-nav').style.display = 'none';
 
     var entries;
 
     function tableCall(table_entries) {
       $.get('/datatable/'+table_entries+'/entries', function(data) {
         $('#excelDataTable').html(' ');
-        $('#empty_handler').hide();
+        $('#empty_handler').show();
 
         if (data.length == 0){
           $('#empty_handler').show();
+          $('#page-nav').hide();
         }
 
         entries = data;
