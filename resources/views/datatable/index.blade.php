@@ -49,8 +49,8 @@
         </section>
         <nav id="page-nav">
           <ul class="pager">
-            <li><a href="#" id="previous">Previous</a></li>
-            <li><a href="#" id="next">Next</a></li>
+            <li><a id="previous">Previous</a></li>
+            <li><a id="next">Next</a></li>
           </ul>
         </nav>
       </div>
@@ -62,16 +62,21 @@
     document.getElementById('empty_handler').style.display = 'none';
     document.getElementById('page-nav').style.display = 'none';
 
+    $(window).load(function() {
+      $('#page-nav').hide();
+      $('.header-control').hide();
+    });
+
     var entries;
 
     function tableCall(table_entries) {
       $.get('/datatable/'+table_entries+'/entries', function(data) {
         $('#excelDataTable').html(' ');
-        $('#empty_handler').show();
 
         if (data.length == 0){
           $('#empty_handler').show();
-          $('#page-nav').hide();
+        } else {
+          $('#page-nav').show();
         }
 
         entries = data;
@@ -119,7 +124,7 @@
     function addAllColumnHeaders(entries) {
       var columnSet = [];
       var headerTr$ = $('<tr/>');
-      headerTr$.append($('<th/>'));
+      headerTr$.append($('<th/>').addClass('header-control'));
 
       for (var i = 0 ; i < entries.length ; i++) {
         var rowHash = entries[i];
