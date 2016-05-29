@@ -35,7 +35,7 @@ class Migration extends Helper
         $package_name = $app_name;
         $devlessfunc = new DVHelper();
         $services_components = $devlessfunc::get_all_services();
-        $service_list = json_decode($services_components,true)['services'];
+        $service_list = json_decode($services_components,true)['service'];
         
         foreach($service_list as $service)
         {
