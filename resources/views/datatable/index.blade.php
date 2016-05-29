@@ -1,3 +1,4 @@
+
 @extends('layout')
 
 @section('header')
@@ -35,20 +36,6 @@
           <table id="excelDataTable" class="schema-table table" cellspacing="0" width="100%">
           </table>
           <h3 id="empty_handler" class="text-center alert alert-info" style="margin: -20px;">Empty!</h3>
-          <tr class="hideme">
-            <td></td>
-            <td id="colspan">
-              <div id="text_input">
-              </div>
-              <div style="clear: left"></div>
-              <div class="col-lg-offset-1 col-lg-1">
-                <button type="submit" class="btn btn-success">Update</button>
-              </div>
-              <div class="col-lg-1">
-                <button type="submit" class="btn btn-danger">Cancel</button>
-              </div>
-            </td>
-          </tr>
         </section>
       </div>
     </div>
@@ -84,7 +71,6 @@
 
         entries = data;
         buildHtmlTable();
-        details();
         for (var x = 0; x < entries.length; x++) {
           keys = Object.keys(entries[x]);
         }
@@ -94,7 +80,7 @@
       var columns = addAllColumnHeaders(entries);
 
       for (var i = 0 ; i < entries.length ; i++) {
-        var row$ = $('<tr/>');
+        var row$ = $('<tr/>').addClass('details');
         row$.append($('<td/>').addClass('details-control'));
         for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
           var cellValue = entries[i][columns[colIndex]];
@@ -124,15 +110,7 @@
       return columnSet;
     }
 
-    function details() {
-      $('.details-control').click(function() {
-        for (var i = 0; i < keys.length; i++) {
-          $('#colspan').attr('colspan="'+ keys.length +'"');
-          $('#text_input').html('<label for="inputEmail1" class="col-lg-1 col-sm-1 control-label text-right"></label>');
-        }
-      })
-    }
-
   }());
+
   </script>
 @endsection

@@ -20,6 +20,7 @@
 
 
 
+
             </div>
             <!--responsive view logo end-->
 
@@ -42,7 +43,6 @@
                         </ul>
                     </li>
                     <li><a href="{{ url('datatable') }}"><span>Data Tables</span></a></li>
-                    <li><a href="{{ url('console/privacy') }}"><span>Privacy</span></a></li>
                     <li class="menu-list">
                       <a href="#"><span>Privacy</span></a>
                       <ul class="child-list">
