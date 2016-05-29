@@ -68,23 +68,32 @@
     });
 
     var entries;
+    var nextUrl;
+    var prevUrl;
 
     function tableCall(table_entries) {
       $.get('/datatable/'+table_entries+'/entries', function(data) {
         $('#excelDataTable').html(' ');
-
-        if (data.length == 0){
+        if (data.data.length == 0){
           $('#empty_handler').show();
         } else {
-          $('#page-nav').show();
+            $(window).load(function() {
+            $('#page-nav').show();
+          });
         }
 
-        entries = data;
+        entries = data.data;
+        nextUrl = data.next_page_url;
+        prevUrl = data.prev_page_url;
         buildHtmlTable();
+        $('#page-nav').show();
+        if(data.current_page == data.from ) {
+          $('#previous').addClass('disabled');
+        }
       });
     }
 
-    if ($('#service').val() != '' && $('#table_name').val() != '') {
+    if ($('#service option:selected').val() != '' && $('#table_name option:selected').val() != '') {
       var tb_name = $('#service option:selected').text() + '_' + $('#table_name option:selected').text();
       tableCall(tb_name);
     }
@@ -138,6 +147,41 @@
       $("#excelDataTable").append(headerTr$);
 
       return columnSet;
+    }
+
+    $('#previous').click(function(){
+      $.get(prevUrl, function(data) {
+        $('#excelDataTable').html(' ');
+        entries = data.data;
+        prevUrl = data.prev_page_url;
+        nextUrl = data.next_page_url;
+        buildHtmlTable();
+        checkPage(data);
+      });
+    });
+
+    $('#next').click(function() {
+      $.get(nextUrl, function(data) {
+        $('#excelDataTable').html(' ');
+        entries = data.data;
+        prevUrl = data.prev_page_url;
+        nextUrl = data.next_page_url;
+        buildHtmlTable();
+        checkPage(data);
+      });
+    })
+
+    function checkPage(data) {
+      if(data.current_page == data.from ) {
+        $('#previous').addClass('disabled');
+        $('#next').removeClass('disabled');
+      } else if (data.current_page == data.last_page) {
+        $('#previous').removeClass('disabled');
+        $('#next').addClass('disabled');
+      } else {
+        $('#next').removeClass('disabled');
+        $('#previous').removeClass('disabled');
+      }
     }
 
   }());

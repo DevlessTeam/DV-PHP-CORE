@@ -55,7 +55,7 @@ class DatatableController extends Controller
      */
     public function show($name)
     {
-        return \DB::table($name)->get();
+        return \DB::table($name)->paginate(10);
     }
 
     /**
