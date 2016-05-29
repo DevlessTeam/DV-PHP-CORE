@@ -77,6 +77,7 @@
         if (data.data.length == 0){
           $('#empty_handler').show('fast', function(){
             $('.header-control').hide();
+            $('#page-nav').hide();
           });
         } else {
             $(window).load(function() {
