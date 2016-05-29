@@ -423,11 +423,13 @@ class DbController extends Controller
                 //store table_meta details 
                 });
                 $this->_set_table_meta($payload);
-                Helper::interrupt(606);
+                Response::respond(606);
+            
             }
         else
         {
-        Helper::interrupt(603, $table_name ." table already exist");
+            Response::respond(603, $table_name ." table already exist");  
+        
         }
 
 }

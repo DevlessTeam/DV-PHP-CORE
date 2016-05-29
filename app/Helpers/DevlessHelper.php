@@ -188,7 +188,7 @@ class DevlessHelper extends Helper
             { 
                 if ( is_dir($src . '/' . $file) )
                 { 
-                    recurse_copy($src . '/' . $file,$dst . '/' . $file); 
+                    self::recurse_copy($src . '/' . $file,$dst . '/' . $file); 
                 } 
                 else 
                 { 
@@ -296,10 +296,20 @@ class DevlessHelper extends Helper
                $table_meta_install($service_table);
             }
         }
+        
+        unlink($service_file_path);
+        
+        return true;
     }
     
-    public static function install_views()
+    public static function install_views($service_name)
     {
+        $service_name = preg_replace('"\.srv$"', '', $service_name);
+        $service_name = preg_replace('"\.pkg$"', '', $service_name);
+        $system_view_directory = config('devless')['views_directory'];
+        $service_view_directory = $system_view_directory.$service_name.'/view_assets';
+        self::recurse_copy($service_view_directory,$system_view_directory); 
+        
         return true;
     }
     

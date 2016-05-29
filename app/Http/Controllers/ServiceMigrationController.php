@@ -66,8 +66,9 @@ class ServiceMigrationController extends Controller {
                                  if($service_archive_object->move(storage_path(),$service_package_name))
                                      {
                                          
-                                            Migration::import_service($service_package_name);
-                                            dd('after import');
+                                        $import_state = Migration::import_service($service_package_name);
+                                        ($import_state)? DLH::flash("Service installed successfully", 'greeen'):
+                                        DLH::flash("Sorry service could not be installed", 'red');
                                      }
                                 }
                                 else
