@@ -387,7 +387,7 @@ class DbController extends Controller
     public function create_schema($resource, array $payload)
     {
         
-    
+        
         $service_name = $payload['service_name'];
         #connectors mysql pgsql sqlsrv sqlite
         $connector = $this->_connector($payload);
@@ -395,8 +395,9 @@ class DbController extends Controller
          #dynamically create columns with schema builder 
         $db_type = $this->db_types;
         $table_meta_data = []; 
-        $payload = $payload['params'][0];
-        $table_name = $service_name.'_'.$payload['name'];
+        $new_payload = $payload['params'][0];
+        $new_payload['id'] = $payload['id'];
+        $table_name = $service_name.'_'.$new_payload['name'];
          if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
                     hasTable($table_name )) 
             {
@@ -405,13 +406,13 @@ class DbController extends Controller
                 \Schema::connection('DYNAMIC_DB_CONFIG')->
                 create($table_name ,function(Blueprint 
                         $table) 
-                    use($payload,$db_type,$service_name)
+                    use($new_payload,$db_type,$service_name)
                     {       
                     #default field
                         $table->increments('id');
                         $table->integer('devless_user_id');
                          #per  field 
-                        foreach($payload['field'] as $field ){
+                        foreach($new_payload['field'] as $field ){
                             $field['ref_table'] = $service_name.'_'.$field['ref_table'];
                             $field['field_type'] = strtolower($field['field_type']);
                             #checks if fieldType and references exist
@@ -422,14 +423,16 @@ class DbController extends Controller
                         }
                 //store table_meta details 
                 });
-                $this->_set_table_meta($payload);
-                Response::respond(606);
+                $this->_set_table_meta($new_payload);
+                $output = Response::respond(606);
+                echo ($output);
             
             }
         else
         {
-            Response::respond(603, $table_name ." table already exist");  
-        
+            $output = Response::respond(603, $table_name ." table already exist");  
+            
+            echo $output;
         }
 
 }
@@ -689,7 +692,7 @@ class DbController extends Controller
    }
    private function _set_table_meta($schema)
    {
-       
+         
        \DB::table('table_metas')->insert(['schema'=>  json_encode($schema),
                'table_name'=> $schema['name'],'service_id'=>$schema['id']]);
        
