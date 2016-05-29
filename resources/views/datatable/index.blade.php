@@ -45,7 +45,7 @@
         <section class="panel">
           <table id="excelDataTable" class="schema-table table" cellspacing="0" width="100%">
           </table>
-          <h3 id="empty_handler" class="text-center alert alert-info" style="margin: -20px;">Empty!</h3>
+          <h3 id="empty_handler" class="text-center alert alert-info" style="margin: -5px;">Empty!</h3>
         </section>
         <nav id="page-nav">
           <ul class="pager">
@@ -75,7 +75,9 @@
       $.get('/datatable/'+table_entries+'/entries', function(data) {
         $('#excelDataTable').html(' ');
         if (data.data.length == 0){
-          $('#empty_handler').show();
+          $('#empty_handler').show('fast', function(){
+            $('.header-control').hide();
+          });
         } else {
             $(window).load(function() {
             $('#page-nav').show();

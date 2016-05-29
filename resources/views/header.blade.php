@@ -38,6 +38,11 @@
 <body onload="init()" class="sticky-header">
 
     <section>
-
-
-            <!-- header section end-->
+      @if(\Request::path() != '/' && \Request::path() != 'setup')
+        <div class="header-section">
+          <!--toggle button start-->
+          <a class="toggle-header"><i class="fa fa-outdent"></i></a>
+          <!--toggle button end-->
+        </div>
+        <!-- header section end-->
+      @endif
