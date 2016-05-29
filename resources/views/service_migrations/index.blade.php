@@ -57,8 +57,7 @@
                     </div>
 
                     <br><br><br>
-                    <button class="btn btn-info" type=
-                    "submit">Export</button>
+                    <button class="btn btn-info" type="submit">Export</button>
                   </form>
                 </div>
                 <div class="tab-pane" id="mtab">
@@ -69,36 +68,38 @@
                   <form enctype="multipart/form-data" action="{{ route('migrate.store') }}" method="POST">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="io_type" value="import"/>
+                    <div class="form-group">
+                      <br><br><br>
+                      <label for="g-title" class="col-lg-2 col-sm-2 control-label">Pick Service to import</label>
+                      <div class="col-lg-10">
+                        <input class="form-control" name="service_file" id="g-title"
+                        placeholder="service name" type="file">
+                        @if($errors->has("service_import"))
+                          <span class="help-block">{{ $errors->first("service_import") }}</span>
+                        @endif
 
-                    <br><br><br>
-                    <label for="g-title" class="col-lg-2 col-sm-2 control-label">Pick Service to import</label>
-                    <div class="col-lg-10">
-                      <input class="form-control" name="service_file" id="g-title"
-                      placeholder="service name" type="file">
-                      @if($errors->has("service_import"))
-                        <span class="help-block">{{ $errors->first("service_import") }}</span>
-                      @endif
-
-                      <br><br><br><br>
-                      <button class="btn btn-info" type="submit">Import</button>
+                        <br><br>
+                      </div>
                     </div>
-                  </div>
+                    <button class="btn btn-info" type="submit">Import</button>
+                  </form>
                 </div>
               </div>
-            </section>
-          </div>
+            </div>
+          </section>
         </div>
-        <script>
-        function init(){
-          @if(session('package'))auto_download('{{session('package')}}') @endif
-        }
-        function auto_download(package_name){
+      </div>
+      <script>
+      function init(){
+        @if(session('package'))auto_download('{{session('package')}}') @endif
+      }
+      function auto_download(package_name){
 
-          url = 'download/'+package_name,
-          win = window.open(url, '_blank');
-          win.focus();
-        }
+        url = 'download/'+package_name,
+        win = window.open(url, '_blank');
+        win.focus();
+      }
 
 
-        </script>
-      @endsection
+      </script>
+    @endsection
