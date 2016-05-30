@@ -20,14 +20,10 @@ class BeforeMiddleware
         
        $app_object = DB::table('apps')->first(); 
        
-       //check token and keys
-       $is_key_right = ($request->header('Devless-key') == $app_object->api_key)?true : false;
-       $is_key_token = ($request->header('devless-token') == $app_object->token )? true : false;
-       $is_admin = Helper::is_admin_login();
-       
-       (($is_key_right && $is_key_token) || $is_admin)? true : Helper::interrupt(631);
        
        $request_path = \Request::path(); 
+       $request['devless_key'] = $app_object->api_key;
+       $request['devless_token'] = $app_object->token;
        $app_exists = $app_object;
       if($app_exists == null && $request_path != 'setup')
       {
@@ -38,7 +34,7 @@ class BeforeMiddleware
       {
           return redirect('/');
       }
-
+        
         return $next($request);
     }
 }
