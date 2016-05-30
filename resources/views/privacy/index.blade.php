@@ -18,7 +18,7 @@
     <div class="wrapper">
       {{-- <div class="row"> --}}
         <div class="col-lg-9 col-md-offset-1">
-          <form id="form_data" class="form-horizontal" method="post">
+          <form id="form_data" class="form-horizontal" method="post" action="/privacy/0">
             <input type="hidden" name="_method" value="PUT">
             <section class="panel">
               <header class="panel-heading">
@@ -135,12 +135,6 @@
           $('#script').val(write_access.script);
         });
       });
-
-      $('#submit_btn').click(function() {
-        if( $('#service option:selected') == '')
-        $('#form_data').attr('action', '/privacy/'+0);
-      });
-
     }());
   </script>
 @endsection

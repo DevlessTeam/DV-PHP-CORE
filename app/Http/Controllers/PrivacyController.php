@@ -74,7 +74,10 @@ class PrivacyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request);
+        if ($id == 0) {
+          DLH::flash('Error Updating Access Rights', 'error');
+          return back();
+        }
         $service = Service::findOrFail($id);
         $json = array(
         'query' =>    $request->input('query'),

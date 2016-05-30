@@ -32,7 +32,7 @@
                 <!--sidebar nav start-->
                 <ul class="nav nav-pills nav-stacked side-navigation">
                     <li>
-                        <h3 class="navigation-title">Menu<a href="{{url('logout')}}" class="pull-right">(Logout)</a></h3>
+                        <h3 class="navigation-title">Menu<a href="{{url('logout')}}" class="pull-right"><i class="fa fa-sign-out"></i></a></h3>
                     </li>
                     <li><a href="{{route('app.index')}}"><i class="fa fa-desktop"></i><span>App</span></a></li>
                     <li class="menu-list">
