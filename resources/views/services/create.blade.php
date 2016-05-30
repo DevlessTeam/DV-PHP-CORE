@@ -28,7 +28,7 @@
                                                 <div class="form-group">
                                                 <label for="g-txt">Service Name</label>
                                                 <input class="form-control" name="name" id="name"
-                                                        type="text" placeholder="Service Name" value="">
+                                                            type="text" placeholder="Service Name" value="">
                                                  @if($errors->has("name"))
                                                   <span class="help-block">{{ $errors->first("name") }}</span>
                                                 @endif

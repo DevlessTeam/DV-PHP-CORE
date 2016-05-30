@@ -38,7 +38,7 @@
                   </div>
                   </div>
                   <div class="row">
-                    <label for="query" class="col-lg-2 col-sm-2 control-label">Query Access</label>
+                    <label for="query" class="col-lg-2 col-sm-2 control-label">Query Tables: </label>
                     <div class="col-lg-9 col-md-9 col-sm-10">
                       <select id="query" name="query" class="form-control m-b-10">
                         <option disabled selected value> -- select a right -- </option>
@@ -50,7 +50,7 @@
                   </div>
                   <div>
                     <div class="row">
-                      <label for="create" class="col-lg-2 col-sm-2 control-label">Create Access</label>
+                      <label for="create" class="col-lg-2 col-sm-2 control-label">Add Data: </label>
                       <div class="col-lg-9 col-md-9 col-sm-10">
                         <select id="create" name="create" class="form-control m-b-10">
                           <option disabled selected value> -- select a right -- </option>
@@ -62,7 +62,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <label for="update" class="col-lg-2 col-sm-2 control-label">Update Access</label>
+                    <label for="update" class="col-lg-2 col-sm-2 control-label">Update Tables: </label>
                     <div class="col-lg-9 col-md-9 col-sm-10">
                       <select id="update" name="update" class="form-control m-b-10">
                         <option disabled selected value> -- select a right -- </option>
@@ -73,7 +73,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <label for="delete" class="col-lg-2 col-sm-2 control-label">Delete Access</label>
+                    <label for="delete" class="col-lg-2 col-sm-2 control-label">Delete: </label>
                     <div class="col-lg-9 col-md-9 col-sm-10">
                       <select id="delete" name="delete" class="form-control m-b-10">
                         <option disabled selected value> -- select a right -- </option>
@@ -84,7 +84,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <label for="schema" class="col-lg-2 col-sm-2 control-label">Schema Access</label>
+                    <label for="schema" class="col-lg-2 col-sm-2 control-label">Create Tables: </label>
                     <div class="col-lg-9 col-md-9 col-sm-10">
                       <select id="schema" name="schema" class="form-control m-b-10">
                         <option disabled selected value> -- select a right -- </option>
@@ -95,7 +95,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <label for="script" class="col-lg-2 col-sm-2 control-label">Script Access</label>
+                    <label for="script" class="col-lg-2 col-sm-2 control-label">Run Script: </label>
                     <div class="col-lg-9 col-md-9 col-sm-10">
                       <select id="script" name="script" class="form-control m-b-10">
                         <option disabled selected value> -- select a right -- </option>

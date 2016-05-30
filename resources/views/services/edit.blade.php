@@ -212,16 +212,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                
+                                    <?php $count = 0; ?>
                                     @foreach($table_meta as $table_data)
                                 <tr id="{{$table_data['name']}}">
-                                    <th scope="row">1</th>
+                                    <th scope="row">{{$count}}</th>
                                     <td>{{$table_data['name']}}</td>
                                     <td>{{$table_data['description']}}</td>
                                     <td>{{sizeOf($table_data['field'])}} field(s)</td>
-                                    <td><button class="btn btn-default">View Data</button>
+                                    <td><a href="/datatable?service_name={{$service->name}}&table_name={{$table_data['name']}}" class="btn btn-default">View Data</a>
                                         <button onclick="destroy_table('{{$table_data['name']}}','{{$service->name}}')" class="btn btn-danger btn-sm">Delete Table</button></td>
                                 </tr>
+                                    <?php $count++; ?>
                                     @endforeach
                                  @else
                                 <h3 class="text-center alert alert-info">Empty!</h3>    
