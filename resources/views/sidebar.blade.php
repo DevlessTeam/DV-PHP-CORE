@@ -32,9 +32,9 @@
                 <!--sidebar nav start-->
                 <ul class="nav nav-pills nav-stacked side-navigation">
                     <li>
-                        <h3 class="navigation-title">Menu<a href="{{url('logout')}}" class="pull-right">(Logout)</a></h3>
+                        <h3 class="navigation-title">Menu<a href="{{url('logout')}}" class="pull-right"><i class="fa fa-sign-out"></i></a></h3>
                     </li>
-                    <li><a href="{{route('app.index')}}"><i class="fa fa-code"></i><span>App</span></a></li>
+                    <li><a href="{{route('app.index')}}"><i class="fa fa-desktop"></i><span>App</span></a></li>
                     <li class="menu-list">
                         <a href="#"><i class="fa fa-gears"></i><span>Services</span></a>
                         <ul class="child-list">
@@ -46,7 +46,7 @@
                     <li class="menu-list">
                       <a href="#"><i class="fa fa-lock"></i><span>Privacy</span></a>
                       <ul class="child-list">
-                        <li><a href="{{ url('console/privacy') }}">API</a></li>
+                        <li><a href="{{ url('privacy') }}">API</a></li>
                       </ul>
                     </li>
                     <li><a href="{{ url('console') }}"><i class="fa fa-terminal"></i><span>API Console</span></a></li>

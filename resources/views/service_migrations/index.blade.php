@@ -4,22 +4,21 @@
   <!-- page head start-->
   <div class="page-head">
 
-    <h3>Migrate Services</h3><span class="sub-title"></span>
+    <h3>Import / Export</h3><span class="sub-title">Migrate Services/</span>
   </div><!-- page head end-->
 @endsection
 
 @section('content')
 
   @include('error')
-  <section>
 
     <!--body wrapper start-->
-    <div class="wrapper no-pad">
+    <div class="wrapper">
       <div class="row">
-        <div class="col-lg-10 col-md-offset-1">
+        <div class="col-lg-12">
 
           <section class="isolate-tabs">
-              <br><br>
+            <br>
             <header class="panel-heading tab-dark">
               <ul class="nav nav-tabs nav-justified">
                 <li class="active">
@@ -47,7 +46,7 @@
                             <option value="{{$option_value->name}}">{{$option_value->name}}</option>
                           @endforeach
                           @if(sizeof($services) !== 0)
-                            <option value="*">Entire App ({{$app->name}})</option>   
+                            <option value="*">Entire App ({{$app->name}})</option>
                           @endif
                         </select>
                         @if($errors->has("service_export"))
@@ -89,6 +88,7 @@
           </section>
         </div>
       </div>
+    </div>
       <script>
       function init(){
         @if(session('package'))auto_download('{{session('package')}}') @endif
