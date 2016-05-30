@@ -46,7 +46,7 @@
                     <li class="menu-list">
                       <a href="#"><i class="fa fa-lock"></i><span>Privacy</span></a>
                       <ul class="child-list">
-                        <li><a href="{{ url('console/privacy') }}">API</a></li>
+                        <li><a href="{{ url('privacy') }}">API</a></li>
                       </ul>
                     </li>
                     <li><a href="{{ url('console') }}"><i class="fa fa-terminal"></i><span>API Console</span></a></li>

@@ -43,8 +43,8 @@
 
       <div class="col-sm-12">
         <section class="panel">
-          <table id="excelDataTable" class="schema-table table" cellspacing="0" width="100%">
-          </table>
+            <table id="excelDataTable" class="schema-table table" cellspacing="0" width="90%">
+            </table>
           <h3 id="empty_handler" class="text-center alert alert-info" style="margin: -5px;">Empty!</h3>
         </section>
         <nav id="page-nav">
@@ -74,6 +74,12 @@
     function tableCall(table_entries) {
       $.get('/datatable/'+table_entries+'/entries', function(data) {
         $('#excelDataTable').html(' ');
+
+        if (data.current_page == data.total) {
+          $('#previous').addClass('disabled');
+          $('#next').addClass('disabled');
+        }
+
         if (data.data.length == 0){
           $('#empty_handler').show('fast', function(){
             $('.header-control').hide();
@@ -123,7 +129,7 @@
 
       for (var i = 0 ; i < entries.length ; i++) {
         var row$ = $('<tr/>').addClass('details');
-        row$.append($('<td/>').addClass('details-control'));
+        row$.append($('<td/>'));
         for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
           var cellValue = entries[i][columns[colIndex]];
 
@@ -136,7 +142,7 @@
     function addAllColumnHeaders(entries) {
       var columnSet = [];
       var headerTr$ = $('<tr/>');
-      headerTr$.append($('<th/>').addClass('header-control'));
+      headerTr$.append($('<th/>'));
 
       for (var i = 0 ; i < entries.length ; i++) {
         var rowHash = entries[i];

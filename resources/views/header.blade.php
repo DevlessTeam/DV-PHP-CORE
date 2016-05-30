@@ -23,7 +23,7 @@
     <link href="{{ url('/css/style.css') }}" rel="stylesheet">
     <link href="{{ url('/css/style-responsive.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url('/css/custom.css')}}">
-    @if( \Request::path() == 'console/privacy' || \Request::path() == 'datatable')
+    @if( \Request::path() == 'privacy' || \Request::path() == 'datatable')
       <link rel="stylesheet" href="{{ url('/css/helper.css') }}" media="screen" title="no title" charset="utf-8">
       <script src="{{ url('/js/jquery-1.10.2.min.js') }}"></script>
     @endif
