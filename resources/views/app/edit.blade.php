@@ -71,7 +71,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-lg-offset-2 col-lg-10">
-                                    <button type="submit" class="btn btn-primary pull-right">Save</button>
+                                    <button type="submit" class="btn btn-info pull-right">Save</button>
                                 </div>
                             </div>
                         </form>

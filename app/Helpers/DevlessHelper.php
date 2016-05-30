@@ -315,6 +315,11 @@ class DevlessHelper extends Helper
         return true;
     }
     
+    /*
+     * install views into service_views dir
+     * @param $service_name
+     * @return boolean
+     */
     public static function install_views($service_name)
     {
         $service_name = preg_replace('"\.srv$"', '', $service_name);
@@ -327,8 +332,57 @@ class DevlessHelper extends Helper
         return true;
     }
     
+    /**
+     * signup new users onto devless
+     * @param type $payload
+     * @return boolean
+     */
+    public function signup()
+    {
+        dd("here in signup");
+    }
+    
+     /**
+     * authenticate and login devless users
+     * @param type $request
+     * @return boolean
+     */
+    public function login($request)
+    {
+        return true;
+    }
+    
+     /**
+     * update user devless project 
+     * @param type $request
+     * @return boolean
+     */
+    public function profile($request)
+    {
+        return true; 
+    }
+    
+     /**
+     * delete a devless user 
+     * @param type $request
+     * @return boolean
+     */
+    public function delete($request)
+    {
+        return true;
+    }
     
     
+    
+    /**
+     * delete a devless user 
+     * @param type $request
+     * @return boolean
+     */
+    public function session_token($request)
+    {
+        return true;
+    }
     
             
 }

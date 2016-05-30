@@ -49,9 +49,11 @@ class ScriptController extends Controller
     { 
         $service = new Service();
         $access_type = $payload['resource_access_right']; 
+        
         $authentication_required = 
-               $service->check_resource_access_right_type($access_type["script"]);
-        $user_cred = Helper::get_authenticated_user_cred();
+                $access_state = $service->check_resource_access_right_type($access_type["script"]);
+        
+        $user_cred = Helper::get_authenticated_user_cred($access_state);
         
         //available internal params 
         $EVENT = [
@@ -70,8 +72,8 @@ $code = <<<EOT
  \$GLOBALS['script_class'] = \$script_class;
 function DvService(\$json_payload, \$service_name, \$resource, \$method){
       
-return call_user_func_array(array(\$GLOBALS['script_class'], 'internal_services'),array(\$json_payload, 
-    \$service_name, \$resource, \$method));
+return json_decode(call_user_func_array(array(\$GLOBALS['script_class'], 'internal_services'),array(\$json_payload, 
+    \$service_name, \$resource, \$method)));
  }
 
 $payload[script];

@@ -55,6 +55,7 @@ class Helper
         628 =>  'Sorry User is not authenticated, try logging in ',
         629 =>  'Sorry table could not be updated',
         630 =>  'failed to push json to file',
+        631 =>  'Sorry access has been revoked',
         700 => 'internal system error',
     ];
 
@@ -259,6 +260,7 @@ class Helper
        
        return ($incoming_token == $user_cred['token'])? true:false;
    }
+   
    
    
 }

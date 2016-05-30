@@ -47,7 +47,11 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
     Route::patch('service/{service}/{resource}','ServiceController@api');
     Route::delete('service/{service}/{resource}','ServiceController@api');
 
-
+    #authentication 
+    Route::post('authentication/signup', 'AuthenticationController@signup');
+    Route::post('authentication/login', 'AuthenticationController@login');
+    Route::patch('authentication/user', 'AuthenticationController@profile');
+    Route::delete('authentication/user', 'AuthenticationController@delete');
 });
 
 Route::group(['middleware' => 'user.auth'], function () {
@@ -83,5 +87,7 @@ Route::group(['middleware' => 'user.auth'], function () {
   Route::get('datatable', 'DatatableController@index');
   Route::get('datatable/{datatable?}', 'DatatableController@create');
   Route::get('datatable/{entries?}/entries', 'DatatableController@show');
+  
+  
 
 });
