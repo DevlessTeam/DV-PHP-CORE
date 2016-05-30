@@ -43,7 +43,7 @@
 
       <div class="col-sm-12">
         <section class="panel">
-            <table id="excelDataTable" class="schema-table table" cellspacing="0" width="90%">
+            <table id="excelDataTable" class="schema-table table" width="100%">
             </table>
           <h3 id="empty_handler" class="text-center alert alert-info" style="margin: -5px;">Empty!</h3>
         </section>
