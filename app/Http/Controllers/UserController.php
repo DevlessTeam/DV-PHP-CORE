@@ -62,7 +62,7 @@ class UserController extends Controller
   public function postRegister(Request $request)
   {
     $this->validate($request, [
-      'name' => 'required|max:255',
+      'username' => 'required|max:255|unique:users',
       'email' => 'required|email|max:255|unique:users',
       'password' => 'required|confirmed|min:6',
       'password_confirmation' => 'required|min:6',
@@ -71,9 +71,10 @@ class UserController extends Controller
     ]);
 
     $user = new User;
-    $user->name = $request->input('name');
+    $user->username = $request->input('name');
     $user->email = $request->input('email');
     $user->password = bcrypt($request->input('password'));
+    $user->role = 1;
 
     $app = new App;
     $app->name = $request->input('app_name');

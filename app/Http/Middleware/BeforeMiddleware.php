@@ -17,6 +17,7 @@ class BeforeMiddleware
      */
     public function handle($request, Closure $next)
     {
+
         
        $app_object = DB::table('apps')->first(); 
        
@@ -29,8 +30,8 @@ class BeforeMiddleware
       {
 
           return redirect('/setup');
-      } 
-      else if ($app_exists == null && $request_path != 'setup') 
+      }
+      else if ($app_exists == null && $request_path != 'setup')
       {
           return redirect('/');
       }
@@ -38,4 +39,3 @@ class BeforeMiddleware
         return $next($request);
     }
 }
-

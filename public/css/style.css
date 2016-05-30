@@ -147,6 +147,12 @@ h1, h2, h3, h4, h5 {
 /*---------------
 logo
 ---------------*/
+#excelDataTable tr td:nth-child(1),
+#excelDataTable tr td:nth-child(3),
+#excelDataTable tr th:nth-child(1),
+#excelDataTable tr th:nth-child(3) {
+  display: none;
+}
 
 .logo {
     height: 60px;
