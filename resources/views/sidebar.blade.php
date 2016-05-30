@@ -34,23 +34,23 @@
                     <li>
                         <h3 class="navigation-title">Menu<a href="{{url('logout')}}" class="pull-right">(Logout)</a></h3>
                     </li>
-                    <li><a href="{{route('app.index')}}"><span>App</span></a></li>
+                    <li><a href="{{route('app.index')}}"><i class="fa fa-code"></i><span>App</span></a></li>
                     <li class="menu-list">
-                        <a href="#"><span>Services</span></a>
+                        <a href="#"><i class="fa fa-gears"></i><span>Services</span></a>
                         <ul class="child-list">
                             <li><a href="{{ route('services.index') }}">All Services</a></li>
                             <li><a href="{{ route('services.create') }}">Add New</a></li>
                         </ul>
                     </li>
-                    <li><a href="{{ url('datatable') }}"><span>Data Tables</span></a></li>
+                    <li><a href="{{ url('datatable') }}"><i class="fa fa-database"></i><span>Data Tables</span></a></li>
                     <li class="menu-list">
-                      <a href="#"><span>Privacy</span></a>
+                      <a href="#"><i class="fa fa-lock"></i><span>Privacy</span></a>
                       <ul class="child-list">
                         <li><a href="{{ url('console/privacy') }}">API</a></li>
                       </ul>
                     </li>
-                    <li><a href="{{ url('console') }}"><span>API Console</span></a></li>
-                    <li><a href="{{route('migrate.index')}}"><span>Import/Export </span></a></li>
+                    <li><a href="{{ url('console') }}"><i class="fa fa-terminal"></i><span>API Console</span></a></li>
+                    <li><a href="{{route('migrate.index')}}"><i class="fa fa-download"></i><span>Import/Export </span></a></li>
                 </ul>
             </div>
         </div>

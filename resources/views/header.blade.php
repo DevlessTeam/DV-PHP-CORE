@@ -41,7 +41,7 @@
       @if(\Request::path() != '/' && \Request::path() != 'setup')
         <div class="header-section">
           <!--toggle button start-->
-          <a class="toggle-header"><i class="fa fa-outdent"></i></a>
+          <a class="toggle-btn"><i class="fa fa-outdent"></i></a>
           <!--toggle button end-->
         </div>
         <!-- header section end-->
