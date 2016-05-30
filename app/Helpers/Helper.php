@@ -218,25 +218,23 @@ class Helper
         return Session()->has('user');
     }
     
-    public static function get_authenticated_user_cred()
+    public static function get_authenticated_user_cred($access_state)
    {
     
-       
-        if(self::is_admin_login())
+        //TODO: handle token
+        if(self::is_admin_login() || $access_state == false)
         {
             $user_cred['id'] = 0;
-            $user_cred['token'] = "";
+            $user_cred['token'] = 12345;
         }
-        else if (Session()->has('public_user_token'))
+        else if(Session()->has('public_user_token'))
         {
-             //TODO: handle token
-        
             $user_cred =
-                    [
-                        'id' =>Session('public_user_id'),
-                        'token' =>Session('public_user_token'),
-
-                    ];  
+                [
+                    'id' =>2,#Session('public_user_id'),
+                    'token' =>12345,#Session('public_user_token'),
+                    
+                ];
         }
         else
         {

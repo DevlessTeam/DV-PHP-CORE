@@ -762,11 +762,12 @@ class DbController extends Controller
         $service = new Service();
         $access_type = $payload['resource_access_right']; 
         $authentication_required = 
-               $service->check_resource_access_right_type($access_type[$db_action]);
-                        
-        $user_cred = Helper::get_authenticated_user_cred();
-
-        ($authentication_required)?$payload['user_id'] = $user_cred['id']:false; 
+              $access_state =  $service
+                ->check_resource_access_right_type($access_type[$db_action]);
+                      
+        $user_cred = Helper::get_authenticated_user_cred($access_state);
+            
+        $payload['user_id'] = $user_cred['id'];
 
         
         return $payload;
