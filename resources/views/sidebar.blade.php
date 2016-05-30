@@ -32,7 +32,7 @@
                 <!--sidebar nav start-->
                 <ul class="nav nav-pills nav-stacked side-navigation">
                     <li>
-                        <h3 class="navigation-title">Menu<a href="{{url('logout')}}" class="pull-right"><i class="fa fa-sign-out"></i></a></h3>
+                        <h3 class="navigation-title">Menu</h3>
                     </li>
                     <li><a href="{{route('app.index')}}"><i class="fa fa-desktop"></i><span>App</span></a></li>
                     <li class="menu-list">
@@ -51,6 +51,7 @@
                     </li>
                     <li><a href="{{ url('console') }}"><i class="fa fa-terminal"></i><span>API Console</span></a></li>
                     <li><a href="{{route('migrate.index')}}"><i class="fa fa-download"></i><span>Import/Export </span></a></li>
+                    <li><a href="{{url('logout')}}"><i class="fa fa-sign-out"></i><span>Logout </span></a></li>
                 </ul>
             </div>
         </div>
