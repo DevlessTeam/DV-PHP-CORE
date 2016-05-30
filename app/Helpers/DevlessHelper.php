@@ -337,9 +337,10 @@ class DevlessHelper extends Helper
      * @param type $payload
      * @return boolean
      */
-    public function signup()
+    public function signup($payload)
     {
-        dd("here in signup");
+        //email username password  first_name  last_name
+        dd($payload);
     }
     
      /**
@@ -347,7 +348,7 @@ class DevlessHelper extends Helper
      * @param type $request
      * @return boolean
      */
-    public function login($request)
+    public function login($payload)
     {
         return true;
     }
@@ -357,7 +358,7 @@ class DevlessHelper extends Helper
      * @param type $request
      * @return boolean
      */
-    public function profile($request)
+    public function profile($payload)
     {
         return true; 
     }
@@ -367,7 +368,7 @@ class DevlessHelper extends Helper
      * @param type $request
      * @return boolean
      */
-    public function delete($request)
+    public function delete($payload)
     {
         return true;
     }
@@ -379,7 +380,7 @@ class DevlessHelper extends Helper
      * @param type $request
      * @return boolean
      */
-    public function session_token($request)
+    public function session_token($payload)
     {
         return true;
     }
