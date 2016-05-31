@@ -32,7 +32,7 @@
                     <select id="service" name="service" class="form-control m-b-10">
                       <option disabled selected value> -- select a service -- </option>
                       @foreach($services as $service)
-                        <option value="{{$service->id}}">{{$service->name}}</option>
+                        <option value="{{$service->id}}">{{ucwords($service->name)}}</option>
                       @endforeach
                     </select>
                   </div>

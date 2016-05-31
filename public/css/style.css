@@ -79,9 +79,7 @@ Table of Content
 
 @import url('bootstrap.min.css');
 @import url('bootstrap-reset.css');
-@import url('jquery-ui-1.10.3.css');
 @import url('font-awesome.css');
-@import url('simple-line-icons.css');
 @import url('default-theme.css');
 body {
     font-family: 'Source Sans Pro', sans-serif;

@@ -5,7 +5,7 @@
 <!-- page head start-->
     <div class="page-head">
         <h3>
-          API Console 
+          API Console
         </h3>
         <span class="sub-title">Console/</span>
 
