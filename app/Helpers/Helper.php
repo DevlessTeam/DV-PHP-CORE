@@ -3,6 +3,8 @@ namespace App\Helpers;
 use Validator;
 use App\Helpers\Response as Response;
 use Hash;
+use App\User;
+use App\Helpers\JWT as jwt;
 use Response as output;
 use Session;
 /*
@@ -56,7 +58,8 @@ class Helper
         629 =>  'Sorry table could not be updated',
         630 =>  'failed to push json to file',
         631 =>  'Sorry access has been revoked',
-        632 =>  'There is something wrong with your input field ',
+        632 =>  'There is something wrong with your in put field ',
+        633 =>  'Token has expired please try logging in again',
         700 => 'internal system error',
     ];
 
@@ -206,7 +209,7 @@ class Helper
      */
     public static function password_hash($password)
     {
-        return Hash::make($password);
+        return bcrypt($password);
     }
 
     /**
@@ -217,7 +220,7 @@ class Helper
      */
     public static function compare_hash($user_input, $hash)
     {
-        return (Hash::check($user_input, $hash))?  true :  false;
+        return Hash::check($user_input, $hash);
     }
 
     public static function is_admin_login()
@@ -228,21 +231,32 @@ class Helper
     
     public static function get_authenticated_user_cred($access_state)
    {
-    
-        //TODO: handle token
+        $user_token = request()->header('devless-user-token');
+                
         if(self::is_admin_login() || $access_state == false)
         {
-            $user_cred['id'] = 0;
-            $user_cred['token'] = 12345;
+            $admin = User::where('role',1)->first();
+            $user_cred['id'] = $admin->id;
+            $user_cred['token'] = "non for admin";
         }
-        else if(Session()->has('public_user_token'))
+        else if($user_token !== null)
         {
-            $user_cred =
-                [
-                    'id' =>2,#Session('public_user_id'),
-                    'token' =>12345,#Session('public_user_token'),
-                    
-                ];
+            
+            $user_data = self::verify_user_token($user_token);
+            
+            if(isset($user_data->id))
+            {    
+                $user_cred =
+                    [
+                        'id' =>$user_data->id,
+                        'token' =>$user_data->session_token,
+
+                    ];
+            }
+            else
+            {
+                $user_cred = false;
+            }
         }
         else
         {
@@ -251,21 +265,26 @@ class Helper
         return $user_cred;
    }
    
-   public static function set_session($key, $value)
-   {
-       return Session::put($key, $value);
-   } 
-   
-   public static function get_session($key, $value)
-   {
-       return Session($key);
-   }
         
-   public static function verify_user_token($incoming_token)
+   public static function verify_user_token($user_token)
    {
-       $user_cred = $this->get_authenticated_user_cred();
+       $secret = config('app')['key'];
        
-       return ($incoming_token == $user_cred['token'])? true:false;
+       $jwt = new jwt();
+       
+       $jwt_payload = json_decode($jwt->decode($user_token, $secret, true));
+       
+       $time_since_token_set = gmdate(date("H", time()) - date('H', $jwt_payload->time_set));
+       
+       if($time_since_token_set >= 1)
+       {
+           Self::interrupt(633);
+       }
+       
+       $user_data = User::where('session_token',$jwt_payload->token)
+               ->update(['session_time',time()])->first();
+       dd($user_data);
+       return $user_data;
    }
    
    

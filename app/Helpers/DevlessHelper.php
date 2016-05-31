@@ -7,7 +7,7 @@ use App\Helpers\JWT as jwt;
 use DB;
 use Hash;
 use App\App;
-use App\User;
+use App\User as user;
 use App\Helpers\Helper as Helper;
 use Illuminate\Support\Facades\Storage as Storage;
 use App\Http\Controllers\DbController as DvSchema;
@@ -341,7 +341,7 @@ class DevlessHelper extends Helper
     /**
      * signup new users onto devless
      * @param type $payload
-     * @return boolean
+     * @return alphanum
      */
     public function signup($payload)
     {
@@ -359,15 +359,24 @@ class DevlessHelper extends Helper
             return $token;
         }
         
+          $user->status = 1;
+        $user->session_token = $session_token = md5(uniqid(1, true));
+           
+        //check if either username or email and password is set 
+        if(!isset($user->password) || ! (isset($user->username) || isset($user->email)))
+        {
+            return false;
+        }
+        
         if($user->save())
         {
             $token_payload = 
             [
                 'token' => $session_token,
-                'time_set' => time(),
+                
             ];
             
-            $prepared_token = $this->set_session_token($token_payload);
+            $prepared_token = $this->set_session_token($token_payload, $user->id);
             
             return $prepared_token;
         }
@@ -385,11 +394,60 @@ class DevlessHelper extends Helper
      /**
      * authenticate and login devless users
      * @param type $request
-     * @return boolean
+     * @return alphanum
      */
     public function login($payload)
     {
         
+        $fields = get_defined_vars();
+        
+        $user =  new user();
+        $fields = $fields['payload'];
+        $secret = config('app')['key'];
+        
+        foreach($fields as $field => $value)
+        {
+            $field = strtolower($field);
+            ${$field} = $value;
+            
+        }
+        
+        if(isset($email,$password))
+        {
+             $user_data = $user::where('email',$email)->first();
+             
+        }
+        else if(isset($username,$password))
+        {
+            $user_data = $user::where('username',$username)->first();
+        }
+        else
+        {
+            return false;
+        }
+        if($user_data !== null)
+        {
+           Helper::compare_hash($password, $user_data->password) ;
+           $user_data->session_token = $session_token = md5(uniqid(1,true));
+           
+           if($user_data->save())
+           {
+               $token_payload = 
+                [
+                    'token' => $session_token,
+                    
+                ];
+
+                $prepared_token = $this->set_session_token($token_payload, $user_data->id);
+
+                return $prepared_token;
+           }
+        }
+        else
+        {
+            return false;
+        }
+       
         
     }
     
@@ -400,7 +458,20 @@ class DevlessHelper extends Helper
      */
     public function profile($payload)
     {
-        return true; 
+        if($token = Helper::get_authenticated_user_cred(true) )
+        {
+            
+            $user =  new user();
+            if($user::where('id',$token['id'])->update($payload))
+            {
+                return true;
+            }
+            
+            
+            
+        }
+        
+        return false; 
     }
     
      /**
@@ -408,9 +479,22 @@ class DevlessHelper extends Helper
      * @param type $request
      * @return boolean
      */
-    public function delete($payload)
+    public function delete()
     {
-        return true;
+         if($token = Helper::get_authenticated_user_cred(true) )
+        {
+            
+            $user =  new user();
+            if($user::where('id',$token['id'])->delete())
+            {
+                return true;
+            }
+            
+            
+            
+        }
+        
+        return false; 
     }
     
     
@@ -420,7 +504,7 @@ class DevlessHelper extends Helper
      * @param type $request
      * @return boolean
      */
-    public function set_session_token($payload)
+    public function set_session_token($payload,$user_id)
     {
         
        $jwt = new jwt();
@@ -428,7 +512,15 @@ class DevlessHelper extends Helper
        
        $payload = json_encode($payload);
        
-       return $jwt->encode($payload, $secret);
+       if(DB::table('users')->where('id',$user_id)->update(['session_time'=>time()]))
+        {
+            return $jwt->encode($payload, $secret);
+        }
+        else
+        {
+            return false;
+        }
+      
        
     }
     
@@ -455,7 +547,7 @@ class DevlessHelper extends Helper
         foreach($fields['payload'] as $field => $value)
         {
             $field = strtolower($field);
-            $value = strtolower($value);
+            
             
             if(isset($expected_fields[$field]))
             {
@@ -478,14 +570,7 @@ class DevlessHelper extends Helper
             }
         }
            
-        $user->status = 1;
-        $user->session_token = $session_token = md5(uniqid(1, true));
-           
-        //check if either username or email and password is set 
-        if(!isset($user->password) || ! (isset($user->username) || isset($user->email)))
-        {
-            return false;
-        }
+      
             
         return $user;
         
