@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('header')
-
+   
 <!-- page head start-->
     <div class="page-head">
         <h3>
-            App
+            App 
         </h3>
         <span class="sub-title">App/</span>
 
@@ -26,42 +26,6 @@
                     </header>
                     <div class="panel-body">
                          <form action="{{ route('app.update') }}" class="form-horizontal" method="POST">
-                            <div class="form-group @if($errors->has('username')) has-error @endif" >
-                                <label for="username" class="col-lg-2 col-sm-2 control-label">Username</label>
-                                <div class="col-lg-10">
-                                    <input type="text" id="username-field" name="username" class="form-control" value="{{ $user->username }}">
-                                      @if($errors->has("username"))
-                                        <span class="help-block">{{ $errors->first("username") }}</span>
-                                      @endif
-                                </div>
-                            </div>
-                            <div class="form-group @if($errors->has('email')) has-error @endif" >
-                                <label for="email" class="col-lg-2 col-sm-2 control-label">Email</label>
-                                <div class="col-lg-10">
-                                    <input type="email" id="email-field" name="email" class="form-control" value="{{ $user->email }}">
-                                      @if($errors->has("email"))
-                                        <span class="help-block">{{ $errors->first("email") }}</span>
-                                      @endif
-                                </div>
-                            </div>
-                            <div class="form-group @if($errors->has('password')) has-error @endif" >
-                                <label for="password" class="col-lg-2 col-sm-2 control-label">Password</label>
-                                <div class="col-lg-10">
-                                    <input type="password" id="password-field" name="password" class="form-control">
-                                      @if($errors->has("password"))
-                                        <span class="help-block">{{ $errors->first("password") }}</span>
-                                      @endif
-                                </div>
-                            </div>
-                            <div class="form-group @if($errors->has('password_confirmation')) has-error @endif">
-                                <label for="password_confirmation" class="col-lg-2 col-sm-2 control-label"  >Confirm Password</label>
-                                <div class="col-lg-10">
-                                    <input type="password" class="form-control" name="password_confirmation" required="">
-                                    @if($errors->has("password_confirmation"))
-                                      <span class="help-block">{{ $errors->first("password_confirmation") }}</span>
-                                    @endif
-                                </div>
-                            </div>
                             <div class="form-group @if($errors->has('name')) has-error @endif" >
                                 <label for="name" class="col-lg-2 col-sm-2 control-label">App Name</label>
                                 <div class="col-lg-10">
@@ -139,7 +103,7 @@
               $("#token").val($result.payload.new_token);
           }
           else{
-
+              
               alert("token could not be updated");
           }
         });

@@ -13,7 +13,7 @@
         <div class="col-lg-6 col-md-offset-3" style="position: fixed; top:10%;">
           <section class="panel">
             <header class="panel-heading">
-              Getting Started
+              App Setup
             </header>
             <div class="panel-body">
               <form action="{{ url('/setup') }}" class="form-horizontal" method="POST">
