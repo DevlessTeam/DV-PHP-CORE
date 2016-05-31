@@ -456,7 +456,7 @@ class DevlessHelper extends Helper
      * @param type $request
      * @return boolean
      */
-    public function profile($payload)
+    public function update_profile($payload)
     {
         if($token = Helper::get_authenticated_user_cred(true) )
         {

@@ -274,16 +274,20 @@ class Helper
        
        $jwt_payload = json_decode($jwt->decode($user_token, $secret, true));
        
-       $time_since_token_set = gmdate(date("H", time()) - date('H', $jwt_payload->time_set));
+       $user_data = User::where('session_token',$jwt_payload->token)
+               ->first();
+       
+       $user_data->session_time = time();
+       $user_data->save();
+       
+       $time_since_token_set = gmdate(date("H", time()) - date('H', $user_data->session_time));
        
        if($time_since_token_set >= 1)
        {
            Self::interrupt(633);
        }
        
-       $user_data = User::where('session_token',$jwt_payload->token)
-               ->update(['session_time',time()])->first();
-       dd($user_data);
+       
        return $user_data;
    }
    
