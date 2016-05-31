@@ -30,6 +30,7 @@ class BeforeMiddleware
                 {
                     $request['devless_key'] = $app_object->api_key;
                     $request['devless_token'] = $app_object->token;
+                    
                 }
                 else
                 {
