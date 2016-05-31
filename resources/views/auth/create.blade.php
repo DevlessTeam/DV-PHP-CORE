@@ -13,16 +13,25 @@
         <div class="col-lg-6 col-md-offset-3" style="position: fixed; top:10%;">
           <section class="panel">
             <header class="panel-heading">
-              App Setup
+              Getting Started
             </header>
             <div class="panel-body">
               <form action="{{ url('/setup') }}" class="form-horizontal" method="POST">
+<<<<<<< HEAD
                 <div class="form-group @if($errors->has('username')) has-error @endif" >
                   <label for="username" class="col-lg-2 col-sm-2 control-label">Username</label>
                   <div class="col-lg-10">
                     <input type="text" id="username-field" name="username" class="form-control" required="">
                     @if($errors->has("username"))
                       <span class="help-block">{{ $errors->first("username") }}</span>
+=======
+                <div class="form-group @if($errors->has('name')) has-error @endif" >
+                  <label for="name" class="col-lg-2 col-sm-2 control-label">User    name</label>
+                  <div class="col-lg-10">
+                    <input type="text" id="name-field" name="username" class="form-control" required="">
+                    @if($errors->has("name"))
+                      <span class="help-block">{{ $errors->first("name") }}</span>
+>>>>>>> 6db668f69b203d02c9eeab12295c6b3febb96ba1
                     @endif
                   </div>
                 </div>

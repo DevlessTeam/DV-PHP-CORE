@@ -35,7 +35,7 @@ class UserController extends Controller
     if (Hash::check($request->input('password'), $user->password))
     {
       $request->session()->put('user', $user->id);
-      DLH::flash('You are logged in', 'success');
+      DLH::flash('Welcome Back', 'success');
       return redirect('services');
     } else {
       DLH::flash('Incorrect login credentials', 'error');
@@ -61,6 +61,7 @@ class UserController extends Controller
 
   public function postRegister(Request $request)
   {
+      
     $this->validate($request, [
       'username' => 'required|max:255|unique:users',
       'email' => 'required|email|max:255|unique:users',

@@ -56,6 +56,7 @@ class Helper
         629 =>  'Sorry table could not be updated',
         630 =>  'failed to push json to file',
         631 =>  'Sorry access has been revoked',
+        632 =>  'There is something wrong with your input field ',
         700 => 'internal system error',
     ];
 
@@ -144,8 +145,14 @@ class Helper
         }
         else
         {
-            //single validator rule convert field type check to lowercase
+            //single validator rule convert field type to lowercase
             $check_against = strtolower($check_against);
+            
+            if(!isset(Helper::$validator_type[$check_against]))
+                {
+                    Helper::interrupt(618,'validator type '.$check_against.
+                            ' does not exist');
+                }
             $check_against = Helper::$validator_type[$check_against] ;
 
         }

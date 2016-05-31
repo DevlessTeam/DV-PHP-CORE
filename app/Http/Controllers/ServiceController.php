@@ -233,6 +233,14 @@ class ServiceController extends Controller {
         */
         public function api(Request $request, $service, $resource)
         {
+            
+             //check token and keys
+            $is_key_right = ($request->header('Devless-key') == $request['devless_key'])?true : false;
+            $is_key_token = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
+            $is_admin = Helper::is_admin_login();
+
+            (($is_key_right && $is_key_token) || $is_admin )? true : Helper::interrupt(631);
+
             $this->resource($request, $service, $resource);
         }
         

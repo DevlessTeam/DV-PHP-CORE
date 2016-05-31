@@ -3,12 +3,18 @@
 namespace App\Helpers;
 use Alchemy\Zippy\Zippy;
 use Session;
-/* 
-*@author Eddymens <eddymens@devless.io
- */
+use App\Helpers\JWT as jwt;
+use DB;
+use Hash;
+use App\App;
+use App\User;
 use App\Helpers\Helper as Helper;
 use Illuminate\Support\Facades\Storage as Storage;
 use App\Http\Controllers\DbController as DvSchema;
+/* 
+*@author Eddymens <eddymens@devless.io
+ */
+
 class DevlessHelper extends Helper
 {
     //
@@ -337,9 +343,43 @@ class DevlessHelper extends Helper
      * @param type $payload
      * @return boolean
      */
-    public function signup()
+    public function signup($payload)
     {
-        dd("here in signup");
+        
+        $fields = get_defined_vars();
+        
+        $user = new User;
+        
+        $secret = config('app')['key'];
+        
+        $token = $this->auth_fields_handler($fields,$user);
+        
+        if($token == false)
+        {
+            return $token;
+        }
+        
+        if($user->save())
+        {
+            $token_payload = 
+            [
+                'token' => $session_token,
+                'time_set' => time(),
+            ];
+            
+            $prepared_token = $this->set_session_token($token_payload);
+            
+            return $prepared_token;
+        }
+        else
+        {
+            return false;
+        }
+
+        
+        
+        
+        
     }
     
      /**
@@ -347,9 +387,10 @@ class DevlessHelper extends Helper
      * @param type $request
      * @return boolean
      */
-    public function login($request)
+    public function login($payload)
     {
-        return true;
+        
+        
     }
     
      /**
@@ -357,7 +398,7 @@ class DevlessHelper extends Helper
      * @param type $request
      * @return boolean
      */
-    public function profile($request)
+    public function profile($payload)
     {
         return true; 
     }
@@ -367,7 +408,7 @@ class DevlessHelper extends Helper
      * @param type $request
      * @return boolean
      */
-    public function delete($request)
+    public function delete($payload)
     {
         return true;
     }
@@ -375,14 +416,79 @@ class DevlessHelper extends Helper
     
     
     /**
-     * delete a devless user 
+     * set session token 
      * @param type $request
      * @return boolean
      */
-    public function session_token($request)
+    public function set_session_token($payload)
     {
-        return true;
+        
+       $jwt = new jwt();
+       $secret = config('app')['key'];
+       
+       $payload = json_encode($payload);
+       
+       return $jwt->encode($payload, $secret);
+       
     }
     
+    public function decode_session_token($payload)
+    {
+       $jwt = new jwt();
+       $secret = config('app')['key'];
+       return $jwt->decode($payload, $secret, true);
+    }
+    
+    public function auth_fields_handler($fields,$user)
+    {
+        
+            $expected_fields = 
+        [
+            'email' => 'email',
+            'username' => 'text',
+            'password' => 'password',
+            'first_name' => 'text',
+            'last_name' => 'text'
             
+        ];
+        
+        foreach($fields['payload'] as $field => $value)
+        {
+            $field = strtolower($field);
+            $value = strtolower($value);
+            
+            if(isset($expected_fields[$field]))
+            {
+                $valid = Helper::field_check($value, $expected_fields[$field]);
+                if($valid !== true)
+                {
+                Helper::interrupt(616, 'There is something wrong with your '.$field);
+                }
+                if($field == 'password')
+                {
+                    $user->$field = Helper::password_hash($value);
+                }
+                else
+                {
+                    
+                     $user->$field = $value ;
+                     
+                }
+                
+            }
+        }
+           
+        $user->status = 1;
+        $user->session_token = $session_token = md5(uniqid(1, true));
+           
+        //check if either username or email and password is set 
+        if(!isset($user->password) || ! (isset($user->username) || isset($user->email)))
+        {
+            return false;
+        }
+            
+        return $user;
+        
+        
+    }        
 }
