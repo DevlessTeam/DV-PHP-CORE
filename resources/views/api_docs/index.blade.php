@@ -216,14 +216,12 @@
              $('#runscript').hide();
 
            } else if (request_type == "script") {
-             $.get('/console/'+service_name+'/script', function (data) {
-               editor.setValue(data)
+               editor.setValue(JSON.stringify(JSON.parse('{"resource":[{}]}'), undefined, 4));
                $('#body_params').show();
                $('#runscript').show();
                $('#query').hide();
                $('#response').hide();
                $('#api_url').val('api/v1/service/'+service_name+'/script');
-             })
 
            } else {
              $.get('/console/'+table_name+'/schema', function (data) {

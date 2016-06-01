@@ -10,13 +10,13 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-Route::get('/', 'UserController@getLogin');
+Route::get('/', 'UserController@get_login');
 
-Route::post('login', 'UserController@postLogin');
-Route::get('logout', 'UserController@getLogout');
+Route::post('login', 'UserController@post_login');
+Route::get('logout', 'UserController@get_logout');
 
-Route::get('setup', 'UserController@getRegister');
-Route::post('setup', 'UserController@postRegister');
+Route::get('setup', 'UserController@get_register');
+Route::post('setup', 'UserController@post_register');
 
 #views route
 Route::resource('service/{service}/{resource}/{template}/', 'ViewController@access_views');
@@ -47,7 +47,7 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
     Route::patch('service/{service}/{resource}','ServiceController@api');
     Route::delete('service/{service}/{resource}','ServiceController@api');
 
-    #authentication 
+    #authentication
     Route::post('authentication/signup', 'AuthenticationController@signup');
     Route::post('authentication/login', 'AuthenticationController@login');
     Route::patch('authentication/user', 'AuthenticationController@profile');
@@ -89,7 +89,7 @@ Route::group(['middleware' => 'user.auth'], function () {
   Route::get('datatable', 'DatatableController@index');
   Route::get('datatable/{datatable?}', 'DatatableController@create');
   Route::get('datatable/{entries?}/entries', 'DatatableController@show');
-  
-  
+
+
 
 });
