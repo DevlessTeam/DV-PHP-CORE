@@ -102,7 +102,7 @@ class Helper
      * @param  error code  $stack
      * @return json
      */
-    public static function  interrupt($stack, $message=null){
+    public static function  interrupt($stack, $message=null, $payload=[]){
         if($message !==null){
             $msg = $message;
         }
@@ -110,9 +110,7 @@ class Helper
         {
             $msg = self::error_message($stack);
         }
-        $response = Response::respond($stack, $msg, []);
-        header('Access-Control-Allow-Origin', '*');
-        header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+        $response = Response::respond($stack, $msg, $payload);
         die($response);
 
 
@@ -232,7 +230,7 @@ class Helper
     public static function get_authenticated_user_cred($access_state)
    {
         $user_token = request()->header('devless-user-token');
-                
+        
         if(self::is_admin_login() || $access_state == false)
         {
             $admin = User::where('role',1)->first();
@@ -254,8 +252,8 @@ class Helper
                     ];
             }
             else
-            {
-                $user_cred = false;
+            {//say wrong det
+                self::interrupt(628);
             }
         }
         else
@@ -276,16 +274,19 @@ class Helper
        
        $user_data = User::where('session_token',$jwt_payload->token)
                ->first();
-       
-       $user_data->session_time = time();
-       $user_data->save();
-       
-       $time_since_token_set = gmdate(date("H", time()) - date('H', $user_data->session_time));
-       
-       if($time_since_token_set >= 1)
+       if($user_data !== null)
        {
-           Self::interrupt(633);
+           $user_data->session_time = time();
+           $user_data->save();
+
+           $time_since_token_set = gmdate(date("H", time()) - date('H', $user_data->session_time));
+
+           if($time_since_token_set >= 1)
+           {
+                Self::interrupt(633);
+           }
        }
+       
        
        
        return $user_data;

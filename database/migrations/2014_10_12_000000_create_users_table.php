@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             $table->boolean('role')->default(0);
             $table->string('first_name');
+            $table->string('phone_number');
             $table->string('last_name');
             $table->boolean('status');
             $table->string('session_token');

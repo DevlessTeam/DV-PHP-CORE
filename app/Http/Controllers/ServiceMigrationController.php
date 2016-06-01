@@ -111,7 +111,7 @@ class ServiceMigrationController extends Controller {
 
                
                
-                    return redirect()->route('services.index')->with('package',$zipped_service_name);
+                    return redirect()->route('migrate.index')->with('package',$zipped_service_name);
                 }
 	/**
 	* Display the specified resource.
