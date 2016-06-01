@@ -86,7 +86,6 @@ window.onload(function() {
 
   function tableCall(table_entries) {
     $.get('/datatable/'+table_entries+'/entries', function(data) {
-      $('#excelDataTable').html(' ');
       navOption(data);
 
       if (data.data.length == 0){
@@ -113,7 +112,11 @@ window.onload(function() {
   var service_id;
   $('#service').change(function() {
     service_id = $('#service').val();
-
+    $('#excelDataTable').html(' ');
+    $('#empty_handler').hide('fast', function() {
+      $('#page-nav').hide();
+    });
+    $('#table_name').find('option').remove().end().append('<option disabled selected value> -- select a table -- </option>');
     $.get('/datatable/'+service_id, function(data) {
       var tables = data;
       for (var i = 0; i < tables.length; i++) {
