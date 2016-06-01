@@ -43,7 +43,7 @@
                       <div class="col-lg-10">
                         <select name="service_name" class="form-control m-b-10">
                           @foreach($services as $option_index => $option_value )
-                            <option value="{{$option_value->name}}">{{$option_value->name}}</option>
+                            <option value="{{$option_value->name}}">{{ucwords($option_value->name)}}</option>
                           @endforeach
                           @if(sizeof($services) !== 0)
                             <option value="*">Entire App ({{$app->name}})</option>

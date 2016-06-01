@@ -3,8 +3,7 @@
 @section('header')
    <!-- page head start-->
             <div class="page-head">
-                <h3>Service</h3><span class="sub-title">Welcome to
-                Devless</span>            </div><!-- page head end-->
+                <h3>Service</h3><span class="sub-title">{{ucwords($service->name)}}</span>            </div><!-- page head end-->
 @endsection
 
 @section('content')
@@ -30,7 +29,7 @@
         </div>
           <HR>
           <center> Add Fields </center>
-          
+
           <div class="removeIndicator" id="fields" >
             <div  class="form-group">
             <label for="name-field">Field Name</label>
@@ -58,21 +57,21 @@
            <label for="default-field">Default Value(optional)</label>
             <input type="text" id="default" name="default" class="form-control" />
            </div>
-            
+
             <div class="form-group">
                 <label for="option-field">Field Options</label>
-                
+
                   <input type="checkbox" id="required"  name="required"/>REQUIRED?
-              
-              
+
+
                   <input type="checkbox" id="validate" name="validate"/>VALIDATE?
-              
-              
+
+
                     <input type="checkbox" id="unique" name="unique"/> UNIQUE FIELD?
             </div>
       </div>
               <div class="dynamic-space"></div>
-          
+
       <div class="modal-footer">
           <button type="button" onclick="append_field()" class="btn btn-info pull-left" >Add a Field</button>
           <button type="button" ONclick="create_table('{{$service->name}}')" class="btn btn-info pull-right" >Create Table</button>
@@ -110,8 +109,8 @@
                                         <span class="help-block">{{ $errors->first("active") }}</span>
                                      @endif
                                 </div>
-                                 
-                                
+
+
                                 <div class="form-group">
                                     <label for="description-field">Description</label>
                                     <div class="">
@@ -138,7 +137,7 @@
                                     </li>
                                 </ul>
                             </header>
-                           
+
                             <div class="panel-body">
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="jus">
@@ -147,12 +146,12 @@
                                                 <label for="g-title">Name</label>
                                                 <input class="form-control" name="database" id="database"
                                                 placeholder="Database Name" value="{{$service->database}}" type="text">
-                                                
+
                                         @if($errors->has("database"))
                                         <span class="help-block">{{ $errors->first("database") }}</span>
                                         @endif
                                          </div>
-                                            
+
                                             <div class="form-group">
                                                 <label for="g-txt" >Database Type</label>
                                                 <select id="db-type" name="driver"  class="form-control m-b-10">
@@ -196,7 +195,7 @@
                                     <div class="tab-pane" id="mtab">
                                                 <section class="panel">
                     <header class="panel-heading head-border">
-                        
+
                     </header>
                     <div class="table-responsive">
                         <table class="table">
@@ -207,7 +206,7 @@
                                     <th>Table Name</th>
                                     <th>Description</th>
                                     <th>#N0 of Fields</th>
-                                    
+
                                     <th>Options</th>
                                 </tr>
                             </thead>
@@ -225,7 +224,7 @@
                                     <?php $count++; ?>
                                     @endforeach
                                  @else
-                                <h3 class="text-center alert alert-info">Empty!</h3>    
+                                <h3 class="text-center alert alert-info">Empty!</h3>
                                 @endif
                             </tbody>
                         </table>
@@ -236,7 +235,7 @@
                                     </div>
                                                                    <div class="tab-pane" id="jtab">
 
-                                                                       
+
 <textarea class="code-box" name="script" rows="20" style="width: 100%">
 
 @if(!$service->script == "")
@@ -246,7 +245,7 @@
 @endif
 
 </textarea>
-                                                                       <br>                                                            
+                                                                       <br>
 
                                                                        <button class="btn btn-info " onclick="run_script()" type="button"> Save </button><br><br>
 <span id="code-console" class="code-console" style="background-color:black;margin-left:14%;width:400px;height:300px;color:greenyellow">
@@ -260,12 +259,12 @@
             </div><!--body wrapper end-->
 <!--body wrapper end-->
 <script>
-    
+
     //page init function
     function init(){
         window.count = 0;
         window.main_old_fields =  $('.removeIndicator').clone();
-        window.schema_json = {"resource":[{"name":"","description":"","field":[]}]  }        
+        window.schema_json = {"resource":[{"name":"","description":"","field":[]}]  }
     }
     //destroy table
     function destroy_table(table_name, service_name){
@@ -283,7 +282,7 @@
            }
 
          $.ajax(settings).done(function (response) {
-             
+
            response_object = JSON.parse(response);
            status_code = response_object.status_code;
            if (status_code == 613) {
@@ -295,9 +294,9 @@
            }
          });
     }
-    
-  function append_field(){  
-  field_names = ['name', 'description', 'field-name', 'field-type', 'default', 
+
+  function append_field(){
+  field_names = ['name', 'description', 'field-name', 'field-type', 'default',
             'required', 'validate', 'unique'];
 
   old_fields = window.main_old_fields.clone();
@@ -305,14 +304,14 @@
   function(i){
             field_name = i+window.count;
             old_fields.find('#'+i).attr('name', field_name ).attr('id', field_name );
-            
+
        }
-               
-                
-  )   
-       
+
+
+  )
+
   new_fields = old_fields;
-        
+
         $( ".dynamic-space").append(new_fields);
         old_fields.attr('class', 'fields'+window.count);
         old_fields.contents().each(function () {
@@ -320,11 +319,11 @@
             if (this.nodeType === 1) $(this).html( $(this).html().replace(/removeIndicator/g, "fields"+window.count) )
             })
         window.count = window.count + 1 ;
-        
-        
+
+
     }
 
-    
+
     function create_table(service_name){
          $.fn.serializeObject = function()
         {
@@ -342,7 +341,7 @@
             });
             return o;
         };
-        
+
         object = $('#form').serializeObject();
         var array = $.map(object, function(value, index) {
         return [value];
@@ -358,35 +357,35 @@
                      {
                       var _this=$(o);
                       field_id = _this.attr('id');
-                        
+
                        if(typeof field_id == "string" && field_id.indexOf("validate")>= 0){
-                           form_array[count] = $('#'+_this.attr('id')).is(':checked'); 
+                           form_array[count] = $('#'+_this.attr('id')).is(':checked');
                        }
                        else if(typeof field_id == "string" && field_id.indexOf("required")>= 0){
-                           form_array[count] = $('#'+_this.attr('id')).is(':checked'); 
+                           form_array[count] = $('#'+_this.attr('id')).is(':checked');
                        }
                        else if(typeof field_id == "string" && field_id.indexOf("unique")>= 0){
-                           form_array[count] = $('#'+_this.attr('id')).is(':checked'); 
+                           form_array[count] = $('#'+_this.attr('id')).is(':checked');
                        }else{
-                           form_array[count] = $('#'+_this.attr('id')).val(); 
+                           form_array[count] = $('#'+_this.attr('id')).val();
                        }
-                        
-                         
+
+
                     count++;
                      })
-                
+
             }
           );
-            
+
             if(form_array.length > 4){
             window.schema_json.resource[0].name = form_array[0];
             window.schema_json.resource[0].description = form_array[1];
             var len = ((form_array.length)-4)/8;
             console.log("number of fields are:",len);
             for (var i = 1; i <= len; i++) {
-                position = ((len-i)*8) 
+                position = ((len-i)*8)
                 if(form_array[6+position] == ""){ _default = null;}else{_default = form_array[6+position]; }
-                window.schema_json.resource[0].field[i-1] = {  
+                window.schema_json.resource[0].field[i-1] = {
                     "name":form_array[3+position],
                     "field_type":form_array[4+position],
                     "ref_table":form_array[5+position],
@@ -394,7 +393,7 @@
                     "required":form_array[7+position],
                     "validation":form_array[8+position],
                     "is_unique":form_array[9+position],
-                    
+
                  };
                  console.log(3+position,form_array[3+position])
             }
@@ -418,15 +417,15 @@
               status_code = response_object.status_code;
               message = response_object.message;
               if(status_code == 700){
-                  alert(message);   
+                  alert(message);
               }
               if(status_code == 606){
-                  
-                  
+
+
                     location.reload();
-                  
+
               }else{
-                  
+
                   alert(message);
               }
             });
@@ -434,21 +433,21 @@
             else{
                 alert('Sorry seems you have no fields set ');
             }
-  
-              
-        
-        
+
+
+
+
     }
    function destroy_field(field_id){
        $('.'+field_id).remove();
    }
    function set_script(){
-       
+
        setTimeout(function(){ $('.code-box').ace({ theme: 'github', lang: 'php'}); }, 1);
    }
-   
+
    function run_script(){
-       
+
        var form = new FormData();
 form.append("call_type", "solo");
 form.append("script", $('.code-box').val());
@@ -475,12 +474,9 @@ $.ajax(settings).done(function (response) {
  : $('.code-console').css('color','red');
 
   $('.code-console').html('<font size="3">'+result.message+'</font>');
-      
-  
+
+
 });
    }
-</script> 
+</script>
 @endsection
-
-
- 

@@ -14,7 +14,7 @@ use \App\Helpers\DevlessHelper as DLH;
 class UserController extends Controller
 {
   // TODO: Session store needs to authenticate with a session table for security
-  public function getLogin()
+  public function get_login()
   {
     if(\Session::has('user'))
     {
@@ -24,7 +24,7 @@ class UserController extends Controller
     }
   }
 
-  public function postLogin(Request $request)
+  public function post_login(Request $request)
   {
     $loginCredentials = array(
       'email' => $request->input('email'),
@@ -43,14 +43,14 @@ class UserController extends Controller
     }
   }
 
-  public function getLogout()
+  public function get_logout()
   {
     \Session::forget('user');
     \Session::flush();
     return redirect('/');
   }
 
-  public function getRegister()
+  public function get_register()
   {
     $app = array(
       'app_key' => $_SERVER['SERVER_NAME'],
@@ -59,9 +59,9 @@ class UserController extends Controller
     return view('auth.create', compact('app'));
   }
 
-  public function postRegister(Request $request)
+  public function post_register(Request $request)
   {
-      
+
     $this->validate($request, [
       'username' => 'required|max:255|unique:users',
       'email' => 'required|email|max:255|unique:users',

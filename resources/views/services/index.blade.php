@@ -3,7 +3,7 @@
 @section('header')
 <!-- page head start-->
 <div class="page-head">
-    <h3>Service</h3><span class="sub-title">Service/</span>
+    <h3>Services</h3><span class="sub-title">Service/</span>
 </div>
 <!-- page head end-->
 
@@ -45,7 +45,7 @@
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <button type="submit" class="btn btn-default">Delete</button>
                                     </form>
-                            
+
                         </div>
                         </center>
 

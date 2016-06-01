@@ -86,12 +86,7 @@ window.onload(function() {
 
   function tableCall(table_entries) {
     $.get('/datatable/'+table_entries+'/entries', function(data) {
-      $('#excelDataTable').html(' ');
-
-      if (data.current_page == data.total) {
-        $('#previous').addClass('disabled');
-        $('#next').addClass('disabled');
-      }
+      navOption(data);
 
       if (data.data.length == 0){
         $('#empty_handler').show('fast', function(){
@@ -104,14 +99,8 @@ window.onload(function() {
         });
       }
 
-      entries = data.data;
-      nextUrl = data.next_page_url;
-      prevUrl = data.prev_page_url;
-      buildHtmlTable();
       $('#page-nav').show();
-      if(data.current_page == data.from ) {
-        $('#previous').addClass('disabled');
-      }
+
     });
   }
 
@@ -123,7 +112,11 @@ window.onload(function() {
   var service_id;
   $('#service').change(function() {
     service_id = $('#service').val();
-
+    $('#excelDataTable').html(' ');
+    $('#empty_handler').hide('fast', function() {
+      $('#page-nav').hide();
+    });
+    $('#table_name').find('option').remove().end().append('<option disabled selected value> -- select a table -- </option>');
     $.get('/datatable/'+service_id, function(data) {
       var tables = data;
       for (var i = 0; i < tables.length; i++) {
@@ -174,32 +167,32 @@ window.onload(function() {
   $('#previous').click(function(){
     $.get(prevUrl, function(data) {
       $('#excelDataTable').html(' ');
-      entries = data.data;
-      prevUrl = data.prev_page_url;
-      nextUrl = data.next_page_url;
-      buildHtmlTable();
-      checkPage(data);
+      navOption(data);
     });
   });
 
   $('#next').click(function() {
     $.get(nextUrl, function(data) {
       $('#excelDataTable').html(' ');
-      entries = data.data;
-      prevUrl = data.prev_page_url;
-      nextUrl = data.next_page_url;
-      buildHtmlTable();
-      checkPage(data);
+      navOption(data);
     });
   })
 
+  function navOption(data) {
+    entries = data.data;
+    prevUrl = data.prev_page_url;
+    nextUrl = data.next_page_url;
+    buildHtmlTable();
+    checkPage(data);
+  }
+
   function checkPage(data) {
-    if(data.current_page == data.from ) {
-      $('#previous').addClass('disabled');
-      $('#next').removeClass('disabled');
-    } else if (data.current_page == data.last_page) {
+    if (data.current_page == data.last_page) {
       $('#previous').removeClass('disabled');
       $('#next').addClass('disabled');
+    } else if (data.current_page == data.from ) {
+      $('#previous').addClass('disabled');
+      $('#next').removeClass('disabled');
     } else {
       $('#next').removeClass('disabled');
       $('#previous').removeClass('disabled');
