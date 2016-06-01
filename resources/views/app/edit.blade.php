@@ -29,7 +29,7 @@
                             <div class="form-group @if($errors->has('name')) has-error @endif" >
                                 <label for="name" class="col-lg-2 col-sm-2 control-label">App Name</label>
                                 <div class="col-lg-10">
-                                    <input type="text" id="name-field" name="name" class="form-control" value="{{ $app->name }}">
+                                    <input type="text" id="name-field" name="name" class="form-control" value="{{ $app->name }}" required="">
                                       @if($errors->has("name"))
                                         <span class="help-block">{{ $errors->first("name") }}</span>
                                       @endif
