@@ -80,12 +80,13 @@ class PrivacyController extends Controller
         }
         $service = Service::findOrFail($id);
         $json = array(
-        'query' =>    $request->input('query'),
+        'query'  =>     $request->input('query'),
         'create' =>    $request->input('create'),
         'update' =>    $request->input('update'),
         'delete' =>    $request->input('delete'),
         'schema' =>    $request->input('schema'),
-        'script' =>    $request->input('script')
+        'script' =>    $request->input('script'),
+        'view'   =>    $request->input('view')
       );
         $service->resource_access_right = json_encode($json);
         if ($service->save()) {
