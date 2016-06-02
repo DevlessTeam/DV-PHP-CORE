@@ -144,6 +144,7 @@
           $('#delete').val(write_access.delete);
           $('#schema').val(write_access.schema);
           $('#script').val(write_access.script);
+          $('#view').val(write_access.view);
         });
       });
     }());
