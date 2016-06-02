@@ -1,13 +1,12 @@
 <?php
-// allow origin
-header('Access-Control-Allow-Origin: *');
-// add any additional headers you need to support here
-header('Access-Control-Allow-Headers: Origin, Content-Type');
-/*
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: PATCH, GET, POST, DELETE");
+ header('Access-Control-Allow-Headers: content-Type, devless-token, devless-key, devless-user-token ');
+ /*
 |--------------------------------------------------------------------------
 | Create The Application
 |--------------------------------------------------------------------------
-|
+    |
 | The first thing we will do is create a new Laravel application instance
 | which serves as the "glue" for all the components of Laravel, and is
 | the IoC container for the system binding all of the various parts.
