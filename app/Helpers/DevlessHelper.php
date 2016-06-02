@@ -391,6 +391,30 @@ class DevlessHelper extends Helper
         
     }
     
+    /**
+     * get authenticated user details 
+     * @param type $request
+     * @return alphanum
+     */
+    public function get_profile($payload)
+    {
+         if($token = Helper::get_authenticated_user_cred(true) )
+        {
+            
+            $db = new DB();
+            $user_data = $db::table('users')->where('id',$token['id'])
+                    ->select('id','username', 'email', 'phone_number', 'first_name', 'last_name')
+                    ->first();
+                
+            
+            
+            return $user_data;
+            
+        }
+        
+        return false; 
+    }
+    
      /**
      * authenticate and login devless users
      * @param type $request
@@ -462,13 +486,24 @@ class DevlessHelper extends Helper
         {
             
             $user =  new user();
+            
+            if(isset($payload['session_token'])){unset($payload['session_token']);}
+            if(isset($payload['session_time'])){unset($payload['session_time']);}
+            if(isset($payload['status'])){unset($payload['status']);} 
+            
+            if(isset($payload['role'])){ unset($payload['role']);} 
+            
+            if(isset($payload['password']))
+            {
+                
+              $payload['password'] = Helper::password_hash($payload['password']);
+                
+            }
+            
             if($user::where('id',$token['id'])->update($payload))
             {
                 return true;
             }
-            
-            
-            
         }
         
         return false; 
