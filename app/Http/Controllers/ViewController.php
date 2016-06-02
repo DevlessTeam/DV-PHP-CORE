@@ -27,6 +27,10 @@ class ViewController extends Controller
         $params = $service->get_params($method, $request);
         $payload['params'] = $params;
        
+        $access_type = $payload['resource_access_right']; 
+        $access_state = $service->check_resource_access_right_type($access_type["script"]);
+        $user_cred = Helper::get_authenticated_user_cred($access_state);
+        
         return $this->_fetch_view($service_name, $template, $payload);
         
     }

@@ -48,11 +48,9 @@ class ScriptController extends Controller
     public function run_script($resource,$payload)
     { 
         $service = new Service();
+        
         $access_type = $payload['resource_access_right']; 
-        
-        $authentication_required = 
-                $access_state = $service->check_resource_access_right_type($access_type["script"]);
-        
+        $access_state = $service->check_resource_access_right_type($access_type["script"]);
         $user_cred = Helper::get_authenticated_user_cred($access_state);
         
         //available internal params 
