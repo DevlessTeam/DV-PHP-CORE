@@ -138,7 +138,6 @@
         $('#form_data').attr('action', '/privacy/'+service);
         $.get('/privacy/'+service+'/get', function (data) {
           var write_access = JSON.parse(data);
-          console.log(data);
           $('#query').val(write_access.query);
           $('#create').val(write_access.create);
           $('#update').val(write_access.update);
