@@ -134,7 +134,8 @@ class ServiceController extends Controller {
 	 */
 	public function update(Request $request, $id)
 	{   
-                
+                $views = new DvViews();
+                    
 		if($service = Service::findOrFail($id))
                 {
                     if($request->input('call_type') =='solo')
@@ -144,7 +145,17 @@ class ServiceController extends Controller {
                         Helper::interrupt(626);
                     }
                     
+                    $old_service_name = $service->name; 
+                    $new_service_name = $request->input("name");
+                    if(!$views->rename_view($old_service_name, $new_service_name))
+                    {
+                         DLH::flash("Sorry service could not be updated(view error)", 'error');
+                         return back();
+                    }
+                    
                     $service->name = strtolower($request->input("name"));
+                    
+                    
                     $service->description = $request->input("description");
                     $service->username = $request->input("username");
                     $service->password = $request->input('password');

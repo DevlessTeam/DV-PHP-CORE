@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\ServiceController as Service; 
 
 use \App\Helpers\Response as Response;
-
+use App\Helpers\Helper as Helper;
 class ViewController extends Controller
 {
     public $MIME_LIST =
@@ -28,7 +28,7 @@ class ViewController extends Controller
         $payload['params'] = $params;
        
         $access_type = $payload['resource_access_right']; 
-        $access_state = $service->check_resource_access_right_type($access_type["script"]);
+        $access_state = $service->check_resource_access_right_type($access_type["view"]);
         $user_cred = Helper::get_authenticated_user_cred($access_state);
         
         return $this->_fetch_view($service_name, $template, $payload);
@@ -91,6 +91,16 @@ class ViewController extends Controller
                 return false;
         }
         
+        
+        
+    }
+    
+    public function rename_view($old_service_name, $new_service_name)
+    {
+        $old_path = config('devless')['views_directory'].$old_service_name;
+        $new_path = config('devless')['views_directory'].$new_service_name;
+        
+        return (rename($old_path, $new_path))? true : false;
         
         
     }
