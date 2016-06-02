@@ -252,7 +252,7 @@ class Helper
                     ];
             }
             else
-            {//say wrong det
+            {
                 self::interrupt(628);
             }
         }

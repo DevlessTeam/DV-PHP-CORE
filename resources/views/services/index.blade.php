@@ -16,7 +16,7 @@
     <div class="row">
          <div class="col-lg-3 col-sm-6 m-b-30">
                 <div class="panel panel-danger">
-                    <div class="panel-header"><br><h4><center>Add Service</center></h4></div>
+                    <div class="panel-header"><br><h4><center>Create Service</center></h4></div>
                     <div class="panel-body">
                         <a href="{{ route('services.create') }}">
                         <center><i class="fa fa-plus fa-5x" aria-hidden="true"></i></center>

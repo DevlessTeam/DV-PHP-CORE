@@ -533,7 +533,27 @@ class DevlessHelper extends Helper
     }
     
     
-    
+    public function logout()
+    {
+        if($token = Helper::get_authenticated_user_cred(true) )
+        {
+            
+            $user =  new user();
+            if($user::where('id',$token['id'])->update(['session_token'=> ""]))
+            {
+                return true;
+            }
+            
+        }
+            
+            return false;
+    }
+
+
+
+
+
+
     /**
      * set session token 
      * @param type $request
