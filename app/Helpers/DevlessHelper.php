@@ -546,7 +546,7 @@ class DevlessHelper extends Helper
             
         }
             
-            return false;
+            return false;   
     }
 
 
@@ -567,7 +567,7 @@ class DevlessHelper extends Helper
        
        $payload = json_encode($payload);
        
-       if(DB::table('users')->where('id',$user_id)->update(['session_time'=>time()]))
+       if(DB::table('users')->where('id',$user_id)->update(['session_time'=>Helper::session_timestamp()]))
         {
             return $jwt->encode($payload, $secret);
         }

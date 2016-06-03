@@ -237,7 +237,7 @@ class Helper
             $user_cred['id'] = $admin->id;
             $user_cred['token'] = "non for admin";
         }
-        else if($user_token !== null)
+        else if($user_token !== null || $access_state == false)
         {
             
             $user_data = self::verify_user_token($user_token);
@@ -276,15 +276,21 @@ class Helper
                ->first();
        if($user_data !== null)
        {
-           $user_data->session_time = time();
-           $user_data->save();
-
-           $time_since_token_set = gmdate(date("H", time()) - date('H', $user_data->session_time));
-
-           if($time_since_token_set >= 1)
-           {
+           
+           $d1 = new \DateTime($user_data->session_time);
+           $d2 = new \DateTime();
+           $interval = $d1->diff($d2);
+           
+           if( $interval->h >= 1 || $interval->days > 0)
+           {    
+               $user_data->session_token = "";
+               $user_data->save();
                 Self::interrupt(633);
            }
+           
+           $user_data->session_time = Helper::session_timestamp();
+           $user_data->save();
+
        }
        
        
@@ -292,8 +298,13 @@ class Helper
        return $user_data;
    }
    
-   
-   
+   public static function session_timestamp()
+   {
+       return date('Y-m-d H:i:s');
+   }
+
+
+   //date("H:i:s");
 }
 
 

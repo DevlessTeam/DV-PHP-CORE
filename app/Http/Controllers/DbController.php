@@ -218,7 +218,7 @@ class DbController extends Controller
 
                 if(isset($payload['params'][0]['params'][0]['drop']))
                 {
-                    if($payload['params'][0]['params'][0]['drop'])
+                    if($payload['params'][0]['params'][0]['drop'] == true)
                     {
                        \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
                    \DB::table('table_metas')->where('table_name',$ORG_table_name)->delete();
@@ -235,7 +235,7 @@ class DbController extends Controller
                     $where = str_replace(",", "','", $where);
                     $where = "'".$where."'";
                     $destroy_query = $destroy_query.'->where('.$where.')';
-                    $task ='where';
+                    $task ='failed';
 
 
                    }
@@ -355,6 +355,7 @@ class DbController extends Controller
                 
             }
             $complete_query = 'return '.$complete_query.'->get();';
+            
             $query_output = eval($complete_query);
             if(sizeof($query_output) == 1 && isset($queried_table_list))
             {

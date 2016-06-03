@@ -30,6 +30,7 @@
             </div>
         @if($services->count())
              @foreach($services as $service)
+             <a href="{{ route('services.edit', $service->id) }}">
             <div class="col-lg-3 col-sm-6 m-b-30">
                 <div class="panel panel-danger">
                     <div class="panel-header"><br><h4><center>{{substr(strtoupper($service->name),0,10)}}</center></h4></div>
@@ -37,6 +38,7 @@
                         <center><span title="{{$service->description}}"</span>{{substr($service->description, 0, 20)}}@if(strlen($service->description)>20)...@endif</center>
                         <br><br>
                         <center>
+                            
                         <div class="btn-group" role="group">
                             <a type="button" href="{{ route('services.edit', $service->id) }}" class="btn btn-default">Edit</a>
                             <a type="button" href="/service/{{$service->name}}/view/index/" target="_blank" class="btn btn-default">Console</a>
@@ -53,6 +55,7 @@
                 </div>
 
             </div>
+             </a>
             @endforeach
         {!! $services->render() !!}
             @endif
