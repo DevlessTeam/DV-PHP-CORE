@@ -66,14 +66,14 @@ class ScriptController extends Controller
 
 //NB: position matters here
 $code = <<<EOT
-        
+  if(!function_exists('DvService')){      
  \$GLOBALS['script_class'] = \$script_class;
 function DvService(\$json_payload, \$service_name, \$resource, \$method){
       
-return json_decode(call_user_func_array(array(\$GLOBALS['script_class'], 'internal_services'),array(\$json_payload, 
-    \$service_name, \$resource, \$method)));
+return call_user_func_array(array(\$GLOBALS['script_class'], 'internal_services'),array(\$json_payload, 
+    \$service_name, \$resource, \$method));
  }
-
+}
 $payload[script];
 EOT;
 
