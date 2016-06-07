@@ -30,10 +30,12 @@ class ScriptController extends Controller
     {
         $json_payload = json_decode($json_payload,true);
         $service = new Service();
+        
         $request = [
         "resource" => $json_payload['resource'],
         "method" => $method
         ];
+        
         $output = $service->resource($request, $service_name, $resource, $internal_access=true);
         return $output;
     }
@@ -69,8 +71,8 @@ $code = <<<EOT
   if(!function_exists('DvService')){      
  \$GLOBALS['script_class'] = \$script_class;
 function DvService(\$json_payload, \$service_name, \$resource, \$method){
-      
-return call_user_func_array(array(\$GLOBALS['script_class'], 'internal_services'),array(\$json_payload, 
+
+  return call_user_func_array(array(\$GLOBALS['script_class'], 'internal_services'),array(\$json_payload, 
     \$service_name, \$resource, \$method));
  }
 }

@@ -369,7 +369,7 @@ class ServiceController extends Controller {
             }
                  
             /*
-             * get parameters from request
+             *check if service exists
              * 
              * @param string $service_name name of service 
              * return array of service values 
@@ -388,7 +388,7 @@ class ServiceController extends Controller {
             }
             
             /*
-             * get parameters from request
+             * get parameters set in from request
              * 
              * @param string $method reuquest method type 
              * @param array $request request parameters 
@@ -414,6 +414,7 @@ class ServiceController extends Controller {
                 }
                 return $parameters;
             }
+            
             /*
              * get and convert resource_access_right to array
              * @param object $service service payload
@@ -428,7 +429,11 @@ class ServiceController extends Controller {
                  return $resource_access_right;
             }
             
-            
+            /*
+             * check user access right 
+             * @param object $service service payload
+             * @return boolean 
+             */
             public function check_resource_access_right_type($access_type)
             {
                 $is_user_login = Helper::is_admin_login();
