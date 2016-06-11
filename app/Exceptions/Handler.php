@@ -55,7 +55,10 @@ class Handler extends ExceptionHandler
             return response()->json([
                     'status_code' =>700,
                     'message'=>[],
-                    'payload'=>[]
+                    'payload'=>[
+                    'message' => $e->getMessage(),
+                    'file'    => $e->getFile(),
+                    'line'     =>$e->getLine()]
                     ]);
     }
 }

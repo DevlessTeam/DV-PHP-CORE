@@ -95,7 +95,7 @@
       }
       function auto_download(package_name){
 
-        url = 'download/'+package_name,
+        url = '/download/'+package_name,
         win = window.open(url, '_blank');
         win.focus();
       }
