@@ -378,60 +378,68 @@
           );
 
             if(form_array.length > 4){
-            window.schema_json.resource[0].name = form_array[0];
-            window.schema_json.resource[0].description = form_array[1];
-            var len = ((form_array.length)-4)/8;
-            console.log("number of fields are:",len);
-            for (var i = 1; i <= len; i++) {
-                position = ((len-i)*8)
-                if(form_array[6+position] == ""){ _default = null;}else{_default = form_array[6+position]; }
-                window.schema_json.resource[0].field[i-1] = {
-                    "name":form_array[3+position],
-                    "field_type":form_array[4+position],
-                    "ref_table":form_array[5+position],
-                    "default":_default,
-                    "required":form_array[7+position],
-                    "validation":form_array[8+position],
-                    "is_unique":form_array[9+position],
+                function trim(str){
+                    console.log(str);
+                    if(typeof str == "string"){
+                        return str.replace(/\s+$/, '');
+                    }else{
+                        return str;
+                    }
+                }    
+                window.schema_json.resource[0].name = trim(form_array[0]);
+                window.schema_json.resource[0].description = trim(form_array[1]);
+                var len = ((form_array.length)-4)/8;
+                
+                for (var i = 1; i <= len; i++) {
+                    position = ((len-i)*8)
+                    if(form_array[6+position] == ""){ _default = null;}else{_default = trim(form_array[6+position]); }
+                    window.schema_json.resource[0].field[i-1] = {
+                        "name":trim(form_array[3+position]),
+                        "field_type":trim(form_array[4+position]),
+                        "ref_table":trim(form_array[5+position]),
+                        "default":_default,
+                        "required":trim(form_array[7+position]),
+                        "validation":trim(form_array[8+position]),
+                        "is_unique":trim(form_array[9+position]),
 
-                 };
-                 console.log(3+position,form_array[3+position])
-            }
-               table_schema =   JSON.stringify(window.schema_json);
-               var settings = {
-                "async": true,
-                "crossDomain": true,
-                "url": "/api/v1/service/"+service_name+"/schema",
-                "method": "POST",
-                "headers": {
-                  "content-type": "application/json",
-                  "cache-control": "no-cache",
-                },
-                "processData": false,
-                "data": table_schema
-              }
+                     };
 
-            $.ajax(settings).done(function (response) {
-              console.log(response);
-              response_object = JSON.parse(response);
-              status_code = response_object.status_code;
-              message = response_object.message;
-              if(status_code == 700){
-                  alert(message);
-              }
-              if(status_code == 606){
+                }
+                   table_schema =   JSON.stringify(window.schema_json);
+                   var settings = {
+                    "async": true,
+                    "crossDomain": true,
+                    "url": "/api/v1/service/"+service_name+"/schema",
+                    "method": "POST",
+                    "headers": {
+                      "content-type": "application/json",
+                      "cache-control": "no-cache",
+                    },
+                    "processData": false,
+                    "data": table_schema
+                  }
+
+                $.ajax(settings).done(function (response) {
+                  console.log(response);
+                  response_object = JSON.parse(response);
+                  status_code = response_object.status_code;
+                  message = response_object.message;
+                  if(status_code == 700){
+                      alert(message);
+                  }
+                  if(status_code == 606){
 
 
-                    location.reload();
+                        location.reload();
 
-              }else{
+                  }else{
 
-                  alert(message);
-              }
-            });
+                      alert(message);
+                  }
+                });
             }
             else{
-                alert('Sorry seems you have no fields set ');
+                alert('Sorry seems like you have no fields set ');
             }
 
 

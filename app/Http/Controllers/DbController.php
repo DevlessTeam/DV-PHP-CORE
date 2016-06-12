@@ -115,7 +115,11 @@ class DbController extends Controller
             
             foreach($payload['params'] as $table){
                 $table_name = $table['name'];
-                
+                 if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
+                    hasTable($table_name)) 
+                {
+                  Helper::interrupt(634);
+                }
                  //check data against field type before adding data 
                 $table_data = $this-> _validate_fields($table_name,$service_name, 
                         $table['field'], true);
@@ -151,6 +155,13 @@ class DbController extends Controller
                         $payload['params'][0]['params'][0]['data']))
             {
                 $table_name = $service_name.'_'.$payload['params'][0]['name'];
+                
+                if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
+                    hasTable($table_name)) 
+                {
+                  Helper::interrupt(634);
+                }
+                
                 $where  = $payload['params'][0]['params'][0]['where'];
                 $explotion = explode(',', $where);
                 $data =  $payload['params'][0]['params'][0]['data'];
@@ -204,6 +215,11 @@ class DbController extends Controller
                 $ORG_table_name = $payload['params'][0]['name'];
                 $table_name = $service_name.'_'.$ORG_table_name;
                 
+                if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
+                    hasTable($table_name)) 
+                {
+                  Helper::interrupt(634);
+                }
                 if($payload['user_id'] !== "")
                 {
                     $user_id = $payload['user_id'];
@@ -294,6 +310,11 @@ class DbController extends Controller
         //check if table name is set 
         if(isset($payload['params']['table']))
        {    
+            if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
+                    hasTable($payload['params']['table'][0])) 
+            {
+                  Helper::interrupt(634);
+            }
             if($payload['user_id'] !== "" ){
                 
                 $user_id = $payload['user_id'];

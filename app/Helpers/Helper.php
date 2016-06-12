@@ -58,8 +58,9 @@ class Helper
         629 =>  'Sorry table could not be updated',
         630 =>  'failed to push json to file',
         631 =>  'Sorry access has been revoked',
-        632 =>  'There is something wrong with your in put field ',
+        632 =>  'There is something wrong with your input field ',
         633 =>  'Token has expired please try logging in again',
+        634 =>  'Table does not exist',
         700 => 'internal system error',
     ];
 
