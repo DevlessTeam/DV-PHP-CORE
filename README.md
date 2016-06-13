@@ -25,7 +25,8 @@ This document explains the various syntax for accessing and working with  the ap
 * run composer install to grab dependecies
 * edit config/database.php to add database option 
 * run migrations with php artisan migrate
-* $ php artisan serve
+* ``$ php artisan serve``
+
 If everything goes on smoothly you should be able to access the setup screen at localhost:8000
 
 If you will need help setting up you may check out the laravel [installation](https://laravel.com/docs/5.1) guide as the devless core is based of laravel. 
