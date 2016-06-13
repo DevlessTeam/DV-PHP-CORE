@@ -1,5 +1,9 @@
             <!--footer section start-->
             <footer>
+                <script src="https://cdn.smooch.io/smooch.min.js"></script>
+<script>
+Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
+</script>
                 2016 &copy; Devless.
 
             </footer>
