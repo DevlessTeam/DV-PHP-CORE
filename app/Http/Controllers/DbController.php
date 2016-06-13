@@ -116,7 +116,7 @@ class DbController extends Controller
             foreach($payload['params'] as $table){
                 $table_name = $table['name'];
                  if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
-                    hasTable($table_name)) 
+                    hasTable($service_name.'_'.$table_name)) 
                 {
                   Helper::interrupt(634);
                 }
@@ -311,7 +311,7 @@ class DbController extends Controller
         if(isset($payload['params']['table']))
        {    
             if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
-                    hasTable($payload['params']['table'][0])) 
+                    hasTable($service_name.'_'.$payload['params']['table'][0])) 
             {
                   Helper::interrupt(634);
             }
@@ -330,7 +330,9 @@ class DbController extends Controller
             (isset($payload['params']['size']))?
             $complete_query = $base_query
                     . '->take('.$payload['params']['size'][0].')' :
+                
             $complete_query = $base_query.'->take(100)' ;   
+            
             (isset($payload['params']['related']))? $queried_table_list = 
                     $payload['params']['related'] : false;
             
@@ -386,8 +388,6 @@ class DbController extends Controller
                  $related = $this->_get_related_tables($payload, $table_name, $query_output[0], 
                          $wanted_relationships, $db); 
                  
-
-            
             }
             $query_output['related'] = $related;
             $response = Response::respond(625,null,$query_output);
@@ -421,7 +421,7 @@ class DbController extends Controller
         $new_payload['id'] = $payload['id'];
         $table_name = $service_name.'_'.$new_payload['name'];
          if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
-                    hasTable($table_name )) 
+                    hasTable($service_name.'_'.$table_name )) 
             {
 
 
@@ -593,7 +593,7 @@ class DbController extends Controller
              $conn['collation'] = $collation;
          }
          \Config::set('database.connections.DYNAMIC_DB_CONFIG', $conn);
-    }
+    }  
     /*
      * access different database connections
      * 
