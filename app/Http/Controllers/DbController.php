@@ -307,8 +307,9 @@ class DbController extends Controller
         $service_name = $payload['service_name'];
         $connector = $this->_connector($payload);
         $db =   \DB::connection('DYNAMIC_DB_CONFIG');
+        
         //check if table name is set 
-        if(isset($payload['params']['table']))
+        if(isset($payload['params']['table'][0]))
        {    
             if(! \Schema::connection('DYNAMIC_DB_CONFIG')->
                     hasTable($service_name.'_'.$payload['params']['table'][0])) 
@@ -326,15 +327,23 @@ class DbController extends Controller
                  $base_query = '$db->table("'.$service_name.'_'.$payload['params']['table'][0].'")';
                     
             }
-            $table_name = $payload['params']['table'];
+            $table_name = $service_name.'_'.$payload['params']['table'][0];
+            
+            (isset($payload['params']['offset']))? 
+                    $complete_query = $base_query
+                    . '->skip('.$payload['params']['offset'][0].')' :
+                     false;
+            
             (isset($payload['params']['size']))?
             $complete_query = $base_query
                     . '->take('.$payload['params']['size'][0].')' :
                 
-            $complete_query = $base_query.'->take(100)' ;   
+            $complete_query = $complete_query.'->take(100)' ;   
+            
             
             (isset($payload['params']['related']))? $queried_table_list = 
                     $payload['params']['related'] : false;
+            
             
             unset($payload['params']['related']);
             $related =[];
@@ -346,7 +355,8 @@ class DbController extends Controller
                $complete_query = $complete_query
                     . '->orderBy("'.$payload['params']['order'][0].'" )' ;
                 unset($payload['params']['order']);}
-                unset($payload['params']['table'],$payload['params']['size']
+                unset($payload['params']['table'],$payload['params']['size'],
+                      $payload['params']['offset']  
                     ); 
             foreach($payload['params'] as $key => $query)
             {
@@ -378,8 +388,10 @@ class DbController extends Controller
                 
             }
             $complete_query = 'return '.$complete_query.'->get();';
-            
+            //Helper::interrupt(1,$complete_query);
+            $count = $db->table($table_name)->count();
             $query_output = eval($complete_query);
+            $query_output['count'] = $count;
             if(sizeof($query_output) == 1 && isset($queried_table_list))
             {
                 
