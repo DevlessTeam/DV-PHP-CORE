@@ -338,7 +338,7 @@ class DbController extends Controller
             $complete_query = $base_query
                     . '->take('.$payload['params']['size'][0].')' :
                 
-                    false ;   
+                    $complete_query = $base_query ;   
             
             
             (isset($payload['params']['related']))? $queried_table_list = 
