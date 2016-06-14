@@ -13,6 +13,7 @@ use App\Http\Controllers\ViewController as View;
 use Session;
 use \App\Helpers\DevlessHelper as DLH;
 use App\Http\Controllers\ViewController as DvViews;
+use Validator;
 
 class ServiceController extends Controller {
 
@@ -46,12 +47,30 @@ class ServiceController extends Controller {
 	 */
 	public function store(Request $request)
 	{       
+                $service = new Service();
+                $service_name_from_form = $request->input("name"); 
+                $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
+                $service_name = strtolower($service_name_from_form);
 
-                    $service = new Service();
-                    $service_name = strtolower($request->input("name"));
+                $validator = Validator::make(
                     
-                     
-		    $service->name = $service_name;
+                    ['name'=>$service_name],
+                    
+                    [
+                        'name'=>'required|unique:services,name',
+                        
+                    ]
+                    
+                    
+                    );
+                
+                 if($validator->fails()){
+                     $errors = $validator->messages();
+                     DLH::flash("Sorry but service could not be created", 'error');
+                     return redirect()->route('services.create')->with('errors',$errors)->withInput();
+                 }
+
+                    $service->name = $service_name;
                     $service->description = $request->input("description");
                     $service->username = $request->input("username");
                     $service->password = $request->input('password');
@@ -145,15 +164,39 @@ class ServiceController extends Controller {
                         Helper::interrupt(626);
                     }
                     
-                    $old_service_name = $service->name; 
-                    $new_service_name = $request->input("name");
+                    
+               $old_service_name = $service->name; 
+               $service_name_from_form = $request->input("name"); 
+               $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
+               $service_name_from_form = strtolower($service_name_from_form);
+
+               $new_service_name = $service_name_from_form;
+                $validator = Validator::make(
+                    
+                    ['name'=>$new_service_name],
+                    
+                    [
+                        'name'=>'required|unique:services,name',
+                        
+                    ]
+                    
+                    
+                    );
+                
+                 if($validator->fails()){
+                     $errors = $validator->messages();
+                     DLH::flash("Sorry service could not be updated", 'error');
+                     return back()->with('errors',$errors)->withInput();
+                 }
+                    
+                    
                     if(!$views->rename_view($old_service_name, $new_service_name))
                     {
                          DLH::flash("Sorry service could not be updated(view error)", 'error');
                          return back();
                     }
                     
-                    $service->name = strtolower($request->input("name"));
+                    $service->name = $new_service_name;
                     
                     
                     $service->description = $request->input("description");
