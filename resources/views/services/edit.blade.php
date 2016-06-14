@@ -381,18 +381,19 @@
                 function trim(str){
                     console.log(str);
                     if(typeof str == "string"){
-                        return str.replace(/\s+$/, '');
+                        
+                        return str.replace(/\s+/g, '').toLowerCase();
                     }else{
                         return str;
                     }
                 }    
                 window.schema_json.resource[0].name = trim(form_array[0]);
-                window.schema_json.resource[0].description = trim(form_array[1]);
+                window.schema_json.resource[0].description = form_array[1]  ;
                 var len = ((form_array.length)-4)/8;
                 
                 for (var i = 1; i <= len; i++) {
                     position = ((len-i)*8)
-                    if(form_array[6+position] == ""){ _default = null;}else{_default = trim(form_array[6+position]); }
+                    if(form_array[6+position] == ""){ _default = null;}else{_default = form_array[6+position]; }
                     window.schema_json.resource[0].field[i-1] = {
                         "name":trim(form_array[3+position]),
                         "field_type":trim(form_array[4+position]),
