@@ -48,10 +48,11 @@ class ServiceController extends Controller {
 	{       
 
                     $service = new Service();
-                    $service_name = strtolower($request->input("name"));
+                    $service_name_from_form = $request->input("name"); 
+                    $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
+                    $service_name = strtolower($service_name_from_form);
                     
-                     
-		    $service->name = $service_name;
+                    $service->name = $service_name;
                     $service->description = $request->input("description");
                     $service->username = $request->input("username");
                     $service->password = $request->input('password');
@@ -146,7 +147,11 @@ class ServiceController extends Controller {
                     }
                     
                     $old_service_name = $service->name; 
-                    $new_service_name = $request->input("name");
+                    $service_name_from_form = $request->input("name"); 
+                    $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
+                    $service_name_from_form = strtolower($service_name_from_form);
+                    
+                    $new_service_name = $service_name_from_form;
                     if(!$views->rename_view($old_service_name, $new_service_name))
                     {
                          DLH::flash("Sorry service could not be updated(view error)", 'error');
