@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Hash;
+use Session;
 use App\App;
 use App\User;
 use App\Http\Requests;
@@ -38,7 +39,7 @@ class UserController extends Controller
       DLH::flash('Welcome Back', 'success');
       return redirect('services');
     } else {
-      DLH::flash('Incorrect login credentials', 'error');
+        Session::flash('error', 'Incorrect login credentials');
       return back();
     }
   }
