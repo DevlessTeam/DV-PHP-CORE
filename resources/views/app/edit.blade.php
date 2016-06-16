@@ -108,7 +108,7 @@
                             <div class="form-group @if($errors->has('old_password')) has-error @endif" >
                                 <label for="old_password" class="col-lg-2 col-sm-2 control-label">Old Password</label>
                                 <div class="col-lg-10">
-                                    <input type="old_password" id="old_password-field" name="old_password" class="form-control" required="">
+                                    <input type="password" id="old_password-field" name="old_password" class="form-control" required="">
                                     @if($errors->has("old_password"))
                                         <span class="help-block">{{ $errors->first("old_password") }}</span>
                                     @endif
