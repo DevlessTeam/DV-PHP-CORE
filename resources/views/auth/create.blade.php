@@ -21,10 +21,6 @@
             section .panel {
                 left: -200px;
             }
-
-            footer {
-                position: fixed;
-            }
         }
     </style>
   <section>
@@ -132,7 +128,3 @@
         </div>
       </div>
     </div>
-<div style="">
-
-    @include('footer')
-</div>
