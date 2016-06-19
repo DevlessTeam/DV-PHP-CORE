@@ -127,6 +127,7 @@ window.onload(function() {
 
     $('#table_name').change(function(data) {
         var table_entries = $('#service option:selected').text() + '_' + $('#table_name option:selected').text();
+        $('#excelDataTable').html(' ');
         tableCall(table_entries);
     });
 
