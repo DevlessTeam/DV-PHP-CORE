@@ -1,7 +1,35 @@
 @include('header')
+@if(Session::has('error'))
+<div id="flash_msg" class="modal fade col-md-offset-3" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:250px;height:3%;">
+            <div class="modal-body text-center" style="color: #fff; background-color: #EA7878;">
+                {{Session::get('error')}}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{url('/js/jquery-1.10.2.min.js')}}"></script>
+<script src="{{url('/js/bootstrap.min.js')}}"></script>
+<script charset="utf-8">
+        $(function modal() {
+            $('#flash_msg').modal({
+                keyboard: true
+            });
+            $('.modal-backdrop').removeClass("modal-backdrop");
+            modalHide();
+        });
+
+        function modalHide() {
+            setTimeout(function(){
+                $('#flash_msg').modal('hide');
+            }, 3000);
+        }
+</script>
+@endif
+
   <section>
     @include('error')
-
     <!--body wrapper start-->
     <div class="wrapper">
       <div class="row">
@@ -9,7 +37,7 @@
           <img src="{{url('/img/logo.png')}}" height="50" alt="Devless">
           <span class="brand-name" style="font-size: 50px; color: #fff; position: relative; top: 10px;">Devless</span>
         </a>
-          <center>   
+          <center>
         <div class="col-lg-6 col-md-6 " style="margin-left:24%;margin-right:24%;margin-top:10%;">
           <section class="panel">
             <header class="panel-heading">
@@ -50,3 +78,6 @@
       </div>
     </div>
 
+    @if(session::has('error'))
+    {{session()->forget('error')}}
+    @endif

@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use Hash;
 use Session;
 use App\App;
 use App\User;
@@ -13,72 +14,73 @@ class AppController extends Controller
 {
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
+    * Display a listing of the resource.
+    *
+    * @return Response
+    */
     public function index()
     {
         $app = App::first();
-				$user = User::findOrFail(Session('user'));
+        $user = User::findOrFail(Session('user'));
         return view('app.edit', compact('app', 'user'));
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @param Request $request
-     * @return Response
-     */
+    * Update the specified resource in storage.
+    *
+    * @param  int  $id
+    * @param Request $request
+    * @return Response
+    */
     public function update(Request $request)
     {
-				$this->validate($request, [
-					'username' => 'required|max:255',
-					'email' => 'required|email|max:255',
-					'password' => 'required|confirmed|min:6',
-					'password_confirmation' => 'required|min:6',
-				]);
+        $this->validate($request, [
+            'username' => 'required|max:255',
+            'email' => 'required|email|max:255',
+            'password' => 'confirmed|min:6',
+            'password_confirmation' => 'min:6',
+            'old_password' => 'required'
+            ]);
 
-        if ($app = App::first()) {
-            if (isset($request['action'])) {
-                $new_token = $app->token = md5(uniqid(1, true));
-                if ($app->save()) {
-                    return Response::respond(622, null, ['new_token'=>$new_token]);
-                } else {
-                    return Response::respond(623);
+            $user = User::findOrFail(Session('user'));
+            $app = App::first();
+            if ($app && Hash::check($request->input('old_password'), $user->password)) {
+                if (isset($request['action'])) {
+                    $new_token = $app->token = md5(uniqid(1, true));
+                    if ($app->save()) {
+                        return Response::respond(622, null, ['new_token'=>$new_token]);
+                    } else {
+                        return Response::respond(623);
+                    }
                 }
+
+                $user->username = $request->input('username');
+                $user->email = $request->input('email');
+                $user->password = bcrypt($request->input('password'));
+
+                $app->name = $request->input("name");
+                $app->description = $request->input("description");
+                $app->api_key = $_SERVER['SERVER_NAME'];
+
+                ($app->save() && $user->save())? DLH::flash("App updated successfully", 'success'):
+                DLH::flash("Changes did not take effect", 'error');
+            } else {
+                DLH::flash("Could not get app properties or password is incorrect", 'error');
             }
-
-						$user = User::findOrFail(Session('user'));
-						$user->username = $request->input('username');
-						$user->email = $request->input('email');
-						$user->password = bcrypt($request->input('password'));
-
-            $app->name = $request->input("name");
-            $app->description = $request->input("description");
-            $app->api_key = $_SERVER['SERVER_NAME'];
-                    #$app->token = $request->input("token");
-
-                    ($app->save() && $user->save())? DLH::flash("App updated successfully", 'success'):
-                        DLH::flash("Changes did not take effect", 'error');
-        } else {
-            DLH::flash("Could not get app properties", 'error');
+            return back();
         }
-        return back();
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        $app = App::findOrFail($id);
-        $app->delete();
+        /**
+        * Remove the specified resource from storage.
+        *
+        * @param  int  $id
+        * @return Response
+        */
+        public function destroy($id)
+        {
+            $app = App::findOrFail($id);
+            $app->delete();
 
-        return redirect()->route('app.index');
+            return redirect()->route('app.index');
+        }
     }
-}
