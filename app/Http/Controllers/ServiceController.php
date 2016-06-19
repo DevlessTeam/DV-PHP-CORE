@@ -108,7 +108,7 @@ class ServiceController extends Controller {
                         DLH::flash("Service could not be created", 'error');
                     }
                 
-                    return redirect()->route('services.index');
+                    return $this->edit($service->id);
 	}
 
 	/**
@@ -164,32 +164,6 @@ class ServiceController extends Controller {
                         Helper::interrupt(626);
                     }
                     
-                    
-               $old_service_name = $service->name; 
-               $service_name_from_form = $request->input("name"); 
-               $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
-               $service_name_from_form = strtolower($service_name_from_form);
-
-               $new_service_name = $service_name_from_form;
-                $validator = Validator::make(
-                    
-                    ['name'=>$new_service_name],
-                    
-                    [
-                        'name'=>'required|unique:services,name',
-                        
-                    ]
-                    
-                    
-                    );
-                
-                 if($validator->fails()){
-                     $errors = $validator->messages();
-                     DLH::flash("Sorry service could not be updated", 'error');
-                     return back()->with('errors',$errors)->withInput();
-                 }
-                    
-                    
                     if(!$views->rename_view($old_service_name, $new_service_name))
                     {
                          DLH::flash("Sorry service could not be updated(view error)", 'error');
@@ -242,6 +216,14 @@ class ServiceController extends Controller {
                 $service_name = $service->name;
                 $view_path = config('devless')['views_directory'];
                 $assets_path = $view_path.$service_name;
+                
+                $table_meta = \App\TableMeta::where('service_id',$id)->get();
+                foreach($table_meta as $meta)
+                {
+                    $table_name = $meta->table_name;
+                    $output = DLH::purge_table($service_name.'_'.$table_name);
+                    
+                }
 		
 		if(DLH::deleteDirectory($assets_path ) && $service->delete())
                 {
