@@ -18,11 +18,11 @@ Route::get('logout', 'UserController@get_logout');
 Route::get('setup', 'UserController@get_register');
 Route::post('setup', 'UserController@post_register');
 
-#views route
+#lean views route
 Route::resource('service/{service}/{resource}/{template}/', 'ViewController@access_views');
 
 
-Route::get('assets/{sublevels?}', 'ViewController@static_files')->where('sublevels', '.*');
+#Route::get('assets/{sublevels?}', 'ViewController@static_files')->where('sublevels', '.*');
 
 #routes for only endpoints
 Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
@@ -35,8 +35,8 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
 
     #system logs
     Route::get('log', function ()    {
-        return "logs from here";
-    })->middleware(['jsonValidator']);
+        return "no log available";
+    });
 
     #config end points
     Route::resource('system', 'ServiceController@api');
@@ -47,23 +47,22 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
     Route::patch('service/{service}/{resource}','ServiceController@api');
     Route::delete('service/{service}/{resource}','ServiceController@api');
 
-    #authentication
-    Route::post('authentication/signup', 'AuthenticationController@signup');
-    Route::post('authentication/login', 'AuthenticationController@login');
-    Route::patch('authentication/user', 'AuthenticationController@profile');
-    Route::delete('authentication/user', 'AuthenticationController@delete');
 });
 
+#routes available to only login users
 Route::group(['middleware' => 'user.auth'], function () {
   #service views
   Route::resource('services','ServiceController');
 
+ #change token
+Route::patch('generatetoken','AppController@token');
+  
   #app views
-  Route::resource("app",'AppController');
+  Route::resource('app','AppController');
 
-  #change token
-  Route::put('generatetoken','AppController@update');
-  Route::delete('destroy_table', 'SystemApiController@delete_table');
+  
+  #destroy table 
+  #Route::delete('destroy_table', 'SystemApiController@delete_table');
 
   #api_doc views
   Route::get('console', 'ApiDocController@index');

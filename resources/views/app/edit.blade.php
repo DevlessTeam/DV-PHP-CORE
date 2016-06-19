@@ -131,8 +131,8 @@
             var settings = {
           "async": true,
           "crossDomain": true,
-          "url": "{{route('app.update')}}",
-          "method": "PUT",
+          "url": "/generatetoken",
+          "method": "patch",
           "headers": {
             "content-type": "application/json",
             "cache-control": "no-cache",
@@ -143,9 +143,9 @@
 
         $.ajax(settings).done(function (response) {
           console.log(response);
-          $result = JSON.parse(response)
-          if($result.status_code == 622){
-              $("#token").val($result.payload.new_token);
+          result = JSON.parse(response)
+          if(result.status_code == 622){
+              $("#token").val(result.payload.new_token);
           }
           else{
 
