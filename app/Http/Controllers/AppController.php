@@ -56,7 +56,9 @@ class AppController extends Controller
 
                 $user->username = $request->input('username');
                 $user->email = $request->input('email');
-                $user->password = bcrypt($request->input('password'));
+                if ($request->has('password')) {
+                    $user->password = bcrypt($request->input('password'));
+                }
 
                 $app->name = $request->input("name");
                 $app->description = $request->input("description");
