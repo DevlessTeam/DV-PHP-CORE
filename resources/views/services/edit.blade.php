@@ -74,7 +74,7 @@
 
       <div class="modal-footer">
           <button type="button" onclick="append_field()" class="btn btn-info pull-left" >Add a Field</button>
-          <button type="button" ONclick="create_table('{{$service->name}}')" class="btn btn-info pull-right" >Create Table</button>
+          <button type="button" onclick="create_table('{{$service->name}}')" class="btn btn-info pull-right" >Create Table</button>
       </div>
       </div></form></div>
   </div>
@@ -92,7 +92,7 @@
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <div  class="form-group @if($errors->has('name')) has-error @endif">
                                     <label for="name-field">Name</label>
-                                    <input type="text" id="name-field" name="name" class="form-control" value="{{ $service->name }}"/>
+                                    <input type="text" readonly id="name-field" name="name" class="form-control" value="{{ $service->name }}"/>
                                      @if($errors->has("name"))
                                         <span class="help-block">{{ $errors->first("name") }}</span>
                                      @endif
@@ -422,20 +422,21 @@
 
                 $.ajax(settings).done(function (response) {
                   console.log(response);
-                  response_object = JSON.parse(response);
-                  status_code = response_object.status_code;
-                  message = response_object.message;
+                  
+                  status_code = response.status_code;
+                  message = response.message;
+                  payload = response.payload;
                   if(status_code == 700){
-                      alert(message);
+                      alert( payload.message);
                   }
-                  if(status_code == 606){
+                  else if(status_code == 606){
 
 
-                        location.reload();
+                        window.location("/services/"+{{$service->id}}+"/edit");
 
                   }else{
 
-                      alert(message);
+                        alert(message);
                   }
                 });
             }

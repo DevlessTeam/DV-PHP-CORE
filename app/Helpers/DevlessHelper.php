@@ -64,7 +64,10 @@ class DevlessHelper extends Helper
                 
         return $service_components;
     }
-
+    
+    /*Get all service attributes
+     * @return json service_object
+     */
     public static function get_all_services()
     {
         $services = \DB::table('services')->get();
@@ -79,6 +82,13 @@ class DevlessHelper extends Helper
        
     }
     
+    public static function purge_table($table_name)
+    {
+
+        \Schema::dropIfExists($table_name);
+        
+    }
+
     public static function convert_to_json($service_components)
     {
             
