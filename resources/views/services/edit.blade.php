@@ -421,8 +421,8 @@
                   }
 
                 $.ajax(settings).done(function (response) {
-                  console.log(response);
                   
+                  response = JSON.parse(response);
                   status_code = response.status_code;
                   message = response.message;
                   payload = response.payload;
@@ -432,7 +432,8 @@
                   else if(status_code == 606){
 
 
-                        window.location("/services/"+{{$service->id}}+"/edit");
+                        window.location.href = "/services/"+{{$service->id}}+"/edit";
+                        
 
                   }else{
 
