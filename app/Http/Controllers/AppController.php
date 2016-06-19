@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use Hash;
 use Session;
 use App\App;
 use App\User;
@@ -42,7 +43,8 @@ class AppController extends Controller
             ]);
 
             $user = User::findOrFail(Session('user'));
-            if ($app = App::first() && $user->password == bcrypt($request->input('old_password'))) {
+            $app = App::first();
+            if ($app && Hash::check($request->input('old_password'), $user->password)) {
                 if (isset($request['action'])) {
                     $new_token = $app->token = md5(uniqid(1, true));
                     if ($app->save()) {
@@ -59,7 +61,6 @@ class AppController extends Controller
                 $app->name = $request->input("name");
                 $app->description = $request->input("description");
                 $app->api_key = $_SERVER['SERVER_NAME'];
-                #$app->token = $request->input("token");
 
                 ($app->save() && $user->save())? DLH::flash("App updated successfully", 'success'):
                 DLH::flash("Changes did not take effect", 'error');
