@@ -42,35 +42,35 @@ class AppController extends Controller
             'old_password' => 'required'
             ]);
 
-            $user = User::findOrFail(Session('user'));
-            $app = App::first();
-            if ($app && Hash::check($request->input('old_password'), $user->password)) {
-                if (isset($request['action'])) {
-                    $new_token = $app->token = md5(uniqid(1, true));
-                    if ($app->save()) {
-                        return Response::respond(622, null, ['new_token'=>$new_token]);
-                    } else {
-                        return Response::respond(623);
-                    }
+        $user = User::findOrFail(Session('user'));
+        $app = App::first();
+        if ($app && Hash::check($request->input('old_password'), $user->password)) {
+            if (isset($request['action'])) {
+                $new_token = $app->token = md5(uniqid(1, true));
+                if ($app->save()) {
+                    return Response::respond(622, null, ['new_token'=>$new_token]);
+                } else {
+                    return Response::respond(623);
                 }
-
-                $user->username = $request->input('username');
-                $user->email = $request->input('email');
-                if ($request->has('password')) {
-                    $user->password = bcrypt($request->input('password'));
-                }
-
-                $app->name = $request->input("name");
-                $app->description = $request->input("description");
-                $app->api_key = $_SERVER['SERVER_NAME'];
-
-                ($app->save() && $user->save())? DLH::flash("App updated successfully", 'success'):
-                DLH::flash("Changes did not take effect", 'error');
-            } else {
-                DLH::flash("Could not get app properties or password is incorrect", 'error');
             }
-            return back();
+
+            $user->username = $request->input('username');
+            $user->email = $request->input('email');
+            if ($request->has('password')) {
+                $user->password = bcrypt($request->input('password'));
+            }
+
+            $app->name = $request->input("name");
+            $app->description = $request->input("description");
+            $app->api_key = $_SERVER['SERVER_NAME'];
+
+            ($app->save() && $user->save())? DLH::flash("App updated successfully", 'success'):
+                DLH::flash("Changes did not take effect", 'error');
+        } else {
+            DLH::flash("Could not get app properties or password is incorrect", 'error');
         }
+        return back();
+    }
 
         /**
         * Remove the specified resource from storage.
@@ -85,4 +85,4 @@ class AppController extends Controller
 
             return redirect()->route('app.index');
         }
-    }
+}
