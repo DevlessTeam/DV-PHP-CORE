@@ -421,11 +421,15 @@
                   }
 
                 $.ajax(settings).done(function (response) {
-                  
-                  response = JSON.parse(response);
+                  console.log(response);
+                  if(typeof(response) == "string")
+                  {
+                      response = JSON.parse(response); 
+                  }
                   status_code = response.status_code;
                   message = response.message;
                   payload = response.payload;
+                  
                   if(status_code == 700){
                       alert( payload.message);
                   }
