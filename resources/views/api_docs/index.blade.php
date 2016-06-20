@@ -336,13 +336,10 @@
                 } else if (request_type === "create"){
                     $.post('api/v1/service/'+service_name+'/db', JSON.parse(editor.getValue()))
                     .done(function(data){
-                        if (JSON.parse(data).status_code == 609) {
-                            $('#response').show();
-                            $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
-                        } else {
-                            $('#response').show();
-                            $('#response-field').text(JSON.stringify(data.payload.message, undefined, 4));
-                        }
+                          $('#response').show();
+                            $('#response-field').text(data);
+                                                 // data = JSON.parse(data);
+                       
                     });
                 } else if (request_type === "update") {
                     $.ajax({

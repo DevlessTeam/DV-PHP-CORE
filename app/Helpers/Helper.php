@@ -77,7 +77,7 @@ class Helper
         'password'   => 'alphanum',
         'percentage' => 'integer',
         'url'        => 'url',
-        'timestamp'  => 'timestamp',
+        'timestamp'  => 'integer',
         'boolean'    => 'boolean',
         'email'      => 'email',
         'reference'  => 'integer',

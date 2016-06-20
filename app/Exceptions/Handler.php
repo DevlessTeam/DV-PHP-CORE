@@ -46,10 +46,6 @@ class Handler extends ExceptionHandler
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }
-            //add to payload to display error details
-//                    'message' => $e->getMessage(),
-//                    'file'    => $e->getFile(),
-//                    'line'     =>$e->getLine()
         
         
             return response()->json([

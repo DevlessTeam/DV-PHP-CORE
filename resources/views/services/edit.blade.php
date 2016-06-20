@@ -38,7 +38,8 @@
              </div>
            <div  class="form-group">
             <label for="field-type">Field Type</label>
-            <?php $options = ['TEXT','TEXTAREA','PASSWORD','INTEGER','MONEY','PASSWORD','PERCENTAGE','URL','TIMESTAMP','BOOLEAN','EMAIL','REFERENCE'] ?>
+            
+            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','PASSWORD','INTEGER','MONEY','PASSWORD','PERCENTAGE','URL','TIMESTAMP','BOOLEAN','EMAIL'] ?>
             <select class="form-control"  name="field-type" id="field-type">
                 @foreach($options as  $option)
                 <option value="{{$option}}">{{$option}}</option>
@@ -421,11 +422,15 @@
                   }
 
                 $.ajax(settings).done(function (response) {
-                  
-                  response = JSON.parse(response);
+                  console.log(response);
+                  if(typeof(response) == "string")
+                  {
+                      response = JSON.parse(response); 
+                  }
                   status_code = response.status_code;
                   message = response.message;
                   payload = response.payload;
+                  
                   if(status_code == 700){
                       alert( payload.message);
                   }
