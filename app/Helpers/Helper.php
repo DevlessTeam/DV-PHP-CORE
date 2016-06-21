@@ -61,6 +61,7 @@ class Helper
         632 =>  'There is something wrong with your input field ',
         633 =>  'Token has expired please try logging in again',
         634 =>  'Table does not exist',
+        635 =>  'sorry to use offset you need need to set size',
         700 => 'internal system error',
     ];
 
