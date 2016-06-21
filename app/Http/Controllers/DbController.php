@@ -335,7 +335,7 @@ class DbController extends Controller
                      false;
             
             (isset($payload['params']['size']))?
-            $complete_query = $base_query
+            $complete_query = $complete_query
                     . '->take('.$payload['params']['size'][0].')' :
                 
                     $complete_query = $base_query ;   
@@ -388,7 +388,6 @@ class DbController extends Controller
                 
             }
             $complete_query = 'return '.$complete_query.'->get();';
-            //Helper::interrupt(1,$complete_query);
             $count = $db->table($table_name)->count();
             $query_output = eval($complete_query);
             $query_output['count'] = $count;

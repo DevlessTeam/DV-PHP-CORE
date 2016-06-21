@@ -123,7 +123,7 @@ class Helper
         }
         else
         {
-            echo ($response);
+            die($response);
         }
         
 
