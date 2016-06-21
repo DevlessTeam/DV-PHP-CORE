@@ -98,9 +98,11 @@ class Helper
     }
 
     /**
-     * stops request processing and returns error payload
+     *  Return results
      *
      * @param  error code  $stack
+     * @param  output message  $message
+     * @param  additional data $payload
      * @return json
      */
     public static function  interrupt($stack, $message=null, $payload=[]){
@@ -121,7 +123,7 @@ class Helper
         }
         else
         {
-            die($response);
+            echo ($response);
         }
         
 
@@ -284,6 +286,10 @@ class Helper
        
        $jwt_payload = json_decode($jwt->decode($user_token, $secret, true));
        
+       if($user_token == "null")
+        {
+           Self::interrupt(633);
+        }
        $user_data = User::where('session_token',$jwt_payload->token)
                ->first();
        if($user_data !== null)
@@ -316,7 +322,7 @@ class Helper
    }
 
 
-   //date("H:i:s");
+   
 }
 
 
