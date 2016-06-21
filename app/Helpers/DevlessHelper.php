@@ -593,6 +593,12 @@ class DevlessHelper extends Helper
     {
        $jwt = new jwt();
        $secret = config('app')['key'];
+       
+       if($user_token == "null")
+        {
+           Self::interrupt(633);
+        }
+        
        return $jwt->decode($payload, $secret, true);
     }
     

@@ -273,7 +273,7 @@ class Helper
             self::interrupt(628);
         }
         return $user_cred;
-   }
+   }//sd
    
         
    public static function verify_user_token($user_token)
@@ -284,6 +284,10 @@ class Helper
        
        $jwt_payload = json_decode($jwt->decode($user_token, $secret, true));
        
+       if($user_token == "null")
+        {
+           Self::interrupt(633);
+        }
        $user_data = User::where('session_token',$jwt_payload->token)
                ->first();
        if($user_data !== null)
