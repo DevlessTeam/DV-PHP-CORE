@@ -98,9 +98,11 @@ class Helper
     }
 
     /**
-     * stops request processing and returns error payload
+     *  Return results
      *
      * @param  error code  $stack
+     * @param  output message  $message
+     * @param  additional data $payload
      * @return json
      */
     public static function  interrupt($stack, $message=null, $payload=[]){
@@ -121,7 +123,7 @@ class Helper
         }
         else
         {
-            die($response);
+            echo ($response);
         }
         
 
@@ -273,7 +275,7 @@ class Helper
             self::interrupt(628);
         }
         return $user_cred;
-   }//sd
+   }
    
         
    public static function verify_user_token($user_token)
@@ -320,7 +322,7 @@ class Helper
    }
 
 
-   //date("H:i:s");
+   
 }
 
 
