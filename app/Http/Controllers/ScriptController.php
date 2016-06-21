@@ -35,9 +35,12 @@ class ScriptController extends Controller
         "resource" => $json_payload['resource'],
         "method" => $method
         ];
-        
+        session()->put('script_call',  'true' );
         $output = $service->resource($request, $service_name, $resource, $internal_access=true);
-        return $output;
+        session()->forget('script_call');
+        
+        return session('script_results');
+        
     }
     
      /*
@@ -81,7 +84,7 @@ EOT;
 
         $result = eval($code);
         
-        return $result;   
+        
     }
 }
 

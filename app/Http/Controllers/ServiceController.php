@@ -363,19 +363,19 @@ class ServiceController extends Controller {
                         case 'db':
 
                             $db = new Db(); 
-                                $db->access_db($resource,$payload);
-                                break;    
+                            $db->access_db($resource,$payload);
+                            break;    
 
                         case 'script':
 
                              $script = new script;
-                                $script->run_script($resource,$payload);
-                                break;
+                             $script->run_script($resource,$payload);
+                             break;
 
                         case 'schema':
                             $db = new Db();
-                                $db->create_schema($resource, $payload);
-                                break;
+                            $db->create_schema($resource, $payload);
+                            break;
 
                         case 'view':
                             return $payload;

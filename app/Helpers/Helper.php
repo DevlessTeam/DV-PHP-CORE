@@ -112,7 +112,18 @@ class Helper
             $msg = self::error_message($stack);
         }
         $response = Response::respond($stack, $msg, $payload);
-        die($response);
+        
+        if(session('script_call') == true)
+        {
+            
+            session()->put('script_results',  $response );
+            
+        }
+        else
+        {
+            die($response);
+        }
+        
 
 
     }

@@ -402,8 +402,9 @@ class DbController extends Controller
                  
             }
             $query_output['related'] = $related;
-            $response = Response::respond(625,null,$query_output);
-            echo ($response);
+            //$response = Response::respond(625,null,$query_output);
+            
+            Helper::interrupt(625,null,$query_output);
             
         }
       else{
