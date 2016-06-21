@@ -193,7 +193,8 @@
             //Handles URL generation
             var service_name;
             $('#service').change(function () {
-
+                $('#table').html('');
+                $('#operation').prop('selectedIndex',0);
                 service_name = $('#service option:selected').text();
                 var service_id = $('#service option:selected').val();
 
@@ -203,6 +204,13 @@
                         $("#table").append("<option>"+$.parseJSON(table[i].schema).name+"</option>");
                     }
                 })
+            });
+
+            //Handles table change
+            $('#table').change(function() {
+                $('#operation').prop('selectedIndex',0);
+                $('#body_params').hide();
+                $('#response').hide();
             });
 
             //texteditor for payload
@@ -336,10 +344,9 @@
                 } else if (request_type === "create"){
                     $.post('api/v1/service/'+service_name+'/db', JSON.parse(editor.getValue()))
                     .done(function(data){
-                          $('#response').show();
-                            $('#response-field').text(data);
-                                                 // data = JSON.parse(data);
-                       
+                        $('#response').show();
+                        $('#response-field').text(data);
+                        statuscheck(data);
                     });
                 } else if (request_type === "update") {
                     $.ajax({
