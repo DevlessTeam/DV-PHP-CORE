@@ -50,7 +50,7 @@
                       </ul>
                     </li>
                     <li><a href="{{ url('console') }}"><i class="fa fa-terminal"></i><span>API Console</span></a></li>
-                    <li><a href="{{route('migrate.index')}}"><i class="fa fa-download"></i><span>Import/Export </span></a></li>
+                    <li><a href="{{route('migrate.index')}}"><i class="fa fa-download"></i><span>Migration</span></a></li>
                     <li><a href="{{url('logout')}}"><i class="fa fa-sign-out"></i><span>Logout </span></a></li>
                 </ul>
             </div>
