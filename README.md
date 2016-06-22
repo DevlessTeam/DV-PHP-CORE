@@ -20,11 +20,11 @@ This document explains the various syntax for accessing and working with  the ap
 * composer
 
 **Installation procedure**
-* Clone the repo (git clone https://github.com/DevlessTeam/DV-PHP-CORE.git) 
-* cd ../DV-PHP-CORE
-* run composer install to grab dependecies
+* ``$ git clone https://github.com/DevlessTeam/DV-PHP-CORE.git`` 
+* ``$ cd DV-PHP-CORE``
+* run ``$ composer install`` to grab dependecies
 * edit config/database.php to add database option 
-* run migrations with php artisan migrate
+* ``$ run migrations with php artisan migrate``
 * ``$ php artisan serve``
 
 If everything goes on smoothly you should be able to access the setup screen at localhost:8000
