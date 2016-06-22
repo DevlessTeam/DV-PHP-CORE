@@ -34,5 +34,5 @@ If you will need help setting up you may check out the laravel [installation](ht
 You may also seek help from the [devless forum](http://forum.devless.io) and also get started with the [devless application](http://docs.devless.io)
 ## How to contribute 
 **Devless api Engine is currently not open for contribution**
-* But we would love to hear from  you though. email us @ edmond@devless.io
-* Please dont forget to visit our landing page @ [devless.io](devless.io)
+* But we would love to hear from  you though. email us edmond@devless.io
+* Please dont forget to visit our landing page [devless.io](http://devless.io)
