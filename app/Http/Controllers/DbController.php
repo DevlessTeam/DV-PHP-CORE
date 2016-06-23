@@ -328,27 +328,38 @@ class DbController extends Controller
                     
             }
             $table_name = $service_name.'_'.$payload['params']['table'][0];
-            
-            (isset($payload['params']['offset']))? 
-                    $complete_query = $base_query
-                    . '->skip('.$payload['params']['offset'][0].')' :
-                     false;
-            
+           
             (isset($payload['params']['size']))?
-            $complete_query = $base_query
-                    . '->take('.$payload['params']['size'][0].')' :
+            $base_query = $base_query
+                    . '->take('.$payload['params']['size'][0].')' :false;
                 
-                    $complete_query = $base_query ;   
+            if(isset($payload['params']['offset']))
+            {
+                if(isset($payload['params']['size']))
+                {
+                      $base_query = $base_query
+                    . '->skip('.$payload['params']['offset'][0].')'. 
+                              '->take('.$payload['params']['size'][0].')';
+                }
+                else
+                {
+                    Helper::interrupt(635);
+                }
+            }        
+           
             
+            if(isset($payload['params']['related']))
+            {
+              $queried_table_list = 
+                    $payload['params']['related'] ;
+              
+              unset($payload['params']['related']);
+            } 
             
-            (isset($payload['params']['related']))? $queried_table_list = 
-                    $payload['params']['related'] : false;
-            
-            
-            unset($payload['params']['related']);
             $related =[];
             
-               
+            $complete_query = $base_query;
+            
                if(isset($payload['params']['order']))
             {
                $order_by = $payload['params']['order'];
@@ -388,7 +399,6 @@ class DbController extends Controller
                 
             }
             $complete_query = 'return '.$complete_query.'->get();';
-            //Helper::interrupt(1,$complete_query);
             $count = $db->table($table_name)->count();
             $query_output = eval($complete_query);
             $query_output['count'] = $count;

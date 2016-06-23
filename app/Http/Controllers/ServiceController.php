@@ -164,13 +164,6 @@ class ServiceController extends Controller {
                         Helper::interrupt(626);
                     }
                     
-                    if(!$views->rename_view($old_service_name, $new_service_name))
-                    {
-                         DLH::flash("Sorry service could not be updated(view error)", 'error');
-                         return back();
-                    }
-                    
-                    $service->name = $new_service_name;
                     
                     
                     $service->description = $request->input("description");
