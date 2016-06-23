@@ -33,13 +33,15 @@ class UserController extends Controller
     );
 
     $user = DB::table('users')->where('email', $request->input('email'))->first();
-    if (Hash::check($request->input('password'), $user->password))
+    if($user && Hash::check($request->input('password'), $user->password)){
+        $request->session()->put('user', $user->id);
+        DLH::flash('Welcome Back', 'success');
+        return redirect('services');
+       
+    }
+    else
     {
-      $request->session()->put('user', $user->id);
-      DLH::flash('Welcome Back', 'success');
-      return redirect('services');
-    } else {
-        Session::flash('error', 'Incorrect login credentials');
+      Session::flash('error', 'Incorrect login credentials');
       return back();
     }
   }
