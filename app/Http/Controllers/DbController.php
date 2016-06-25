@@ -637,9 +637,22 @@ class DbController extends Controller
             $driver   = $default_connector['driver'];
             $hostname = (isset($default_connector['hostname']))? $default_connector['hostname']:
                         $default_connector['host'];
-            $database = $default_connector['database'];
-            $username = $default_connector['username'];
-            $password = $default_connector['password'];
+            if(isset($default_connector['hostname']) && isset($default_connector['database']))
+            {
+                    $hostname = $default_connector['hostname'];
+                    $database = $default_connector['database']; 
+                    $username = $default_connector['username'];
+                    $password = $default_connector['password'];
+            }
+            else
+            {
+                    $hostname = $default_connector['host'];
+                    $database = $default_connector['database']; 
+                    $username = $default_connector['username'];
+                    $password = $default_connector['password'];
+            }
+            
+            
         }
         else
         {
