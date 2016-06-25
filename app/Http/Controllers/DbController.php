@@ -636,7 +636,7 @@ class DbController extends Controller
             $default_connector = config('database.connections.'.$default_database);
             
             $driver   = $default_connector['driver'];
-            if($driver != "sqlite"){
+            if($default_connector['database'] != "sqlite"){
                 $hostname = (isset($default_connector['hostname']))? $default_connector['hostname']:
                             $default_connector['host'];
                 $database = $default_connector['database'];
