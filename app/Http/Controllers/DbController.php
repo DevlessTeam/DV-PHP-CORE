@@ -625,6 +625,7 @@ class DbController extends Controller
      */
     private function _connector($connector_params)
     {
+        $username = $database = $password = $hostname = $host = $driver = '';
         
         $driver = $connector_params['driver'];
         
@@ -635,24 +636,19 @@ class DbController extends Controller
             $default_connector = config('database.connections.'.$default_database);
             
             $driver   = $default_connector['driver'];
-            $hostname = (isset($default_connector['hostname']))? $default_connector['hostname']:
-                        $default_connector['host'];
-            if(isset($default_connector['hostname']) && isset($default_connector['database']))
-            {
-                    $hostname = $default_connector['hostname'];
-                    $database = $default_connector['database']; 
-                    $username = $default_connector['username'];
-                    $password = $default_connector['password'];
+            if($driver != "sqlite"){
+                $hostname = (isset($default_connector['hostname']))? $default_connector['hostname']:
+                            $default_connector['host'];
+                $database = $default_connector['database'];
+                $username = $default_connector['username'];
+                $password = $default_connector['password'];
+                
             }
             else
             {
-                    $hostname = $default_connector['host'];
-                    $database = $default_connector['database']; 
-                    $username = $default_connector['username'];
-                    $password = $default_connector['password'];
+                $driver   = $connector_params['driver'];
+                $database = $default_connector['database'];
             }
-            
-            
         }
         else
         {
