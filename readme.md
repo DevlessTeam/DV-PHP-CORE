@@ -23,7 +23,7 @@ This document explains the various syntax for accessing and working with  the ap
 * Clone the repo (git clone https://github.com/DevlessTeam/DV-PHP-CORE.git) 
 * cd ../DV-PHP-CORE
 * run composer install to grab dependecies
-* edit config/database.php to add database option 
+* copy .env.example to .env and update the database options 
 * run migrations with php artisan migrate
 * ``$ php artisan serve``
 
