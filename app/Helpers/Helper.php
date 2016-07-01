@@ -199,9 +199,12 @@ class Helper
 
         foreach( $query as $param )
             {
-
-              list($name, $value) = explode('=', $param, 2);
-              $params[urldecode($name)][] = urldecode($value);
+                if($params !=="")
+                {
+                    list($name, $value) = explode('=', $param, 2);
+                    $params[urldecode($name)][] = urldecode($value);
+                }
+                 
             }
             return $params;
         }
