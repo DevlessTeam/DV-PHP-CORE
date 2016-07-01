@@ -44,8 +44,9 @@ class ViewController extends Controller
     
     public function static_files(Request $request)
     {
+        
         $get_mime_type = $this->MIME_LIST;
-        $asset_file_path = '../resources/'.$request->path();
+        $asset_file_path = '../resources/views/'.$request->path();
         $asset_file_extension = pathinfo($asset_file_path, PATHINFO_EXTENSION);
         
         $using_asset_file_extension = $asset_file_extension;
