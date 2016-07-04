@@ -88,8 +88,8 @@ class SystemApiController extends Controller
     public function delete_table(Request $request)
     {
         
-        $sdk = new \App\Helpers\Sdk('sdas','sadas','asdsd');
-        $sdk->table($request['resource'][0]['name'],'DELETE');
+        $sdk = new \App\Helpers\Sdk('sdas', 'sadas', 'asdsd');
+        $sdk->table($request['resource'][0]['name'], 'DELETE');
         dd($result);
     }
 }

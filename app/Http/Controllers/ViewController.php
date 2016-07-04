@@ -7,10 +7,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Http\Controllers\ServiceController as Service; 
+use App\Http\Controllers\ServiceController as Service;
 
 use \App\Helpers\Response as Response;
 use App\Helpers\Helper as Helper;
+
 class ViewController extends Controller
 {
     public $MIME_LIST =
@@ -20,14 +21,14 @@ class ViewController extends Controller
         'default' => 'text/plain',
     ];
     public function access_views(Request $request, $service_name, $resource, $template)
-    {   
+    {
         $method = $request->method();
         $service = new Service();
         $payload = $service->assign_to_service($service_name, $resource, $method);
         $params = $service->get_params($method, $request);
         $payload['params'] = $params;
        
-        $access_type = $payload['resource_access_right']; 
+        $access_type = $payload['resource_access_right'];
         $access_state = $service->check_resource_access_right_type($access_type["view"]);
         $user_cred = Helper::get_authenticated_user_cred($access_state);
         
@@ -54,13 +55,10 @@ class ViewController extends Controller
                 $get_mime_type[$using_asset_file_extension] :
                 $file_mime = $get_mime_type['default'];
         
-        if(file_exists($asset_file_path))
-        {
-             $content = file_get_contents($asset_file_path);
+        if (file_exists($asset_file_path)) {
+            $content = file_get_contents($asset_file_path);
              return response($content)->header('Content-Type', $file_mime);
-        }
-        else
-        {
+        } else {
             return Response::respond(621);
         }
     }
@@ -68,22 +66,18 @@ class ViewController extends Controller
     public function create_views($service_name, $type)
     {
 
-        switch ($type)
-        {
-            case "init" :
+        switch ($type) {
+            case "init":
                 $source_path = '../resources/views/welcome.blade.php';
                 $destination_path = config('devless')['views_directory'].$service_name;
                 
                 
-                if(mkdir($destination_path))
-                {
-                  $is_saved = (copy($source_path, $destination_path.'/index.blade.php'))?true 
+                if (mkdir($destination_path)) {
+                    $is_saved = (copy($source_path, $destination_path.'/index.blade.php'))?true
                           : false;
                   
-                  return $is_saved;
-                }
-                else
-                {
+                    return $is_saved;
+                } else {
                     return false;
                 }
                 

@@ -17,13 +17,13 @@ class DatatableController extends Controller
      */
     public function index(Request $request)
     {
-      if ($request->service_name && $request->table_name) {
-        $service = \DB::table('services')->where('name', $request->service_name)->first();
-        $tables = \DB::table('table_metas')->where('service_id', $service->id)->get();
-        return view('datatable.index', compact('service', 'tables'));
-      }
-      $services = Service::all();
-      return view('datatable.index', compact('services'));
+        if ($request->service_name && $request->table_name) {
+            $service = \DB::table('services')->where('name', $request->service_name)->first();
+            $tables = \DB::table('table_metas')->where('service_id', $service->id)->get();
+            return view('datatable.index', compact('service', 'tables'));
+        }
+        $services = Service::all();
+        return view('datatable.index', compact('services'));
     }
 
     /**
@@ -33,7 +33,7 @@ class DatatableController extends Controller
      */
     public function create($id)
     {
-      return \DB::table('table_metas')->where('service_id', $id)->get();
+        return \DB::table('table_metas')->where('service_id', $id)->get();
     }
 
     /**

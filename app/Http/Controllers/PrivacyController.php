@@ -75,8 +75,8 @@ class PrivacyController extends Controller
     public function update(Request $request, $id)
     {
         if ($id == 0) {
-          DLH::flash('Error Updating Access Rights', 'error');
-          return back();
+            DLH::flash('Error Updating Access Rights', 'error');
+            return back();
         }
         $service = Service::findOrFail($id);
         $json = array(
@@ -87,7 +87,7 @@ class PrivacyController extends Controller
         'schema' =>    $request->input('schema'),
         'script' =>    $request->input('script'),
         'view'   =>    $request->input('view')
-      );
+        );
         $service->resource_access_right = json_encode($json);
         if ($service->save()) {
             DLH::flash('Access Rights Updated Successfully', 'success');
