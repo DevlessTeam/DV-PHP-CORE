@@ -28,7 +28,7 @@ class ScriptController extends Controller
      */
     public function internal_services($json_payload, $service_name, $resource, $method)
     {
-        $json_payload = json_decode($json_payload,true);
+        $json_payload = json_decode($json_payload, true);
         $service = new Service();
 
         $request = [
@@ -36,11 +36,11 @@ class ScriptController extends Controller
         "method" => $method
         ];
 
-        session()->put('script_call',  'true' );
-        $output = $service->resource($request, $service_name, $resource, $internal_access=true);
+        session()->put('script_call', 'true');
+        $output = $service->resource($request, $service_name, $resource, $internal_access = true);
         session()->forget('script_call');
         
-        return json_decode(session('script_results'),true);
+        return json_decode(session('script_results'), true);
         
     }
 
@@ -51,7 +51,7 @@ class ScriptController extends Controller
      * @param array $payload request parameters
      * @return array
      */
-    public function run_script($resource,$payload)
+    public function run_script($resource, $payload)
     {
 
         $service = new Service();
@@ -72,7 +72,7 @@ class ScriptController extends Controller
 
 
 //NB: position matters here
-$code = <<<EOT
+        $code = <<<EOT
   if(!function_exists('DvService')){
  \$GLOBALS['script_class'] = \$script_class;
 function DvService(\$json_payload, \$service_name, \$resource, \$method){
@@ -84,6 +84,8 @@ $payload[script];
 EOT;
 
         $result = eval($code);
+        
+        return $result;
 
     }
 }

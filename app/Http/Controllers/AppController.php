@@ -45,11 +45,9 @@ class AppController extends Controller
         $user = User::findOrFail(Session('user'));
         $app = App::first();
         if ($app && Hash::check($request->input('old_password'), $user->password)) {
-           
             $user->username = $request->input('username');
             $user->email = $request->input('email');
-            if ($request->has('password'))
-            {
+            if ($request->has('password')) {
                 $user->password = bcrypt($request->input('password'));
             }
 
@@ -59,9 +57,7 @@ class AppController extends Controller
 
             ($app->save() && $user->save())? DLH::flash("App updated successfully", 'success'):
                 DLH::flash("Changes did not take effect", 'error');
-        } 
-        else
-        {
+        } else {
             DLH::flash("Could not get app properties or password is incorrect", 'error');
         }
         return back();
@@ -73,34 +69,30 @@ class AppController extends Controller
         * @param  int  $id
         * @return Response
         */
-        public function destroy($id)
-        {
-            $app = App::findOrFail($id);
-            $app->delete();
+    public function destroy($id)
+    {
+        $app = App::findOrFail($id);
+        $app->delete();
 
-            return redirect()->route('app.index');
-        }
+        return redirect()->route('app.index');
+    }
         
-        public function store()
-        {
-            dd("store");
-        }
+    public function store()
+    {
+        dd("store");
+    }
         
-        public function token(Request $request)
-        {
-            $app = App::first();
-            if (isset($request['action'])) 
-            {
-                $new_token = $app->token = md5(uniqid(1, true));
-                if ($app->save())
-                {
-                    return Response::respond(622, null, ['new_token'=>$new_token]);
-                }
-                else
-                {
-                    return Response::respond(623);
-                }
+    public function token(Request $request)
+    {
+        $app = App::first();
+        if (isset($request['action'])) {
+            $new_token = $app->token = md5(uniqid(1, true));
+            if ($app->save()) {
+                return Response::respond(622, null, ['new_token'=>$new_token]);
+            } else {
+                return Response::respond(623);
             }
-
         }
+
+    }
 }

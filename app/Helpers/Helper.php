@@ -116,6 +116,7 @@ class Helper
         }
         $response = Response::respond($stack, $msg, $payload);
         
+        //return results from db functions called from scripts as session('script_results') 
         if(session('script_call') == true)
         {
             
@@ -201,6 +202,7 @@ class Helper
             {
                 if($params !=="")
                 {
+                    
                     list($name, $value) = explode('=', $param, 2);
                     $params[urldecode($name)][] = urldecode($value);
                 }
