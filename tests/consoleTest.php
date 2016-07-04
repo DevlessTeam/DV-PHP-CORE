@@ -4,7 +4,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class applicationFlowTest extends TestCase
+class ApplicationFlowTest extends TestCase
 {
     /**
      * Test complete application flow.
@@ -15,10 +15,14 @@ class applicationFlowTest extends TestCase
     {
         //Failed Login
         $this->visit('/')
-            ->type("someemailthatyouwontuse@somethingelse.somethingnotused", 
-                    'email')
-            ->type("something you will not use as your password asfdhvjafhdsjaklfhs", 
-                    'password')
+            ->type(
+                "someemailthatyouwontuse@somethingelse.somethingnotused",
+                'email'
+            )
+            ->type(
+                "something you will not use as your password asfdhvjafhdsjaklfhs",
+                'password'
+            )
             ->press('Login')
             ->see('Incorrect login credentials');
         
@@ -29,14 +33,18 @@ class applicationFlowTest extends TestCase
             ->press('Login')
             ->see('Create Service');
             
-         return $this;
                 
     }
     
     public function testServices()
     {
-        $loggedIn = testLogin(); 
-        $loggedIn->visit('/services/create')
+        $this->visit('/')
+            ->type(env('TEST_LOGIN_EMAIL'), 'email')
+            ->type(env('TEST_LOGIN_PASSWORD'), 'password')
+            ->press('Login')
+            ->see('Create Service');
+      
+        $this->visit('/services/create')
              ->see('service name');
     }
 }
