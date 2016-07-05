@@ -30,7 +30,8 @@ class ScriptController extends Controller
     {
         $json_payload = json_decode($json_payload, true);
         $service = new Service();
-
+        
+        //prepare request payload
         $request = [
         "resource" => $json_payload['resource'],
         "method" => $method
@@ -55,7 +56,8 @@ class ScriptController extends Controller
     {
 
         $service = new Service();
-
+        
+        //checking right access control right
         $access_type = $payload['resource_access_right'];
         $access_state = $service->check_resource_access_right_type($access_type["script"]);
         $user_cred = Helper::get_authenticated_user_cred($access_state);
@@ -69,8 +71,7 @@ class ScriptController extends Controller
             'user_token' => $user_cred['token']
         ];
         $script_class = new ScriptController;
-
-
+    
 //NB: position matters here
         $code = <<<EOT
   if(!function_exists('DvService')){
