@@ -192,7 +192,7 @@ class Helper
      * get url parameters
      * @return array
      **/
-    public static function query_string()
+     public static function query_string()
     {
         if(isset( $_SERVER['QUERY_STRING'])){
          $query  = explode('&', $_SERVER['QUERY_STRING']);
@@ -200,13 +200,11 @@ class Helper
 
         foreach( $query as $param )
             {
-                if($params !=="")
+                if($param !== "")
                 {
-
-                    list($name, $value) = explode('=', $param, 2);
-                    $params[urldecode($name)][] = urldecode($value);
+                     list($name, $value) = explode('=', $param, 2);
+                      $params[urldecode($name)][] = urldecode($value);
                 }
-
             }
             return $params;
         }
@@ -216,7 +214,6 @@ class Helper
             return $param;
         }
     }
-
 
     /**
      * Hash password
