@@ -202,11 +202,11 @@ class Helper
             {
                 if($params !=="")
                 {
-                    
+
                     list($name, $value) = explode('=', $param, 2);
                     $params[urldecode($name)][] = urldecode($value);
                 }
-                 
+
             }
             return $params;
         }
