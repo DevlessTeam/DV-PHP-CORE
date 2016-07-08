@@ -1,7 +1,7 @@
 <?php
-//header("Access-Control-Allow-Origin: *");
-//header("Access-Control-Allow-Methods: PATCH, GET, POST, DELETE");
-// header('Access-Control-Allow-Headers: content-Type, devless-token, devless-key, devless-user-token ');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: PATCH, GET, POST, DELETE");
+header('Access-Control-Allow-Headers: content-Type, devless-token, devless-key, devless-user-token ');
  /*
 |--------------------------------------------------------------------------
 | Create The Application
