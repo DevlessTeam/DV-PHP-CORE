@@ -50,17 +50,3 @@ class ApplicationFlowTest extends TestCase
 }
 
 
-/*test types 
- * Methods,console,apis 
- * console
- * register 
- * create service (crud)
- * create table (crud)
- * add scripts (execution)
- * export an
- * 
- * 
- *  */
-
-
-//  login validation not working 

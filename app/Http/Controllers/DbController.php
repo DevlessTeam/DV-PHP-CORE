@@ -338,6 +338,7 @@ class DbController extends Controller
                     }
                 }
                 $complete_query = 'return '.$complete_query.'->get();';
+                
                 $count = $db->table($table_name)->count();
                 $query_output = eval($complete_query);
                 $query_output['count'] = $count;
@@ -353,7 +354,7 @@ class DbController extends Controller
                      );
                 }
                 $query_output['related'] = $related;
-            //$response = Response::respond(625,null,$query_output);
+          
             
                 Helper::interrupt(625, null, $query_output);
         } else {

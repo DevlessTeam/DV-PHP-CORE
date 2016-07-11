@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'default' => 'mysql',#env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -49,6 +49,18 @@ return [
         'sqlite' => [
             'driver'   => 'sqlite',
             'database' => database_path('database.sqlite'),
+            'prefix'   => '',
+        ],
+
+        'devless-rec' => [
+            'driver'   => 'sqlite',
+            'database' => database_path('devless-rec.sqlite3'),
+            'prefix'   => '',
+        ],
+        
+        'sqlite_testing' => [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
             'prefix'   => '',
         ],
 
