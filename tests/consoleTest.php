@@ -16,10 +16,6 @@ class ApplicationFlowTest extends TestCase
         //Failed Login
         $this->visit('/')
             ->type(
-                "someemailthatyouwontuse@somethingelse.somethingnotused",
-                'email'
-            )
-            ->type(
                 "something you will not use as your password asfdhvjafhdsjaklfhs",
                 'password'
             )

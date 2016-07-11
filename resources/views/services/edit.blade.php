@@ -290,9 +290,7 @@
            {
                alert('could not delete table ');
            }
-         });}else{
-         
-         }
+         });}
     }
 
   function append_field(){
