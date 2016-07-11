@@ -493,37 +493,33 @@ $charset='utf8', $prefix='', $collation='utf8_unicode_ci')
 * @return boolean
 */
 private function _connector($connector_params)
-{
-    $driver = $connector_params['driver'];
-
-    //get current database else connect to remote
-    if ($driver == 'default') {
-        $default_database = config('database.default');
-        $default_connector = config('database.connections.'.$default_database);
-
-        $driver   = $default_connector['driver'];
-        if (isset($default_connector['hostname'])) {
-            $hostname = $default_connector['hostname'];
+    {
+        
+        $driver = $connector_params['driver'];
+        
+        //get current database else connect to remote
+        if ($driver == 'default') {
+            $default_database = config('database.default');
+            $default_connector = config('database.connections.'.$default_database);
+            
+            $driver   = $default_connector['driver'];
+            $hostname = (isset($default_connector['hostname']))? $default_connector['hostname']:
+                        $default_connector['host'];
+            $database = $default_connector['database'];
+            $username = $default_connector['username'];
+            $password = $default_connector['password'];
         } else {
-            $hostname = (isset($default_connector['host']))? $default_connector['host']:false;
+            $driver   = $connector_params['driver'];
+            $hostname = $connector_params['hostname'];
+            $database = $connector_params['database'];
+            $username = $connector_params['username'];
+            $password = $connector_params['password'];
         }
-
-
-        $username = (isset($default_connector['username']))? $default_connector['username']: false;
-        $password = (isset($default_connector['$password']))? $default_connector['$password']: false;
-        $database = $default_connector['database'];
-    } else {
-        $driver   = $connector_params['driver'];
-        $hostname = $connector_params['hostname'];
-        $database = $connector_params['database'];
-        $username = $connector_params['username'];
-        $password = $connector_params['password'];
+        $this->db_socket($driver, $hostname, $database, $username, $password);
+          
+        return true;
     }
-    $this->db_socket($driver, $hostname, $database, $username, $password);
-
-    return true;
-}
-
+    
 /*
 * get related tables
 * @params $table_name
