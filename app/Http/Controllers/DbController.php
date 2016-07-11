@@ -498,17 +498,28 @@ private function _connector($connector_params)
         $driver = $connector_params['driver'];
         
         //get current database else connect to remote
-        if ($driver == 'default') {
+        if($driver == 'default')
+        {
             $default_database = config('database.default');
             $default_connector = config('database.connections.'.$default_database);
             
             $driver   = $default_connector['driver'];
-            $hostname = (isset($default_connector['hostname']))? $default_connector['hostname']:
-                        $default_connector['host'];
+            if(isset($default_connector['hostname']))
+            {
+                $hostname = $default_connector['hostname'];
+            }
+            else
+            {
+                $hostname = (isset($default_connector['host']))? $default_connector['host']:false;
+            }
+
+           
+            $username = (isset($default_connector['username']))? $default_connector['username']: false;
+            $password = (isset($default_connector['$password']))? $default_connector['$password']: false;
             $database = $default_connector['database'];
-            $username = $default_connector['username'];
-            $password = $default_connector['password'];
-        } else {
+        }   
+        else
+        {
             $driver   = $connector_params['driver'];
             $hostname = $connector_params['hostname'];
             $database = $connector_params['database'];
@@ -519,7 +530,7 @@ private function _connector($connector_params)
           
         return true;
     }
-    
+        
 /*
 * get related tables
 * @params $table_name
