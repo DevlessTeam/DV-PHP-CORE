@@ -60,7 +60,7 @@
            </div>
 
             <div class="form-group">
-                <label for="option-field">Field Options</label>
+                <label for="option-field"><b>Field Options:</b></label>
 
                   <input type="checkbox" id="required"  name="required"/>REQUIRED?
 
@@ -71,7 +71,7 @@
 
       <div class="modal-footer">
           <button type="button" onclick="append_field()" class="btn btn-info pull-left" >Add a Field</button>
-          <button type="button" onclick="create_table('{{$service->name}}')" class="btn btn-info pull-right" >Create Table</button>
+          <button type="button" id="crt-tbl" onclick="create_table('{{$service->name}}')" class="btn btn-info pull-right" >Create Table</button>
       </div>
       </div></form></div>
   </div>
@@ -265,6 +265,7 @@
     }
     //destroy table
     function destroy_table(table_name, service_name){
+        if(confirm('Are you sure you want to delete '+table_name+' table?')){
             var settings = {
            "async": true,
            "crossDomain": true,
@@ -289,7 +290,9 @@
            {
                alert('could not delete table ');
            }
-         });
+         });}else{
+         
+         }
     }
 
   function append_field(){
@@ -322,6 +325,7 @@
 
 
     function create_table(service_name){
+         $('#crt-tbl').prop('disabled', true);
          $.fn.serializeObject = function()
         {
             var o = {};
@@ -439,6 +443,7 @@
                   }else{
 
                         alert(message);
+                        $('#crt-tbl').prop('disabled', false);
                   }
                 });
             }

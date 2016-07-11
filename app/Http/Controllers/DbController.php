@@ -19,7 +19,7 @@ class DbController extends Controller
         'text'      => 'string',
         'textarea'   => 'longText',
         'integer'    => 'integer',
-        'decimals'      => 'double',
+        'decimals'   => 'double',
         'password'   => 'string',
         'percentage' => 'integer',
         'url'        => 'string',
