@@ -65,7 +65,6 @@
                                         <div class="col-lg-10">
                                             <select id="script_method" name="script_method" class="form-control m-b-10">
                                                 {{-- <option disabled selected value> -- select an operation -- </option> --}}
-                                                <option value="GET">GET</option>
                                                 <option value="POST">POST </option>
                                                 <option value="UPDATE">PATCH </option>
                                                 <option value="DELETE">DELETE </option>
