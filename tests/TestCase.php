@@ -33,6 +33,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         parent::setUp();
         Artisan::call('migrate');
         
+        //setup Devless
         $this->visit('/setup')
                 ->type("test@test.com","email")
                 ->type("eddymens","username")
@@ -44,7 +45,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
                 ->see('Setup successful. Welcome to Devless');
             
          
-           
+        //login to Devless   
         $this->click('Logout')
             ->type(
                  "password",
@@ -57,6 +58,13 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
          ->press('Login')
          ->see('Welcome Back');
 
+         //create service 
+         $this->visit('/services/create')
+             ->see('ADD SERVICE')
+             ->type($this->serviceName, 'name')   
+             ->press('Create')
+             ->see('Service Created Successfully');
+       
        
     }
 

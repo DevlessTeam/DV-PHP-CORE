@@ -511,12 +511,14 @@ private function _connector($connector_params)
             else
             {
                 $hostname = (isset($default_connector['host']))? $default_connector['host']:false;
+                
             }
 
            
             $username = (isset($default_connector['username']))? $default_connector['username']: false;
-            $password = (isset($default_connector['$password']))? $default_connector['$password']: false;
+            $password = (isset($default_connector['password']))? $default_connector['password']: false;
             $database = $default_connector['database'];
+            
         }   
         else
         {
@@ -525,6 +527,7 @@ private function _connector($connector_params)
             $database = $connector_params['database'];
             $username = $connector_params['username'];
             $password = $connector_params['password'];
+            
         }
         $this->db_socket($driver, $hostname, $database, $username, $password);
           
