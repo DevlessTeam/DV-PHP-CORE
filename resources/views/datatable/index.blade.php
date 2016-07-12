@@ -62,8 +62,9 @@ td {
             </section>
             <nav id="page-nav">
                 <ul class="pager">
-                    <li><a id="previous">Previous</a></li>
-                    <li><a id="next">Next</a></li>
+                    <li class="previous"><a id="previous"><span aria-hidden="true">&larr;</span> Older</a></li>
+                    <span class="badge" id="first_no"> </span> Out of <span class="badge" id="last_no"></span>
+                    <li class="next"><a id="next">Newer <span aria-hidden="true">&rarr;</span></a></li>
                 </ul>
             </nav>
         </div>
@@ -183,6 +184,8 @@ window.onload(function() {
         entries = data.data;
         prevUrl = data.prev_page_url;
         nextUrl = data.next_page_url;
+        $('#first_no').html(data.current_page);
+        $('#last_no').html(data.last_page);
         buildHtmlTable();
         checkPage(data);
     }
