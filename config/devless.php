@@ -7,5 +7,5 @@
 
 
 return[
-  'views_directory' => '../resources/views/service_views/', 
+  'views_directory' => base_path().'/resources/views/service_views/', 
 ];

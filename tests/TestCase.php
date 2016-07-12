@@ -1,5 +1,7 @@
 <?php
 
+use \App\Helpers\DevlessHelper as DLH;
+
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
     /**
@@ -8,7 +10,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      * @var string
      */
     protected $baseUrl = 'http://localhost:8000 ';
-    public $afterLogin;
+    public $serviceName = 'testservice';
 
     /**
      * Creates the application.
@@ -55,12 +57,12 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
          ->press('Login')
          ->see('Welcome Back');
 
-        
+       
     }
 
     public function tearDown()
     {
-        //Artisan::call('migrate:reset');
+        DLH::deleteDirectory(config('devless')['views_directory'].$this->serviceName);
         parent::tearDown();
     }
 }

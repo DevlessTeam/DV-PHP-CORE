@@ -68,9 +68,8 @@ class ViewController extends Controller
 
         switch ($type) {
             case "init":
-                $source_path = '../resources/views/welcome.blade.php';
+                $source_path = base_path().'/resources/views/welcome.blade.php';
                 $destination_path = config('devless')['views_directory'].$service_name;
-                
                 
                 if (mkdir($destination_path)) {
                     $is_saved = (copy($source_path, $destination_path.'/index.blade.php'))?true

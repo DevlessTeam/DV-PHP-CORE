@@ -13,10 +13,9 @@ class ApplicationFlowTest extends TestCase
      */
     public function testCreatService()
     {
-      
         $this->visit('/services/create')
              ->see('ADD SERVICE')
-             ->type('testservice', 'name')   
+             ->type($this->serviceName, 'name')   
              ->press('Create')
              ->see('Service Created Successfully');
                 
