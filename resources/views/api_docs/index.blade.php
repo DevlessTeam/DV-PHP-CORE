@@ -246,11 +246,11 @@
                             values[schema[i].name] = "";
                         };
                         if (request_type === 'create'){
-                            var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+table_name+'","field":['+JSON.stringify(values)+']}]}'), undefined, 4);
+                            var json = JSON.stringify(JSON.parse('['+JSON.stringify(values)+']'), undefined, 4);
                         } else if (request_type === 'update') {
-                            var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+table_name+'","params":[{"where":"id, ","data":[{"key":"value"}]}]}]}'), undefined, 4);
+                            var json = JSON.stringify(JSON.parse('[{"where":"id, ","data":[{"key":"value"}]}]'), undefined, 4);
                         } else if (request_type === 'delete') {
-                            var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+table_name+'","params":[{"delete":"true","where":"id, "}]}]}'), undefined, 4);
+                            var json = JSON.stringify(JSON.parse('[{"delete":"true","where":"id, "}]'), undefined, 4);
                         }
                         editor.setValue(json);
                     });
@@ -341,31 +341,55 @@
                     }
 
                 } else if (request_type === "create"){
-                    $.post('api/v1/service/'+service_name+'/db', JSON.parse(editor.getValue()))
-                    .done(function(data){
+                    payload = JSON.parse(editor.getValue());
+
+                    var promises = [];
+                    for (var i = 0; i < payload.length; i++) {
+                        var info = {resource:[{name:table_name, field: [payload[i]]}]};
+                        promises.push($.post("api/v1/service/"+service_name+"/db", info).success(function(data){
+                            $('#response-field').text(data);
+                            statuscheck(data);
+                        }));
+                    }
+
+                    $.when.apply(promises).done(function() {
                         $('#response').show();
-                        $('#response-field').text(data);
-                        statuscheck(data);
                     });
+
                 } else if (request_type === "update") {
-                    $.ajax({
-                        url: "api/v1/service/"+service_name+"/db",
-                        type: "PATCH",
-                        data: JSON.parse(editor.getValue())
-                    })
-                    .done(function(data) {
-                        statuscheck(data);
-                    })
+                    payload = JSON.parse(editor.getValue());
+                    var promises = [];
+
+                    for (var i = 0; i < payload.length; i++) {
+                        var info = {resource:[{name:table_name,params: [payload[i]]}]};
+                        promises.push($.ajax({
+                            url: "api/v1/service/"+service_name+"/db",
+                            type: "PATCH",
+                            data: info
+                        })
+                        .done(function(data) {
+                            statuscheck(data);
+                        }));
+                    }
+
+                    $.when.apply(promises);
 
                 } else if (request_type === "delete") {
-                    $.ajax({
-                        url: "api/v1/service/"+service_name+"/db",
-                        type: "DELETE",
-                        data: JSON.parse(editor.getValue())
-                    })
-                    .done(function(data) {
-                        statuscheck(data);
-                    })
+                    payload = JSON.parse(editor.getValue());
+                    var promises = [];
+
+                    for (var i = 0; i < payload.length; i++) {
+                        var info = {resource:[{name:table_name,params: [payload[i]]}]};
+                        promises.push($.ajax({
+                            url: "api/v1/service/"+service_name+"/db",
+                            type: "DELETE",
+                            data: info
+                        })
+                        .done(function(data) {
+                            statuscheck(data);
+                        }));
+                    }
+
                 } else {
 
                     var method_type = $('#script_method').val();
