@@ -52,6 +52,18 @@ return [
             'prefix'   => '',
         ],
 
+        'devless-rec' => [
+            'driver'   => 'sqlite',
+            'database' => database_path('devless-rec.sqlite3'),
+            'prefix'   => '',
+        ],
+        
+        'sqlite_testing' => [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ],
+
         'mysql' => [
             'driver'    => 'mysql',
             'host'      => env('DB_HOST', 'localhost'),
