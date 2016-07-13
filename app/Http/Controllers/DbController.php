@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Helpers\Helper;
-#use App\Helpers\SchemaHelper;
 use App\Exceptions\Handler as error;
 use Illuminate\Filesystem\Filesystem as files;
 use App\Helpers\Response as Response;
@@ -198,7 +197,7 @@ class DbController extends Controller
             if ($payload['params'][0]['params'][0]['drop'] == true) {
                 \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
                 \DB::table('table_metas')->where('table_name', $ORG_table_name)->delete();
-                Helper::interrupt(613, 'dropped table succefully');
+                Helper::interrupt(613, 'dropped table successfully');
                 $task = 'drop';
             }
         }

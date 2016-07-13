@@ -284,6 +284,7 @@
            response_object = JSON.parse(response);
            status_code = response_object.status_code;
            if (status_code == 613) {
+               
                 $("#"+table_name).remove();
            }
            else
@@ -405,6 +406,8 @@
                      };
 
                 }
+                
+                if (len > 1) {
                    table_schema =   JSON.stringify(window.schema_json);
                    var settings = {
                     "async": true,
@@ -443,7 +446,10 @@
                         alert(message);
                         $('#crt-tbl').prop('disabled', false);
                   }
-                });
+                });} else {
+                     
+                     alert('Please add at least a field');
+                }
             }
             else{
                 alert('Sorry seems like you have no fields set ');
