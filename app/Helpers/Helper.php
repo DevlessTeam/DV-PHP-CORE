@@ -106,7 +106,7 @@ class Helper
      * @param  additional data $payload
      * @return json
      */
-    public static function  interrupt($stack, $message=null, $payload=[]){
+    public static function  interrupt($stack, $message=null, $payload=[], $dieFixed=false){
         if($message !==null){
             $msg = $message;
         }
@@ -116,6 +116,7 @@ class Helper
         }
         $response = Response::respond($stack, $msg, $payload);
 
+        
         //return results from db functions called from scripts as session('script_results')
         if(session('script_call') == true)
         {
@@ -123,9 +124,16 @@ class Helper
             session()->put('script_results',  $response );
 
         }
-        else
+        else 
         {
-            die($response);
+            //TODO: remove once all Helper callers dont need die
+            if ($dieFixed == false) {
+                
+                die($response);
+            } else {
+                echo ($response);
+            }
+            
         }
 
 

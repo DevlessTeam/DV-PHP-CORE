@@ -2,6 +2,7 @@
 
 use \App\Helpers\DevlessHelper as DLH;
 
+
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
     /**
@@ -11,6 +12,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     protected $baseUrl = 'http://localhost:8000 ';
     public $serviceName = 'testservice';
+    public $serviceTable = 'serviceTable';
 
     /**
      * Creates the application.
@@ -58,7 +60,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
          ->press('Login')
          ->see('Welcome Back');
 
-         //create service 
+         //create service   
          $this->visit('/services/create')
              ->see('ADD SERVICE')
              ->type($this->serviceName, 'name')   
@@ -71,6 +73,17 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     public function tearDown()
     {
         DLH::deleteDirectory(config('devless')['views_directory'].$this->serviceName);
+       
+        //tear down table in devless-rec after creating for test
+        $query = 'DROP TABLE '.$this->serviceName.'_'.$this->serviceTable;
+        $db = new SQLite3(database_path('devless-rec.sqlite3'));
+        try {
+            $db->exec($query);
+        } catch (Exception $e) {
+             //silence is golden 
+        }
+        
+        
         parent::tearDown();
     }
 }
