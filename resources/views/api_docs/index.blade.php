@@ -401,7 +401,15 @@
                         data: json,
                     })
                     .done(function(data) {
-                        statuscheck(data);
+                        if(data.status_code == 700){
+                            $('#response').show()
+                            $('#response-field').text(data);
+                            flash('error');
+                        } else {
+                            $('#response').show()
+                            $('#response-field').text(data);
+                            flash('success');
+                        }
                     });
                 }
 
