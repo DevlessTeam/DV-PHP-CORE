@@ -131,9 +131,9 @@ class Helper
         }
         else 
         {
-                
+               //using die temporally 
                echo ($response);
-            
+               die();
             
         }
 
