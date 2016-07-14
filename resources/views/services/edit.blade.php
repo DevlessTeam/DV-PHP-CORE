@@ -59,10 +59,14 @@
             <input type="text" id="default" name="default" class="form-control" />
            </div>
 
-            <div class="form-group">
-                <label for="option-field"><b>Field Options:</b></label>
+             <div class="form-group">
+                <label for="option-field">Field Options</label>
 
                   <input type="checkbox" id="required"  name="required"/>REQUIRED?
+
+
+                  <input type="checkbox" id="validate" name="validate"/>VALIDATE?
+
 
                     <input type="checkbox" id="unique" name="unique"/> UNIQUE FIELD?
             </div>
