@@ -133,7 +133,7 @@ class Helper
         {
                //using die temporally 
                echo ($response);
-               die();
+               
             
         }
 
