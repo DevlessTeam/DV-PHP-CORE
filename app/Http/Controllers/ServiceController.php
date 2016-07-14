@@ -378,7 +378,7 @@ class ServiceController extends Controller
              */
     public function service_exist($service_name)
     {
-        do {
+        
         if ($current_service = serviceModel::where('name', $service_name)->
         where('active', 1)->first()) {
             return $current_service;
@@ -387,7 +387,7 @@ class ServiceController extends Controller
             return false;
         }
         
-        }while(0);
+        
     }
             
             /*
