@@ -313,7 +313,8 @@ class ServiceController extends Controller
     ) {
         
         $current_service = $this->service_exist($service_name);
-               
+        
+      if(!$current_service == false){     
         //check service access right
         $is_it_public = $current_service->public;
         $is_admin = Helper::is_admin_login();
@@ -366,7 +367,7 @@ class ServiceController extends Controller
             Helper::interrupt(624);
             return;
         }
-                    
+       }              
     }
                  
             /*
@@ -377,13 +378,16 @@ class ServiceController extends Controller
              */
     public function service_exist($service_name)
     {
+        do {
         if ($current_service = serviceModel::where('name', $service_name)->
         where('active', 1)->first()) {
             return $current_service;
         } else {
             Helper::interrupt(604);
-            return;
+            return false;
         }
+        
+        }while(0);
     }
             
             /*
