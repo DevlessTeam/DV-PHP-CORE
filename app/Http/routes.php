@@ -30,7 +30,7 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
     #check system status
     Route::get('status', function ()    {
 
-        return "healthy";
+        return '{"state_code":111,"message":"healthy",payload:[]}';
     });
 
     #system logs

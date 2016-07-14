@@ -335,7 +335,7 @@ class DbController extends Controller
             $complete_query = 'return '.$complete_query.'->get();';
             $count = $db->table($table_name)->count();
             $query_output = eval($complete_query);
-            $query_output['count'] = $count;
+            //$query_output['count'] = $count;
             if (sizeof($query_output) == 1 && isset($queried_table_list)) {
                 $query_output = json_decode(json_encode($query_output), true);
                 $wanted_relationships = $queried_table_list;
@@ -347,7 +347,7 @@ class DbController extends Controller
                     $db
                 );
             }
-            $query_output['related'] = $related;
+            //$query_output['related'] = $related;
         //$response = Response::respond(625,null,$query_output);
 
             Helper::interrupt(625, null, $query_output);

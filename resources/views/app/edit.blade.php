@@ -152,11 +152,14 @@
 			<div class="tab-content">
                             <div class="tab-pane active" id="web">
                                 <code>
-                                    window.devless_key = "{{$app->api_key}}";
-                                    window.devless_token = "{{$app->token}}";
-                                    window.devless_domain_name = "{{URL::to('/')}}";
-                                    window.devless_port = <?php echo $_SERVER['SERVER_PORT'] ?>;
-                                    
+                                    var constants = {
+                                        "token":"{{$app->token}}",
+                                        "key":"{{$app->api_key}}",
+                                        "domain":"{{URL::to('/')}}"
+                                        };
+                                        
+                                    Devless.init(constants);
+
                                     
 
                                 </code>
