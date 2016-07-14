@@ -13,7 +13,7 @@ class ApplicationFlowTest extends TestCase
      */
     public function testCreatService()
     {
-        //silence is golden 
+        //silence is golden
     }
     
     public function testServices()
@@ -21,5 +21,3 @@ class ApplicationFlowTest extends TestCase
         //silence is golden
     }
 }
-
-

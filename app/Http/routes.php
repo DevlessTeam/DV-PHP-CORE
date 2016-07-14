@@ -39,7 +39,7 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
     });
 
     #config end points
-    Route::resource('system', 'ServiceController@api');
+    Route::get('a', 'ServiceController@jsonView');
 
     #service end points
     Route::get('service/{service}/{resource}','ServiceController@api');

@@ -2,7 +2,6 @@
 
 use \App\Helpers\DevlessHelper as DLH;
 
-
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
     /**
@@ -37,33 +36,33 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         
         //setup Devless
         $this->visit('/setup')
-                ->type("test@test.com","email")
-                ->type("eddymens","username")
-                ->type("password","password")
-                ->type("password","password_confirmation")
-                ->type("test","app_description")
-                ->type("appName","app_name")
+                ->type("test@test.com", "email")
+                ->type("eddymens", "username")
+                ->type("password", "password")
+                ->type("password", "password_confirmation")
+                ->type("test", "app_description")
+                ->type("appName", "app_name")
                 ->press('Create App')
                 ->see('Setup successful. Welcome to Devless');
             
          
-        //login to Devless   
+        //login to Devless
         $this->click('Logout')
             ->type(
-                 "password",
-                 'password'
+                "password",
+                'password'
             )
             ->type(
                 "test@test.com",
                 'email'
-         )
+            )
          ->press('Login')
          ->see('Welcome Back');
 
-         //create service   
+         //create service
          $this->visit('/services/create')
              ->see('ADD SERVICE')
-             ->type($this->serviceName, 'name')   
+             ->type($this->serviceName, 'name')
              ->press('Create')
              ->see('Service Created Successfully');
        
@@ -80,7 +79,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         try {
             $db->exec($query);
         } catch (Exception $e) {
-             //silence is golden 
+             //silence is golden
         }
         
         

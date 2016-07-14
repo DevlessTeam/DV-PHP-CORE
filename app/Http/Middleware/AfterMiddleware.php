@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Helpers\DevlessHelper as DVL;
+
 class AfterMiddleware
 {
     /**
@@ -18,8 +18,9 @@ class AfterMiddleware
     {
         $response = $next($request);
        
-             return $response;
-        
-            
+                
+             return ($response);
+             
+           
     }
 }

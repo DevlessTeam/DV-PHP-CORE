@@ -154,6 +154,7 @@ class ServiceController extends Controller
                 $service->script = $request->input('script');
                 $service->save();
                 Helper::interrupt(626);
+                return;
             }
                     
                     
@@ -246,12 +247,21 @@ class ServiceController extends Controller
         $is_key_right = ($request->header('Devless-key') == $request['devless_key'])?true : false;
         $is_key_token = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
         $is_admin = Helper::is_admin_login();
-
-        (($is_key_right && $is_key_token) || $is_admin )? true : Helper::interrupt(631);
+        $HelperInterrupt = function($statusCode){
+            Helper::interrupt($statusCode);
+            return;
+        };
+        (($is_key_right && $is_key_token) || $is_admin )? true : $HelperInterrupt(631);
 
         $this->resource($request, $service, $resource);
+        
     }
         
+    public function jsonView(Request $request) 
+    {
+        
+         return response()->json(['name' => 'Abigail', 'state' => 'CA']);
+    }
         /**
      * Refer request to the right service and resource
          * @param array  $request request params
@@ -354,9 +364,11 @@ class ServiceController extends Controller
 
                 default:
                     Helper::interrupt(605);
+                    break;
             }
         } else {
             Helper::interrupt(624);
+            return;
         }
                     
     }
@@ -374,6 +386,7 @@ class ServiceController extends Controller
             return $current_service;
         } else {
             Helper::interrupt(604);
+            return;
         }
     }
             
@@ -393,6 +406,7 @@ class ServiceController extends Controller
         } else {
             Helper::interrupt(608, 'Request method '.$method.
                     ' is not supported');
+            return;
         }
         return $parameters;
     }
@@ -422,6 +436,7 @@ class ServiceController extends Controller
                 
         if (! $is_user_login && $access_type == 0) {
             Helper::interrupt(627);
+            return;
         } //private
         elseif ($access_type == 1) {
             return false;
