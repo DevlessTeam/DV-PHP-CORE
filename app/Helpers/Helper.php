@@ -130,6 +130,7 @@ class Helper
         }
         else 
         {
+            
                echo ($response);
             
             

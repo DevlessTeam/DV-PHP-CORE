@@ -247,12 +247,12 @@ class ServiceController extends Controller
         $is_key_right = ($request->header('Devless-key') == $request['devless_key'])?true : false;
         $is_key_token = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
         $is_admin = Helper::is_admin_login();
-        $HelperInterrupt = function($statusCode){
-            Helper::interrupt($statusCode);
+       
+        $state = (($is_key_right && $is_key_token) || $is_admin )? true : false;
+        if(!$state){
+            Helper::interrupt(631);
             return;
-        };
-        (($is_key_right && $is_key_token) || $is_admin )? true : $HelperInterrupt(631);
-
+        }
         $this->resource($request, $service, $resource);
         
     }
