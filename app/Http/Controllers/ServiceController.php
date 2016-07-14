@@ -257,11 +257,7 @@ class ServiceController extends Controller
         
     }
         
-    public function jsonView(Request $request) 
-    {
-        
-         return response()->json(['name' => 'Abigail', 'state' => 'CA']);
-    }
+    
         /**
      * Refer request to the right service and resource
          * @param array  $request request params

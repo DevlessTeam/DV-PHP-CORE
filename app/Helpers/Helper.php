@@ -110,7 +110,7 @@ class Helper
      */
     public static function  interrupt( $stack, $message=null, $payload=[], $dieFixed=false){
         
-        //  dd(debug_backtrace());
+        
         if($message !==null){
             $msg = $message;
         }

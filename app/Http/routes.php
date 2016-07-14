@@ -38,9 +38,6 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
         return "no log available";
     });
 
-    #config end points
-    Route::get('a', 'ServiceController@jsonView');
-
     #service end points
     Route::get('service/{service}/{resource}','ServiceController@api');
     Route::post('service/{service}/{resource}','ServiceController@api');
