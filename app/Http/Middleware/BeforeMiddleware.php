@@ -35,6 +35,7 @@ class BeforeMiddleware
                 else
                 {
                     Helper::interrupt(631);
+                    return;
                 }
            }
            

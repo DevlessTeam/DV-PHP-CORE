@@ -154,6 +154,7 @@ class ServiceController extends Controller
                 $service->script = $request->input('script');
                 $service->save();
                 Helper::interrupt(626);
+                return;
             }
                     
                     
@@ -246,12 +247,17 @@ class ServiceController extends Controller
         $is_key_right = ($request->header('Devless-key') == $request['devless_key'])?true : false;
         $is_key_token = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
         $is_admin = Helper::is_admin_login();
-
-        (($is_key_right && $is_key_token) || $is_admin )? true : Helper::interrupt(631);
-
+       
+        $state = (($is_key_right && $is_key_token) || $is_admin )? true : false;
+        if(!$state){
+            Helper::interrupt(631);
+            return;
+        }
         $this->resource($request, $service, $resource);
+        
     }
         
+    
         /**
      * Refer request to the right service and resource
          * @param array  $request request params
@@ -307,7 +313,8 @@ class ServiceController extends Controller
     ) {
         
         $current_service = $this->service_exist($service_name);
-               
+        
+      if(!$current_service == false){     
         //check service access right
         $is_it_public = $current_service->public;
         $is_admin = Helper::is_admin_login();
@@ -354,11 +361,13 @@ class ServiceController extends Controller
 
                 default:
                     Helper::interrupt(605);
+                    break;
             }
         } else {
             Helper::interrupt(624);
+            return;
         }
-                    
+       }              
     }
                  
             /*
@@ -369,12 +378,16 @@ class ServiceController extends Controller
              */
     public function service_exist($service_name)
     {
+        
         if ($current_service = serviceModel::where('name', $service_name)->
         where('active', 1)->first()) {
             return $current_service;
         } else {
             Helper::interrupt(604);
+            return false;
         }
+        
+        
     }
             
             /*
@@ -393,6 +406,7 @@ class ServiceController extends Controller
         } else {
             Helper::interrupt(608, 'Request method '.$method.
                     ' is not supported');
+            return;
         }
         return $parameters;
     }
@@ -422,6 +436,7 @@ class ServiceController extends Controller
                 
         if (! $is_user_login && $access_type == 0) {
             Helper::interrupt(627);
+            return;
         } //private
         elseif ($access_type == 1) {
             return false;

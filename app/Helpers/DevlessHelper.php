@@ -625,7 +625,8 @@ class DevlessHelper extends Helper
                 $valid = Helper::field_check($value, $expected_fields[$field]);
                 if($valid !== true)
                 {
-                Helper::interrupt(616, 'There is something wrong with your '.$field);
+                    Helper::interrupt(616, 'There is something wrong with your '.$field);
+                    break;
                 }
                 if($field == 'password')
                 {

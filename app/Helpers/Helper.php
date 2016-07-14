@@ -1,12 +1,15 @@
 <?php
+
 namespace App\Helpers;
 use Validator;
+use Illuminate\Http\Request;
 use App\Helpers\Response as Response;
 use Hash;
 use App\User;
 use App\Helpers\JWT as jwt;
 use Response as output;
 use Session;
+use test;
 /*
  * @author eddymens <eddymens@devless.io>
 *composed of most common used classes and functions
@@ -74,7 +77,7 @@ class Helper
         'text'      => 'string',
         'textarea'   => 'string',
         'integer'    => 'integer',
-        'money'      => 'numeric',
+        'decimal'      => 'numeric',
         'password'   => 'alphanum',
         'percentage' => 'integer',
         'url'        => 'url',
@@ -106,7 +109,9 @@ class Helper
      * @param  additional data $payload
      * @return json
      */
-    public static function  interrupt($stack, $message=null, $payload=[], $dieFixed=false){
+    public static function  interrupt( $stack, $message=null, $payload=[], $dieFixed=false){
+        
+        
         if($message !==null){
             $msg = $message;
         }
@@ -116,7 +121,7 @@ class Helper
         }
         $response = Response::respond($stack, $msg, $payload);
 
-        
+                
         //return results from db functions called from scripts as session('script_results')
         if(session('script_call') == true)
         {
@@ -126,13 +131,9 @@ class Helper
         }
         else 
         {
-            //TODO: remove once all Helper callers dont need die
-            if ($dieFixed == false) {
                 
-                die($response);
-            } else {
-                echo ($response);
-            }
+               echo ($response);
+            
             
         }
 
@@ -164,6 +165,7 @@ class Helper
                 {
                     Helper::interrupt(618,'validator type '.$rule.
                             ' does not exist');
+                    break;
                 }
                 $check_against = Helper::$validator_type[$rule]."|" ;
             }
@@ -177,6 +179,7 @@ class Helper
                 {
                     Helper::interrupt(618,'validator type '.$check_against.
                             ' does not exist');
+                    return;
                 }
             $check_against = Helper::$validator_type[$check_against] ;
 

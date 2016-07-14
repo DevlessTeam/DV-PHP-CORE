@@ -15,8 +15,9 @@ class Cors
      */
     public function handle($request, Closure $next)
     {
-
+        $request->headers->set("Content-type","application/json");
+        
          return $next($request);
-
+         
     }
 }

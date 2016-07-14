@@ -47,22 +47,28 @@
             </select>
         </div>
         <div  class="form-group">
+            <div style="display:none;" >
             <label for="field-reference">Reference Table</label>
-            <select class="form-control"  name="field-reference" id="field-reference">
+            <select class="form-control"  name="field-reference" id="field-reference" >
                 @foreach($table_meta as $table_data)
                 <option value="{{$table_data['name']}}">{{$table_data['name']}}</option>
                 @endforeach
             </select>
+            </div> 
         </div>
           <div class="form-group">
            <label for="default-field">Default Value(optional)</label>
             <input type="text" id="default" name="default" class="form-control" />
            </div>
 
-            <div class="form-group">
-                <label for="option-field"><b>Field Options:</b></label>
+             <div class="form-group">
+                <label for="option-field">Field Options</label>
 
                   <input type="checkbox" id="required"  name="required"/>REQUIRED?
+
+
+                  <input type="checkbox" id="validate" name="validate"/>VALIDATE?
+
 
                     <input type="checkbox" id="unique" name="unique"/> UNIQUE FIELD?
             </div>
@@ -407,7 +413,7 @@
 
                 }
                 
-                if (len > 1) {
+                if (len => 1) {
                    table_schema =   JSON.stringify(window.schema_json);
                    var settings = {
                     "async": true,
@@ -444,19 +450,21 @@
                   }else{
 
                         alert(message);
-                        $('#crt-tbl').prop('disabled', false);
+                        
                   }
                 });} else {
                      
                      alert('Please add at least a field');
+                     $('#crt-tbl').prop('disabled', false);
                 }
             }
             else{
                 alert('Sorry seems like you have no fields set ');
+                $('#crt-tbl').prop('disabled', false);
             }
 
 
-
+            
 
     }
    function destroy_field(field_id){

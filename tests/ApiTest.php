@@ -86,12 +86,14 @@ class ApiTest extends TestCase
 ';
         $schemaObj = json_decode($schemaStruct, true);
         
-        $this->json('POST', $url.$serviceName.'/schema', $schemaObj);
+        $this->json('POST', $url.$serviceName.'/schema', $schemaObj)
+              ->seeJson([]);
       
              
     }
     
+    public function testAddData()
+    {
     
-    
-    
+    }
 }
