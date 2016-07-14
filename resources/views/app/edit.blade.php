@@ -62,12 +62,12 @@
                                      @endif
                                 </div>
                             </div>
-                             <div class="form-group @if($errors->has('app-key')) has-error @endif">
-                                <label for="app-key" class="col-lg-2 col-sm-2 control-label"  >App Key</label>
+                             <div class="form-group @if($errors->has('app_key')) has-error @endif">
+                                <label for="app_key" class="col-lg-2 col-sm-2 control-label"  >App Key</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="app-key" value='{{$_SERVER['SERVER_NAME']}}' placeholder="app key">
-                                    @if($errors->has("name"))
-                                        <span class="help-block">{{ $errors->first("api-key") }}</span>
+                                    <input type="text" class="form-control" id="app_key" name="api_key" value='{{$app->api_key}}' placeholder="App key">
+                                    @if($errors->has("api_key"))
+                                        <span class="help-block">{{ $errors->first("api_key") }}</span>
                                       @endif
                                 </div>
                             </div>
@@ -116,7 +116,11 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-lg-offset-2 col-lg-10">
-                                    <button type="submit" class="btn btn-info pull-right">Save</button>
+                                    <!-- Button trigger modal -->
+<button type="button" class="btn btn-info  pull-left" data-toggle="modal" data-target="#connect-to-app">
+    Connect to my App
+</button>
+                                    <button type="submit" class="btn btn-info pull-right">Save Changes</button>
                                 </div>
                             </div>
                         </form>
@@ -126,6 +130,46 @@
         </div>
     </div>
     <!--body wrapper end-->
+    
+<!-- Modal -->
+<div class="modal fade" id="connect-to-app" tabindex="-1" role="dialog" aria-labelledby="Label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Choose connection type</h4>
+      </div>
+      <div class="modal-body">
+                    <ul class="nav nav-tabs" id="options-tab">
+			  <li><a data-target="#web" data-toggle="tab">Web</a></li>
+			  <li><a data-target="#android" data-toggle="tab">Android</a></li>
+			  <li><a data-target="#ios" data-toggle="tab">IOS</a></li>
+                          <li><a data-target="#raw" data-toggle="tab">Raw</a></li>
+			</ul>
+
+			<div class="tab-content">
+                            <div class="tab-pane active" id="web">
+                                <code>
+                                    window.devless_key = "{{$app->api_key}}";
+                                    window.devless_token = "{{$app->token}}";
+                                    window.devless_domain_name = "{{URL::to('/')}}";
+                                    window.devless_port = <?php echo $_SERVER['SERVER_PORT'] ?>;
+                                    
+                                    
+
+                                </code>
+                            </div>
+                            <div class="tab-pane" id="android"><center>NA</center></div>
+			  <div class="tab-pane" id="ios"><center>NA</center></div>
+			  <div class="tab-pane" id="raw"><center>NA</center></div>
+			</div>
+      </div>
+      
+    </div>
+  </div>
+</div>
     <script>
     function generate_token(){
             var settings = {
@@ -160,5 +204,6 @@
             return false;
         }
     }
+    ('#options-tab a:last').tab('show')
     </script>
 @endsection

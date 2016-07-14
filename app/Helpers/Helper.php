@@ -9,6 +9,7 @@ use App\User;
 use App\Helpers\JWT as jwt;
 use Response as output;
 use Session;
+use test;
 /*
  * @author eddymens <eddymens@devless.io>
 *composed of most common used classes and functions
@@ -130,7 +131,7 @@ class Helper
         }
         else 
         {
-            
+                
                echo ($response);
             
             
