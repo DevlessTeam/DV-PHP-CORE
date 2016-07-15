@@ -16,7 +16,7 @@ class AfterMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $response = $next($request);
+            $response = $next($request);
        
                 
              return ($response);

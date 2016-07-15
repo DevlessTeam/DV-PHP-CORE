@@ -47,14 +47,30 @@ class Handler extends ExceptionHandler
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }
         
-        
-            return response()->json([
+        $generalError = function($e){
+           $customPayload = $e->getMessage();
+           $customPayload = json_decode($customPayload,true);
+           return [
+             'status_code' =>  $customPayload['status_code'], 
+             'message'     => $customPayload['message'],
+             'payload'     => $customPayload['payload']
+           ];
+           
+        };
+        $customError = function($e){
+            return [
                     'status_code' =>700,
-                    'message'=>[],
+                    'message'=>$e->getMessage(),
                     'payload'=>[
-                    'message' => $e->getMessage(),
                     'file'    => $e->getFile(),
                     'line'     =>$e->getLine()]
-                    ]);
+                    ];
+        };
+        
+        $output =  ($e->getCode() == 0)?  $generalError($e) : $customError($e);
+        
+        return response()->json($output);
     }
 }
+
+                    

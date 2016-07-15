@@ -347,12 +347,11 @@ class DbController extends Controller
                 );
             }
             //$query_output['related'] = $related;
-        //$response = Response::respond(625,null,$query_output);
-
-            Helper::interrupt(625, null, $query_output);
+        
+            Helper::interrupt( 625, null, $query_output);
             return;
         } else {
-            Helper::interrupt(611);
+            Helper::interrupt(611,null, null, true);
             return;
         }
     }
@@ -397,12 +396,12 @@ class DbController extends Controller
             });
             $this->_set_table_meta($new_payload);
            
-            Helper::interrupt(606);
-            return;
+            Helper::interrupt(606,null, null, true);
+            
         } else {
           
-            Helper::interrupt(603, $table_name ." table already exist");
-            return;
+            Helper::interrupt(603, $table_name ." table already exist",null, true);
+            
             
         }
     }

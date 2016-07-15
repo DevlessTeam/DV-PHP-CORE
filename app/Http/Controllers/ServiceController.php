@@ -216,12 +216,12 @@ class ServiceController extends Controller
     }
 
 
-          /**
-           * download service packages
-           * @param $request
-           * @param $filename
-           *
-           */
+    /**
+     * download service packages
+     * @param $request
+     * @param $filename
+     *
+     */
     public function download_service_package($filename)
     {
 
@@ -234,28 +234,19 @@ class ServiceController extends Controller
         }
 
     }
-        /**
-        * all api calls go through here
-        * @param array  $request request params
-        * @param string  $service  service to be accessed
-        * @param string $resource resource to be accessed
-        * @return Response
-        */
+    
+    /**
+    * all api calls go through here
+    * @param array  $request request params
+    * @param string  $service  service to be accessed
+    * @param string $resource resource to be accessed
+    * @return Response
+    */
     public function api(Request $request, $service, $resource)
     {
 
          //check token and keys
-
-        $is_key_set = ($request->header('Devless-key') == $request['devless_key'])?true : false;
-        $is_token_set = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
-        $is_admin = Helper::is_admin_login();
-
-        $state = (($is_key_set && $is_token_set) || $is_admin )? true : false;
-
-        if(!$state){
-            Helper::interrupt(631);
-            return;
-        }
+        $this->_devlessCheckHeaders($request);
         $this->resource($request, $service, $resource);
         
         return messenger::message();
@@ -263,11 +254,11 @@ class ServiceController extends Controller
     
      /**
      * Refer request to the right service and resource
-    * @param array  $request request params
-    * @param string  $service  service to be accessed
-    * @param string $resource resource to be accessed
-    * @return Response
-    */
+     * @param array  $request request params
+     * @param string  $service  service to be accessed
+     * @param string $resource resource to be accessed
+     * @return Response
+     */
     public function resource($request, $service_name, $resource, $internal_access = false)
     {
         $resource = strtolower($resource);
@@ -297,14 +288,14 @@ class ServiceController extends Controller
 
 
 
-        /**
+    /**
      * assign request to a devless service .
      *
-         * @param string $service name of service to be access
+     * @param string $service name of service to be access
      * @param  string  $resource
-         * @param array $method http verb
-         * @param array $parameter contains all parameters passed from route
-         * @param boolean $internal_service true if service is being called internally
+     * @param array $method http verb
+     * @param array $parameter contains all parameters passed from route
+     * @param boolean $internal_service true if service is being called internally
      * @return Response
      */
     public function assign_to_service(
@@ -373,12 +364,12 @@ class ServiceController extends Controller
        }
     }
 
-            /*
-             *check if service exists
-             *
-             * @param string $service_name name of service
-             * return array of service values
-             */
+    /*
+     *check if service exists
+     *
+     * @param string $service_name name of service
+     * return array of service values
+     */
     public function service_exist($service_name)
     {
 
@@ -393,13 +384,13 @@ class ServiceController extends Controller
 
     }
 
-            /*
-             * get parameters set in from request
-             *
-             * @param string $method reuquest method type
-             * @param array $request request parameters
-             * return array of parameters
-             */
+    /*
+     * get parameters set in from request
+     *
+     * @param string $method reuquest method type
+     * @param array $request request parameters
+     * return array of parameters
+     */
     public function get_params($method, $request)
     {
         if (in_array($method, ['POST','DELETE','PATCH'])) {
@@ -414,11 +405,11 @@ class ServiceController extends Controller
         return $parameters;
     }
 
-            /*
-             * get and convert resource_access_right to array
-             * @param object $service service payload
-             * @return array resource access right
-             */
+    /*
+     * get and convert resource_access_right to array
+     * @param object $service service payload
+     * @return array resource access right
+    */
     private function _get_resource_access_right($service)
     {
         $resource_access_right = $service->resource_access_right;
@@ -427,12 +418,27 @@ class ServiceController extends Controller
 
         return $resource_access_right;
     }
+    
+    private function _devlessCheckHeaders($request)
+    {
+        
+        $is_key_set = ($request->header('Devless-key') == $request['devless_key'])?true : false;
+        $is_token_set = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
+        $is_admin = Helper::is_admin_login();
 
-            /*
-             * check user access right
-             * @param object $service service payload
-             * @return boolean
-             */
+        $state = (($is_key_set && $is_token_set) || $is_admin )? true : false;
+
+        if(!$state){
+            Helper::interrupt(631);
+            
+        }
+    }
+
+    /*
+     * check user access right
+     * @param object $service service payload
+     * @return boolean
+     */
     public function check_resource_access_right_type($access_type)
     {
         $is_user_login = Helper::is_admin_login();
