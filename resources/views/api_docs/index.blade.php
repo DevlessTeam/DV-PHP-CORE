@@ -423,7 +423,8 @@
                     flash('error');
                 } else {
                     $('#response').show()
-                    $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                    // $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                    $('#response-field').text(JSON.stringify(data, undefined, 4));
                     flash('success');
                 }
             };
