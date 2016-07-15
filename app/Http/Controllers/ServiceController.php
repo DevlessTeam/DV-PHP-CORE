@@ -54,14 +54,14 @@ class ServiceController extends Controller
                 $service_name = strtolower($service_name_from_form);
 
                 $validator = Validator::make(
-                    
+
                     ['name'=>$service_name],
                     [
                         'name'=>'required|unique:services,name',
-                        
+
                     ]
                 );
-                
+
                 if ($validator->fails()) {
                     $errors = $validator->messages();
                     DLH::flash("Sorry but service could not be created", 'error');
@@ -96,13 +96,13 @@ class ServiceController extends Controller
                        //create initial views for service
                         $views = new DvViews();
                         $type = "init";
-                         
+
                         ($service->save() && $views->create_views($service_name, $type) )
                                         ?
                         DLH::flash("Service created successfully", 'success'):
                         DLH::flash("Service could not be created", 'error');
                     }
-                
+
                     return $this->edit($service->id);
     }
 
@@ -134,7 +134,7 @@ class ServiceController extends Controller
                 $table_meta[$count]  = (json_decode($each_table_meta->schema, true));
             $count++;
         }
-                
+
         return view('services.edit', compact('service', 'table_meta'));
     }
 
@@ -148,7 +148,7 @@ class ServiceController extends Controller
     public function update(Request $request, $id)
     {
                 $views = new DvViews();
-                    
+
         if ($service = Service::findOrFail($id)) {
             if ($request->input('call_type') =='solo') {
                 $service->script = $request->input('script');
@@ -156,9 +156,9 @@ class ServiceController extends Controller
                 Helper::interrupt(626);
                 return;
             }
-                    
-                    
-                    
+
+
+
                     $service->description = $request->input("description");
                     $service->username = $request->input("username");
                     $service->password = $request->input('password');
@@ -166,7 +166,7 @@ class ServiceController extends Controller
                     $service->hostname = $request->input('hostname');
                     $service->driver = $request->input('driver');
                     $service->active = $request->input("active");
-                    
+
                     $connection =
                     [
                         'username' => $service->username,
@@ -198,13 +198,13 @@ class ServiceController extends Controller
                 $service_name = $service->name;
                 $view_path = config('devless')['views_directory'];
                 $assets_path = $view_path.$service_name;
-                
+
                 $table_meta = \App\TableMeta::where('service_id', $id)->get();
         foreach ($table_meta as $meta) {
                 $table_name = $meta->table_name;
             $output = DLH::purge_table($service_name.'_'.$table_name);
         }
-        
+
         if (DLH::deleteDirectory($assets_path) && $service->delete()) {
                 DLH::flash("Service deleted successfully", 'success');
         } else {
@@ -213,8 +213,8 @@ class ServiceController extends Controller
 
         return redirect()->route('services.index');
     }
-        
-        
+
+
           /**
            * download service packages
            * @param $request
@@ -223,7 +223,7 @@ class ServiceController extends Controller
            */
     public function download_service_package($filename)
     {
-              
+
         $file_path = DLH::get_file($filename);
         if ($file_path) {
         // Send Download
@@ -231,7 +231,7 @@ class ServiceController extends Controller
         } else {
             DLH::flash("could not download files");
         }
-              
+
     }
         /**
         * all api calls go through here
@@ -242,49 +242,47 @@ class ServiceController extends Controller
         */
     public function api(Request $request, $service, $resource)
     {
-     
-        //check token and key
+
+         //check token and keys
+
         $is_key_right = ($request->header('Devless-key') == $request['devless_key'])?true : false;
         $is_token_right = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
         $is_admin = Helper::is_admin_login();
-       
-        $state = (($is_key_right && $is_token_right) || $is_admin )? true : false;
+
+        $state = (($is_key_right && $is_key_token) || $is_admin )? true : false;
+
         if(!$state){
             Helper::interrupt(631);
             return;
         }
         $this->resource($request, $service, $resource);
        
-       
     }
     
-    
-        
-    
-        /**
-     * Refer request to the right service and resource
-         * @param array  $request request params
-     * @param string  $service  service to be accessed
-         * @param string $resource resource to be accessed
-     * @return Response
-     */
+    /**
+    * Refer request to the right service and resource
+    * @param array  $request request params
+    * @param string  $service  service to be accessed
+    * @param string $resource resource to be accessed
+    * @return Response
+    */
     public function resource($request, $service_name, $resource, $internal_access = false)
     {
         $resource = strtolower($resource);
         $service_name = strtolower($service_name);
         ($internal_access == true)? $method = $request['method'] :
         $method = $request->method();
-            
+
         $method = strtoupper($method);
         #check method type and get payload accordingly
-         
+
         if ($internal_access == true) {
             $parameters = $request['resource'];
         } else {
             $parameters = $this->get_params($method, $request);
         }
-            
-            
+
+
         //$resource
         return $this->assign_to_service(
             $service_name,
@@ -294,9 +292,9 @@ class ServiceController extends Controller
             $internal_access
         );
     }
-        
-       
-        
+
+
+
         /**
      * assign request to a devless service .
      *
@@ -314,15 +312,15 @@ class ServiceController extends Controller
         $parameters = null,
         $internal_access = false
     ) {
-        
+
         $current_service = $this->service_exist($service_name);
-        
-      if(!$current_service == false){     
+
+      if(!$current_service == false){
         //check service access right
         $is_it_public = $current_service->public;
         $is_admin = Helper::is_admin_login();
         $accessed_internally = $internal_access;
-                
+
         if ($is_it_public == 0 || $is_admin == true ||
                 $accessed_internally == true) {
             $resource_access_right = $this->_get_resource_access_right($current_service);
@@ -370,18 +368,18 @@ class ServiceController extends Controller
             Helper::interrupt(624);
             return;
         }
-       }              
+       }
     }
-                 
+
             /*
              *check if service exists
-             * 
-             * @param string $service_name name of service 
-             * return array of service values 
+             *
+             * @param string $service_name name of service
+             * return array of service values
              */
     public function service_exist($service_name)
     {
-        
+
         if ($current_service = serviceModel::where('name', $service_name)->
         where('active', 1)->first()) {
             return $current_service;
@@ -389,15 +387,15 @@ class ServiceController extends Controller
             Helper::interrupt(604);
             return false;
         }
-        
-        
+
+
     }
-            
+
             /*
              * get parameters set in from request
-             * 
-             * @param string $method reuquest method type 
-             * @param array $request request parameters 
+             *
+             * @param string $method reuquest method type
+             * @param array $request request parameters
              * return array of parameters
              */
     public function get_params($method, $request)
@@ -413,7 +411,7 @@ class ServiceController extends Controller
         }
         return $parameters;
     }
-            
+
             /*
              * get and convert resource_access_right to array
              * @param object $service service payload
@@ -422,21 +420,21 @@ class ServiceController extends Controller
     private function _get_resource_access_right($service)
     {
         $resource_access_right = $service->resource_access_right;
-                 
+
         $resource_access_right = json_decode($resource_access_right, true);
-                
+
         return $resource_access_right;
     }
-            
+
             /*
-             * check user access right 
+             * check user access right
              * @param object $service service payload
-             * @return boolean 
+             * @return boolean
              */
     public function check_resource_access_right_type($access_type)
     {
         $is_user_login = Helper::is_admin_login();
-                
+
         if (! $is_user_login && $access_type == 0) {
             Helper::interrupt(627);
             return;
@@ -447,7 +445,7 @@ class ServiceController extends Controller
         elseif ($access_type == 2) {
             return true;
         }//authentication required
-                
+
         return true;
     }
 }
