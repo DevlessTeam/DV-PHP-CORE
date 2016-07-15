@@ -11,7 +11,8 @@ use App\Http\Controllers\ScriptController as Script ;
 use App\Http\Controllers\DbController as Db;
 use App\Http\Controllers\ViewController as View;
 use Session;
-use \App\Helpers\DevlessHelper as DLH;
+use App\Helpers\DevlessHelper as DLH;
+use App\Helpers\Messenger as messenger;
 use App\Http\Controllers\ViewController as DvViews;
 use Validator;
 
@@ -118,7 +119,7 @@ class ServiceController extends Controller
 
         return view('services.show', compact('service'));
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
@@ -245,22 +246,23 @@ class ServiceController extends Controller
 
          //check token and keys
 
-        $is_key_right = ($request->header('Devless-key') == $request['devless_key'])?true : false;
-        $is_token_right = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
+        $is_key_set = ($request->header('Devless-key') == $request['devless_key'])?true : false;
+        $is_token_set = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
         $is_admin = Helper::is_admin_login();
 
-        $state = (($is_key_right && $is_key_token) || $is_admin )? true : false;
+        $state = (($is_key_set && $is_token_set) || $is_admin )? true : false;
 
         if(!$state){
             Helper::interrupt(631);
             return;
         }
         $this->resource($request, $service, $resource);
-       
+        
+        return messenger::message();
     }
     
-    /**
-    * Refer request to the right service and resource
+     /**
+     * Refer request to the right service and resource
     * @param array  $request request params
     * @param string  $service  service to be accessed
     * @param string $resource resource to be accessed

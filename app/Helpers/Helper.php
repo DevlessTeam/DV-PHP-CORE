@@ -3,13 +3,16 @@
 namespace App\Helpers;
 use Validator;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as res;
 use App\Helpers\Response as Response;
+use App\Helpers\Messenger as messenger;
 use Hash;
 use App\User;
+use App\Exceptions\Handler as handler;
 use App\Helpers\JWT as jwt;
 use Response as output;
 use Session;
-use test;
+
 /*
  * @author eddymens <eddymens@devless.io>
 *composed of most common used classes and functions
@@ -109,7 +112,7 @@ class Helper
      * @param  additional data $payload
      * @return json
      */
-    public static function  interrupt( $stack, $message=null, $payload=[], $dieFixed=false){
+    public static function  interrupt( $stack, $message=null, $payload=[]){
         
         
         if($message !==null){
@@ -125,14 +128,17 @@ class Helper
         //return results from db functions called from scripts as session('script_results')
         if(session('script_call') == true)
         {
-
+            
             session()->put('script_results',  $response );
 
         }
         else 
         {
-               //using die temporally 
-               echo ($response);
+            
+            messenger::createMessage($response);
+            
+            
+              
                
             
         }
@@ -335,6 +341,6 @@ class Helper
        return date('Y-m-d H:i:s');
    }
 
-
+   
 
 }

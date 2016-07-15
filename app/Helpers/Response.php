@@ -1,7 +1,7 @@
 <?php
 namespace App\Helpers;
 /* 
-*@author Eddymens <eddymens@devless.io
+*@author Eddymens <eddymens@devless.io>
  */
 use App\Helpers\Helper as Helper;
 
@@ -21,6 +21,6 @@ class Response extends Helper
             'message'=>$message,
             'payload'=>$payload
         ];
-        return json_encode($response);
+        return ($response);
     }
 }
