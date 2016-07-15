@@ -29,17 +29,14 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
 
     #check system status
     Route::get('status', function ()    {
-
-        return "healthy";
+        
+        return ['status_code'=>111, 'message'=>'healthy','payload'=>[]];
     });
 
     #system logs
     Route::get('log', function ()    {
         return "no log available";
     });
-
-    #config end points
-    Route::resource('system', 'ServiceController@api');
 
     #service end points
     Route::get('service/{service}/{resource}','ServiceController@api');

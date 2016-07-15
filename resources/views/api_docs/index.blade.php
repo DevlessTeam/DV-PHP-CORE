@@ -207,9 +207,9 @@
 
             //Handles table change
             $('#table').change(function() {
-                $('#operation').prop('selectedIndex',0);
-                $('#body_params').hide();
-                $('#response').hide();
+            $('#operation').prop('selectedIndex',0);
+            $('#body_params').hide();
+            $('#response').hide();
             });
 
             //texteditor for payload
@@ -246,6 +246,7 @@
                             values[schema[i].name] = "";
                         };
                         if (request_type === 'create'){
+                            // var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+table_name+'","field":['+JSON.stringify(values)+']}]}'), undefined, 4);
                             var json = JSON.stringify(JSON.parse('['+JSON.stringify(values)+']'), undefined, 4);
                         } else if (request_type === 'update') {
                             var json = JSON.stringify(JSON.parse('[{"where":"id, ","data":[{"key":"value"}]}]'), undefined, 4);
@@ -267,7 +268,7 @@
             $('#form_data').submit(function(e){
                 e.preventDefault();
                 $('#response-field').text('');
-
+                var payload = JSON.parse(editor.getValue());
                 // Handles GET requests
                 if (request_type === "retrieve_all") {
 
@@ -341,11 +342,11 @@
                     }
 
                 } else if (request_type === "create"){
-                    payload = JSON.parse(editor.getValue());
+                    // payload = JSON.stringify(JSON.parse(editor.getValue()));
 
                     var promises = [];
                     for (var i = 0; i < payload.length; i++) {
-                        var info = {resource:[{name:table_name, field: [payload[i]]}]};
+                        var info = JSON.stringify({resource:[{name:table_name, field: [payload[i]]}]});
                         promises.push($.post("api/v1/service/"+service_name+"/db", info).success(function(data){
                             $('#response-field').text(data);
                             statuscheck(data);
@@ -357,11 +358,11 @@
                     });
 
                 } else if (request_type === "update") {
-                    payload = JSON.parse(editor.getValue());
+                    // payload = JSON.parse(editor.getValue());
                     var promises = [];
 
                     for (var i = 0; i < payload.length; i++) {
-                        var info = {resource:[{name:table_name,params: [payload[i]]}]};
+                        var info = JSON.stringify({resource:[{name:table_name,params: [payload[i]]}]});
                         promises.push($.ajax({
                             url: "api/v1/service/"+service_name+"/db",
                             type: "PATCH",
@@ -375,11 +376,11 @@
                     $.when.apply(promises);
 
                 } else if (request_type === "delete") {
-                    payload = JSON.parse(editor.getValue());
+                    // payload = JSON.parse(editor.getValue());
                     var promises = [];
 
                     for (var i = 0; i < payload.length; i++) {
-                        var info = {resource:[{name:table_name,params: [payload[i]]}]};
+                        var info = JSON.stringify({resource:[{name:table_name,params: [payload[i]]}]});
                         promises.push($.ajax({
                             url: "api/v1/service/"+service_name+"/db",
                             type: "DELETE",
@@ -401,7 +402,15 @@
                         data: json,
                     })
                     .done(function(data) {
-                        statuscheck(data);
+                        if(data.status_code == 700){
+                            $('#response').show()
+                            $('#response-field').text(data);
+                            flash('error');
+                        } else {
+                            $('#response').show()
+                            $('#response-field').text(data);
+                            flash('success');
+                        }
                     });
                 }
 
@@ -414,7 +423,8 @@
                     flash('error');
                 } else {
                     $('#response').show()
-                    $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                    // $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
+                    $('#response-field').text(JSON.stringify(data, undefined, 4));
                     flash('success');
                 }
             };

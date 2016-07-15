@@ -1,12 +1,18 @@
 <?php
+
 namespace App\Helpers;
 use Validator;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response as res;
 use App\Helpers\Response as Response;
+use App\Helpers\Messenger as messenger;
 use Hash;
 use App\User;
+use App\Exceptions\Handler as handler;
 use App\Helpers\JWT as jwt;
 use Response as output;
 use Session;
+
 /*
  * @author eddymens <eddymens@devless.io>
 *composed of most common used classes and functions
@@ -19,7 +25,7 @@ class Helper
      * @var type
      */
 
-    public static  $ERROR_HEAP =
+    public static  $MESSAGE_HEAP =
     [
         #JSON HEAP
         400 => 'Sorry something went wrong with payload(check json format)',
@@ -71,10 +77,10 @@ class Helper
      */
     private static $validator_type =
     [
-        'text'      => 'string',
+        'text'       => 'string',
         'textarea'   => 'string',
         'integer'    => 'integer',
-        'money'      => 'numeric',
+        'decimal'    => 'numeric',
         'password'   => 'alphanum',
         'percentage' => 'integer',
         'url'        => 'url',
@@ -88,10 +94,10 @@ class Helper
     * @param  stack  $stack
     * @return string or null
     **/
-    public static function error_message($stack)
+    public static function outputMessage($stack)
     {
-        if(isset(self::$ERROR_HEAP[$stack]))
-            return self::$ERROR_HEAP[$stack];
+        if(isset(self::$MESSAGE_HEAP[$stack]))
+            return self::$MESSAGE_HEAP[$stack];
         else
             {
               return null;
@@ -106,26 +112,39 @@ class Helper
      * @param  additional data $payload
      * @return json
      */
-    public static function  interrupt($stack, $message=null, $payload=[]){
-        if($message !==null){
+    public static function  interrupt( $stack, $message=null, $payload=[], $error=false){
+        
+        
+        if($message !==null){   
             $msg = $message;
         }
         else
         {
-            $msg = self::error_message($stack);
+            $msg = self::outputMessage($stack);
         }
         $response = Response::respond($stack, $msg, $payload);
 
+                
         //return results from db functions called from scripts as session('script_results')
         if(session('script_call') == true)
         {
-
-            session()->put('script_results',  $response );
+            
+            messenger::createMessage($response);
 
         }
-        else
+        else 
         {
-            die($response);
+            
+            ($error)? abort(500,json_encode($response)) :
+                messenger::createMessage($response);
+            
+            
+            
+            
+            
+              
+               
+            
         }
 
 
@@ -155,7 +174,8 @@ class Helper
                 if(!isset(Helper::$validator_type[$rule]))
                 {
                     Helper::interrupt(618,'validator type '.$rule.
-                            ' does not exist');
+                            ' does not exist',[], true);
+                    
                 }
                 $check_against = Helper::$validator_type[$rule]."|" ;
             }
@@ -168,7 +188,8 @@ class Helper
             if(!isset(Helper::$validator_type[$check_against]))
                 {
                     Helper::interrupt(618,'validator type '.$check_against.
-                            ' does not exist');
+                            ' does not exist',[], true);
+                    
                 }
             $check_against = Helper::$validator_type[$check_against] ;
 
@@ -270,12 +291,12 @@ class Helper
             }
             else
             {
-                self::interrupt(628);
+                self::interrupt(628,null,[],true);
             }
         }
         else
         {
-            self::interrupt(628);
+            self::interrupt(628,null,[],true);
         }
         return $user_cred;
    }
@@ -291,7 +312,7 @@ class Helper
 
        if($user_token == "null")
         {
-           Self::interrupt(633);
+           Self::interrupt(633,null,[],true);
         }
        $user_data = User::where('session_token',$jwt_payload->token)
                ->first();
@@ -306,7 +327,7 @@ class Helper
            {
                $user_data->session_token = "";
                $user_data->save();
-                Self::interrupt(633);
+                Self::interrupt(633,null,[],true);
            }
 
            $user_data->session_time = Helper::session_timestamp();
@@ -324,6 +345,6 @@ class Helper
        return date('Y-m-d H:i:s');
    }
 
-
+   
 
 }

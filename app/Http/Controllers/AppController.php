@@ -39,7 +39,8 @@ class AppController extends Controller
             'email' => 'required|email|max:255',
             'password' => 'confirmed|min:6',
             'password_confirmation' => 'min:6',
-            'old_password' => 'required'
+            'old_password' => 'required',
+            'api_key' => 'required'
             ]);
 
         $user = User::findOrFail(Session('user'));
@@ -53,7 +54,7 @@ class AppController extends Controller
 
             $app->name = $request->input("name");
             $app->description = $request->input("description");
-            $app->api_key = $_SERVER['SERVER_NAME'];
+            $app->api_key = $request->input("api_key");
 
             ($app->save() && $user->save())? DLH::flash("App updated successfully", 'success'):
                 DLH::flash("Changes did not take effect", 'error');

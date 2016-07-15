@@ -47,22 +47,30 @@
             </select>
         </div>
         <div  class="form-group">
+            <div style="display:none;" >
             <label for="field-reference">Reference Table</label>
-            <select class="form-control"  name="field-reference" id="field-reference">
+            <select class="form-control"  name="field-reference" id="field-reference" >
                 @foreach($table_meta as $table_data)
                 <option value="{{$table_data['name']}}">{{$table_data['name']}}</option>
                 @endforeach
             </select>
+            </div> 
         </div>
           <div class="form-group">
            <label for="default-field">Default Value(optional)</label>
             <input type="text" id="default" name="default" class="form-control" />
            </div>
 
-            <div class="form-group">
-                <label for="option-field"><b>Field Options:</b></label>
+             <div class="form-group">
+                <label for="option-field">Field Options</label>
 
                   <input type="checkbox" id="required"  name="required"/>REQUIRED?
+
+
+                 <div style="display:none;">
+                     <input type="checkbox" id="validate" name="validate"/>VALIDATE?
+                 </div>
+
 
                     <input type="checkbox" id="unique" name="unique"/> UNIQUE FIELD?
             </div>
@@ -280,10 +288,11 @@
            }
 
          $.ajax(settings).done(function (response) {
-
-           response_object = JSON.parse(response);
+            
+           response_object = (response);
            status_code = response_object.status_code;
            if (status_code == 613) {
+               
                 $("#"+table_name).remove();
            }
            else
@@ -405,6 +414,8 @@
                      };
 
                 }
+                
+                if (len => 1) {
                    table_schema =   JSON.stringify(window.schema_json);
                    var settings = {
                     "async": true,
@@ -420,7 +431,7 @@
                   }
 
                 $.ajax(settings).done(function (response) {
-                  console.log(response);
+                  
                   if(typeof(response) == "string")
                   {
                       response = JSON.parse(response); 
@@ -430,7 +441,8 @@
                   payload = response.payload;
                   
                   if(status_code == 700){
-                      alert( payload.message);
+                      alert(message);
+                      $('#crt-tbl').prop('disabled', false);
                   }
                   else if(status_code == 606){
 
@@ -443,14 +455,22 @@
                         alert(message);
                         $('#crt-tbl').prop('disabled', false);
                   }
-                });
+                });} else if(len == 0){
+                     alert('Seems you have no fields selected');
+                     $('#crt-tbl').prop('disabled', false);
+                } else {
+                     
+                     alert('Please add at least a field');
+                     $('#crt-tbl').prop('disabled', false);
+                }
             }
             else{
                 alert('Sorry seems like you have no fields set ');
+                $('#crt-tbl').prop('disabled', false);
             }
 
-
-
+           
+            
 
     }
    function destroy_field(field_id){

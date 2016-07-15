@@ -70,7 +70,7 @@
                        You have no Services, lets walkthrough a quick tutorial on how to create a Service. Click on Getting Started to begin.
                    </div>
                    <div class="modal-footer">
-                       <a href="http://devless.io/#!/tutorial/" class="btn btn-primary">Getting Started</a>
+                       <a href="http://devless.io/#!/tutorial/" target="_blank" class="btn btn-primary">Getting Started</a>
                    </div>
                </div>
            </div>

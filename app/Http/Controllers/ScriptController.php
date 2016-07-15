@@ -3,15 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Http\Controllers\CoreController as Core;
 use App\Http\Controllers\ServiceController as Service;
-
 use \App\Helpers\Helper as Helper;
-
+use App\Helpers\Messenger as messenger;
 use Session;
 
 class ScriptController extends Controller
@@ -41,7 +38,7 @@ class ScriptController extends Controller
         $output = $service->resource($request, $service_name, $resource, $internal_access = true);
         session()->forget('script_call');
         
-        return json_decode(session('script_results'), true);
+        return json_decode(json_encode(messenger::message(), true),true);
         
     }
 
