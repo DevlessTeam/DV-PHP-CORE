@@ -77,10 +77,10 @@ class Helper
      */
     private static $validator_type =
     [
-        'text'      => 'string',
+        'text'       => 'string',
         'textarea'   => 'string',
         'integer'    => 'integer',
-        'decimal'      => 'numeric',
+        'decimal'    => 'numeric',
         'password'   => 'alphanum',
         'percentage' => 'integer',
         'url'        => 'url',
@@ -174,7 +174,7 @@ class Helper
                 if(!isset(Helper::$validator_type[$rule]))
                 {
                     Helper::interrupt(618,'validator type '.$rule.
-                            ' does not exist',null, true);
+                            ' does not exist',[], true);
                     
                 }
                 $check_against = Helper::$validator_type[$rule]."|" ;
@@ -188,7 +188,7 @@ class Helper
             if(!isset(Helper::$validator_type[$check_against]))
                 {
                     Helper::interrupt(618,'validator type '.$check_against.
-                            ' does not exist',null, true);
+                            ' does not exist',[], true);
                     
                 }
             $check_against = Helper::$validator_type[$check_against] ;
@@ -291,12 +291,12 @@ class Helper
             }
             else
             {
-                self::interrupt(628);
+                self::interrupt(628,null,[],true);
             }
         }
         else
         {
-            self::interrupt(628);
+            self::interrupt(628,null,[],true);
         }
         return $user_cred;
    }
@@ -312,7 +312,7 @@ class Helper
 
        if($user_token == "null")
         {
-           Self::interrupt(633);
+           Self::interrupt(633,null,[],true);
         }
        $user_data = User::where('session_token',$jwt_payload->token)
                ->first();
@@ -327,7 +327,7 @@ class Helper
            {
                $user_data->session_token = "";
                $user_data->save();
-                Self::interrupt(633);
+                Self::interrupt(633,null,[],true);
            }
 
            $user_data->session_time = Helper::session_timestamp();

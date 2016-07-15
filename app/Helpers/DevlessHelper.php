@@ -596,7 +596,7 @@ class DevlessHelper extends Helper
        
        if($user_token == "null")
         {
-           Self::interrupt(633);
+           Self::interrupt(633, null, [], true);
         }
         
        return $jwt->decode($payload, $secret, true);
@@ -625,8 +625,8 @@ class DevlessHelper extends Helper
                 $valid = Helper::field_check($value, $expected_fields[$field]);
                 if($valid !== true)
                 {
-                    Helper::interrupt(616, 'There is something wrong with your '.$field);
-                    break;
+                    Helper::interrupt(616, 'There is something wrong with your '.$field, [],true);
+                    
                 }
                 if($field == 'password')
                 {

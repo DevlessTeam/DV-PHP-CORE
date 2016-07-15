@@ -154,8 +154,8 @@ class ServiceController extends Controller
             if ($request->input('call_type') =='solo') {
                 $service->script = $request->input('script');
                 $service->save();
-                Helper::interrupt(626);
-                return;
+                Helper::interrupt(626,null,[],true);
+               
             }
 
 
@@ -354,11 +354,11 @@ class ServiceController extends Controller
                     return $payload;
 
                 default:
-                    Helper::interrupt(605);
+                    Helper::interrupt(605,null,[],true);
                     break;
             }
         } else {
-            Helper::interrupt(624);
+            Helper::interrupt(624,null,[],true);
             return;
         }
        }
@@ -377,7 +377,7 @@ class ServiceController extends Controller
         where('active', 1)->first()) {
             return $current_service;
         } else {
-            Helper::interrupt(604);
+            Helper::interrupt(604,null,[],true);
             return false;
         }
 
@@ -399,8 +399,8 @@ class ServiceController extends Controller
             $parameters = Helper::query_string();
         } else {
             Helper::interrupt(608, 'Request method '.$method.
-                    ' is not supported');
-            return;
+                    ' is not supported',[],true);
+            
         }
         return $parameters;
     }
@@ -429,7 +429,7 @@ class ServiceController extends Controller
         $state = (($is_key_set && $is_token_set) || $is_admin )? true : false;
 
         if(!$state){
-            Helper::interrupt(631);
+            Helper::interrupt(631,null,[],true);
             
         }
     }
@@ -444,7 +444,7 @@ class ServiceController extends Controller
         $is_user_login = Helper::is_admin_login();
 
         if (! $is_user_login && $access_type == 0) {
-            Helper::interrupt(627);
+            Helper::interrupt(627,null,[],true);
             return;
         } //private
         elseif ($access_type == 1) {
