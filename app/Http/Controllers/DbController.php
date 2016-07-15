@@ -480,8 +480,6 @@ class DbController extends Controller
             ->on($field['ref_table'])->default($field['default'])
             ->onDelete('cascade');
         } elseif ($column_type == 2) {
-            var_dump($field['field_type']);
-            
             $table->$db_type[$field['field_type']]
             ($field['name'])->default($field['default'])->onDelete('cascade')
             ->$unique();

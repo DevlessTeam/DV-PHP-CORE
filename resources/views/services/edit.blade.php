@@ -67,7 +67,9 @@
                   <input type="checkbox" id="required"  name="required"/>REQUIRED?
 
 
-                  <input type="checkbox" id="validate" name="validate"/>VALIDATE?
+                 <div style="display:none;">
+                     <input type="checkbox" id="validate" name="validate"/>VALIDATE?
+                 </div>
 
 
                     <input type="checkbox" id="unique" name="unique"/> UNIQUE FIELD?
@@ -286,8 +288,8 @@
            }
 
          $.ajax(settings).done(function (response) {
-
-           response_object = JSON.parse(response);
+            
+           response_object = (response);
            status_code = response_object.status_code;
            if (status_code == 613) {
                
@@ -429,7 +431,7 @@
                   }
 
                 $.ajax(settings).done(function (response) {
-                  console.log(response);
+                  
                   if(typeof(response) == "string")
                   {
                       response = JSON.parse(response); 
@@ -439,7 +441,8 @@
                   payload = response.payload;
                   
                   if(status_code == 700){
-                      alert( payload.message);
+                      alert(message);
+                      $('#crt-tbl').prop('disabled', false);
                   }
                   else if(status_code == 606){
 
@@ -450,9 +453,12 @@
                   }else{
 
                         alert(message);
-                        
+                        $('#crt-tbl').prop('disabled', false);
                   }
-                });} else {
+                });} else if(len == 0){
+                     alert('Seems you have no fields selected');
+                     $('#crt-tbl').prop('disabled', false);
+                } else {
                      
                      alert('Please add at least a field');
                      $('#crt-tbl').prop('disabled', false);
@@ -463,7 +469,7 @@
                 $('#crt-tbl').prop('disabled', false);
             }
 
-
+           
             
 
     }
