@@ -189,7 +189,7 @@ class Helper
                 {
                     Helper::interrupt(618,'validator type '.$check_against.
                             ' does not exist',null, true);
-                    return;
+                    
                 }
             $check_against = Helper::$validator_type[$check_against] ;
 
