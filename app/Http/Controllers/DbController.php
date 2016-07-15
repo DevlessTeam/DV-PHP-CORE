@@ -97,7 +97,6 @@ class DbController extends Controller
         $connector = $this->_connector($payload);
 
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
-
         foreach ($payload['params'] as $table) {
             $table_name = $table['name'];
             if (! \Schema::connection('DYNAMIC_DB_CONFIG')->

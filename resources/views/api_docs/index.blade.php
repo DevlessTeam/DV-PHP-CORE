@@ -207,9 +207,9 @@
 
             //Handles table change
             $('#table').change(function() {
-                $('#operation').prop('selectedIndex',0);
-                $('#body_params').hide();
-                $('#response').hide();
+            $('#operation').prop('selectedIndex',0);
+            $('#body_params').hide();
+            $('#response').hide();
             });
 
             //texteditor for payload
