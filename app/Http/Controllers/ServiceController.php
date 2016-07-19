@@ -249,9 +249,12 @@ class ServiceController extends Controller
         $this->_devlessCheckHeaders($request);
         $this->resource($request, $service, $resource);
         
-        return messenger::message();
+        return response(messenger::message())
+                ->header('Content-Type', 'Application/json')
+                ->header('Access-Control-Allow-Methods', 'PATCH, GET, POST, DELETE')
+                ->header('Access-Control-Allow-Headers', 
+                        'Content-type, devless-token, devless-key, devless-user-token ');
     }
-    
      /**
      * Refer request to the right service and resource
      * @param array  $request request params

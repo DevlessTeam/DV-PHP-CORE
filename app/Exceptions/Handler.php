@@ -69,7 +69,11 @@ class Handler extends ExceptionHandler
         
         $output =  ($e->getCode() == 0)?  $generalError($e) : $customError($e);
         
-        return response()->json($output);
+        return response()->json($output)
+                ->header('Content-Type', 'Application/json')
+                ->header('Access-Control-Allow-Methods', 'PATCH, GET, POST, DELETE')
+                ->header('Access-Control-Allow-Headers', 
+                        'Content-type, devless-token, devless-key, devless-user-token ');
     }
 }
 
