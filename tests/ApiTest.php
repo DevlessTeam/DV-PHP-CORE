@@ -89,6 +89,8 @@ class ApiTest extends TestCase
               ->seeJsonEquals(['message'=>'Created table successfully',
                   'payload'=>[],'status_code'=>606]);
         
+        
+        //to be moved to testAddData 
          $url = $this->subUrl;
         $dbAction  = $this->dbUrl;
         $serviceName = $this->serviceName;
@@ -112,14 +114,30 @@ class ApiTest extends TestCase
         $this->json('POST', $url.$serviceName.'/'.$dbAction, $schemaObj)
               ->seeJson(['message'=>"Data has been added to serviceTable table succefully",
                     'payload'=>[],'status_code'=>609]);
+
+        
+        //to be moved to testQueryData 
+         $url = $this->subUrl;
+        $dbAction  = $this->dbUrl;
+        $serviceName = $this->serviceName;
+        
+        $schemaObj = json_decode($schemaStruct, true);
+        $this->visit( $url.$serviceName.'/db'.
+                '?table='.$this->serviceTable)
+              ->seeJson(['message'=>"Data has been added to serviceTable table succefully",
+                    'payload'=>[],'status_code'=>609]);
      
+
+        
     }
     
-    
-   
     public function testAddData()
     {
-        
-       
+        //silence is golden
+    }
+    
+    public function testGetData()
+    {
+        //silence is golden
     }
 }
