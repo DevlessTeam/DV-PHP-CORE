@@ -252,6 +252,7 @@ class ServiceController extends Controller
         return response(messenger::message());
                 
     }
+   
      /**
      * Refer request to the right service and resource
      * @param array  $request request params
@@ -402,7 +403,6 @@ class ServiceController extends Controller
                     ' is not supported',[],true);
             
         }
-        
         return $parameters;
     }
 

@@ -60,7 +60,9 @@ class BeforeMiddleware
        }
       
       
+          
         
       return $next($request);
-    }
+   }
+              
 }
