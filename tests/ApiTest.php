@@ -86,13 +86,40 @@ class ApiTest extends TestCase
         $schemaObj = json_decode($schemaStruct, true);
         
         $this->json('POST', $url.$serviceName.'/schema', $schemaObj)
-              ->seeJson([]);
-      
-             
+              ->seeJsonEquals(['message'=>'Created table successfully',
+                  'payload'=>[],'status_code'=>606]);
+        
+         $url = $this->subUrl;
+        $dbAction  = $this->dbUrl;
+        $serviceName = $this->serviceName;
+        
+        $schemaStruct = '{  
+                        "resource":[  
+                           {  
+                              "name":"'.$this->serviceTable.'",
+                              "field":[  
+
+                                 {  
+                                    "username":"Edmond",
+                                    "password":"password"
+                                 }
+                              ]
+                           }
+
+                         ]
+                     }';
+        $schemaObj = json_decode($schemaStruct, true);
+        $this->json('POST', $url.$serviceName.'/'.$dbAction, $schemaObj)
+              ->seeJson(['message'=>"Data has been added to serviceTable table succefully",
+                    'payload'=>[],'status_code'=>609]);
+     
     }
     
+    
+   
     public function testAddData()
     {
-    
+        
+       
     }
 }
