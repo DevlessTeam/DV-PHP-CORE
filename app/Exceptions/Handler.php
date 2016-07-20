@@ -70,6 +70,7 @@ class Handler extends ExceptionHandler
         $output =  ($e->getCode() == 0)?  $generalError($e) : $customError($e);
         
         return response()->json($output);
+                
     }
 }
 

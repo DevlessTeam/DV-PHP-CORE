@@ -249,9 +249,10 @@ class ServiceController extends Controller
         $this->_devlessCheckHeaders($request);
         $this->resource($request, $service, $resource);
         
-        return messenger::message();
+        return response(messenger::message());
+                
     }
-    
+   
      /**
      * Refer request to the right service and resource
      * @param array  $request request params
