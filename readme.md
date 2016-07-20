@@ -1,6 +1,8 @@
 
 ##Devless Api Engine(DAE)
 
+[![Build Status](https://api.travis-ci.org/DevlessTeam/DV-PHP-CORE.svg)](https://travis-ci.org/DevlessTeam/DV-PHP-CORE)
+
 **Devless Api Engine(DAE)** is an opensource api engine that allows a crud access to databases as well as execute php scripts. 
 
 Current implementation of the devless api engine is in php and ontop of the laravel framework. 
