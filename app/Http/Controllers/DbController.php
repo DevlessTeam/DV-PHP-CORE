@@ -48,19 +48,19 @@ class DbController extends Controller
         if ($payload['method'] == 'GET') {
             $db_action = 'query';
             $payload = $this->set_auth_id_if_required($db_action, $payload);
-            $this->db_query($resource, $payload);
+            return $this->db_query($resource, $payload);
         } elseif ($payload['method'] == 'POST') {
             $db_action = 'create';
             $payload = $this->set_auth_id_if_required($db_action, $payload);
-            $this->add_data($resource, $payload);
+            return $this->add_data($resource, $payload);
         } elseif ($payload['method'] == 'PATCH') {
             $db_action = 'update';
             $payload = $this->set_auth_id_if_required($db_action, $payload);
-            $this->update($resource, $payload);
+            return $this->update($resource, $payload);
         } elseif ($payload['method'] == 'DELETE') {
             $db_action = 'delete';
             $payload = $this->set_auth_id_if_required($db_action, $payload);
-            $this->destroy($resource, $payload);
+            return $this->destroy($resource, $payload);
         } else {
             Helper::interrupt(607,null,[],true);
             
@@ -267,8 +267,7 @@ class DbController extends Controller
         if (isset($payload['params']['table'][0])) {
             if (! \Schema::connection('DYNAMIC_DB_CONFIG')->
             hasTable($service_name.'_'.$payload['params']['table'][0])) {
-                Helper::interrupt(634,null,[],true);
-                return;
+                return Helper::interrupt(634,null,[],false);
             }
             if ($payload['user_id'] !== "") {
                 $user_id = $payload['user_id'];
@@ -321,12 +320,12 @@ class DbController extends Controller
                             '->'.$this->query_params[$key].'("'.$query_params[0].
                             '","'.$query_params[1].'")';
                         } else {
-                            Helper::interrupt(612,null,[],true);
-                            return;
+                            return  Helper::interrupt(612,null,[],false);
+                            
                         }
                     } else {
-                        Helper::interrupt(610,null,[],true);
-                        return;
+                        return Helper::interrupt(610,null,[],false);
+                        
                     }
                 }
             }
@@ -348,10 +347,10 @@ class DbController extends Controller
             $results['results'] = $query_output;
             
             $results['properties']['related'] = $related; 
-            Helper::interrupt( 625, null, $results, true);
+            return Helper::interrupt( 625, null, $results, false);
             
         } else {
-            Helper::interrupt(611,null, [], true);
+            return Helper::interrupt(611,null, [], false);
             
         }
     }

@@ -247,9 +247,10 @@ class ServiceController extends Controller
 
          //check token and keys
         $this->_devlessCheckHeaders($request);
+        
         $serviceOutput = $this->resource($request, $service, $resource);
         
-        $this->after_executing_service_action($service, $resource, $serviceOutput);
+        $response = $this->after_executing_service_action($service, $serviceOutput);
         
         return response($response);
                 
@@ -346,29 +347,29 @@ class ServiceController extends Controller
             switch ($resource) {
                 case 'db':
                     $db = new Db();
-                    $db->access_db($resource, $payload);
+                    return $db->access_db($resource, $payload);
                     break;
 
                 case 'script':
                      $script = new script;
-                     $script->run_script($resource, $payload);
+                     return $script->run_script($resource, $payload);
                     break;
 
                 case 'schema':
                     $db = new Db();
-                    $db->create_schema($resource, $payload);
+                    return $db->create_schema($resource, $payload);
                     break;
 
                 case 'view':
                     return $payload;
 
                 default:
-                    Helper::interrupt(605,null,[],true);
+                    return Helper::interrupt(605,null,[],false);
                     break;
             }
         } else {
-            Helper::interrupt(624,null,[],true);
-            return;
+           return  Helper::interrupt(624,null,[],false);
+            
         }
        }
     }
@@ -386,8 +387,8 @@ class ServiceController extends Controller
         where('active', 1)->first()) {
             return $current_service;
         } else {
-            Helper::interrupt(604,null,[],true);
-            return false;
+            Helper::interrupt(604,null,[],false);
+            
         }
 
 
@@ -493,9 +494,9 @@ class ServiceController extends Controller
      * $prams array $response
      * @return array 
      */
-    public function after_executing_service_action($service, $resource, $response)
+    public function after_executing_service_action($service, $response)
     {
-        $output = Helper::execute_post_function($service, $resource, $response);
-        dd($output);
+        $output = Helper::execute_post_function($service, $response);
+        
     }
 }

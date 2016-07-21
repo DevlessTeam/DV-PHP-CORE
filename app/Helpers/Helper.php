@@ -37,12 +37,12 @@ class Helper
         602 => 'Database schema could not be created',
         603 => 'Table could not be created',
         604 => 'Service  does not exist or is not active',
-        605 => 'No such service resource try (script  db or view)',
+        605 => 'No such resource type try (script  db or view)',
         606 => 'Created table successfully',
         607 => 'Could not find the right DB method',
         608 => 'Request method not supported',
         609 => 'Data has been added to table successfully',
-        610 => 'Query paramter does not exist',
+        610 => 'Query parameter does not exist',
         611 => 'Table name is not set',
         612 => 'Query parameters not set',
         613 => 'Database has been deleted successfully',
@@ -133,20 +133,16 @@ class Helper
         if(session('script_call') == true)
         {
             
+            
             messenger::createMessage($response);
             
-            Helper::execute_pro_function($service, $resource, $response);
 
         }
         else 
         {
-            $createMessage = function($response){
-                
-                 Helper::execute_pro_function($service, $resource, $response);
-                 messenger::createMessage($response);
-            };
             
-            ($error)?  abort(404,json_encode($response)) : $createMessage;
+            
+            return ($error)?  abort(404,json_encode($response)) : $response;
                 
             
         }
@@ -372,15 +368,9 @@ class Helper
            
    }
    
-  /*
-   * execute pre script to alter payload  
-   */
-   public static function execute_pre_function($payload)
+   
+   public static function execute_function($crudeFunctions, $functionToExecName, $payload)
    {
-       $result = []; 
-       $script = $payload['script'];
-       $crudeFunctions = Helper::get_script_functions($script);
-       
        if(!$crudeFunctions) {
            $result['state'] = false;
            return $result;
@@ -391,24 +381,48 @@ class Helper
        $preFunction = false;
       
        foreach($functionNames as $key => $functionName){
-           if($functionName == self::$preFunctionName){
-               $preFunction = $functions[$key];
+           if($functionName == $functionToExecName ){
+               $functionToExec = $functions[$key];
                break;
            }
        }
        
-       eval($preFunction);
-       $payload = DvBefore($payload);
+       eval($functionToExec);
+       $payload = call_user_func($functionName,$payload);
        $result['payload'] = $payload;
        $result['state'] = true;
        return $result;
    }
-   
-   public static function execute_post_function($service, $resource, $response)
+
+
+   /*
+   * execute pre script to alter payload  
+   */
+   public static function execute_pre_function($payload)
    {
-       $result = [];
-       $service = app('\App\Http\Controllers\ServiceController')->service_exist('like');
-       dd($service);
+       $result = []; 
+       $script = $payload['script'];
+       $functionToExecName = self::$preFunctionName;
+       
        $crudeFunctions = Helper::get_script_functions($script);
+       $results = Helper::execute_function($crudeFunctions, $functionToExecName, $payload);
+       
+       return $results;
+       
+       
+   }
+   
+   public static function execute_post_function($serviceName, $response)
+   {
+       
+       $result = [];
+       $serviceObj = app('\App\Http\Controllers\ServiceController')->service_exist($serviceName);
+       
+       $script = $serviceObj->script; 
+       $functionToExecName = self::$postFunctionName;
+       
+       $crudeFunctions = Helper::get_script_functions($script);
+       $results = Helper::execute_function($crudeFunctions, $functionToExecName, $response);
+    
    }
 }
