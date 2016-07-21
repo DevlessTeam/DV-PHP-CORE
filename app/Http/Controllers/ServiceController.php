@@ -465,7 +465,7 @@ class ServiceController extends Controller
     public function before_assigning_service_action($resource, $payload)
     {
         
-        $payload = Helper::execute_pr_function($payload);
+        $payload = Helper::execute_pre_function($payload);
         
         
         dd();
