@@ -91,8 +91,8 @@ class Helper
         'reference'  => 'integer',
     ];
     
-    public static $beforeFunctionName = 'DvBefore';
-    public static $afterFunctionName = 'DvAfter';
+    public static $preFunctionName = 'DvBefore';
+    public static $postFunctionName = 'DvAfter';
     /**
      * fetch message based on error code
     * @param  stack  $stack
@@ -139,7 +139,7 @@ class Helper
         else 
         {
             
-            ($error)? abort(500,json_encode($response)) :
+            ($error)? abort(404,json_encode($response)) :
                 messenger::createMessage($response);
             
         }
@@ -370,11 +370,13 @@ class Helper
    */
    public static function execute_pre_function($payload)
    {
+       $result = []; 
        $script = $payload['script'];
        $crudeFunctions = Helper::get_script_functions($script);
        
        if(!$crudeFunctions) {
-           return false;
+           $result['state'] = false;
+           return $result;
         }
        
        $functions = $crudeFunctions[0];
@@ -390,7 +392,9 @@ class Helper
        
        eval($preFunction);
        $payload = DvBefore($payload);
-       var_dump($payload);
+       $result['payload'] = $payload;
+       $result['state'] = true;
+       return $result;
    }
    
    public static function execute_after_function($script)

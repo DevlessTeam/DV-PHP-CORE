@@ -336,7 +336,9 @@ class ServiceController extends Controller
             ];
             
             // run script before assigning to method 
-            $this->before_assigning_service_action($resource, $payload);
+            $newServiceElements = $this->before_assigning_service_action($resource, $payload);
+            $resource = $newServiceElements['resource'];
+            $payload = $newServiceElements['payload'];
             
             //keep names of resources in the singular
             switch ($resource) {
@@ -464,10 +466,15 @@ class ServiceController extends Controller
     
     public function before_assigning_service_action($resource, $payload)
     {
+        $originalPayload = [];
+        $originalPayload['payload'] = $payload;
+        $originalPayload['resource'] = $resource;
         
-        $payload = Helper::execute_pre_function($payload);
+        $result = Helper::execute_pre_function($payload);
+        $result['resource'] = $resource;
+        
+        return ($result['state'])? $result : $originalPayload;
         
         
-        dd();
     }
 }

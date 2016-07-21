@@ -49,27 +49,51 @@ class Handler extends ExceptionHandler
         
         $generalError = function($e){
             
+           
            $customPayload = substr($e->getMessage(), 0,strrpos($e->getMessage(), '}')+1) ;
            $customPayload = json_decode($customPayload,true);
            
-           return [
-             'status_code' =>  $customPayload['status_code'], 
-             'message'     => $customPayload['message'],
-             'payload'     => $customPayload['payload']
+           $intendedErrorPayload = function($e) {
+                $customPayload = substr($e->getMessage(), 0,strrpos($e->getMessage(), '}')+1) ;
+                $customPayload = json_decode($customPayload,true);
+                return [
+                'status_code' =>  $customPayload['status_code'], 
+                'message'     => $customPayload['message'],
+                'payload'     => $customPayload['payload']
+              ];
+           };
+           
+           $internalErrorPayload  = function($e) {
+               
+                 return [
+             'status_code' =>  700,
+             'message'     => $e->getMessage(),
+             'payload'     => [
+                 'file' => $e->getFile(),
+                 'line' => $e->getLine()
+             ]
            ];
+           };
+           
+           return ($customPayload['status_code'] == null && $customPayload['message'] == null && 
+                   $customPayload['payload'] == null )?  $internalErrorPayload($e):
+                                            $intendedErrorPayload($e);
+                                                        
+          
            
         };
-        $customError = function($e){
+        
+        $systemError = function($e){
             return [
                     'status_code' =>700,
                     'message'=>$e->getMessage(),
                     'payload'=>[
-                    'file'    => $e->getFile(),
-                    'line'     =>$e->getLine()]
+                        'file'    => $e->getFile(),
+                        'line'     =>$e->getLine()]
                     ];
         };
         
-        $output =  ($e->getCode() == 0)?  $generalError($e) : $customError($e);
+        $output =  ($e->getCode() == 0 )?  $generalError($e) : $systemError($e);
         
         return response()->json($output);
                 
