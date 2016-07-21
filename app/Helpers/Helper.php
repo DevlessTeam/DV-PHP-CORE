@@ -70,7 +70,8 @@ class Helper
         635 => 'Sorry to use offset you need need to set size',
         700 => 'Internal system error',
     ];
-
+    
+    
     /**
      * convert soft types to validator rules
      * @var string
@@ -89,6 +90,9 @@ class Helper
         'email'      => 'email',
         'reference'  => 'integer',
     ];
+    
+    public static $beforeFunctionName = 'DvBefore';
+    public static $afterFunctionName = 'DvAfter';
     /**
      * fetch message based on error code
     * @param  stack  $stack
@@ -137,13 +141,6 @@ class Helper
             
             ($error)? abort(500,json_encode($response)) :
                 messenger::createMessage($response);
-            
-            
-            
-            
-            
-              
-               
             
         }
 
@@ -344,6 +341,60 @@ class Helper
        return date('Y-m-d H:i:s');
    }
 
-   
+   public static function get_script_functions($script)
+   {
+        
+       $regex = '~
+        function                 #function keyword
+        \s+                      #any number of whitespaces 
+        (?P<function_name>.*?)   #function name itself
+        \s*                      #optional white spaces
+        (?P<parameters>\(.*?\))  #function parameters
+        \s*                      #optional white spaces
+        (?P<body>\{.*?\})        #body of a function
+      ~six';
 
+
+      if (preg_match_all($regex, $script, $matches)) {
+          
+           return $matches;
+      } else {
+          
+          return false;
+      }
+           
+   }
+   
+  /*
+   * execute pre script to alter payload  
+   */
+   public static function execute_pre_function($payload)
+   {
+       $script = $payload['script'];
+       $crudeFunctions = Helper::get_script_functions($script);
+       
+       if(!$crudeFunctions) {
+           return false;
+        }
+       
+       $functions = $crudeFunctions[0];
+       $functionNames = $crudeFunctions[1];
+       $preFunction = false;
+      
+       foreach($functionNames as $key => $functionName){
+           if($functionName == self::$preFunctionName){
+               $preFunction = $functions[$key];
+               break;
+           }
+       }
+       
+       eval($preFunction);
+       $payload = DvBefore($payload);
+       var_dump($payload);
+   }
+   
+   public static function execute_after_function($script)
+   {
+       //
+   }
 }

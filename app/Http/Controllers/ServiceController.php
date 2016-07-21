@@ -334,6 +334,10 @@ class ServiceController extends Controller
             'method' => $method,
             'params' => $parameters,
             ];
+            
+            // run script before assigning to method 
+            $this->before_assigning_service_action($resource, $payload);
+            
             //keep names of resources in the singular
             switch ($resource) {
                 case 'db':
@@ -456,5 +460,14 @@ class ServiceController extends Controller
         }//authentication required
 
         return true;
+    }
+    
+    public function before_assigning_service_action($resource, $payload)
+    {
+        
+        $payload = Helper::execute_pr_function($payload);
+        
+        
+        dd();
     }
 }
