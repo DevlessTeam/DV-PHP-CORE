@@ -48,8 +48,10 @@ class Handler extends ExceptionHandler
         }
         
         $generalError = function($e){
-           $customPayload = $e->getMessage();
+            
+           $customPayload = substr($e->getMessage(), 0,strrpos($e->getMessage(), '}')+1) ;
            $customPayload = json_decode($customPayload,true);
+           
            return [
              'status_code' =>  $customPayload['status_code'], 
              'message'     => $customPayload['message'],

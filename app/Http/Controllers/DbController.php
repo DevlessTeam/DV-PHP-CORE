@@ -262,7 +262,7 @@ class DbController extends Controller
         $service_name = $payload['service_name'];
         $connector = $this->_connector($payload);
         $db =   \DB::connection('DYNAMIC_DB_CONFIG');
-
+        $results = [];
         //check if table name is set
         if (isset($payload['params']['table'][0])) {
             if (! \Schema::connection('DYNAMIC_DB_CONFIG')->
@@ -333,7 +333,7 @@ class DbController extends Controller
             $complete_query = 'return '.$complete_query.'->get();';
             $count = $db->table($table_name)->count();
             $query_output = eval($complete_query);
-            //$query_output['count'] = $count;
+            $results['properties']['count'] = $count;
             if (sizeof($query_output) == 1 && isset($queried_table_list)) {
                 $query_output = json_decode(json_encode($query_output), true);
                 $wanted_relationships = $queried_table_list;
@@ -345,9 +345,10 @@ class DbController extends Controller
                     $db
                 );
             }
-            //$query_output['related'] = $related;
-        
-            Helper::interrupt( 625, null, $query_output, true);
+            $results['results'] = $query_output;
+            
+            $results['properties']['related'] = $related; 
+            Helper::interrupt( 625, null, $results, true);
             
         } else {
             Helper::interrupt(611,null, [], true);
