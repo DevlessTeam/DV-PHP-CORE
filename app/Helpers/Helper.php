@@ -116,7 +116,7 @@ class Helper
      * @param  additional data $payload
      * @return json
      */
-    public static function  interrupt( $stack, $message=null, $payload=[], $error=false){
+    public static function interrupt( $stack, $message=null, $payload=[], $error=false){
         
         
         if($message !==null){   
@@ -128,19 +128,26 @@ class Helper
         }
         $response = Response::respond($stack, $msg, $payload);
         
-                
+        
         //return results from db functions called from scripts as session('script_results')
         if(session('script_call') == true)
         {
             
             messenger::createMessage($response);
+            
+            Helper::execute_pro_function($service, $resource, $response);
 
         }
         else 
         {
+            $createMessage = function($response){
+                
+                 Helper::execute_pro_function($service, $resource, $response);
+                 messenger::createMessage($response);
+            };
             
-            ($error)? abort(404,json_encode($response)) :
-                messenger::createMessage($response);
+            ($error)?  abort(404,json_encode($response)) : $createMessage;
+                
             
         }
 
@@ -397,8 +404,11 @@ class Helper
        return $result;
    }
    
-   public static function execute_after_function($script)
+   public static function execute_post_function($service, $resource, $response)
    {
-       //
+       $result = [];
+       $service = app('\App\Http\Controllers\ServiceController')->service_exist('like');
+       dd($service);
+       $crudeFunctions = Helper::get_script_functions($script);
    }
 }

@@ -247,9 +247,11 @@ class ServiceController extends Controller
 
          //check token and keys
         $this->_devlessCheckHeaders($request);
-        $this->resource($request, $service, $resource);
+        $serviceOutput = $this->resource($request, $service, $resource);
         
-        return response(messenger::message());
+        $this->after_executing_service_action($service, $resource, $serviceOutput);
+        
+        return response($response);
                 
     }
    
@@ -464,6 +466,12 @@ class ServiceController extends Controller
         return true;
     }
     
+    /*
+     * operations to execute before assigning action to resource
+     * @param string $resource 
+     * @params array $payload
+     * @return array
+     */
     public function before_assigning_service_action($resource, $payload)
     {
         $originalPayload = [];
@@ -476,5 +484,18 @@ class ServiceController extends Controller
         return ($result['state'])? $result : $originalPayload;
         
         
+    }
+    
+    /*
+     * opreations to execute after service resource is executed
+     * @param string $service
+     * @prams string $resource 
+     * $prams array $response
+     * @return array 
+     */
+    public function after_executing_service_action($service, $resource, $response)
+    {
+        $output = Helper::execute_post_function($service, $resource, $response);
+        dd($output);
     }
 }
