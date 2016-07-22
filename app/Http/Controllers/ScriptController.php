@@ -38,7 +38,7 @@ class ScriptController extends Controller
         $output = $service->resource($request, $service_name, $resource, $internal_access = true);
         session()->forget('script_call');
         
-        return json_decode(json_encode(messenger::message(), true),true);
+        return json_decode(json_encode(messenger::message(), true), true);
         
     }
 

@@ -155,7 +155,6 @@ class ServiceController extends Controller
                 $service->script = $request->input('script');
                 $service->save();
                 return Helper::interrupt(626);
-               
             }
 
 
@@ -312,66 +311,65 @@ class ServiceController extends Controller
 
         $current_service = $this->service_exist($service_name);
 
-      if(!$current_service == false){
-        //check service access right
-        $is_it_public = $current_service->public;
-        $is_admin = Helper::is_admin_login();
-        $accessed_internally = $internal_access;
+        if (!$current_service == false) {
+            //check service access right
+            $is_it_public = $current_service->public;
+            $is_admin = Helper::is_admin_login();
+            $accessed_internally = $internal_access;
 
-        if ($is_it_public == 0 || $is_admin == true ||
+            if ($is_it_public == 0 || $is_admin == true ||
                 $accessed_internally == true) {
-            $resource_access_right = $this->_get_resource_access_right($current_service);
-            $payload =
-            [
-            'id'=>$current_service->id,
-            'service_name' =>$current_service->name,
-            'database' =>$current_service->database,
-            'driver' => $current_service->driver,
-            'hostname' => $current_service->hostname,
-            'username' => $current_service->username,
-            'password' => $current_service->password,
-            'calls' =>  $current_service->calls,
-            #'public' => $current_service->public,
-            'resource_access_right' =>$resource_access_right,
-            'script' => $current_service->script,
-            'method' => $method,
-            'params' => $parameters,
-            ];
+                $resource_access_right = $this->_get_resource_access_right($current_service);
+                $payload =
+                [
+                'id'=>$current_service->id,
+                'service_name' =>$current_service->name,
+                'database' =>$current_service->database,
+                'driver' => $current_service->driver,
+                'hostname' => $current_service->hostname,
+                'username' => $current_service->username,
+                'password' => $current_service->password,
+                'calls' =>  $current_service->calls,
+                #'public' => $current_service->public,
+                'resource_access_right' =>$resource_access_right,
+                'script' => $current_service->script,
+                'method' => $method,
+                'params' => $parameters,
+                ];
             
-            // run script before assigning to method 
-            $newServiceElements = $this->before_assigning_service_action($resource, $payload);
-            $resource = $newServiceElements['resource'];
-            $payload = $newServiceElements['payload'];
+                // run script before assigning to method
+                $newServiceElements = $this->before_assigning_service_action($resource, $payload);
+                $resource = $newServiceElements['resource'];
+                $payload = $newServiceElements['payload'];
             
-            //keep names of resources in the singular
-            switch ($resource) {
-                case 'db':
-                    $db = new Db();
-                    return $db->access_db($resource, $payload);
+                //keep names of resources in the singular
+                switch ($resource) {
+                    case 'db':
+                        $db = new Db();
+                        return $db->access_db($resource, $payload);
                     break;
 
-                case 'script':
-                     $script = new script;
-                     return $script->run_script($resource, $payload);
+                    case 'script':
+                         $script = new script;
+                        return $script->run_script($resource, $payload);
                     break;
 
-                case 'schema':
-                    $db = new Db();
-                    return $db->create_schema($resource, $payload);
+                    case 'schema':
+                        $db = new Db();
+                        return $db->create_schema($resource, $payload);
                     break;
 
-                case 'view':
-                    return $payload;
+                    case 'view':
+                        return $payload;
 
-                default:
-                    return Helper::interrupt(605);
+                    default:
+                        return Helper::interrupt(605);
                     break;
+                }
+            } else {
+                 return  Helper::interrupt(624);
             }
-        } else {
-           return  Helper::interrupt(624);
-            
         }
-       }
     }
 
     /*
@@ -387,8 +385,7 @@ class ServiceController extends Controller
         where('active', 1)->first()) {
             return $current_service;
         } else {
-           return Helper::interrupt(604);
-            
+            return Helper::interrupt(604);
         }
 
 
@@ -410,7 +407,6 @@ class ServiceController extends Controller
         } else {
             return Helper::interrupt(608, 'Request method '.$method.
                     ' is not supported');
-            
         }
         return $parameters;
     }
@@ -438,9 +434,8 @@ class ServiceController extends Controller
 
         $state = (($is_key_set && $is_token_set) || $is_admin )? true : false;
 
-        if(!$state){
+        if (!$state) {
             return Helper::interrupt(631);
-            
         }
     }
 
@@ -455,7 +450,6 @@ class ServiceController extends Controller
 
         if (! $is_user_login && $access_type == 0) {
             return Helper::interrupt(627);
-            
         } //private
         elseif ($access_type == 1) {
             return false;
@@ -499,9 +493,9 @@ class ServiceController extends Controller
         $originalResponse = $response;
        
         $output = Helper::execute_post_function($service, $response);
-        if(isset($output['payload'])) {
+        if (isset($output['payload'])) {
             $newResponse = $output['payload'];
-        }else {
+        } else {
             $newResponse = [];
         }
         

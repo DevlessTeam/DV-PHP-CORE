@@ -1,5 +1,6 @@
 <?php
 namespace App\Helpers;
+
 /* 
 *@author Eddymens <eddymens@devless.io>
  */
@@ -9,10 +10,10 @@ class Response extends Helper
 {
     //
     
-    public static function respond($status_code, $message=null, $payload=[])
+    public static function respond($status_code, $message = null, $payload = [])
     {
-        if($message == null){
-        (isset(self::$MESSAGE_HEAP[$status_code]))?$message = self::$MESSAGE_HEAP[$status_code]:
+        if ($message == null) {
+            (isset(self::$MESSAGE_HEAP[$status_code]))?$message = self::$MESSAGE_HEAP[$status_code]:
             $message ;
         }
         

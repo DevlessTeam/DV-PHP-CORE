@@ -1,4 +1,4 @@
-<?php 
+<?php
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -90,7 +90,7 @@ class ApiTest extends TestCase
                   'payload'=>[],'status_code'=>606]);
         
         
-        //to be moved to testAddData 
+        //to be moved to testAddData
          $url = $this->subUrl;
         $dbAction  = $this->dbUrl;
         $serviceName = $this->serviceName;
