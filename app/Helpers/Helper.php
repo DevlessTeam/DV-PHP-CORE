@@ -37,12 +37,12 @@ class Helper
         602 => 'Database schema could not be created',
         603 => 'Table could not be created',
         604 => 'Service  does not exist or is not active',
-        605 => 'No such service resource try (script  db or view)',
+        605 => 'No such resource type try (script  db or view)',
         606 => 'Created table successfully',
         607 => 'Could not find the right DB method',
         608 => 'Request method not supported',
         609 => 'Data has been added to table successfully',
-        610 => 'Query paramter does not exist',
+        610 => 'Query parameter does not exist',
         611 => 'Table name is not set',
         612 => 'Query parameters not set',
         613 => 'Database has been deleted successfully',
@@ -70,7 +70,8 @@ class Helper
         635 => 'Sorry to use offset you need need to set size',
         700 => 'Internal system error',
     ];
-
+    
+    
     /**
      * convert soft types to validator rules
      * @var string
@@ -89,6 +90,9 @@ class Helper
         'email'      => 'email',
         'reference'  => 'integer',
     ];
+    
+    public static $preFunctionName = 'DvBefore';
+    public static $postFunctionName = 'DvAfter';
     /**
      * fetch message based on error code
     * @param  stack  $stack
@@ -112,7 +116,7 @@ class Helper
      * @param  additional data $payload
      * @return json
      */
-    public static function  interrupt( $stack, $message=null, $payload=[], $error=false){
+    public static function interrupt( $stack, $message=null, $payload=[]){
         
         
         if($message !==null){   
@@ -123,27 +127,23 @@ class Helper
             $msg = self::outputMessage($stack);
         }
         $response = Response::respond($stack, $msg, $payload);
-
-                
+        
+        
         //return results from db functions called from scripts as session('script_results')
         if(session('script_call') == true)
         {
             
+            
             messenger::createMessage($response);
+            
 
         }
         else 
         {
             
-            ($error)? abort(500,json_encode($response)) :
-                messenger::createMessage($response);
             
-            
-            
-            
-            
-              
-               
+            return  $response;
+                
             
         }
 
@@ -173,8 +173,8 @@ class Helper
                 //convert each rule and re-combine
                 if(!isset(Helper::$validator_type[$rule]))
                 {
-                    Helper::interrupt(618,'validator type '.$rule.
-                            ' does not exist',[], true);
+                    return Helper::interrupt(618,'validator type '.$rule.
+                            ' does not exist');
                     
                 }
                 $check_against = Helper::$validator_type[$rule]."|" ;
@@ -187,8 +187,8 @@ class Helper
 
             if(!isset(Helper::$validator_type[$check_against]))
                 {
-                    Helper::interrupt(618,'validator type '.$check_against.
-                            ' does not exist',[], true);
+                    return Helper::interrupt(618,'validator type '.$check_against.
+                            ' does not exist');
                     
                 }
             $check_against = Helper::$validator_type[$check_against] ;
@@ -218,7 +218,6 @@ class Helper
         if(isset( $_SERVER['QUERY_STRING'])){
          $query  = explode('&', $_SERVER['QUERY_STRING']);
          $params = array();
-
         foreach( $query as $param )
             {
                 if($param !== "")
@@ -345,6 +344,87 @@ class Helper
        return date('Y-m-d H:i:s');
    }
 
-   
+   public static function get_script_functions($script)
+   {
+        
+       $regex = '~
+        function                 #function keyword
+        \s+                      #any number of whitespaces 
+        (?P<function_name>.*?)   #function name itself
+        \s*                      #optional white spaces
+        (?P<parameters>\(.*?\))  #function parameters
+        \s*                      #optional white spaces
+        (?P<body>\{.*?\})        #body of a function
+      ~six';
 
+
+      if (preg_match_all($regex, $script, $matches)) {
+          
+           return $matches;
+      } else {
+          
+          return false;
+      }
+           
+   }
+   
+   
+   public static function execute_function($crudeFunctions, $functionToExecName, $payload)
+   {
+       if(!$crudeFunctions) {
+           $result['state'] = false;
+           return $result;
+        }
+       
+       $functions = $crudeFunctions[0];
+       $functionNames = $crudeFunctions[1];
+       $preFunction = false;
+      
+       foreach($functionNames as $key => $functionName){
+           if($functionName == $functionToExecName ){
+               $functionToExec = $functions[$key];
+               break;
+           }
+       }
+       
+       eval($functionToExec);
+       $payload = call_user_func($functionName,$payload);
+       $result['payload'] = $payload;
+       $result['state'] = true;
+       return $result;
+   }
+
+
+   /*
+   * execute pre script to alter payload  
+   */
+   public static function execute_pre_function($payload)
+   {
+       $result = []; 
+       $script = $payload['script'];
+       $functionToExecName = self::$preFunctionName;
+       
+       $crudeFunctions = Helper::get_script_functions($script);
+       $results = Helper::execute_function($crudeFunctions, $functionToExecName, $payload);
+       
+       return $results;
+       
+       
+   }
+   
+   public static function execute_post_function($serviceName, $response)
+   {
+       
+       $result = [];
+       $serviceObj = app('\App\Http\Controllers\ServiceController')->service_exist($serviceName);
+       
+       $script = $serviceObj->script; 
+       $functionToExecName = self::$postFunctionName;
+       
+       $crudeFunctions = Helper::get_script_functions($script);
+       $results = Helper::execute_function($crudeFunctions, $functionToExecName, $response);
+       
+       return $results;
+    
+   }
 }

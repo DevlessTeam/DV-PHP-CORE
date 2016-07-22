@@ -1,5 +1,4 @@
-<?php
-
+<?php 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -87,13 +86,57 @@ class ApiTest extends TestCase
         $schemaObj = json_decode($schemaStruct, true);
         
         $this->json('POST', $url.$serviceName.'/schema', $schemaObj)
-              ->seeJson([]);
-      
-             
+              ->seeJsonEquals(['message'=>'Created table successfully',
+                  'payload'=>[],'status_code'=>606]);
+        
+        
+        //to be moved to testAddData 
+         $url = $this->subUrl;
+        $dbAction  = $this->dbUrl;
+        $serviceName = $this->serviceName;
+        
+        $schemaStruct = '{  
+                        "resource":[  
+                           {  
+                              "name":"'.$this->serviceTable.'",
+                              "field":[  
+
+                                 {  
+                                    "username":"Edmond",
+                                    "password":"password"
+                                 }
+                              ]
+                           }
+
+                         ]
+                     }';
+        $schemaObj = json_decode($schemaStruct, true);
+        $this->json('POST', $url.$serviceName.'/'.$dbAction, $schemaObj)
+              ->seeJson(['message'=>"Data has been added to serviceTable table succefully",
+                    'payload'=>[],'status_code'=>609]);
+
+//                //to be moved to testQueryData 
+//         $url = $this->subUrl;
+//        $dbAction  = $this->dbUrl;
+//        $serviceName = $this->serviceName;
+//        
+//        $schemaObj = json_decode($schemaStruct, true);
+//        $this->visit( $url.$serviceName.'/db'.
+//                '?table='.$this->serviceTable)
+//              ->seeJson(['message'=>"Data has been added to serviceTable table succefully",
+//                    'payload'=>[],'status_code'=>609]);
+//     
+
+        
     }
     
     public function testAddData()
     {
+        //silence is golden
+    }
     
+    public function testGetData()
+    {
+        //silence is golden
     }
 }

@@ -34,8 +34,8 @@ class BeforeMiddleware
                 }
                 else
                 {
-                    Helper::interrupt(631,null,[],true);
-                    return;
+                    return Helper::interrupt(631);
+                    
                 }
            }
            
@@ -58,9 +58,7 @@ class BeforeMiddleware
        {
            return redirect('/');
        }
-      
-      
-        
-      return $next($request);
-    }
+          return $next($request);
+   }
+              
 }

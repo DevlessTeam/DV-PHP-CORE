@@ -48,21 +48,21 @@ class DbController extends Controller
         if ($payload['method'] == 'GET') {
             $db_action = 'query';
             $payload = $this->set_auth_id_if_required($db_action, $payload);
-            $this->db_query($resource, $payload);
+            return $this->db_query($resource, $payload);
         } elseif ($payload['method'] == 'POST') {
             $db_action = 'create';
             $payload = $this->set_auth_id_if_required($db_action, $payload);
-            $this->add_data($resource, $payload);
+            return $this->add_data($resource, $payload);
         } elseif ($payload['method'] == 'PATCH') {
             $db_action = 'update';
             $payload = $this->set_auth_id_if_required($db_action, $payload);
-            $this->update($resource, $payload);
+            return $this->update($resource, $payload);
         } elseif ($payload['method'] == 'DELETE') {
             $db_action = 'delete';
             $payload = $this->set_auth_id_if_required($db_action, $payload);
-            $this->destroy($resource, $payload);
+            return $this->destroy($resource, $payload);
         } else {
-            Helper::interrupt(607,null,[],true);
+            return Helper::interrupt(607);
             
         }
     }
@@ -101,7 +101,7 @@ class DbController extends Controller
             $table_name = $table['name'];
             if (! \Schema::connection('DYNAMIC_DB_CONFIG')->
             hasTable($service_name.'_'.$table_name)) {
-                Helper::interrupt(634,null,[],true);
+                return Helper::interrupt(634);
             }
             //check data against field type before adding data
             $table_data = $this-> _validate_fields(
@@ -117,9 +117,9 @@ class DbController extends Controller
         }
 
         if ($output) {
-            Helper::interrupt(609, 'Data has been added to '.$table['name']
-            .' table succefully',[],true);
-            return;
+            return Helper::interrupt(609, 'Data has been added to '.$table['name']
+            .' table succefully');
+            
         }
     }
 
@@ -144,7 +144,7 @@ class DbController extends Controller
 
             if (! \Schema::connection('DYNAMIC_DB_CONFIG')->
             hasTable($table_name)) {
-                Helper::interrupt(634,null,[],true);
+                return Helper::interrupt(634);
                 
             }
 
@@ -164,15 +164,15 @@ class DbController extends Controller
             }
 
             if ($result == 1) {
-                Helper::interrupt(
+                return Helper::interrupt(
                     619,
                     'table '.$payload['params'][0]['name']." updated successfuly"
-                ,[],true);
+                );
             } else {
-                Helper::interrupt(629, 'Table '.$payload['params'][0]['name']." could not be updated",[],true);
+               return  Helper::interrupt(629, 'Table '.$payload['params'][0]['name']." could not be updated");
             }
         } else {
-            Helper::interrupt(614,null,[],true);
+            return Helper::interrupt(614);
         }
     }
 
@@ -194,8 +194,8 @@ class DbController extends Controller
 
         if (! \Schema::connection('DYNAMIC_DB_CONFIG')->
         hasTable($table_name)) {
-            Helper::interrupt(634,null,[],true);
-            return;
+            return Helper::interrupt(634);
+            
         }
         if ($payload['user_id'] !== "") {
             $user_id = $payload['user_id'];
@@ -208,7 +208,7 @@ class DbController extends Controller
             if ($payload['params'][0]['params'][0]['drop'] == true) {
                 \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
                 \DB::table('table_metas')->where('table_name', $ORG_table_name)->delete();
-                Helper::interrupt(613, 'dropped table successfully',[],true);
+                return Helper::interrupt(613, 'dropped table successfully');
                 $task = 'drop';
                 
             }
@@ -236,17 +236,17 @@ class DbController extends Controller
                 $task = 'delete';
             }
         } else {
-            Helper::interrupt(615,null,[],true);
-            return;
+            return Helper::interrupt(615);
+            
         }
 
         $destroy_query = $destroy_query.';';
         $result = eval('return'.$destroy_query);
         if ($result == false && $result != null) {
-            Helper::interrupt(614, 'could not '.$task.' '.$element,[],true);
-            return;
+            return Helper::interrupt(614, 'could not '.$task.' '.$element);
+            
         }
-        Helper::interrupt(626, 'The table or field has been '.$task,[],true);
+        return Helper::interrupt(626, 'The table or field has been '.$task);
     }
 
 
@@ -262,13 +262,12 @@ class DbController extends Controller
         $service_name = $payload['service_name'];
         $connector = $this->_connector($payload);
         $db =   \DB::connection('DYNAMIC_DB_CONFIG');
-
+        $results = [];
         //check if table name is set
         if (isset($payload['params']['table'][0])) {
             if (! \Schema::connection('DYNAMIC_DB_CONFIG')->
             hasTable($service_name.'_'.$payload['params']['table'][0])) {
-                Helper::interrupt(634,null,[],true);
-                return;
+                return Helper::interrupt(634);
             }
             if ($payload['user_id'] !== "") {
                 $user_id = $payload['user_id'];
@@ -321,19 +320,19 @@ class DbController extends Controller
                             '->'.$this->query_params[$key].'("'.$query_params[0].
                             '","'.$query_params[1].'")';
                         } else {
-                            Helper::interrupt(612,null,[],true);
-                            return;
+                            return  Helper::interrupt(612);
+                            
                         }
                     } else {
-                        Helper::interrupt(610,null,[],true);
-                        return;
+                        return Helper::interrupt(610);
+                        
                     }
                 }
             }
             $complete_query = 'return '.$complete_query.'->get();';
             $count = $db->table($table_name)->count();
             $query_output = eval($complete_query);
-            //$query_output['count'] = $count;
+            $results['properties']['count'] = $count;
             if (sizeof($query_output) == 1 && isset($queried_table_list)) {
                 $query_output = json_decode(json_encode($query_output), true);
                 $wanted_relationships = $queried_table_list;
@@ -345,12 +344,13 @@ class DbController extends Controller
                     $db
                 );
             }
-            //$query_output['related'] = $related;
-        
-            Helper::interrupt( 625, null, $query_output, true);
+            $results['results'] = $query_output;
+            
+            $results['properties']['related'] = $related; 
+            return Helper::interrupt( 625, null, $results);
             
         } else {
-            Helper::interrupt(611,null, [], true);
+            return Helper::interrupt(611);
             
         }
     }
@@ -395,11 +395,11 @@ class DbController extends Controller
             });
             $this->_set_table_meta($new_payload);
            
-            Helper::interrupt(606,null, [],false);
+            return Helper::interrupt(606);
             
         } else {
           
-            Helper::interrupt(603, $table_name ." table already exist",[], true);
+            Helper::interrupt(603, $table_name ." table already exist");
             
             
         }
@@ -417,15 +417,15 @@ class DbController extends Controller
 
         #check if soft data type has equivalent db type
         if (!isset($this->db_types[$field['field_type']])) {
-            Helper::interrupt(600, $field['field_type'].' does not exist',[],true);
+            return Helper::interrupt(600, $field['field_type'].' does not exist');
             
         }
         if (strtolower($field['field_type']) == "reference") {
             if (! \Schema::connection('DYNAMIC_DB_CONFIG')->
             hasTable($field['ref_table'])) {
                 //
-                Helper::interrupt(601, 'referenced table '
-                .$field['ref_table'].' does not exist',[],true);
+                return Helper::interrupt(601, 'referenced table '
+                .$field['ref_table'].' does not exist');
                 
             }
         }
@@ -450,7 +450,7 @@ class DbController extends Controller
         if (($field['field_type'] !=='reference' && $field['default'] == null)) {
             return 1;
         } else {
-            Helper::interrupt(602, 'Database schema could not be created');
+            return Helper::interrupt(602, 'Database schema could not be created');
         }
     }
 
@@ -487,9 +487,9 @@ class DbController extends Controller
             $table->$db_type[$field['field_type']]
             ($field['name'])->onDelete('cascade')->$unique();
         } else {
-            Helper::interrupt(
+           return Helper::interrupt(
                 602,
-                'For some reason database schema could not be created',null,"",true
+                'For some reason database schema could not be created'
             );
             
         }
@@ -750,8 +750,8 @@ class DbController extends Controller
                         }
 
                         if (is_object($err_msg) == true) {
-                            Helper::interrupt(616, $err_msg);
-                            return;
+                            return Helper::interrupt(616, $err_msg);
+                            
                         }
                     }
                 }
@@ -765,8 +765,8 @@ class DbController extends Controller
 
 
         if ($hit == 0) {
-            Helper::interrupt(617,null,[],true);
-            return;
+            return Helper::interrupt(617);
+            
         }
 
         if ($check_password == "true") {

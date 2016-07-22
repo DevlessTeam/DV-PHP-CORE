@@ -154,7 +154,7 @@ class ServiceController extends Controller
             if ($request->input('call_type') =='solo') {
                 $service->script = $request->input('script');
                 $service->save();
-                Helper::interrupt(626,null,[],true);
+                return Helper::interrupt(626);
                
             }
 
@@ -247,11 +247,15 @@ class ServiceController extends Controller
 
          //check token and keys
         $this->_devlessCheckHeaders($request);
-        $this->resource($request, $service, $resource);
         
-        return messenger::message();
+        $serviceOutput = $this->resource($request, $service, $resource);
+        
+        $response = $this->after_executing_service_action($service, $serviceOutput);
+        
+        return response($response);
+                
     }
-    
+   
      /**
      * Refer request to the right service and resource
      * @param array  $request request params
@@ -333,33 +337,39 @@ class ServiceController extends Controller
             'method' => $method,
             'params' => $parameters,
             ];
+            
+            // run script before assigning to method 
+            $newServiceElements = $this->before_assigning_service_action($resource, $payload);
+            $resource = $newServiceElements['resource'];
+            $payload = $newServiceElements['payload'];
+            
             //keep names of resources in the singular
             switch ($resource) {
                 case 'db':
                     $db = new Db();
-                    $db->access_db($resource, $payload);
+                    return $db->access_db($resource, $payload);
                     break;
 
                 case 'script':
                      $script = new script;
-                     $script->run_script($resource, $payload);
+                     return $script->run_script($resource, $payload);
                     break;
 
                 case 'schema':
                     $db = new Db();
-                    $db->create_schema($resource, $payload);
+                    return $db->create_schema($resource, $payload);
                     break;
 
                 case 'view':
                     return $payload;
 
                 default:
-                    Helper::interrupt(605,null,[],true);
+                    return Helper::interrupt(605);
                     break;
             }
         } else {
-            Helper::interrupt(624,null,[],true);
-            return;
+           return  Helper::interrupt(624);
+            
         }
        }
     }
@@ -377,8 +387,8 @@ class ServiceController extends Controller
         where('active', 1)->first()) {
             return $current_service;
         } else {
-            Helper::interrupt(604,null,[],true);
-            return false;
+           return Helper::interrupt(604);
+            
         }
 
 
@@ -398,8 +408,8 @@ class ServiceController extends Controller
         } elseif ($method == 'GET') {
             $parameters = Helper::query_string();
         } else {
-            Helper::interrupt(608, 'Request method '.$method.
-                    ' is not supported',[],true);
+            return Helper::interrupt(608, 'Request method '.$method.
+                    ' is not supported');
             
         }
         return $parameters;
@@ -429,7 +439,7 @@ class ServiceController extends Controller
         $state = (($is_key_set && $is_token_set) || $is_admin )? true : false;
 
         if(!$state){
-            Helper::interrupt(631,null,[],true);
+            return Helper::interrupt(631);
             
         }
     }
@@ -444,8 +454,8 @@ class ServiceController extends Controller
         $is_user_login = Helper::is_admin_login();
 
         if (! $is_user_login && $access_type == 0) {
-            Helper::interrupt(627,null,[],true);
-            return;
+            return Helper::interrupt(627);
+            
         } //private
         elseif ($access_type == 1) {
             return false;
@@ -455,5 +465,48 @@ class ServiceController extends Controller
         }//authentication required
 
         return true;
+    }
+    
+    /*
+     * operations to execute before assigning action to resource
+     * @param string $resource 
+     * @params array $payload
+     * @return array
+     */
+    public function before_assigning_service_action($resource, $payload)
+    {
+        $originalPayload = [];
+        $originalPayload['payload'] = $payload;
+        $originalPayload['resource'] = $resource;
+        
+        $result = Helper::execute_pre_function($payload);
+        $result['resource'] = $resource;
+        
+        return ($result['state'])? $result : $originalPayload;
+        
+        
+    }
+    
+    /*
+     * opreations to execute after service resource is executed
+     * @param string $service
+     * @prams string $resource 
+     * $prams array $response
+     * @return array 
+     */
+    public function after_executing_service_action($service, $response)
+    {
+        $originalResponse = $response;
+       
+        $output = Helper::execute_post_function($service, $response);
+        if(isset($output['payload'])) {
+            $newResponse = $output['payload'];
+        }else {
+            $newResponse = [];
+        }
+        
+        
+        return ($output['state'])? $newResponse : $originalResponse;
+        
     }
 }
