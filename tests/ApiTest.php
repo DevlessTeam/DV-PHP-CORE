@@ -116,17 +116,17 @@ class ApiTest extends TestCase
                     'payload'=>[],'status_code'=>609]);
 
         
-        //to be moved to testQueryData 
-         $url = $this->subUrl;
-        $dbAction  = $this->dbUrl;
-        $serviceName = $this->serviceName;
-        
-        $schemaObj = json_decode($schemaStruct, true);
-        $this->visit( $url.$serviceName.'/db'.
-                '?table='.$this->serviceTable)
-              ->seeJson(['message'=>"Data has been added to serviceTable table succefully",
-                    'payload'=>[],'status_code'=>609]);
-     
+//        //to be moved to testQueryData 
+//         $url = $this->subUrl;
+//        $dbAction  = $this->dbUrl;
+//        $serviceName = $this->serviceName;
+//        
+//        $schemaObj = json_decode($schemaStruct, true);
+//        $this->visit( $url.$serviceName.'/db'.
+//                '?table='.$this->serviceTable)
+//              ->seeJson(['message'=>"Data has been added to serviceTable table succefully",
+//                    'payload'=>[],'status_code'=>609]);
+//     
 
         
     }

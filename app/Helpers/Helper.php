@@ -116,7 +116,7 @@ class Helper
      * @param  additional data $payload
      * @return json
      */
-    public static function interrupt( $stack, $message=null, $payload=[], $error=false){
+    public static function interrupt( $stack, $message=null, $payload=[]){
         
         
         if($message !==null){   
@@ -142,7 +142,7 @@ class Helper
         {
             
             
-            return ($error)?  abort(404,json_encode($response)) : $response;
+            return  $response;
                 
             
         }
@@ -173,8 +173,8 @@ class Helper
                 //convert each rule and re-combine
                 if(!isset(Helper::$validator_type[$rule]))
                 {
-                    Helper::interrupt(618,'validator type '.$rule.
-                            ' does not exist',[], true);
+                    return Helper::interrupt(618,'validator type '.$rule.
+                            ' does not exist');
                     
                 }
                 $check_against = Helper::$validator_type[$rule]."|" ;
@@ -187,8 +187,8 @@ class Helper
 
             if(!isset(Helper::$validator_type[$check_against]))
                 {
-                    Helper::interrupt(618,'validator type '.$check_against.
-                            ' does not exist',[], true);
+                    return Helper::interrupt(618,'validator type '.$check_against.
+                            ' does not exist');
                     
                 }
             $check_against = Helper::$validator_type[$check_against] ;
@@ -423,6 +423,8 @@ class Helper
        
        $crudeFunctions = Helper::get_script_functions($script);
        $results = Helper::execute_function($crudeFunctions, $functionToExecName, $response);
+       
+       return $results;
     
    }
 }

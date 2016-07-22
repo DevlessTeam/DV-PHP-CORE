@@ -154,7 +154,7 @@ class ServiceController extends Controller
             if ($request->input('call_type') =='solo') {
                 $service->script = $request->input('script');
                 $service->save();
-                Helper::interrupt(626,null,[],true);
+                return Helper::interrupt(626);
                
             }
 
@@ -364,11 +364,11 @@ class ServiceController extends Controller
                     return $payload;
 
                 default:
-                    return Helper::interrupt(605,null,[],false);
+                    return Helper::interrupt(605);
                     break;
             }
         } else {
-           return  Helper::interrupt(624,null,[],false);
+           return  Helper::interrupt(624);
             
         }
        }
@@ -387,7 +387,7 @@ class ServiceController extends Controller
         where('active', 1)->first()) {
             return $current_service;
         } else {
-            Helper::interrupt(604,null,[],false);
+           return Helper::interrupt(604);
             
         }
 
@@ -408,8 +408,8 @@ class ServiceController extends Controller
         } elseif ($method == 'GET') {
             $parameters = Helper::query_string();
         } else {
-            Helper::interrupt(608, 'Request method '.$method.
-                    ' is not supported',[],true);
+            return Helper::interrupt(608, 'Request method '.$method.
+                    ' is not supported');
             
         }
         return $parameters;
@@ -439,7 +439,7 @@ class ServiceController extends Controller
         $state = (($is_key_set && $is_token_set) || $is_admin )? true : false;
 
         if(!$state){
-            Helper::interrupt(631,null,[],true);
+            return Helper::interrupt(631);
             
         }
     }
@@ -454,8 +454,8 @@ class ServiceController extends Controller
         $is_user_login = Helper::is_admin_login();
 
         if (! $is_user_login && $access_type == 0) {
-            Helper::interrupt(627,null,[],true);
-            return;
+            return Helper::interrupt(627);
+            
         } //private
         elseif ($access_type == 1) {
             return false;
@@ -496,7 +496,17 @@ class ServiceController extends Controller
      */
     public function after_executing_service_action($service, $response)
     {
+        $originalResponse = $response;
+       
         $output = Helper::execute_post_function($service, $response);
+        if(isset($output['payload'])) {
+            $newResponse = $output['payload'];
+        }else {
+            $newResponse = [];
+        }
+        
+        
+        return ($output['state'])? $newResponse : $originalResponse;
         
     }
 }
