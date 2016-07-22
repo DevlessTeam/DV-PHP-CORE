@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Helpers;
+
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as res;
@@ -25,7 +26,7 @@ class Helper
      * @var type
      */
 
-    public static  $MESSAGE_HEAP =
+    public static $MESSAGE_HEAP =
     [
         #JSON HEAP
         400 => 'Sorry something went wrong with payload(check json format)',
@@ -100,12 +101,11 @@ class Helper
     **/
     public static function outputMessage($stack)
     {
-        if(isset(self::$MESSAGE_HEAP[$stack]))
+        if (isset(self::$MESSAGE_HEAP[$stack])) {
             return self::$MESSAGE_HEAP[$stack];
-        else
-            {
+        } else {
               return null;
-            }
+        }
     }
 
     /**
@@ -116,35 +116,23 @@ class Helper
      * @param  additional data $payload
      * @return json
      */
-    public static function interrupt( $stack, $message=null, $payload=[]){
+    public static function interrupt($stack, $message = null, $payload = [])
+    {
         
         
-        if($message !==null){   
+        if ($message !==null) {
             $msg = $message;
-        }
-        else
-        {
+        } else {
             $msg = self::outputMessage($stack);
         }
         $response = Response::respond($stack, $msg, $payload);
         
         
         //return results from db functions called from scripts as session('script_results')
-        if(session('script_call') == true)
-        {
-            
-            
+        if (session('script_call') == true) {
             messenger::createMessage($response);
-            
-
-        }
-        else 
-        {
-            
-            
+        } else {
             return  $response;
-                
-            
         }
 
 
@@ -158,53 +146,42 @@ class Helper
      * @param string parameters to check against $check_against
      * @return boolean
      */
-    public static function field_check( $field_value, $check_against)
+    public static function field_check($field_value, $check_against)
     {
         //convert check against to field_name for err_msg
         $field_name = $check_against;
 
         //check if multiple rules are used
-        if(strpos($check_against, '|'))
-        {
+        if (strpos($check_against, '|')) {
             $rules = explode("|", $check_against);
 
-            foreach($rules as $rule)
-            {
-                //convert each rule and re-combine
-                if(!isset(Helper::$validator_type[$rule]))
-                {
-                    return Helper::interrupt(618,'validator type '.$rule.
+            foreach ($rules as $rule) {
+            //convert each rule and re-combine
+                if (!isset(Helper::$validator_type[$rule])) {
+                    return Helper::interrupt(618, 'validator type '.$rule.
                             ' does not exist');
-                    
                 }
                 $check_against = Helper::$validator_type[$rule]."|" ;
             }
-        }
-        else
-        {
+        } else {
             //single validator rule convert field type to lowercase
             $check_against = strtolower($check_against);
 
-            if(!isset(Helper::$validator_type[$check_against]))
-                {
-                    return Helper::interrupt(618,'validator type '.$check_against.
+            if (!isset(Helper::$validator_type[$check_against])) {
+                return Helper::interrupt(618, 'validator type '.$check_against.
                             ' does not exist');
-                    
-                }
+            }
             $check_against = Helper::$validator_type[$check_against] ;
-
         }
 
 
         $state = Validator::make(
             [$field_name => $field_value],
-                [$field_name => $check_against]
+            [$field_name => $check_against]
         );
-        if(!$state->fails()){
-            return TRUE;
-        }
-        else
-        {
+        if (!$state->fails()) {
+            return true;
+        } else {
             return $state->messages();
         }
     }
@@ -213,23 +190,19 @@ class Helper
      * get url parameters
      * @return array
      **/
-     public static function query_string()
+    public static function query_string()
     {
-        if(isset( $_SERVER['QUERY_STRING'])){
-         $query  = explode('&', $_SERVER['QUERY_STRING']);
-         $params = array();
-        foreach( $query as $param )
-            {
-                if($param !== "")
-                {
-                     list($name, $value) = explode('=', $param, 2);
+        if (isset($_SERVER['QUERY_STRING'])) {
+            $query  = explode('&', $_SERVER['QUERY_STRING']);
+            $params = array();
+            foreach ($query as $param) {
+                if ($param !== "") {
+                    list($name, $value) = explode('=', $param, 2);
                       $params[urldecode($name)][] = urldecode($value);
                 }
             }
             return $params;
-        }
-        else
-        {
+        } else {
             $param = "";
             return $param;
         }
@@ -265,89 +238,75 @@ class Helper
     }
 
     public static function get_authenticated_user_cred($access_state)
-   {
+    {
         $user_token = request()->header('devless-user-token');
 
-        if(self::is_admin_login() || $access_state == false)
-        {
-            $admin = User::where('role',1)->first();
+        if (self::is_admin_login() || $access_state == false) {
+            $admin = User::where('role', 1)->first();
             $user_cred['id'] = $admin->id;
             $user_cred['token'] = "non for admin";
-        }
-        else if($user_token !== null || $access_state == false)
-        {
-
+        } elseif ($user_token !== null || $access_state == false) {
             $user_data = self::verify_user_token($user_token);
 
-            if(isset($user_data->id))
-            {
+            if (isset($user_data->id)) {
                 $user_cred =
                     [
                         'id' =>$user_data->id,
                         'token' =>$user_data->session_token,
 
                     ];
+            } else {
+                self::interrupt(628, null, [], true);
             }
-            else
-            {
-                self::interrupt(628,null,[],true);
-            }
-        }
-        else
-        {
-            self::interrupt(628,null,[],true);
+        } else {
+            self::interrupt(628, null, [], true);
         }
         return $user_cred;
-   }
+    }
 
 
-   public static function verify_user_token($user_token)
-   {
-       $secret = config('app')['key'];
+    public static function verify_user_token($user_token)
+    {
+        $secret = config('app')['key'];
 
-       $jwt = new jwt();
+        $jwt = new jwt();
 
-       $jwt_payload = json_decode($jwt->decode($user_token, $secret, true));
+        $jwt_payload = json_decode($jwt->decode($user_token, $secret, true));
 
-       if($user_token == "null")
-        {
-           Self::interrupt(633,null,[],true);
+        if ($user_token == "null") {
+            Self::interrupt(633, null, [], true);
         }
-       $user_data = User::where('session_token',$jwt_payload->token)
+        $user_data = User::where('session_token', $jwt_payload->token)
                ->first();
-       if($user_data !== null)
-       {
+        if ($user_data !== null) {
+            $d1 = new \DateTime($user_data->session_time);
+            $d2 = new \DateTime();
+            $interval = $d1->diff($d2);
 
-           $d1 = new \DateTime($user_data->session_time);
-           $d2 = new \DateTime();
-           $interval = $d1->diff($d2);
+            if ($interval->h >= 1 || $interval->days > 0) {
+                $user_data->session_token = "";
+                $user_data->save();
+                Self::interrupt(633, null, [], true);
+            }
 
-           if( $interval->h >= 1 || $interval->days > 0)
-           {
-               $user_data->session_token = "";
-               $user_data->save();
-                Self::interrupt(633,null,[],true);
-           }
-
-           $user_data->session_time = Helper::session_timestamp();
-           $user_data->save();
-
-       }
+            $user_data->session_time = Helper::session_timestamp();
+            $user_data->save();
+        }
 
 
 
-       return $user_data;
-   }
+        return $user_data;
+    }
 
-   public static function session_timestamp()
-   {
-       return date('Y-m-d H:i:s');
-   }
+    public static function session_timestamp()
+    {
+        return date('Y-m-d H:i:s');
+    }
 
-   public static function get_script_functions($script)
-   {
+    public static function get_script_functions($script)
+    {
         
-       $regex = '~
+        $regex = '~
         function                 #function keyword
         \s+                      #any number of whitespaces 
         (?P<function_name>.*?)   #function name itself
@@ -358,73 +317,71 @@ class Helper
       ~six';
 
 
-      if (preg_match_all($regex, $script, $matches)) {
-          
-           return $matches;
-      } else {
-          
-          return false;
-      }
+        if (preg_match_all($regex, $script, $matches)) {
+             return $matches;
+        } else {
+            return false;
+        }
            
-   }
+    }
    
    
-   public static function execute_function($crudeFunctions, $functionToExecName, $payload)
-   {
-       if(!$crudeFunctions) {
-           $result['state'] = false;
-           return $result;
+    public static function execute_function($crudeFunctions, $functionToExecName, $payload)
+    {
+        if (!$crudeFunctions) {
+            $result['state'] = false;
+            return $result;
         }
        
-       $functions = $crudeFunctions[0];
-       $functionNames = $crudeFunctions[1];
-       $preFunction = false;
+        $functions = $crudeFunctions[0];
+        $functionNames = $crudeFunctions[1];
+        $preFunction = false;
       
-       foreach($functionNames as $key => $functionName){
-           if($functionName == $functionToExecName ){
-               $functionToExec = $functions[$key];
-               break;
-           }
-       }
+        foreach ($functionNames as $key => $functionName) {
+            if ($functionName == $functionToExecName) {
+                $functionToExec = $functions[$key];
+                break;
+            }
+        }
        
-       eval($functionToExec);
-       $payload = call_user_func($functionName,$payload);
-       $result['payload'] = $payload;
-       $result['state'] = true;
-       return $result;
-   }
+        eval($functionToExec);
+        $payload = call_user_func($functionName, $payload);
+        $result['payload'] = $payload;
+        $result['state'] = true;
+        return $result;
+    }
 
 
    /*
    * execute pre script to alter payload  
    */
-   public static function execute_pre_function($payload)
-   {
-       $result = []; 
-       $script = $payload['script'];
-       $functionToExecName = self::$preFunctionName;
+    public static function execute_pre_function($payload)
+    {
+        $result = [];
+        $script = $payload['script'];
+        $functionToExecName = self::$preFunctionName;
        
-       $crudeFunctions = Helper::get_script_functions($script);
-       $results = Helper::execute_function($crudeFunctions, $functionToExecName, $payload);
+        $crudeFunctions = Helper::get_script_functions($script);
+        $results = Helper::execute_function($crudeFunctions, $functionToExecName, $payload);
        
-       return $results;
+        return $results;
        
        
-   }
+    }
    
-   public static function execute_post_function($serviceName, $response)
-   {
+    public static function execute_post_function($serviceName, $response)
+    {
        
-       $result = [];
-       $serviceObj = app('\App\Http\Controllers\ServiceController')->service_exist($serviceName);
+        $result = [];
+        $serviceObj = app('\App\Http\Controllers\ServiceController')->service_exist($serviceName);
        
-       $script = $serviceObj->script; 
-       $functionToExecName = self::$postFunctionName;
+        $script = $serviceObj->script;
+        $functionToExecName = self::$postFunctionName;
        
-       $crudeFunctions = Helper::get_script_functions($script);
-       $results = Helper::execute_function($crudeFunctions, $functionToExecName, $response);
+        $crudeFunctions = Helper::get_script_functions($script);
+        $results = Helper::execute_function($crudeFunctions, $functionToExecName, $response);
        
-       return $results;
+        return $results;
     
-   }
+    }
 }

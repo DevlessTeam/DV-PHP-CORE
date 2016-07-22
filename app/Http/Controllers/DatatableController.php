@@ -55,7 +55,7 @@ class DatatableController extends Controller
      */
     public function show($name)
     {
-        if(\DB::connection('sqlite')){
+        if (\DB::connection('sqlite')) {
             return \DB::connection('devless-rec')->table($name)->paginate(10);
         }
         return \DB::table($name)->paginate(10);
