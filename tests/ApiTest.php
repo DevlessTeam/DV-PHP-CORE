@@ -115,8 +115,7 @@ class ApiTest extends TestCase
               ->seeJson(['message'=>"Data has been added to serviceTable table succefully",
                     'payload'=>[],'status_code'=>609]);
 
-        
-//        //to be moved to testQueryData 
+//                //to be moved to testQueryData 
 //         $url = $this->subUrl;
 //        $dbAction  = $this->dbUrl;
 //        $serviceName = $this->serviceName;
