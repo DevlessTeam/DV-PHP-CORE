@@ -14,6 +14,7 @@ use Session;
 use App\Helpers\DevlessHelper as DLH;
 use App\Helpers\Messenger as messenger;
 use App\Http\Controllers\ViewController as DvViews;
+use App\Helpers\Response as Response;
 use Validator;
 
 class ServiceController extends Controller
@@ -154,7 +155,7 @@ class ServiceController extends Controller
             if ($request->input('call_type') =='solo') {
                 $service->script = $request->input('script');
                 $service->save();
-                return Helper::interrupt(626);
+                return Response::respond(626);
             }
 
 
@@ -235,13 +236,13 @@ class ServiceController extends Controller
     }
     
     /**
-    * all api calls go through here
+    * All api calls go through here
     * @param array  $request request params
     * @param string  $service  service to be accessed
     * @param string $resource resource to be accessed
     * @return Response
     */
-    public function api(Request $request, $service, $resource)
+    public function service(Request $request, $service, $resource)
     {
 
          //check token and keys
@@ -279,7 +280,7 @@ class ServiceController extends Controller
         }
 
 
-        //$resource
+        
         return $this->assign_to_service(
             $service_name,
             $resource,
@@ -363,11 +364,11 @@ class ServiceController extends Controller
                         return $payload;
 
                     default:
-                        return Helper::interrupt(605);
+                        Helper::interrupt(605);
                     break;
                 }
             } else {
-                 return  Helper::interrupt(624);
+                 Helper::interrupt(624);
             }
         }
     }
@@ -385,7 +386,7 @@ class ServiceController extends Controller
         where('active', 1)->first()) {
             return $current_service;
         } else {
-            return Helper::interrupt(604);
+             Helper::interrupt(604);
         }
 
 
@@ -405,7 +406,7 @@ class ServiceController extends Controller
         } elseif ($method == 'GET') {
             $parameters = Helper::query_string();
         } else {
-            return Helper::interrupt(608, 'Request method '.$method.
+            Helper::interrupt(608, 'Request method '.$method.
                     ' is not supported');
         }
         return $parameters;
@@ -435,7 +436,10 @@ class ServiceController extends Controller
         $state = (($is_key_set && $is_token_set) || $is_admin )? true : false;
 
         if (!$state) {
-            return Helper::interrupt(631);
+             Helper::interrupt(631);
+            
+            
+            
         }
     }
 
@@ -449,7 +453,7 @@ class ServiceController extends Controller
         $is_user_login = Helper::is_admin_login();
 
         if (! $is_user_login && $access_type == 0) {
-            return Helper::interrupt(627);
+             Helper::interrupt(627);
         } //private
         elseif ($access_type == 1) {
             return false;

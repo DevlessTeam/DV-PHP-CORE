@@ -39,10 +39,10 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
     });
 
     #service end points
-    Route::get('service/{service}/{resource}','ServiceController@api');
-    Route::post('service/{service}/{resource}','ServiceController@api');
-    Route::patch('service/{service}/{resource}','ServiceController@api');
-    Route::delete('service/{service}/{resource}','ServiceController@api');
+    Route::get('service/{service}/{resource}','ServiceController@service');
+    Route::post('service/{service}/{resource}','ServiceController@service');
+    Route::patch('service/{service}/{resource}','ServiceController@service');
+    Route::delete('service/{service}/{resource}','ServiceController@service');
 
 });
 

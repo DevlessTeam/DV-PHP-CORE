@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response as res;
 use App\Helpers\Response as Response;
 use App\Helpers\Messenger as messenger;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Hash;
 use App\User;
 use App\Exceptions\Handler as handler;
@@ -69,6 +70,7 @@ class Helper
         633 => 'Token has expired please try logging in again',
         634 => 'Table does not exist',
         635 => 'Sorry to use offset you need need to set size',
+        636 => 'The table or field has been deleted',
         700 => 'Internal system error',
     ];
     
@@ -95,7 +97,7 @@ class Helper
     public static $preFunctionName = 'DvBefore';
     public static $postFunctionName = 'DvAfter';
     /**
-     * fetch message based on error code
+     * fetch message based on status code
     * @param  stack  $stack
     * @return string or null
     **/
@@ -109,7 +111,7 @@ class Helper
     }
 
     /**
-     *  Return results
+     *  Abort execution and show message
      *
      * @param  error code  $stack
      * @param  output message  $message
@@ -118,25 +120,8 @@ class Helper
      */
     public static function interrupt($stack, $message = null, $payload = [])
     {
-        
-        
-        if ($message !==null) {
-            $msg = $message;
-        } else {
-            $msg = self::outputMessage($stack);
-        }
-        $response = Response::respond($stack, $msg, $payload);
-        
-        
-        //return results from db functions called from scripts as session('script_results')
-        if (session('script_call') == true) {
-            messenger::createMessage($response);
-        } else {
-            return  $response;
-        }
-
-
-
+        $message = ($message !==null)? $message : self::outputMessage($stack);
+        throw new HttpException(500, $message, null, [],$stack);
     }
 
      /**
@@ -158,7 +143,7 @@ class Helper
             foreach ($rules as $rule) {
             //convert each rule and re-combine
                 if (!isset(Helper::$validator_type[$rule])) {
-                    return Helper::interrupt(618, 'validator type '.$rule.
+                     Helper::interrupt(618, 'validator type '.$rule.
                             ' does not exist');
                 }
                 $check_against = Helper::$validator_type[$rule]."|" ;
@@ -168,7 +153,7 @@ class Helper
             $check_against = strtolower($check_against);
 
             if (!isset(Helper::$validator_type[$check_against])) {
-                return Helper::interrupt(618, 'validator type '.$check_against.
+                 Helper::interrupt(618, 'validator type '.$check_against.
                             ' does not exist');
             }
             $check_against = Helper::$validator_type[$check_against] ;

@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use DB;
 use Closure;
-
+use App\Helpers\Response as Response;
 use App\Helpers\Helper as Helper;
 class BeforeMiddleware
 {
@@ -34,7 +34,7 @@ class BeforeMiddleware
                 }
                 else
                 {
-                    return Helper::interrupt(631);
+                    Helper::interrupt(631);
                     
                 }
            }
