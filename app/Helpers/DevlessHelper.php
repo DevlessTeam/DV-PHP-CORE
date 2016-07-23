@@ -12,7 +12,7 @@ use App\User as user;
 use App\Helpers\Helper as Helper;
 use Illuminate\Support\Facades\Storage as Storage;
 use App\Http\Controllers\DbController as DvSchema;
-
+use App\Helpers\Response as Response;
 /* 
 *@author Eddymens <eddymens@devless.io
  */
@@ -574,7 +574,7 @@ class DevlessHelper extends Helper
                 if (isset($expected_fields[$field])) {
                     $valid = Helper::field_check($value, $expected_fields[$field]);
                     if ($valid !== true) {
-                        return Helper::interrupt(616, 'There is something wrong with your '.$field);
+                         Helper::interrupt(616, 'There is something wrong with your '.$field);
                     }
                     if ($field == 'password') {
                         $user->$field = Helper::password_hash($value);

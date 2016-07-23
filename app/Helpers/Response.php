@@ -6,6 +6,9 @@ namespace App\Helpers;
  */
 use App\Helpers\Helper as Helper;
 
+/**
+ * Format response output 
+ */
 class Response extends Helper
 {
     //
@@ -17,11 +20,19 @@ class Response extends Helper
             $message ;
         }
         
-        $response = [
+         $response = [
             'status_code'=>$status_code,
             'message'=>$message,
             'payload'=>$payload
         ];
-        return ($response);
+         
+        //return results from db functions called from scripts 
+        if (session('script_call') == true) {
+            messenger::createMessage($response);
+        } else {
+            return  $response;
+        }
+
+        return $response;
     }
 }
