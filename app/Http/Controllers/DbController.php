@@ -116,7 +116,7 @@ class DbController extends Controller
         }
 
         if ($output) {
-             
+
            return Response::respond(609, 'Data has been added to '.$table['name']
             .' table succefully');
         }
@@ -337,7 +337,7 @@ class DbController extends Controller
                 );
             }
             $results['results'] = $query_output;
-            
+
             $results['properties']['related'] = $related;
             return Response::respond(625, null, $results);
         } else {
@@ -384,7 +384,7 @@ class DbController extends Controller
                 //store table_meta details
             });
             $this->_set_table_meta($new_payload);
-           
+
             return Response::respond(606);
         } else {
             Helper::interrupt(603, $table_name ." table already exist");
@@ -488,7 +488,7 @@ class DbController extends Controller
         $prefix = '',
         $collation = 'utf8_unicode_ci'
     ) {
-    
+
         if ($driver == 'sqlite') {
             $database =  __DIR__.
             '/../../../database/devless-rec.sqlite3';
@@ -515,14 +515,14 @@ class DbController extends Controller
 */
     private function _connector($connector_params)
     {
-        
+
         $driver = $connector_params['driver'];
-        
+
         //get current database else connect to remote
         if ($driver == 'default') {
             $default_database = config('database.default');
             $default_connector = config('database.connections.'.$default_database);
-            
+
             $driver   = $default_connector['driver'];
             if (isset($default_connector['hostname'])) {
                 $hostname = $default_connector['hostname'];
@@ -530,7 +530,7 @@ class DbController extends Controller
                 $hostname = (isset($default_connector['host']))? $default_connector['host']:false;
             }
 
-           
+
             $username = (isset($default_connector['username']))? $default_connector['username']: false;
             $password = (isset($default_connector['password']))? $default_connector['password']: false;
             $database = $default_connector['database'];
@@ -542,10 +542,10 @@ class DbController extends Controller
             $password = $connector_params['password'];
         }
         $this->db_socket($driver, $hostname, $database, $username, $password);
-          
+
         return true;
     }
-        
+
 /*
 * get related tables
 * @params $table_name
@@ -561,7 +561,7 @@ class DbController extends Controller
         $wanted_related_tables,
         $db
     ) {
-    
+
         $service_name = $payload['service_name'];
         $table_meta =  $db->table('table_metas')->where('table_name', $table_name)->get();
         $table_schema = json_decode($table_meta[0]->schema);
@@ -707,7 +707,7 @@ class DbController extends Controller
         $table_data,
         $check_password = false
     ) {
-    
+
         $table_meta = $this->_get_tableMeta($table_name);
         $schema = $table_meta['schema'];
         $hit = 0;

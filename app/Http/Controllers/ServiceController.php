@@ -120,7 +120,7 @@ class ServiceController extends Controller
 
         return view('services.show', compact('service'));
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -234,7 +234,7 @@ class ServiceController extends Controller
         }
 
     }
-    
+
     /**
     * All api calls go through here
     * @param array  $request request params
@@ -244,18 +244,18 @@ class ServiceController extends Controller
     */
     public function service(Request $request, $service, $resource)
     {
-
+      // die($request);
          //check token and keys
         $this->_devlessCheckHeaders($request);
-        
+
         $serviceOutput = $this->resource($request, $service, $resource);
-        
+
         $response = $this->after_executing_service_action($service, $serviceOutput);
-        
+
         return response($response);
-                
+
     }
-   
+
      /**
      * Refer request to the right service and resource
      * @param array  $request request params
@@ -280,7 +280,7 @@ class ServiceController extends Controller
         }
 
 
-        
+
         return $this->assign_to_service(
             $service_name,
             $resource,
@@ -337,12 +337,12 @@ class ServiceController extends Controller
                 'method' => $method,
                 'params' => $parameters,
                 ];
-            
+
                 // run script before assigning to method
                 $newServiceElements = $this->before_assigning_service_action($resource, $payload);
                 $resource = $newServiceElements['resource'];
                 $payload = $newServiceElements['payload'];
-            
+
                 //keep names of resources in the singular
                 switch ($resource) {
                     case 'db':
@@ -425,10 +425,10 @@ class ServiceController extends Controller
 
         return $resource_access_right;
     }
-    
+
     private function _devlessCheckHeaders($request)
     {
-        
+
         $is_key_set = ($request->header('Devless-key') == $request['devless_key'])?true : false;
         $is_token_set = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
         $is_admin = Helper::is_admin_login();
@@ -437,9 +437,9 @@ class ServiceController extends Controller
 
         if (!$state) {
              Helper::interrupt(631);
-            
-            
-            
+
+
+
         }
     }
 
@@ -464,10 +464,10 @@ class ServiceController extends Controller
 
         return true;
     }
-    
+
     /*
      * operations to execute before assigning action to resource
-     * @param string $resource 
+     * @param string $resource
      * @params array $payload
      * @return array
      */
@@ -476,35 +476,35 @@ class ServiceController extends Controller
         $originalPayload = [];
         $originalPayload['payload'] = $payload;
         $originalPayload['resource'] = $resource;
-        
+
         $result = Helper::execute_pre_function($payload);
         $result['resource'] = $resource;
-        
+
         return ($result['state'])? $result : $originalPayload;
-        
-        
+
+
     }
-    
+
     /*
      * opreations to execute after service resource is executed
      * @param string $service
-     * @prams string $resource 
+     * @prams string $resource
      * $prams array $response
-     * @return array 
+     * @return array
      */
     public function after_executing_service_action($service, $response)
     {
         $originalResponse = $response;
-       
+
         $output = Helper::execute_post_function($service, $response);
         if (isset($output['payload'])) {
             $newResponse = $output['payload'];
         } else {
             $newResponse = [];
         }
-        
-        
+
+
         return ($output['state'])? $newResponse : $originalResponse;
-        
+
     }
 }
