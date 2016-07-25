@@ -268,10 +268,9 @@
             $('#form_data').submit(function(e){
                 e.preventDefault();
                 $('#response-field').text('');
-                var payload = JSON.parse(editor.getValue());
+
                 // Handles GET requests
                 if (request_type === "retrieve_all") {
-
                     var order = $('#order-field').val();
                     var key = $('#key-field').val();
                     var value = $('#value-field').val();
@@ -328,9 +327,7 @@
                         });
 
                     } else {
-
                         $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&where='+key+','+value+'&size='+size, function(data) {
-                            console.log('data is here',data);
                             if (data.status_code == 700){
                                 $('#response').show();
                                 $('#response-field').text(JSON.stringify(data.payload.message));
@@ -342,12 +339,15 @@
                     }
 
                 } else if (request_type === "create"){
-                    // payload = JSON.stringify(JSON.parse(editor.getValue()));
+                    payload = JSON.parse(editor.getValue());
 
                     var promises = [];
                     for (var i = 0; i < payload.length; i++) {
-                        var info = JSON.stringify({resource:[{name:table_name, field: [payload[i]]}]});
+                        var info = {resource:[{name:table_name, field: [payload[i]]}]};
+
                         promises.push($.post("api/v1/service/"+service_name+"/db", info).success(function(data){
+                          console.log(data);
+
                             $('#response-field').text(data);
                             statuscheck(data);
                         }));
@@ -358,11 +358,11 @@
                     });
 
                 } else if (request_type === "update") {
-                    // payload = JSON.parse(editor.getValue());
+                    payload = JSON.parse(editor.getValue());
                     var promises = [];
 
                     for (var i = 0; i < payload.length; i++) {
-                        var info = JSON.stringify({resource:[{name:table_name,params: [payload[i]]}]});
+                        var info = {resource:[{name:table_name,params: [payload[i]]}]};
                         promises.push($.ajax({
                             url: "api/v1/service/"+service_name+"/db",
                             type: "PATCH",
@@ -376,11 +376,11 @@
                     $.when.apply(promises);
 
                 } else if (request_type === "delete") {
-                    // payload = JSON.parse(editor.getValue());
+                    payload = JSON.parse(editor.getValue());
                     var promises = [];
 
                     for (var i = 0; i < payload.length; i++) {
-                        var info = JSON.stringify({resource:[{name:table_name,params: [payload[i]]}]});
+                        var info = {resource:[{name:table_name,params: [payload[i]]}]};
                         promises.push($.ajax({
                             url: "api/v1/service/"+service_name+"/db",
                             type: "DELETE",
