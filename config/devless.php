@@ -9,3 +9,4 @@
 return[
   'views_directory' => base_path().'/resources/views/service_views/', 
 ];
+

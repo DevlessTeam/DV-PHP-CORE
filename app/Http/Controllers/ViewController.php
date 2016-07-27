@@ -20,6 +20,16 @@ class ViewController extends Controller
         'css' => 'text/css',
         'default' => 'text/plain',
     ];
+    
+    /**
+     * Get views related to a service 
+     * 
+     * @param Request $request
+     * @param string $service_name
+     * @param string $resource
+     * @param string $template
+     * @return object
+     */
     public function access_views(Request $request, $service_name, $resource, $template)
     {
         $method = $request->method();
@@ -35,7 +45,15 @@ class ViewController extends Controller
         return $this->_fetch_view($service_name, $template, $payload);
         
     }
- 
+    
+    /**
+     * Get view from service_view directory 
+     * 
+     * @param string $service
+     * @param string $template
+     * @param string $payload
+     * @return object
+     */
     private function _fetch_view($service, $template, $payload)
     {
         
@@ -43,6 +61,12 @@ class ViewController extends Controller
         
     }
     
+    /**
+     * Get static files for service_views
+     * 
+     * @param Request $request
+     * @return string
+     */
     public function static_files(Request $request)
     {
         
@@ -59,10 +83,17 @@ class ViewController extends Controller
             $content = file_get_contents($asset_file_path);
              return response($content)->header('Content-Type', $file_mime);
         } else {
-            return Response::respond(621);
+            return Response::respond(621,null,['filePath'=>$asset_file_path]);
         }
     }
     
+    /**
+     * create view files for new services 
+     * 
+     * @param string $service_name
+     * @param string $type
+     * @return boolean
+     */
     public function create_views($service_name, $type)
     {
 
@@ -89,6 +120,13 @@ class ViewController extends Controller
         
     }
     
+    /**
+     * Rename view directory name 
+     * 
+     * @param string $old_service_name
+     * @param string $new_service_name
+     * @return boolean
+     */
     public function rename_view($old_service_name, $new_service_name)
     {
         $old_path = config('devless')['views_directory'].$old_service_name;

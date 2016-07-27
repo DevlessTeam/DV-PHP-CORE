@@ -144,11 +144,12 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\HelperServiceProvider::class,
 
 
         'JeroenG\Packager\PackagerServiceProvider',
         "Laralib\L5scaffold\GeneratorsServiceProvider",
-
+        
 
 
     ],
