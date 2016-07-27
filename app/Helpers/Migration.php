@@ -77,5 +77,3 @@ class Migration extends Helper
         return true;
     }
 }
-
-

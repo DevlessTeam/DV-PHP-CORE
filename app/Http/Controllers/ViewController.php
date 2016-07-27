@@ -22,8 +22,8 @@ class ViewController extends Controller
     ];
     
     /**
-     * Get views related to a service 
-     * 
+     * Get views related to a service
+     *
      * @param Request $request
      * @param string $service_name
      * @param string $resource
@@ -47,8 +47,8 @@ class ViewController extends Controller
     }
     
     /**
-     * Get view from service_view directory 
-     * 
+     * Get view from service_view directory
+     *
      * @param string $service
      * @param string $template
      * @param string $payload
@@ -63,7 +63,7 @@ class ViewController extends Controller
     
     /**
      * Get static files for service_views
-     * 
+     *
      * @param Request $request
      * @return string
      */
@@ -83,13 +83,13 @@ class ViewController extends Controller
             $content = file_get_contents($asset_file_path);
              return response($content)->header('Content-Type', $file_mime);
         } else {
-            return Response::respond(621,null,['filePath'=>$asset_file_path]);
+            return Response::respond(621, null, ['filePath'=>$asset_file_path]);
         }
     }
     
     /**
-     * create view files for new services 
-     * 
+     * create view files for new services
+     *
      * @param string $service_name
      * @param string $type
      * @return boolean
@@ -121,8 +121,8 @@ class ViewController extends Controller
     }
     
     /**
-     * Rename view directory name 
-     * 
+     * Rename view directory name
+     *
      * @param string $old_service_name
      * @param string $new_service_name
      * @return boolean
