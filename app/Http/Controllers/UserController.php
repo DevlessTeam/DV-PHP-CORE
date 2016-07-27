@@ -52,7 +52,7 @@ class UserController extends Controller
     public function get_register()
     {
         $app = array(
-        'app_key' => "TEMPORAL-APP-KEY",
+        'app_key' => str_random(40),
         'app_token' => md5(uniqid(1, true))
          );
         return view('auth.create', compact('app'));
