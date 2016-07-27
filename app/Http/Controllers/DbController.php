@@ -116,8 +116,7 @@ class DbController extends Controller
         }
 
         if ($output) {
-
-           return Response::respond(609, 'Data has been added to '.$table['name']
+            return Response::respond(609, 'Data has been added to '.$table['name']
             .' table succefully');
         }
     }
@@ -472,9 +471,9 @@ class DbController extends Controller
             ($field['name'])->onDelete('cascade')->$unique();
         } else {
              Helper::interrupt(
-                602,
-                'For some reason database schema could not be created'
-            );
+                 602,
+                 'For some reason database schema could not be created'
+             );
         }
     }
 

@@ -365,7 +365,7 @@ class ServiceController extends Controller
 
                     default:
                         Helper::interrupt(605);
-                    break;
+                        break;
                 }
             } else {
                  Helper::interrupt(624);
@@ -437,9 +437,6 @@ class ServiceController extends Controller
 
         if (!$state) {
              Helper::interrupt(631);
-
-
-
         }
     }
 
