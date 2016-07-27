@@ -1,4 +1,5 @@
-
+[![Build Status](https://api.travis-ci.org/DevlessTeam/DV-PHP-CORE.svg)](https://travis-ci.org/DevlessTeam/DV-PHP-CORE)
+ 
 ##Devless Api Engine(DAE)
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
@@ -6,8 +7,6 @@ Versioning ot this project follows the  [Sermantic Versioning Specification](htt
 
 Coding standards are also based on the [PSR-2-coding-style-guide](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
 
- [![Build Status](https://api.travis-ci.org/DevlessTeam/DV-PHP-CORE.svg)](https://travis-ci.org/DevlessTeam/DV-PHP-CORE)
-   
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 Versioning ot this project follows the  [Sermantic Versioning Specification](http://semver.org/)
