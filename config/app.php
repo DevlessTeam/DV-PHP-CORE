@@ -148,7 +148,7 @@ return [
 
 
         'JeroenG\Packager\PackagerServiceProvider',
-        "Laralib\L5scaffold\GeneratorsServiceProvider",
+       
         
 
 

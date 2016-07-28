@@ -1,29 +1,28 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
-    "license": "MIT",
+    "name": "devless/devless",
+    "description": "The Devless Framework.",
+    "keywords": ["framework", "ldevless"],
+    "license": "Apache",
     "type": "project",
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
         "jeroen-g/laravel-packager": "^1.4",
-        "corveda/php-sandbox": "^2.0",
         "alchemy/zippy": "^0.3.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~4.0",
-        "phpspec/phpspec": "~2.1",
-        "laralib/l5scaffold": "^1.0"
+        "phpspec/phpspec": "~2.1"
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database",
+            "app/Helpers/view.php"
+
         ],
         "psr-4": {
-            "Devless\\core\\": "packages/Devless/core/src",
             "App\\": "app/"
         }
     },

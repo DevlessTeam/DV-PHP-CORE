@@ -51,8 +51,7 @@ class ServiceMigrationController extends Controller
                     
         if ($migration_type == "import") {
                     $zipped_file_name = "";
-                            
-
+                    
             if ($request->file('service_file')->isValid()) {
                 $service_archive_object =$request->file('service_file');
                                 

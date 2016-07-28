@@ -29,3 +29,24 @@ function DvAssetPath($payload, $partialAssetPath)
         
     return $assetPath;
 }
+
+/**
+ * allow access to admin only 
+ * 
+ * @param boolean $message
+ */
+function DvAdminOnly($message = "Sorry you dont have access to this page")
+{
+    $helper = app('App\Helpers\Helper');
+    $is_admin = $helper->is_admin_login();
+    
+    ($is_admin)? true : $helper->interrupt(1001,$message);
+    
+}
+
+function DvNavigate($payload, $pageName)
+{
+    $pagePath = url('/').'/service/'.$payload['service_name'].'/view/'.$pageName;
+    
+    return  $pagePath ; 
+}
