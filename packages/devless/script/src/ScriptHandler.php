@@ -62,7 +62,7 @@ class ScriptHandler
             'user_id' => $user_cred['id'],
             'user_token' => $user_cred['token']
         ];
-        $script_class = new ScriptController;
+        $script_class = new ScriptHandler;
     
 //NB: position matters here
         $code = <<<EOT

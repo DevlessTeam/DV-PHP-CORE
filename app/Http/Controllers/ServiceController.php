@@ -8,6 +8,7 @@ use App\Helpers\Helper;
 use Devless\Schema\DbHandler as Db;
 use App\Helpers\DevlessHelper as DLH;
 use App\Http\Controllers\ViewController as DvViews;
+use Devless\Script\ScriptHandler as script;
 use App\Helpers\Response as Response;
 use Validator;
 
