@@ -148,6 +148,8 @@ return [
 
 
         'JeroenG\Packager\PackagerServiceProvider',
+        
+        Devless\Schema\SchemaServiceProvider::class,
        
         
 

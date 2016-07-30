@@ -11,7 +11,7 @@ use App\App;
 use App\User as user;
 use App\Helpers\Helper as Helper;
 use Illuminate\Support\Facades\Storage as Storage;
-use App\Http\Controllers\DbController as DvSchema;
+use Devless\Schema\DbHandler as DvSchema;
 use App\Helpers\Response as Response;
 
 /* 

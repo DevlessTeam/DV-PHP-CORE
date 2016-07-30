@@ -23,7 +23,8 @@
 
         ],
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Devless\\Schema\\": "packages/devless/schema/src"
         }
     },
     "autoload-dev": {

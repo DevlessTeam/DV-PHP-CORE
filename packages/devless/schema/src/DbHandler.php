@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Devless\Schema;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -12,7 +12,7 @@ use App\Helpers\Response as Response;
 use \Illuminate\Database\Schema\Blueprint as Blueprint;
 use App\Http\Controllers\ServiceController as Service;
 
-class DbController extends Controller
+class DbHandler
 {
     public $db_types = [
         'text'      => 'string',
@@ -489,8 +489,7 @@ class DbController extends Controller
     ) {
 
         if ($driver == 'sqlite') {
-            $database =  __DIR__.
-            '/../../../database/devless-rec.sqlite3';
+            $database = database_path('devless-rec.sqlite3');
         }
         $conn = array(
         'driver'    => $driver,

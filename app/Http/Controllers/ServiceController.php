@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Service as serviceModel;
 use App\Helpers\Helper;
 use App\Http\Controllers\ScriptController as Script ;
-use App\Http\Controllers\DbController as Db;
+use Devless\Schema\DbHandler as Db;
 use App\Http\Controllers\ViewController as View;
 use Session;
 use App\Helpers\DevlessHelper as DLH;
