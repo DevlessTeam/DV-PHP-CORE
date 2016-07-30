@@ -1,17 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Devless\Script;
 
-use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\CoreController as Core;
 use App\Http\Controllers\ServiceController as Service;
 use \App\Helpers\Helper as Helper;
 use App\Helpers\Messenger as messenger;
-use Session;
 
-class ScriptController extends Controller
+class ScriptHandler
 {
 
      /*

@@ -150,6 +150,7 @@ return [
         'JeroenG\Packager\PackagerServiceProvider',
         
         Devless\Schema\SchemaServiceProvider::class,
+        Devless\Script\ScriptServiceProvider::class,
        
         
 

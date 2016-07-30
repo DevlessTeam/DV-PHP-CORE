@@ -1,18 +1,12 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Service;
 use Illuminate\Http\Request;
 use App\Service as serviceModel;
 use App\Helpers\Helper;
-use App\Http\Controllers\ScriptController as Script ;
 use Devless\Schema\DbHandler as Db;
-use App\Http\Controllers\ViewController as View;
-use Session;
 use App\Helpers\DevlessHelper as DLH;
-use App\Helpers\Messenger as messenger;
 use App\Http\Controllers\ViewController as DvViews;
 use App\Helpers\Response as Response;
 use Validator;
