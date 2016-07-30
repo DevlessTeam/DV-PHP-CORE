@@ -69,11 +69,21 @@ class ViewController extends Controller
      */
     public function static_files(Request $request)
     {
+        $url = $request->path();
+        $viewsDirectory = config('devless')['views_directory'];
         
-        $get_mime_type = $this->MIME_LIST;
-        $asset_file_path = '../resources/views/'.$request->path();
+        $splitUrl = $sub = explode('/', $url, 3);
+        $route = $splitUrl[0];
+        $serviceName = (isset($splitUrl[1]))? $splitUrl[1] :  ''; 
+        $assetsSubPath = (isset($splitUrl[2]))? $splitUrl[2] :  '';
+                
+        $asset_file_path = 
+                \App\Helpers\DevlessHelper::assetsDirectory($serviceName, $assetsSubPath);
+        
         $asset_file_extension = pathinfo($asset_file_path, PATHINFO_EXTENSION);
         
+        $get_mime_type = $this->MIME_LIST;
+       
         $using_asset_file_extension = $asset_file_extension;
         (isset($get_mime_type[$using_asset_file_extension]))? $file_mime =
                 $get_mime_type[$using_asset_file_extension] :
@@ -88,7 +98,7 @@ class ViewController extends Controller
     }
     
     /**
-     * create view files for new services
+     * create initial view files for new services
      *
      * @param string $service_name
      * @param string $type
@@ -110,8 +120,6 @@ class ViewController extends Controller
                 } else {
                     return false;
                 }
-                
-                
             default:
                 return false;
         }

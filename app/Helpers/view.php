@@ -25,7 +25,8 @@ function DvInclude($payload, $templateName)
 function DvAssetPath($payload, $partialAssetPath)
 {
     $serviceName = $payload['service_name'];
-    $assetPath = url('/').'/service_views/'.$serviceName.'/assets/'.$partialAssetPath;
+    
+    $assetPath = config('devless')['assets_route'].$serviceName.'/'.$partialAssetPath;
         
     return $assetPath;
 }

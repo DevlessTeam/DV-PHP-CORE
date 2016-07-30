@@ -591,4 +591,19 @@ class DevlessHelper extends Helper
         
         
     }
+    
+    /**
+     * Get assets directory for a service 
+     * 
+     * @param type $serviceName
+     * @param type $assetsSubPath
+     * @return string
+     */
+    public static function assetsDirectory($serviceName, $assetsSubPath)
+    {
+        $viewsDirectory = config('devless')['views_directory'];
+        $assetsDirectoryName = config('devless')['assets_directory_name'];
+        
+        return $viewsDirectory.'/'.$serviceName.'/'.$assetsDirectoryName.'/'.$assetsSubPath;
+    }
 }
