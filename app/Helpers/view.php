@@ -26,7 +26,7 @@ function DvAssetPath($payload, $partialAssetPath)
 {
     $serviceName = $payload['service_name'];
     
-    $assetPath = config('devless')['assets_route'].$serviceName.'/'.$partialAssetPath;
+    $assetPath = url('/').'/service_views/'.$serviceName.'/'.$partialAssetPath;
         
     return $assetPath;
 }
