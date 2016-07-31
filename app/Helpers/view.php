@@ -1,6 +1,4 @@
-
 <?php
-
 /**
  * Include a php file
  *
@@ -15,7 +13,6 @@ function DvInclude($payload, $templateName)
     
     include($viewPath.$serviceName.'/'.$templateName);
 }
-
 /**
  * Get asset path
  *
@@ -31,7 +28,6 @@ function DvAssetPath($payload, $partialAssetPath)
         
     return $assetPath;
 }
-
 /**
  * allow access to admin only 
  * 
@@ -45,9 +41,8 @@ function DvAdminOnly($message = "Sorry you dont have access to this page")
     ($is_admin)? true : $helper->interrupt(1001,$message);
     
 }
-
 /**
- * Get url to specified page 
+ * Get url for specified page name
  * 
  * @param type $payload
  * @param type $pageName
@@ -73,3 +68,4 @@ function DvRedirect($url, $time)
     header('refresh:'.$time.';url='.$url);
   
 }
+	
