@@ -73,11 +73,12 @@ function DvService(\$json_payload, \$service_name, \$resource, \$method){
     \$service_name, \$resource, \$method));
  }
 }
+
 $payload[script];
 EOT;
 
         $result = eval($code);
-        
+
         return $result;
 
     }

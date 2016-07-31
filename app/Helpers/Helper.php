@@ -328,9 +328,11 @@ class Helper
                 break;
             }
         }
-       
-        eval($functionToExec);
-        $payload = call_user_func($functionName, $payload);
+        
+        (isset($functionToExec))?eval($functionToExec) : '';
+        
+        $payload = (function_exists($functionToExecName))? 
+                $functionToExecName($payload): $payload;
         $result['payload'] = $payload;
         $result['state'] = true;
         return $result;
@@ -340,7 +342,7 @@ class Helper
    /*
    * execute pre script to alter payload  
    */
-    public static function execute_pre_function($payload)
+    public static function  execute_pre_function($payload)
     {
         $result = [];
         $script = $payload['script'];

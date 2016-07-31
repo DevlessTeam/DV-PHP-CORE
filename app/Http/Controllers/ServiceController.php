@@ -239,13 +239,13 @@ class ServiceController extends Controller
     */
     public function service(Request $request, $service, $resource)
     {
-      // die($request);
+      
          //check token and keys
         $this->_devlessCheckHeaders($request);
 
         $serviceOutput = $this->resource($request, $service, $resource);
 
-        $response = $this->after_executing_service_action($service, $serviceOutput);
+        $response = $this->after_executing_service_action($service, $resource, $serviceOutput);
 
         return response($response);
 
@@ -346,7 +346,7 @@ class ServiceController extends Controller
                     break;
 
                     case 'script':
-                         $script = new script;
+                        $script = new script;
                         return $script->run_script($resource, $payload);
                     break;
 
@@ -465,13 +465,19 @@ class ServiceController extends Controller
      */
     public function before_assigning_service_action($resource, $payload)
     {
+        
         $originalPayload = [];
         $originalPayload['payload'] = $payload;
         $originalPayload['resource'] = $resource;
+        
+        if ($resource == 'script') {
+            
+            return $originalPayload;
+        }
 
         $result = Helper::execute_pre_function($payload);
         $result['resource'] = $resource;
-
+        
         return ($result['state'])? $result : $originalPayload;
 
 
@@ -484,8 +490,13 @@ class ServiceController extends Controller
      * $prams array $response
      * @return array
      */
-    public function after_executing_service_action($service, $response)
+    public function after_executing_service_action($service, $resource, $response)
     {
+         if ($resource == 'script') {
+            
+            return $response;
+         }
+        
         $originalResponse = $response;
 
         $output = Helper::execute_post_function($service, $response);
