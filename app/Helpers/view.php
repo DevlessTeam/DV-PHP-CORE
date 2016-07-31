@@ -73,4 +73,3 @@ function DvRedirect($url, $time)
     header('refresh:'.$time.';url='.$url);
   
 }
-	
