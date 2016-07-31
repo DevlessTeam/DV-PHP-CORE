@@ -1,3 +1,4 @@
+
 <?php
 
 /**
@@ -45,9 +46,31 @@ function DvAdminOnly($message = "Sorry you dont have access to this page")
     
 }
 
+/**
+ * Get url to specified page 
+ * 
+ * @param type $payload
+ * @param type $pageName
+ * @return string
+ */
 function DvNavigate($payload, $pageName)
 {
     $pagePath = url('/').'/service/'.$payload['service_name'].'/view/'.$pageName;
     
     return  $pagePath ; 
 }
+
+
+
+/**
+ * Redirect to url after time
+ * 
+ * @param type $url
+ * @param type $time
+ */
+function DvRedirect($url, $time)
+{
+    header('refresh:'.$time.';url='.$url);
+  
+}
+	
