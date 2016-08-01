@@ -1,17 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Devless\Script;
 
-use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\CoreController as Core;
 use App\Http\Controllers\ServiceController as Service;
 use \App\Helpers\Helper as Helper;
 use App\Helpers\Messenger as messenger;
-use Session;
 
-class ScriptController extends Controller
+class ScriptHandler
 {
 
      /*
@@ -67,7 +62,7 @@ class ScriptController extends Controller
             'user_id' => $user_cred['id'],
             'user_token' => $user_cred['token']
         ];
-        $script_class = new ScriptController;
+        $script_class = new ScriptHandler;
     
 //NB: position matters here
         $code = <<<EOT
@@ -78,11 +73,12 @@ function DvService(\$json_payload, \$service_name, \$resource, \$method){
     \$service_name, \$resource, \$method));
  }
 }
+
 $payload[script];
 EOT;
 
         $result = eval($code);
-        
+
         return $result;
 
     }

@@ -11,8 +11,9 @@ use App\App;
 use App\User as user;
 use App\Helpers\Helper as Helper;
 use Illuminate\Support\Facades\Storage as Storage;
-use App\Http\Controllers\DbController as DvSchema;
+use Devless\Schema\DbHandler as DvSchema;
 use App\Helpers\Response as Response;
+
 /* 
 *@author Eddymens <eddymens@devless.io
  */
@@ -589,5 +590,20 @@ class DevlessHelper extends Helper
             return $user;
         
         
+    }
+    
+    /**
+     * Get assets directory for a service 
+     * 
+     * @param type $serviceName
+     * @param type $assetsSubPath
+     * @return string
+     */
+    public static function assetsDirectory($serviceName, $assetsSubPath)
+    {
+        $viewsDirectory = config('devless')['views_directory'];
+        $assetsDirectoryName = config('devless')['assets_directory_name'];
+        
+        return $viewsDirectory.'/'.$serviceName.'/'.$assetsDirectoryName.'/'.$assetsSubPath;
     }
 }

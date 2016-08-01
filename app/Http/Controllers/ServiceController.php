@@ -1,19 +1,14 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Service;
 use Illuminate\Http\Request;
 use App\Service as serviceModel;
 use App\Helpers\Helper;
-use App\Http\Controllers\ScriptController as Script ;
-use App\Http\Controllers\DbController as Db;
-use App\Http\Controllers\ViewController as View;
-use Session;
+use Devless\Schema\DbHandler as Db;
 use App\Helpers\DevlessHelper as DLH;
-use App\Helpers\Messenger as messenger;
 use App\Http\Controllers\ViewController as DvViews;
+use Devless\Script\ScriptHandler as script;
 use App\Helpers\Response as Response;
 use Validator;
 
@@ -244,13 +239,13 @@ class ServiceController extends Controller
     */
     public function service(Request $request, $service, $resource)
     {
-      // die($request);
+      
          //check token and keys
         $this->_devlessCheckHeaders($request);
 
         $serviceOutput = $this->resource($request, $service, $resource);
 
-        $response = $this->after_executing_service_action($service, $serviceOutput);
+        $response = $this->after_executing_service_action($service, $resource, $serviceOutput);
 
         return response($response);
 
@@ -351,7 +346,7 @@ class ServiceController extends Controller
                     break;
 
                     case 'script':
-                         $script = new script;
+                        $script = new script;
                         return $script->run_script($resource, $payload);
                     break;
 
@@ -365,7 +360,7 @@ class ServiceController extends Controller
 
                     default:
                         Helper::interrupt(605);
-                    break;
+                        break;
                 }
             } else {
                  Helper::interrupt(624);
@@ -437,9 +432,6 @@ class ServiceController extends Controller
 
         if (!$state) {
              Helper::interrupt(631);
-
-
-
         }
     }
 
@@ -473,13 +465,19 @@ class ServiceController extends Controller
      */
     public function before_assigning_service_action($resource, $payload)
     {
+        
         $originalPayload = [];
         $originalPayload['payload'] = $payload;
         $originalPayload['resource'] = $resource;
+        
+        if ($resource == 'script') {
+            
+            return $originalPayload;
+        }
 
         $result = Helper::execute_pre_function($payload);
         $result['resource'] = $resource;
-
+        
         return ($result['state'])? $result : $originalPayload;
 
 
@@ -492,8 +490,13 @@ class ServiceController extends Controller
      * $prams array $response
      * @return array
      */
-    public function after_executing_service_action($service, $response)
+    public function after_executing_service_action($service, $resource, $response)
     {
+         if ($resource == 'script') {
+            
+            return $response;
+         }
+        
         $originalResponse = $response;
 
         $output = Helper::execute_post_function($service, $response);
