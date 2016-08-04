@@ -239,7 +239,7 @@ class ServiceController extends Controller
     */
     public function service(Request $request, $service, $resource)
     {
-      
+
          //check token and keys
         $this->_devlessCheckHeaders($request);
 
@@ -465,19 +465,19 @@ class ServiceController extends Controller
      */
     public function before_assigning_service_action($resource, $payload)
     {
-        
+
         $originalPayload = [];
         $originalPayload['payload'] = $payload;
         $originalPayload['resource'] = $resource;
-        
+
         if ($resource == 'script') {
-            
+
             return $originalPayload;
         }
 
         $result = Helper::execute_pre_function($payload);
         $result['resource'] = $resource;
-        
+
         return ($result['state'])? $result : $originalPayload;
 
 
@@ -493,10 +493,10 @@ class ServiceController extends Controller
     public function after_executing_service_action($service, $resource, $response)
     {
          if ($resource == 'script') {
-            
+
             return $response;
          }
-        
+
         $originalResponse = $response;
 
         $output = Helper::execute_post_function($service, $response);

@@ -22,7 +22,7 @@ class ScriptHandler
     {
         $json_payload = json_decode($json_payload, true);
         $service = new Service();
-        
+
         //prepare request payload
         $request = [
         "resource" => $json_payload['resource'],
@@ -32,9 +32,9 @@ class ScriptHandler
         session()->put('script_call', 'true');
         $output = $service->resource($request, $service_name, $resource, $internal_access = true);
         session()->forget('script_call');
-        
+
         return json_decode(json_encode(messenger::message(), true), true);
-        
+
     }
 
      /*
@@ -48,7 +48,7 @@ class ScriptHandler
     {
 
         $service = new Service();
-        
+
         //checking right access control right
         $access_type = $payload['resource_access_right'];
         $access_state = $service->check_resource_access_right_type($access_type["script"]);
@@ -63,7 +63,7 @@ class ScriptHandler
             'user_token' => $user_cred['token']
         ];
         $script_class = new ScriptHandler;
-    
+
 //NB: position matters here
         $code = <<<EOT
   if(!function_exists('DvService')){
