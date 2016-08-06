@@ -2,11 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-
 use Blade;
-
-
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,9 +15,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-         Blade::directive('datetime', function($expression) {
-            return "<?php echo with{$expression}->format('m/d/Y H:i'); ?>";
-        });
+         Blade::directive('datetime', function ($expression) {
+             return "<?php echo with{$expression}->format('m/d/Y H:i'); ?>";
+         });
     }
 
     /**

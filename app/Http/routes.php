@@ -18,74 +18,69 @@ Route::get('logout', 'UserController@get_logout');
 Route::get('setup', 'UserController@get_register');
 Route::post('setup', 'UserController@post_register');
 
-#lean views route
+//lean views route
 Route::resource('service/{service}/{resource}/{template}/', 'ViewController@access_views');
 
 
 Route::get(config('devless')['assets_route_name'].'/{sublevels?}', 'ViewController@static_files')->where('sublevels', '.*');
 
-#routes for only endpoints
-Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
+//routes for only endpoints
+Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function () {
 
-    #check system status
-    Route::get('status', function ()    {
-
-        return ['status_code'=>111, 'message'=>'healthy','payload'=>[]];
+    //check system status
+    Route::get('status', function () {
+        return ['status_code' => 111, 'message' => 'healthy', 'payload' => []];
     });
 
-    #system logs
-    Route::get('log', function ()    {
-        return "no log available";
+    //system logs
+    Route::get('log', function () {
+        return 'no log available';
     });
 
-    #service end points
-    Route::get('service/{service}/{resource}','ServiceController@service');
-    Route::post('service/{service}/{resource}','ServiceController@service');
-    Route::patch('service/{service}/{resource}','ServiceController@service');
-    Route::delete('service/{service}/{resource}','ServiceController@service');
-
+    //service end points
+    Route::get('service/{service}/{resource}', 'ServiceController@service');
+    Route::post('service/{service}/{resource}', 'ServiceController@service');
+    Route::patch('service/{service}/{resource}', 'ServiceController@service');
+    Route::delete('service/{service}/{resource}', 'ServiceController@service');
 });
 
-#routes available to only login users
+//routes available to only login users
 Route::group(['middleware' => 'user.auth'], function () {
-  #service views
-  Route::resource('services','ServiceController');
+    //service views
+  Route::resource('services', 'ServiceController');
 
- #change token
-Route::patch('generatetoken','AppController@token');
+ //change token
+Route::patch('generatetoken', 'AppController@token');
 
-  #app views
-  Route::resource('app','AppController');
+  //app views
+  Route::resource('app', 'AppController');
 
 
-  #destroy table
-  #Route::delete('destroy_table', 'SystemApiController@delete_table');
+  //destroy table
+  //Route::delete('destroy_table', 'SystemApiController@delete_table');
 
-  #api_doc views
+  //api_doc views
   Route::get('console', 'ApiDocController@index');
-  Route::get('console/{console?}', 'ApiDocController@edit');
-  Route::get('console/schema/{schema?}', 'ApiDocController@schema');
-  Route::get('console/{service_id?}/{table?}/schema', 'ApiDocController@schema');
+    Route::get('console/{console?}', 'ApiDocController@edit');
+    Route::get('console/schema/{schema?}', 'ApiDocController@schema');
+    Route::get('console/{service_id?}/{table?}/schema', 'ApiDocController@schema');
 
-  #privacy
+  //privacy
   Route::get('privacy', 'PrivacyController@index');
-  Route::get('privacy/{serviceId?}/get', 'PrivacyController@show');
-  Route::put('privacy/{privacy}', 'PrivacyController@update');
+    Route::get('privacy/{serviceId?}/get', 'PrivacyController@show');
+    Route::put('privacy/{privacy}', 'PrivacyController@update');
 
-  #Service Migrator
-  Route::resource("migrate","ServiceMigrationController");
+  //Service Migrator
+  Route::resource('migrate', 'ServiceMigrationController');
 
 
 
-  #Download Route
+  //Download Route
   Route::get('download/{filename}', 'ServiceController@download_service_package')
     ->where('filename', '[A-Za-z0-9\-\_\.]+');
 
-  #Datatable Route
+  //Datatable Route
   Route::get('datatable', 'DatatableController@index');
-  Route::get('datatable/{datatable?}', 'DatatableController@create');
-  Route::get('datatable/{entries?}/entries', 'DatatableController@show');
-
-
-
+    Route::get('datatable/{datatable?}', 'DatatableController@create');
+    Route::get('datatable/{entries?}/entries', 'DatatableController@show');
 });
