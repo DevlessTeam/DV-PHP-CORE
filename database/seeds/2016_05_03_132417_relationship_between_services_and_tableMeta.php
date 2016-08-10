@@ -1,5 +1,5 @@
-<?php 
-use Illuminate\Database\Schema\Blueprint;
+<?php
+
 use Illuminate\Database\Migrations\Migration;
 
 class RelationshipBetweenServicesAndTableMeta extends Migration
@@ -12,9 +12,8 @@ class RelationshipBetweenServicesAndTableMeta extends Migration
     public function up()
     {
         //
-        Schema::table('tableMeta',function($table){
+        Schema::table('tableMeta', function ($table) {
             $table->foreign('service_id')->references('id')->on('services');
-            
         });
     }
 

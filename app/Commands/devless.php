@@ -2,7 +2,6 @@
 
 namespace App\Commands;
 
-use App\Commands\Command;
 use Illuminate\Contracts\Bus\SelfHandling;
 
 class devless extends Command implements SelfHandling

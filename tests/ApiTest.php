@@ -1,7 +1,5 @@
 <?php
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+
 
 class ApiTest extends TestCase
 {
@@ -9,20 +7,18 @@ class ApiTest extends TestCase
     private $subUrl;
     private $dbUrl;
     private $scriptUrl;
-    
+
     public function __construct()
     {
-         $this->apiUrl = '/api/v1/';
-    
-         $this->subUrl  = $this->apiUrl.'service/';
-         
-         $this->dbUrl = 'db/';
-         
-         $this->scriptUrl = '/script/';
-         
-    
+        $this->apiUrl = '/api/v1/';
+
+        $this->subUrl = $this->apiUrl.'service/';
+
+        $this->dbUrl = 'db/';
+
+        $this->scriptUrl = '/script/';
     }
-    
+
     /**
      * Temporal test for complete service creation cycle.
      *
@@ -31,28 +27,25 @@ class ApiTest extends TestCase
     public function testLog()
     {
         $subUrl = $this->apiUrl;
-        
+
         $this->visit($subUrl.'log')
              ->see('no log available');
-             
-        
     }
-    
+
     public function testHealth()
     {
         $subUrl = $this->apiUrl;
-        
+
         $this->visit($subUrl.'status')
              ->see('healthy');
-     
     }
-    
+
     public function testSchema()
     {
         $url = $this->subUrl;
-        $dbAction  = $this->dbUrl;
+        $dbAction = $this->dbUrl;
         $serviceName = $this->serviceName;
-        
+
         $schemaStruct = '{  
      "resource":[  
         {  
@@ -84,17 +77,17 @@ class ApiTest extends TestCase
   }        
 ';
         $schemaObj = json_decode($schemaStruct, true);
-        
+
         $this->json('POST', $url.$serviceName.'/schema', $schemaObj)
-              ->seeJsonEquals(['message'=>'Created table successfully',
-                  'payload'=>[],'status_code'=>606]);
-        
-        
+              ->seeJsonEquals(['message' => 'Created table successfully',
+                  'payload'              => [], 'status_code' => 606, ]);
+
+
         //to be moved to testAddData
          $url = $this->subUrl;
-        $dbAction  = $this->dbUrl;
+        $dbAction = $this->dbUrl;
         $serviceName = $this->serviceName;
-        
+
         $schemaStruct = '{  
                         "resource":[  
                            {  
@@ -112,29 +105,27 @@ class ApiTest extends TestCase
                      }';
         $schemaObj = json_decode($schemaStruct, true);
         $this->json('POST', $url.$serviceName.'/'.$dbAction, $schemaObj)
-              ->seeJson(['message'=>"Data has been added to serviceTable table succefully",
-                    'payload'=>[],'status_code'=>609]);
+              ->seeJson(['message' => 'Data has been added to serviceTable table succefully',
+                    'payload'      => [], 'status_code' => 609, ]);
 
-//                //to be moved to testQueryData 
+//                //to be moved to testQueryData
 //         $url = $this->subUrl;
 //        $dbAction  = $this->dbUrl;
 //        $serviceName = $this->serviceName;
-//        
+//
 //        $schemaObj = json_decode($schemaStruct, true);
 //        $this->visit( $url.$serviceName.'/db'.
 //                '?table='.$this->serviceTable)
 //              ->seeJson(['message'=>"Data has been added to serviceTable table succefully",
 //                    'payload'=>[],'status_code'=>609]);
-//     
-
-        
+//
     }
-    
+
     public function testAddData()
     {
         //silence is golden
     }
-    
+
     public function testGetData()
     {
         //silence is golden
