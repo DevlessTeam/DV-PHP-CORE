@@ -37,7 +37,7 @@ class UserController extends Controller
             DLH::flash('Welcome Back', 'success');
             return redirect('services');
         } else {
-            Session::flash('error', 'Incorrect login credentials');
+            Session::flash('success', 'Incorrect login credentials');
             return back();
         }
     }

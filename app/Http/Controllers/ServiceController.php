@@ -239,7 +239,6 @@ class ServiceController extends Controller
     */
     public function service(Request $request, $service, $resource)
     {
-      
          //check token and keys
         $this->_devlessCheckHeaders($request);
 

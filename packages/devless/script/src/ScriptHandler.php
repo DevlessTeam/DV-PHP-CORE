@@ -9,14 +9,15 @@ use App\Helpers\Messenger as messenger;
 class ScriptHandler
 {
 
-     /*
+    /**
      * Call on services from within scripts and views
      *
-     * @param json $payload request payload
+     * @param $json_payload
      * @param string $service_name
      * @param string $resource
      * @param string $method
      * @return array|object
+     * @internal param json $payload request payload
      */
     public function internal_services($json_payload, $service_name, $resource, $method)
     {
@@ -37,7 +38,7 @@ class ScriptHandler
         
     }
 
-     /*
+     /**
      * script execution sandbox
      *
      * @param string $resource name of resource belonging to a service
