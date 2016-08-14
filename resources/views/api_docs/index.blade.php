@@ -191,11 +191,12 @@
 
             //Handles URL generation
             var service_name;
+            var service_id;
             $('#service').change(function () {
                 $('#table').html('');
                 $('#operation').prop('selectedIndex',0);
                 service_name = $('#service option:selected').text();
-                var service_id = $('#service option:selected').val();
+                service_id = $('#service option:selected').val();
 
                 $.get('console/'+service_id, function(data) {
                     var table = data;
@@ -239,7 +240,8 @@
                     $('#api_url').val('api/v1/service/'+service_name+'/script');
 
                 } else {
-                    $.get('/console/'+table_name+'/schema', function (data) {
+                    $.get('/console/'+service_id+'/'+table_name+'/schema', function (data) {
+                      console.log(data);
                         var schema = data;
                         var values = {};
                         for (var i = 0; i < schema.length; i++) {
