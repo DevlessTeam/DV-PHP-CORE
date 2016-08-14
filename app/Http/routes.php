@@ -29,7 +29,7 @@ Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
 
     #check system status
     Route::get('status', function ()    {
-        
+
         return ['status_code'=>111, 'message'=>'healthy','payload'=>[]];
     });
 
@@ -53,19 +53,19 @@ Route::group(['middleware' => 'user.auth'], function () {
 
  #change token
 Route::patch('generatetoken','AppController@token');
-  
+
   #app views
   Route::resource('app','AppController');
 
-  
-  #destroy table 
+
+  #destroy table
   #Route::delete('destroy_table', 'SystemApiController@delete_table');
 
   #api_doc views
   Route::get('console', 'ApiDocController@index');
   Route::get('console/{console?}', 'ApiDocController@edit');
-  Route::get('console/{schema?}/schema', 'ApiDocController@schema');
-  Route::get('console/{script?}/script', 'ApiDocController@script');
+  Route::get('console/schema/{schema?}', 'ApiDocController@schema');
+  Route::get('console/{service_id?}/{table?}/schema', 'ApiDocController@schema');
 
   #privacy
   Route::get('privacy', 'PrivacyController@index');

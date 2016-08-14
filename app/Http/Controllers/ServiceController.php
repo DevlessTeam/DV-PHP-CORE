@@ -213,9 +213,9 @@ class ServiceController extends Controller
 
     /**
      * download service packages
-     * @param $request
      * @param $filename
-     *
+     * @return
+     * @internal param $request
      */
     public function download_service_package($filename)
     {
@@ -231,15 +231,16 @@ class ServiceController extends Controller
     }
 
     /**
-    * All api calls go through here
-    * @param array  $request request params
-    * @param string  $service  service to be accessed
-    * @param string $resource resource to be accessed
-    * @return Response
-    */
+     * All api calls go through here
+     * @param array|Request $request request params
+     * @param string $service service to be accessed
+     * @param string $resource resource to be accessed
+     * @return Response
+     * @internal param $newServiceElements
+     */
     public function service(Request $request, $service, $resource)
     {
-      
+
          //check token and keys
         $this->_devlessCheckHeaders($request);
 
@@ -251,12 +252,14 @@ class ServiceController extends Controller
 
     }
 
-     /**
+    /**
      * Refer request to the right service and resource
-     * @param array  $request request params
-     * @param string  $service  service to be accessed
+     * @param array $request request params
+     * @param $service_name
      * @param string $resource resource to be accessed
+     * @param bool $internal_access
      * @return Response
+     * @internal param string $service service to be accessed
      */
     public function resource($request, $service_name, $resource, $internal_access = false)
     {
@@ -286,16 +289,18 @@ class ServiceController extends Controller
     }
 
 
-
     /**
      * assign request to a devless service .
      *
-     * @param string $service name of service to be access
-     * @param  string  $resource
+     * @param $service_name
+     * @param  string $resource
      * @param array $method http verb
-     * @param array $parameter contains all parameters passed from route
-     * @param boolean $internal_service true if service is being called internally
+     * @param null $parameters
+     * @param bool $internal_access
      * @return Response
+     * @internal param string $service name of service to be access
+     * @internal param array $parameter contains all parameters passed from route
+     * @internal param bool $internal_service true if service is being called internally
      */
     public function assign_to_service(
         $service_name,
@@ -368,7 +373,7 @@ class ServiceController extends Controller
         }
     }
 
-    /*
+    /**
      *check if service exists
      *
      * @param string $service_name name of service
@@ -387,12 +392,13 @@ class ServiceController extends Controller
 
     }
 
-    /*
+    /**
      * get parameters set in from request
      *
      * @param string $method reuquest method type
      * @param array $request request parameters
      * return array of parameters
+     * @return array|mixed
      */
     public function get_params($method, $request)
     {
@@ -407,7 +413,7 @@ class ServiceController extends Controller
         return $parameters;
     }
 
-    /*
+    /**
      * get and convert resource_access_right to array
      * @param object $service service payload
      * @return array resource access right
@@ -435,10 +441,11 @@ class ServiceController extends Controller
         }
     }
 
-    /*
+    /**
      * check user access right
-     * @param object $service service payload
-     * @return boolean
+     * @param $access_type
+     * @return bool
+     * @internal param object $service service payload
      */
     public function check_resource_access_right_type($access_type)
     {
@@ -457,7 +464,7 @@ class ServiceController extends Controller
         return true;
     }
 
-    /*
+    /**
      * operations to execute before assigning action to resource
      * @param string $resource
      * @params array $payload
@@ -465,25 +472,25 @@ class ServiceController extends Controller
      */
     public function before_assigning_service_action($resource, $payload)
     {
-        
+
         $originalPayload = [];
         $originalPayload['payload'] = $payload;
         $originalPayload['resource'] = $resource;
-        
+
         if ($resource == 'script') {
-            
+
             return $originalPayload;
         }
 
         $result = Helper::execute_pre_function($payload);
         $result['resource'] = $resource;
-        
+
         return ($result['state'])? $result : $originalPayload;
 
 
     }
 
-    /*
+    /**
      * opreations to execute after service resource is executed
      * @param string $service
      * @prams string $resource
@@ -493,10 +500,10 @@ class ServiceController extends Controller
     public function after_executing_service_action($service, $resource, $response)
     {
          if ($resource == 'script') {
-            
+
             return $response;
          }
-        
+
         $originalResponse = $response;
 
         $output = Helper::execute_post_function($service, $response);

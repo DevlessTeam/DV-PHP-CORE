@@ -328,11 +328,12 @@ class Helper
                 break;
             }
         }
+       $script =  (isset($payload['script']))? $payload['script'] :'';
+        eval($script);
         
-        (isset($functionToExec))?eval($functionToExec) : '';
-        
-        $payload = (function_exists($functionToExecName))? 
+         (function_exists($functionToExecName))? 
                 $functionToExecName($payload): $payload;
+        
         $result['payload'] = $payload;
         $result['state'] = true;
         return $result;

@@ -2,12 +2,8 @@
 
 namespace Devless\Schema;
 
-use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\Helpers\Helper;
-use App\Exceptions\Handler as error;
-use Illuminate\Filesystem\Filesystem as files;
+use Illuminate\Http\Request;
 use App\Helpers\Response as Response;
 use \Illuminate\Database\Schema\Blueprint as Blueprint;
 use App\Http\Controllers\ServiceController as Service;
@@ -36,11 +32,12 @@ class DbHandler
     ];
 
 
-    /*
-    * access db functions based on request method type
-    * @param string resource name $resource
-    * @param array payload $payload
-    */
+    /**
+     * access db functions based on request method type
+     * @param string resource name $resource
+     * @param array payload $payload
+     * @return \App\Helpers\json|\Illuminate\Http\Response
+     */
     public function access_db($resource, $payload)
     {
         $payload['user_id'] = "";
@@ -122,11 +119,11 @@ class DbHandler
     }
 
     /**
-    * Update the specified resource in storage.
-    * @param  string  $resource
-    * @param array $payload payload
-    * @return
-    */
+     * Update the specified resource in storage.
+     * @param  string $resource
+     * @param array $payload payload
+     * @return \App\Helpers\json
+     */
     public function update($resource, $payload)
     {
         $connector = $this->_connector($payload);
@@ -344,13 +341,13 @@ class DbHandler
         }
     }
 
-/**
-*Create a service table
-*
-* @param array resource
-* @param  array $payload
-* @return true
-*/
+    /**
+    * Create a service table
+    *
+    * @param array resource
+    * @param  array $payload
+    * @return true
+    */
     public function create_schema($resource, array $payload)
     {
         $service_name = $payload['service_name'];
@@ -390,13 +387,13 @@ class DbHandler
         }
     }
 
-/**
-*check if field exist
-*
-* @param column fields (array)  $field
-* @param  table_name   $table_name
-* @return true
-*/
+    /**
+     * check if field exist
+     *
+     * @param column fields (array)  $field
+     * @return true
+     * @internal param table_name $table_name
+     */
     public function field_type_exist($field)
     {
 
@@ -414,12 +411,12 @@ class DbHandler
         }
     }
 
-/**
-* check column constraints
-*
-* @param  column fields (array)  $field
-* @return int
-*/
+    /**
+    * check column constraints
+    *
+    * @param  column fields (array)  $field
+    * @return int
+    */
     public function check_column_constraints($field)
     {
         #create column with default and reference
@@ -437,13 +434,13 @@ class DbHandler
         }
     }
 
-/**
-* Update the specified resource in storage.
-*
-* @param  array $field
-* @param  object $table
-* @return object
-*/
+    /**
+    * Update the specified resource in storage.
+    *
+    * @param  array $field
+    * @param  object $table
+    * @return object
+    */
     public function column_generator($field, $table, $db_type)
     {
         $column_type = $this->check_column_constraints($field);
@@ -477,6 +474,18 @@ class DbHandler
         }
     }
 
+
+    /**
+     * Devless database connection socket
+     * @param $driver
+     * @param $host
+     * @param $database
+     * @param $username
+     * @param $password
+     * @param string $charset
+     * @param string $prefix
+     * @param string $collation
+     */
     public function db_socket(
         $driver,
         $host,
@@ -505,12 +514,14 @@ class DbHandler
         }
         \Config::set('database.connections.DYNAMIC_DB_CONFIG', $conn);
     }
-/*
-* access different database connections
-*
-* @param $payload request parameters
-* @return boolean
-*/
+
+    /**
+     * access different database connections
+     *
+     * @param $connector_params
+     * @return bool
+     * @internal param Request $payload parameters
+     */
     private function _connector($connector_params)
     {
 
@@ -544,14 +555,18 @@ class DbHandler
         return true;
     }
 
-/*
-* get related tables
-* @params $table_name
-* @param $payload request parameters
-* @params $wanted_relationships names fo table to get
-* @params $db db connection
-* @return array
-*/
+    /**TODO:needs serious refactoring
+     * get related tables
+     * @params $table_name
+     * @param $payload request parameters
+     * @param $table_name
+     * @param $output
+     * @param $wanted_related_tables
+     * @param $db
+     * @return array
+     * @params $wanted_relationships names fo table to get
+     * @params $db db connection
+     */
     private function _get_related_tables(
         $payload,
         $table_name,
@@ -619,13 +634,14 @@ class DbHandler
         return true;
     }
 
-/*
-*Get table meta
-*
-* @param string  $service_id
-*
-* @return array
-*/
+    /**
+     *Get table meta
+     *
+     * @param $table_name
+     * @return array
+     * @internal param string $service_id
+     *
+     */
     private function _get_tableMeta($table_name)
     {
         $tableMeta =\DB::table('table_metas')->
@@ -637,11 +653,12 @@ class DbHandler
         return $tableMeta;
     }
 
-/*
-* Check if a connection can be made to database
-* @param array $connection_params (hostname,username,password,driver,)
-*
-*/
+    /**
+     * Check if a connection can be made to database
+     * @param array $connection_params (hostname,username,password,driver,)
+     *
+     * @return bool
+     */
     public function check_db_connection(array $connection_params)
     {
         $connector = $this->_connector($connection_params);
@@ -650,36 +667,16 @@ class DbHandler
     }
 
 
-/*
-* mandatory db choes from system
-*
-*/
-    private function system_schema_jobs()
-    {
-        $user_cred = Helper::get_authenticated_user_cred();
-        $user_id = $user_cred['id'];
-        $jobs =
-        [
-        'query' => $user_id,
-        'update' => $user_id,
-        'create' => $user_id,
-        'delete' => $user_id,
-        'schema' => '',
-        ];
-        return $jobs;
-    }
-
-/*
-* add user id to payload
-* @param $db_action
-* @param $payload
-* @return $payload || boolean
-*/
+    /**
+     * add user id to payload
+     * @param $db_action
+     * @param $payload
+     * @return mixed $payload || boolean
+     */
     private function set_auth_id_if_required($db_action, $payload)
     {
         $service = new Service();
         $access_type = $payload['resource_access_right'];
-        $authentication_required =
         $access_state =  $service
         ->check_resource_access_right_type($access_type[$db_action]);
 
@@ -691,14 +688,17 @@ class DbHandler
         return $payload;
     }
 
-/*TODO:needs serious refactoring
-* validate entry data against schema field type
-*
-* @param string $table_name
-* @param string $service_id
-* @param array  $field_names
-* @return boolean
-*/
+    /**
+     * validate entry data against schema field type
+     *
+     * @param string $table_name
+     * @param $service_name
+     * @param $table_data
+     * @param bool $check_password
+     * @return bool
+     * @internal param string $service_id
+     * @internal param array $field_names
+     */
     private function _validate_fields(
         $table_name,
         $service_name,
@@ -709,7 +709,6 @@ class DbHandler
         $table_meta = $this->_get_tableMeta($table_name);
         $schema = $table_meta['schema'];
         $hit = 0;
-        $check = 0;
         $count = 0;
 
 
