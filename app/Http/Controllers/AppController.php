@@ -26,12 +26,12 @@ class AppController extends Controller
     }
 
     /**
-    * Update the specified resource in storage.
-    *
-    * @param  int  $id
-    * @param Request $request
-    * @return Response
-    */
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @return Response
+     * @internal param int $id
+     */
     public function update(Request $request)
     {
         $this->validate($request, [

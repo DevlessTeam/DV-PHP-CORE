@@ -5,8 +5,8 @@ namespace Devless\Schema;
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use App\Helpers\Response as Response;
-use \Illuminate\Database\Schema\Blueprint as Blueprint;
 use App\Http\Controllers\ServiceController as Service;
+use \Illuminate\Database\Schema\Blueprint as Blueprint;
 
 class DbHandler
 {
@@ -31,6 +31,19 @@ class DbHandler
         'relation' => 'relation'
     ];
 
+    private $dbActionAssoc = [
+    'GET'    => 'query',
+    'POST'   => 'create',
+    'PATCH'  => 'update',
+    'DELETE' => 'delete',
+    ];
+
+    private $dbActionMethod = [
+    'GET'    => 'db_query',
+    'POST'   => 'add_data',
+    'PATCH'  => 'update',
+    'DELETE' => 'destroy',
+    ];
 
     /**
      * access db functions based on request method type
@@ -42,25 +55,18 @@ class DbHandler
     {
         $payload['user_id'] = "";
 
-        if ($payload['method'] == 'GET') {
-            $db_action = 'query';
-            $payload = $this->set_auth_id_if_required($db_action, $payload);
-            return $this->db_query($resource, $payload);
-        } elseif ($payload['method'] == 'POST') {
-            $db_action = 'create';
-            $payload = $this->set_auth_id_if_required($db_action, $payload);
-            return $this->add_data($resource, $payload);
-        } elseif ($payload['method'] == 'PATCH') {
-            $db_action = 'update';
-            $payload = $this->set_auth_id_if_required($db_action, $payload);
-            return $this->update($resource, $payload);
-        } elseif ($payload['method'] == 'DELETE') {
-            $db_action = 'delete';
-            $payload = $this->set_auth_id_if_required($db_action, $payload);
-            return $this->destroy($resource, $payload);
-        } else {
-            Helper::interrupt(607);
-        }
+        $request = $payload['method'];
+
+        $db_action = (isset($this->dbActionAssoc[$request]))? $this->dbActionAssoc[$request]
+                     : Helper::interrupt(607);
+
+        $payload = $this->set_auth_id_if_required($db_action, $payload);
+
+        $dbActionName = $this->dbActionMethod[$request];
+
+        return $this->$dbActionName($resource, $payload);
+
+
     }
 
     /**
@@ -351,10 +357,10 @@ class DbHandler
     public function create_schema($resource, array $payload)
     {
         $service_name = $payload['service_name'];
-        #connectors mysql pgsql sqlsrv sqlite
+        //connectors mysql pgsql sqlsrv sqlite
         $connector = $this->_connector($payload);
 
-        #dynamically create columns with schema builder
+        //dynamically create columns with schema builder
         $db_type = $this->db_types;
         $table_meta_data = [];
         $new_payload = $payload['params'][0];
@@ -397,7 +403,7 @@ class DbHandler
     public function field_type_exist($field)
     {
 
-        #check if soft data type has equivalent db type
+        //check if soft data type has equivalent db type
         if (!isset($this->db_types[$field['field_type']])) {
              Helper::interrupt(600, $field['field_type'].' does not exist');
         }
@@ -419,7 +425,7 @@ class DbHandler
     */
     public function check_column_constraints($field)
     {
-        #create column with default and reference
+        //create column with default and reference
         if ($field['field_type'] =='reference' && $field['default'] !== null) {
             return 4;
         } elseif ($field['field_type'] =='reference' && $field['default'] == null) {
@@ -435,12 +441,13 @@ class DbHandler
     }
 
     /**
-    * Update the specified resource in storage.
-    *
-    * @param  array $field
-    * @param  object $table
-    * @return object
-    */
+     * generate column data query .
+     *
+     * @param  array $field
+     * @param  object $table
+     * @param $db_type
+     * @return object
+     */
     public function column_generator($field, $table, $db_type)
     {
         $column_type = $this->check_column_constraints($field);
@@ -589,7 +596,6 @@ class DbHandler
                     $each_->ref_table !== "") {
                         $referenced_table = $each_->ref_table;
                         $indexed_referenced_table = $service_name.'_'.$referenced_table;
-                        $indexed_table = $service_name.'_'.$table_name[0];
                         $referenced_id = ($output[$indexed_referenced_table.'_id']);
                         if ($payload['user_id'] !== "") {
                             $user_id = $payload['user_id'];
@@ -738,10 +744,6 @@ class DbHandler
             $count++;
         }
         $hit = 1;
-
-
-
-
 
         if ($hit == 0) {
             Helper::interrupt(617);
