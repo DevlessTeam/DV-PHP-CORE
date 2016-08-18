@@ -2,18 +2,12 @@
 
 namespace App\Helpers;
 
-use Validator;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response as res;
-use App\Helpers\Response as Response;
-use App\Helpers\Messenger as messenger;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Hash;
-use App\User;
-use App\Exceptions\Handler as handler;
-use App\Helpers\JWT as jwt;
-use Response as output;
 use Session;
+use App\User;
+use Validator;
+use Response as output;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /*
  * @author eddymens <eddymens@devless.io>
@@ -188,8 +182,7 @@ class Helper
             }
             return $params;
         } else {
-            $param = "";
-            return $param;
+            return "";
         }
     }
 
@@ -216,12 +209,21 @@ class Helper
         return Hash::check($user_input, $hash);
     }
 
+    /**
+     * Check if current user is admin
+     * @return mixed
+     */
     public static function is_admin_login()
     {
 
         return Session()->has('user');
     }
 
+    /**
+     * Get authenticated user cred
+     * @param $access_state
+     * @return array
+     */
     public static function get_authenticated_user_cred($access_state)
     {
         $user_token = request()->header('devless-user-token');
@@ -250,6 +252,11 @@ class Helper
     }
 
 
+    /**
+     * Verify user token
+     * @param $user_token
+     * @return mixed
+     */
     public static function verify_user_token($user_token)
     {
         $secret = config('app')['key'];
@@ -283,11 +290,20 @@ class Helper
         return $user_data;
     }
 
+    /**
+     * Generate session timestamp
+     * @return bool|string
+     */
     public static function session_timestamp()
     {
         return date('Y-m-d H:i:s');
     }
 
+    /**
+     * Get all functions in a script
+     * @param $script
+     * @return bool
+     */
     public static function get_script_functions($script)
     {
         
@@ -309,8 +325,15 @@ class Helper
         }
            
     }
-   
-   
+
+
+    /**
+     * General function executor
+     * @param $crudeFunctions
+     * @param $functionToExecName
+     * @param $payload
+     * @return mixed
+     */
     public static function execute_function($crudeFunctions, $functionToExecName, $payload)
     {
         if (!$crudeFunctions) {
@@ -340,9 +363,11 @@ class Helper
     }
 
 
-   /*
-   * execute pre script to alter payload  
-   */
+    /**
+     * Execute pre script function
+     * @param $payload
+     * @return mixed
+     */
     public static function  execute_pre_function($payload)
     {
         $result = [];
@@ -356,7 +381,13 @@ class Helper
        
        
     }
-   
+
+    /**
+     * Execute post script function
+     * @param $serviceName
+     * @param $response
+     * @return mixed
+     */
     public static function execute_post_function($serviceName, $response)
     {
        

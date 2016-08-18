@@ -2,21 +2,16 @@
 
 namespace App\Helpers;
 
-use Alchemy\Zippy\Zippy;
-use Session;
-use App\Helpers\JWT as jwt;
 use DB;
 use Hash;
-use App\App;
+use Session;
 use App\User as user;
-use App\Helpers\Helper as Helper;
-use Illuminate\Support\Facades\Storage as Storage;
+use Alchemy\Zippy\Zippy;
 use Devless\Schema\DbHandler as DvSchema;
-use App\Helpers\Response as Response;
 
 /* 
-*@author Eddymens <eddymens@devless.io
- */
+* @author Eddymens <eddymens@devless.io
+*/
 
 class DevlessHelper extends Helper
 {
@@ -25,7 +20,7 @@ class DevlessHelper extends Helper
      * set paramters for notification plate
      *
      * @param type $message
-     * @param type $message_color
+     * @param type|string $message_color
      */
     public static function flash($message, $message_color = "#736F6F")
     {
@@ -44,7 +39,7 @@ class DevlessHelper extends Helper
         session::flash('flash_message', $message);
     }
     
-    /*
+    /**
      * get service_component from db 
      * @param $service_name 
      * @return service_object
@@ -67,9 +62,9 @@ class DevlessHelper extends Helper
                 
         return $service_components;
     }
-    
-    /*Get all service attributes
-     * @return json service_object
+
+    /** Get all service attributes
+     * @return string
      */
     public static function get_all_services()
     {
@@ -84,24 +79,44 @@ class DevlessHelper extends Helper
         return $services_components;
        
     }
-    
+
+
+    /**
+     * Delete table is exists
+     * @param $table_name
+     * @return bool
+     */
     public static function purge_table($table_name)
     {
 
-        \Schema::dropIfExists($table_name);
+        return (\Schema::dropIfExists($table_name))? true: false;
         
     }
 
-    public static function convert_to_json($service_components)
+
+    /**
+     * convert string to json
+     * @param $incomingArray
+     * @return string
+     * @internal param $incommingArray
+     * @internal param $service_components
+     */
+    public static function convert_to_json($incomingArray)
     {
             
-        $formatted_service_components = json_encode($service_components, true);
+        $formatted_json = json_encode($incomingArray, true);
         
-        return $formatted_service_components;
+        return $formatted_json;
         
     }
-    
-    
+
+
+    /**
+     * Zip a folder
+     * @param $service_folder_path
+     * @param $extension
+     * @return string
+     */
     public static function zip_folder($service_folder_path, $extension)
     {
         $dvext = $extension;
@@ -123,8 +138,14 @@ class DevlessHelper extends Helper
         return $folder_name.$dvext;
 
     }
-    
-    
+
+
+    /**
+     * Extract package or services
+     * @param string $service_folder_path
+     * @param bool $delete_package
+     * @return bool|string
+     */
     public static function expand_package($service_folder_path, $delete_package)
     {
             $zip = new \ZipArchive;
@@ -135,6 +156,7 @@ class DevlessHelper extends Helper
             //convert from srv/pkg to zip
             $new_service_folder_path = preg_replace('"\.srv$"', '.zip', $service_folder_path);
             $new_service_folder_path = preg_replace('"\.pkg$"', '.zip', $service_folder_path);
+
             $state_or_payload =
                  (rename($service_folder_path, $new_service_folder_path))? $new_service_folder_path
                     :false;
@@ -154,8 +176,15 @@ class DevlessHelper extends Helper
             $exported_folder_path = config('devless')['views_directory'].$folder_name;
             return $exported_folder_path;
     }
-    
-    
+
+
+    /**
+     * Add services to folder
+     * @param $service_name
+     * @param $service_components
+     * @param null $package_name
+     * @return string
+     */
     public static function add_service_to_folder(
         $service_name,
         $service_components,
@@ -198,7 +227,12 @@ class DevlessHelper extends Helper
         return $temporal_package_path;
             
     }
-    
+
+    /**
+     * Copy a whole folder
+     * @param $src
+     * @param $dst
+     */
     public static function recurse_copy($src, $dst)
     {
         $dir = opendir($src);
@@ -214,7 +248,12 @@ class DevlessHelper extends Helper
         }
         closedir($dir);
     }
-    
+
+    /**
+     * Delete given directory
+     * @param $dir
+     * @return bool
+     */
     public static function deleteDirectory($dir)
     {
         if (!file_exists($dir)) {
@@ -237,7 +276,12 @@ class DevlessHelper extends Helper
 
         return rmdir($dir);
     }
-    
+
+    /**
+     * Get file path from storage
+     * @param $filename
+     * @return bool|string
+     */
     public static function get_file($filename)
     {
         
@@ -248,7 +292,12 @@ class DevlessHelper extends Helper
 
         return $file_path;
     }
-    
+
+    /**
+     * Install service and or package given service path
+     * @param $service_path
+     * @return bool
+     */
     public static function install_service($service_path)
     {
         $builder = new DvSchema();
@@ -316,10 +365,11 @@ class DevlessHelper extends Helper
         return true;
     }
     
-    /*
+
+    /**
      * install views into service_views dir
      * @param $service_name
-     * @return boolean
+     * @return bool
      */
     public static function install_views($service_name)
     {
@@ -380,11 +430,12 @@ class DevlessHelper extends Helper
         
         
     }
-    
+
     /**
      * get authenticated user details
-     * @param type $request
+     * @param $payload
      * @return alphanum
+     * @internal param type $request
      */
     public function get_profile($payload)
     {
@@ -401,15 +452,16 @@ class DevlessHelper extends Helper
         
         return false;
     }
-    
-     /**
+
+    /**
      * authenticate and login devless users
-     * @param type $request
+     * @param $payload
      * @return alphanum
+     * @internal param type $request
      */
     public function login($payload)
     {
-        
+
         $fields = get_defined_vars();
         
         $user =  new user();
@@ -449,47 +501,51 @@ class DevlessHelper extends Helper
        
         
     }
-    
-     /**
+
+    /**
      * update user devless project
-     * @param type $request
-     * @return boolean
+     * @param $payload
+     * @return bool
+     * @internal param type $request
      */
     public function update_profile($payload)
     {
         if ($token = Helper::get_authenticated_user_cred(true)) {
             $user =  new user();
-            
-            if (isset($payload['session_token'])) {
-                unset($payload['session_token']);
+
+            //unchangeable fields
+            $indices = [
+                'session_token',
+                'status',
+                'role'
+            ];
+
+            $unset = function($payload, $index) {
+                unset($payload[$index]);
+            };
+
+            foreach($indices as $index) {
+
+                (isset($payload[$index]))? $unset($payload, $index) : false;
             }
-            if (isset($payload['session_time'])) {
-                unset($payload['session_time']);
-            }
-            if (isset($payload['status'])) {
-                unset($payload['status']);
-            }
-            
-            if (isset($payload['role'])) {
-                unset($payload['role']);
-            }
-            
+
+
             if (isset($payload['password'])) {
                 $payload['password'] = Helper::password_hash($payload['password']);
             }
-            
+
             if ($user::where('id', $token['id'])->update($payload)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
-     /**
+
+    /**
      * delete a devless user
-     * @param type $request
-     * @return boolean
+     * @return bool
+     * @internal param type $request
      */
     public function delete()
     {
@@ -502,8 +558,8 @@ class DevlessHelper extends Helper
         
         return false;
     }
-    
-    
+
+
     public function logout()
     {
         if ($token = Helper::get_authenticated_user_cred(true)) {
@@ -517,44 +573,36 @@ class DevlessHelper extends Helper
     }
 
 
-
-
-
-
     /**
      * set session token
-     * @param type $request
-     * @return boolean
+     * @param $payload
+     * @param $user_id
+     * @return bool
+     * @internal param type $request
      */
     public function set_session_token($payload, $user_id)
     {
-        
+
         $jwt = new jwt();
         $secret = config('app')['key'];
-       
+
         $payload = json_encode($payload);
-       
+
         if (DB::table('users')->where('id', $user_id)->update(['session_time'=>Helper::session_timestamp()])) {
             return $jwt->encode($payload, $secret);
         } else {
             return false;
         }
-      
-       
+
+
     }
-    
-    public function decode_session_token($payload)
-    {
-        $jwt = new jwt();
-        $secret = config('app')['key'];
-       
-        if ($user_token == "null") {
-            Self::interrupt(633, null, [], true);
-        }
-        
-        return $jwt->decode($payload, $secret, true);
-    }
-    
+
+    /**
+     * check if needed auth fields are satisfied
+     * @param $fields
+     * @param $user
+     * @return mixed
+     */
     public function auth_fields_handler($fields, $user)
     {
         

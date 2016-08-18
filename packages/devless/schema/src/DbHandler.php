@@ -688,7 +688,7 @@ class DbHandler
         $service = new Service();
         $access_type = $payload['resource_access_right'];
         $access_state =  $service
-        ->check_resource_access_right_type($access_type[$db_action]);
+            ->check_resource_access_right_type($access_type[$db_action]);
 
         $user_cred = Helper::get_authenticated_user_cred($access_state);
 
