@@ -196,9 +196,9 @@ class Helper
     /**
      * Hash password
      * @param type $password
-     * @param type $hash
-     * @param array $rules
      * @return string
+     * @internal param type $hash
+     * @internal param array $rules
      */
     public static function password_hash($password)
     {

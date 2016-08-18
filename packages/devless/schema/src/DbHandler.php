@@ -66,11 +66,10 @@ class DbHandler
 
         return $this->$dbActionName($resource, $payload);
 
-
     }
 
     /**
-    * create new table schema .
+    * create new table schema.
     * @param  \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Response
     * api/v1/schema
@@ -196,6 +195,7 @@ class DbHandler
         hasTable($table_name)) {
             Helper::interrupt(634);
         }
+        //
         if ($payload['user_id'] !== "") {
             $user_id = $payload['user_id'];
             $destroy_query = '$db->table("'.$table_name.'")->where("devless_user_id",'.$user_id.')';
@@ -204,9 +204,13 @@ class DbHandler
         }
 
         if (isset($payload['params'][0]['params'][0]['drop'])) {
-            if ($payload['params'][0]['params'][0]['drop'] == true) {
+            if ($payload['params'][0]['params'][0]['drop'] == true ) {
+
                 \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
-                \DB::table('table_metas')->where('table_name', $ORG_table_name)->delete();
+
+                (Helper::is_admin_login())?
+                \DB::table('table_metas')->where('table_name', $ORG_table_name)->delete(): Helper::interrupt(620);
+
                 return Response::respond(613, 'dropped table successfully');
                 $task = 'drop';
             }
