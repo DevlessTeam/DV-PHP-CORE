@@ -351,10 +351,10 @@ class Helper
                 break;
             }
         }
-       $script =  (isset($payload['script']))? $payload['script'] :'';
+        $script =  (isset($payload['script']))? $payload['script'] :'';
         eval($script);
         
-         (function_exists($functionToExecName))? 
+         (function_exists($functionToExecName))?
                 $functionToExecName($payload): $payload;
         
         $result['payload'] = $payload;
@@ -368,7 +368,7 @@ class Helper
      * @param $payload
      * @return mixed
      */
-    public static function  execute_pre_function($payload)
+    public static function execute_pre_function($payload)
     {
         $result = [];
         $script = $payload['script'];

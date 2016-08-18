@@ -17,7 +17,7 @@ class UserAuthentication
     public function handle($request, Closure $next)
     {
         if (!Session::has('user')) {
-          return redirect('/');
+            return redirect('/');
         }
 
         return $next($request);

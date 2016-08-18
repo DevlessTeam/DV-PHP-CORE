@@ -30,8 +30,8 @@ function DvAssetPath($payload, $partialAssetPath)
     return $assetPath;
 }
 /**
- * allow access to admin only 
- * 
+ * allow access to admin only
+ *
  * @param boolean $message
  */
 function DvAdminOnly($message = "Sorry you dont have access to this page")
@@ -39,12 +39,12 @@ function DvAdminOnly($message = "Sorry you dont have access to this page")
     $helper = app('App\Helpers\Helper');
     $is_admin = $helper->is_admin_login();
     
-    ($is_admin)? true : $helper->interrupt(1001,$message);
+    ($is_admin)? true : $helper->interrupt(1001, $message);
     
 }
 /**
  * Get url for specified page name
- * 
+ *
  * @param type $payload
  * @param type $pageName
  * @return string
@@ -53,14 +53,14 @@ function DvNavigate($payload, $pageName)
 {
     $pagePath = url('/').'/service/'.$payload['service_name'].'/view/'.$pageName;
     
-    return  $pagePath ; 
+    return  $pagePath ;
 }
 
 
 
 /**
  * Redirect to url after time
- * 
+ *
  * @param type $url
  * @param type $time
  */
@@ -69,4 +69,3 @@ function DvRedirect($url, $time)
     header('refresh:'.$time.';url='.$url);
   
 }
-	

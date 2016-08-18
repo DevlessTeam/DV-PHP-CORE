@@ -28,63 +28,63 @@ Route::get(config('devless')['assets_route_name'].'/{sublevels?}', 'ViewControll
 Route::group(['prefix' => 'api/v1','middleware' => 'cors'], function () {
 
     #check system status
-    Route::get('status', function ()    {
+    Route::get('status', function () {
 
         return ['status_code'=>111, 'message'=>'healthy','payload'=>[]];
     });
 
     #system logs
-    Route::get('log', function ()    {
+    Route::get('log', function () {
         return "no log available";
     });
 
     #service end points
-    Route::get('service/{service}/{resource}','ServiceController@service');
-    Route::post('service/{service}/{resource}','ServiceController@service');
-    Route::patch('service/{service}/{resource}','ServiceController@service');
-    Route::delete('service/{service}/{resource}','ServiceController@service');
+    Route::get('service/{service}/{resource}', 'ServiceController@service');
+    Route::post('service/{service}/{resource}', 'ServiceController@service');
+    Route::patch('service/{service}/{resource}', 'ServiceController@service');
+    Route::delete('service/{service}/{resource}', 'ServiceController@service');
 
 });
 
 #routes available to only login users
 Route::group(['middleware' => 'user.auth'], function () {
   #service views
-  Route::resource('services','ServiceController');
+    Route::resource('services', 'ServiceController');
 
  #change token
-Route::patch('generatetoken','AppController@token');
+    Route::patch('generatetoken', 'AppController@token');
 
   #app views
-  Route::resource('app','AppController');
+    Route::resource('app', 'AppController');
 
 
   #destroy table
   #Route::delete('destroy_table', 'SystemApiController@delete_table');
 
   #api_doc views
-  Route::get('console', 'ApiDocController@index');
-  Route::get('console/{console?}', 'ApiDocController@edit');
-  Route::get('console/schema/{schema?}', 'ApiDocController@schema');
-  Route::get('console/{service_id?}/{table?}/schema', 'ApiDocController@schema');
+    Route::get('console', 'ApiDocController@index');
+    Route::get('console/{console?}', 'ApiDocController@edit');
+    Route::get('console/schema/{schema?}', 'ApiDocController@schema');
+    Route::get('console/{service_id?}/{table?}/schema', 'ApiDocController@schema');
 
   #privacy
-  Route::get('privacy', 'PrivacyController@index');
-  Route::get('privacy/{serviceId?}/get', 'PrivacyController@show');
-  Route::put('privacy/{privacy}', 'PrivacyController@update');
+    Route::get('privacy', 'PrivacyController@index');
+    Route::get('privacy/{serviceId?}/get', 'PrivacyController@show');
+    Route::put('privacy/{privacy}', 'PrivacyController@update');
 
   #Service Migrator
-  Route::resource("migrate","ServiceMigrationController");
+    Route::resource("migrate", "ServiceMigrationController");
 
 
 
   #Download Route
-  Route::get('download/{filename}', 'ServiceController@download_service_package')
+    Route::get('download/{filename}', 'ServiceController@download_service_package')
     ->where('filename', '[A-Za-z0-9\-\_\.]+');
 
   #Datatable Route
-  Route::get('datatable', 'DatatableController@index');
-  Route::get('datatable/{datatable?}', 'DatatableController@create');
-  Route::get('datatable/{entries?}/entries', 'DatatableController@show');
+    Route::get('datatable', 'DatatableController@index');
+    Route::get('datatable/{datatable?}', 'DatatableController@create');
+    Route::get('datatable/{entries?}/entries', 'DatatableController@show');
 
 
 

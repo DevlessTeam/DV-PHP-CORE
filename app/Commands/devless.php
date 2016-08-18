@@ -1,29 +1,29 @@
  <?php
 
-namespace App\Commands;
+ namespace App\Commands;
 
-use App\Commands\Command;
-use Illuminate\Contracts\Bus\SelfHandling;
+ use App\Commands\Command;
+ use Illuminate\Contracts\Bus\SelfHandling;
 
-class devless extends Command implements SelfHandling
-{
-    /**
+ class devless extends Command implements SelfHandling
+ {
+     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        //
-    }
+     public function __construct()
+     {
+         //
+        }
 
-    /**
+      /**
      * Execute the command.
      *
      * @return void
      */
-    public function handle()
-    {
-        //
+        public function handle()
+        {
+            //
+        }
     }
-}

@@ -40,8 +40,8 @@ class DevlessHelper extends Helper
     }
     
     /**
-     * get service_component from db 
-     * @param $service_name 
+     * get service_component from db
+     * @param $service_name
      * @return service_object
      */
     public static function get_service_components($service_name)
@@ -520,12 +520,11 @@ class DevlessHelper extends Helper
                 'role'
             ];
 
-            $unset = function($payload, $index) {
+            $unset = function ($payload, $index) {
                 unset($payload[$index]);
             };
 
-            foreach($indices as $index) {
-
+            foreach ($indices as $index) {
                 (isset($payload[$index]))? $unset($payload, $index) : false;
             }
 
@@ -641,8 +640,8 @@ class DevlessHelper extends Helper
     }
     
     /**
-     * Get assets directory for a service 
-     * 
+     * Get assets directory for a service
+     *
      * @param type $serviceName
      * @param type $assetsSubPath
      * @return string

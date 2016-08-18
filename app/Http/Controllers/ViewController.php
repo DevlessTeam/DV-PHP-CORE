@@ -73,10 +73,10 @@ class ViewController extends Controller
         
         $splitUrl = $sub = explode('/', $url, 3);
         $route = $splitUrl[0];
-        $serviceName = (isset($splitUrl[1]))? $splitUrl[1] :  ''; 
+        $serviceName = (isset($splitUrl[1]))? $splitUrl[1] :  '';
         $assetsSubPath = (isset($splitUrl[2]))? $splitUrl[2] :  '';
                 
-        $asset_file_path = 
+        $asset_file_path =
                 \App\Helpers\DevlessHelper::assetsDirectory($serviceName, $assetsSubPath);
         
         $asset_file_extension = pathinfo($asset_file_path, PATHINFO_EXTENSION);

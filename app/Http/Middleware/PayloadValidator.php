@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use App\Helpers\Helper;
 use Closure;
 
-class PayloadValidator 
+class PayloadValidator
 {
         
     /**
@@ -16,11 +16,9 @@ class PayloadValidator
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {  
+    {
       
             return $next($request);
 
-        }
-
-      
     }
+}

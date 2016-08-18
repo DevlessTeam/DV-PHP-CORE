@@ -30,7 +30,7 @@ class Handler extends ExceptionHandler
      * @return void
      */
     public function report(Exception $e)
-    {   
+    {
         
         return parent::report($e);
     }
@@ -49,15 +49,13 @@ class Handler extends ExceptionHandler
         
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
-        } else if ($e instanceof HttpException) {
-             
-             
-             if ($e->getTrace()[0]['function'] == 'interrupt') {
-                 $statusCode = $e->getTrace()[0]['args'][0];
-             }
+        } elseif ($e instanceof HttpException) {
+            if ($e->getTrace()[0]['function'] == 'interrupt') {
+                $statusCode = $e->getTrace()[0]['args'][0];
+            }
         }
         
-        $payload = ($statusCode == 700)? 
+        $payload = ($statusCode == 700)?
                 [ 'file' => $e->getFile(), 'line' => $e->getLine()] : [];
                                         
         $response = Response::respond($statusCode, $e->getMessage(), $payload);
@@ -66,5 +64,3 @@ class Handler extends ExceptionHandler
                 
     }
 }
-
-                    

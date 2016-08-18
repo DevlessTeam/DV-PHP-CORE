@@ -204,8 +204,7 @@ class DbHandler
         }
 
         if (isset($payload['params'][0]['params'][0]['drop'])) {
-            if ($payload['params'][0]['params'][0]['drop'] == true ) {
-
+            if ($payload['params'][0]['params'][0]['drop'] == true) {
                 \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
 
                 (Helper::is_admin_login())?

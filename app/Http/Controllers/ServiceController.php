@@ -478,7 +478,6 @@ class ServiceController extends Controller
         $originalPayload['resource'] = $resource;
 
         if ($resource == 'script') {
-
             return $originalPayload;
         }
 
@@ -499,10 +498,9 @@ class ServiceController extends Controller
      */
     public function after_executing_service_action($service, $resource, $response)
     {
-         if ($resource == 'script') {
-
+        if ($resource == 'script') {
             return $response;
-         }
+        }
 
         $originalResponse = $response;
 
