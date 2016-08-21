@@ -73,19 +73,20 @@ class Helper
      * convert soft types to validator rules
      * @var string
      */
-    private static $validator_type =
+    public static $validator_type =
     [
-        'text'       => 'string',
-        'textarea'   => 'string',
-        'integer'    => 'integer',
+        'boolean'    => 'boolean',
         'decimal'    => 'numeric',
+        'email'      => 'email',
+        'integer'    => 'integer',
         'password'   => 'alphanum',
         'percentage' => 'integer',
-        'url'        => 'url',
-        'timestamp'  => 'integer',
-        'boolean'    => 'boolean',
-        'email'      => 'email',
         'reference'  => 'integer',
+        'text'       => 'string',
+        'textarea'   => 'string',
+        'timestamp'  => 'integer',
+        'url'        => 'url',
+
     ];
     
     public static $preFunctionName = 'DvBefore';
