@@ -200,7 +200,7 @@ class Helper
      */
     public static function password_hash($password)
     {
-        return bcrypt($password);
+        return Hash::make($password);
     }
 
     /**

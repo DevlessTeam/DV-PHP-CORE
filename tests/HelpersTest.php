@@ -82,19 +82,45 @@ class HelpersTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * Field validator test.
+     * url query string test.
      *
      * @return void
      */
-    public function testQuery_string()
+    public function testQueryString()
     {
         $_SERVER['QUERY_STRING'] = 'name=edmond&name=charles&age=12';
+
         $output = Helper::query_string();
         $this->assertEquals($output['name'][0],'edmond');
         $this->assertEquals($output['name'][1],'charles');
         $this->assertEquals($output['age'][0],'12');
 
+        //query string when parameters are not set
+        unset($_SERVER['QUERY_STRING']);
+        $output = Helper::query_string();
+        $this->assertEquals('', $output);
+
+
+    }
+
+
+    /**
+     * password and compare hash test.
+     *
+     * @return void
+     */
+    public function testpasswordHash_and_CompareHash()
+    {
+        $password = 'password';
+        $hashedPassword = Helper::password_hash($password);
+
+        $output = Helper::compare_hash($password, $hashedPassword);
+
+        $this->assertTrue($output);
     }
 }
+
+
+
 
 
