@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Service;
 use Illuminate\Http\Request;
 use App\Service as serviceModel;
@@ -290,7 +289,7 @@ class ServiceController extends Controller
 
 
     /**
-     * assign request to a devless service .
+     * assign request to a devless resource eg: db, view, script, schema, .
      *
      * @param $service_name
      * @param  string $resource
@@ -321,21 +320,21 @@ class ServiceController extends Controller
             if ($is_it_public == 0 || $is_admin == true ||
                 $accessed_internally == true) {
                 $resource_access_right = $this->_get_resource_access_right($current_service);
+
                 $payload =
                 [
-                'id'=>$current_service->id,
-                'service_name' =>$current_service->name,
-                'database' =>$current_service->database,
-                'driver' => $current_service->driver,
-                'hostname' => $current_service->hostname,
-                'username' => $current_service->username,
-                'password' => $current_service->password,
-                'calls' =>  $current_service->calls,
-                #'public' => $current_service->public,
-                'resource_access_right' =>$resource_access_right,
-                'script' => $current_service->script,
-                'method' => $method,
-                'params' => $parameters,
+                    'id'=>$current_service->id,
+                    'service_name' =>$current_service->name,
+                    'database' =>$current_service->database,
+                    'driver' => $current_service->driver,
+                    'hostname' => $current_service->hostname,
+                    'username' => $current_service->username,
+                    'password' => $current_service->password,
+                    'calls' =>  $current_service->calls,
+                    'resource_access_right' =>$resource_access_right,
+                    'script' => $current_service->script,
+                    'method' => $method,
+                    'params' => $parameters,
                 ];
 
                 // run script before assigning to method
@@ -347,17 +346,17 @@ class ServiceController extends Controller
                 switch ($resource) {
                     case 'db':
                         $db = new Db();
-                        return $db->access_db($resource, $payload);
+                        return $db->access_db($payload);
                     break;
 
                     case 'script':
                         $script = new script;
-                        return $script->run_script($resource, $payload);
+                        return $script->run_script($payload);
                     break;
 
                     case 'schema':
                         $db = new Db();
-                        return $db->create_schema($resource, $payload);
+                        return $db->create_schema($payload);
                     break;
 
                     case 'view':
@@ -442,7 +441,7 @@ class ServiceController extends Controller
     }
 
     /**
-     * check user access right
+     * check user resource  action access right eg: query db or write to table
      * @param $access_type
      * @return bool
      * @internal param object $service service payload

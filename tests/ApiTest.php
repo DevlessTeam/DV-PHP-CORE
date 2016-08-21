@@ -1,7 +1,4 @@
 <?php
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ApiTest extends TestCase
 {
@@ -115,17 +112,6 @@ class ApiTest extends TestCase
               ->seeJson(['message'=>"Data has been added to serviceTable table succefully",
                     'payload'=>[],'status_code'=>609]);
 
-//                //to be moved to testQueryData 
-//         $url = $this->subUrl;
-//        $dbAction  = $this->dbUrl;
-//        $serviceName = $this->serviceName;
-//        
-//        $schemaObj = json_decode($schemaStruct, true);
-//        $this->visit( $url.$serviceName.'/db'.
-//                '?table='.$this->serviceTable)
-//              ->seeJson(['message'=>"Data has been added to serviceTable table succefully",
-//                    'payload'=>[],'status_code'=>609]);
-//     
 
         $url = $this->subUrl;
 

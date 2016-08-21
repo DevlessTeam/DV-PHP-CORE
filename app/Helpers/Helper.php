@@ -95,7 +95,7 @@ class Helper
     * @param  stack  $stack
     * @return string or null
     **/
-    public static function outputMessage($stack)
+    public static function responseMessage($stack)
     {
         if (isset(self::$MESSAGE_HEAP[$stack])) {
             return self::$MESSAGE_HEAP[$stack];
@@ -114,7 +114,7 @@ class Helper
      */
     public static function interrupt($stack, $message = null, $payload = [])
     {
-        $message = ($message !==null)? $message : self::outputMessage($stack);
+        $message = ($message !==null)? $message : self::responseMessage($stack);
         throw new HttpException(500, $message, null, [], $stack);
     }
 
@@ -135,7 +135,7 @@ class Helper
             $rules = explode("|", $check_against);
 
             foreach ($rules as $rule) {
-            //convert each rule and re-combine
+                //convert each rule and re-combine
                 if (!isset(Helper::$validator_type[$rule])) {
                      Helper::interrupt(618, 'validator type '.$rule.
                             ' does not exist');
@@ -172,7 +172,10 @@ class Helper
     public static function query_string()
     {
         if (isset($_SERVER['QUERY_STRING'])) {
-            $query  = explode('&', $_SERVER['QUERY_STRING']);
+
+            $originalQueryString = $_SERVER['QUERY_STRING'];
+
+            $query  = explode('&', $originalQueryString);
             $params = array();
             foreach ($query as $param) {
                 if ($param !== "") {
@@ -180,6 +183,7 @@ class Helper
                       $params[urldecode($name)][] = urldecode($value);
                 }
             }
+
             return $params;
         } else {
             return "";

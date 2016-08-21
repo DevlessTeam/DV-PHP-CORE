@@ -8,14 +8,13 @@
  class devless extends Command implements SelfHandling
  {
      /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
+      * Create a new command instance.
+      *
+      */
      public function __construct()
      {
          //
-        }
+     }
 
       /**
      * Execute the command.

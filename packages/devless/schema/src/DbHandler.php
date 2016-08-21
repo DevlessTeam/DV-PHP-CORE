@@ -46,12 +46,12 @@ class DbHandler
     ];
 
     /**
-     * access db functions based on request method type
+     * Access db functions based on request method type
      * @param string resource name $resource
      * @param array payload $payload
      * @return \App\Helpers\json|\Illuminate\Http\Response
      */
-    public function access_db($resource, $payload)
+    public function access_db($payload)
     {
         $payload['user_id'] = "";
 
@@ -64,12 +64,12 @@ class DbHandler
 
         $dbActionName = $this->dbActionMethod[$request];
 
-        return $this->$dbActionName($resource, $payload);
+        return $this->$dbActionName($payload);
 
     }
 
     /**
-    * create new table schema.
+    * Create new table schema.
     * @param  \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Response
     * api/v1/schema
@@ -79,17 +79,17 @@ class DbHandler
         //
         $resource = 'schema';
 
-        $this->create_schema($resource, $request['resource']);
+        $this->create_schema($request['resource']);
     }
 
     /**
-    * query for data from db
-    *
-    * @param  string  $resource
-    * @return \Illuminate\Http\Response
-    *
-    */
-    public function add_data($resource, $payload)
+     * query for data from db
+     *
+     * @param $payload
+     * @return \Illuminate\Http\Response
+     * @internal param string $resource
+     */
+    public function add_data($payload)
     {
         $service_id = $payload['id'];
         $service_name = $payload['service_name'];
@@ -125,11 +125,11 @@ class DbHandler
 
     /**
      * Update the specified resource in storage.
-     * @param  string $resource
      * @param array $payload payload
      * @return \App\Helpers\json
+     * @internal param string $resource
      */
-    public function update($resource, $payload)
+    public function update($payload)
     {
         $connector = $this->_connector($payload);
         $db =   \DB::connection('DYNAMIC_DB_CONFIG');
@@ -176,13 +176,13 @@ class DbHandler
     }
 
     /**
-    * Remove the specified resource from storage.
-    *
-    * @param  string  $resource
-    * @param array $payload payload from request
-    * @return \Illuminate\Http\Response
-    */
-    public function destroy($resource, $payload)
+     * Remove the specified resource from storage.
+     *
+     * @param array $payload payload from request
+     * @return \Illuminate\Http\Response
+     * @internal param string $resource
+     */
+    public function destroy($payload)
     {
         $connector = $this->_connector($payload);
         $db =   \DB::connection('DYNAMIC_DB_CONFIG');
@@ -250,13 +250,13 @@ class DbHandler
 
 
     /**
-    * query a table.
-    *
-    * @param  string  $resource
-    * @param array $payload payload from request
-    * @return \Illuminate\Http\Response
-    */
-    public function db_query($resource, $payload)
+     * query a table.
+     *
+     * @param array $payload payload from request
+     * @return \Illuminate\Http\Response
+     * @internal param string $resource
+     */
+    public function db_query($payload)
     {
         $service_name = $payload['service_name'];
         $connector = $this->_connector($payload);
@@ -353,11 +353,10 @@ class DbHandler
     /**
     * Create a service table
     *
-    * @param array resource
     * @param  array $payload
     * @return true
     */
-    public function create_schema($resource, array $payload)
+    public function create_schema($payload)
     {
         $service_name = $payload['service_name'];
         //connectors mysql pgsql sqlsrv sqlite
@@ -671,7 +670,6 @@ class DbHandler
     public function check_db_connection(array $connection_params)
     {
         $connector = $this->_connector($connection_params);
-        //dd(\DB::connection('DYNAMIC_DB_CONFIG')->table('kofi')->delete());
         return true;
     }
 
