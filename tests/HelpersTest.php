@@ -1,7 +1,7 @@
 <?php
 
 use App\Helpers\Helper;
-
+use Session;
 class HelpersTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -105,19 +105,22 @@ class HelpersTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * password and compare hash test.
+     * sessionTimestamp test.
      *
      * @return void
      */
-    public function testpasswordHash_and_CompareHash()
+    public function testSessionTimestamp()
     {
-        $password = 'password';
-        $hashedPassword = Helper::password_hash($password);
+        $sessionTime = Helper::session_timestamp();
 
-        $output = Helper::compare_hash($password, $hashedPassword);
+        $formattedSessionTime = date('Y-m-d',strtotime($sessionTime));
 
-        $this->assertTrue($output);
+        $this->assertEquals(date('Y-m-d'), $formattedSessionTime);
+
+
     }
+
+  
 }
 
 

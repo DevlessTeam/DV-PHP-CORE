@@ -221,7 +221,7 @@ class Helper
     public static function is_admin_login()
     {
 
-        return Session()->has('user');
+        return (Session()->has('user'))? true :false;
     }
 
     /**
