@@ -81,7 +81,20 @@ class HelpersTest extends PHPUnit_Framework_TestCase
     }
 
 
-    
+    /**
+     * Field validator test.
+     *
+     * @return void
+     */
+    public function testQuery_string()
+    {
+        $_SERVER['QUERY_STRING'] = 'name=edmond&name=charles&age=12';
+        $output = Helper::query_string();
+        $this->assertEquals($output['name'][0],'edmond');
+        $this->assertEquals($output['name'][1],'charles');
+        $this->assertEquals($output['age'][0],'12');
+
+    }
 }
 
 
