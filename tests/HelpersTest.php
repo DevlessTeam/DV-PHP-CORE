@@ -2,6 +2,7 @@
 
 use App\Helpers\Helper;
 use Session;
+
 class HelpersTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -65,8 +66,7 @@ class HelpersTest extends PHPUnit_Framework_TestCase
 
         $fieldTypes  = Helper::$validator_type;
 
-        foreach($fieldTypes as $fieldType => $vaidatorKey){
-
+        foreach ($fieldTypes as $fieldType => $vaidatorKey) {
             //check against valid field types
             $output = Helper::field_check($validSample[$fieldType], $fieldType);
             $this->assertTrue($output);
@@ -75,7 +75,6 @@ class HelpersTest extends PHPUnit_Framework_TestCase
             $output = Helper::field_check($invalidSample[$fieldType], $fieldType);
             $type   = gettype($output);
             $this->assertEquals('object', $type);
-
         }
 
     }
@@ -91,9 +90,9 @@ class HelpersTest extends PHPUnit_Framework_TestCase
         $_SERVER['QUERY_STRING'] = 'name=edmond&name=charles&age=12';
 
         $output = Helper::query_string();
-        $this->assertEquals($output['name'][0],'edmond');
-        $this->assertEquals($output['name'][1],'charles');
-        $this->assertEquals($output['age'][0],'12');
+        $this->assertEquals($output['name'][0], 'edmond');
+        $this->assertEquals($output['name'][1], 'charles');
+        $this->assertEquals($output['age'][0], '12');
 
         //query string when parameters are not set
         unset($_SERVER['QUERY_STRING']);
@@ -113,7 +112,7 @@ class HelpersTest extends PHPUnit_Framework_TestCase
     {
         $sessionTime = Helper::session_timestamp();
 
-        $formattedSessionTime = date('Y-m-d',strtotime($sessionTime));
+        $formattedSessionTime = date('Y-m-d', strtotime($sessionTime));
 
         $this->assertEquals(date('Y-m-d'), $formattedSessionTime);
 
@@ -136,10 +135,4 @@ EOF;
         $this->assertEquals($output['parameters'][0], '()');
 
     }
-
 }
-
-
-
-
-
