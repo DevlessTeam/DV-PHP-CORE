@@ -2,21 +2,22 @@
 
 namespace Devless\Script;
 
-use App\Http\Controllers\ServiceController as Service;
-use \App\Helpers\Helper as Helper;
+use App\Helpers\Helper as Helper;
 use App\Helpers\Messenger as messenger;
+use App\Http\Controllers\ServiceController as Service;
 
 class ScriptHandler
 {
-
     /**
-     * Call on services from within scripts and views
+     * Call on services from within scripts and views.
      *
      * @param $json_payload
      * @param string $service_name
      * @param string $resource
      * @param string $method
+     *
      * @return array|object
+     *
      * @internal param json $payload request payload
      */
     public function internal_services($json_payload, $service_name, $resource, $method)
@@ -26,8 +27,8 @@ class ScriptHandler
 
         //prepare request payload
         $request = [
-        "resource" => $json_payload['resource'],
-        "method" => $method
+        'resource' => $json_payload['resource'],
+        'method'   => $method,
         ];
 
         session()->put('script_call', 'true');
@@ -35,35 +36,34 @@ class ScriptHandler
         session()->forget('script_call');
 
         return json_decode(json_encode(messenger::message(), true), true);
-
     }
 
-     /**
-     * script execution sandbox
+    /**
+     * script execution sandbox.
      *
      * @param string $resource name of resource belonging to a service
-     * @param array $payload request parameters
+     * @param array  $payload  request parameters
+     *
      * @return array
      */
     public function run_script($resource, $payload)
     {
-
         $service = new Service();
 
         //checking right access control right
         $access_type = $payload['resource_access_right'];
-        $access_state = $service->check_resource_access_right_type($access_type["script"]);
+        $access_state = $service->check_resource_access_right_type($access_type['script']);
         $user_cred = Helper::get_authenticated_user_cred($access_state);
 
         //available internal params
         $EVENT = [
-            'method' => $payload['method'],
-            'params' => $payload['params'],
-            'script'  => $payload['script'],
-            'user_id' => $user_cred['id'],
-            'user_token' => $user_cred['token']
+            'method'     => $payload['method'],
+            'params'     => $payload['params'],
+            'script'     => $payload['script'],
+            'user_id'    => $user_cred['id'],
+            'user_token' => $user_cred['token'],
         ];
-        $script_class = new ScriptHandler;
+        $script_class = new self();
 
 //NB: position matters here
         $code = <<<EOT
@@ -81,6 +81,5 @@ EOT;
         $result = eval($code);
 
         return $result;
-
     }
 }

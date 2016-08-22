@@ -6,20 +6,18 @@ class ApiTest extends TestCase
     private $subUrl;
     private $dbUrl;
     private $scriptUrl;
-    
+
     public function __construct()
     {
-         $this->apiUrl = '/api/v1/';
-    
-         $this->subUrl  = $this->apiUrl.'service/';
-         
-         $this->dbUrl = 'db/';
-         
-         $this->scriptUrl = '/script/';
-         
-    
+        $this->apiUrl = '/api/v1/';
+
+        $this->subUrl = $this->apiUrl.'service/';
+
+        $this->dbUrl = 'db/';
+
+        $this->scriptUrl = '/script/';
     }
-    
+
     /**
      * Temporal test for complete service creation cycle.
      *
@@ -28,26 +26,23 @@ class ApiTest extends TestCase
     public function testLog()
     {
         $subUrl = $this->apiUrl;
-        
+
         $this->visit($subUrl.'log')
              ->see('no log available');
-             
-        
     }
-    
+
     public function testHealth()
     {
         $subUrl = $this->apiUrl;
-        
+
         $this->visit($subUrl.'status')
              ->see('healthy');
-     
     }
-    
+
     public function testSchema()
     {
         $url = $this->subUrl;
-        $dbAction  = $this->dbUrl;
+        $dbAction = $this->dbUrl;
         $serviceName = $this->serviceName;
 
         $schemaStruct = '{  
@@ -83,15 +78,15 @@ class ApiTest extends TestCase
         $schemaObj = json_decode($schemaStruct, true);
 
         $this->json('POST', $url.$serviceName.'/schema', $schemaObj)
-              ->seeJsonEquals(['message'=>'Created table successfully',
-                  'payload'=>[],'status_code'=>606]);
-        
-        
+              ->seeJsonEquals(['message' => 'Created table successfully',
+                  'payload'              => [], 'status_code' => 606, ]);
+
+
         //to be moved to testAddData
          $url = $this->subUrl;
-        $dbAction  = $this->dbUrl;
+        $dbAction = $this->dbUrl;
         $serviceName = $this->serviceName;
-        
+
         $schemaStruct = '{  
                         "resource":[  
                            {  
@@ -109,13 +104,13 @@ class ApiTest extends TestCase
                      }';
         $schemaObj = json_decode($schemaStruct, true);
         $this->json('POST', $url.$serviceName.'/'.$dbAction, $schemaObj)
-              ->seeJson(['message'=>"Data has been added to serviceTable table succefully",
-                    'payload'=>[],'status_code'=>609]);
+              ->seeJson(['message' => 'Data has been added to serviceTable table succefully',
+                    'payload'      => [], 'status_code' => 609, ]);
 
 
         $url = $this->subUrl;
 
-        $dbAction  = $this->dbUrl;
+        $dbAction = $this->dbUrl;
 
         $serviceName = $this->serviceName;
 
@@ -124,24 +119,23 @@ class ApiTest extends TestCase
         $deleteObj = json_decode($deleteStruct, true);
 
         $this->json('DELETE', $url.$serviceName.'/'.$dbAction, $deleteObj)
-            ->seeJson(['message'=>"The table or field has been delete",
-                'payload'=>[],'status_code'=>636]);
+            ->seeJson(['message' => 'The table or field has been delete',
+                'payload'        => [], 'status_code' => 636, ]);
 
         $deleteStruct = '{"resource":[{"name":"'.$this->serviceTable.'","params":[{"drop":true}]}]}';
 
         $deleteObj = json_decode($deleteStruct, true);
 
         $this->json('DELETE', $url.$serviceName.'/'.$dbAction, $deleteObj)
-            ->seeJson(['message'=>"dropped table successfully",
-                'payload'=>[],'status_code'=>613]);
-
+            ->seeJson(['message' => 'dropped table successfully',
+                'payload'        => [], 'status_code' => 613, ]);
     }
-    
+
     public function testAddData()
     {
         //silence is golden
     }
-    
+
     public function testGetData()
     {
         //silence is golden
@@ -149,6 +143,5 @@ class ApiTest extends TestCase
 
     public function testDestroy()
     {
-
     }
 }

@@ -23,8 +23,6 @@ class ScriptServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        
         $this->app->make('Devless\Script\ScriptHandler');
-    
     }
 }
