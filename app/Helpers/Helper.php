@@ -2,12 +2,12 @@
 
 namespace App\Helpers;
 
-use Hash;
-use Session;
 use App\User;
-use Validator;
+use Hash;
 use Response as output;
+use Session;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Validator;
 
 /*
  * @author eddymens <eddymens@devless.io>
@@ -17,17 +17,17 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class Helper
 {
     /**
-     * application error heap
+     * application error heap.
+     *
      * @var type
      */
-
     public static $MESSAGE_HEAP =
     [
-        #JSON HEAP
+        //JSON HEAP
         400 => 'Sorry something went wrong with payload(check json format)',
-        #SCHEMA HEAP
+        //SCHEMA HEAP
         500 => 'first schema error',
-        # error code for custom messages
+        // error code for custom messages
         600 => 'Data type does not exist',
         601 => 'Reference column column name does not exist',
         602 => 'Database schema could not be created',
@@ -67,10 +67,11 @@ class Helper
         636 => 'The table or field has been deleted',
         700 => 'Internal system error',
     ];
-    
-    
+
+
     /**
-     * convert soft types to validator rules
+     * convert soft types to validator rules.
+     *
      * @var string
      */
     public static $validator_type =
@@ -88,43 +89,49 @@ class Helper
         'url'        => 'url',
 
     ];
-    
+
     public static $preFunctionName = 'DvBefore';
     public static $postFunctionName = 'DvAfter';
+
     /**
-     * fetch message based on status code
-    * @param  stack  $stack
-    * @return string or null
-    **/
+     * fetch message based on status code.
+     *
+     * @param stack $stack
+     *
+     * @return string or null
+     **/
     public static function responseMessage($stack)
     {
         if (isset(self::$MESSAGE_HEAP[$stack])) {
             return self::$MESSAGE_HEAP[$stack];
         } else {
-              return null;
+            return;
         }
     }
 
     /**
-     *  Abort execution and show message
+     *  Abort execution and show message.
      *
-     * @param  error code  $stack
-     * @param  output message  $message
-     * @param  additional data $payload
+     * @param error code      $stack
+     * @param output message  $message
+     * @param additional data $payload
+     *
      * @return json
      */
     public static function interrupt($stack, $message = null, $payload = [])
     {
-        $message = ($message !==null)? $message : self::responseMessage($stack);
+        $message = ($message !== null) ? $message : self::responseMessage($stack);
         throw new HttpException(500, $message, null, [], $stack);
     }
 
-     /**
+    /**
      * check the validility of a field type
-     * uses laravel validator
-     * @param string   $field_value
+     * uses laravel validator.
+     *
+     * @param string                             $field_value
      * @param string parameters to check against $check_against
-     * @return boolean
+     *
+     * @return bool
      */
     public static function field_check($field_value, $check_against)
     {
@@ -133,25 +140,25 @@ class Helper
 
         //check if multiple rules are used
         if (strpos($check_against, '|')) {
-            $rules = explode("|", $check_against);
+            $rules = explode('|', $check_against);
 
             foreach ($rules as $rule) {
                 //convert each rule and re-combine
-                if (!isset(Helper::$validator_type[$rule])) {
-                     Helper::interrupt(618, 'validator type '.$rule.
+                if (!isset(self::$validator_type[$rule])) {
+                    self::interrupt(618, 'validator type '.$rule.
                             ' does not exist');
                 }
-                $check_against = Helper::$validator_type[$rule]."|" ;
+                $check_against = self::$validator_type[$rule].'|';
             }
         } else {
             //single validator rule convert field type to lowercase
             $check_against = strtolower($check_against);
 
-            if (!isset(Helper::$validator_type[$check_against])) {
-                 Helper::interrupt(618, 'validator type '.$check_against.
+            if (!isset(self::$validator_type[$check_against])) {
+                self::interrupt(618, 'validator type '.$check_against.
                             ' does not exist');
             }
-            $check_against = Helper::$validator_type[$check_against] ;
+            $check_against = self::$validator_type[$check_against];
         }
 
 
@@ -166,8 +173,9 @@ class Helper
         }
     }
 
-     /**
-     * get url parameters
+    /**
+     * get url parameters.
+     *
      * @return array
      **/
     public static function query_string()
@@ -175,25 +183,28 @@ class Helper
         if (isset($_SERVER['QUERY_STRING'])) {
             $originalQueryString = $_SERVER['QUERY_STRING'];
 
-            $query  = explode('&', $originalQueryString);
-            $params = array();
+            $query = explode('&', $originalQueryString);
+            $params = [];
             foreach ($query as $param) {
-                if ($param !== "") {
+                if ($param !== '') {
                     list($name, $value) = explode('=', $param, 2);
-                      $params[urldecode($name)][] = urldecode($value);
+                    $params[urldecode($name)][] = urldecode($value);
                 }
             }
 
             return $params;
         } else {
-            return "";
+            return '';
         }
     }
 
     /**
-     * Hash password
+     * Hash password.
+     *
      * @param type $password
+     *
      * @return string
+     *
      * @internal param type $hash
      * @internal param array $rules
      */
@@ -203,10 +214,12 @@ class Helper
     }
 
     /**
-     * compare password hash
+     * compare password hash.
+     *
      * @param string $user_input
      * @param string $hash
-     * @return boolean
+     *
+     * @return bool
      */
     public static function compare_hash($user_input, $hash)
     {
@@ -214,18 +227,20 @@ class Helper
     }
 
     /**
-     * Check if current user is admin
+     * Check if current user is admin.
+     *
      * @return mixed
      */
     public static function is_admin_login()
     {
-
-        return (Session()->has('user'))? true :false;
+        return (Session()->has('user')) ? true : false;
     }
 
     /**
-     * Get authenticated user cred
+     * Get authenticated user cred.
+     *
      * @param $access_state
+     *
      * @return array
      */
     public static function get_authenticated_user_cred($access_state)
@@ -235,15 +250,15 @@ class Helper
         if (self::is_admin_login() || $access_state == false) {
             $admin = User::where('role', 1)->first();
             $user_cred['id'] = $admin->id;
-            $user_cred['token'] = "non for admin";
+            $user_cred['token'] = 'non for admin';
         } elseif ($user_token !== null || $access_state == false) {
             $user_data = self::verify_user_token($user_token);
 
             if (isset($user_data->id)) {
                 $user_cred =
                     [
-                        'id' =>$user_data->id,
-                        'token' =>$user_data->session_token,
+                        'id'    => $user_data->id,
+                        'token' => $user_data->session_token,
 
                     ];
             } else {
@@ -252,13 +267,15 @@ class Helper
         } else {
             self::interrupt(628, null, [], true);
         }
+
         return $user_cred;
     }
 
-
     /**
-     * Verify user token
+     * Verify user token.
+     *
      * @param $user_token
+     *
      * @return mixed
      */
     public static function verify_user_token($user_token)
@@ -269,7 +286,7 @@ class Helper
 
         $jwt_payload = json_decode($jwt->decode($user_token, $secret, true));
 
-        if ($user_token == "null") {
+        if ($user_token == 'null') {
             Self::interrupt(633, null, [], true);
         }
         $user_data = User::where('session_token', $jwt_payload->token)
@@ -280,12 +297,12 @@ class Helper
             $interval = $d1->diff($d2);
 
             if ($interval->h >= 1 || $interval->days > 0) {
-                $user_data->session_token = "";
+                $user_data->session_token = '';
                 $user_data->save();
                 Self::interrupt(633, null, [], true);
             }
 
-            $user_data->session_time = Helper::session_timestamp();
+            $user_data->session_time = self::session_timestamp();
             $user_data->save();
         }
 
@@ -295,7 +312,8 @@ class Helper
     }
 
     /**
-     * Generate session timestamp
+     * Generate session timestamp.
+     *
      * @return bool|string
      */
     public static function session_timestamp()
@@ -304,13 +322,14 @@ class Helper
     }
 
     /**
-     * Get all functions in a script
+     * Get all functions in a script.
+     *
      * @param $script
+     *
      * @return bool
      */
     public static function get_script_functions($script)
     {
-        
         $regex = '~
         function                 #function keyword
         \s+                      #any number of whitespaces 
@@ -323,53 +342,56 @@ class Helper
 
 
         if (preg_match_all($regex, $script, $matches)) {
-             return $matches;
+            return $matches;
         } else {
             return false;
         }
-           
     }
 
-
     /**
-     * General function executor
+     * General function executor.
+     *
      * @param $crudeFunctions
      * @param $functionToExecName
      * @param $payload
+     *
      * @return mixed
      */
     public static function execute_function($crudeFunctions, $functionToExecName, $payload)
     {
         if (!$crudeFunctions) {
             $result['state'] = false;
+
             return $result;
         }
-       
+
         $functions = $crudeFunctions[0];
         $functionNames = $crudeFunctions[1];
         $preFunction = false;
-      
+
         foreach ($functionNames as $key => $functionName) {
             if ($functionName == $functionToExecName) {
                 $functionToExec = $functions[$key];
                 break;
             }
         }
-        $script =  (isset($payload['script']))? $payload['script'] :'';
+        $script = (isset($payload['script'])) ? $payload['script'] : '';
         eval($script);
-        
-         (function_exists($functionToExecName))?
-                $functionToExecName($payload): $payload;
-        
+
+        (function_exists($functionToExecName)) ?
+                $functionToExecName($payload) : $payload;
+
         $result['payload'] = $payload;
         $result['state'] = true;
+
         return $result;
     }
 
-
     /**
-     * Execute pre script function
+     * Execute pre script function.
+     *
      * @param $payload
+     *
      * @return mixed
      */
     public static function execute_pre_function($payload)
@@ -377,34 +399,32 @@ class Helper
         $result = [];
         $script = $payload['script'];
         $functionToExecName = self::$preFunctionName;
-       
-        $crudeFunctions = Helper::get_script_functions($script);
-        $results = Helper::execute_function($crudeFunctions, $functionToExecName, $payload);
-       
+
+        $crudeFunctions = self::get_script_functions($script);
+        $results = self::execute_function($crudeFunctions, $functionToExecName, $payload);
+
         return $results;
-       
-       
     }
 
     /**
-     * Execute post script function
+     * Execute post script function.
+     *
      * @param $serviceName
      * @param $response
+     *
      * @return mixed
      */
     public static function execute_post_function($serviceName, $response)
     {
-       
         $result = [];
         $serviceObj = app('\App\Http\Controllers\ServiceController')->service_exist($serviceName);
-       
+
         $script = $serviceObj->script;
         $functionToExecName = self::$postFunctionName;
-       
-        $crudeFunctions = Helper::get_script_functions($script);
-        $results = Helper::execute_function($crudeFunctions, $functionToExecName, $response);
-       
+
+        $crudeFunctions = self::get_script_functions($script);
+        $results = self::execute_function($crudeFunctions, $functionToExecName, $response);
+
         return $results;
-    
     }
 }
