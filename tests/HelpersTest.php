@@ -120,7 +120,23 @@ class HelpersTest extends PHPUnit_Framework_TestCase
 
     }
 
-  
+    public function testGetScriptFunctions()
+    {
+        $script  = <<< EOF
+                function funcName(){
+                
+                    echo "happy coding";
+                }
+
+EOF;
+
+        $output = Helper::get_script_functions($script);
+
+        $this->assertEquals($output['function_name'][0], 'funcName');
+        $this->assertEquals($output['parameters'][0], '()');
+
+    }
+
 }
 
 
