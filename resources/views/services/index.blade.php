@@ -41,7 +41,8 @@
 
                         <div class="btn-group" role="group">
                             <a type="button" href="{{ route('services.edit', $service->id) }}" class="btn btn-default">Edit</a>
-                            <a type="button" href="/service/{{$service->name}}/view/index/" target="_blank" class="btn btn-default">Console</a>
+                            <a type="button" href="/service/{{$service->name}}/view/index/" target="_blank" rel="noopener"
+                               class="btn btn-default">Console</a>
                              <form action="{{ route('services.destroy', $service->id) }}" method="POST" style="display: inline;" onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false };">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -70,7 +71,8 @@
                        You have no Services, lets walkthrough a quick tutorial on how to create a Service. Click on Getting Started to begin.
                    </div>
                    <div class="modal-footer">
-                       <a href="http://devless.io/#!/tutorial/" target="_blank" class="btn btn-primary">Getting Started</a>
+                       <a href="http://devless.io/#!/tutorial/" target="_blank" rel="noopener"
+                          class="btn btn-primary">Getting Started</a>
                    </div>
                </div>
            </div>
