@@ -4,24 +4,23 @@ use Devless\Schema as Schema;
 
 class DbhandlerTest extends PHPUnit_Framework_TestCase
 {
-
     private $dbHandler;
 
     private $payload =
     [
-        'id'=>1,
-        'service_name' =>'serviceName',
-        'database' =>'default',
-        'driver' => 'sqlite',
-        'hostname' => '',
-        'username' => '',
-        'password' => '',
-        'calls' =>  0,
-        'resource_access_right' =>'',
-        'script' => 'echo ""',
-        'method' => 'GET',
-        'user_id' => 1,
-        'params' => ['table' => 'table_name'],
+        'id'                    => 1,
+        'service_name'          => 'serviceName',
+        'database'              => 'default',
+        'driver'                => 'sqlite',
+        'hostname'              => '',
+        'username'              => '',
+        'password'              => '',
+        'calls'                 => 0,
+        'resource_access_right' => '',
+        'script'                => 'echo ""',
+        'method'                => 'GET',
+        'user_id'               => 1,
+        'params'                => ['table' => 'table_name'],
 
     ];
 
