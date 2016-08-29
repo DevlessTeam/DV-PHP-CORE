@@ -587,7 +587,7 @@ class DevlessHelper extends Helper
 
         $payload = json_encode($payload);
 
-        if (DB::table('users')->where('id', $user_id)->update(['session_time'=>Helper::session_timestamp()])) {
+        if (DB::table('users')->where('id', $user_id)->update(['session_time'=>elper::session_timestamp()])) {
             return $jwt->encode($payload, $secret);
         } else {
             return false;

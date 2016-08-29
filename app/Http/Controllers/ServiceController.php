@@ -143,16 +143,12 @@ class ServiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-                $views = new DvViews();
-
         if ($service = Service::findOrFail($id)) {
             if ($request->input('call_type') =='solo') {
                 $service->script = $request->input('script');
                 $service->save();
                 return Response::respond(626);
             }
-
-
 
                     $service->description = $request->input("description");
                     $service->username = $request->input("username");
@@ -429,11 +425,10 @@ class ServiceController extends Controller
     private function _devlessCheckHeaders($request)
     {
 
-        $is_key_set = ($request->header('Devless-key') == $request['devless_key'])?true : false;
         $is_token_set = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
         $is_admin = Helper::is_admin_login();
 
-        $state = (($is_key_set && $is_token_set) || $is_admin )? true : false;
+        $state = ( $is_token_set || $is_admin )? true : false;
 
         if (!$state) {
              Helper::interrupt(631);

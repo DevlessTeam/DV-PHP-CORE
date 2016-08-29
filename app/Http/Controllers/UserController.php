@@ -81,7 +81,6 @@ class UserController extends Controller
         $app = new App;
         $app->name = $request->input('app_name');
         $app->description = $request->input('app_description');
-        $app->api_key = $request->input('app_key');
         $app->token = $request->input('app_token');
 
         if ($user->save() && $app->save()) {

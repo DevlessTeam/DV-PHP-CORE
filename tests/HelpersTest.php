@@ -1,7 +1,7 @@
 <?php
 
 use App\Helpers\Helper;
-use Session;
+
 class HelpersTest extends PHPUnit_Framework_TestCase
 {
     /**
