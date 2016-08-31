@@ -57,7 +57,7 @@ return [
             'database' => database_path('devless-rec.sqlite3'),
             'prefix'   => '',
         ],
-        
+
         'sqlite_testing' => [
             'driver'   => 'sqlite',
             'database' => ':memory:',

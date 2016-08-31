@@ -23,9 +23,7 @@ class HelperServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        
-        require_once  base_path().'/app/Helpers/snip.php';
-        require_once  base_path().'/app/Helpers/view.php';
-
+        require_once base_path().'/app/Helpers/snip.php';
+        require_once base_path().'/app/Helpers/view.php';
     }
 }

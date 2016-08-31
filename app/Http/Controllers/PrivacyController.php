@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DevlessHelper as DLH;
 use App\Service;
-use App\Http\Requests;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use \App\Helpers\DevlessHelper as DLH;
 
 class PrivacyController extends Controller
 {
@@ -18,6 +16,7 @@ class PrivacyController extends Controller
     public function index()
     {
         $services = Service::all();
+
         return view('privacy.index', compact('services'));
     }
 
@@ -34,7 +33,8 @@ class PrivacyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -45,19 +45,22 @@ class PrivacyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $service = Service::findOrFail($id);
+
         return $service->resource_access_right;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -68,39 +71,43 @@ class PrivacyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         if ($id == 0) {
             DLH::flash('Error Updating Access Rights', 'error');
+
             return back();
         }
         $service = Service::findOrFail($id);
-        $json = array(
-        'query'  =>     $request->input('query'),
-        'create' =>    $request->input('create'),
-        'update' =>    $request->input('update'),
-        'delete' =>    $request->input('delete'),
-        'schema' =>    $request->input('schema'),
-        'script' =>    $request->input('script'),
-        'view'   =>    $request->input('view')
-        );
+        $json = [
+        'query'  => $request->input('query'),
+        'create' => $request->input('create'),
+        'update' => $request->input('update'),
+        'delete' => $request->input('delete'),
+        'schema' => $request->input('schema'),
+        'script' => $request->input('script'),
+        'view'   => $request->input('view'),
+        ];
         $service->resource_access_right = json_encode($json);
         if ($service->save()) {
             DLH::flash('Access Rights Updated Successfully', 'success');
         } else {
             DLH::flash('Error Updating Access Rights', 'error');
         }
+
         return back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

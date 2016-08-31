@@ -11,18 +11,14 @@ class HelpersTest extends PHPUnit_Framework_TestCase
      */
     public function testResponseMessage()
     {
-
         $stack = rand(0, 614);
 
         $outputType = gettype(Helper::responseMessage($stack));
 
-        $assetAgainst = ($stack > 600)? 'string' : 'NULL';
+        $assetAgainst = ($stack > 600) ? 'string' : 'NULL';
 
         $this->assertEquals($assetAgainst, $outputType);
-
-
     }
-
 
     /**
      * Field validator test.
@@ -63,7 +59,7 @@ class HelpersTest extends PHPUnit_Framework_TestCase
 
             ];
 
-        $fieldTypes  = Helper::$validator_type;
+        $fieldTypes = Helper::$validator_type;
 
         foreach($fieldTypes as $fieldType => $vaidatorKey){
 
@@ -73,13 +69,11 @@ class HelpersTest extends PHPUnit_Framework_TestCase
 
             //check against wrong field types
             $output = Helper::field_check($invalidSample[$fieldType], $fieldType);
-            $type   = gettype($output);
+            $type = gettype($output);
             $this->assertEquals('object', $type);
 
         }
-
     }
-
 
     /**
      * url query string test.
@@ -99,10 +93,7 @@ class HelpersTest extends PHPUnit_Framework_TestCase
         unset($_SERVER['QUERY_STRING']);
         $output = Helper::query_string();
         $this->assertEquals('', $output);
-
-
     }
-
 
     /**
      * sessionTimestamp test.
@@ -116,14 +107,29 @@ class HelpersTest extends PHPUnit_Framework_TestCase
         $formattedSessionTime = date('Y-m-d',strtotime($sessionTime));
 
         $this->assertEquals(date('Y-m-d'), $formattedSessionTime);
-
-
     }
 
+<<<<<<< HEAD
   
 }
 
+=======
+    public function testGetScriptFunctions()
+    {
+        $script = <<< 'EOF'
+                function funcName(){
+                
+                    echo "happy coding";
+                }
+>>>>>>> 9ea15b99496b5e04c4df95fece6d0ee76eaf8628
 
 
 
+<<<<<<< HEAD
 
+=======
+        $this->assertEquals($output['function_name'][0], 'funcName');
+        $this->assertEquals($output['parameters'][0], '()');
+    }
+}
+>>>>>>> 9ea15b99496b5e04c4df95fece6d0ee76eaf8628
