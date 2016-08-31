@@ -181,6 +181,7 @@ class Helper
     public static function query_string()
     {
         if (isset($_SERVER['QUERY_STRING'])) {
+
             $originalQueryString = $_SERVER['QUERY_STRING'];
 
             $query = explode('&', $originalQueryString);

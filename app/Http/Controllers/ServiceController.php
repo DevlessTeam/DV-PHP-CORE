@@ -365,9 +365,8 @@ class ServiceController extends Controller
                     break;
 
                     case 'script':
-                        $script = new script();
-
-                        return $script->run_script($payload);
+                        $script = new script;
+                        return $script->run_script($resource, $payload);
                     break;
 
                     case 'schema':
