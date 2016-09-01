@@ -289,8 +289,10 @@ class DbHandler
             }
             $table_name = $service_name.'_'.$payload['params']['table'][0];
 
+            $complete_query = $base_query;
+
             (isset($payload['params']['offset'])) ?
-            $complete_query = $base_query
+            $complete_query = $complete_query
             .'->skip('.$payload['params']['offset'][0].')' :
             false;
 
