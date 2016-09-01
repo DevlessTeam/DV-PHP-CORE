@@ -23,13 +23,15 @@ class BeforeMiddleware
             $request_path = \Request::path();
 
             if ($app_object !== null) {
-                if (isset($app_object->api_key, $app_object->token)) {
-                    $request['devless_key'] = $app_object->api_key;
+
+
+                if (isset($app_object->token)) {
+
                     $request['devless_token'] = $app_object->token;
                 } else {
                     Helper::interrupt(631);
                 }
-            }
+
         } catch (Exception $ex) {
             $app_object = null;
         }

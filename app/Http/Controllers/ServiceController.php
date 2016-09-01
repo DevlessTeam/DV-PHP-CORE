@@ -149,7 +149,9 @@ class ServiceController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $views = new DvViews();
+
 
         if ($service = Service::findOrFail($id)) {
             if ($request->input('call_type') == 'solo') {
@@ -159,15 +161,14 @@ class ServiceController extends Controller
                 return Response::respond(626);
             }
 
+                    $service->description = $request->input("description");
+                    $service->username = $request->input("username");
+                    $service->password = $request->input('password');
+                    $service->database = $request->input('database');
+                    $service->hostname = $request->input('hostname');
+                    $service->driver = $request->input('driver');
+                    $service->active = $request->input("active");
 
-
-            $service->description = $request->input('description');
-            $service->username = $request->input('username');
-            $service->password = $request->input('password');
-            $service->database = $request->input('database');
-            $service->hostname = $request->input('hostname');
-            $service->driver = $request->input('driver');
-            $service->active = $request->input('active');
 
             $connection =
                     [
@@ -446,11 +447,11 @@ class ServiceController extends Controller
 
     private function _devlessCheckHeaders($request)
     {
-        $is_key_set = ($request->header('Devless-key') == $request['devless_key']) ? true : false;
-        $is_token_set = ($request->header('Devless-token') == $request['devless_token']) ? true : false;
+
+        $is_token_set = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
         $is_admin = Helper::is_admin_login();
 
-        $state = (($is_key_set && $is_token_set) || $is_admin) ? true : false;
+        $state = ( $is_token_set || $is_admin )? true : false;
 
         if (!$state) {
             Helper::interrupt(631);

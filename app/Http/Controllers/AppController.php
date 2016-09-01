@@ -54,9 +54,12 @@ class AppController extends Controller
                 $user->password = bcrypt($request->input('password'));
             }
 
+
             $app->name = $request->input('name');
             $app->description = $request->input('description');
-            $app->api_key = $request->input('api_key');
+
+            $app->name = $request->input("name");
+            $app->description = $request->input("description");
 
             ($app->save() && $user->save()) ? DLH::flash('App updated successfully', 'success') :
                 DLH::flash('Changes did not take effect', 'error');
