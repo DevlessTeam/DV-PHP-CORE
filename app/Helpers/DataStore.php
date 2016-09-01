@@ -34,8 +34,6 @@ class DataStore extends Helper
 
         };
 
-
-
         (isset(self::$payload['service_name'], self::$payload['params']['table']))? true : $setServiceAndTableNames();
 
         return (is_null(self::$instance))? self::$instance = new self() : self::$instance;
@@ -49,8 +47,10 @@ class DataStore extends Helper
     {
         $service = self::$payload['service'];
         $payload = self::$payload;
+        $method = 'GET';
+        $resourceType = 'db';
 
-        $result  = $service->assign_to_service($payload['service_name'], 'db', 'GET', self::$payload['params']);
+        $result  = $service->assign_to_service($payload['service_name'], $resourceType, $method, self::$payload['params']);
         return $result;
     }
 
@@ -84,9 +84,9 @@ class DataStore extends Helper
      * @param $value
      * @return DataStore
      */
-    public static function order($value)
+    public static function orderBy($value)
     {
-        return self::bindToParams('order', $value);
+        return self::bindToParams('orderBy', $value);
     }
 
     /**

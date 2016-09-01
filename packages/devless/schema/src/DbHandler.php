@@ -311,7 +311,7 @@ class DbHandler
             $related = [];
 
 
-            if (isset($payload['params']['order'])) {
+            if (isset($payload['params']['orderBy'])) {
                 $order_by = $payload['params']['order'];
                 $complete_query = $complete_query
                 .'->orderBy("'.$payload['params']['order'][0].'" )';
