@@ -14,7 +14,7 @@ use App\Http\Controllers\ServiceController as Service;
 class DataStore extends Helper
 {
     private static $instance;
-    private static $payload;
+    public static $payload;
 
 
     /**
@@ -41,6 +41,10 @@ class DataStore extends Helper
         return (is_null(self::$instance))? self::$instance = new self() : self::$instance;
     }
 
+    /**
+     * Query data from a particular table from a particular service
+     * @return mixed
+     */
     public static function queryData()
     {
         $service = self::$payload['service'];
@@ -50,12 +54,26 @@ class DataStore extends Helper
         return $result;
     }
 
-    public static function addData($params, $data) {/**/}
-    public static function update($params, $data) {/**/}
-    public static function delete($params) {/**/}
+    public static function addData($data) {/**/}
+    public static function update($data) {/**/}
+    public static function delete() {/**/}
 
+    /**
+     * Skip $value number of results
+     * @param $value
+     * @return DataStore
+     */
+    public function offset($value)
+    {
+        return self::bindToParams('offset', $value);
+    }
 
-
+    /**
+     * Carryout db action where $column equals $value
+     * @param $column
+     * @param $value
+     * @return DataStore
+     */
     public static function where($column, $value)
     {
         return self::bindToParams('where',  $column.','.$value);
@@ -89,6 +107,7 @@ class DataStore extends Helper
      */
     private static function bindToParams($methodName, $args)
     {
+
         self::$payload['params'][$methodName] =
             (null == isset( self::$payload['params'][$methodName]))?  self::$payload['params'][$methodName] = [] : true;
 
