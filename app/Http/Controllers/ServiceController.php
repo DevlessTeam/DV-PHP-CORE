@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 
+use App\Helpers\DataStore;
 use Validator;
 use App\Service;
 use App\Helpers\Helper;
@@ -238,7 +239,6 @@ class ServiceController extends Controller
     public function service(Request $request, $service, $resource)
     {
 
-        //check token and keys
         $this->_devlessCheckHeaders($request);
 
         $serviceOutput = $this->resource($request, $service, $resource);
@@ -273,7 +273,6 @@ class ServiceController extends Controller
         } else {
             $parameters = $this->get_params($method, $request);
         }
-
 
 
         return $this->assign_to_service(

@@ -538,6 +538,7 @@ class DbHandler
         if ($driver == 'mysql') {
             $conn['collation'] = $collation;
         }
+
         \Config::set('database.connections.DYNAMIC_DB_CONFIG', $conn);
     }
 
