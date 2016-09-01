@@ -1,17 +1,18 @@
-<?php
+<?php namespace App\Http\Controllers;
 
-namespace App\Http\Controllers;
-
-use App\App;
-use App\Helpers\DevlessHelper as DLH;
-use App\Helpers\Response as Response;
-use App\User;
 use Hash;
-use Illuminate\Http\Request;
 use Session;
+use App\App;
+use App\User;
+use App\Http\Requests;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use \App\Helpers\DevlessHelper as DLH;
+use App\Helpers\Response as Response;
 
 class AppController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +22,6 @@ class AppController extends Controller
     {
         $app = App::first();
         $user = User::findOrFail(Session('user'));
-
         return view('app.edit', compact('app', 'user'));
     }
 
@@ -29,21 +29,19 @@ class AppController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     *
      * @return Response
-     *
      * @internal param int $id
      */
     public function update(Request $request)
     {
         $this->validate($request, [
-            'username'              => 'required|max:255',
-            'email'                 => 'required|email|max:255',
-            'password'              => 'confirmed|min:6',
+            'username' => 'required|max:255',
+            'email' => 'required|email|max:255',
+            'password' => 'confirmed|min:6',
             'password_confirmation' => 'min:6',
-            'old_password'          => 'required',
-            'api_key'               => 'required',
-            ]);
+            'old_password' => 'required',
+            'api_key' => 'required'
+        ]);
 
         $user = User::findOrFail(Session('user'));
         $app = App::first();
@@ -54,27 +52,21 @@ class AppController extends Controller
                 $user->password = bcrypt($request->input('password'));
             }
 
-
-            $app->name = $request->input('name');
-            $app->description = $request->input('description');
-
             $app->name = $request->input("name");
             $app->description = $request->input("description");
 
-            ($app->save() && $user->save()) ? DLH::flash('App updated successfully', 'success') :
-                DLH::flash('Changes did not take effect', 'error');
+            ($app->save() && $user->save())? DLH::flash("App updated successfully", 'success'):
+                DLH::flash("Changes did not take effect", 'error');
         } else {
-            DLH::flash('Could not get app properties or password is incorrect', 'error');
+            DLH::flash("Could not get app properties or password is incorrect", 'error');
         }
-
         return back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function destroy($id)
@@ -87,7 +79,7 @@ class AppController extends Controller
 
     public function store()
     {
-        dd('store');
+        dd("store");
     }
 
     public function token(Request $request)
@@ -96,10 +88,11 @@ class AppController extends Controller
         if (isset($request['action'])) {
             $new_token = $app->token = md5(uniqid(1, true));
             if ($app->save()) {
-                return Response::respond(622, null, ['new_token' => $new_token]);
+                return Response::respond(622, null, ['new_token'=>$new_token]);
             } else {
                 return Response::respond(623);
             }
         }
+
     }
 }

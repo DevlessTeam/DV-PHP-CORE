@@ -1,20 +1,21 @@
-<?php
+<?php namespace App\Http\Controllers;
 
-namespace App\Http\Controllers;
 
-use App\Helpers\DevlessHelper as DLH;
-use App\Helpers\Helper;
-use App\Helpers\Response as Response;
-use App\Http\Controllers\ViewController as DvViews;
+use Validator;
 use App\Service;
+use App\Helpers\Helper;
+use Illuminate\Http\Request;
 use App\Service as serviceModel;
 use Devless\Schema\DbHandler as Db;
+use App\Helpers\DevlessHelper as DLH;
+use App\Helpers\Response as Response;
 use Devless\Script\ScriptHandler as script;
-use Illuminate\Http\Request;
-use Validator;
+use App\Http\Controllers\ViewController as DvViews;
+
 
 class ServiceController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -41,65 +42,63 @@ class ServiceController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     *
      * @return Response
      */
     public function store(Request $request)
     {
         $service = new Service();
-        $service_name_from_form = $request->input('name');
+        $service_name_from_form = $request->input("name");
         $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
         $service_name = strtolower($service_name_from_form);
 
         $validator = Validator::make(
 
-                    ['name' => $service_name],
-                    [
-                        'name' => 'required|unique:services,name',
+            ['name'=>$service_name],
+            [
+                'name'=>'required|unique:services,name',
 
-                    ]
-                );
+            ]
+        );
 
         if ($validator->fails()) {
             $errors = $validator->messages();
-            DLH::flash('Sorry but service could not be created', 'error');
-
+            DLH::flash("Sorry but service could not be created", 'error');
             return redirect()->route('services.create')->with('errors', $errors)->withInput();
         }
 
         $service->name = $service_name;
-        $service->description = $request->input('description');
-        $service->username = $request->input('username');
+        $service->description = $request->input("description");
+        $service->username = $request->input("username");
         $service->password = $request->input('password');
         $service->database = $request->input('database');
         $service->hostname = $request->input('hostname');
         $service->driver = $request->input('driver');
         $service->resource_access_right =
-                            '{"query":0,"create":0,"update":0,"delete":0,"schema":0,"script":0, "view":0}';
+            '{"query":0,"create":0,"update":0,"delete":0,"schema":0,"script":0, "view":0}';
         $service->active = 1;
         $service->script = 'echo "Happy Coding";';
 
         $connection =
-                    [
-                        'username' => $service->username,
-                        'password' => $service->password,
-                        'database' => $service->database,
-                        'hostname' => $service->hostname,
-                        'driver'   => $service->driver,
-                    ];
+            [
+                'username' => $service->username,
+                'password' => $service->password,
+                'database' => $service->database,
+                'hostname' => $service->hostname,
+                'driver'   => $service->driver,
+            ];
         $db = new Db();
 
         if (!$db->check_db_connection($connection)) {
-            DLH::flash('Sorry connection could not be made to Database', 'error');
+            DLH::flash("Sorry connection could not be made to Database", 'error');
         } else {
             //create initial views for service
-                        $views = new DvViews();
-            $type = 'init';
+            $views = new DvViews();
+            $type = "init";
 
-            ($service->save() && $views->create_views($service_name, $type))
-                                        ?
-                        DLH::flash('Service created successfully', 'success') :
-                        DLH::flash('Service could not be created', 'error');
+            ($service->save() && $views->create_views($service_name, $type) )
+                ?
+                DLH::flash("Service created successfully", 'success'):
+                DLH::flash("Service could not be created", 'error');
         }
 
         return $this->edit($service->id);
@@ -108,8 +107,7 @@ class ServiceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -122,8 +120,7 @@ class ServiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
@@ -132,7 +129,7 @@ class ServiceController extends Controller
         $table_meta = \App\TableMeta::where('service_id', $id)->get();
         $count = 0;
         foreach ($table_meta as $each_table_meta) {
-            $table_meta[$count] = (json_decode($each_table_meta->schema, true));
+            $table_meta[$count]  = (json_decode($each_table_meta->schema, true));
             $count++;
         }
 
@@ -142,59 +139,50 @@ class ServiceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param int     $id
+     * @param  int  $id
      * @param Request $request
-     *
      * @return Response
      */
     public function update(Request $request, $id)
     {
-
-        $views = new DvViews();
-
-
         if ($service = Service::findOrFail($id)) {
-            if ($request->input('call_type') == 'solo') {
+            if ($request->input('call_type') =='solo') {
                 $service->script = $request->input('script');
                 $service->save();
-
                 return Response::respond(626);
             }
 
-                    $service->description = $request->input("description");
-                    $service->username = $request->input("username");
-                    $service->password = $request->input('password');
-                    $service->database = $request->input('database');
-                    $service->hostname = $request->input('hostname');
-                    $service->driver = $request->input('driver');
-                    $service->active = $request->input("active");
-
+            $service->description = $request->input("description");
+            $service->username = $request->input("username");
+            $service->password = $request->input('password');
+            $service->database = $request->input('database');
+            $service->hostname = $request->input('hostname');
+            $service->driver = $request->input('driver');
+            $service->active = $request->input("active");
 
             $connection =
-                    [
-                        'username' => $service->username,
-                        'password' => $service->password,
-                        'database' => $service->database,
-                        'hostname' => $service->hostname,
-                        'driver'   => $service->driver,
-                    ];
+                [
+                    'username' => $service->username,
+                    'password' => $service->password,
+                    'database' => $service->database,
+                    'hostname' => $service->hostname,
+                    'driver'   => $service->driver,
+                ];
             $db = new Db();
             if (!$db->check_db_connection($connection)) {
-                DLH::flash('Sorry connection could not be made to Database', 'error');
+                DLH::flash("Sorry connection could not be made to Database", 'error');
             } else {
-                ($service->save()) ? DLH::flash('Service updated successfully', 'success') :
-                        DLH::flash('Changes did not take effect', 'error');
+                ($service->save())? DLH::flash("Service updated successfully", 'success'):
+                    DLH::flash("Changes did not take effect", 'error');
             }
         }
-
         return back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function destroy($id)
@@ -211,49 +199,46 @@ class ServiceController extends Controller
         }
 
         if (DLH::deleteDirectory($assets_path) && $service->delete()) {
-            DLH::flash('Service deleted successfully', 'success');
+            DLH::flash("Service deleted successfully", 'success');
         } else {
-            DLH::flash('Service could not be deleted', 'error');
+            DLH::flash("Service could not be deleted", 'error');
         }
 
         return redirect()->route('services.index');
     }
 
+
     /**
-     * download service packages.
-     *
+     * download service packages
      * @param $filename
-     *
      * @return
-     *
      * @internal param $request
      */
     public function download_service_package($filename)
     {
+
         $file_path = DLH::get_file($filename);
         if ($file_path) {
             // Send Download
-               return \Response::download($file_path, $filename)->deleteFileAfterSend(true);
+            return \Response::download($file_path, $filename)->deleteFileAfterSend(true);
         } else {
-            DLH::flash('could not download files');
+            DLH::flash("could not download files");
         }
+
     }
 
     /**
-     * All api calls go through here.
-     *
-     * @param array|Request $request  request params
-     * @param string        $service  service to be accessed
-     * @param string        $resource resource to be accessed
-     *
+     * All api calls go through here
+     * @param array|Request $request request params
+     * @param string $service service to be accessed
+     * @param string $resource resource to be accessed
      * @return Response
-     *
      * @internal param $newServiceElements
      */
     public function service(Request $request, $service, $resource)
     {
 
-         //check token and keys
+        //check token and keys
         $this->_devlessCheckHeaders($request);
 
         $serviceOutput = $this->resource($request, $service, $resource);
@@ -261,29 +246,27 @@ class ServiceController extends Controller
         $response = $this->after_executing_service_action($service, $resource, $serviceOutput);
 
         return response($response);
+
     }
 
     /**
-     * Refer request to the right service and resource.
-     *
+     * Refer request to the right service and resource
      * @param array $request request params
      * @param $service_name
-     * @param string $resource        resource to be accessed
-     * @param bool   $internal_access
-     *
+     * @param string $resource resource to be accessed
+     * @param bool $internal_access
      * @return Response
-     *
      * @internal param string $service service to be accessed
      */
     public function resource($request, $service_name, $resource, $internal_access = false)
     {
         $resource = strtolower($resource);
         $service_name = strtolower($service_name);
-        ($internal_access == true) ? $method = $request['method'] :
-        $method = $request->method();
+        ($internal_access == true)? $method = $request['method'] :
+            $method = $request->method();
 
         $method = strtoupper($method);
-        //check method type and get payload accordingly
+        #check method type and get payload accordingly
 
         if ($internal_access == true) {
             $parameters = $request['resource'];
@@ -302,17 +285,16 @@ class ServiceController extends Controller
         );
     }
 
+
     /**
      * assign request to a devless resource eg: db, view, script, schema, .
      *
      * @param $service_name
-     * @param string $resource
-     * @param array  $method          http verb
-     * @param null   $parameters
-     * @param bool   $internal_access
-     *
+     * @param  string $resource
+     * @param array $method http verb
+     * @param null $parameters
+     * @param bool $internal_access
      * @return Response
-     *
      * @internal param string $service name of service to be access
      * @internal param array $parameter contains all parameters passed from route
      * @internal param bool $internal_service true if service is being called internally
@@ -324,6 +306,7 @@ class ServiceController extends Controller
         $parameters = null,
         $internal_access = false
     ) {
+
         $current_service = $this->service_exist($service_name);
 
         if (!$current_service == false) {
@@ -337,20 +320,20 @@ class ServiceController extends Controller
                 $resource_access_right = $this->_get_resource_access_right($current_service);
 
                 $payload =
-                [
-                    'id'                    => $current_service->id,
-                    'service_name'          => $current_service->name,
-                    'database'              => $current_service->database,
-                    'driver'                => $current_service->driver,
-                    'hostname'              => $current_service->hostname,
-                    'username'              => $current_service->username,
-                    'password'              => $current_service->password,
-                    'calls'                 => $current_service->calls,
-                    'resource_access_right' => $resource_access_right,
-                    'script'                => $current_service->script,
-                    'method'                => $method,
-                    'params'                => $parameters,
-                ];
+                    [
+                        'id'=>$current_service->id,
+                        'service_name' =>$current_service->name,
+                        'database' =>$current_service->database,
+                        'driver' => $current_service->driver,
+                        'hostname' => $current_service->hostname,
+                        'username' => $current_service->username,
+                        'password' => $current_service->password,
+                        'calls' =>  $current_service->calls,
+                        'resource_access_right' =>$resource_access_right,
+                        'script' => $current_service->script,
+                        'method' => $method,
+                        'params' => $parameters,
+                    ];
 
                 // run script before assigning to method
                 $newServiceElements = $this->before_assigning_service_action($resource, $payload);
@@ -361,21 +344,18 @@ class ServiceController extends Controller
                 switch ($resource) {
                     case 'db':
                         $db = new Db();
-
                         return $db->access_db($payload);
-                    break;
+                        break;
 
                     case 'script':
-                        $script = new script();
-
-                        return $script->run_script($payload);
-                    break;
+                        $script = new script;
+                        return $script->run_script($resource, $payload);
+                        break;
 
                     case 'schema':
                         $db = new Db();
-
                         return $db->create_schema($payload);
-                    break;
+                        break;
 
                     case 'view':
                         return $payload;
@@ -391,49 +371,48 @@ class ServiceController extends Controller
     }
 
     /**
-     *check if service exists.
+     *check if service exists
      *
      * @param string $service_name name of service
-     *                             return array of service values
+     * return array of service values
      */
     public function service_exist($service_name)
     {
+
         if ($current_service = serviceModel::where('name', $service_name)->
         where('active', 1)->first()) {
             return $current_service;
         } else {
             Helper::interrupt(604);
         }
+
+
     }
 
     /**
-     * get parameters set in from request.
+     * get parameters set in from request
      *
-     * @param string $method  reuquest method type
-     * @param array  $request request parameters
-     *                        return array of parameters
-     *
+     * @param string $method reuquest method type
+     * @param array $request request parameters
+     * return array of parameters
      * @return array|mixed
      */
     public function get_params($method, $request)
     {
-        if (in_array($method, ['POST', 'DELETE', 'PATCH'])) {
+        if (in_array($method, ['POST','DELETE','PATCH'])) {
             $parameters = $request['resource'];
         } elseif ($method == 'GET') {
             $parameters = Helper::query_string();
         } else {
             Helper::interrupt(608, 'Request method '.$method.
-                    ' is not supported');
+                ' is not supported');
         }
-
         return $parameters;
     }
 
     /**
-     * get and convert resource_access_right to array.
-     *
+     * get and convert resource_access_right to array
      * @param object $service service payload
-     *
      * @return array resource access right
      */
     private function _get_resource_access_right($service)
@@ -459,19 +438,16 @@ class ServiceController extends Controller
     }
 
     /**
-     * check user resource  action access right eg: query db or write to table.
-     *
+     * check user resource  action access right eg: query db or write to table
      * @param $access_type
-     *
      * @return bool
-     *
      * @internal param object $service service payload
      */
     public function check_resource_access_right_type($access_type)
     {
         $is_user_login = Helper::is_admin_login();
 
-        if (!$is_user_login && $access_type == 0) {
+        if (! $is_user_login && $access_type == 0) {
             Helper::interrupt(627);
         } //private
         elseif ($access_type == 1) {
@@ -485,15 +461,14 @@ class ServiceController extends Controller
     }
 
     /**
-     * operations to execute before assigning action to resource.
-     *
+     * operations to execute before assigning action to resource
      * @param string $resource
      * @params array $payload
-     *
      * @return array
      */
     public function before_assigning_service_action($resource, $payload)
     {
+
         $originalPayload = [];
         $originalPayload['payload'] = $payload;
         $originalPayload['resource'] = $resource;
@@ -505,16 +480,16 @@ class ServiceController extends Controller
         $result = Helper::execute_pre_function($payload);
         $result['resource'] = $resource;
 
-        return ($result['state']) ? $result : $originalPayload;
+        return ($result['state'])? $result : $originalPayload;
+
+
     }
 
     /**
-     * opreations to execute after service resource is executed.
-     *
+     * opreations to execute after service resource is executed
      * @param string $service
      * @prams string $resource
      * $prams array $response
-     *
      * @return array
      */
     public function after_executing_service_action($service, $resource, $response)
@@ -533,6 +508,7 @@ class ServiceController extends Controller
         }
 
 
-        return ($output['state']) ? $newResponse : $originalResponse;
+        return ($output['state'])? $newResponse : $originalResponse;
+
     }
 }
