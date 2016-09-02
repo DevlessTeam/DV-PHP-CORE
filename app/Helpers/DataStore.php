@@ -15,6 +15,7 @@ class DataStore extends Helper
 {
     private static $instance;
     public static $payload;
+    private static $resourceType = 'db';
 
 
     /**
@@ -48,13 +49,27 @@ class DataStore extends Helper
         $service = self::$payload['service'];
         $payload = self::$payload;
         $method = 'GET';
-        $resourceType = 'db';
 
-        $result  = $service->assign_to_service($payload['service_name'], $resourceType, $method, self::$payload['params']);
+
+        $result  = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, self::$payload['params']);
         return $result;
     }
 
-    public static function addData($data) {/**/}
+    public static function addData($data)
+    {
+        $service = self::$payload['service'];
+        $payload = self::$payload;
+        $tableName = self::$payload['params']['table'][0];
+        $method = 'POST';
+
+        foreach($data as $datum ) {
+
+            $dataToAdd = [['name' => $tableName, 'field' => [$datum]]];
+            $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToAdd);
+        }
+
+        return $result;
+    }
     public static function update($data) {/**/}
     public static function delete() {/**/}
 

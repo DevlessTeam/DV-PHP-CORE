@@ -12,10 +12,10 @@ class DataStoreTest extends TestCase
      */
     public function testService()
     {
-            $mock = Mockery::mock('App\Http\Controllers\ServiceController');
-            $mock->shouldReceive('assign_to_service')->andReturn("mocked");
+            $serviceMock = Mockery::mock('App\Http\Controllers\ServiceController');
+            $serviceMock->shouldReceive('assign_to_service')->andReturn(__FUNCTION__);
 
-            $dataStore = DataStore::service($this->serviceName,  $this->serviceTable, $mock);
+            $dataStore = DataStore::service($this->serviceName,  $this->serviceTable, $serviceMock);
 
             $payload = DataStore::$payload;
 
@@ -61,7 +61,7 @@ class DataStoreTest extends TestCase
      * Test order parameter
      * @return void
      */
-    public  function testorderBy()
+    public  function testOrderBy()
     {
         $keyword = rand();
         $dataStore = $this->testService();
@@ -71,5 +71,11 @@ class DataStoreTest extends TestCase
         $this->assertTrue(isset($params['orderBy']));
         $this->assertEquals($params['orderBy'][0], $keyword);
     }
+
+    public function testAddData()
+    {
+    
+    }
 }
+
 

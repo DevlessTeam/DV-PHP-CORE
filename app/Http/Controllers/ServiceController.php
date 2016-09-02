@@ -239,7 +239,8 @@ class ServiceController extends Controller
     public function service(Request $request, $service, $resource)
     {
 
-//        $results = DataStore::service('likes', 'likes-table', $this)->size(7)->offset(12)->queryData();
+//        $data = [['identifier' =>'3aa', 'objectid'=>'34'],['identifier' =>'5aa', 'objectid'=>'34']];
+//        $results = DataStore::service('likes', 'likes-table', $this)->addData($data);
 //        dd($results);
         //check token and keys
         $this->_devlessCheckHeaders($request);
