@@ -8,7 +8,6 @@
 
 namespace App\Helpers;
 
-
 use App\Http\Controllers\ServiceController as Service;
 
 class DataStore extends Helper
@@ -25,10 +24,10 @@ class DataStore extends Helper
      * @param Service $service
      * @return DataStore
      */
-    public static function service($serviceName, $tableName, Service $service )
+    public static function service($serviceName, $tableName, Service $service)
     {
 
-        $setServiceAndTableNames = function () use($serviceName, $tableName, $service){
+        $setServiceAndTableNames = function () use ($serviceName, $tableName, $service) {
             self::$payload['service_name'] = $serviceName;
             self::$payload['params'] = ['table' => [$tableName]];
             self::$payload['service'] = $service;
@@ -67,15 +66,14 @@ class DataStore extends Helper
         $payload = self::$payload;
         $tableName = self::$payload['params']['table'][0];
         $method = 'POST';
-        $pushToStore = function ($data) use($tableName, $method, $service, $payload) {
+        $pushToStore = function ($data) use ($tableName, $method, $service, $payload) {
             $dataToAdd = [['name' => $tableName, 'field' => [$data]]];
             return $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToAdd);
         };
 
-        foreach($data as $datum ) {
-
+        foreach ($data as $datum) {
                 $results =$pushToStore($datum);
-            }
+        }
         return $results;
     }
 
@@ -131,6 +129,7 @@ class DataStore extends Helper
 
     /**
      * select delete action
+     * @param $action
      * @return mixed
      */
     private static function destroyAction($action)
@@ -140,7 +139,8 @@ class DataStore extends Helper
         $tableName = self::$payload['params']['table'][0];
         $method = 'DELETE';
 
-        $parameters  = ($action == 'delete')? [[$action=>"true", 'where'=>$payload['params']['where'][0]]]: [[$action=>"true"]];
+        $parameters  = ($action == 'delete' && isset($payload['params']['where'][0]))?
+            [[$action=>"true", 'where'=>$payload['params']['where'][0]]]: [[$action=>"true"]];
 
         $dataToPatch =
             [['name' => $tableName, 'params' => $parameters ]];
@@ -169,7 +169,7 @@ class DataStore extends Helper
      */
     public static function where($column, $value)
     {
-        return self::bindToParams('where',  $column.','.$value);
+        return self::bindToParams('where', $column.','.$value);
     }
 
     /**
@@ -202,7 +202,7 @@ class DataStore extends Helper
     {
 
         self::$payload['params'][$methodName] =
-            (null == isset( self::$payload['params'][$methodName]))?  self::$payload['params'][$methodName] = [] : true;
+            (null == isset(self::$payload['params'][$methodName]))?  self::$payload['params'][$methodName] = [] : true;
 
         array_push(self::$payload['params'][$methodName], $args);
 

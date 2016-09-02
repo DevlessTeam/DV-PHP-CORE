@@ -1,8 +1,8 @@
  <?php
 
-namespace App\Commands;
+ namespace App\Commands;
 
-use Illuminate\Contracts\Bus\SelfHandling;
+ use Illuminate\Contracts\Bus\SelfHandling;
 
  class devless extends Command implements SelfHandling
  {
@@ -12,7 +12,7 @@ use Illuminate\Contracts\Bus\SelfHandling;
      public function __construct()
      {
          //
-     }
+        }
 
         /**
          * Execute the command.
@@ -23,4 +23,4 @@ use Illuminate\Contracts\Bus\SelfHandling;
         {
             //
         }
- }
+    }

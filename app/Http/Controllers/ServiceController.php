@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-
 use App\Helpers\DataStore;
 use Validator;
 use App\Service;
@@ -12,7 +11,6 @@ use App\Helpers\DevlessHelper as DLH;
 use App\Helpers\Response as Response;
 use Devless\Script\ScriptHandler as script;
 use App\Http\Controllers\ViewController as DvViews;
-
 
 class ServiceController extends Controller
 {
@@ -238,9 +236,6 @@ class ServiceController extends Controller
      */
     public function service(Request $request, $service, $resource)
     {
-
-//        $results = DataStore::service('likes', 'likes-table', $this)->drop();
-//        dd($results);
         //check token and keys
         $this->_devlessCheckHeaders($request);
 
@@ -277,7 +272,7 @@ class ServiceController extends Controller
             $parameters = $this->get_params($method, $request);
         }
 
-        dd($parameters);
+
 
         return $this->assign_to_service(
             $service_name,
