@@ -171,7 +171,7 @@ class DbHandler
             }
 
             if ($result == 1) {
-                return Helper::interrupt(
+                return Response::respond(
                     619,
                     'table '.$payload['params'][0]['name'].' updated successfuly'
                 );

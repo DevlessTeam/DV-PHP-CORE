@@ -239,7 +239,7 @@ class ServiceController extends Controller
     public function service(Request $request, $service, $resource)
     {
 
-//        $data = [['identifier' =>'edmond', 'objectid'=>'34']];
+//        $data = [['identifier' =>'charles', 'objectid'=>'34']];
 //        $results = DataStore::service('likes', 'likes-table', $this)->where('id', 80)->update($data);
 //        dd($results);
         //check token and keys
