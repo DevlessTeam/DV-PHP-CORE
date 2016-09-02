@@ -239,8 +239,7 @@ class ServiceController extends Controller
     public function service(Request $request, $service, $resource)
     {
 
-//        $data = [['identifier' =>'charles', 'objectid'=>'34']];
-//        $results = DataStore::service('likes', 'likes-table', $this)->where('id', 80)->update($data);
+//        $results = DataStore::service('likes', 'likes-table', $this)->drop();
 //        dd($results);
         //check token and keys
         $this->_devlessCheckHeaders($request);
@@ -278,7 +277,7 @@ class ServiceController extends Controller
             $parameters = $this->get_params($method, $request);
         }
 
-        //dd($parameters);
+        dd($parameters);
 
         return $this->assign_to_service(
             $service_name,

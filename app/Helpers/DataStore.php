@@ -19,7 +19,7 @@ class DataStore extends Helper
 
 
     /**
-     * Specify which service table you want to work with
+     * Specify which service table to work with
      * @param $serviceName
      * @param $tableName
      * @param Service $service
@@ -41,7 +41,7 @@ class DataStore extends Helper
     }
 
     /**
-     * Query data from a particular table from a particular service
+     * Query service tables
      * @return mixed
      */
     public static function queryData()
@@ -51,29 +51,39 @@ class DataStore extends Helper
         $method = 'GET';
 
 
-        $result  = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, self::$payload['params']);
+        $result  =
+            $service->assign_to_service($payload['service_name'], self::$resourceType, $method, self::$payload['params']);
         return $result;
     }
 
+    /**
+     * Add data to the service table
+     * @param $data
+     * @return mixed
+     */
     public static function addData($data)
     {
         $service = self::$payload['service'];
         $payload = self::$payload;
         $tableName = self::$payload['params']['table'][0];
         $method = 'POST';
-
         $pushToStore = function ($data) use($tableName, $method, $service, $payload) {
             $dataToAdd = [['name' => $tableName, 'field' => [$data]]];
             return $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToAdd);
         };
 
-            foreach($data as $datum ) {
+        foreach($data as $datum ) {
 
                 $results =$pushToStore($datum);
             }
         return $results;
     }
 
+    /**
+     * Update record at specific entry
+     * @param $data
+     * @return mixed
+     */
     public static function update($data)
     {
         $service = self::$payload['service'];
@@ -81,18 +91,65 @@ class DataStore extends Helper
         $tableName = self::$payload['params']['table'][0];
         $method = 'PATCH';
 
-        foreach($data as $datum ) {
+        $dataToPatch =
+                [['name' => $tableName, 'params' => [['where'=>$payload['params']['where'][0], 'data'=>[$data]]] ]];
 
-            $dataToPatch =
-                [['name' => $tableName, 'params' => [['where'=>$payload['params']['where'][0], 'data'=>[$datum]]] ]];
+        $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToPatch);
 
-            $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToPatch);
-        }
 
         return $result;
 
     }
-    public static function delete() {/**/}
+
+    /**
+     * Delete records from service table
+     * @return mixed
+     */
+    public static function delete()
+    {
+        return self::destroyAction('delete');
+    }
+
+    /**
+     * Truncate service table
+     * @return mixed
+     */
+    public static function truncate()
+    {
+        return self::destroyAction('truncate');
+    }
+
+
+    /**
+     * Drop service table
+     * @return mixed
+     */
+    public static function drop()
+    {
+        return self::destroyAction('drop');
+    }
+
+    /**
+     * select delete action
+     * @return mixed
+     */
+    private static function destroyAction($action)
+    {
+        $service = self::$payload['service'];
+        $payload = self::$payload;
+        $tableName = self::$payload['params']['table'][0];
+        $method = 'DELETE';
+
+        $parameters  = ($action == 'delete')? [[$action=>"true", 'where'=>$payload['params']['where'][0]]]: [[$action=>"true"]];
+
+        $dataToPatch =
+            [['name' => $tableName, 'params' => $parameters ]];
+
+        $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToPatch);
+
+        return $result;
+
+    }
 
     /**
      * Skip $value number of results
@@ -135,7 +192,6 @@ class DataStore extends Helper
         return self::bindToParams('size', $value);
     }
 
-
     /**
      * add parameter to Global params
      * @param $methodName
@@ -153,4 +209,3 @@ class DataStore extends Helper
         return (is_null(self::$instance))? self::$instance = new self() : self::$instance;
     }
 }
-
