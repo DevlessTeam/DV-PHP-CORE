@@ -347,7 +347,7 @@ class DevlessHelper extends Helper
                 $service_table['schema']['id'] = $new_service_id;
                 $service_table['id'] = $new_service_id;
                 $service_table['params'] = [0 =>$service_table['schema']];
-                $builder->create_schema($resource, $service_table);
+                $builder->create_schema($service_table);
             }
 
 

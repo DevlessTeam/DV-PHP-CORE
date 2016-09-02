@@ -81,7 +81,6 @@ class DbHandler
     {
         //
         $resource = 'schema';
-
         $this->create_schema($request['resource']);
     }
 
