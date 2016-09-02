@@ -74,7 +74,7 @@ class DataStoreTest extends TestCase
 
     public function testAddData()
     {
-    
+
     }
 }
 

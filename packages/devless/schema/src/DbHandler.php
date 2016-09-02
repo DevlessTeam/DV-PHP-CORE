@@ -156,17 +156,17 @@ class DbHandler
             }
 
             $where = $payload['params'][0]['params'][0]['where'];
-            $explotion = explode(',', $where);
+            $explosion = explode(',', $where);
             $data = $payload['params'][0]['params'][0]['data'];
 
             if ($payload['user_id'] !== '') {
                 $result = $db->table($table_name)
-                ->where($explotion[0], $explotion[1])
+                ->where($explosion[0], $explosion[1])
                 ->where('devless_user_id', $payload['user_id'])
                 ->update($data[0]);
             } else {
                 $result = $db->table($table_name)
-                ->where($explotion[0], $explotion[1])
+                ->where($explosion[0], $explosion[1])
                 ->update($data[0]);
             }
 

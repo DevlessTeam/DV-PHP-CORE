@@ -62,15 +62,36 @@ class DataStore extends Helper
         $tableName = self::$payload['params']['table'][0];
         $method = 'POST';
 
+        $pushToStore = function ($data) use($tableName, $method, $service, $payload) {
+            $dataToAdd = [['name' => $tableName, 'field' => [$data]]];
+            return $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToAdd);
+        };
+
+            foreach($data as $datum ) {
+
+                $results =$pushToStore($datum);
+            }
+        return $results;
+    }
+
+    public static function update($data)
+    {
+        $service = self::$payload['service'];
+        $payload = self::$payload;
+        $tableName = self::$payload['params']['table'][0];
+        $method = 'PATCH';
+
         foreach($data as $datum ) {
 
-            $dataToAdd = [['name' => $tableName, 'field' => [$datum]]];
-            $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToAdd);
+            $dataToPatch =
+                [['name' => $tableName, 'params' => [['where'=>$payload['params']['where'][0], 'data'=>[$datum]]] ]];
+
+            $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToPatch);
         }
 
         return $result;
+
     }
-    public static function update($data) {/**/}
     public static function delete() {/**/}
 
     /**
@@ -113,6 +134,7 @@ class DataStore extends Helper
     {
         return self::bindToParams('size', $value);
     }
+
 
     /**
      * add parameter to Global params
