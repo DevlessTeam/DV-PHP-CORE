@@ -339,7 +339,6 @@ class DevlessHelper extends Helper
                 $old_service_id = $service_table['service_id'];
                 $new_service_id = $service_id_map[$old_service_id];
                 $service_table['schema'] = json_decode($service_table['schema'], true);
-                $resource = 'schema';
                 $service_table['service_name'] = $service_name[$old_service_id];
                 $service_table['driver'] = "default";
                 $service_table['schema']['service_id'] = $new_service_id ;

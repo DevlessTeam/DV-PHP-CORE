@@ -39,7 +39,7 @@
            <div  class="form-group">
             <label for="field-type">Field Type</label>
             
-            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL'] ?>
+            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'REFERENCE'] ?>
             <select class="form-control"  name="field-type" id="field-type">
                 @foreach($options as  $option)
                 <option value="{{$option}}">{{$option}}</option>
@@ -47,7 +47,7 @@
             </select>
         </div>
         <div  class="form-group">
-            <div style="display:none;" >
+            <div style="display:block;" >
             <label for="field-reference">Reference Table</label>
             <select class="form-control"  name="field-reference" id="field-reference" >
                 @foreach($table_meta as $table_data)

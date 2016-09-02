@@ -62,8 +62,8 @@
                                      @endif
                                 </div>
                             </div>
-<<<                         <div class="form-group @if($errors->has('token')) has-error @endif">
->>>
+                            <div class="form-group @if($errors->has('token')) has-error @endif">
+
                                 <label for="token-field" class="col-lg-2 col-sm-2 control-label">Token</label>
                                 <div class="col-lg-10">
                                     <div class="input-group m-b-10" >
