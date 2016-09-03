@@ -12,6 +12,7 @@
 */
 Route::get('/', 'UserController@get_login');
 
+
 Route::post('login', 'UserController@post_login');
 Route::get('logout', 'UserController@get_logout');
 
@@ -36,6 +37,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function () {
     Route::get('log', function () {
         return 'no log available';
     });
+
 
     //service end points
     Route::get('service/{service}/{resource}', 'ServiceController@service');

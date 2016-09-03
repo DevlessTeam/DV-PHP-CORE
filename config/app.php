@@ -151,6 +151,8 @@ return [
 
         Devless\Schema\SchemaServiceProvider::class,
         Devless\Script\ScriptServiceProvider::class,
+        Devless\ActionClass\ActionClassServiceProvider::class,
+
 
 
 

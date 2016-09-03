@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use App\Helpers\DataStore;
 use Validator;
 use App\Service;
 use App\Helpers\Helper;
@@ -11,7 +10,7 @@ use App\Helpers\DevlessHelper as DLH;
 use App\Helpers\Response as Response;
 use Devless\Script\ScriptHandler as script;
 use App\Http\Controllers\ViewController as DvViews;
-
+use App\Http\Controllers\RpcController as Rpc;
 class ServiceController extends Controller
 {
 
@@ -194,7 +193,7 @@ class ServiceController extends Controller
         $table_meta = \App\TableMeta::where('service_id', $id)->get();
         foreach ($table_meta as $meta) {
             $table_name = $meta->table_name;
-            $output = DLH::purge_table($service_name.'_'.$table_name);
+            DLH::purge_table($service_name, $table_name);
         }
 
         if (DLH::deleteDirectory($assets_path) && $service->delete()) {
@@ -357,6 +356,10 @@ class ServiceController extends Controller
 
                     case 'view':
                         return $payload;
+
+                    case 'rpc':
+                        $rpc = new Rpc();
+                        return $rpc->index($payload);
 
                     default:
                         Helper::interrupt(605);

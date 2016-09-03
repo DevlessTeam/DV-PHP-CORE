@@ -2,13 +2,14 @@
 
 namespace App\Helpers;
 
+use App\Http\Controllers\ServiceController;
 use DB;
 use Hash;
 use Session;
 use App\User as user;
 use Alchemy\Zippy\Zippy;
 use Devless\Schema\DbHandler as DvSchema;
-
+use App\Helpers\DataStore;
 /*
 * @author Eddymens <eddymens@devless.io
 */
@@ -83,13 +84,14 @@ class DevlessHelper extends Helper
 
     /**
      * Delete table is exists
-     * @param $table_name
+     * @param $serviceName
+     * @param $tableName
      * @return bool
      */
-    public static function purge_table($table_name)
+    public static function purge_table($serviceName, $tableName)
     {
-
-        return (\Schema::dropIfExists($table_name))? true: false;
+        $service = new ServiceController();
+        return DataStore::service($serviceName, $tableName, $service)->drop()? true: false;
 
     }
 
