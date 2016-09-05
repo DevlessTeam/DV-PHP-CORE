@@ -109,7 +109,13 @@ class ViewController extends Controller
                 $destination_path = config('devless')['views_directory'].$service_name;
 
                 if (mkdir($destination_path)) {
-                    return DevlessHelper::recurse_copy($source_path, $destination_path);
+                    $copied_to_destination =  DevlessHelper::recurse_copy($source_path, $destination_path);
+
+                    $payload['serviceName'] = $service_name;
+                    $exec_success = DevlessHelper::execOnViewsCreation($payload);
+
+                    return ($exec_success && $copied_to_destination);
+
                 } else {
                     return false;
                 }

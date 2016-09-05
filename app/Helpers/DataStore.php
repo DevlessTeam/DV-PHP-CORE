@@ -208,4 +208,15 @@ class DataStore extends Helper
 
         return (is_null(self::$instance))? self::$instance = new self() : self::$instance;
     }
+
+    public static function instanceInfo()
+    {
+        $adminData = \DB::table('users')->where('id',1)->where('role',1)->select('username','email')->first();
+        $appData = \DB::table('apps')->select('name','description','token')->first();
+
+        $instanceInfo['app'] = $appData;
+        $instanceInfo['admin'] = $adminData;
+
+        return $instanceInfo;
+    }
 }

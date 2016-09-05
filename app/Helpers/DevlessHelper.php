@@ -10,6 +10,8 @@ use App\User as user;
 use Alchemy\Zippy\Zippy;
 use Devless\Schema\DbHandler as DvSchema;
 use App\Helpers\DataStore;
+use Symfony\Component\VarDumper\Cloner\Data;
+
 /*
 * @author Eddymens <eddymens@devless.io
 */
@@ -670,9 +672,9 @@ class DevlessHelper extends Helper
         $ACLS = self::accessTypes;
 
         $access_type = function() use($docComment)  {
-            (strpos($docComment, '@ACL private'))? Helper::interrupt(627) :
-                (strpos($docComment, '@ACL protected'))? Helper::get_authenticated_user_cred(2) :
-                    (strpos($docComment, '@ACL public'))? true : Helper::interrupt(638) ;
+            (strpos((strtolower($docComment)), '@ACL private'))? Helper::interrupt(627) :
+                (strpos(strtolower($docComment), '@ACL protected'))? Helper::get_authenticated_user_cred(2) :
+                    (strpos(strtolower($docComment), '@ACL public'))? true : Helper::interrupt(638) ;
 
         };
 
@@ -680,10 +682,88 @@ class DevlessHelper extends Helper
 
     }
 
-    public static function modifyServiceAssets()
+    /**
+     * Get and replace file content
+     * @param $filePath
+     * @param $oldText
+     * @param $replacement
+     * @return int
+     */
+    public static function modifyFileContent($filePath, $oldText, $replacement)
     {
-        //be able to edit content within each file
 
-        return true;
+        $fileContent = file_get_contents($filePath);
+
+        $fileContent = str_replace($oldText, $replacement, $fileContent);
+
+        return file_put_contents($filePath, $fileContent);
+
     }
+
+
+    /**
+     * @param $serviceName
+     * @param $files
+     * @param $replacements
+     * @return bool
+     */
+    public static function modifyAssetContent($serviceName, array $files, array $replacements) {
+
+        $forEachFile = function ($fileName) use($serviceName, $replacements){
+
+            $filePath = config('devless')['views_directory'].$serviceName.'/'.$fileName;
+
+            foreach($replacements as $oldContent => $newContent) {
+
+                $state = self::modifyFileContent($filePath, $oldContent, $newContent);
+            }
+            return $state;
+        };
+
+        return array_filter($files, $forEachFile);
+
+    }
+
+    /**
+     * Execute on views creation
+     * @param $payload
+     * @return bool
+     */
+    public static function execOnViewsCreation($payload)
+    {
+        $serviceName = $payload['serviceName'];
+
+        $instanceInfo = DataStore::instanceInfo();
+
+        $username = $instanceInfo['admin']->username;
+        $files = ['ActionClass.php'];
+        $time = date('jS \of F Y h:i:s A');
+
+        $replacements = [
+            '{{ServiceName}}' => $serviceName,
+
+            '{{MAINDOC}}'=> '/**
+ * Created by Devless.
+ * User: '.$username.'
+ * Date Created:'.$time.'
+ * @Service: '.$serviceName.'
+ * @Version: 1.0
+ */
+',
+        ];
+
+        return self::modifyAssetContent($serviceName, $files, $replacements);
+    }
+
+    /**
+     *
+     */
+    public static function execOnServiceCreation()
+    {
+
+
+    }
+
+
+
 }

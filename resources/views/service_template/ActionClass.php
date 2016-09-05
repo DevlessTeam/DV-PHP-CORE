@@ -3,51 +3,58 @@
 /** @NB Do not remove  **/
 @DvAdminOnly();
 
-/**
- * Created by Devless.
- * User: username
- * Date: 02/09/2016
- * Time: 11:34 AM
- */
+{{MAINDOC}}
 
 //Action method for serviceName
-class test_service
+class {{ServiceName}}
 {
-    public $serviceName = 'test_service';
-    //method accessible to the view from the sdk
+    public $serviceName = '{{ServiceName}}';
 
     /**
-     * @ACL protected
-     */
-    public function actionOne()
-    {
-        $service = new \App\Http\Controllers\ServiceController();
-        return "am open";//DS::service($this->serviceName,'ss', $service)->addData([['a'=>'charles']]);
-
-    }
-
-    //method only available in rule engine
-    /**
+     * Sample method accessible to via endpoint
      * @ACL public
      */
-    protected function actionTwo()
+    public function methodOne()
     {
-
-        $service = new \App\Http\Controllers\ServiceController();
-        return DS::service($this->serviceName,'ss', $service)->where('id',1)->queryData();
-
+        return "Sample Protected Method";
     }
 
-    //code here will only be executed when service is installed
-    private function __start()
+
+    /**
+     * Sample method accessible only by authenticated users
+     * @ACL protected
+     */
+    public function methodTwo()
     {
-        //code to run from here
+        return "Sample Protected Method";
     }
 
-    //code here will run before service is deleted
-    private function __end()
+    /**
+     * Sample method not accessible via endpoint
+     * @ACL public
+     */
+    protected function methodThree()
     {
-        //silence is golden
+        return "Sample Protected Method";
+    }
+
+    /**
+     * This method will execute on service importation
+     * @ACL private
+     */
+    public function __onImport()
+    {
+        //add code here
+    }
+
+
+    /**
+     * This method will execute on service exportation
+     * @ACL private
+     */
+    public function __onExport()
+    {
+        //add code here
     }
 
 
