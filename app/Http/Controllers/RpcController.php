@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Helpers\DevlessHelper;
 use JsonRPC\Server;
 use App\Helpers\Helper;
 use App\Helpers\Response;
@@ -21,14 +22,19 @@ class RpcController extends Controller
         $service = $payload['service_name'];
         $method  = Helper::query_string()['action'][0];
 
-        $serviceMethodPath = config('devless')['views_directory'].$service.'/ActionClass.php';
+
+        $serviceMethodPath = config('devless')['views_directory'].'test_service/ActionClass.php';
 
         (file_exists($serviceMethodPath))?
             require_once $serviceMethodPath : false;
 
         $server = new Server();
-        $server->getProcedureHandler()->withClassAndMethod($service, $service, $method);
 
+        $class = new \ReflectionClass($service);
+
+        DevlessHelper::rpcMethodAccessibility($method, $class);
+
+        $server->getProcedureHandler()->withClassAndMethod($service, $service, $method);
         return  Response::respond(637, null, json_decode($server->execute()));
     }
 

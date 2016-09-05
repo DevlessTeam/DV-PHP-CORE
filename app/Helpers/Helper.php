@@ -66,6 +66,7 @@ class Helper
         635 => 'Sorry to use offset you need need to set size',
         636 => 'The table or field has been deleted',
         637 => 'Got RPC response successfully',
+        638 => 'You need to set @ACL public/private/protected annotation on method to make it available',
         700 => 'Internal system error',
     ];
 

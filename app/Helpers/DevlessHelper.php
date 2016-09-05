@@ -654,4 +654,28 @@ class DevlessHelper extends Helper
 
         return $viewsDirectory.'/'.$serviceName.'/'.$assetsDirectoryName.'/'.$assetsSubPath;
     }
+
+    /**
+     * Check method access type
+     * @param $method
+     * @param $class
+     */
+    public static function rpcMethodAccessibility($method, $class)
+    {
+        $property = $class->getMethod($method);
+        $docComment  = $property->getDocComment();
+
+        //check DocComment
+        $ACLS = ['@ACL public', '@ACL private', '@ACL protected'];
+
+        $access_type = function() use($docComment)  {
+            (strpos($docComment, '@ACL private'))? Helper::interrupt(627) :
+                (strpos($docComment, '@ACL protected'))? Helper::get_authenticated_user_cred(2) :
+                    (strpos($docComment, '@ACL public'))? true : Helper::interrupt(638) ;
+
+        };
+
+        array_filter($ACLS, $access_type);
+
+    }
 }
