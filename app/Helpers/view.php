@@ -36,7 +36,7 @@ function DvAssetPath($payload, $partialAssetPath)
  *
  * @param bool $message
  */
-function DvAdminOnly($message = 'Sorry you dont have access to this page')
+function DvAdminOnly($message = "Sorry you don't have access to this page")
 {
     $helper = app('App\Helpers\Helper');
     $is_admin = $helper->is_admin_login();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DevlessHelper;
 use App\Helpers\Helper as Helper;
 use App\Helpers\Response as Response;
 use App\Http\Controllers\ServiceController as Service;
@@ -35,7 +36,7 @@ class ViewController extends Controller
 
         $access_type = $payload['resource_access_right'];
         $access_state = $service->check_resource_access_right_type($access_type['view']);
-        $user_cred = Helper::get_authenticated_user_cred($access_state);
+        Helper::get_authenticated_user_cred($access_state);
 
         return $this->_fetch_view($service_name, $template, $payload);
     }
@@ -104,14 +105,11 @@ class ViewController extends Controller
     {
         switch ($type) {
             case 'init':
-                $source_path = base_path().'/resources/views/welcome.blade.php';
+                $source_path =  base_path().'/resources/views/service_template';
                 $destination_path = config('devless')['views_directory'].$service_name;
 
                 if (mkdir($destination_path)) {
-                    $is_saved = (copy($source_path, $destination_path.'/index.blade.php')) ? true
-                          : false;
-
-                    return $is_saved;
+                    return DevlessHelper::recurse_copy($source_path, $destination_path);
                 } else {
                     return false;
                 }

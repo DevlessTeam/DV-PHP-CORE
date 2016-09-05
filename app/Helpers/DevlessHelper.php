@@ -16,7 +16,7 @@ use App\Helpers\DataStore;
 
 class DevlessHelper extends Helper
 {
-    //
+    private $accessTypes = ['@ACL public', '@ACL private', '@ACL protected'];
     /**
      * set paramters for notification plate
      *
@@ -212,7 +212,6 @@ class DevlessHelper extends Helper
             mkdir($new_assets_path);
         }
 
-
         if (!file_exists($service_view_path)) {
             mkdir($service_view_path);
         }
@@ -234,6 +233,7 @@ class DevlessHelper extends Helper
      * Copy a whole folder
      * @param $src
      * @param $dst
+     * @return bool
      */
     public static function recurse_copy($src, $dst)
     {
@@ -249,6 +249,7 @@ class DevlessHelper extends Helper
             }
         }
         closedir($dir);
+        return file_exists($dst);
     }
 
     /**
@@ -666,7 +667,7 @@ class DevlessHelper extends Helper
         $docComment  = $property->getDocComment();
 
         //check DocComment
-        $ACLS = ['@ACL public', '@ACL private', '@ACL protected'];
+        $ACLS = self::accessTypes;
 
         $access_type = function() use($docComment)  {
             (strpos($docComment, '@ACL private'))? Helper::interrupt(627) :
@@ -677,5 +678,12 @@ class DevlessHelper extends Helper
 
         array_filter($ACLS, $access_type);
 
+    }
+
+    public static function modifyServiceAssets()
+    {
+        //be able to edit content within each file
+
+        return true;
     }
 }
