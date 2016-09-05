@@ -23,7 +23,7 @@ class RpcController extends Controller
         $method  = Helper::query_string()['action'][0];
 
 
-        $serviceMethodPath = config('devless')['views_directory'].'test_service/ActionClass.php';
+        $serviceMethodPath = config('devless')['views_directory'].$service.'/ActionClass.php';
 
         (file_exists($serviceMethodPath))?
             require_once $serviceMethodPath : false;

@@ -745,7 +745,7 @@ class DevlessHelper extends Helper
             '{{MAINDOC}}'=> '/**
  * Created by Devless.
  * User: '.$username.'
- * Date Created:'.$time.'
+ * Date Created: '.$time.'
  * @Service: '.$serviceName.'
  * @Version: 1.0
  */
@@ -755,14 +755,24 @@ class DevlessHelper extends Helper
         return self::modifyAssetContent($serviceName, $files, $replacements);
     }
 
-    /**
-     *
-     */
-    public static function execOnServiceCreation()
+
+    public static function execOnServiceStar($payload)
     {
+        $service = $payload['serviceName'];
+        $serviceMethodPath = config('devless')['views_directory'].$service.'/ActionClass.php';
 
+        (file_exists($serviceMethodPath))?
+            require_once $serviceMethodPath : false;
 
+        $serviceInstance = new $service();
+        $results = (isset($payload['delete']) && !isset($payload['install']) && $payload['delete'] == '__onDelete')?
+            $serviceInstance->__onDelete() :
+                    (isset($payload['install']) && !isset($payload['delete']) && $payload['install'] == '__onImport')?
+                        $serviceInstance->__onImport() : false;
+        return $results;
     }
+
+
 
 
 

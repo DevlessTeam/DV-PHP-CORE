@@ -45,6 +45,7 @@ class {{ServiceName}}
     public function __onImport()
     {
         //add code here
+        return "something here";
     }
 
 
@@ -52,9 +53,10 @@ class {{ServiceName}}
      * This method will execute on service exportation
      * @ACL private
      */
-    public function __onExport()
+    public function __onDelete()
     {
         //add code here
+        return "something there";
     }
 
 

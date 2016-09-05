@@ -93,7 +93,12 @@ class ServiceController extends Controller
             $views = new DvViews();
             $type = "init";
 
-            ($service->save() && $views->create_views($service_name, $type) )
+            $payload['serviceName'] = $service_name;
+            $views_created = $views->create_views($service_name, $type);
+
+
+
+            ($service->save() && $views_created )
                 ?
                 DLH::flash("Service created successfully", 'success'):
                 DLH::flash("Service could not be created", 'error');
@@ -196,8 +201,13 @@ class ServiceController extends Controller
             DLH::purge_table($service_name, $table_name);
         }
 
+        $payload['serviceName'] = $service_name;
+        $payload['delete'] = '__onDelete';
+        $execOutput = DLH::execOnServiceStar($payload);
+
         if (DLH::deleteDirectory($assets_path) && $service->delete()) {
-            DLH::flash("Service deleted successfully", 'success');
+
+            DLH::flash("Service deleted successfully ".$execOutput, 'success');
         } else {
             DLH::flash("Service could not be deleted", 'error');
         }
