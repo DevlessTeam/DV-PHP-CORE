@@ -18,7 +18,7 @@ use Symfony\Component\VarDumper\Cloner\Data;
 
 class DevlessHelper extends Helper
 {
-    private $accessTypes = ['@ACL public', '@ACL private', '@ACL protected'];
+
     /**
      * set paramters for notification plate
      *
@@ -669,12 +669,12 @@ class DevlessHelper extends Helper
         $docComment  = $property->getDocComment();
 
         //check DocComment
-        $ACLS = self::accessTypes;
+        $ACLS =  ['@ACL public', '@ACL private', '@ACL protected'];
 
         $access_type = function() use($docComment)  {
-            (strpos((strtolower($docComment)), '@ACL private'))? Helper::interrupt(627) :
-                (strpos(strtolower($docComment), '@ACL protected'))? Helper::get_authenticated_user_cred(2) :
-                    (strpos(strtolower($docComment), '@ACL public'))? true : Helper::interrupt(638) ;
+            (strpos(($docComment), '@ACL private'))? Helper::interrupt(627) :
+                (strpos($docComment, '@ACL protected'))? Helper::get_authenticated_user_cred(2) :
+                    (strpos($docComment, '@ACL public'))? true : Helper::interrupt(638) ;
 
         };
 

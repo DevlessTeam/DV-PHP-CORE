@@ -12,7 +12,7 @@ class {{ServiceName}}
 
     /**
      * Sample method accessible to via endpoint
-     * @ACL public
+     * @ACL private
      */
     public function methodOne()
     {
@@ -45,7 +45,7 @@ class {{ServiceName}}
     public function __onImport()
     {
         //add code here
-        return "something here";
+
     }
 
 
@@ -56,7 +56,7 @@ class {{ServiceName}}
     public function __onDelete()
     {
         //add code here
-        return "something there";
+
     }
 
 
