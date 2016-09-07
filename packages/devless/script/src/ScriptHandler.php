@@ -6,6 +6,8 @@ use App\Helpers\Helper as Helper;
 use App\Helpers\Messenger as messenger;
 use App\Http\Controllers\ServiceController as Service;
 
+
+
 class ScriptHandler
 {
     /**
@@ -24,7 +26,6 @@ class ScriptHandler
     {
         $json_payload = json_decode($json_payload, true);
         $service = new Service();
-
         //prepare request payload
         $request = [
         'resource' => $json_payload['resource'],
@@ -32,7 +33,7 @@ class ScriptHandler
         ];
 
         session()->put('script_call', 'true');
-        $output = $service->resource($request, $service_name, $resource, $internal_access = true);
+        $service->resource($request, $service_name, $resource, $internal_access = true);
         session()->forget('script_call');
 
         return json_decode(json_encode(messenger::message(), true), true);
@@ -63,7 +64,13 @@ class ScriptHandler
             'user_id'    => $user_cred['id'],
             'user_token' => $user_cred['token'],
         ];
+
+
         $script_class = new self();
+
+
+
+
 
 //NB: position matters here
         $code = <<<EOT
