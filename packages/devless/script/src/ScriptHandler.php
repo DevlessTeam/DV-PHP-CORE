@@ -47,7 +47,7 @@ class ScriptHandler
      *
      * @return array
      */
-    public function run_script($resource, $payload)
+    public function run_script($Dvresource, $payload)
     {
         $service = new Service();
 
@@ -63,13 +63,11 @@ class ScriptHandler
             'script'     => $payload['script'],
             'user_id'    => $user_cred['id'],
             'user_token' => $user_cred['token'],
+            'requestType'=> $Dvresource,
         ];
 
 
         $script_class = new self();
-
-
-
 
 
 //NB: position matters here
@@ -85,8 +83,9 @@ function DvService(\$json_payload, \$service_name, \$resource, \$method){
 $payload[script];
 EOT;
 
-        $result = eval($code);
-
-        return $result;
+        eval($code);
+        $results['payload'] = $payload;
+        $results['resource'] = $Dvresource;
+        return $results;
     }
 }

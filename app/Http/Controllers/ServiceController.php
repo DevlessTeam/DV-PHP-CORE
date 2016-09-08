@@ -250,9 +250,7 @@ class ServiceController extends Controller
 
         $serviceOutput = $this->resource($request, $service, $resource);
 
-        $response = $this->after_executing_service_action($service, $resource, $serviceOutput);
-
-        return response($response);
+        return response($serviceOutput);
 
     }
 
@@ -352,11 +350,6 @@ class ServiceController extends Controller
                     case 'db':
                         $db = new Db();
                         return $db->access_db($payload);
-                        break;
-
-                    case 'script':
-                        $script = new script;
-                        return $script->run_script($resource, $payload);
                         break;
 
                     case 'schema':
@@ -479,47 +472,11 @@ class ServiceController extends Controller
      */
     public function before_assigning_service_action($resource, $payload)
     {
+        $script = new script;
+        $payload =  $script->run_script($resource, $payload);
 
-        $originalPayload = [];
-        $originalPayload['payload'] = $payload;
-        $originalPayload['resource'] = $resource;
-
-        if ($resource == 'script') {
-            return $originalPayload;
-        }
-
-        $result = Helper::execute_pre_function($payload);
-        $result['resource'] = $resource;
-
-        return ($result['state'])? $result : $originalPayload;
-
+        return $payload;
 
     }
 
-    /**
-     * opreations to execute after service resource is executed
-     * @param string $service
-     * @prams string $resource
-     * $prams array $response
-     * @return array
-     */
-    public function after_executing_service_action($service, $resource, $response)
-    {
-        if ($resource == 'script') {
-            return $response;
-        }
-
-        $originalResponse = $response;
-
-        $output = Helper::execute_post_function($service, $response);
-        if (isset($output['payload'])) {
-            $newResponse = $output['payload'];
-        } else {
-            $newResponse = [];
-        }
-
-
-        return ($output['state'])? $newResponse : $originalResponse;
-
-    }
 }
