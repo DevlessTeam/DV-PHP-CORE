@@ -29,6 +29,7 @@ class Rules
 
 
     private $results = '';
+    private $answered = false;
 
 
     /**
@@ -64,10 +65,8 @@ class Rules
     public function ifAllFails()
     {
         $this->assertion['ifAllFails'] =
-            (!$this->assertion['elseWhenever'] || !$this->assertion['whenever']) ? : true;
-           dd($this->assertion['ifAllFails']);
-
-
+            (!$this->assertion['elseWhenever'] || !$this->assertion['whenever']) ? : false;
+        $this->called['ifAllFails'] = true;
             return $this;
     }
 
@@ -85,27 +84,37 @@ class Rules
         $elseWhenever = $this->assertion['elseWhenever'];
         $ifAllFails = $this->assertion['ifAllFails'];
 
-        $calledWhenever = $this->called['whenever'];
-        $calledElseWhenever = $this->called['elseWhenever'];
-        $calledIfAllFails = $this->called['ifAllFails'];
+        $evaluate = function () use ($service, $method, $params) {
 
+            $results = ActionClass::execute($service, $method, $params);
+            $this->answered = true;
+            return $results;
+        };
 
+        $error = function($msg='you cannot call on elseWhenever without calling on whenever') {
+            $this->answered = true;
+            $this->results = $msg;
 
-        $this->results = ($whenever || $elseWhenever || $ifAllFails )?
-            ActionClass::execute($service, $method, $params):
-            "You should have one complete flow in each rule ";
+        };
 
-       return  ($this->called['ifAllFails'])? $this->results : $this;
+        if ($this->called['elseWhenever'] && !$this->called['whenever']) {
+            $error();
 
+        } elseif($ifAllFails && !$this->called['whenever'] ) {
+            $msg = 'You cannot call on else without calling on whenever';
+            $error($msg);
 
+        } elseif((($whenever && !$this->answered) && $this->called['whenever']) ||
+                (($elseWhenever && !$this->answered) && $this->called['whenever'] && $this->called['elseWhenever']) ||
+                ($ifAllFails && !$this->answered && ( $this->called['whenever'] || $this->called['elseWhenever'] ))) {
 
+                $this->results =  $evaluate();
+
+        }
+
+        return ($this->called['ifAllFails'])? $this->results : $this;
     }
 
 
 
 }
-
-
-
-
-//voice out incase fails
