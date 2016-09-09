@@ -2,11 +2,15 @@
 
 namespace App\Helpers;
 
-use Alchemy\Zippy\Zippy;
-use App\User as user;
+use App\Http\Controllers\ServiceController;
 use DB;
-use Devless\Schema\DbHandler as DvSchema;
+use Hash;
 use Session;
+use App\User as user;
+use Alchemy\Zippy\Zippy;
+use Devless\Schema\DbHandler as DvSchema;
+use App\Helpers\DataStore;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 /*
 * @author Eddymens <eddymens@devless.io
@@ -14,47 +18,44 @@ use Session;
 
 class DevlessHelper extends Helper
 {
-    //
 
     /**
-     * set paramters for notification plate.
+     * set paramters for notification plate
      *
-     * @param type        $message
+     * @param type $message
      * @param type|string $message_color
      */
-    public static function flash($message, $message_color = '#736F6F')
+    public static function flash($message, $message_color = "#736F6F")
     {
         $custom_colors =
-        [
-            'error'        => '#EA7878',
-            'warning'      => '#F1D97A',
-            'success'      => '#7BE454',
-            'notification' => '#736F6F',
-        ];
-        (isset($custom_colors[$message_color])) ? $notification_color =
-                $custom_colors[$message_color]
-                : $notification_color = $message_color;
+            [
+                'error' => '#EA7878',
+                'warning' => '#F1D97A',
+                'success' => '#7BE454',
+                'notification' => '#736F6F',
+            ];
+        (isset($custom_colors[$message_color]))?$notification_color =
+            $custom_colors[$message_color]
+            : $notification_color = $message_color;
 
         session::flash('color', $notification_color);
         session::flash('flash_message', $message);
     }
 
     /**
-     * get service_component from db.
-     *
+     * get service_component from db
      * @param $service_name
-     *
      * @return service_object
      */
     public static function get_service_components($service_name)
     {
         $service = \DB::table('services')
-                ->where('name', $service_name)->first();
+            ->where('name', $service_name)->first();
 
         $tables = \DB::table('table_metas')
-                ->where('service_id', $service->id)->get();
+            ->where('service_id', $service->id)->get();
 
-        $views_folder = $service_name;
+        $views_folder =$service_name;
 
         $service_components['service'] = $service;
         $service_components['tables'] = $tables;
@@ -79,43 +80,45 @@ class DevlessHelper extends Helper
         $services_components = self::convert_to_json($services_components);
 
         return $services_components;
+
     }
 
+
     /**
-     * Delete table is exists.
-     *
-     * @param $table_name
-     *
+     * Delete table is exists
+     * @param $serviceName
+     * @param $tableName
      * @return bool
      */
-    public static function purge_table($table_name)
+    public static function purge_table($serviceName, $tableName)
     {
-        return (\Schema::dropIfExists($table_name)) ? true : false;
+        $service = new ServiceController();
+        return DataStore::service($serviceName, $tableName, $service)->drop()? true: false;
+
     }
 
+
     /**
-     * convert string to json.
-     *
+     * convert string to json
      * @param $incomingArray
-     *
      * @return string
-     *
      * @internal param $incommingArray
      * @internal param $service_components
      */
     public static function convert_to_json($incomingArray)
     {
+
         $formatted_json = json_encode($incomingArray, true);
 
         return $formatted_json;
+
     }
 
+
     /**
-     * Zip a folder.
-     *
+     * Zip a folder
      * @param $service_folder_path
      * @param $extension
-     *
      * @return string
      */
     public static function zip_folder($service_folder_path, $extension)
@@ -123,45 +126,44 @@ class DevlessHelper extends Helper
         $dvext = $extension;
         // Load Zippy
         $zippy = Zippy::load();
-                //Creates a service_folder_name.pkg
-                //that contains a directory "folder" that contains
+        //Creates a service_folder_name.pkg
+        //that contains a directory "folder" that contains
         //files contained in "service_folder_name" recursively
 
         $folder_name = basename($service_folder_path);
 
-        $archive = $zippy->create($service_folder_path.'.zip', [
-            $folder_name => $service_folder_path,
-        ], true);
+        $archive = $zippy->create($service_folder_path.'.zip', array(
+            $folder_name => $service_folder_path
+        ), true);
 
 
         rename($service_folder_path.'.zip', $service_folder_path.$dvext);
         self::deleteDirectory($service_folder_path);
-
         return $folder_name.$dvext;
+
     }
 
+
     /**
-     * Extract package or services.
-     *
+     * Extract package or services
      * @param string $service_folder_path
-     * @param bool   $delete_package
-     *
+     * @param bool $delete_package
      * @return bool|string
      */
     public static function expand_package($service_folder_path, $delete_package)
     {
-        $zip = new \ZipArchive();
+        $zip = new \ZipArchive;
 
         $service_basename = basename($service_folder_path);
         $state_or_payload = true;
 
-            //convert from srv/pkg to zip
-            $new_service_folder_path = preg_replace('"\.srv$"', '.zip', $service_folder_path);
+        //convert from srv/pkg to zip
+        $new_service_folder_path = preg_replace('"\.srv$"', '.zip', $service_folder_path);
         $new_service_folder_path = preg_replace('"\.pkg$"', '.zip', $service_folder_path);
 
         $state_or_payload =
-                 (rename($service_folder_path, $new_service_folder_path)) ? $new_service_folder_path
-                    : false;
+            (rename($service_folder_path, $new_service_folder_path))? $new_service_folder_path
+                :false;
 
         $res = $zip->open($new_service_folder_path);
         if ($res === true) {
@@ -169,24 +171,22 @@ class DevlessHelper extends Helper
             $zip->close();
 
             self::deleteDirectory($new_service_folder_path);
-            $state_or_payload = ($delete_package) ? self::deleteDirectory($service_folder_path) : false;
+            $state_or_payload = ($delete_package)? self::deleteDirectory($service_folder_path):false;
         } else {
             return false;
         }
 
         $folder_name = preg_replace('"\.srv$"', '', $service_basename);
         $exported_folder_path = config('devless')['views_directory'].$folder_name;
-
         return $exported_folder_path;
     }
 
+
     /**
-     * Add services to folder.
-     *
+     * Add services to folder
      * @param $service_name
      * @param $service_components
      * @param null $package_name
-     *
      * @return string
      */
     public static function add_service_to_folder(
@@ -194,8 +194,9 @@ class DevlessHelper extends Helper
         $service_components,
         $package_name = null
     ) {
+
         if ($package_name == null) {
-            $package_name = $service_name;
+            $package_name  = $service_name;
         }
 
         $temporal_package_path = storage_path().'/'.$package_name;
@@ -213,7 +214,6 @@ class DevlessHelper extends Helper
             mkdir($new_assets_path);
         }
 
-
         if (!file_exists($service_view_path)) {
             mkdir($service_view_path);
         }
@@ -228,35 +228,35 @@ class DevlessHelper extends Helper
 
         //return folder_name
         return $temporal_package_path;
+
     }
 
     /**
-     * Copy a whole folder.
-     *
+     * Copy a whole folder
      * @param $src
      * @param $dst
+     * @return bool
      */
     public static function recurse_copy($src, $dst)
     {
         $dir = opendir($src);
         @mkdir($dst);
-        while (false !== ($file = readdir($dir))) {
-            if (($file != '.') && ($file != '..')) {
-                if (is_dir($src.'/'.$file)) {
-                    self::recurse_copy($src.'/'.$file, $dst.'/'.$file);
+        while (false !== ( $file = readdir($dir))) {
+            if (( $file != '.' ) && ( $file != '..' )) {
+                if (is_dir($src . '/' . $file)) {
+                    self::recurse_copy($src . '/' . $file, $dst . '/' . $file);
                 } else {
-                    copy($src.'/'.$file, $dst.'/'.$file);
+                    copy($src . '/' . $file, $dst . '/' . $file);
                 }
             }
         }
         closedir($dir);
+        return file_exists($dst);
     }
 
     /**
-     * Delete given directory.
-     *
+     * Delete given directory
      * @param $dir
-     *
      * @return bool
      */
     public static function deleteDirectory($dir)
@@ -274,7 +274,7 @@ class DevlessHelper extends Helper
                 continue;
             }
 
-            if (!self::deleteDirectory($dir.DIRECTORY_SEPARATOR.$item)) {
+            if (!self::deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
                 return false;
             }
         }
@@ -283,14 +283,13 @@ class DevlessHelper extends Helper
     }
 
     /**
-     * Get file path from storage.
-     *
+     * Get file path from storage
      * @param $filename
-     *
      * @return bool|string
      */
     public static function get_file($filename)
     {
+
         $file_path = storage_path().'/'.$filename;
         if (!file_exists($file_path)) {
             return false;
@@ -300,10 +299,8 @@ class DevlessHelper extends Helper
     }
 
     /**
-     * Install service and or package given service path.
-     *
+     * Install service and or package given service path
      * @param $service_path
-     *
      * @return bool
      */
     public static function install_service($service_path)
@@ -321,12 +318,13 @@ class DevlessHelper extends Helper
         $service_name = [];
         $service_id_map = [];
         $install_services = function ($service) use (&$service_id, &$service_name, &$service_id_map) {
+
             $old_service_id = $service['id'];
             $service_name[$old_service_id] = $service['name'];
             unset($service['id']);
             \DB::table('services')->insert($service);
             $new_service_id = \DB::getPdo()->lastInsertId();
-            $service_id_map[$old_service_id] = $new_service_id;
+            $service_id_map[$old_service_id] = $new_service_id ;
         };
         if (!isset($service_object['service'][0])) {
             $install_services($service_object['service']);
@@ -340,21 +338,23 @@ class DevlessHelper extends Helper
             &$service_id_map,
             &$builder,
             &$service_name
-) {
-            if (count($service_table) !== 0) {
+        ) {
+
+            if (sizeof($service_table) !== 0) {
                 $old_service_id = $service_table['service_id'];
                 $new_service_id = $service_id_map[$old_service_id];
                 $service_table['schema'] = json_decode($service_table['schema'], true);
-                $resource = 'schema';
                 $service_table['service_name'] = $service_name[$old_service_id];
-                $service_table['driver'] = 'default';
-                $service_table['schema']['service_id'] = $new_service_id;
-                $service_table['service_id'] = $new_service_id;
+                $service_table['driver'] = "default";
+                $service_table['schema']['service_id'] = $new_service_id ;
+                $service_table['service_id'] = $new_service_id ;
                 $service_table['schema']['id'] = $new_service_id;
                 $service_table['id'] = $new_service_id;
-                $service_table['params'] = [0 => $service_table['schema']];
-                $builder->create_schema($resource, $service_table);
+                $service_table['params'] = [0 =>$service_table['schema']];
+                $builder->create_schema($service_table);
             }
+
+
         };
         if (!isset($service_object['tables'][0])) {
             $table_meta_install($service_object['tables']);
@@ -369,11 +369,10 @@ class DevlessHelper extends Helper
         return true;
     }
 
+
     /**
-     * install views into service_views dir.
-     *
+     * install views into service_views dir
      * @param $service_name
-     *
      * @return bool
      */
     public static function install_views($service_name)
@@ -389,17 +388,16 @@ class DevlessHelper extends Helper
     }
 
     /**
-     * signup new users onto devless.
-     *
+     * signup new users onto devless
      * @param type $payload
-     *
      * @return alphanum
      */
     public function signup($payload)
     {
+
         $fields = get_defined_vars();
 
-        $user = new User();
+        $user = new User;
 
         $secret = config('app')['key'];
 
@@ -413,16 +411,16 @@ class DevlessHelper extends Helper
         $user->session_token = $session_token = md5(uniqid(1, true));
 
         //check if either username or email and password is set
-        if (!isset($user->password) || !(isset($user->username) || isset($user->email))) {
+        if (!isset($user->password) || ! (isset($user->username) || isset($user->email))) {
             return false;
         }
 
         if ($user->save()) {
             $token_payload =
-            [
-                'token' => $session_token,
+                [
+                    'token' => $session_token,
 
-            ];
+                ];
 
             $prepared_token = $this->set_session_token($token_payload, $user->id);
 
@@ -430,15 +428,17 @@ class DevlessHelper extends Helper
         } else {
             return false;
         }
+
+
+
+
+
     }
 
     /**
-     * get authenticated user details.
-     *
+     * get authenticated user details
      * @param $payload
-     *
      * @return alphanum
-     *
      * @internal param type $request
      */
     public function get_profile($payload)
@@ -446,8 +446,8 @@ class DevlessHelper extends Helper
         if ($token = Helper::get_authenticated_user_cred(true)) {
             $db = new DB();
             $user_data = $db::table('users')->where('id', $token['id'])
-                  ->select('id', 'username', 'email', 'phone_number', 'first_name', 'last_name')
-                  ->first();
+                ->select('id', 'username', 'email', 'phone_number', 'first_name', 'last_name')
+                ->first();
 
 
 
@@ -458,19 +458,17 @@ class DevlessHelper extends Helper
     }
 
     /**
-     * authenticate and login devless users.
-     *
+     * authenticate and login devless users
      * @param $payload
-     *
      * @return alphanum
-     *
      * @internal param type $request
      */
     public function login($payload)
     {
+
         $fields = get_defined_vars();
 
-        $user = new user();
+        $user =  new user();
         $fields = $fields['payload'];
         $secret = config('app')['key'];
 
@@ -479,23 +477,23 @@ class DevlessHelper extends Helper
             ${$field} = $value;
         }
 
-        if (isset($email, $password)) {
+        if (isset($email,$password)) {
             $user_data = $user::where('email', $email)->first();
-        } elseif (isset($username, $password)) {
+        } elseif (isset($username,$password)) {
             $user_data = $user::where('username', $username)->first();
         } else {
             return false;
         }
         if ($user_data !== null) {
-            Helper::compare_hash($password, $user_data->password);
+            Helper::compare_hash($password, $user_data->password) ;
             $user_data->session_token = $session_token = md5(uniqid(1, true));
 
             if ($user_data->save()) {
                 $token_payload =
-                [
-                    'token' => $session_token,
+                    [
+                        'token' => $session_token,
 
-                ];
+                    ];
 
                 $prepared_token = $this->set_session_token($token_payload, $user_data->id);
 
@@ -504,27 +502,26 @@ class DevlessHelper extends Helper
         } else {
             return false;
         }
+
+
     }
 
     /**
-     * update user devless project.
-     *
+     * update user devless project
      * @param $payload
-     *
      * @return bool
-     *
      * @internal param type $request
      */
     public function update_profile($payload)
     {
         if ($token = Helper::get_authenticated_user_cred(true)) {
-            $user = new user();
+            $user =  new user();
 
             //unchangeable fields
             $indices = [
                 'session_token',
                 'status',
-                'role',
+                'role'
             ];
 
             $unset = function ($payload, $index) {
@@ -532,7 +529,7 @@ class DevlessHelper extends Helper
             };
 
             foreach ($indices as $index) {
-                (isset($payload[$index])) ? $unset($payload, $index) : false;
+                (isset($payload[$index]))? $unset($payload, $index) : false;
             }
 
 
@@ -549,16 +546,14 @@ class DevlessHelper extends Helper
     }
 
     /**
-     * delete a devless user.
-     *
+     * delete a devless user
      * @return bool
-     *
      * @internal param type $request
      */
     public function delete()
     {
         if ($token = Helper::get_authenticated_user_cred(true)) {
-            $user = new user();
+            $user =  new user();
             if ($user::where('id', $token['id'])->delete()) {
                 return true;
             }
@@ -567,11 +562,12 @@ class DevlessHelper extends Helper
         return false;
     }
 
+
     public function logout()
     {
         if ($token = Helper::get_authenticated_user_cred(true)) {
-            $user = new user();
-            if ($user::where('id', $token['id'])->update(['session_token' => ''])) {
+            $user =  new user();
+            if ($user::where('id', $token['id'])->update(['session_token'=> ""])) {
                 return true;
             }
         }
@@ -579,49 +575,49 @@ class DevlessHelper extends Helper
         return false;
     }
 
+
     /**
-     * set session token.
-     *
+     * set session token
      * @param $payload
      * @param $user_id
-     *
      * @return bool
-     *
      * @internal param type $request
      */
     public function set_session_token($payload, $user_id)
     {
+
         $jwt = new jwt();
         $secret = config('app')['key'];
 
         $payload = json_encode($payload);
 
-        if (DB::table('users')->where('id', $user_id)->update(['session_time' => Helper::session_timestamp()])) {
+        if (DB::table('users')->where('id', $user_id)->update(['session_time'=>elper::session_timestamp()])) {
             return $jwt->encode($payload, $secret);
         } else {
             return false;
         }
+
+
     }
 
     /**
-     * check if needed auth fields are satisfied.
-     *
+     * check if needed auth fields are satisfied
      * @param $fields
      * @param $user
-     *
      * @return mixed
      */
     public function auth_fields_handler($fields, $user)
     {
-        $expected_fields =
-        [
-            'email'      => 'email',
-            'username'   => 'text',
-            'password'   => 'password',
-            'first_name' => 'text',
-            'last_name'  => 'text',
 
-        ];
+        $expected_fields =
+            [
+                'email' => 'email',
+                'username' => 'text',
+                'password' => 'password',
+                'first_name' => 'text',
+                'last_name' => 'text'
+
+            ];
 
         foreach ($fields['payload'] as $field => $value) {
             $field = strtolower($field);
@@ -635,7 +631,7 @@ class DevlessHelper extends Helper
                 if ($field == 'password') {
                     $user->$field = Helper::password_hash($value);
                 } else {
-                    $user->$field = $value;
+                    $user->$field = $value ;
                 }
             }
         }
@@ -643,14 +639,15 @@ class DevlessHelper extends Helper
 
 
         return $user;
+
+
     }
 
     /**
-     * Get assets directory for a service.
+     * Get assets directory for a service
      *
      * @param type $serviceName
      * @param type $assetsSubPath
-     *
      * @return string
      */
     public static function assetsDirectory($serviceName, $assetsSubPath)
@@ -660,4 +657,123 @@ class DevlessHelper extends Helper
 
         return $viewsDirectory.'/'.$serviceName.'/'.$assetsDirectoryName.'/'.$assetsSubPath;
     }
+
+    /**
+     * Check method access type
+     * @param $method
+     * @param $class
+     */
+    public static function rpcMethodAccessibility($method, $class)
+    {
+        $property = $class->getMethod($method);
+        $docComment  = $property->getDocComment();
+
+        //check DocComment
+        $ACLS =  ['@ACL public', '@ACL private', '@ACL protected'];
+
+        $access_type = function() use($docComment)  {
+            (strpos(($docComment), '@ACL private'))? Helper::interrupt(627) :
+                (strpos($docComment, '@ACL protected'))? Helper::get_authenticated_user_cred(2) :
+                    (strpos($docComment, '@ACL public'))? true : Helper::interrupt(638) ;
+
+        };
+
+        array_filter($ACLS, $access_type);
+
+    }
+
+    /**
+     * Get and replace file content
+     * @param $filePath
+     * @param $oldText
+     * @param $replacement
+     * @return int
+     */
+    public static function modifyFileContent($filePath, $oldText, $replacement)
+    {
+
+        $fileContent = file_get_contents($filePath);
+
+        $fileContent = str_replace($oldText, $replacement, $fileContent);
+
+        return file_put_contents($filePath, $fileContent);
+
+    }
+
+
+    /**
+     * @param $serviceName
+     * @param $files
+     * @param $replacements
+     * @return bool
+     */
+    public static function modifyAssetContent($serviceName, array $files, array $replacements) {
+
+        $forEachFile = function ($fileName) use($serviceName, $replacements){
+
+            $filePath = config('devless')['views_directory'].$serviceName.'/'.$fileName;
+
+            foreach($replacements as $oldContent => $newContent) {
+
+                $state = self::modifyFileContent($filePath, $oldContent, $newContent);
+            }
+            return $state;
+        };
+
+        return array_filter($files, $forEachFile);
+
+    }
+
+    /**
+     * Execute on views creation
+     * @param $payload
+     * @return bool
+     */
+    public static function execOnViewsCreation($payload)
+    {
+        $serviceName = $payload['serviceName'];
+
+        $instanceInfo = DataStore::instanceInfo();
+
+        $username = $instanceInfo['admin']->username;
+        $files = ['ActionClass.php'];
+        $time = date('jS \of F Y h:i:s A');
+
+        $replacements = [
+            '{{ServiceName}}' => $serviceName,
+
+            '{{MAINDOC}}'=> '/**
+ * Created by Devless.
+ * User: '.$username.'
+ * Date Created: '.$time.'
+ * @Service: '.$serviceName.'
+ * @Version: 1.0
+ */
+',
+        ];
+
+        return self::modifyAssetContent($serviceName, $files, $replacements);
+    }
+
+
+    public static function execOnServiceStar($payload)
+    {
+        $service = $payload['serviceName'];
+        $serviceMethodPath = config('devless')['views_directory'].$service.'/ActionClass.php';
+
+        (file_exists($serviceMethodPath))?
+            require_once $serviceMethodPath : false;
+
+        $serviceInstance = new $service();
+        $results = (isset($payload['delete']) && !isset($payload['install']) && $payload['delete'] == '__onDelete')?
+            $serviceInstance->__onDelete() :
+                    (isset($payload['install']) && !isset($payload['delete']) && $payload['install'] == '__onImport')?
+                        $serviceInstance->__onImport() : false;
+        return $results;
+    }
+
+
+
+
+
 }

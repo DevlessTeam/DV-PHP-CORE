@@ -66,8 +66,5 @@ class Migration extends Helper
         return $install_state;
     }
 
-    public static function import_app($app_package_name)
-    {
-        return true;
-    }
+
 }

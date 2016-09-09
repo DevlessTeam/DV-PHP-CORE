@@ -81,7 +81,6 @@ class DbHandler
     {
         //
         $resource = 'schema';
-
         $this->create_schema($request['resource']);
     }
 
@@ -156,22 +155,22 @@ class DbHandler
             }
 
             $where = $payload['params'][0]['params'][0]['where'];
-            $explotion = explode(',', $where);
+            $explosion = explode(',', $where);
             $data = $payload['params'][0]['params'][0]['data'];
 
             if ($payload['user_id'] !== '') {
                 $result = $db->table($table_name)
-                ->where($explotion[0], $explotion[1])
+                ->where($explosion[0], $explosion[1])
                 ->where('devless_user_id', $payload['user_id'])
                 ->update($data[0]);
             } else {
                 $result = $db->table($table_name)
-                ->where($explotion[0], $explotion[1])
+                ->where($explosion[0], $explosion[1])
                 ->update($data[0]);
             }
 
             if ($result == 1) {
-                return Helper::interrupt(
+                return Response::respond(
                     619,
                     'table '.$payload['params'][0]['name'].' updated successfuly'
                 );
@@ -289,8 +288,10 @@ class DbHandler
             }
             $table_name = $service_name.'_'.$payload['params']['table'][0];
 
+            $complete_query = $base_query;
+
             (isset($payload['params']['offset'])) ?
-            $complete_query = $base_query
+            $complete_query = $complete_query
             .'->skip('.$payload['params']['offset'][0].')' :
             false;
 
@@ -309,7 +310,7 @@ class DbHandler
             $related = [];
 
 
-            if (isset($payload['params']['order'])) {
+            if (isset($payload['params']['orderBy'])) {
                 $order_by = $payload['params']['order'];
                 $complete_query = $complete_query
                 .'->orderBy("'.$payload['params']['order'][0].'" )';
@@ -538,6 +539,7 @@ class DbHandler
         if ($driver == 'mysql') {
             $conn['collation'] = $collation;
         }
+
         \Config::set('database.connections.DYNAMIC_DB_CONFIG', $conn);
     }
 

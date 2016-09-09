@@ -97,16 +97,6 @@
                          @endif
                     </div>
                 </div>
-
-                <div class="form-group @if($errors->has('app_key')) has-error @endif" >
-                  <label for="app_key" class="col-lg-2 control-label">App Key</label>
-                  <div class="col-lg-10">
-                    <input type="text" id="app_key-field" name="app_key" class="form-control" required="" value="{{$app['app_key']}}">
-                    @if($errors->has("app_key"))
-                      <span class="help-block">{{ $errors->first("app_key") }}</span>
-                    @endif
-                  </div>
-                </div>
                 <div class="form-group @if($errors->has('app_token')) has-error @endif" >
                   <label for="app_token" class="col-lg-2 control-label">App Token</label>
                   <div class="col-lg-10">

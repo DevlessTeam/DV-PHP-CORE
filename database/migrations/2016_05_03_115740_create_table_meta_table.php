@@ -15,15 +15,13 @@ class CreateTableMetaTable extends Migration
         Schema::create('table_metas', function ($table) {
             $table->increments('id');
             $table->string('table_name');
-            $table->json('validation')->nullable();
-            $table->json('relations')->nullable();
             $table->json('schema');
             $table->integer('count')->nullable();
             $table->boolean('access')->nullable();
             $table->integer('service_id')->unsigned();
-           //$table->timestamps();
-           $table->foreign('service_id')->references('id')->on('services')
+            $table->foreign('service_id')->references('id')->on('services')
                    ->onDelete('cascade');
+           // $table->timestamps();
         });
     }
 

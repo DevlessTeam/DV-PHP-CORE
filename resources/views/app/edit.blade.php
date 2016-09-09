@@ -62,16 +62,8 @@
                                      @endif
                                 </div>
                             </div>
-                             <div class="form-group @if($errors->has('app_key')) has-error @endif">
-                                <label for="app_key" class="col-lg-2 col-sm-2 control-label"  >App Key</label>
-                                <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="app_key" name="api_key" value='{{$app->api_key}}' placeholder="App key">
-                                    @if($errors->has("api_key"))
-                                        <span class="help-block">{{ $errors->first("api_key") }}</span>
-                                      @endif
-                                </div>
-                            </div>
                             <div class="form-group @if($errors->has('token')) has-error @endif">
+
                                 <label for="token-field" class="col-lg-2 col-sm-2 control-label">Token</label>
                                 <div class="col-lg-10">
                                     <div class="input-group m-b-10" >
@@ -154,7 +146,6 @@
                                 <code>
                                     var constants = {
                                         "token":"{{$app->token}}",
-                                        "key":"{{$app->api_key}}",
                                         "domain":"{{URL::to('/')}}"
                                         };
                                         
