@@ -447,7 +447,7 @@ class ServiceController extends Controller
      * @return bool
      * @internal param object $service service payload
      */
-    public function check_resource_access_right_type($access_type)
+    public function     check_resource_access_right_type($access_type)
     {
         $is_user_login = Helper::is_admin_login();
 
@@ -472,10 +472,17 @@ class ServiceController extends Controller
      */
     public function before_assigning_service_action($resource, $payload)
     {
-        $script = new script;
-        $payload =  $script->run_script($resource, $payload);
+        $output['resource'] = $resource;
+        $output['payload'] = $payload;
 
-        return $payload;
+        if($resource != 'schema') {
+
+        $script = new script;
+        $output =  $script->run_script($resource, $payload);
+
+        }
+
+        return $output;
 
     }
 

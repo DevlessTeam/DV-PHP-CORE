@@ -91,7 +91,7 @@
     </div>
       <script>
       function init(){
-        @if(session('package'))auto_download('{{session('package')}}') @endif
+        @if(session('package'))auto_download('{{session('package')}}'); @endif
       }
       function auto_download(package_name){
 

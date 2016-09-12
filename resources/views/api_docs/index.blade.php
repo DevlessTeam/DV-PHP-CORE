@@ -246,7 +246,7 @@
                         var values = {};
                         for (var i = 0; i < schema.length; i++) {
                             values[schema[i].name] = "";
-                        };
+                        }
                         if (request_type === 'create'){
                             // var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+table_name+'","field":['+JSON.stringify(values)+']}]}'), undefined, 4);
                             var json = JSON.stringify(JSON.parse('['+JSON.stringify(values)+']'), undefined, 4);
@@ -405,11 +405,11 @@
                     })
                     .done(function(data) {
                         if(data.status_code == 700){
-                            $('#response').show()
+                            $('#response').show();
                             $('#response-field').text(data);
                             flash('error');
                         } else {
-                            $('#response').show()
+                            $('#response').show();
                             $('#response-field').text(data);
                             flash('success');
                         }
@@ -420,17 +420,16 @@
 
             function statuscheck(data) {
                 if(data.status_code == 700){
-                    $('#response').show()
+                    $('#response').show();
                     $('#response-field').text(JSON.stringify(data, undefined, 4));
                     flash('error');
                 } else {
-                    $('#response').show()
+                    $('#response').show();
                     // $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
                     $('#response-field').text(JSON.stringify(data, undefined, 4));
                     flash('success');
                 }
-            };
-
+            }
             function flash(alert) {
                 if (alert == 'success') {
                     $('.modal-body').html('Operation Successful');
@@ -448,8 +447,7 @@
                     $('.modal-backdrop').removeClass("modal-backdrop");
                 }
                 modalHide();
-            };
-
+            }
             function modalHide() {
                 setTimeout(function(){
                     $('#flash_msg').modal('hide');

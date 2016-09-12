@@ -178,7 +178,7 @@ window.onload(function() {
             $('#excelDataTable').html(' ');
             navOption(data);
         });
-    })
+    });
 
     function navOption(data) {
         entries = data.data;

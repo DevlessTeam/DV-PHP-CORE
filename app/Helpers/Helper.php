@@ -33,7 +33,7 @@ class Helper
         602 => 'Database schema could not be created',
         603 => 'Table could not be created',
         604 => 'Service  does not exist or is not active',
-        605 => 'No such resource type try (script  db or view)',
+        605 => 'No such resource type try (rpc db or view)',
         606 => 'Created table successfully',
         607 => 'Could not find the right DB method',
         608 => 'Request method not supported',

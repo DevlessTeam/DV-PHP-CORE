@@ -31,7 +31,7 @@ class DbHandler
         'relation' => 'relation',
     ];
 
-    private $dbActionAssoc = [
+    public $dbActionAssoc = [
     'GET'    => 'query',
     'POST'   => 'create',
     'PATCH'  => 'update',

@@ -242,13 +242,7 @@
 
 
 <textarea class="code-box" name="script" rows="20" style="width: 100%">
-
-@if(!$service->script == "")
 {{$service->script}}
-@else
- echo "Happy scripting";
-@endif
-
 </textarea>
                                                                        <br>
 
@@ -285,7 +279,7 @@
            },
            "processData": false,
             "data": "{\"resource\":[{\"name\":\""+table_name+"\",\"params\":[{\"drop\":\"true\"}]}]}"
-           }
+           };
 
          $.ajax(settings).done(function (response) {
             
@@ -315,16 +309,16 @@
        }
 
 
-  )
+  );
 
   new_fields = old_fields;
 
         $( ".dynamic-space").append(new_fields);
         old_fields.attr('class', 'fields'+window.count);
         old_fields.contents().each(function () {
-            if (this.nodeType === 3) this.nodeValue = $.trim($(this).text()).replace(/removeIndicator/g, "fields"+window.count)
+            if (this.nodeType === 3) this.nodeValue = $.trim($(this).text()).replace(/removeIndicator/g, "fields"+window.count);
             if (this.nodeType === 1) $(this).html( $(this).html().replace(/removeIndicator/g, "fields"+window.count) )
-            })
+            });
         window.count = window.count + 1 ;
 
 
@@ -354,7 +348,7 @@
         var array = $.map(object, function(value, index) {
         return [value];
         });
-        count = 0
+        count = 0;
         jQuery(
             function($)
             {
@@ -400,7 +394,7 @@
                 var len = ((form_array.length)-4)/8;
                 
                 for (var i = 1; i <= len; i++) {
-                    position = ((len-i)*8)
+                    position = ((len-i)*8);
                     if(form_array[6+position] == ""){ _default = null;}else{_default = form_array[6+position]; }
                     window.schema_json.resource[0].field[i-1] = {
                         "name":trim(form_array[3+position]),
@@ -428,7 +422,7 @@
                     },
                     "processData": false,
                     "data": table_schema
-                  }
+                  };
 
                 $.ajax(settings).done(function (response) {
                   
@@ -447,7 +441,7 @@
                   else if(status_code == 606){
 
 
-                        window.location.href = "/services/"+{{$service->id}}+"/edit";
+                        window.location.href = "/services/"+{{$service->id}}+"/edit";;
                         
 
                   }else{
@@ -463,7 +457,7 @@
                      alert('Please add at least a field');
                      $('#crt-tbl').prop('disabled', false);
                 }
-            }
+            };
             else{
                 alert('Sorry seems like you have no fields set ');
                 $('#crt-tbl').prop('disabled', false);
@@ -500,11 +494,11 @@ var settings = {
   "contentType": false,
   "mimeType": "multipart/form-data",
   "data": form
-}
+};
 
 $.ajax(settings).done(function (response) {
   result = JSON.parse(response);
-  console.log(result);
+
    (result.status_code == 626)?$('.code-console').css('color','greenyellow')
  : $('.code-console').css('color','red');
 
