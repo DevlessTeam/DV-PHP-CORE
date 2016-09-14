@@ -143,10 +143,10 @@ class DataStore extends Helper
         $parameters  = ($action == 'delete' && isset($payload['params']['where'][0]))?
             [[$action=>"true", 'where'=>$payload['params']['where'][0]]]: [[$action=>"true"]];
 
-        $dataToPatch =
+        $deletePayload =
             [['name' => $tableName, 'params' => $parameters ]];
-
-        $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToPatch);
+        
+        $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $deletePayload);
 
         return $result;
 

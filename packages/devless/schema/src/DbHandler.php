@@ -197,9 +197,8 @@ class DbHandler
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
         //check if table name is set
         $service_name = $payload['service_name'];
-        $ORG_table_name = $payload['params'][0]['name'];
-        $table_name = $service_name.'_'.$ORG_table_name;
-
+        $table_name = ($payload['params'][0]['name'] == $service_name.'_'.$payload['params'][0]['name'])
+                ? $payload['params'][0]['name']: $service_name.'_'.$payload['params'][0]['name'];
         if (!\Schema::connection('DYNAMIC_DB_CONFIG')->
         hasTable($table_name)) {
             Helper::interrupt(634);
@@ -339,23 +338,27 @@ class DbHandler
                     }
                 }
             }
-            
-            $related = function ($results) use($queried_table_list, $service_name, $table_name, $payload) {
-                return $this->_get_related_data($payload, $results, $table_name,
-                        $queried_table_list);
-            };
-            $endOutput = [];
-            $complete_query = $complete_query.'
-                ->chunk(100, function($results) use(&$endOutput, $related) { 
-                    $endOutput =  $related($results);
-                });';
+            if (isset($queried_table_list)) {
+                $related = function ($results) use($queried_table_list, $service_name, $table_name, $payload) {
+                    return $this->_get_related_data($payload, $results, $table_name,
+                            $queried_table_list);
+                };
+                $endOutput = [];
+                $complete_query = $complete_query.'
+                    ->chunk(100, function($results) use(&$endOutput, $related) { 
+                        $endOutput =  $related($results);
+                    });';
+            } else {
+                $complete_query = 'return '.$complete_query.'->get();';
+            }
             
             $count = $db->table($table_name)->count();
             $query_output = eval($complete_query);
+            
                  
             $results['properties']['count'] = $count;
             
-            $results['results'] = $endOutput;
+            $results['results'] = (isset($queried_table_list))? $endOutput : $query_output;
 
             return Response::respond(625, null, $results);
         } else {
@@ -372,6 +375,7 @@ class DbHandler
      */
     public function create_schema($payload)
     {
+        dd($payload);
         $service_name = $payload['service_name'];
         //connectors mysql pgsql sqlsrv sqlite
         $connector = $this->_connector($payload);

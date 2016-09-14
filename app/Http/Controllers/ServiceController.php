@@ -194,8 +194,9 @@ class ServiceController extends Controller
         $service_name = $service->name;
         $view_path = config('devless')['views_directory'];
         $assets_path = $view_path.$service_name;
-
-        $table_meta = \App\TableMeta::where('service_id', $id)->get();
+        
+        $table_meta = \App\TableMeta::where('service_id', $id)->orderBy('id', 'desc')->get();
+        
         foreach ($table_meta as $meta) {
             $table_name = $meta->table_name;
             DLH::purge_table($service_name, $table_name);
