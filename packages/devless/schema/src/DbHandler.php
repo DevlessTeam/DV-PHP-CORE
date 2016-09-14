@@ -375,7 +375,6 @@ class DbHandler
      */
     public function create_schema($payload)
     {
-        dd($payload);
         $service_name = $payload['service_name'];
         //connectors mysql pgsql sqlsrv sqlite
         $connector = $this->_connector($payload);

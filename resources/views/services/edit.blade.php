@@ -293,24 +293,26 @@
          });}
     }
   function append_field(){
-  field_names = ['name', 'description', 'field-name', 'field-type', 'default',
-            'required', 'validate', 'unique'];
-  old_fields = window.main_old_fields.clone();
-        field_names.forEach(
-  function(i){
-            field_name = i+window.count;
-            old_fields.find('#'+i).attr('name', field_name ).attr('id', field_name );
-       }
-  )
-  new_fields = old_fields;
-        $( ".dynamic-space").append(new_fields);
-        old_fields.attr('class', 'fields'+window.count);
-        old_fields.contents().each(function () {
-            if (this.nodeType === 3) this.nodeValue = $.trim($(this).text()).replace(/removeIndicator/g, "fields"+window.count)
-            if (this.nodeType === 1) $(this).html( $(this).html().replace(/removeIndicator/g, "fields"+window.count) )
-            })
-        window.count = window.count + 1 ;
+    field_names = ['name', 'description', 'field-name', 'field-type', 'field-reference',
+                'default', 'required', 'validate', 'unique'];
+    old_fields = window.main_old_fields.clone();
+          field_names.forEach(
+    function(i){
+              field_name = i+window.count;
+              old_fields.find('#'+i).attr('name', field_name ).attr('id', field_name );
+         }
+    )
+    new_fields = old_fields;
+    $( ".dynamic-space").append(new_fields);
+    old_fields.attr('class', 'fields'+window.count);
+    old_fields.contents().each(function () {
+        if (this.nodeType === 3) this.nodeValue = $.trim($(this).text()).replace(/removeIndicator/g, "fields"+window.count)
+        if (this.nodeType === 1) $(this).html( $(this).html().replace(/removeIndicator/g, "fields"+window.count) )
+        })
+    window.count = window.count + 1 ;
+    
     }
+    
     function create_table(service_name){
          $('#crt-tbl').prop('disabled', true);
          $.fn.serializeObject = function()
