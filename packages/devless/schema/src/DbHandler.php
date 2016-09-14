@@ -602,11 +602,11 @@ class DbHandler
         $service = $payload['service_name'];
         
         $tables = (in_array("*", $tables))?
-                $this->_get_all_related_tables($payload, $primaryTable) : $tables;
+                $this->_get_all_related_tables($primaryTable) : $tables;
         
         //loop over list of tables check if exist
         foreach ($results as $eachResult) {
-
+                   $eachResult->related = []; 
                    array_walk($tables, function($table) use($eachResult, &$output, $service) {
 
                        $ref_field = $service.'_'.$table.'_id';
@@ -614,11 +614,12 @@ class DbHandler
                        $relatedData = @\DB::table($service.'_'.$table)
                            ->where('id', $eachResult->$ref_field )
                            ->get();
-                       $eachResult->related = [$table =>[$relatedData]];
+                       
+                       array_push($eachResult->related,[$table =>[$relatedData]]);
 
-                       array_push($output, $eachResult);
+                       
                    });
-
+                   array_push($output, $eachResult); 
         }
         return $output;
     }
@@ -628,23 +629,30 @@ class DbHandler
      *@param $stableName
      *@return array
      */
-    private function _get_all_related_tables($payload, $tableName) 
+    private function _get_all_related_tables($tableName) 
     {
-        $serviceTables = $this->_get_all_service_tables($payload);
-        foreach($serviceTables as $eachTable) {
-            
-            $schema = $this->_get_tableMeta($tableName);
-            dd($schema);
-        }
-        //return 
+        $relatedTables = [];
         
-    }
-    
+        $schema = $this->_get_tableMeta($tableName);
+        
+        array_walk($schema['schema']['field'], function($field) 
+                use($tableName, &$relatedTables) {
+            
+            if ($field['field_type'] == 'reference') {
+
+                array_push($relatedTables, $field['ref_table']);
+            }
+
+        });
+       
+        return $relatedTables;
+        
+    } 
     private function _get_all_service_tables($payload)
     {
         $serviceId = $payload['id'];
         $tables = \DB::table('table_metas')
-                ->where($serviceId, 'service_id')->get();
+                ->where('service_id', $serviceId)->get();
         
         return $tables;
     }
