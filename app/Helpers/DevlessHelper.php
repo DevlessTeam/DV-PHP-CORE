@@ -763,13 +763,18 @@ class DevlessHelper extends Helper
 
         (file_exists($serviceMethodPath))?
             require_once $serviceMethodPath : false;
-
-        $serviceInstance = new $service();
-        $results = (isset($payload['delete']) && !isset($payload['install']) && $payload['delete'] == '__onDelete')?
-            $serviceInstance->__onDelete() :
-                    (isset($payload['install']) && !isset($payload['delete']) && $payload['install'] == '__onImport')?
-                        $serviceInstance->__onImport() : false;
-        return $results;
+        
+        if (class_exists($service)) {
+                $serviceInstance = new $service();
+            $results = (isset($payload['delete']) && !isset($payload['install']) && $payload['delete'] == '__onDelete')?
+                $serviceInstance->__onDelete() :
+                        (isset($payload['install']) && !isset($payload['delete']) && $payload['install'] == '__onImport')?
+                            $serviceInstance->__onImport() : false;
+            return $results;
+        } else {
+            return false;
+        }
+        
     }
 
 

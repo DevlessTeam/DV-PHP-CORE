@@ -245,6 +245,7 @@ class ServiceController extends Controller
      */
     public function service(Request $request, $service, $resource)
     {
+       
         //check token and keys
         $this->_devlessCheckHeaders($request);
 
@@ -361,6 +362,7 @@ class ServiceController extends Controller
                         return $payload;
 
                     case 'rpc':
+                        ($method != 'POST')? Helper::interrupt(639): true;
                         $rpc = new Rpc();
                         return $rpc->index($payload);
 

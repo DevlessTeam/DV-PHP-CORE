@@ -129,6 +129,7 @@ class ApiTest extends TestCase
         $this->json('DELETE', $url.$serviceName.'/'.$dbAction, $deleteObj)
             ->seeJson(['message' => 'dropped table successfully',
                 'payload'        => [], 'status_code' => 613, ]);
+        //dd($this);
     }
 
     public function testAddData()

@@ -217,7 +217,7 @@ class DbHandler
                 \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
 
                 (Helper::is_admin_login()) ?
-                \DB::table('table_metas')->where('table_name', $ORG_table_name)->delete() : Helper::interrupt(620);
+                \DB::table('table_metas')->where('table_name', $table_name)->delete() : Helper::interrupt(620);
 
                 return Response::respond(613, 'dropped table successfully');
                 $task = 'drop';
@@ -339,24 +339,23 @@ class DbHandler
                     }
                 }
             }
-            $complete_query = 'return '.$complete_query.'->get();';
+            
+            $related = function ($results) use($queried_table_list, $service_name, $table_name, $payload) {
+                return $this->_get_related_data($payload, $results, $table_name,
+                        $queried_table_list);
+            };
+            $endOutput = [];
+            $complete_query = $complete_query.'
+                ->chunk(100, function($results) use(&$endOutput, $related) { 
+                    $endOutput =  $related($results);
+                });';
+            
             $count = $db->table($table_name)->count();
             $query_output = eval($complete_query);
+                 
             $results['properties']['count'] = $count;
-            if (count($query_output) == 1 && isset($queried_table_list)) {
-                $query_output = json_decode(json_encode($query_output), true);
-                $wanted_relationships = $queried_table_list;
-                $related = $this->_get_related_tables(
-                    $payload,
-                    $table_name,
-                    $query_output[0],
-                    $wanted_relationships,
-                    $db
-                );
-            }
-            $results['results'] = $query_output;
-
-            $results['properties']['related'] = $related;
+            
+            $results['results'] = $endOutput;
 
             return Response::respond(625, null, $results);
         } else {
@@ -402,7 +401,7 @@ class DbHandler
                 }
                 //store table_meta details
             });
-            $this->_set_table_meta($new_payload);
+            $this->_set_table_meta($service_name, $new_payload);
 
             return Response::respond(606);
         } else {
@@ -584,7 +583,7 @@ class DbHandler
         return true;
     }
 
-    /**TODO:needs serious refactoring
+    /**
      * get related tables
      * @params $table_name
      * @param $payload request parameters
@@ -596,68 +595,72 @@ class DbHandler
      * @params $wanted_relationships names fo table to get
      * @params $db db connection
      */
-    private function _get_related_tables(
-        $payload,
-        $table_name,
-        $output,
-        $wanted_related_tables,
-        $db
-    ) {
-        $service_name = $payload['service_name'];
-        $table_meta = $db->table('table_metas')->where('table_name', $table_name)->get();
-        $table_schema = json_decode($table_meta[0]->schema);
-        $table_fields = $table_schema->field;
+    private function _get_related_data($payload, $results, $primaryTable, $tables) {
+        $output = [];
+        
+        //$serviceTables = $this->_get_all_tables($serviceId);
+        $service = $payload['service_name'];
+        
+        $tables = (in_array("*", $tables))?
+                $this->_get_all_related_tables($payload, $primaryTable) : $tables;
+        
+        //loop over list of tables check if exist
+        foreach ($results as $eachResult) {
 
-        $related_tables = [];
-        foreach ($wanted_related_tables as $each_wanted_table) {
-            if ($each_wanted_table == '*') {
-                //check the model and grab all relations
-                foreach ($table_fields as $each_) {
-                    if ($each_->ref_table !== null &&
-                    $each_->ref_table !== '') {
-                        $referenced_table = $each_->ref_table;
-                        $indexed_referenced_table = $service_name.'_'.$referenced_table;
-                        $referenced_id = ($output[$indexed_referenced_table.'_id']);
-                        if ($payload['user_id'] !== '') {
-                            $user_id = $payload['user_id'];
-                            $related_tables[$referenced_table] = $db->table($indexed_referenced_table)
-                            ->where('id', $referenced_id)->where('devless_user_id', $user_id)->get();
-                        } else {
-                            $related_tables[$referenced_table] = $db->table($indexed_referenced_table)
-                            ->where('id', $referenced_id)->get();
-                        }
-                    }
-                }
-            } else {
-                foreach ($table_fields as $each_) {
-                    $each_referenced_field = $each_->ref_table;
-                    $referenced_field = $service_name.'_'.
-                    $each_referenced_field.'_id';
-                    if (isset($output[$referenced_field]) &&
-                    $each_referenced_field == $each_wanted_table) {
-                        if ($payload['user_id'] !== '') {
-                            $related_tables[$each_wanted_table] = $db->
-                            table($service_name.'_'.$each_wanted_table)
-                            ->where('id', $output[$referenced_field])
-                            ->where('devless_user_id', $user_id)->get();
-                        } else {
-                            $related_tables[$each_wanted_table] = $db->
-                            table($service_name.'_'.$each_wanted_table)
-                            ->where('id', $output[$referenced_field])
-                            ->get();
-                        }
-                    }
-                }
-            }
+                   array_walk($tables, function($table) use($eachResult, &$output, $service) {
+
+                       $ref_field = $service.'_'.$table.'_id';
+
+                       $relatedData = @\DB::table($service.'_'.$table)
+                           ->where('id', $eachResult->$ref_field )
+                           ->get();
+                       $eachResult->related = [$table =>[$relatedData]];
+
+                       array_push($output, $eachResult);
+                   });
+
         }
-
-        return $related_tables;
+        return $output;
+    }
+    
+    /**
+     *Get all related tables for a service.
+     *@param $stableName
+     *@return array
+     */
+    private function _get_all_related_tables($payload, $tableName) 
+    {
+        $serviceTables = $this->_get_all_service_tables($payload);
+        foreach($serviceTables as $eachTable) {
+            
+            $schema = $this->_get_tableMeta($tableName);
+            dd($schema);
+        }
+        //return 
+        
+    }
+    
+    private function _get_all_service_tables($payload)
+    {
+        $serviceId = $payload['id'];
+        $tables = \DB::table('table_metas')
+                ->where($serviceId, 'service_id')->get();
+        
+        return $tables;
     }
 
-    private function _set_table_meta($schema)
+
+    /**
+     *Set table meta.
+     *@param $service_name
+     *@param $schema
+     *@return array
+     *
+     */
+    private function _set_table_meta($service_name, $schema)
     {
         \DB::table('table_metas')->insert(['schema' => json_encode($schema),
-        'table_name'                                => $schema['name'], 'service_id' => $schema['id'], ]);
+                    'table_name' => $service_name.'_'.$schema['name'], 'service_id' => $schema['id'], ]);
 
 
         return true;
@@ -665,19 +668,15 @@ class DbHandler
 
     /**
      *Get table meta.
-     *
      * @param $table_name
-     *
      * @return array
      *
-     * @internal param string $service_id
      */
     private function _get_tableMeta($table_name)
     {
         $tableMeta = \DB::table('table_metas')->
         where('table_name', $table_name)->first();
         $tableMeta = json_decode(json_encode($tableMeta), true);
-        $count = 0;
         $tableMeta['schema'] = json_decode($tableMeta['schema'], true);
 
         return $tableMeta;

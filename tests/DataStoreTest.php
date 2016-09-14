@@ -13,7 +13,7 @@ class DataStoreTest extends TestCase
     public function testService()
     {
             $serviceMock = Mockery::mock('App\Http\Controllers\ServiceController');
-            $serviceMock->shouldReceive('assign_to_service')->andReturn(__FUNCTION__);
+            $serviceMock->shouldReceive('assign_to_service')->with()->andReturn("eddymens");
 
             $dataStore = DataStore::service($this->serviceName,  $this->serviceTable, $serviceMock);
 
@@ -72,9 +72,14 @@ class DataStoreTest extends TestCase
         $this->assertEquals($params['orderBy'][0], $keyword);
     }
 
-    public function testAddData()
+    public function testInstanceInfo()
     {
-
+        
+    $results = DataStore::instanceInfo();
+    
+    $this->assertEquals($results['app']->name, 'appName');
+    $this->assertEquals($results['admin']->username, 'eddymens');
+    
     }
 }
 
