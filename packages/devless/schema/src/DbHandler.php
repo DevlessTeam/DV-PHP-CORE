@@ -752,7 +752,7 @@ class DbHandler
         $table_data,
         $check_password = false
     ) {
-        $table_meta = $this->_get_tableMeta($table_name);
+        $table_meta = $this->_get_tableMeta($service_name.'_'.$table_name);
         $schema = $table_meta['schema'];
         $hit = 0;
         $count = 0;
