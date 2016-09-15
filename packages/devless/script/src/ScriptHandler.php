@@ -9,6 +9,7 @@ use Devless\RulesEngine\Rules;
 use Devless\Schema\DbHandler as DbHandler;
 
 
+
 class ScriptHandler
 {
     /**
@@ -49,7 +50,8 @@ class ScriptHandler
      * @internal param string $resource name of resource belonging to a service
      */
     public function run_script($Dvresource, $payload)
-    {
+    { 
+            
         $service = new Service();
         $rules = new Rules();
 
@@ -73,26 +75,21 @@ class ScriptHandler
 
         $EVENT['params'] = (isset($payload['params'][0]['field'])) ? $payload['params'][0]['field'][0] : [];
 
-        $script_class = new self();
-
-
 //NB: position matters here
-        $code = <<<EOT
-  if(!function_exists('DvService')){
- \$GLOBALS['script_class'] = \$script_class;
-function DvService(\$json_payload, \$service_name, \$resource, \$method){
-  return call_user_func_array(array(\$GLOBALS['script_class'], 'internal_services'),array(\$json_payload,
-    \$service_name, \$resource, \$method));
- }
-}
-
+$code = <<<EOT
 $payload[script];
 EOT;
-        eval($code);
-
-
+        $exec = function () use($code, $rules, $EVENT) {
+            eval($code);        
+        };
+        
+        ob_start();
+        $output = $exec();
+        ob_end_clean();
+        
         $results['payload'] = $payload;
         $results['resource'] = $Dvresource;
+        
         return $results;
     }
 }
