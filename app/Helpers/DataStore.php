@@ -210,6 +210,10 @@ class DataStore extends Helper
         return (is_null(self::$instance))? self::$instance = new self() : self::$instance;
     }
 
+    /**
+     * get instance information 
+     * @return array
+     */
     public static function instanceInfo()
     {
         
@@ -222,4 +226,6 @@ class DataStore extends Helper
 
         return $instanceInfo;
     }
+    
+   
 }

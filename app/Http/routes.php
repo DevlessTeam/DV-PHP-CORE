@@ -72,9 +72,12 @@ Route::group(['middleware' => 'user.auth'], function () {
     Route::get('privacy/{serviceId?}/get', 'PrivacyController@show');
     Route::put('privacy/{privacy}', 'PrivacyController@update');
 
-  //Service Migrator
+  //Service Migration
     Route::resource('migrate', 'ServiceMigrationController');
 
+  //Hub
+    Route::resource('hub', 'HubController@index');
+    Route::resource('get-service', 'HubController@getService');
 
 
   //Download Route

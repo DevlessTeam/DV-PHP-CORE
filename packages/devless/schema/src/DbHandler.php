@@ -197,8 +197,21 @@ class DbHandler
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
         //check if table name is set
         $service_name = $payload['service_name'];
-        $table_name = ($payload['params'][0]['name'] == $service_name.'_'.$payload['params'][0]['name'])
-                ? $payload['params'][0]['name']: $service_name.'_'.$payload['params'][0]['name'];
+        $table = $payload['params'][0]['name'];
+        
+        //remove service appendage from service 
+        if(($pos = strpos($table, $service_name.'_')) !== false)
+        {
+           $tableWithoutService = substr($table, $pos + 1);
+        } else {
+            $tableWithoutService = $table;
+        }
+        
+        
+        $table_name = ($tableWithoutService == $payload['params'][0]['name'])
+                ? $service_name.'_'.$tableWithoutService:
+                  $payload['params'][0]['name'];
+        dd($table_name);
         if (!\Schema::connection('DYNAMIC_DB_CONFIG')->
         hasTable($table_name)) {
             Helper::interrupt(634);
@@ -207,6 +220,7 @@ class DbHandler
         if ($payload['user_id'] !== '') {
             $user_id = $payload['user_id'];
             $destroy_query = '$db->table("'.$table_name.'")->where("devless_user_id",'.$user_id.')';
+            
         } else {
             $destroy_query = '$db->table("'.$table_name.'")';
         }
