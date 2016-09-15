@@ -211,7 +211,7 @@ class DbHandler
         $table_name = ($tableWithoutService == $payload['params'][0]['name'])
                 ? $service_name.'_'.$tableWithoutService:
                   $payload['params'][0]['name'];
-        dd($table_name);
+        
         if (!\Schema::connection('DYNAMIC_DB_CONFIG')->
         hasTable($table_name)) {
             Helper::interrupt(634);
