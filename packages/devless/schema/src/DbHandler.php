@@ -588,36 +588,39 @@ class DbHandler
 
     /**
      * get related tables
-     * @params $table_name
-     * @param $payload request parameters
-     * @param $table_name
-     * @param $output
-     * @param $wanted_related_tables
-     * @param $db
+     * @param $payload
+     * @param $results
+     * @param $primaryTable
      * @return array
-     * @params $wanted_relationships names fo table to get
-     * @params $db db connection
      */
     private function _get_related_data($payload, $results, $primaryTable, $tables) {
-        $output = [];
+      
         
-        //$serviceTables = $this->_get_all_tables($serviceId);
-        $service = $payload['service_name'];
+        
+        $serviceTables = $this->_get_all_service_tables($payload);
+        
         
         $tables = (in_array("*", $tables))?
                 $this->_get_all_related_tables($primaryTable) : $tables;
+        
+        $output = [];
+        $service = $payload['service_name'];
+        
         
         //loop over list of tables check if exist
         foreach ($results as $eachResult) {
                    $eachResult->related = []; 
                    array_walk($tables, function($table) use($eachResult, &$output, $service) {
 
-                       $ref_field = $service.'_'.$table.'_id';
-
-                       $relatedData = @\DB::table($service.'_'.$table)
-                           ->where('id', $eachResult->$ref_field )
-                           ->get();
+                       $refField = $service.'_'.$table.'_id';
                        
+                       $referenceId = (isset($eachResult->$refField))? $eachResult->$refField:
+                                    Helper::interrupt(640);
+                       
+                       $relatedData = \DB::table($service.'_'.$table)
+                           ->where('id', $referenceId)
+                           ->get();
+                        
                        array_push($eachResult->related,[$table =>[$relatedData]]);
 
                        

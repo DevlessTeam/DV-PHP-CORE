@@ -68,6 +68,7 @@ class Helper
         637 => 'Got RPC response successfully',
         638 => 'Sorry no such method or method is private/protected',
         639 => 'Sorry RPC can only be processed over POST request',
+        640 => 'Sorry no such related tables',
         700 => 'Internal system error',
     ];
 
