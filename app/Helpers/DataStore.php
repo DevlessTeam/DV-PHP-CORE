@@ -66,13 +66,14 @@ class DataStore extends Helper
         $payload = self::$payload;
         $tableName = self::$payload['params']['table'][0];
         $method = 'POST';
+
         $pushToStore = function ($data) use ($tableName, $method, $service, $payload) {
             $dataToAdd = [['name' => $tableName, 'field' => [$data]]];
             return $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToAdd);
         };
 
         foreach ($data as $datum) {
-                $results =$pushToStore($datum);
+                $results = $pushToStore($datum);
         }
         return $results;
     }
@@ -142,10 +143,10 @@ class DataStore extends Helper
         $parameters  = ($action == 'delete' && isset($payload['params']['where'][0]))?
             [[$action=>"true", 'where'=>$payload['params']['where'][0]]]: [[$action=>"true"]];
 
-        $dataToPatch =
+        $deletePayload =
             [['name' => $tableName, 'params' => $parameters ]];
-
-        $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToPatch);
+        
+        $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $deletePayload);
 
         return $result;
 
@@ -209,10 +210,16 @@ class DataStore extends Helper
         return (is_null(self::$instance))? self::$instance = new self() : self::$instance;
     }
 
+    /**
+     * get instance information
+     * @return array
+     */
     public static function instanceInfo()
     {
-        $adminData = \DB::table('users')->where('id',1)->where('role',1)->select('username','email')->first();
-        $appData = \DB::table('apps')->select('name','description','token')->first();
+        
+        $adminData = \DB::table('users')->where('id', 1)->where('role', 1)
+                ->select('username', 'email')->first();
+        $appData   =  \DB::table('apps')->select('name', 'description', 'token')->first();
 
         $instanceInfo['app'] = $appData;
         $instanceInfo['admin'] = $adminData;

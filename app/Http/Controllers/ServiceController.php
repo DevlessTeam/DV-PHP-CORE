@@ -11,6 +11,7 @@ use App\Helpers\Response as Response;
 use Devless\Script\ScriptHandler as script;
 use App\Http\Controllers\ViewController as DvViews;
 use App\Http\Controllers\RpcController as Rpc;
+
 class ServiceController extends Controller
 {
 
@@ -194,8 +195,9 @@ class ServiceController extends Controller
         $service_name = $service->name;
         $view_path = config('devless')['views_directory'];
         $assets_path = $view_path.$service_name;
-
-        $table_meta = \App\TableMeta::where('service_id', $id)->get();
+        
+        $table_meta = \App\TableMeta::where('service_id', $id)->orderBy('id', 'desc')->get();
+        
         foreach ($table_meta as $meta) {
             $table_name = $meta->table_name;
             DLH::purge_table($service_name, $table_name);
@@ -206,7 +208,6 @@ class ServiceController extends Controller
         $execOutput = DLH::execOnServiceStar($payload);
 
         if (DLH::deleteDirectory($assets_path) && $service->delete()) {
-
             DLH::flash("Service deleted successfully ".$execOutput, 'success');
         } else {
             DLH::flash("Service could not be deleted", 'error');
@@ -245,6 +246,7 @@ class ServiceController extends Controller
      */
     public function service(Request $request, $service, $resource)
     {
+        
         //check token and keys
         $this->_devlessCheckHeaders($request);
 
@@ -361,6 +363,7 @@ class ServiceController extends Controller
                         return $payload;
 
                     case 'rpc':
+                        ($method != 'POST')? Helper::interrupt(639): true;
                         $rpc = new Rpc();
                         return $rpc->index($payload);
 
@@ -472,11 +475,15 @@ class ServiceController extends Controller
      */
     public function before_assigning_service_action($resource, $payload)
     {
-        $script = new script;
-        $payload =  $script->run_script($resource, $payload);
+        $output['resource'] = $resource;
+        $output['payload'] = $payload;
 
-        return $payload;
+        if ($resource != 'schema') {
+            $script = new script;
+            $output =  $script->run_script($resource, $payload);
+        }
+
+        return $output;
 
     }
-
 }

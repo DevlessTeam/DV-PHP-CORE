@@ -115,7 +115,6 @@ class ViewController extends Controller
                     $exec_success = DevlessHelper::execOnViewsCreation($payload);
 
                     return ($exec_success && $copied_to_destination);
-
                 } else {
                     return false;
                 }

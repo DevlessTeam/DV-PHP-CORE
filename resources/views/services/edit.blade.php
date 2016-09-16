@@ -242,13 +242,7 @@
 
 
 <textarea class="code-box" name="script" rows="20" style="width: 100%">
-
-@if(!$service->script == "")
 {{$service->script}}
-@else
- echo "Happy scripting";
-@endif
-
 </textarea>
                                                                        <br>
 
@@ -264,7 +258,6 @@
             </div><!--body wrapper end-->
 <!--body wrapper end-->
 <script>
-
     //page init function
     function init(){
         window.count = 0;
@@ -286,13 +279,11 @@
            "processData": false,
             "data": "{\"resource\":[{\"name\":\""+table_name+"\",\"params\":[{\"drop\":\"true\"}]}]}"
            }
-
          $.ajax(settings).done(function (response) {
-            
-           response_object = (response);
-           status_code = response_object.status_code;
+             console.log(response)
+           //response_object = JSON.parse(response);
+           status_code = response.status_code;
            if (status_code == 613) {
-               
                 $("#"+table_name).remove();
            }
            else
@@ -301,36 +292,27 @@
            }
          });}
     }
-
   function append_field(){
-  field_names = ['name', 'description', 'field-name', 'field-type', 'default',
-            'required', 'validate', 'unique'];
-
-  old_fields = window.main_old_fields.clone();
-        field_names.forEach(
-  function(i){
-            field_name = i+window.count;
-            old_fields.find('#'+i).attr('name', field_name ).attr('id', field_name );
-
-       }
-
-
-  )
-
-  new_fields = old_fields;
-
-        $( ".dynamic-space").append(new_fields);
-        old_fields.attr('class', 'fields'+window.count);
-        old_fields.contents().each(function () {
-            if (this.nodeType === 3) this.nodeValue = $.trim($(this).text()).replace(/removeIndicator/g, "fields"+window.count)
-            if (this.nodeType === 1) $(this).html( $(this).html().replace(/removeIndicator/g, "fields"+window.count) )
-            })
-        window.count = window.count + 1 ;
-
-
+    field_names = ['name', 'description', 'field-name', 'field-type', 'field-reference',
+                'default','required', 'validate', 'unique'];
+    old_fields = window.main_old_fields.clone();
+          field_names.forEach(
+    function(i){
+              field_name = i+window.count;
+              old_fields.find('#'+i).attr('name', field_name ).attr('id', field_name );
+         }
+    )
+    new_fields = old_fields;
+    $( ".dynamic-space").append(new_fields);
+    old_fields.attr('class', 'fields'+window.count);
+    old_fields.contents().each(function () {
+        if (this.nodeType === 3) this.nodeValue = $.trim($(this).text()).replace(/removeIndicator/g, "fields"+window.count)
+        if (this.nodeType === 1) $(this).html( $(this).html().replace(/removeIndicator/g, "fields"+window.count) )
+        })
+    window.count = window.count + 1 ;
+    
     }
-
-
+    
     function create_table(service_name){
          $('#crt-tbl').prop('disabled', true);
          $.fn.serializeObject = function()
@@ -349,7 +331,6 @@
             });
             return o;
         };
-
         object = $('#form').serializeObject();
         var array = $.map(object, function(value, index) {
         return [value];
@@ -365,7 +346,6 @@
                      {
                       var _this=$(o);
                       field_id = _this.attr('id');
-
                        if(typeof field_id == "string" && field_id.indexOf("validate")>= 0){
                            form_array[count] = $('#'+_this.attr('id')).is(':checked');
                        }
@@ -377,14 +357,10 @@
                        }else{
                            form_array[count] = $('#'+_this.attr('id')).val();
                        }
-
-
                     count++;
                      })
-
             }
           );
-
             if(form_array.length > 4){
                 function trim(str){
                     console.log(str);
@@ -410,9 +386,7 @@
                         "required":trim(form_array[7+position]),
                         "validation":trim(form_array[8+position]),
                         "is_unique":trim(form_array[9+position]),
-
                      };
-
                 }
                 
                 if (len => 1) {
@@ -429,9 +403,8 @@
                     "processData": false,
                     "data": table_schema
                   }
-
                 $.ajax(settings).done(function (response) {
-                  
+                  console.log(response);
                   if(typeof(response) == "string")
                   {
                       response = JSON.parse(response); 
@@ -441,24 +414,16 @@
                   payload = response.payload;
                   
                   if(status_code == 700){
-                      alert(message);
-                      $('#crt-tbl').prop('disabled', false);
+                      alert( payload.message);
                   }
                   else if(status_code == 606){
-
-
                         window.location.href = "/services/"+{{$service->id}}+"/edit";
                         
-
                   }else{
-
                         alert(message);
-                        $('#crt-tbl').prop('disabled', false);
+                        
                   }
-                });} else if(len == 0){
-                     alert('Seems you have no fields selected');
-                     $('#crt-tbl').prop('disabled', false);
-                } else {
+                });} else {
                      
                      alert('Please add at least a field');
                      $('#crt-tbl').prop('disabled', false);
@@ -468,26 +433,20 @@
                 alert('Sorry seems like you have no fields set ');
                 $('#crt-tbl').prop('disabled', false);
             }
-
-           
+            $('#crt-tbl').prop('disabled', false);
             
-
     }
    function destroy_field(field_id){
        $('.'+field_id).remove();
    }
    function set_script(){
-
        setTimeout(function(){ $('.code-box').ace({ theme: 'github', lang: 'php'}); }, 1);
    }
-
    function run_script(){
-
        var form = new FormData();
 form.append("call_type", "solo");
 form.append("script", $('.code-box').val());
 form.append("_method", "PUT");
-
 var settings = {
   "async": true,
   "crossDomain": true,
@@ -501,16 +460,12 @@ var settings = {
   "mimeType": "multipart/form-data",
   "data": form
 }
-
 $.ajax(settings).done(function (response) {
   result = JSON.parse(response);
   console.log(result);
    (result.status_code == 626)?$('.code-console').css('color','greenyellow')
  : $('.code-console').css('color','red');
-
   $('.code-console').html('<font size="3">'+result.message+'</font>');
-
-
 });
    }
 </script>

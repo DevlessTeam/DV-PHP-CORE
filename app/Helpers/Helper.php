@@ -33,7 +33,7 @@ class Helper
         602 => 'Database schema could not be created',
         603 => 'Table could not be created',
         604 => 'Service  does not exist or is not active',
-        605 => 'No such resource type try (script  db or view)',
+        605 => 'No such resource type try (rpc db or view)',
         606 => 'Created table successfully',
         607 => 'Could not find the right DB method',
         608 => 'Request method not supported',
@@ -66,7 +66,9 @@ class Helper
         635 => 'Sorry to use offset you need need to set size',
         636 => 'The table or field has been deleted',
         637 => 'Got RPC response successfully',
-        638 => 'You need to set @ACL public/private/protected annotation on method to make it available',
+        638 => 'Sorry no such method or method is private/protected',
+        639 => 'Sorry RPC can only be processed over POST request',
+        640 => 'Sorry no such related tables',
         700 => 'Internal system error',
     ];
 
@@ -322,6 +324,4 @@ class Helper
     {
         return date('Y-m-d H:i:s');
     }
-
-
 }

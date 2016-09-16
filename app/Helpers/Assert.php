@@ -35,7 +35,7 @@ use Traversable;
  * @method static void nullOrTrue($value, $message = '')
  * @method static void nullOrFalse($value, $message = '')
  * @method static void nullOrEq($value, $value2, $message = '')
- * @method static void nullOrNotEq($value,$value2,  $message = '')
+ * @method static void nullOrNotEq($value, $value2, $message = '')
  * @method static void nullOrSame($value, $value2, $message = '')
  * @method static void nullOrNotSame($value, $value2, $message = '')
  * @method static void nullOrGreaterThan($value, $value2, $message = '')
@@ -95,7 +95,7 @@ use Traversable;
  * @method static void allTrue($values, $message = '')
  * @method static void allFalse($values, $message = '')
  * @method static void allEq($values, $value2, $message = '')
- * @method static void allNotEq($values,$value2,  $message = '')
+ * @method static void allNotEq($values, $value2, $message = '')
  * @method static void allSame($values, $value2, $message = '')
  * @method static void allNotSame($values, $value2, $message = '')
  * @method static void allGreaterThan($values, $value2, $message = '')
@@ -142,7 +142,8 @@ class Assert extends Helper
 {
     public static function string($value)
     {
-        return (is_string($value))? true : false;
+
+        return (is_string($value) && !is_numeric($value)) ? true : false;
     }
 
     public static function stringNotEmpty($value)
@@ -153,174 +154,119 @@ class Assert extends Helper
 
     public static function integer($value)
     {
-        (is_int($value))? true : false;
-    }
-
-    public static function integerish($value)
-    {
-        (!is_numeric($value) || $value != (int) $value)?true : false;
+        return (is_int($value)) ? true : false;
     }
 
     public static function float($value)
     {
-         return (is_float($value))? true : false;
+        return (is_float($value)) ? true : false;
     }
 
     public static function numeric($value)
     {
-        return (is_numeric($value))? true : false;
+        return (is_numeric($value)) ? true : false;
     }
 
     public static function boolean($value)
     {
-         return (is_bool($value))? true : false;
+        return (is_bool($value)) ? true : false;
     }
 
     public static function scalar($value)
     {
-         return (is_scalar($value))?true : false;
+        return (is_scalar($value)) ? true : false;
 
     }
 
-    public static function object($value)
-    {
-        return (!is_object($value))?true : false;
-    }
-
-    public static function resource($value)
-    {
-        return (!is_resource($value))?true : false;
-
-
-    }
-
-    public static function isCallable($value)
-    {
-        return  (!is_callable($value))?true : false;
-    }
-
-    public static function isArray($value)
-    {
-        return (!is_array($value))?true : false;
-    }
-
-    public static function isTraversable($value)
-    {
-        return  (!is_array($value) && !($value instanceof Traversable))?true : false;
-
-    }
-
-    public static function isInstanceOf($value, $class)
-    {
-        return (!($value instanceof $class))?true : false;
-    }
-
-    public static function notInstanceOf($value, $class)
-    {
-        return ($value instanceof $class)? true : false;
-    }
 
     public static function isEmpty($value)
     {
-        return (!empty($value))?true : false;
+        return (empty($value)) ? true : false;
     }
 
     public static function notEmpty($value)
     {
-        return (empty($value))?true : false;
+        return (!empty($value)) ? true : false;
     }
 
-    public static function null($value)
+    public static function isNull($value)
     {
-        return (null !== $value)?true : false;
+        return (null === $value) ? true : false;
     }
 
     public static function notNull($value)
     {
-        return (null === $value)?true : false;
+        return (null !== $value) ? true : false;
     }
 
     public static function true($value)
     {
-        return (true !== $value)?true : false;
+        return (true === $value) ? true : false;
     }
 
     public static function false($value)
     {
-        return (false !== $value)?true : false;
+        return (false !== $value) ? true : false;
     }
 
     public static function eq($value, $value2)
     {
-        return ($value2 != $value)?true : false;
+        return ($value2 == $value) ? true : false;
     }
 
     public static function notEq($value, $value2)
     {
-        return ($value2 == $value)?true : false;
+        return ($value2 != $value) ? true : false;
     }
 
     public static function same($value, $value2)
     {
-        return ($value2 !== $value)?true : false;
+        return ($value2 === $value) ? true : false;
     }
 
     public static function notSame($value, $value2)
     {
-        return ($value2 === $value)?true : false;
+        return ($value2 !== $value) ? true : false;
     }
 
     public static function greaterThan($value, $limit)
     {
-         return ($value <= $limit)? true : false;
+        return ($value <= $limit) ? true : false;
     }
 
-    public static function greaterThanEq($value, $limit, $message = '')
+    public static function greaterThanEq($value, $limit)
     {
-        return ($value < $limit)? true : false;
+        return ($value < $limit) ? true : false;
     }
 
-    public static function lessThan($value, $limit, $message = '')
+    public static function lessThan($value, $limit)
     {
-        return  ($value >= $limit)? true : false;
+        return ($value < $limit) ? true : false;
     }
 
     public static function lessThanEq($value, $limit)
     {
-        return ($value > $limit)? true : false;
+        return ($value <= $limit) ? true : false;
     }
 
-    public static function range($value, $min, $max, $message = '')
+    public static function range($value, $min, $max)
     {
-        if ($value < $min || $value > $max) {
-            throw new InvalidArgumentException(sprintf(
-                $message ?: 'Expected a value between %2$s and %3$s. Got: %s',
-                self::valueToString($value),
-                self::valueToString($min),
-                self::valueToString($max)
-            ));
-        }
+        return  ($value > $min || $value < $max)? true : false;
     }
 
     public static function oneOf($value, array $values)
     {
-        return (!in_array($value, $values, true))?true : false;
+        return (!in_array($value, $values, true)) ? true : false;
     }
 
     public static function contains($value, $subString)
     {
-        return (false === strpos($value, $subString))? true : false;
+        return (false === strpos($value, $subString)) ? true : false;
     }
 
     public static function startsWith($value, $prefix)
     {
-        if (0 !== strpos($value, $prefix)) {
-            throw new InvalidArgumentException(sprintf(
-                $message ?: 'Expected a value to start with %2$s. Got: %s',
-                self::valueToString($value),
-                self::valueToString($prefix)
-            ));
-        }
+        return (0 !== strpos($value, $prefix))? true : false;
     }
 
     public static function startsWithLetter($value)
@@ -334,17 +280,17 @@ class Assert extends Helper
             setlocale(LC_CTYPE, $locale);
         }
 
-        return (!$valid)?true : false;
+        return (!$valid) ? true : false;
     }
 
     public static function endsWith($value, $suffix, $message = '')
     {
-         return ($suffix !== substr($value, -self::strlen($suffix)))?true : false;
+        return ($suffix !== substr($value, -self::strlen($suffix))) ? true : false;
     }
 
     public static function regex($value, $pattern)
     {
-        return (!preg_match($pattern, $value))?true : false;
+        return (!preg_match($pattern, $value)) ? true : false;
     }
 
     public static function alpha($value)
@@ -354,7 +300,7 @@ class Assert extends Helper
         $valid = !ctype_alpha($value);
         setlocale(LC_CTYPE, $locale);
 
-        return ($valid)?true : false;
+        return ($valid) ? true : false;
     }
 
     public static function digits($value)
@@ -364,138 +310,138 @@ class Assert extends Helper
         $valid = !ctype_digit($value);
         setlocale(LC_CTYPE, $locale);
 
-        return ($valid)?true : false;
+        return ($valid) ? true : false;
     }
 
-    public static function alnum($value, $message = '')
+    public static function alnum($value)
     {
         $locale = setlocale(LC_CTYPE, 0);
         setlocale(LC_CTYPE, 'C');
         $valid = !ctype_alnum($value);
         setlocale(LC_CTYPE, $locale);
 
-        return ($valid)?true : false;
+        return ($valid) ? true : false;
     }
 
-    public static function lower($value, $message = '')
+    public static function lower($value)
     {
         $locale = setlocale(LC_CTYPE, 0);
         setlocale(LC_CTYPE, 'C');
         $valid = !ctype_lower($value);
         setlocale(LC_CTYPE, $locale);
 
-        return ($valid)?true : false;
+        return ($valid) ? true : false;
     }
 
-    public static function upper($value, $message = '')
+    public static function upper($value)
     {
         $locale = setlocale(LC_CTYPE, 0);
         setlocale(LC_CTYPE, 'C');
         $valid = !ctype_upper($value);
         setlocale(LC_CTYPE, $locale);
 
-        return ($valid)?true : false;
+        return ($valid) ? true : false;
     }
 
-    public static function length($value, $length, $message = '')
+    public static function length($value, $length)
     {
-        return ($length !== self::strlen($value))?true : false;
+        return ($length !== self::strlen($value)) ? true : false;
     }
 
-    public static function minLength($value, $min, $message = '')
+    public static function minLength($value, $min)
     {
-        return (self::strlen($value) < $min)?true : false;
+        return (self::strlen($value) < $min) ? true : false;
     }
 
-    public static function maxLength($value, $max, $message = '')
+    public static function maxLength($value, $max)
     {
-        return (self::strlen($value) > $max)?true : false;
+        return (self::strlen($value) > $max) ? true : false;
     }
 
-    public static function lengthBetween($value, $min, $max, $message = '')
+    public static function lengthBetween($value, $min, $max)
     {
         $length = self::strlen($value);
 
-        return ($length < $min || $length > $max)?true : false;
+        return ($length < $min || $length > $max) ? true : false;
     }
 
-    public static function fileExists($value, $message = '')
+    public static function fileExists($value)
     {
         self::string($value);
 
-        return (!file_exists($value))?true : false;
+        return (!file_exists($value)) ? true : false;
     }
 
     public static function file($value)
     {
         self::fileExists($value);
 
-        return (!is_file($value))?true : false;
+        return (!is_file($value)) ? true : false;
     }
 
     public static function directory($value)
     {
         self::fileExists($value);
 
-        return (!is_dir($value))?true : false;
+        return (!is_dir($value)) ? true : false;
     }
 
     public static function readable($value)
     {
-         return (!is_readable($value))?true : false;
+        return (!is_readable($value)) ? true : false;
     }
 
     public static function writable($value)
     {
-        return (!is_writable($value))?true : false;
+        return (!is_writable($value)) ? true : false;
     }
 
     public static function classExists($value)
     {
-        return (!class_exists($value))?true : false;
+        return (!class_exists($value)) ? true : false;
     }
 
     public static function subclassOf($value, $class)
     {
-        return (!is_subclass_of($value, $class))?true : false;
+        return (!is_subclass_of($value, $class)) ? true : false;
     }
 
     public static function implementsInterface($value, $interface)
     {
-        return (!in_array($interface, class_implements($value)))?true : false;
+        return (!in_array($interface, class_implements($value))) ? true : false;
     }
 
     public static function propertyExists($classOrObject, $property)
     {
-         return (!property_exists($classOrObject, $property))?true : false;
+        return (!property_exists($classOrObject, $property)) ? true : false;
     }
 
     public static function propertyNotExists($classOrObject, $property)
     {
-        return (property_exists($classOrObject, $property))?true : false;
+        return (property_exists($classOrObject, $property)) ? true : false;
     }
 
     public static function methodExists($classOrObject, $method)
     {
-        return (!method_exists($classOrObject, $method))?true : false;
+        return (!method_exists($classOrObject, $method)) ? true : false;
     }
 
     public static function methodNotExists($classOrObject, $method)
     {
-        return (method_exists($classOrObject, $method))?true : false;
+        return (method_exists($classOrObject, $method)) ? true : false;
     }
 
     public static function keyExists($array, $key)
     {
-        return (!array_key_exists($key, $array))? true : false;
+        return (!array_key_exists($key, $array)) ? true : false;
     }
 
     public static function keyNotExists($array, $key)
     {
-        return (array_key_exists($key, $array))?true : false;
+        return (array_key_exists($key, $array)) ? true : false;
     }
 
-    public static function uuid($value, $message = '')
+    public static function uuid($value)
     {
         $value = str_replace(array('urn:', 'uuid:', '{', '}'), '', $value);
 
@@ -506,7 +452,7 @@ class Assert extends Helper
         }
 
         return (!preg_match('/^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/', $value))
-            ?true : false;
+            ? true : false;
     }
 
     public static function __callStatic($name, $arguments)
@@ -535,7 +481,7 @@ class Assert extends Helper
             return;
         }
 
-        throw new BadMethodCallException('No such method: '.$name);
+        throw new BadMethodCallException('No such method: ' . $name);
     }
 
     protected static function valueToString($value)
@@ -565,10 +511,10 @@ class Assert extends Helper
         }
 
         if (is_string($value)) {
-            return '"'.$value.'"';
+            return '"' . $value . '"';
         }
 
-        return (string) $value;
+        return (string)$value;
     }
 
     protected static function typeToString($value)

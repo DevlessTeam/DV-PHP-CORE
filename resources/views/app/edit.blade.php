@@ -149,7 +149,7 @@
                                         "domain":"{{URL::to('/')}}"
                                         };
                                         
-                                    Devless.init(constants);
+                                    Devless = new Devless(constants);
 
                                     
 
@@ -177,11 +177,11 @@
           },
           "processData": false,
           "data": "{\"action\":\"regen\"}"
-        }
+        };
 
         $.ajax(settings).done(function (response) {
           console.log(response);
-          result = JSON.parse(response)
+          result = JSON.parse(response);
           if(result.status_code == 622){
               $("#token").val(result.payload.new_token);
           }

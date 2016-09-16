@@ -21,7 +21,7 @@
 
     $('#notif').modal({
       keyboard: true
-   })
+   });
    $('.modal-backdrop').removeClass("modal-backdrop");
 });
 

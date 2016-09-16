@@ -43,6 +43,8 @@
                         </ul>
                     </li>
                     <li><a href="{{ url('datatable') }}"><i class="fa fa-database"></i><span>Data Tables</span></a></li>
+                     <li><a href="{{ url('hub') }}"><i class="fa fa-cubes"></i><span>Service Hub</span></a></li>
+                   
                     <li class="menu-list">
                       <a href="#"><i class="fa fa-lock"></i><span>Privacy</span></a>
                       <ul class="child-list">
