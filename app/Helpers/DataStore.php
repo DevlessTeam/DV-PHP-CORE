@@ -211,21 +211,19 @@ class DataStore extends Helper
     }
 
     /**
-     * get instance information 
+     * get instance information
      * @return array
      */
     public static function instanceInfo()
     {
         
-        $adminData = \DB::table('users')->where('id',1)->where('role',1)
-                ->select('username','email')->first();
-        $appData   =  \DB::table('apps')->select('name','description','token')->first();
+        $adminData = \DB::table('users')->where('id', 1)->where('role', 1)
+                ->select('username', 'email')->first();
+        $appData   =  \DB::table('apps')->select('name', 'description', 'token')->first();
 
         $instanceInfo['app'] = $appData;
         $instanceInfo['admin'] = $adminData;
 
         return $instanceInfo;
     }
-    
-   
 }

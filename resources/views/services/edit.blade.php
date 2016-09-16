@@ -294,7 +294,7 @@
     }
   function append_field(){
     field_names = ['name', 'description', 'field-name', 'field-type', 'field-reference',
-                'default', 'required', 'validate', 'unique'];
+                'default','required', 'validate', 'unique'];
     old_fields = window.main_old_fields.clone();
           field_names.forEach(
     function(i){

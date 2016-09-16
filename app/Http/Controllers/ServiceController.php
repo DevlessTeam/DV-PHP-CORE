@@ -11,6 +11,7 @@ use App\Helpers\Response as Response;
 use Devless\Script\ScriptHandler as script;
 use App\Http\Controllers\ViewController as DvViews;
 use App\Http\Controllers\RpcController as Rpc;
+
 class ServiceController extends Controller
 {
 
@@ -207,7 +208,6 @@ class ServiceController extends Controller
         $execOutput = DLH::execOnServiceStar($payload);
 
         if (DLH::deleteDirectory($assets_path) && $service->delete()) {
-
             DLH::flash("Service deleted successfully ".$execOutput, 'success');
         } else {
             DLH::flash("Service could not be deleted", 'error');
@@ -450,7 +450,7 @@ class ServiceController extends Controller
      * @return bool
      * @internal param object $service service payload
      */
-    public function     check_resource_access_right_type($access_type)
+    public function check_resource_access_right_type($access_type)
     {
         $is_user_login = Helper::is_admin_login();
 
@@ -478,15 +478,12 @@ class ServiceController extends Controller
         $output['resource'] = $resource;
         $output['payload'] = $payload;
 
-        if($resource != 'schema') {
-
-        $script = new script;
-        $output =  $script->run_script($resource, $payload);
-
+        if ($resource != 'schema') {
+            $script = new script;
+            $output =  $script->run_script($resource, $payload);
         }
 
         return $output;
 
     }
-
 }

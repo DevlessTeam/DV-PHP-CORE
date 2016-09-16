@@ -58,7 +58,7 @@ class ServiceMigrationController extends Controller
                     if ($service_archive_object->move(storage_path(), $service_package_name)) {
                         $import_state = Migration::import_service($service_package_name);
 
-                        $payload['serviceName'] = str_replace('.srv', '',str_replace('.pkg', '', $service_package_name));
+                        $payload['serviceName'] = str_replace('.srv', '', str_replace('.pkg', '', $service_package_name));
                         $payload['install'] = '__onImport';
                         $execOutput = ($import_state)?  DLH::execOnServiceStar($payload): false;
 

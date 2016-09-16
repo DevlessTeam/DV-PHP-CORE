@@ -2,11 +2,10 @@
 
 namespace App\Helpers;
 
-
 class ActionClass
 {
 
-    public static function execute($service, $method, $params=null)
+    public static function execute($service, $method, $params = null)
     {
 
         $serviceMethodPath = config('devless')['views_directory'].$service.'/ActionClass.php';

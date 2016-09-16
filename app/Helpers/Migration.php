@@ -65,6 +65,4 @@ class Migration extends Helper
 
         return $install_state;
     }
-
-
 }

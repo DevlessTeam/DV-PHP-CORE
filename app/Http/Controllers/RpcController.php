@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Helpers\DevlessHelper;
 use JsonRPC\Server;
 use App\Helpers\Helper;
@@ -37,6 +36,4 @@ class RpcController extends Controller
         $server->getProcedureHandler()->withClassAndMethod($service, $service, $method);
         return  Response::respond(637, null, json_decode($server->execute()));
     }
-
-
 }
