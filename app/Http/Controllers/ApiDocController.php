@@ -25,9 +25,9 @@ class ApiDocController extends Controller
      * @return Response
      */
     // public function schema($table_name, $service_id)
-    public function schema($service_id, $table_name)
+    public function schema($service_id, $service_name, $table_name)
     {
-        $schema_data = \DB::table('table_metas')->where('table_name', $table_name)->where('service_id', $service_id)->first();
+        $schema_data = \DB::table('table_metas')->where('table_name', $table_name.'_'.$service_name)->where('service_id', $service_id)->first();
         $schema = json_decode($schema_data->schema);
 
         return $schema->field;
