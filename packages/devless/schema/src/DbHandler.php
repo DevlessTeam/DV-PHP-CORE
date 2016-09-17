@@ -569,7 +569,7 @@ class DbHandler
     private function _get_all_related_tables($tableName)
     {
         $relatedTables = [];
-        $schema = $this->_get_tableMeta($tableName);
+        $schema = $this->get_tableMeta($tableName);
         array_walk($schema['schema']['field'], function($field)
                 use($tableName, &$relatedTables) {
             if ($field['field_type'] == 'reference') {
@@ -604,7 +604,7 @@ class DbHandler
      * @return array
      *
      */
-    private function _get_tableMeta($table_name)
+    public function get_tableMeta($table_name)
     {
         $tableMeta = \DB::table('table_metas')->
         where('table_name', $table_name)->first();
@@ -661,7 +661,7 @@ class DbHandler
         $table_data,
         $check_password = false
     ) {
-        $table_meta = $this->_get_tableMeta($service_name.'_'.$table_name);
+        $table_meta = $this->get_tableMeta($service_name.'_'.$table_name);
         $schema = $table_meta['schema'];
         $hit = 0;
         $count = 0;

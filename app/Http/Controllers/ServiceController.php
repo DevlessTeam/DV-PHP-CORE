@@ -14,6 +14,7 @@ use App\Http\Controllers\RpcController as Rpc;
 
 class ServiceController extends Controller
 {
+    
 
     /**
      * Display a listing of the resource.
@@ -246,7 +247,6 @@ class ServiceController extends Controller
      */
     public function service(Request $request, $service, $resource)
     {
-        
         $this->_devlessCheckHeaders($request);
 
         $serviceOutput = $this->resource($request, $service, $resource);
