@@ -1,7 +1,7 @@
 <?php
 
 /** @NB Do not remove  **/
-@DvAdminOnly();
+
 
 {{MAINDOC}}
 

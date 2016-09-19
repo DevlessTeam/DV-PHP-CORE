@@ -19,7 +19,7 @@
    ` <!--body wrapper start-->
     <div class="wrapper">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-8 col-md-offset-2">
                 <section class="panel">
                     <header class="panel-heading">
                          App Panel

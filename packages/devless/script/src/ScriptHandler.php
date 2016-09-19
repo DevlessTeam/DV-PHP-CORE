@@ -56,20 +56,20 @@ class ScriptHandler
         $rules = new Rules();
 
         //checking right access control right
-        $access_type = $payload['resource_access_right'];
-        $dbHandler = new DbHandler();
-
-        $resourceType = $dbHandler->dbActionAssoc[$payload['method']];
-        $access_state = $service->check_resource_access_right_type($access_type[$resourceType]);
-        $user_cred = Helper::get_authenticated_user_cred($access_state);
+//        $access_type = $payload['resource_access_right'];
+//        $dbHandler = new DbHandler();
+//
+//        $resourceType = $dbHandler->dbActionAssoc[$payload['method']];
+//        $access_state = $service->check_resource_access_right_type($access_type[$resourceType]);
+//        $user_cred = Helper::get_authenticated_user_cred($access_state);
 
         //available internal params
         $EVENT = [
             'method' => $payload['method'],
             'params' => '',
             'script' => $payload['script'],
-            'user_id' => $user_cred['id'],
-            'user_token' => $user_cred['token'],
+//            'user_id' => $user_cred['id'],
+//            'user_token' => $user_cred['token'],
             'requestType' => $Dvresource,
         ];
 

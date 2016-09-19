@@ -14,6 +14,7 @@ use App\Http\Controllers\RpcController as Rpc;
 
 class ServiceController extends Controller
 {
+    
 
     /**
      * Display a listing of the resource.
@@ -246,8 +247,6 @@ class ServiceController extends Controller
      */
     public function service(Request $request, $service, $resource)
     {
-        
-        //check token and keys
         $this->_devlessCheckHeaders($request);
 
         $serviceOutput = $this->resource($request, $service, $resource);
@@ -346,7 +345,7 @@ class ServiceController extends Controller
                 $newServiceElements = $this->before_assigning_service_action($resource, $payload);
                 $resource = $newServiceElements['resource'];
                 $payload = $newServiceElements['payload'];
-
+                    
                 //keep names of resources in the singular
                 switch ($resource) {
                     case 'db':
@@ -452,6 +451,7 @@ class ServiceController extends Controller
      */
     public function check_resource_access_right_type($access_type)
     {
+        
         $is_user_login = Helper::is_admin_login();
 
         if (! $is_user_login && $access_type == 0) {
