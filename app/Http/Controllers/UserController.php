@@ -36,7 +36,7 @@ class UserController extends Controller
 
             return redirect('services');
         } else {
-            Session::flash('success', 'Incorrect login credentials');
+            Session::flash('error', 'Incorrect login credentials');
 
             return back();
         }
