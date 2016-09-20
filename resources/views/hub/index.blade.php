@@ -41,7 +41,7 @@
             <div class="name column-name">
               <h3>
                 <a href="#" class="thickbox">
-                  Module Commerce<img src="http://placehold.it/128x128" class="plugin-icon" alt="">
+                  Module Commerce<img src="https://store.devless.io/ico/schools.png" class="plugin-icon img-responsive" alt="">
                 </a>
               </h3>
             </div>
@@ -51,6 +51,7 @@
             </div>
           </div>
           <div class="plugin-card-bottom">
+            <!--
             <div class="vers column-rating">
               <div class="star-rating" title="5.0 rating based on 1 rating">
                 <div class="star star-full"><i class="fa fa-star"></i></div>
@@ -61,9 +62,10 @@
                 <span class="num-ratings">(1)</span>
               </div>
             </div>
+            -->
             <div class="column-updated">
-              <button class="btn btn-success" type="button">Download</button>
               <button class="btn btn-primary" type="submit">Install</button>
+              <button class="btn btn-success" type="button">Download</button>
             </div>
             <div class="column-downloaded">
               300+ Active Installs

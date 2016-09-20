@@ -24,12 +24,14 @@ p.description{
 	margin: 10px 0;
 }
 .plugin-icon {
-	height: 128px;
+    border: 1px solid #dedede;
+    height: 128px;
     left: 10px;
     margin: 0 20px 20px 0;
+    padding: 6px;
     position: absolute;
     top: 10px;
-    width: 128px;
+    width: auto;
 }
 .plugin-card .desc, .plugin-card .name {
     margin-left: 138px;
@@ -82,7 +84,7 @@ p.description{
     clear: right;
     float: right;
     text-align: right;
-    width: calc(100% - 180px);
+    width: calc(100% - 130px);
 }
 .dv-prod {
 	background-color: #fff;
@@ -91,4 +93,7 @@ p.description{
 }
 .plugin-card {
 	margin-bottom: 20px;
+}
+.column-downloaded {
+    line-height: 30px;
 }
