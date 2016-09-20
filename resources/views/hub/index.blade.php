@@ -34,7 +34,44 @@
 <!--body wrapper start-->
 <div class="wrapper">
     <div class="row">
-         
+    <?php for ($i=0; $i < 5; $i++) { ?>
+      <div class="col-lg-4 col-md-6 col-sm-6 mr-b-20 plugin-card">
+        <div class="dv-prod">
+          <div class="plugin-card-top">
+            <div class="name column-name">
+              <h3>
+                <a href="#" class="thickbox">
+                  Module Commerce<img src="http://placehold.it/128x128" class="plugin-icon" alt="">
+                </a>
+              </h3>
+            </div>
+            <div class="desc column-description">
+              <p>Fully responsive and mobile friendly WP food menu display plugin for... </p>
+              <p class="authors"> <cite>By <a href="#">Devless Team</a></cite></p>
+            </div>
+          </div>
+          <div class="plugin-card-bottom">
+            <div class="vers column-rating">
+              <div class="star-rating" title="5.0 rating based on 1 rating">
+                <div class="star star-full"><i class="fa fa-star"></i></div>
+                <div class="star star-full"><i class="fa fa-star"></i></div>
+                <div class="star star-full"><i class="fa fa-star"></i></div>
+                <div class="star star-full"><i class="fa fa-star"></i></div>
+                <div class="star star-full"><i class="fa fa-star"></i></div>
+                <span class="num-ratings">(1)</span>
+              </div>
+            </div>
+            <div class="column-updated">
+              <button class="btn btn-success" type="button">Download</button>
+              <button class="btn btn-primary" type="submit">Install</button>
+            </div>
+            <div class="column-downloaded">
+              300+ Active Installs
+            </div>
+          </div>
+        </div>  
+      </div>
+    <?php } ?>
         @if($services->count())
              @foreach($services as $service)
              <a data-toggle="modal" data-target="#service-desc" />
