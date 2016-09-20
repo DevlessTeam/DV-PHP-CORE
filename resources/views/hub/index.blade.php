@@ -43,35 +43,24 @@
           <div class="plugin-card-top">
             <div class="name column-name">
               <h3>
-                <a href="#" class="thickbox">
+                <a href="#" data-toggle="modal" data-target="#service-desc">
                   Module Commerce<img src="https://store.devless.io/ico/schools.png" class="plugin-icon img-responsive" alt="">
                 </a>
               </h3>
             </div>
             <div class="desc column-description">
               <p>Fully responsive and mobile friendly WP food menu display plugin for... </p>
-              <p class="authors"> <cite>By <a href="#">Devless Team</a></cite></p>
+              <a href="#" data-toggle="modal" data-target="#service-desc">More Details</a>
             </div>
           </div>
           <div class="plugin-card-bottom">
-            <!--
-            <div class="vers column-rating">
-              <div class="star-rating" title="5.0 rating based on 1 rating">
-                <div class="star star-full"><i class="fa fa-star"></i></div>
-                <div class="star star-full"><i class="fa fa-star"></i></div>
-                <div class="star star-full"><i class="fa fa-star"></i></div>
-                <div class="star star-full"><i class="fa fa-star"></i></div>
-                <div class="star star-full"><i class="fa fa-star"></i></div>
-                <span class="num-ratings">(1)</span>
-              </div>
-            </div>
-            -->
             <div class="column-updated">
               <button class="btn btn-primary" type="submit">Install</button>
               <button class="btn btn-success" type="button">Download</button>
             </div>
             <div class="column-downloaded">
-              300+ Active Installs
+              <p class="authors"><cite>By <a href="#">Devless Team</a></cite></p>
+              <span>300+ Active Installs</span>
             </div>
           </div>
         </div>  

@@ -94,9 +94,6 @@ p.description{
 .plugin-card {
 	margin-bottom: 20px;
 }
-.column-downloaded {
-    line-height: 30px;
-}
 .search-content input {
     position: absolute;
     right: 20px;
@@ -105,4 +102,8 @@ p.description{
 }
 .search-content input:focus {
     width: 250px;
+}
+.authors {
+    margin-bottom: -3px;
+    margin-top: -5px;
 }
