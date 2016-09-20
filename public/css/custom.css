@@ -101,5 +101,8 @@ p.description{
     position: absolute;
     right: 20px;
     top: 15px;
-    width: 172px;
+    width: 230px;
+}
+.search-content input:focus {
+    width: 250px;
 }
