@@ -3,8 +3,11 @@
 @section('header')
 <!-- page head start-->
 <div class="page-head">
-    <h3>Hub</h3><span class="sub-title">Hub/</span>
-    <span class="pull-right"><input class="form-control" name="search" placeholder="Search module or service" type="text"></span>
+    <h3>Hub</h3>
+    <span class="sub-title">Hub/</span>
+    <form method="post" action="index.html" class="search-content">
+        <input type="text" placeholder="Search module or service" name="keyword" class="form-control">
+    </form>
 </div>
 <!-- page head end-->
 

@@ -97,3 +97,9 @@ p.description{
 .column-downloaded {
     line-height: 30px;
 }
+.search-content input {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    width: 172px;
+}
