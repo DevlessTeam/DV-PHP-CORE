@@ -1,6 +1,5 @@
 <?php
 
-/** @NB Do not remove  **/
 
 
 {{MAINDOC}}

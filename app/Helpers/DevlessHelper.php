@@ -394,7 +394,10 @@ class DevlessHelper extends Helper
      */
     public function signup($payload)
     {
-
+        return \DB::table('users')->where('username', $payload['username'])
+                ->orWhere('email', $payload['email'])
+                ->orWhere('phone_number', $payload['phone_number']);
+        
         $fields = get_defined_vars();
 
         $user = new User;
@@ -485,10 +488,11 @@ class DevlessHelper extends Helper
             return false;
         }
         if ($user_data !== null) {
-            Helper::compare_hash($password, $user_data->password) ;
+           $correct_password = 
+                   (Helper::compare_hash($password, $user_data->password))?true: false ;
             $user_data->session_token = $session_token = md5(uniqid(1, true));
 
-            if ($user_data->save()) {
+            if ($correct_password && $user_data->save()) {
                 $token_payload =
                     [
                         'token' => $session_token,
@@ -498,6 +502,8 @@ class DevlessHelper extends Helper
                 $prepared_token = $this->set_session_token($token_payload, $user_data->id);
 
                 return $prepared_token;
+            } else {
+                return false;
             }
         } else {
             return false;
@@ -591,7 +597,7 @@ class DevlessHelper extends Helper
 
         $payload = json_encode($payload);
 
-        if (DB::table('users')->where('id', $user_id)->update(['session_time'=>elper::session_timestamp()])) {
+        if (DB::table('users')->where('id', $user_id)->update(['session_time'=>Helper::session_timestamp()])) {
             return $jwt->encode($payload, $secret);
         } else {
             return false;
