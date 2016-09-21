@@ -394,9 +394,13 @@ class DevlessHelper extends Helper
      */
     public function signup($payload)
     {
-        return \DB::table('users')->where('username', $payload['username'])
+        $existing_users =  \DB::table('users')->where('username', $payload['username'])
                 ->orWhere('email', $payload['email'])
-                ->orWhere('phone_number', $payload['phone_number']);
+                ->orWhere('phone_number', $payload['phone_number'])->get();
+         
+        if($existing_users != null) {
+            return Response::respond(1001,"Seems User already exists");
+        }
         
         $fields = get_defined_vars();
 
