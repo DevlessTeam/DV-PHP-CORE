@@ -628,7 +628,8 @@ class DevlessHelper extends Helper
                 'password' => 'password',
                 'first_name' => 'text',
                 'last_name' => 'text',
-                'remember_token' => 'text'
+                'remember_token' => 'text',
+                'status'         => 'text'
 
             ];
 
