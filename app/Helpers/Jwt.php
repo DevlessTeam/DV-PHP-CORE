@@ -16,7 +16,7 @@ namespace App\Helpers;
  *
  * @link     https://github.com/firebase/php-jwt
  */
-class Jwt
+class Jwt extends Helper
 {
     /**
      * Decodes a JWT string into a PHP object.
