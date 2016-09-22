@@ -394,21 +394,23 @@ class DevlessHelper extends Helper
      */
     public function signup($payload)
     {
-        $existing_users =  \DB::table('users')->where('username', $payload['username'])
-                ->orWhere('email', $payload['email'])
-                ->orWhere('phone_number', $payload['phone_number'])->get();
+        $username = (isset($payload['username']))?$payload['username']:'';
+        
+        $email = (isset($payload['email']))?$payload['email']:'';
+        $phone_number = (isset($payload['phone_number']))?$payload['phone_number']:'';
+        $existing_users =  \DB::table('users')->orWhere('username', $username)
+                ->orWhere('email', $email)
+                ->orWhere('phone_number', $phone_number)->get();
          
         if($existing_users != null) {
             return Response::respond(1001,"Seems User already exists");
         }
         
-        $fields = get_defined_vars();
-
         $user = new User;
 
         $secret = config('app')['key'];
 
-        $token = $this->auth_fields_handler($fields, $user);
+        $token = $this->auth_fields_handler($payload, $user);
 
         if ($token == false) {
             return $token;
@@ -625,11 +627,12 @@ class DevlessHelper extends Helper
                 'username' => 'text',
                 'password' => 'password',
                 'first_name' => 'text',
-                'last_name' => 'text'
+                'last_name' => 'text',
+                'remember_token' => 'text'
 
             ];
 
-        foreach ($fields['payload'] as $field => $value) {
+        foreach ($fields as $field => $value) {
             $field = strtolower($field);
 
 
