@@ -11,7 +11,7 @@ use Alchemy\Zippy\Zippy;
 use App\Helpers\DataStore;
 use Devless\Schema\DbHandler as DvSchema;
 use Symfony\Component\VarDumper\Cloner\Data;
-
+use App\Helpers\Jwt as jwt;
 /*
 * @author Eddymens <eddymens@devless.io
 */
