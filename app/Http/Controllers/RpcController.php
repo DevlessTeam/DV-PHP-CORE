@@ -22,7 +22,9 @@ class RpcController extends Controller
         $method  = Helper::query_string()['action'][0];
 
         // the service name devless is a reserved name
-        $serviceMethodPath = config('devless')['views_directory'].$service.'/ActionClass.php';
+        $serviceMethodPath = ($service = config('devless')['name'])? config('devless')['views_directory']:
+                            config('devless')['views_directory'].$service.'/ActionClass.php';
+        
 
         (file_exists($serviceMethodPath))?
             require_once $serviceMethodPath : false;

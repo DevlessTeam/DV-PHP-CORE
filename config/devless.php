@@ -10,6 +10,7 @@ return[
   'assets_route_name'     => 'service_views',
   'assets_directory_name' => 'assets',
   'views_directory'       => base_path().'/resources/views/service_views/',
-  'version'               => 1.0  
+  'version'               => 1.0,
+  'name'                  => 'devless',
 ];
 

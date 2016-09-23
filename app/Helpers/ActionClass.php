@@ -1,10 +1,18 @@
 <?php
-
 namespace App\Helpers;
 
+/**
+ * Internal ActionClass execution 
+ */
 class ActionClass
 {
-
+    /**
+     * execute service action class
+     * @param string $service
+     * @param string $method
+     * @param mixed $params
+     * @return mixed
+     */
     public static function execute($service, $method, $params = null)
     {
 
