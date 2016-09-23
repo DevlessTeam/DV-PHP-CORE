@@ -37,8 +37,10 @@
 <!--body wrapper start-->
 <div class="wrapper">
     <div class="row">
-    <?php for ($i=0; $i < 5; $i++) { ?>
-      <div class="col-lg-4 col-md-6 col-sm-6 mr-b-20 plugin-card">
+    
+        @if($services->count())
+             @foreach($services as $service)
+             <div class="col-lg-4 col-md-6 col-sm-6 mr-b-20 plugin-card">
         <div class="dv-prod">
           <div class="plugin-card-top">
             <div class="name column-name">
@@ -65,30 +67,6 @@
           </div>
         </div>  
       </div>
-    <?php } ?>
-        @if($services->count())
-             @foreach($services as $service)
-             <a data-toggle="modal" data-target="#service-desc" />
-            <div class="col-lg-3 col-sm-6 m-b-30">
-                <div class="panel panel-danger">
-                    <div class="panel-header"><img src="https://store.devless.io/ico/schools.png" width="228" height="80" /></div>
-                    <div class="panel-header"><br><h5><center>{{substr(strtoupper($service->name),0,10)}}<span title="{{$service->description}}"</span>({{substr($service->description, 0, 14)}}@if(strlen($service->description)>14)...@endif)</center></h5></div>
-                    <div class="panel-body" >
-                          <center>
-
-                        <div class="btn-group" role="group">
-                            <a type="button" href="{{ route('services.edit', $service->id) }}" class="btn btn-default">Install </a>
-                             <a type="button" class="btn btn-default">Download </a>  
-                             <a type="button" class="btn btn-default" data-toggle="modal" data-target="#service-desc"> <center>&nbsp; ...</center></a>
-                           
-                        </div>
-                        </center>
-
-                    </div>
-                </div>
-
-            </div>
-             </a>
             @endforeach
         {!! $services->render() !!}
     @else

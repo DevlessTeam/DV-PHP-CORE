@@ -446,11 +446,9 @@ class DevlessHelper extends Helper
 
     /**
      * get authenticated user details
-     * @param $payload
-     * @return alphanum
-     * @internal param type $request
+     * @return array
      */
-    public function get_profile($payload)
+    public function get_profile()
     {
         if ($token = Helper::get_authenticated_user_cred(true)) {
             $db = new DB();
@@ -519,7 +517,7 @@ class DevlessHelper extends Helper
     }
 
     /**
-     * update user devless project
+     * update devless user profile 
      * @param $payload
      * @return bool
      * @internal param type $request

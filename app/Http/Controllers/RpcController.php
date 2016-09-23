@@ -17,11 +17,11 @@ class RpcController extends Controller
      */
     public function index($payload)
     {
-
+        
         $service = $payload['service_name'];
         $method  = Helper::query_string()['action'][0];
 
-
+        // the service name devless is a reserved name
         $serviceMethodPath = config('devless')['views_directory'].$service.'/ActionClass.php';
 
         (file_exists($serviceMethodPath))?

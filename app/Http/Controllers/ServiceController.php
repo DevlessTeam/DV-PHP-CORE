@@ -49,14 +49,13 @@ class ServiceController extends Controller
         $service = new Service();
         $service_name_from_form = $request->input("name");
         $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
-        $service_name = strtolower($service_name_from_form);
+        $service_name = strtoupper($service_name_from_form);
 
         $validator = Validator::make(
-
-            ['name'=>$service_name],
+                
+            ['Service Name'=>$service_name,'Devless'=>'DEVLESS'],
             [
-                'name'=>'required|unique:services,name',
-
+                'Service Name'=>'required|unique:services,name|min:3|max:15|different:Devless',
             ]
         );
 
