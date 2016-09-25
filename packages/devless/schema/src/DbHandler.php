@@ -340,7 +340,8 @@ class DbHandler
     {
         $service_name = $payload['service_name'];
         //connectors mysql pgsql sqlsrv sqlite
-        $connector = $this->_connector($payload);
+         $this->_connector($payload);
+         
         //dynamically create columns with schema builder
         $db_type = $this->db_types;
         $table_meta_data = [];
@@ -498,7 +499,8 @@ class DbHandler
         if ($driver == 'mysql') {
             $conn['collation'] = $collation;
         }
-        var_dump($conn);
+        
+        
         \Config::set('database.connections.DYNAMIC_DB_CONFIG', $conn);
     }
     /**
@@ -513,8 +515,9 @@ class DbHandler
     private function _connector($connector_params)
     {
         $driver = $connector_params['driver'];
+        
         //get current database else connect to remote
-        if ($driver == 'default') {
+        if ($driver == 'default'|| $driver == "") {
             $default_database = config('database.default');
             $default_connector = config('database.connections.'.$default_database);
             $driver = $default_connector['driver'];
