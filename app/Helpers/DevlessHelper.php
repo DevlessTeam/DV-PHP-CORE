@@ -675,7 +675,7 @@ class DevlessHelper extends Helper
      * @param $method
      * @param $class
      */
-    public static function rpcMethodAccessibility($method, $class)
+    public static function rpcMethodAccessibility($class, $method)
     {
         $property = $class->getMethod($method);
         $docComment  = $property->getDocComment();

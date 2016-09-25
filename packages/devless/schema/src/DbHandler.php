@@ -278,16 +278,18 @@ class DbHandler
             unset($payload['params']['related']);
             $related = [];
             if (isset($payload['params']['orderBy'])) {
-                $order_by = $payload['params']['order'];
+                $order_by = $payload['params']['orderBy'];
                 $complete_query = $complete_query
-                .'->orderBy("'.$payload['params']['order'][0].'" )';
-                unset($payload['params']['order']);
+                .'->orderBy("'.$payload['params']['orderBy'][0].'" )';
+                unset($payload['params']['orderBy']);
             }
             unset(
                 $payload['params']['table'],
                 $payload['params']['size'],
                 $payload['params']['offset']
             );
+            
+            //finally loop over remaining query params (where)
             foreach ($payload['params'] as $key => $query) {
                 foreach ($query as $one) {
                     //prepare query for order and where
@@ -353,7 +355,8 @@ class DbHandler
                 //default field
                 $table->increments('id');
                 $table->integer('devless_user_id');
-                //per  field
+                
+                //generate remaining fields
                 foreach ($new_payload['field'] as $field) {
                     $field['ref_table'] = $service_name.'_'.$field['ref_table'];
                     $field['field_type'] = strtolower($field['field_type']);
@@ -495,6 +498,7 @@ class DbHandler
         if ($driver == 'mysql') {
             $conn['collation'] = $collation;
         }
+        var_dump($conn);
         \Config::set('database.connections.DYNAMIC_DB_CONFIG', $conn);
     }
     /**

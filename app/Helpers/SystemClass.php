@@ -2,16 +2,23 @@
 
 
 
-{{MAINDOC}}
+/**
+ * Created by Devless.
+ * User: eddymens
+ * Date Created: 23rd of September 2016 09:01:20 AM
+ * @Service: event
+ * @Version: 1.0
+ */
+
 
 //Action method for serviceName
-class {{ServiceName}}
+class devless
 {
-    public $serviceName = '{{ServiceName}}';
+    public $serviceName = 'event';
 
     /**
      * Sample method accessible to via endpoint
-     * @ACL private
+     * @ACL public
      */
     public function methodOne()
     {

@@ -53,7 +53,7 @@ class ServiceController extends Controller
 
         $validator = Validator::make(
                 
-            ['Service Name'=>$service_name,'Devless'=>'DEVLESS'],
+            ['Service Name'=>$service_name,'Devless'=>'devless'],
             [
                 'Service Name'=>'required|unique:services,name|min:3|max:15|different:Devless',
             ]
@@ -266,7 +266,6 @@ class ServiceController extends Controller
     public function resource($request, $service_name, $resource, $internal_access = false)
     {
         $resource = strtolower($resource);
-        $service_name = strtolower($service_name);
         ($internal_access == true)? $method = $request['method'] :
             $method = $request->method();
 
@@ -311,7 +310,7 @@ class ServiceController extends Controller
         $parameters = null,
         $internal_access = false
     ) {
-
+        
         $current_service = $this->service_exist($service_name);
 
         if (!$current_service == false) {
@@ -344,7 +343,7 @@ class ServiceController extends Controller
                 $newServiceElements = $this->before_assigning_service_action($resource, $payload);
                 $resource = $newServiceElements['resource'];
                 $payload = $newServiceElements['payload'];
-                    
+                
                 //keep names of resources in the singular
                 switch ($resource) {
                     case 'db':
@@ -383,13 +382,21 @@ class ServiceController extends Controller
      */
     public function service_exist($service_name)
     {
-
+        
         if ($current_service = serviceModel::where('name', $service_name)->
         where('active', 1)->first()) {
+            
             return $current_service;
+            
+        } else if (config('devless')['devless_service']->name == 'devless') {
+            
+            $current_service = config('devless')['devless_service'];
+            return $current_service;
+            
         } else {
             Helper::interrupt(604);
         }
+        
 
 
     }
