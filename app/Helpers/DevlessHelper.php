@@ -65,7 +65,7 @@ class DevlessHelper extends Helper
 
         return $service_components;
     }
-
+    
     /** Get all service attributes
      * @return string
      */
@@ -767,7 +767,11 @@ class DevlessHelper extends Helper
         return self::modifyAssetContent($serviceName, $files, $replacements);
     }
 
-
+    /**
+     * execute on import and delete function 
+     * @param type $payload
+     * @return boolean
+     */
     public static function execOnServiceStar($payload)
     {
         $service = $payload['serviceName'];
@@ -788,4 +792,15 @@ class DevlessHelper extends Helper
         }
         
     }
+    
+    public static function rmdir_recursive($dir) {
+        foreach(scandir($dir) as $file) {
+            if ('.' === $file || '..' === $file) continue;
+            if (is_dir("$dir/$file")) rmdir_recursive("$dir/$file");
+            else unlink("$dir/$file");
+        }
+        rmdir($dir);
+        return true;
+    }
+    
 }

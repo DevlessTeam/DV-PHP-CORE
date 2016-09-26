@@ -108,7 +108,7 @@ class ViewController extends Controller
                 $source_path =  base_path().'/resources/views/service_template';
                 $destination_path = config('devless')['views_directory'].$service_name;
                 
-                if(file_exists($destination_path)){rmdir($destination_path);}
+                if(file_exists($destination_path)){DevlessHelper::rmdir_recursive($destination_path);}
                 
                 if (mkdir($destination_path)) {
                     $copied_to_destination =  DevlessHelper::recurse_copy($source_path, $destination_path);
