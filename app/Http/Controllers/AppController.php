@@ -40,7 +40,6 @@ class AppController extends Controller
             'password' => 'confirmed|min:6',
             'password_confirmation' => 'min:6',
             'old_password' => 'required',
-            'api_key' => 'required'
         ]);
 
         $user = User::findOrFail(Session('user'));

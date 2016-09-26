@@ -3,8 +3,11 @@
 @section('header')
 <!-- page head start-->
 <div class="page-head">
-    <h3>Hub</h3><span class="sub-title">Hub/</span>
-    <span class="pull-right"><input class="form-control" name="search" placeholder="Search module or service" type="text"></span>
+    <h3>Hub</h3>
+    <span class="sub-title">Hub/</span>
+    <form method="post" action="index.html" class="search-content">
+        <input type="text" placeholder="Search module or service..." name="keyword" class="form-control">
+    </form>
 </div>
 <!-- page head end-->
 
@@ -18,7 +21,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Service Name</h4>
+        <h4 class="modal-title">Service Name </h4>
       </div>
       <div class="modal-body">
          
@@ -34,30 +37,36 @@
 <!--body wrapper start-->
 <div class="wrapper">
     <div class="row">
-         
+    
         @if($services->count())
              @foreach($services as $service)
-             <a data-toggle="modal" data-target="#service-desc" />
-            <div class="col-lg-3 col-sm-6 m-b-30">
-                <div class="panel panel-danger">
-                    <div class="panel-header"><img src="https://store.devless.io/ico/schools.png" width="228" height="80" /></div>
-                    <div class="panel-header"><br><h5><center>{{substr(strtoupper($service->name),0,10)}}<span title="{{$service->description}}"</span>({{substr($service->description, 0, 14)}}@if(strlen($service->description)>14)...@endif)</center></h5></div>
-                    <div class="panel-body" >
-                          <center>
-
-                        <div class="btn-group" role="group">
-                            <a type="button" href="{{ route('services.edit', $service->id) }}" class="btn btn-default">Install </a>
-                             <a type="button" class="btn btn-default">Download </a>  
-                             <a type="button" class="btn btn-default" data-toggle="modal" data-target="#service-desc"> <center>&nbsp; ...</center></a>
-                           
-                        </div>
-                        </center>
-
-                    </div>
-                </div>
-
+             <div class="col-lg-4 col-md-6 col-sm-6 mr-b-20 plugin-card">
+        <div class="dv-prod">
+          <div class="plugin-card-top">
+            <div class="name column-name">
+              <h3>
+                <a href="#" data-toggle="modal" data-target="#service-desc">
+                  Module Commerce<img src="https://store.devless.io/ico/schools.png" class="plugin-icon img-responsive" alt="">
+                </a>
+              </h3>
             </div>
-             </a>
+            <div class="desc column-description">
+              <p>Fully responsive and mobile friendly WP food menu display plugin for... </p>
+              <a href="#" data-toggle="modal" data-target="#service-desc">More Details</a>
+            </div>
+          </div>
+          <div class="plugin-card-bottom">
+            <div class="column-updated">
+              <button class="btn btn-primary" type="submit">Install</button>
+              <button class="btn btn-success" type="button">Download</button>
+            </div>
+            <div class="column-downloaded">
+              <p class="authors"><cite>By <a href="#">Devless Team</a></cite></p>
+              <span>300+ Active Installs</span>
+            </div>
+          </div>
+        </div>  
+      </div>
             @endforeach
         {!! $services->render() !!}
     @else

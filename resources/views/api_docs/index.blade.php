@@ -57,20 +57,9 @@
                                             <option value="create">ADD RECORD (POST) </option>
                                             <option value="update">UPDATE RECORD(PATCH) </option>
                                             <option value="delete">DELETE RECORD (DELETE) </option>
-                                            <option value="script">RUN SCRIPT </option>
                                         </select>
                                     </div>
-                                    <div id="runscript">
-                                        <label for="script_method" class="col-lg-2 col-sm-2 control-label">Script Method</label>
-                                        <div class="col-lg-10">
-                                            <select id="script_method" name="script_method" class="form-control m-b-10">
-                                                {{-- <option disabled selected value> -- select an operation -- </option> --}}
-                                                <option value="POST">POST </option>
-                                                <option value="UPDATE">PATCH </option>
-                                                <option value="DELETE">DELETE </option>
-                                            </select>
-                                        </div>
-                                    </div>
+
                                 </div>
 
                                 <div class="form-group">
@@ -187,7 +176,6 @@
             document.getElementById('body_params').style.display = 'none';
             document.getElementById('request').style.display = 'none';
             document.getElementById('response').style.display = 'none';
-            document.getElementById('runscript').style.display = 'none';
 
             //Handles URL generation
             var service_name;
@@ -229,18 +217,9 @@
                     $('#query').show();
                     $('#body_params').hide();
                     $('#response').hide();
-                    $('#runscript').hide();
-
-                } else if (request_type == "script") {
-                    editor.setValue(JSON.stringify(JSON.parse('{"resource":[{}]}'), undefined, 4));
-                    $('#body_params').show();
-                    $('#runscript').show();
-                    $('#query').hide();
-                    $('#response').hide();
-                    $('#api_url').val('api/v1/service/'+service_name+'/script');
 
                 } else {
-                    $.get('/console/'+service_id+'/'+table_name+'/schema', function (data) {
+                    $.get('/console/'+service_id+'/'+service_name+'/'+table_name, function (data) {
                       console.log(data);
                         var schema = data;
                         var values = {};
@@ -261,7 +240,6 @@
                     $('#body_params').show();
                     $('#query').hide();
                     $('#response').hide();
-                    $('#runscript').hide();
                 }
 
             });

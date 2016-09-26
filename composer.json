@@ -10,7 +10,8 @@
         "jeroen-g/laravel-packager": "^1.4",
         "alchemy/zippy": "^0.3.5",
         "fguillot/json-rpc": "@stable",
-        "bugsnag/bugsnag": "^3.4"
+        "bugsnag/bugsnag": "^3.4",
+        "devless/php-sdk": "v1.0.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -28,7 +29,8 @@
             "App\\": "app/",
             "Devless\\Schema\\": "packages/devless/schema/src",
             "Devless\\Script\\": "packages/devless/script/src",
-            "Devless\\RulesEngine\\": "packages/devless/rulesengine/src"
+            "Devless\\RulesEngine\\": "packages/devless/rulesengine/src",
+            "Devless\\SDK\\": "devless/php-sdk/src"
 
         }
     },

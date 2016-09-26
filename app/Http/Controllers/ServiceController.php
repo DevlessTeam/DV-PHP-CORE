@@ -12,8 +12,10 @@ use Devless\Script\ScriptHandler as script;
 use App\Http\Controllers\ViewController as DvViews;
 use App\Http\Controllers\RpcController as Rpc;
 
+
 class ServiceController extends Controller
 {
+    
 
     /**
      * Display a listing of the resource.
@@ -48,14 +50,13 @@ class ServiceController extends Controller
         $service = new Service();
         $service_name_from_form = $request->input("name");
         $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
-        $service_name = strtolower($service_name_from_form);
+        $service_name = strtoupper($service_name_from_form);
 
         $validator = Validator::make(
-
-            ['name'=>$service_name],
+                
+            ['Service Name'=>$service_name,'Devless'=>'devless'],
             [
-                'name'=>'required|unique:services,name',
-
+                'Service Name'=>'required|unique:services,name|min:3|max:15|different:Devless',
             ]
         );
 
@@ -75,7 +76,7 @@ class ServiceController extends Controller
         $service->resource_access_right =
             '{"query":0,"create":0,"update":0,"delete":0,"schema":0,"script":0, "view":0}';
         $service->active = 1;
-        $service->script = 'echo "Happy Coding";';
+        $service->script = 'echo "Surely silence can sometimes be the most eloquent reply.";';
 
         $connection =
             [
@@ -246,8 +247,6 @@ class ServiceController extends Controller
      */
     public function service(Request $request, $service, $resource)
     {
-        
-        //check token and keys
         $this->_devlessCheckHeaders($request);
 
         $serviceOutput = $this->resource($request, $service, $resource);
@@ -268,7 +267,6 @@ class ServiceController extends Controller
     public function resource($request, $service_name, $resource, $internal_access = false)
     {
         $resource = strtolower($resource);
-        $service_name = strtolower($service_name);
         ($internal_access == true)? $method = $request['method'] :
             $method = $request->method();
 
@@ -313,7 +311,7 @@ class ServiceController extends Controller
         $parameters = null,
         $internal_access = false
     ) {
-
+        
         $current_service = $this->service_exist($service_name);
 
         if (!$current_service == false) {
@@ -346,7 +344,7 @@ class ServiceController extends Controller
                 $newServiceElements = $this->before_assigning_service_action($resource, $payload);
                 $resource = $newServiceElements['resource'];
                 $payload = $newServiceElements['payload'];
-
+                
                 //keep names of resources in the singular
                 switch ($resource) {
                     case 'db':
@@ -385,13 +383,21 @@ class ServiceController extends Controller
      */
     public function service_exist($service_name)
     {
-
+        
         if ($current_service = serviceModel::where('name', $service_name)->
         where('active', 1)->first()) {
+            
             return $current_service;
+            
+        } else if (config('devless')['devless_service']->name == 'devless') {
+            
+            $current_service = config('devless')['devless_service'];
+            return $current_service;
+            
         } else {
             Helper::interrupt(604);
         }
+        
 
 
     }
@@ -452,6 +458,7 @@ class ServiceController extends Controller
      */
     public function check_resource_access_right_type($access_type)
     {
+        
         $is_user_login = Helper::is_admin_login();
 
         if (! $is_user_login && $access_type == 0) {

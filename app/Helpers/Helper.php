@@ -242,9 +242,7 @@ class Helper
 
     /**
      * Get authenticated user cred.
-     *
      * @param $access_state
-     *
      * @return array
      */
     public static function get_authenticated_user_cred($access_state)

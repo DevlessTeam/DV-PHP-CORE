@@ -11,7 +11,7 @@ use Alchemy\Zippy\Zippy;
 use App\Helpers\DataStore;
 use Devless\Schema\DbHandler as DvSchema;
 use Symfony\Component\VarDumper\Cloner\Data;
-
+use App\Helpers\Jwt as jwt;
 /*
 * @author Eddymens <eddymens@devless.io
 */
@@ -65,7 +65,7 @@ class DevlessHelper extends Helper
 
         return $service_components;
     }
-
+    
     /** Get all service attributes
      * @return string
      */
@@ -394,14 +394,23 @@ class DevlessHelper extends Helper
      */
     public function signup($payload)
     {
-
-        $fields = get_defined_vars();
-
+        $username = (isset($payload['username']))?$payload['username']:'';
+        
+        $email = (isset($payload['email']))?$payload['email']:'';
+        $phone_number = (isset($payload['phone_number']))?$payload['phone_number']:'';
+        $existing_users =  \DB::table('users')->orWhere('username', $username)
+                ->orWhere('email', $email)
+                ->orWhere('phone_number', $phone_number)->get();
+         
+        if($existing_users != null) {
+            return Response::respond(1001,"Seems User already exists");
+        }
+        
         $user = new User;
 
         $secret = config('app')['key'];
 
-        $token = $this->auth_fields_handler($fields, $user);
+        $token = $this->auth_fields_handler($payload, $user);
 
         if ($token == false) {
             return $token;
@@ -437,11 +446,9 @@ class DevlessHelper extends Helper
 
     /**
      * get authenticated user details
-     * @param $payload
-     * @return alphanum
-     * @internal param type $request
+     * @return array
      */
-    public function get_profile($payload)
+    public function get_profile()
     {
         if ($token = Helper::get_authenticated_user_cred(true)) {
             $db = new DB();
@@ -485,10 +492,11 @@ class DevlessHelper extends Helper
             return false;
         }
         if ($user_data !== null) {
-            Helper::compare_hash($password, $user_data->password) ;
+           $correct_password = 
+                   (Helper::compare_hash($password, $user_data->password))?true: false ;
             $user_data->session_token = $session_token = md5(uniqid(1, true));
 
-            if ($user_data->save()) {
+            if ($correct_password && $user_data->save()) {
                 $token_payload =
                     [
                         'token' => $session_token,
@@ -498,6 +506,8 @@ class DevlessHelper extends Helper
                 $prepared_token = $this->set_session_token($token_payload, $user_data->id);
 
                 return $prepared_token;
+            } else {
+                return false;
             }
         } else {
             return false;
@@ -507,7 +517,7 @@ class DevlessHelper extends Helper
     }
 
     /**
-     * update user devless project
+     * update devless user profile 
      * @param $payload
      * @return bool
      * @internal param type $request
@@ -591,7 +601,7 @@ class DevlessHelper extends Helper
 
         $payload = json_encode($payload);
 
-        if (DB::table('users')->where('id', $user_id)->update(['session_time'=>elper::session_timestamp()])) {
+        if (DB::table('users')->where('id', $user_id)->update(['session_time'=>Helper::session_timestamp()])) {
             return $jwt->encode($payload, $secret);
         } else {
             return false;
@@ -615,11 +625,13 @@ class DevlessHelper extends Helper
                 'username' => 'text',
                 'password' => 'password',
                 'first_name' => 'text',
-                'last_name' => 'text'
+                'last_name' => 'text',
+                'remember_token' => 'text',
+                'status'         => 'text'
 
             ];
 
-        foreach ($fields['payload'] as $field => $value) {
+        foreach ($fields as $field => $value) {
             $field = strtolower($field);
 
 
@@ -663,7 +675,7 @@ class DevlessHelper extends Helper
      * @param $method
      * @param $class
      */
-    public static function rpcMethodAccessibility($method, $class)
+    public static function rpcMethodAccessibility($class, $method)
     {
         $property = $class->getMethod($method);
         $docComment  = $property->getDocComment();
@@ -755,7 +767,11 @@ class DevlessHelper extends Helper
         return self::modifyAssetContent($serviceName, $files, $replacements);
     }
 
-
+    /**
+     * execute on import and delete function 
+     * @param type $payload
+     * @return boolean
+     */
     public static function execOnServiceStar($payload)
     {
         $service = $payload['serviceName'];
@@ -776,4 +792,15 @@ class DevlessHelper extends Helper
         }
         
     }
+    
+    public static function rmdir_recursive($dir) {
+        foreach(scandir($dir) as $file) {
+            if ('.' === $file || '..' === $file) continue;
+            if (is_dir("$dir/$file")) rmdir_recursive("$dir/$file");
+            else unlink("$dir/$file");
+        }
+        rmdir($dir);
+        return true;
+    }
+    
 }

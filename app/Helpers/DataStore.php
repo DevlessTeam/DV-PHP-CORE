@@ -217,7 +217,7 @@ class DataStore extends Helper
     public static function instanceInfo()
     {
         
-        $adminData = \DB::table('users')->where('id', 1)->where('role', 1)
+        $adminData = \DB::table('users')->where('role', 1)
                 ->select('username', 'email')->first();
         $appData   =  \DB::table('apps')->select('name', 'description', 'token')->first();
 

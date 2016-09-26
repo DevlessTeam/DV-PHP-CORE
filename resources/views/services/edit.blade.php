@@ -378,8 +378,19 @@
                 for (var i = 1; i <= len; i++) {
                     position = ((len-i)*8)
                     if(form_array[6+position] == ""){ _default = null;}else{_default = form_array[6+position]; }
+                    console.log("field tpe", trim(form_array[4+position]));
+                    if(trim(form_array[4+position]) == "reference")
+                    {
+                        console.log('appended service')
+                        referenced_table_name = service_name+'_'+trim(form_array[5+position])+'_id';
+                        
+                    }else{
+                        referenced_table_name = trim(form_array[3+position]);
+                        console.log('went for else instead')
+                    }
+                    console.log('ref after passing', referenced_table_name);
                     window.schema_json.resource[0].field[i-1] = {
-                        "name":trim(form_array[3+position]),
+                        "name":    referenced_table_name,
                         "field_type":trim(form_array[4+position]),
                         "ref_table":trim(form_array[5+position]),
                         "default":_default,
