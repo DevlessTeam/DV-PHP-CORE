@@ -12,6 +12,8 @@
 */
 Route::get('/', 'UserController@get_login');
 
+//MEMEMEMEMEM
+Route::get('/service_assets', 'ServiceController@service_views');
 
 Route::post('login', 'UserController@post_login');
 Route::get('logout', 'UserController@get_logout');
