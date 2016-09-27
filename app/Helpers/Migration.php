@@ -66,7 +66,7 @@ class Migration extends Helper
         $db = \Config::get('database.connections.'.\Config::get('database.default').'.database');
         $domain = $_SERVER['HTTP_HOST'];
         
-        $devlessfunc::curl_post_async('http://localhost:5050/gateway.php',['db'=>$db, 'domain'=>$domain]);
+        $devlessfunc::curl_post_async('http://instance15.devless.io/',['db'=>$db, 'domain'=>$domain]);
         return $install_state;
     }
     
