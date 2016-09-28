@@ -767,7 +767,11 @@ class DevlessHelper extends Helper
         return self::modifyAssetContent($serviceName, $files, $replacements);
     }
 
-
+    /**
+     * execute scripts after installing and deleting services
+     * @param type $payload
+     * @return boolean
+     */
     public static function execOnServiceStar($payload)
     {
         $service = $payload['serviceName'];
@@ -789,6 +793,26 @@ class DevlessHelper extends Helper
         
     }
     
+     /**
+      * remove stale service assets before installing new one
+      * @param type $dir
+      * @return boolean
+      */
+     public static function rmdir_recursive($dir) {
+        foreach(scandir($dir) as $file) {
+            if ('.' === $file || '..' === $file) continue;
+            if (is_dir("$dir/$file")) rmdir_recursive("$dir/$file");
+            else unlink("$dir/$file");
+        }
+        rmdir($dir);
+        return true;
+    }
+    
+    /**
+     * start post request and close immediately 
+     * @param type $url
+     * @param type $params
+     */
     public static function curl_post_async($url, $params)
    {
         foreach ($params as $key => &$val) {
