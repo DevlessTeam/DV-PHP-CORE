@@ -54,6 +54,8 @@ Route::group(['middleware' => 'user.auth'], function () {
  //change token
     Route::patch('generatetoken', 'AppController@token');
 
+ //install service
+    Route::get('install_service', 'HubController@get_service');
   //app views
     Route::resource('app', 'AppController');
 

@@ -4,6 +4,7 @@ use App\Service;
 use App\Http\Requests;
 use \App\Helpers\Migration;
 use Illuminate\Http\Request;
+use Devless\SDK\SDK;
 use App\Helpers\DevlessHelper as DLH;
 use App\Http\Controllers\Controller;
 class HubController extends Controller
@@ -15,83 +16,30 @@ class HubController extends Controller
      */
     public function index()
     {
-        $services = Service::orderBy('id', 'desc')->paginate(10);
-        return view('hub.index', compact('services'));
+        $sdk = new SDK("http://devless.herokuapp.com","10fa22f7466bafdad86dbde4cf451027");
+        $data = $sdk->getData('DV_STORE', 'service');
         
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        if($data['status_code'] == 625) {
+            $services = $data['payload']['results'];
+            $properties = $data['payload']['properties'];
+           
+        } else {
+            DLH::flash("Could not connect to the store :(", 'error');
+        }
+        return view('hub.index', compact('services','properties'));
+        
     }
     
-    public function getService()
+    public function get_service($url, $serviceName)
     {
-        $serviceName = 'imageupload.srv';
-        $service = file_get_contents('https://store.devless.io/download/imageupload.srv');
+        $service = file_get_contents($url);
         $status = file_put_contents(storage_path().'/'.$serviceName, $service);
-        
+
         if ($status) {
             $status = Migration::import_service($serviceName);
-            ($status)? DLH::flash('Service has been installed', 'success'):
-                false;
+            return ($status)? "ok" : "false";
         } else {
-            DLH::flash('Sorry Service or package could not be downloaded', 'error');
+            return false;
         }
     }
 }
