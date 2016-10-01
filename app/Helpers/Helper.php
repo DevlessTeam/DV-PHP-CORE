@@ -8,7 +8,7 @@ use Response as output;
 use Session;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Validator;
-
+use App\Helpers\Jwt;
 /*
  * @author eddymens <eddymens@devless.io>
 *composed of most common used classes and functions

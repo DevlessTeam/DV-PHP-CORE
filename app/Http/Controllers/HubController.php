@@ -1,14 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Service;
 use App\Http\Requests;
 use \App\Helpers\Migration;
 use Illuminate\Http\Request;
 use App\Helpers\DevlessHelper as DLH;
 use App\Http\Controllers\Controller;
-
 class HubController extends Controller
 {
     /**
@@ -22,7 +19,6 @@ class HubController extends Controller
         return view('hub.index', compact('services'));
         
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -32,7 +28,6 @@ class HubController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -43,7 +38,6 @@ class HubController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      *
@@ -54,7 +48,6 @@ class HubController extends Controller
     {
         //
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -65,7 +58,6 @@ class HubController extends Controller
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -77,7 +69,6 @@ class HubController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      *
