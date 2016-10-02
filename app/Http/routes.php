@@ -56,6 +56,7 @@ Route::group(['middleware' => 'user.auth'], function () {
 
  //install service
     Route::get('install_service', 'HubController@get_service');
+        
   //app views
     Route::resource('app', 'AppController');
 
