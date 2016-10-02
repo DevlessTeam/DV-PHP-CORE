@@ -135,8 +135,11 @@ window.onload(function() {
     var metas;
 
     function tableCall(table_entries) {
+        $.get('/datatable/'+table_entries+'/metas', function(response){
+          metas = response;
+        });
+
         $.get('/datatable/'+table_entries+'/entries', function(data) {
-            metas = Object.keys(data.data[0]);
             $('#addbtn').prop("disabled", false);
             navOption(data);
             if (data.data.length == 0){

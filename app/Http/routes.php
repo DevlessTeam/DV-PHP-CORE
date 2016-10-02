@@ -90,4 +90,5 @@ Route::group(['middleware' => 'user.auth'], function () {
     Route::get('datatable', 'DatatableController@index');
     Route::get('datatable/{datatable?}', 'DatatableController@create');
     Route::get('datatable/{entries?}/entries', 'DatatableController@show');
+    Route::get('datatable/{entries?}/metas', 'DatatableController@store');
 });
