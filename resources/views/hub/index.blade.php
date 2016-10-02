@@ -14,10 +14,10 @@
 @endsection
 
 @section('content')
-<div id="service-desc" class="modal fade" role="dialog">
+<!--<div id="service-desc" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
-    <!-- Modal content-->
+     Modal content
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -32,13 +32,12 @@
 
       </div></form></div>
   </div>
-</div>
+</div>-->
 
 <!--body wrapper start-->
 <div class="wrapper">
     <div class="row">
-    
-        @if($services->count())
+        @if(count($services))
              @foreach($services as $service)
              <div class="col-lg-4 col-md-6 col-sm-6 mr-b-20 plugin-card">
         <div class="dv-prod">
@@ -46,13 +45,14 @@
             <div class="name column-name">
               <h3>
                 <a href="#" data-toggle="modal" data-target="#service-desc">
-                  Module Commerce<img src="https://store.devless.io/ico/schools.png" class="plugin-icon img-responsive" alt="">
+                    <!--src="{{$service['image_url']}}"--> 
+                    {{$service['name']}}<img width=2 class="plugin-icon img-responsive" alt="N/A">
                 </a>
               </h3>
             </div>
             <div class="desc column-description">
-              <p>Fully responsive and mobile friendly WP food menu display plugin for... </p>
-              <a href="#" data-toggle="modal" data-target="#service-desc">More Details</a>
+              <p>{{$service['description']}} </p>
+              <!--<a href="#" data-toggle="modal" data-target="#service-desc">More Details</a>-->
             </div>
           </div>
           <div class="plugin-card-bottom">
@@ -61,14 +61,14 @@
               <button class="btn btn-success" type="button">Download</button>
             </div>
             <div class="column-downloaded">
-              <p class="authors"><cite>By <a href="#">Devless Team</a></cite></p>
+              <p class="authors"><cite>By <a href="#">{{$service['author']}}</a></cite></p>
               <span>300+ Active Installs</span>
             </div>
           </div>
         </div>  
       </div>
             @endforeach
-        {!! $services->render() !!}
+       
     @else
        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
            <div class="modal-dialog" role="document">
@@ -90,6 +90,21 @@
            window.onload(function(){
                $('#myModal').modal('show');
            }());
+           function getService(url) {
+               httpGetAsync(url,function(data) {
+                console.log('results', data)
+               })
+           }
+           
+           function httpGetAsync(theUrl, callback){
+{               var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function() { 
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                        callback(xmlHttp.responseText);
+                }
+                xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+                xmlHttp.send(null);
+}           }
        </script>
             @endif
     </div>
