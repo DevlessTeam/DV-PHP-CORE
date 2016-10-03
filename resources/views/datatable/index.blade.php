@@ -2,10 +2,11 @@
 @extends('layout')
 
 @section('header')
-    <div class="page-head">
+      <div class="page-head">
         <h3>
             Data Table
         </h3>
+        <button type="button" id="addbtn" class="btn btn-primary pull-right" style="position: relative; bottom: 23px;" disabled="true">Add Data</button>
         <span class="sub-title">Data Table/</span>
     </div>
 @endsection
@@ -70,6 +71,52 @@ td {
         </div>
     </div>
 </div>
+
+<div id="flash_msg" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="container col-md-12 col-sm-12" style="color: #000; background-color: #f3f3f3; padding: 10px;">
+        <form id="modalform" action="" method="post">
+          <div class="form-group" id="formData">
+          </div>
+          <button type="submit" class="btn btn-default">Update</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+          <button type="submit" class="btn btn-warning" id="cancel">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="add_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="container col-md-12 col-sm-12" style="color: #000; background-color: #f3f3f3; padding: 10px;">
+        <form id="modaladd" action="" method="post">
+          <div class="form-group" id="addform">
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+          <button type="submit" class="btn btn-warning">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="error_flash" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="container col-md-12 col-sm-12" style="color: #000; background-color: #f3f3f3; padding: 10px;">
+        <pre>
+          <div id="error_display">
+
+          </div>
+        </pre>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script charset="utf-8">
 window.onload(function() {
 
@@ -85,9 +132,15 @@ window.onload(function() {
     var entries;
     var nextUrl;
     var prevUrl;
+    var metas;
 
     function tableCall(table_entries) {
+        $.get('/datatable/'+table_entries+'/metas', function(response){
+          metas = response;
+        });
+
         $.get('/datatable/'+table_entries+'/entries', function(data) {
+            $('#addbtn').prop("disabled", false);
             navOption(data);
             if (data.data.length == 0){
                 $('#empty_handler').show('fast', function(){
@@ -111,8 +164,13 @@ window.onload(function() {
     }
 
     var service_id;
+    var service_name;
+    var service_table;
+    var c;
     $('#service').change(function() {
         service_id = $('#service').val();
+        service_name = $('#service option:selected').text();
+        console.log(service_name);
         $('#excelDataTable').html(' ');
         $('#empty_handler').hide('fast', function() {
             $('#page-nav').hide();
@@ -127,7 +185,8 @@ window.onload(function() {
     });
 
     $('#table_name').change(function(data) {
-        var table_entries = $('#service option:selected').text() + '_' + $('#table_name option:selected').text();
+        service_table = $('#table_name option:selected').text();
+        var table_entries = service_name + '_' + service_table;
         $('#excelDataTable').html(' ');
         tableCall(table_entries);
     });
@@ -205,6 +264,124 @@ window.onload(function() {
             $('#previous').removeClass('disabled');
         }
     }
+
+    function jQExtn() {
+      $.fn.serializeObject = function()
+      {
+        var obj = {};
+        var arr = this.serializeArray();
+        $.each(arr, function() {
+          if (obj[this.name] !== undefined) {
+            if (!obj[this.name].push) {
+              obj[this.name] = [obj[this.name]];
+            }
+            obj[this.name].push(this.value || '');
+          } else {
+            obj[this.name] = this.value || '';
+          }
+        });
+        return obj;
+      };
+    }
+
+
+    $(document).on('click', '.details', function () {
+
+      c = $(this).find('td').map(function(){
+        return $(this).html();
+      }).get();
+      console.log(c);
+
+      $(function modal() {
+          $('#flash_msg').modal({show: true, backdrop: 'static'});
+          $('#formData').html(" ");
+          for (var i = 2; i < metas.length; i++) {
+            $('#formData').append('<label for="'+metas[i]+'">'+metas[i]+'</label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'" value="'+c[i+1]+'">');
+          }
+      });
+      jQExtn();
+    })
+
+    var form_value;
+    $(function() {
+        $('form').submit(function(e) {
+          e.preventDefault();
+          payload = $('form').serializeObject();
+
+          switch ($(this).find("button:focus")[0].innerText) {
+            case "Cancel":
+                $('#add_form').modal('hide');
+                $('#flash_msg').modal('hide');
+                break;
+            case "Submit":
+                var info = {resource:[{name:service_table, field: [payload]}]};
+                $.post("api/v1/service/"+service_name+"/db", info).success(function(data){
+                  console.log(data);
+                  if(data.status_code === 609){
+                    location.reload();
+                  } else {
+                    $('#add_form').modal('hide');
+                    $('#flash_msg').modal('hide');
+                    $('#error_flash').modal('show');
+                    $('#error_display').text(JSON.stringify(data.message));
+                  }
+                });
+                break;
+            case "Update":
+                var info = {resource:[{name:service_table, params: [{where: "id,"+c[1], data:[payload]}]}]};
+                $.ajax({
+                    url: "api/v1/service/"+service_name+"/db",
+                    type: "PATCH",
+                    data: info
+                })
+                .done(function(data) {
+                    if(data.status_code === 619){
+                      location.reload();
+                    } else {
+                      $('#add_form').modal('hide');
+                      $('#flash_msg').modal('hide');
+                      $('#error_flash').modal('show');
+                      $('#error_display').text(JSON.stringify(data.message));
+                    }
+                });
+                break;
+            case "Delete":
+                var info = {resource:[{name:service_table, params: [{delete:true, where: "id,"+c[1]}]}]};
+                console.log('payload', info);
+                $.ajax({
+                    url: "api/v1/service/"+service_name+"/db",
+                    type: "DELETE",
+                    data: info
+                })
+                .done(function(data) {
+                  console.log(data);
+                  if(data.status_code === 636){
+                    location.reload();
+                  } else {
+                    $('#add_form').modal('hide');
+                    $('#flash_msg').modal('hide');
+                    $('#error_flash').modal('show');
+                    $('#error_display').text(JSON.stringify(data));
+                  }
+                });
+                break;
+          }
+
+            return false;
+        });
+    });
+
+    $('#addbtn').click(function(){
+      $(function modal() {
+          $('#add_form').modal({show: true, backdrop: 'static'});
+
+          $('#addform').html(" ");
+          for (var i = 2; i < metas.length; i++) {
+            $('#addform').append('<label for="'+metas[i]+'">'+metas[i]+'</label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'">');
+          }
+      });
+      jQExtn();
+    });
 
 }());
 
