@@ -13,7 +13,7 @@ class {{ServiceName}}
      * Sample method accessible to via endpoint
      * @ACL private
      */
-    public function methodOne()
+    public function methodone()
     {
         return "Sample Protected Method";
     }
@@ -23,7 +23,7 @@ class {{ServiceName}}
      * Sample method accessible only by authenticated users
      * @ACL protected
      */
-    public function methodTwo()
+    public function methodtwo()
     {
         return "Sample Protected Method";
     }
@@ -32,7 +32,7 @@ class {{ServiceName}}
      * Sample method not accessible via endpoint
      * @ACL public
      */
-    public function methodThree()
+    public function methodthree()
     {
         return "Sample Protected Method";
     }
