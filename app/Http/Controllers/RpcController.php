@@ -25,18 +25,19 @@ class RpcController extends Controller
         $serviceMethodPath = ($service ==  config('devless')['name'])?
                             config('devless')['helpers'].'SystemClass.php':
                             config('devless')['views_directory'].$service.'/ActionClass.php';
-        
        
-        (file_exists($serviceMethodPath))?
-            require_once $serviceMethodPath : false;
+        if(file_exists($serviceMethodPath)) { 
+            require_once $serviceMethodPath;
+        } else {
+            return Response::respond(604);
+        }
             
         $server = new Server();
         
         $class = new \ReflectionClass($service);
         
         DevlessHelper::rpcMethodAccessibility($class, $method);
-        
         $server->getProcedureHandler()->withClassAndMethod($service, $service, $method);
-        return  Response::respond(637, null, json_decode($server->execute()));
+        return  Response::respond(637, '', json_decode($server->execute()));
     }
 }

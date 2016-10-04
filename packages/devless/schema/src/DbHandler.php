@@ -86,6 +86,10 @@ class DbHandler
         //setup db connection
         $connector = $this->_connector($payload);
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
+       
+        (isset($payload['params'][0]['name']) && count($payload['params'][0]['name'])> 0
+                && gettype($payload['params'][0]['field']) == 'array' || isset($payload['params'][0]['field'][0]) )? true :
+        Helper::interrupt(641);
         foreach ($payload['params'] as $table) {
             $table_name = $table['name'];
             if (!\Schema::connection('DYNAMIC_DB_CONFIG')->
