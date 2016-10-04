@@ -31,6 +31,9 @@ class DataStore extends Helper
             self::$payload['service_name'] = $serviceName;
             self::$payload['params'] = ['table' => [$tableName]];
             self::$payload['service'] = $service;
+            
+            //disregard access rights 
+            Session()->put('user', 1);
 
         };
 

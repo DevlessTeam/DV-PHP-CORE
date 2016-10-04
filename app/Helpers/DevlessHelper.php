@@ -6,6 +6,7 @@ use App\Http\Controllers\ServiceController;
 use DB;
 use Hash;
 use Session;
+use Devless\SDK\SDK;
 use App\User as user;
 use Alchemy\Zippy\Zippy;
 use App\Helpers\DataStore;
@@ -767,7 +768,11 @@ class DevlessHelper extends Helper
         return self::modifyAssetContent($serviceName, $files, $replacements);
     }
 
-
+    /**
+     * execute scripts after installing and deleting services
+     * @param type $payload
+     * @return boolean
+     */
     public static function execOnServiceStar($payload)
     {
         $service = $payload['serviceName'];
@@ -789,6 +794,26 @@ class DevlessHelper extends Helper
         
     }
     
+     /**
+      * remove stale service assets before installing new one
+      * @param type $dir
+      * @return boolean
+      */
+     public static function rmdir_recursive($dir) {
+        foreach(scandir($dir) as $file) {
+            if ('.' === $file || '..' === $file) continue;
+            if (is_dir("$dir/$file")) rmdir_recursive("$dir/$file");
+            else unlink("$dir/$file");
+        }
+        rmdir($dir);
+        return true;
+    }
+    
+    /**
+     * start post request and close immediately 
+     * @param type $url
+     * @param type $params
+     */
     public static function curl_post_async($url, $params)
    {
         foreach ($params as $key => &$val) {
@@ -813,5 +838,24 @@ class DevlessHelper extends Helper
         fwrite($fp, $out);
         fclose($fp);
     }
-
+    
+     public static function instance_log($url, $token, $purpose)
+    {
+        $sdk = new SDK($url, $token);
+        $instance = DataStore::instanceInfo();
+        
+        $user = $instance['admin'];
+        $app  = $instance['app'];
+        $data = [
+            'username' => $user->username,
+            'email' => $user->email,
+            'token' => $app->token,
+            'connected_on' => Date(DATE_RFC2822),
+            'instance_url' => $_SERVER['HTTP_HOST'],
+            'purpose'      => $purpose
+        ];
+        $status = $sdk->addData('INSTANCE_LOG', 'instance', $data);
+        return ($status['status_code'] == 609)? true : false;
+        
+    }
 }
