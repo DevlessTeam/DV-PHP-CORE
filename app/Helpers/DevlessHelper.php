@@ -757,7 +757,7 @@ class DevlessHelper extends Helper
 
             '{{MAINDOC}}'=> '/**
  * Created by Devless.
- * User: '.$username.'
+ * Author: '.$username.'
  * Date Created: '.$time.'
  * @Service: '.$serviceName.'
  * @Version: 1.0

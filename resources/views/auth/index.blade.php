@@ -34,11 +34,10 @@
     <div class="wrapper">
       <div class="row">
         <a href="https://devless.io">
-          <img src="{{url('/img/logo.png')}}" height="50" alt="Devless">
-          <span class="brand-name" style="font-size: 50px; color: #fff; position: relative; top: 10px;">Devless</span>
+          <img src="{{url('/img/logo.png')}}" class="login-logo" alt="Devless">
         </a>
           <center>
-        <div class="col-lg-6 col-md-6 " style="margin-left:24%;margin-right:24%;margin-top:10%;">
+        <div class="col-lg-6 col-md-6 " style="margin-left:24%;margin-right:24%;">
           <section class="panel">
             <header class="panel-heading">
               Login

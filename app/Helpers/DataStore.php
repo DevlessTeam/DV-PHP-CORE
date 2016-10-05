@@ -203,7 +203,7 @@ class DataStore extends Helper
     {
 
         self::$payload['params'][$methodName] =
-            (null == isset(self::$payload['params'][$methodName]))?  self::$payload['params'][$methodName] = [] : true;
+            (null == isset(self::$payload['params'][$methodName]))?  self::$payload['params'][$methodName] = [] :self::$payload['params'][$methodName] ;
 
         array_push(self::$payload['params'][$methodName], $args);
 
