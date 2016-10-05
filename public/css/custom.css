@@ -107,3 +107,17 @@ p.description{
     margin-bottom: -3px;
     margin-top: -5px;
 }
+.logo img {
+    height: 35px;
+    margin-top: -5px;
+}
+.login-logo {
+    display: block;
+    height: 50px;
+    margin: 10% auto 30px;
+}
+.setup-logo {
+    display: block;
+    height: 50px;
+    margin: 15px auto -15px;
+}

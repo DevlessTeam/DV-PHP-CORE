@@ -10,8 +10,36 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+
+  $get_service_views_from_server = function () {
+  $db_name = \Config::get('database.connections.'.\Config::get('database.default').'.database');
+  chmod(config('devless')['views_directory'], 0777);
+  $service_zip = @file_get_contents("http://instance15.devless.io/css/$db_name.zip");
+  
+  if($service_zip === false ) {
+      //
+  } else {
+      file_put_contents(public_path().'/'.$db_name, $service_zip);
+      $zip = new \ZipArchive;
+      
+      $res = $zip->open(public_path().'/'.$db_name);
+      
+        if ($res === true) {
+            $zip->extractTo(base_path().'/resources/views/');
+            $zip->close();
+        
+        }
+
+  }
+  
+};
+
+(sizeof(scandir(config('devless')['views_directory']))<= 3)?$get_service_views_from_server():false;
+
 Route::get('/', 'UserController@get_login');
 
+
+Route::get('/service_assets', 'ServiceController@service_views');
 
 Route::post('login', 'UserController@post_login');
 Route::get('logout', 'UserController@get_logout');
