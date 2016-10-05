@@ -204,10 +204,14 @@ class DataStore extends Helper
      */
     private static function bindToParams($methodName, $args)
     {
-
-        self::$payload['params'][$methodName] =
-            (null == isset(self::$payload['params'][$methodName]))?  self::$payload['params'][$methodName] = [] : true;
-
+            
+        if(!isset(self::$payload['params'][$methodName] )) {
+                if($methodName == "where") {
+                    self::$payload['params'][$methodName]  = [];
+                } else {
+                    self::$payload['params'][$methodName] = '';
+                }
+        }
         array_push(self::$payload['params'][$methodName], $args);
 
         return (is_null(self::$instance))? self::$instance = new self() : self::$instance;
