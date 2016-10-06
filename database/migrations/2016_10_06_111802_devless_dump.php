@@ -12,7 +12,13 @@ class DevlessDump extends Migration
      */
     public function up()
     {
-        //
+       Schema::create('devless_dump', function ($table) {
+            $table->increments('id');
+            $table->string('key');
+            $table->string('value');
+            $table->string('notes');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -22,6 +28,6 @@ class DevlessDump extends Migration
      */
     public function down()
     {
-        //
+           Schema::drop('devless_dump');
     }
 }

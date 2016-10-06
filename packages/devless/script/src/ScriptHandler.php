@@ -61,8 +61,8 @@ class ScriptHandler
             'method' => $payload['method'],
             'params' => '',
             'script' => $payload['script'],
-//            'user_id' => $user_cred['id'],
-//            'user_token' => $user_cred['token'],
+            'user_id' => $user_cred['id'],
+             'user_token' => $user_cred['token'],
             'requestType' => $Dvresource,
         ];
 
