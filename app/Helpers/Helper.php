@@ -82,7 +82,7 @@ class Helper
     public static $validator_type =
     [
         'boolean'    => 'boolean',
-        'decimal'    => 'numeric',
+        'decimals'    => 'numeric',
         'email'      => 'email',
         'integer'    => 'integer',
         'password'   => 'alphanum',
