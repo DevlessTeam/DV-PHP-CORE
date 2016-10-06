@@ -54,6 +54,7 @@ class ScriptHandler
             
         $service = new Service();
         $rules = new Rules();
+        $rules->requestType($payload['method']);
 
         //checking right access control right
 //        $access_type = $payload['resource_access_right'];
