@@ -51,19 +51,11 @@ class ScriptHandler
      */
     public function run_script($Dvresource, $payload)
     { 
-            
+        
         $service = new Service();
         $rules = new Rules();
         $rules->requestType($payload['method']);
-
-        //checking right access control right
-//        $access_type = $payload['resource_access_right'];
-//        $dbHandler = new DbHandler();
-//
-//        $resourceType = $dbHandler->dbActionAssoc[$payload['method']];
-//        $access_state = $service->check_resource_access_right_type($access_type[$resourceType]);
-//        $user_cred = Helper::get_authenticated_user_cred($access_state);
-
+        
         //available internal params
         $EVENT = [
             'method' => $payload['method'],
@@ -81,7 +73,16 @@ $code = <<<EOT
 $payload[script];
 EOT;
         $exec = function () use($code, $rules, $EVENT) {
-            eval($code);        
+            $midRules = $rules;
+            $mindEvent = $EVENT; 
+           $tokens = token_get_all('<?php '.$code);
+           $declarationString = '';
+           $declarationString = initializedVariables();
+           eval($declarationString);
+           $rules = $midRules;
+           $EVENT = $mindEvent;
+           //next explode variables and make them available 
+           eval($code);        
         };
         
         ob_start();
