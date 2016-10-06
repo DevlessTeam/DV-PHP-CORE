@@ -431,7 +431,11 @@
                     $('.modal-backdrop').removeClass("modal-backdrop");
                 }
                 modalHide();
-                $(window).scrollTop($('#response-field').offset().top);
+                $('html, body').animate({
+                  scrollTop: $('#response-field').offset().top
+                }, 1000, function(){
+                  window.location = "#response";
+                });
             }
             function modalHide() {
                 setTimeout(function(){
