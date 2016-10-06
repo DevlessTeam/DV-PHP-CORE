@@ -275,6 +275,12 @@
                         });
                     } else if (size != '' && key != '' && value == '') {
                         $('#response').show();
+                        flash('error');
+                        $('#response-field').text(JSON.stringify(JSON.parse('{"status_code":612,"message":"query parameters not set","payload":[]}'), undefined, 4));
+
+                    } else if (size == '' && key != '' && value == '') {
+                        $('#response').show();
+                        flash('error');
                         $('#response-field').text(JSON.stringify(JSON.parse('{"status_code":612,"message":"query parameters not set","payload":[]}'), undefined, 4));
 
                     } else if(related != '' && key == '' && value == '' && order == '' && size == '') {
@@ -425,6 +431,7 @@
                     $('.modal-backdrop').removeClass("modal-backdrop");
                 }
                 modalHide();
+                $(window).scrollTop($('#response-field').offset().top);
             }
             function modalHide() {
                 setTimeout(function(){
