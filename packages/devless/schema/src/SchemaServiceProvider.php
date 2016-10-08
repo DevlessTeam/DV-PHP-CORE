@@ -23,8 +23,6 @@ class SchemaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        
         $this->app->make('Devless\Schema\DbHandler');
-    
     }
 }

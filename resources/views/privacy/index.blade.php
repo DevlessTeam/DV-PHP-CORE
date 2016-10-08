@@ -95,17 +95,6 @@
                     </div>
                   </div>
                   <div class="row">
-                    <label for="script" class="col-lg-2 col-sm-2 control-label">Script Access</label>
-                    <div class="col-lg-9 col-md-9 col-sm-10">
-                      <select id="script" name="script" class="form-control m-b-10">
-                        <option disabled selected value> -- select a right -- </option>
-                        <option value="0">PRIVATE</option>
-                        <option value="1">PUBLIC </option>
-                        <option value="2">AUTHENTICATE </option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row">
                     <label for="view" class="col-lg-2 col-sm-2 control-label">Service Views Access</label>
                     <div class="col-lg-9 col-md-9 col-sm-10">
                       <select id="view" name="view" class="form-control m-b-10">

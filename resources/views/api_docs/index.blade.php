@@ -57,20 +57,9 @@
                                             <option value="create">ADD RECORD (POST) </option>
                                             <option value="update">UPDATE RECORD(PATCH) </option>
                                             <option value="delete">DELETE RECORD (DELETE) </option>
-                                            <option value="script">RUN SCRIPT </option>
                                         </select>
                                     </div>
-                                    <div id="runscript">
-                                        <label for="script_method" class="col-lg-2 col-sm-2 control-label">Script Method</label>
-                                        <div class="col-lg-10">
-                                            <select id="script_method" name="script_method" class="form-control m-b-10">
-                                                {{-- <option disabled selected value> -- select an operation -- </option> --}}
-                                                <option value="POST">POST </option>
-                                                <option value="UPDATE">PATCH </option>
-                                                <option value="DELETE">DELETE </option>
-                                            </select>
-                                        </div>
-                                    </div>
+
                                 </div>
 
                                 <div class="form-group">
@@ -187,15 +176,15 @@
             document.getElementById('body_params').style.display = 'none';
             document.getElementById('request').style.display = 'none';
             document.getElementById('response').style.display = 'none';
-            document.getElementById('runscript').style.display = 'none';
 
             //Handles URL generation
             var service_name;
+            var service_id;
             $('#service').change(function () {
                 $('#table').html('');
                 $('#operation').prop('selectedIndex',0);
                 service_name = $('#service option:selected').text();
-                var service_id = $('#service option:selected').val();
+                service_id = $('#service option:selected').val();
 
                 $.get('console/'+service_id, function(data) {
                     var table = data;
@@ -228,23 +217,15 @@
                     $('#query').show();
                     $('#body_params').hide();
                     $('#response').hide();
-                    $('#runscript').hide();
-
-                } else if (request_type == "script") {
-                    editor.setValue(JSON.stringify(JSON.parse('{"resource":[{}]}'), undefined, 4));
-                    $('#body_params').show();
-                    $('#runscript').show();
-                    $('#query').hide();
-                    $('#response').hide();
-                    $('#api_url').val('api/v1/service/'+service_name+'/script');
 
                 } else {
-                    $.get('/console/'+table_name+'/schema', function (data) {
+                    $.get('/console/'+service_id+'/'+service_name+'/'+table_name, function (data) {
+                      console.log(data);
                         var schema = data;
                         var values = {};
                         for (var i = 0; i < schema.length; i++) {
                             values[schema[i].name] = "";
-                        };
+                        }
                         if (request_type === 'create'){
                             // var json = JSON.stringify(JSON.parse('{"resource":[{"name":"'+table_name+'","field":['+JSON.stringify(values)+']}]}'), undefined, 4);
                             var json = JSON.stringify(JSON.parse('['+JSON.stringify(values)+']'), undefined, 4);
@@ -259,7 +240,6 @@
                     $('#body_params').show();
                     $('#query').hide();
                     $('#response').hide();
-                    $('#runscript').hide();
                 }
 
             });
@@ -403,11 +383,11 @@
                     })
                     .done(function(data) {
                         if(data.status_code == 700){
-                            $('#response').show()
+                            $('#response').show();
                             $('#response-field').text(data);
                             flash('error');
                         } else {
-                            $('#response').show()
+                            $('#response').show();
                             $('#response-field').text(data);
                             flash('success');
                         }
@@ -418,17 +398,16 @@
 
             function statuscheck(data) {
                 if(data.status_code == 700){
-                    $('#response').show()
+                    $('#response').show();
                     $('#response-field').text(JSON.stringify(data, undefined, 4));
                     flash('error');
                 } else {
-                    $('#response').show()
+                    $('#response').show();
                     // $('#response-field').text(JSON.stringify(JSON.parse(data), undefined, 4));
                     $('#response-field').text(JSON.stringify(data, undefined, 4));
                     flash('success');
                 }
-            };
-
+            }
             function flash(alert) {
                 if (alert == 'success') {
                     $('.modal-body').html('Operation Successful');
@@ -446,8 +425,7 @@
                     $('.modal-backdrop').removeClass("modal-backdrop");
                 }
                 modalHide();
-            };
-
+            }
             function modalHide() {
                 setTimeout(function(){
                     $('#flash_msg').modal('hide');

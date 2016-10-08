@@ -148,11 +148,9 @@ return [
 
 
         'JeroenG\Packager\PackagerServiceProvider',
-        
         Devless\Schema\SchemaServiceProvider::class,
         Devless\Script\ScriptServiceProvider::class,
-       
-        
+        Devless\RulesEngine\RulesServiceProvider::class,
 
 
     ],
@@ -202,7 +200,7 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
-        'Helper'   => 'App\Helpers\Helper::class',
+        'Helper'    => 'App\Helpers\Helper::class',
 
     ],
 

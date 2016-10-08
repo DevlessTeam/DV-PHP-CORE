@@ -16,15 +16,17 @@
     <div class="row">
          <div class="col-lg-3 col-sm-6 m-b-30">
                 <div class="panel panel-danger">
+                     <a href="{{ route('services.create') }}">
                     <div class="panel-header"><br><h4><center>Create Service</center></h4></div>
                     <div class="panel-body">
-                        <a href="{{ route('services.create') }}">
+                       
                         <center><i class="fa fa-plus fa-5x" aria-hidden="true"></i></center>
-                        </a>
+                        
                         <br>
 
 
                     </div>
+                    </a>
                 </div>
 
             </div>
@@ -42,8 +44,10 @@
                         <div class="btn-group" role="group">
                             <a type="button" href="{{ route('services.edit', $service->id) }}" class="btn btn-default">Edit</a>
                             <a type="button" href="/service/{{$service->name}}/view/index/" target="_blank" class="btn btn-default">Console</a>
-                             <form action="{{ route('services.destroy', $service->id) }}" method="POST" style="display: inline;" onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false };">
-                                        <input type="hidden" name="_method" value="DELETE">
+                            <form action="{{ route('services.destroy', $service->id) }}" method="POST"
+                                  style="display: inline;"
+                                  onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false }">
+                                <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <button type="submit" class="btn btn-default">Delete</button>
                                     </form>

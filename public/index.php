@@ -1,13 +1,12 @@
 <?php
-header('Content-type','application/json');
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: PATCH, GET, POST, DELETE");
+
+header('Content-type', 'application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: PATCH, GET, POST, DELETE');
 header('Access-Control-Allow-Headers:  Content-type, devless-token, devless-key, devless-user-token ');
 
-/**
- * Laravel - A PHP Framework For Web Artisans
+/* Laravel - A PHP Framework For Web Artisans.
  *
- * @package  Laravel
  * @author   Taylor Otwell <taylorotwell@gmail.com>
  */
 

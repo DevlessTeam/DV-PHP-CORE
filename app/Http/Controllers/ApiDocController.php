@@ -1,14 +1,13 @@
-<?php namespace App\Http\Controllers;
+<?php
 
-use App\Http\Requests;
-use Illuminate\Http\Request;
+namespace App\Http\Controllers;
+
 use App\Service;
-use App\Http\Controllers\Controller;
-use \App\Helpers\DevlessHelper as DLH;
+use Illuminate\Http\Request;
+use Devless\Schema\DbHandler;
 
 class ApiDocController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -17,42 +16,49 @@ class ApiDocController extends Controller
     public function index()
     {
         $services = Service::all();
+
         return view('api_docs.index', compact('services'));
     }
 
     /**
-     *Get schema to generate request payload
+     *Get schema to generate request payload.
      *
      * @return Response
      */
-    public function schema($table_name)
+    // public function schema($table_name, $service_id)
+    public function schema($service_id, $service_name, $table_name)
     {
-            $schema_data = \DB::table('table_metas')->where('table_name', $table_name)->first();
-            $schema = json_decode($schema_data->schema);
-            return $schema->field;
+        $schema_data = \DB::table('table_metas')->where('table_name', $service_name.'_'.$table_name)->where('service_id', $service_id)->first();
+        $schema = json_decode($schema_data->schema);
+
+        return $schema->field;
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
+     *
      * @return Response
      */
     public function script($service_name)
     {
         $script = \DB::table('services')->where('name', $service_name)->value('script');
+
         return $script;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
     public function edit($id)
     {
         $tables = \DB::table('table_metas')->where('service_id', $id)->get();
+
         return $tables;
     }
 }

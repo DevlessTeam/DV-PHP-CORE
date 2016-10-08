@@ -14,10 +14,10 @@ class AppController extends Controller
 {
 
     /**
-    * Display a listing of the resource.
-    *
-    * @return Response
-    */
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
     public function index()
     {
         $app = App::first();
@@ -26,12 +26,12 @@ class AppController extends Controller
     }
 
     /**
-    * Update the specified resource in storage.
-    *
-    * @param  int  $id
-    * @param Request $request
-    * @return Response
-    */
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @return Response
+     * @internal param int $id
+     */
     public function update(Request $request)
     {
         $this->validate($request, [
@@ -40,8 +40,7 @@ class AppController extends Controller
             'password' => 'confirmed|min:6',
             'password_confirmation' => 'min:6',
             'old_password' => 'required',
-            'api_key' => 'required'
-            ]);
+        ]);
 
         $user = User::findOrFail(Session('user'));
         $app = App::first();
@@ -54,7 +53,6 @@ class AppController extends Controller
 
             $app->name = $request->input("name");
             $app->description = $request->input("description");
-            $app->api_key = $request->input("api_key");
 
             ($app->save() && $user->save())? DLH::flash("App updated successfully", 'success'):
                 DLH::flash("Changes did not take effect", 'error');
@@ -64,12 +62,12 @@ class AppController extends Controller
         return back();
     }
 
-        /**
-        * Remove the specified resource from storage.
-        *
-        * @param  int  $id
-        * @return Response
-        */
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
     public function destroy($id)
     {
         $app = App::findOrFail($id);
@@ -77,12 +75,12 @@ class AppController extends Controller
 
         return redirect()->route('app.index');
     }
-        
+
     public function store()
     {
         dd("store");
     }
-        
+
     public function token(Request $request)
     {
         $app = App::first();

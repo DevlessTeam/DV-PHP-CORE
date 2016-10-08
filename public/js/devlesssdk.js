@@ -10,7 +10,7 @@ var settings = {
   },
   "processData": false,
   "data": "{  \n   \"resource\":[  \n      {  \n         \"name\":\"testtable\",\n         \"params\":[  \n            {  \n               \"drop\":\"true\"    \n            }\n         ]\n      }\n\n    ]\n}        "
-}
+};
 
 $.ajax(settings).done(function (response) {
   console.log(response);
