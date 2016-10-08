@@ -1,7 +1,7 @@
 <?php
 
 
-
+use App\Helpers\DevlessHelper as DVH;
 /**
  * Created by Devless.
  * User: eddymens
@@ -14,36 +14,109 @@
 //Action method for serviceName
 class devless
 {
-    public $serviceName = 'event';
-
+    public $serviceName = 'dvauth';
+    private $auth;
+    
+    public function __construct()
+    {
+        $this->auth = new DVH();
+        
+    }
     /**
-     * Sample method accessible to via endpoint
+     * method for handling user signup
      * @ACL public
      */
-    public function methodOne()
+    public function signUp($email=null, $password=null, $username=null,
+            $phone_number=null, $first_name=null, $last_name=null, $remember_token=null)
     {
-        return "Sample Protected Method";
+       $payload = get_defined_vars();
+       
+       $payload = self::getSetParams($payload);
+       
+       $auth = $this->auth;
+       
+       $output = $auth->signup($payload);
+       return $output;
+        
+       
     }
 
 
     /**
-     * Sample method accessible only by authenticated users
-     * @ACL protected
-     */
-    public function methodTwo()
-    {
-        return "Sample Protected Method";
-    }
-
-    /**
-     * Sample method not accessible via endpoint
+     * method for handling user login
      * @ACL public
      */
-    public function methodThree()
+    public function login($username=null, $email=null, $phone_number=null, $password=null)
     {
-        return "Sample Protected Method";
+       $payload = get_defined_vars();
+       
+       $payload = self::getSetParams($payload);
+       
+       $auth = $this->auth;
+       
+       $output = $auth->login($payload);
+       return $output;
+       
     }
-
+    
+    /**
+     * get user profile
+     * @ACL public
+    */
+    public function profile() 
+    {
+        $auth = $this->auth;
+        
+        $profile = $auth->get_profile();
+        
+        return $profile;
+    }
+    
+    /**
+     * logout
+     * @ACL public
+     */
+    public function logout()
+    {
+        $auth = $this->auth;
+        $logState = $auth->logOut();
+        
+        return $logState;
+    }
+    
+    /**
+     * method for handling user login
+     * @ACL public
+    */
+    public function updateProfile($email=null, $password=null, $username=null,
+            $phone_number=null, $first_name=null, $last_name=null, $remember_token=null)
+    {
+       $payload = get_defined_vars();
+       
+       foreach($payload as $key=>$value) {
+           if($value == null){
+               unset($payload[$key]);
+           }
+           
+       }
+       $auth = $this->auth;
+       
+       $output = $auth->update_profile($payload);
+       return $output;
+        
+       
+    }
+    
+    private static function getSetParams($payload)
+    {
+        foreach($payload as $key=>$value){
+           if($value == null){
+               unset($payload[$key]);
+           }
+           
+       }
+       return $payload;
+    }
     /**
      * This method will execute on service importation
      * @ACL private
@@ -64,9 +137,6 @@ class devless
         //add code here
 
     }
-
-
-
 
 }
 

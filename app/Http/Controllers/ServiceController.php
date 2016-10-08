@@ -44,7 +44,7 @@ class ServiceController extends Controller
         $service = new Service();
         $service_name_from_form = $request->input("name");
         $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
-        $service_name = strtoupper($service_name_from_form);
+        $service_name = $service_name_from_form;
         $validator = Validator::make(
                 
             ['Service Name'=>$service_name,'Devless'=>'devless'],
@@ -142,7 +142,7 @@ class ServiceController extends Controller
                 $service_name = $service->name;
                 $db = new DataStore();
                 $var_init = $this->var_init($script);
-                $service->relations = $var_init;
+                $service->script_init_vars = $var_init;
                 $service->script = $script;
                         
                 $service->save();
