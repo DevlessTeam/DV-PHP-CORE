@@ -63,6 +63,7 @@ class ServiceController extends Controller
         $service->password = $request->input('password');
         $service->database = $request->input('database');
         $service->hostname = $request->input('hostname');
+        $service->script_init_vars = '$rules = null;';
         $service->driver = $request->input('driver');
         $service->resource_access_right =
             '{"query":0,"create":0,"update":0,"delete":0,"schema":0,"script":0, "view":0}';
@@ -300,7 +301,7 @@ class ServiceController extends Controller
                         'hostname' => $current_service->hostname,
                         'username' => $current_service->username,
                         'password' => $current_service->password,
-                        'relations' => $current_service->relations,
+                        'script_init_vars' => $current_service->script_init_vars,
                         'calls' =>  $current_service->calls,
                         'resource_access_right' =>$resource_access_right,
                         'script' => $current_service->script,
