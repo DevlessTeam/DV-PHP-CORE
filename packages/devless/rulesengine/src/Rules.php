@@ -31,15 +31,53 @@ class Rules
 
     private $results = '';
     private $answered = false;
+    
+    private $execOrNot = true;
+    private $actionType = '';
 
-
+    public function requestType($actionType)
+    {
+        $this->actionType = $actionType;
+        return $this;
+    }
+    
+    
+    public function onQuery()
+    {
+        $this->execOrNot = ($this->actionType == 'GET')? true : false;
+        return $this ;   
+    }
+    
+    
+    
+    public function onUpdate()
+    {
+        $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
+        return $this ;   
+    }
+    
+    
+    public function onCreate()
+    {
+        $this->execOrNot = ($this->actionType == 'POST')? true : false;
+        return $this ;   
+    }
+    
+    
+    public function onDelete()
+    {
+        $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
+        return $this ;   
+    }
+    
     /**
-     * if equivalent
+     * if equivalence
      * @param $assert
      * @return $this
      */
     public function whenever($assert)
     {
+        if(!$this->execOrNot){return $this;}
         $this->assertion['whenever'] = $assert;
         $this->called['whenever'] = true;
 
@@ -47,12 +85,13 @@ class Rules
     }
 
     /**
-     * elseif equivalent
+     * elseif equivalence
      * @param $assert
      * @return $this
      */
     public function elseWhenever($assert)
     {
+        if(!$this->execOrNot){return $this;}
         $this->assertion['elseWhenever'] = $assert;
         $this->called['elseWhenever'] = true;
 
@@ -60,11 +99,12 @@ class Rules
     }
 
     /**
-     * else equivalent
+     * else equivalence
      * @return $this
      */
     public function ifAllFails()
     {
+        if(!$this->execOrNot){return $this;}
         $this->assertion['ifAllFails'] =
             (!$this->assertion['elseWhenever'] || !$this->assertion['whenever']) ? : false;
         $this->called['ifAllFails'] = true;
@@ -83,6 +123,7 @@ class Rules
 
     public function failWith($msg=null)
     {
+       if(!$this->execOrNot){return $this;} 
        $evaluator = function() use($msg) {
            return Helper::interrupt(1001, $msg);
        };
@@ -99,7 +140,7 @@ class Rules
      */
     public function run($service, $method, $params=null)
     {
-
+        if(!$this->execOrNot){return $this;}
         $evaluator = function () use ($service, $method, $params) {
 
             $results = ActionClass::execute($service, $method, $params);
@@ -119,6 +160,7 @@ class Rules
      */
     public function executor($evaluator)
     {
+        if(!$this->execOrNot){return $this;}
         $whenever = $this->assertion['whenever'];
         $elseWhenever = $this->assertion['elseWhenever'];
         $ifAllFails = $this->assertion['ifAllFails'];

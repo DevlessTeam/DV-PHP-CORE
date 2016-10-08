@@ -15,7 +15,6 @@
 
 @section('content')
     <section>
-
         <div class="wrapper">
             <div class="row">
                 <div id="flash_msg" class="modal fade col-md-offset-4" tabindex="-1" role="dialog">
@@ -166,16 +165,17 @@
 
                 </div>
             </div>
+            <button type="button" id="scroll" name="button" class="btn btn-warning pull-right">Scroll Up</button>
         </div>
         <script src="{{ url('/js/src-min-noconflict/ace.js') }}" type="text/javascript" charset="utf-8"></script>
         <script src="{{ url('/js/ace/jquery-1.8.3.min.js') }}" type="text/javascript" charset="utf-8"></script>
         <script>
-
         window.onload(function () {
             document.getElementById('query').style.display = 'none';
             document.getElementById('body_params').style.display = 'none';
             document.getElementById('request').style.display = 'none';
             document.getElementById('response').style.display = 'none';
+            document.getElementById('scroll').style.display = 'none';
 
             //Handles URL generation
             var service_name;
@@ -185,7 +185,6 @@
                 $('#operation').prop('selectedIndex',0);
                 service_name = $('#service option:selected').text();
                 service_id = $('#service option:selected').val();
-
                 $.get('console/'+service_id, function(data) {
                     var table = data;
                     for (var i = 0; i < table.length; i++) {
@@ -193,19 +192,16 @@
                     }
                 })
             });
-
             //Handles table change
             $('#table').change(function() {
             $('#operation').prop('selectedIndex',0);
             $('#body_params').hide();
             $('#response').hide();
             });
-
             //texteditor for payload
             var editor = ace.edit("editor");
             editor.setTheme("ace/theme/xcode");
             editor.getSession().setMode("ace/mode/json");
-
             // Handles the form rendering
             var request_type;
             var table_name;
@@ -217,7 +213,6 @@
                     $('#query').show();
                     $('#body_params').hide();
                     $('#response').hide();
-
                 } else {
                     $.get('/console/'+service_id+'/'+service_name+'/'+table_name, function (data) {
                       console.log(data);
@@ -236,19 +231,15 @@
                         }
                         editor.setValue(json);
                     });
-
                     $('#body_params').show();
                     $('#query').hide();
                     $('#response').hide();
                 }
-
             });
-
             // Handling requests and response
             $('#form_data').submit(function(e){
                 e.preventDefault();
                 $('#response-field').text('');
-
                 // Handles GET requests
                 if (request_type === "retrieve_all") {
                     var order = $('#order-field').val();
@@ -256,7 +247,6 @@
                     var value = $('#value-field').val();
                     var size = $('#size-field').val();
                     var related = $('#related-field').val();
-
                     if (size == '' && order == '' && key != '' && value != '') {
                         $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&where='+key+','+value, function(data) {
                             statuscheck(data);
@@ -275,8 +265,12 @@
                         });
                     } else if (size != '' && key != '' && value == '') {
                         $('#response').show();
+                        flash('error');
                         $('#response-field').text(JSON.stringify(JSON.parse('{"status_code":612,"message":"query parameters not set","payload":[]}'), undefined, 4));
-
+                    } else if (size == '' && key != '' && value == '') {
+                        $('#response').show();
+                        flash('error');
+                        $('#response-field').text(JSON.stringify(JSON.parse('{"status_code":612,"message":"query parameters not set","payload":[]}'), undefined, 4));
                     } else if(related != '' && key == '' && value == '' && order == '' && size == '') {
                         $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&related='+related, function(data){
                             statuscheck(data);
@@ -305,7 +299,6 @@
                         $.get('api/v1/service/'+service_name+'/db?table='+table_name, function(data) {
                             statuscheck(data);
                         });
-
                     } else {
                         $.get('api/v1/service/'+service_name+'/db?table='+table_name+'&where='+key+','+value+'&size='+size, function(data) {
                             if (data.status_code == 700){
@@ -317,30 +310,23 @@
                             }
                         });
                     }
-
                 } else if (request_type === "create"){
                     payload = JSON.parse(editor.getValue());
-
                     var promises = [];
                     for (var i = 0; i < payload.length; i++) {
                         var info = {resource:[{name:table_name, field: [payload[i]]}]};
-
                         promises.push($.post("api/v1/service/"+service_name+"/db", info).success(function(data){
                           console.log(data);
-
                             $('#response-field').text(data);
                             statuscheck(data);
                         }));
                     }
-
                     $.when.apply(promises).done(function() {
                         $('#response').show();
                     });
-
                 } else if (request_type === "update") {
                     payload = JSON.parse(editor.getValue());
                     var promises = [];
-
                     for (var i = 0; i < payload.length; i++) {
                         var info = {resource:[{name:table_name,params: [payload[i]]}]};
                         promises.push($.ajax({
@@ -352,13 +338,10 @@
                             statuscheck(data);
                         }));
                     }
-
                     $.when.apply(promises);
-
                 } else if (request_type === "delete") {
                     payload = JSON.parse(editor.getValue());
                     var promises = [];
-
                     for (var i = 0; i < payload.length; i++) {
                         var info = {resource:[{name:table_name,params: [payload[i]]}]};
                         promises.push($.ajax({
@@ -370,12 +353,9 @@
                             statuscheck(data);
                         }));
                     }
-
                 } else {
-
                     var method_type = $('#script_method').val();
                     var json = '{"resource":['+editor.getValue()+']}';
-
                     $.ajax({
                         url: "/api/v1/service/"+service_name+"/script",
                         type: method_type,
@@ -393,9 +373,7 @@
                         }
                     });
                 }
-
             });
-
             function statuscheck(data) {
                 if(data.status_code == 700){
                     $('#response').show();
@@ -408,6 +386,7 @@
                     flash('success');
                 }
             }
+
             function flash(alert) {
                 if (alert == 'success') {
                     $('.modal-body').html('Operation Successful');
@@ -425,15 +404,29 @@
                     $('.modal-backdrop').removeClass("modal-backdrop");
                 }
                 modalHide();
+                $('html, body').animate({
+                  scrollTop: $('#response-field').offset().top
+                }, 1000, function(){
+                  window.location = "#response";
+                });
+                $('#scroll').show();
             }
-            function modalHide() {
-                setTimeout(function(){
-                    $('#flash_msg').modal('hide');
-                }, 3000);
-            }
+
+          function modalHide() {
+              setTimeout(function(){
+                  $('#flash_msg').modal('hide');
+              }, 3000);
+          }
+
+          $('#scroll').click(function(){
+            $('html, body').animate({
+              scrollTop: $('html, body').offset().top
+            }, 1000, function(){
+              window.location = "#";
+            })
+          })
 
 
         }());
-
         </script>
     @endsection

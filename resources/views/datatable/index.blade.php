@@ -216,7 +216,7 @@ window.onload(function() {
             for (var key in rowHash) {
                 if ($.inArray(key, columnSet) == -1){
                     columnSet.push(key);
-                    headerTr$.append($('<th/>').html(key));
+                    headerTr$.append($('<th/>').html(key.toUpperCase()));
                 }
             }
         }
@@ -296,7 +296,7 @@ window.onload(function() {
           $('#flash_msg').modal({show: true, backdrop: 'static'});
           $('#formData').html(" ");
           for (var i = 2; i < metas.length; i++) {
-            $('#formData').append('<label for="'+metas[i]+'">'+metas[i]+'</label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'" value="'+c[i+1]+'">');
+            $('#formData').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'" value="'+c[i+1]+'">');
           }
       });
       jQExtn();
@@ -377,7 +377,7 @@ window.onload(function() {
 
           $('#addform').html(" ");
           for (var i = 2; i < metas.length; i++) {
-            $('#addform').append('<label for="'+metas[i]+'">'+metas[i]+'</label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'">');
+            $('#addform').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'">');
           }
       });
       jQExtn();

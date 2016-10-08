@@ -444,7 +444,7 @@
                 alert('Sorry seems like you have no fields set ');
                 $('#crt-tbl').prop('disabled', false);
             }
-            $('#crt-tbl').prop('disabled', false);
+            
             
     }
    function destroy_field(field_id){
