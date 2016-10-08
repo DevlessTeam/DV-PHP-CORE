@@ -41,7 +41,13 @@
                             <li><a href="{{ route('services.create') }}">Add New</a></li>
                         </ul>
                     </li>
-                    <li><a href="{{ url('datatable') }}"><i class="fa fa-database"></i><span>Data Tables</span></a></li>
+                    <li class="menu-list">
+                        <a href="#"><i class="fa fa-database"></i><span>Data Tables</span></a>
+                        <ul class="child-list">
+                            <li><a href="{{ url('datatable') }}">Service Tables</a></li>
+                            <li><a href="{{ url('devless_users') }}">Users</a></li>
+                        </ul>
+                    </li>
                      <li><a href="{{ url('hub') }}"><i class="fa fa-cubes"></i><span>Service Hub</span></a></li>
                    
                     <li class="menu-list">
