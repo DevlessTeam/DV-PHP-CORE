@@ -68,12 +68,12 @@ class ServiceController extends Controller
             '{"query":0,"create":0,"update":0,"delete":0,"schema":0,"script":0, "view":0}';
         $service->active = 1;
         $service->script = 'use App\Helpers\Assert as Assert;  
- +$rules
- +-> onQuery()
- +-> onUpdate()
- +-> onDelete()
- +-> onCreate()
- +';
+ $rules
+ -> onQuery()
+ -> onUpdate()
+ -> onDelete()
+ -> onCreate()
+ ';
         $connection =
             [
                 'username' => $service->username,
@@ -141,11 +141,7 @@ class ServiceController extends Controller
                 $service_name = $service->name;
                 $db = new DataStore();
                 $var_init = $this->var_init($script);
-                if($db::getDump($service_name.'_script_vars')){
-                     $db::updateDump($service_name.'_script_vars', $var_init);
-                 } else {
-                     $db::setDump($service_name.'_script_vars', $var_init);
-                 }
+                $service->relations = $var_init;
                 $service->script = $script;
                         
                 $service->save();
@@ -294,6 +290,7 @@ class ServiceController extends Controller
             if ($is_it_public == 0 || $is_admin == true ||
                 $accessed_internally == true) {
                 $resource_access_right = $this->_get_resource_access_right($current_service);
+                
                 $payload =
                     [
                         'id'=>$current_service->id,
@@ -303,6 +300,7 @@ class ServiceController extends Controller
                         'hostname' => $current_service->hostname,
                         'username' => $current_service->username,
                         'password' => $current_service->password,
+                        'relations' => $current_service->relations,
                         'calls' =>  $current_service->calls,
                         'resource_access_right' =>$resource_access_right,
                         'script' => $current_service->script,
@@ -347,13 +345,12 @@ class ServiceController extends Controller
      */
     public function service_exist($service_name)
     {
-        
         if ($current_service = serviceModel::where('name', $service_name)->
         where('active', 1)->first()) {
             
             return $current_service;
             
-        } else if (config('devless')['devless_service']->name == 'devless') {
+        } else if (config('devless')['devless_service']->name == $service_name) {
             
             $current_service = config('devless')['devless_service'];
             return $current_service;

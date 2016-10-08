@@ -74,15 +74,15 @@ $code = <<<EOT
 $payload[script];
 EOT;
               $_____service_name = $payload['service_name'];
-        $exec = function () use($code, $rules, $EVENT, $_____service_name) {
+              $_____init_vars = $payload['relations'];
+         $exec = function () use($code, $rules, $EVENT, $_____service_name, $_____init_vars) {
             //store script params temorally 
             $_____midRules = $rules;
             $_____mindEvent = $EVENT; 
            $declarationString = '';
            //get declared vars
-           if($declarationString = DataStore::getDump($_____service_name.'_script_vars')) {
-               eval($declarationString);
-           }
+           $declarationString = $_____init_vars ;
+           eval($declarationString);
            //restore script params 
            $rules = $_____midRules;
            $EVENT = $_____mindEvent;
