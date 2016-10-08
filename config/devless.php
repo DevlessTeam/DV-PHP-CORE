@@ -17,6 +17,7 @@ $devless_object_keys = [
     'method'       => 'POST',
     'params'       =>  '', 
     'public'       =>  '',
+    'relations'    =>  '',
     'active'       =>  '',
     'calls'        =>  '',
     'driver'       =>  '',
