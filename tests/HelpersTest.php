@@ -34,7 +34,7 @@ class HelpersTest extends PHPUnit_Framework_TestCase
         $validSample =
             [
                 'boolean'    => true,
-                'decimal'    => 12.2324344,
+                'decimals'    => 12.2324344,
                 'email'      => 'edmond@devless.io',
                 'integer'    => 1,
                 'password'   => 'al32j4hk2jh4hghg23hghj',
@@ -50,7 +50,7 @@ class HelpersTest extends PHPUnit_Framework_TestCase
         $invalidSample =
             [
                 'boolean'    => 'true',
-                'decimal'    => 'string instead of decimal',
+                'decimals'    => 'string instead of decimal',
                 'email'      => 'edmonddevless.io',
                 'integer'    => 'string here',
                 'password'   => true,

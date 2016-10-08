@@ -2,12 +2,12 @@
 
 namespace Devless\Script;
 
+use App\Helpers\DataStore;
 use App\Helpers\Helper as Helper;
 use App\Helpers\Messenger as messenger;
 use App\Http\Controllers\ServiceController as Service;
 use Devless\RulesEngine\Rules;
 use Devless\Schema\DbHandler as DbHandler;
-
 
 
 class ScriptHandler
@@ -55,7 +55,8 @@ class ScriptHandler
         $service = new Service();
         $rules = new Rules();
         $rules->requestType($payload['method']);
-        
+        $user_cred['id'] = (isset($user_cred['id']))? $user_cred['id'] :'';
+        $user_cred['token'] = (isset($user_cred['token']))? $user_cred['token'] :'';
         //available internal params
         $EVENT = [
             'method' => $payload['method'],
@@ -72,16 +73,23 @@ class ScriptHandler
 $code = <<<EOT
 $payload[script];
 EOT;
-        $exec = function () use($code, $rules, $EVENT) {
-            $midRules = $rules;
-            $mindEvent = $EVENT; 
-           $tokens = token_get_all('<?php '.$code);
+              $_____service_name = $payload['service_name'];
+        $exec = function () use($code, $rules, $EVENT, $_____service_name) {
+            //store script params temorally 
+            $_____midRules = $rules;
+            $_____mindEvent = $EVENT; 
            $declarationString = '';
-           $declarationString = initializedVariables();
-           eval($declarationString);
-           $rules = $midRules;
-           $EVENT = $mindEvent;
-           //next explode variables and make them available 
+           //get declared vars
+           if($declarationString = DataStore::getDump($_____service_name.'_script_vars')) {
+               eval($declarationString);
+           }
+           //restore script params 
+           $rules = $_____midRules;
+           $EVENT = $_____mindEvent;
+           
+            //next explode variables and make them available 
+           extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
+           
            eval($code);        
         };
         
@@ -95,3 +103,4 @@ EOT;
         return $results;
     }
 }
+
