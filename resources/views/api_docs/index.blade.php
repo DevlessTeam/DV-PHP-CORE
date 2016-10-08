@@ -15,7 +15,6 @@
 
 @section('content')
     <section>
-
         <div class="wrapper">
             <div class="row">
                 <div id="flash_msg" class="modal fade col-md-offset-4" tabindex="-1" role="dialog">
@@ -166,6 +165,7 @@
 
                 </div>
             </div>
+            <button type="button" id="scroll" name="button" class="btn btn-warning pull-right">Scroll Up</button>
         </div>
         <script src="{{ url('/js/src-min-noconflict/ace.js') }}" type="text/javascript" charset="utf-8"></script>
         <script src="{{ url('/js/ace/jquery-1.8.3.min.js') }}" type="text/javascript" charset="utf-8"></script>
@@ -176,6 +176,7 @@
             document.getElementById('body_params').style.display = 'none';
             document.getElementById('request').style.display = 'none';
             document.getElementById('response').style.display = 'none';
+            document.getElementById('scroll').style.display = 'none';
 
             //Handles URL generation
             var service_name;
@@ -414,6 +415,7 @@
                     flash('success');
                 }
             }
+
             function flash(alert) {
                 if (alert == 'success') {
                     $('.modal-body').html('Operation Successful');
@@ -436,12 +438,22 @@
                 }, 1000, function(){
                   window.location = "#response";
                 });
+                $('#scroll').show();
             }
-            function modalHide() {
-                setTimeout(function(){
-                    $('#flash_msg').modal('hide');
-                }, 3000);
-            }
+
+          function modalHide() {
+              setTimeout(function(){
+                  $('#flash_msg').modal('hide');
+              }, 3000);
+          }
+
+          $('#scroll').click(function(){
+            $('html, body').animate({
+              scrollTop: $('html, body').offset().top
+            }, 1000, function(){
+              window.location = "#";
+            })
+          })
 
 
         }());
