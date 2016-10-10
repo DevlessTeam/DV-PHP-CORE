@@ -15,7 +15,7 @@ require __DIR__.'/bootstrap/autoload.php';
                 29 => "'default' => 'mysql',",
                 70 => "'database'  => '$database',",
                 71 => "'username'  => '$username',",
-                72 =>  "'password' => '$password',",
+                72 => "'password'  => '$password',",
 
             ];
             function edit($content){
