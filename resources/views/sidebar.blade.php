@@ -5,7 +5,7 @@
                 <!--logo and logo icon start-->
                 <div class="logo dark-logo-bg hidden-xs hidden-sm">
                     <a href="https://devless.io">
-                         <img src="{{url('/img/logo.png')}}" alt="Devless">
+                         <img src="{{Request::secure(Request::root()).'/img/logo.png'}}" alt="Devless">
                         <!--<i class="fa fa-maxcdn"></i>-->
                     </a>
                 </div>
@@ -43,7 +43,7 @@
                     </li>
                     <li><a href="{{ url('datatable') }}"><i class="fa fa-database"></i><span>Data Tables</span></a></li>
                      <li><a href="{{ url('hub') }}"><i class="fa fa-cubes"></i><span>Service Hub</span></a></li>
-                   
+
                     <li class="menu-list">
                       <a href="#"><i class="fa fa-lock"></i><span>Privacy</span></a>
                       <ul class="child-list">
