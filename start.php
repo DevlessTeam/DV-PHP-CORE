@@ -13,9 +13,9 @@ require __DIR__.'/bootstrap/autoload.php';
             //add code here
              $content = [
                 29 => "'default' => 'mysql',",
-                72 => "'database'  => '$database',",
-                73 => "'username'  => '$username',",
-                74 =>  "'password'  => '$password',",
+                70 => "'database'  => '$database',",
+                71 => "'username'  => '$username',",
+                72 =>  "'password' => '$password',",
 
             ];
             function edit($content){
