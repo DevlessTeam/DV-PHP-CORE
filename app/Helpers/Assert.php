@@ -283,7 +283,7 @@ class Assert extends Helper
         return (!$valid) ? true : false;
     }
 
-    public static function endsWith($value, $suffix, $message = '')
+    public static function endsWith($value, $suffix)
     {
         return ($suffix !== substr($value, -self::strlen($suffix))) ? true : false;
     }

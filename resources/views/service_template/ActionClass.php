@@ -1,7 +1,6 @@
 <?php
 
 
-
 {{MAINDOC}}
 
 //Action method for serviceName
@@ -57,8 +56,6 @@ class {{ServiceName}}
         //add code here
 
     }
-
-
 
 
 }
