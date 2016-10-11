@@ -83,7 +83,12 @@ EOT;
                //restore script params 
                $rules = $_____midRules;
                $EVENT = $_____mindEvent;
-
+               foreach($EVENT['params'] as $each_key => $value ) {
+                   
+                   
+               }
+//               var_dump($EVENT['params']);
+//               die();
                 //next explode variables and make them available 
                extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
 
