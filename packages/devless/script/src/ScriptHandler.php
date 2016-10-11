@@ -2,12 +2,9 @@
 
 namespace Devless\Script;
 
-use App\Helpers\DataStore;
-use App\Helpers\Helper as Helper;
 use App\Helpers\Messenger as messenger;
 use App\Http\Controllers\ServiceController as Service;
 use Devless\RulesEngine\Rules;
-use Devless\Schema\DbHandler as DbHandler;
 
 
 class ScriptHandler
@@ -74,23 +71,23 @@ $code = <<<EOT
 $payload[script];
 EOT;
               $_____service_name = $payload['service_name'];
-              $_____init_vars = $payload['relations'];
+              $_____init_vars = $payload['script_init_vars'];
          $exec = function () use($code, $rules, $EVENT, $_____service_name, $_____init_vars) {
-            //store script params temorally 
-            $_____midRules = $rules;
-            $_____mindEvent = $EVENT; 
-           $declarationString = '';
-           //get declared vars
-           $declarationString = $_____init_vars ;
-           eval($declarationString);
-           //restore script params 
-           $rules = $_____midRules;
-           $EVENT = $_____mindEvent;
-           
-            //next explode variables and make them available 
-           extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
-           
-           eval($code);        
+                //store script params temorally 
+                $_____midRules = $rules;
+                $_____mindEvent = $EVENT; 
+               $declarationString = '';
+               //get declared vars
+               $declarationString = $_____init_vars ;
+               eval($declarationString);
+               //restore script params 
+               $rules = $_____midRules;
+               $EVENT = $_____mindEvent;
+
+                //next explode variables and make them available 
+               extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
+
+               eval($code);        
         };
         
         ob_start();
