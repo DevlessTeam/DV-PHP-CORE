@@ -70,8 +70,8 @@ class ScriptHandler
 $code = <<<EOT
 $payload[script];
 EOT;
-              $_____service_name = $payload['service_name'];
-              $_____init_vars = $payload['script_init_vars'];
+         $_____service_name = $payload['service_name'];
+         $_____init_vars = $payload['script_init_vars'];
          $exec = function () use($code, $rules, $EVENT, $_____service_name, $_____init_vars) {
                 //store script params temorally 
                 $_____midRules = $rules;
@@ -83,15 +83,7 @@ EOT;
                //restore script params 
                $rules = $_____midRules;
                $EVENT = $_____mindEvent;
-               foreach($EVENT['params'] as $each_key => $value ) {
-                   
-                   
-               }
-//               var_dump($EVENT['params']);
-//               die();
-                //next explode variables and make them available 
                extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
-
                eval($code);        
         };
         
