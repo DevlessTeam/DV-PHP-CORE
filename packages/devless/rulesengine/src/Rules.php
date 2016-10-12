@@ -173,19 +173,20 @@ class Rules
 
         if ($this->called['elseWhenever'] && !$this->called['whenever']) {
             $error();
-
+           
         } elseif($ifAllFails && !$this->called['whenever'] ) {
-            $msg = 'You cannot call on else without calling on whenever';
+            $msg = 'You cannot call on ifAllFails without calling on whenever';
             $error($msg);
-
+           
         } elseif((($whenever && !$this->answered) && $this->called['whenever']) ||
             (($elseWhenever && !$this->answered) && $this->called['whenever'] && $this->called['elseWhenever']) ||
             ($ifAllFails && !$this->answered && ( $this->called['whenever'] || $this->called['elseWhenever'] ))) {
 
             $this->results =  $evaluator();
+            
 
-        }
-
+        } 
+        
         return ($this->called['ifAllFails'])? $this->results : $this;
 
     }

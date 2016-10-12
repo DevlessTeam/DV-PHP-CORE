@@ -27,7 +27,7 @@
               <h3>
                 <a href="#" data-toggle="modal" data-target="#service-desc">
                     <!--src="{{$service['image_url']}}"--> 
-                    {{$service['name']}}<img width=2 class="plugin-icon img-responsive" alt="N/A">
+                    {{$service['name']}}<img width=2 class="plugin-icon img-responsive" src="{{$service['image_url']}}" alt="N/A">
                 </a>
               </h3>
             </div>

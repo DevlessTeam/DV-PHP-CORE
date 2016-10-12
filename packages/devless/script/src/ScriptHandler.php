@@ -52,8 +52,8 @@ class ScriptHandler
         $service = new Service();
         $rules = new Rules();
         $rules->requestType($payload['method']);
-        $user_cred['id'] = (isset($user_cred['id']))? $user_cred['id'] :null;
-        $user_cred['token'] = (isset($user_cred['token']))? $user_cred['token'] :null;
+        $user_cred['id'] = (isset($user_cred['id']))? $user_cred['id'] :'';
+        $user_cred['token'] = (isset($user_cred['token']))? $user_cred['token'] :'';
         //available internal params
         $EVENT = [
             'method' => $payload['method'],
@@ -70,25 +70,21 @@ class ScriptHandler
 $code = <<<EOT
 $payload[script];
 EOT;
-              $_____service_name = $payload['service_name'];
-              $_____init_vars = $payload['script_init_vars'];
+         $_____service_name = $payload['service_name'];
+         $_____init_vars = $payload['script_init_vars'];
          $exec = function () use($code, $rules, $EVENT, $_____service_name, $_____init_vars) {
                 //store script params temorally 
                 $_____midRules = $rules;
                 $_____mindEvent = $EVENT; 
-               $_____declarationString = '';
+               $declarationString = '';
                //get declared vars
-               $_____declarationString = $_____init_vars ;
-               eval($_____declarationString);
+               $declarationString = $_____init_vars ;
+               eval($declarationString);
                //restore script params 
                $rules = $_____midRules;
                $EVENT = $_____mindEvent;
-
-                //next explode variables and make them available 
                extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
-
-               eval($code);   
-               
+               eval($code);        
         };
         
         ob_start();
