@@ -54,6 +54,9 @@ class HubController extends Controller
         
         if ($status) {
             $status = Migration::import_service($service_name);
+            $payload['install'] = '__onImport';
+            $payload['serviceName'] = $service_name_only;
+            DLH::execOnServiceStar($payload);
             return ($status)? '{"status":"true"}' : '{"status":"false"}';
         } else {
             return '{"status":"false"}';
