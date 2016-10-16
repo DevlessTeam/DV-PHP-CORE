@@ -56,7 +56,7 @@
 </div><!--body wrapper end-->
 <script>
             function install(url, service_name) {
-                   $('#'+service_name).html('Installing...');
+                   $('#'+service_name).html('...');
                    httpGetAsync("{{url('/')}}"+'/install_service?url='+url, function(output){
                        console.log(output);
                    state = JSON.parse(output);
