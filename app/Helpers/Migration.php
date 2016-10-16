@@ -62,8 +62,6 @@ class Migration extends Helper
 
         $install_state = $devlessfunc::install_service($folder_path);
         $install_state = $devlessfunc::install_views($service_package_name);
-        $payload['delete'] = '__onImport';
-        $execOutput = $devlessfunc::execOnServiceStar($payload);
         $db = \Config::get('database.connections.'.\Config::get('database.default').'.database');
         $domain = $_SERVER['HTTP_HOST'];
         
