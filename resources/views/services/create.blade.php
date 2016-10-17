@@ -43,7 +43,15 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-sm-2 control-label" for="g-txt" >Database Type</label>
+                            <label class="col-lg-2 col-sm-2 control-label" for="g-txt"></label>
+                            <div class=" col-lg-10 col-sm-10">
+                               <div class="alert alert-warning bs-alert-old-docs">
+                            <strong>Heads up!</strong> Only fill out below if you need to connect the service to a remote database. Otherwise leave as is. 
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label" for="g-txt" >Database Type </label>
                             <div class=" col-lg-10 col-sm-10">
                                 <select id="db-type" name="driver"  class="form-control m-b-10">
                                     <?php $options = ['Default'=>'default','Sqlite'=>'sqlite',
