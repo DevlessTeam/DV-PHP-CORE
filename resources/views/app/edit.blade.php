@@ -179,7 +179,6 @@
           "processData": false,
           "data": "{\"action\":\"regen\"}"
         };
-
         $.ajax(settings).done(function (response) {
           console.log(response);
           result = JSON.parse(response);
@@ -187,7 +186,6 @@
               $("#token").val(result.payload.new_token);
           }
           else{
-
               alert("token could not be updated");
           }
         });
