@@ -61,7 +61,7 @@
                        console.log(output);
                    state = JSON.parse(output);
                    if(state.status == "true"){
-                       $('#'+service_name).html('Installed');
+                       $('#'+service_name).html('Done');
                    } else {
                        $('#'+service_name).html('Failed :(');
                    }
