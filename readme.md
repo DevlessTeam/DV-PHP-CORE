@@ -43,10 +43,10 @@ If everything goes on smoothly you should be able to access the setup screen at 
 
 If you will need help setting up you may check out the laravel [installation](https://laravel.com/docs/5.1) guide as the devless core is based of laravel. 
 
-You may also seek help from the [devless forum](forum.devless.io) and also get started with the [devless application](docs.devless.io)
+Checkout the docs @ [devless application](https://docs.devless.io)
 ## How to contribute 
 **Please checkout the [Contribute](https://guides.github.com/activities/contributing-to-open-source/) guide on how to contribute**
-Remember no contribution is too small 
+No contribution is too small 
 
 * We would love to hear from  you email us @ info@devless.io
-* Also forget to visit our landing page @ [devless.io](devless.io)
+* Also forget to visit our landing page @ [devless.io](https://devless.io)
