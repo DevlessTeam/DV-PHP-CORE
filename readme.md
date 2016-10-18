@@ -45,7 +45,8 @@ If you will need help setting up you may check out the laravel [installation](ht
 
 You may also seek help from the [devless forum](forum.devless.io) and also get started with the [devless application](docs.devless.io)
 ## How to contribute 
-** Please checkout the [Contribute](https://guides.github.com/activities/contributing-to-open-source/) guide
+**Please checkout the [Contribute](https://guides.github.com/activities/contributing-to-open-source/) guide on how to contribute**
+Remember no contribution is too small 
 
 * We would love to hear from  you email us @ info@devless.io
 * Also forget to visit our landing page @ [devless.io](devless.io)
