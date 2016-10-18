@@ -6,7 +6,6 @@ use App\Helpers\Messenger as messenger;
 use App\Http\Controllers\ServiceController as Service;
 use Devless\RulesEngine\Rules;
 
-
 class ScriptHandler
 {
     /**
@@ -47,7 +46,7 @@ class ScriptHandler
      * @internal param string $resource name of resource belonging to a service
      */
     public function run_script($Dvresource, $payload)
-    { 
+    {
         
         $service = new Service();
         $rules = new Rules();
@@ -67,25 +66,25 @@ class ScriptHandler
         $EVENT['params'] = (isset($payload['params'][0]['field'])) ? $payload['params'][0]['field'][0] : [];
 
 //NB: position matters here
-$code = <<<EOT
+        $code = <<<EOT
 $payload[script];
 EOT;
          $_____service_name = $payload['service_name'];
          $_____init_vars = $payload['script_init_vars'];
-         $exec = function () use($code, $rules, $EVENT, $_____service_name, $_____init_vars) {
-                //store script params temorally 
+         $exec = function () use ($code, $rules, $EVENT, $_____service_name, $_____init_vars) {
+                //store script params temorally
                 $_____midRules = $rules;
-                $_____mindEvent = $EVENT; 
+                $_____mindEvent = $EVENT;
                $declarationString = '';
                //get declared vars
                $declarationString = $_____init_vars ;
                eval($declarationString);
-               //restore script params 
+               //restore script params
                $rules = $_____midRules;
                $EVENT = $_____mindEvent;
                extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
-               eval($code);        
-        };
+               eval($code);
+         };
         
         ob_start();
         $output = $exec();
@@ -97,4 +96,3 @@ EOT;
         return $results;
     }
 }
-

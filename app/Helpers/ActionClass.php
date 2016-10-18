@@ -2,7 +2,7 @@
 namespace App\Helpers;
 
 /**
- * Internal ActionClass execution 
+ * Internal ActionClass execution
  */
 class ActionClass
 {
@@ -29,5 +29,3 @@ class ActionClass
         return $results;
     }
 }
-
-

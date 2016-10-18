@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+
 use App\Service;
 use App\Http\Requests;
 use \App\Helpers\Migration;
@@ -8,6 +9,7 @@ use Devless\SDK\SDK;
 use App\Helpers\DevlessHelper as DLH;
 use App\Http\Controllers\Controller;
 use App\Helpers\DataStore;
+
 class HubController extends Controller
 {
     private $url = "http://devless.herokuapp.com";
@@ -21,17 +23,16 @@ class HubController extends Controller
     {
         $services = [];
         $properties = [];
-        $sdk = new SDK($this->url,$this->token);
+        $sdk = new SDK($this->url, $this->token);
         $data = $sdk->getData('DV_STORE', 'service');
         
-        if(isset($data['status_code']) && $data['status_code'] == 625) {
+        if (isset($data['status_code']) && $data['status_code'] == 625) {
             $services = $data['payload']['results'];
             $properties = $data['payload']['properties'];
-           
         } else {
             DLH::flash("Could not connect to the store :(", 'error');
         }
-        return view('hub.index', compact('services','properties'));
+        return view('hub.index', compact('services', 'properties'));
         
     }
     
@@ -45,9 +46,9 @@ class HubController extends Controller
         $service_name_only = explode('.', $service_name)[0];
         $service_exists = \DB::table('services')->where('name', $service_name_only)->first();
         DLH::instance_log($this->url, $this->token, 'Downloaded'.$service_name_only);
-        if($service_exists) {
+        if ($service_exists) {
                return '{"status":"false"}';
-        } 
+        }
        
         $service = file_get_contents($url);
         $status = file_put_contents(storage_path().'/'.$service_name, $service);
@@ -62,6 +63,4 @@ class HubController extends Controller
             return '{"status":"false"}';
         }
     }
-    
-   
 }

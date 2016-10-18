@@ -6,7 +6,9 @@
  * Time: 1:21 AM
  */
 namespace App\Helpers;
+
 use App\Http\Controllers\ServiceController as Service;
+
 class DataStore extends Helper
 {
     private static $instance;
@@ -187,12 +189,12 @@ class DataStore extends Helper
     }
     
     /**
-     * get data from Devless dump 
+     * get data from Devless dump
      * @return boolean
      */
     public static function getDump($key)
     {
-        if($dump = \DB::table('devless_dump')->where('key', $key)->first()) {
+        if ($dump = \DB::table('devless_dump')->where('key', $key)->first()) {
             return $dump->value;
         } else {
             return null;
@@ -202,7 +204,7 @@ class DataStore extends Helper
     
     
      /**
-     * add data to devless dump 
+     * add data to devless dump
      * @return boolean
      */
     public static function setDump($key, $value)
@@ -214,7 +216,7 @@ class DataStore extends Helper
     }
     
     /**
-     * get data from Devless dump 
+     * get data from Devless dump
      * @return boolean
      */
     public static function updateDump($key, $value)
@@ -226,7 +228,7 @@ class DataStore extends Helper
     
      
     /**
-     * destroy devless dump 
+     * destroy devless dump
      * @return boolean
      */
     public static function destroyDump($key)

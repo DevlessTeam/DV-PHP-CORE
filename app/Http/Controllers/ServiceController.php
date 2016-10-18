@@ -1,4 +1,5 @@
 <?php namespace App\Http\Controllers;
+
 use Validator;
 use App\Service;
 use App\Helpers\Helper;
@@ -350,14 +351,10 @@ class ServiceController extends Controller
     {
         if ($current_service = serviceModel::where('name', $service_name)->
         where('active', 1)->first()) {
-            
             return $current_service;
-            
-        } else if (config('devless')['devless_service']->name == $service_name) {
-            
+        } elseif (config('devless')['devless_service']->name == $service_name) {
             $current_service = config('devless')['devless_service'];
             return $current_service;
-            
         } else {
             Helper::interrupt(604);
         }
@@ -442,16 +439,16 @@ class ServiceController extends Controller
     }
     
     /**
-     * create service views 
+     * create service views
      * @return string
      */
     public function service_views()
-    {       
+    {
             
             $folder_path = config('devless')['views_directory'];
             $db_name = \Config::get('database.connections.'.\Config::get('database.default').'.database');
             
-            //get db name 
+            //get db name
             DLH::zip_folder($folder_path, 'download.zip');
             $mode = 0777;
             $zip = $folder_path.'/'.'download.zip';
@@ -467,13 +464,13 @@ class ServiceController extends Controller
         $declarationString = '';
         $tokens = token_get_all('<?php '.$code);
         foreach ($tokens as $token) {
-                if (is_array($token)) {
-                    $start = 1;
-                    if($token[0] == 312) {
-                         $variable = substr($token[1], $start);
-                         $declarationString .= "$$variable = null;";
-                    }
+            if (is_array($token)) {
+                $start = 1;
+                if ($token[0] == 312) {
+                     $variable = substr($token[1], $start);
+                     $declarationString .= "$$variable = null;";
                 }
+            }
         }
         return $declarationString;
     }

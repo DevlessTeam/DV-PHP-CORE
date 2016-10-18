@@ -26,7 +26,7 @@ class RpcController extends Controller
                             config('devless')['helpers'].'SystemClass.php':
                             config('devless')['views_directory'].$service.'/ActionClass.php';
        
-        if(file_exists($serviceMethodPath)) { 
+        if (file_exists($serviceMethodPath)) {
             require_once $serviceMethodPath;
         } else {
             return Response::respond(604);

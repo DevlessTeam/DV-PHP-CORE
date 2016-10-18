@@ -2,6 +2,7 @@
 
 
 use App\Helpers\DevlessHelper as DVH;
+
 /**
  * Created by Devless.
  * User: eddymens
@@ -26,17 +27,24 @@ class devless
      * method for handling user signup
      * @ACL public
      */
-    public function signUp($email=null, $password=null, $username=null,
-            $phone_number=null, $first_name=null, $last_name=null, $remember_token=null)
-    {
-       $payload = get_defined_vars();
+    public function signUp(
+        $email = null,
+        $password = null,
+        $username = null,
+        $phone_number = null,
+        $first_name = null,
+        $last_name = null,
+        $remember_token = null
+    ) {
+    
+        $payload = get_defined_vars();
        
-       $payload = self::getSetParams($payload);
+        $payload = self::getSetParams($payload);
        
-       $auth = $this->auth;
+        $auth = $this->auth;
        
-       $output = $auth->signup($payload);
-       return $output;
+        $output = $auth->signup($payload);
+        return $output;
         
        
     }
@@ -46,16 +54,16 @@ class devless
      * method for handling user login
      * @ACL public
      */
-    public function login($username=null, $email=null, $phone_number=null, $password=null)
+    public function login($username = null, $email = null, $phone_number = null, $password = null)
     {
-       $payload = get_defined_vars();
+        $payload = get_defined_vars();
        
-       $payload = self::getSetParams($payload);
+        $payload = self::getSetParams($payload);
        
-       $auth = $this->auth;
+        $auth = $this->auth;
        
-       $output = $auth->login($payload);
-       return $output;
+        $output = $auth->login($payload);
+        return $output;
        
     }
     
@@ -63,7 +71,7 @@ class devless
      * get user profile
      * @ACL public
     */
-    public function profile() 
+    public function profile()
     {
         $auth = $this->auth;
         
@@ -88,34 +96,39 @@ class devless
      * method for handling user login
      * @ACL public
     */
-    public function updateProfile($email=null, $password=null, $username=null,
-            $phone_number=null, $first_name=null, $last_name=null, $remember_token=null)
-    {
-       $payload = get_defined_vars();
+    public function updateProfile(
+        $email = null,
+        $password = null,
+        $username = null,
+        $phone_number = null,
+        $first_name = null,
+        $last_name = null,
+        $remember_token = null
+    ) {
+    
+        $payload = get_defined_vars();
        
-       foreach($payload as $key=>$value) {
-           if($value == null){
-               unset($payload[$key]);
-           }
-           
-       }
-       $auth = $this->auth;
+        foreach ($payload as $key => $value) {
+            if ($value == null) {
+                unset($payload[$key]);
+            }
+        }
+        $auth = $this->auth;
        
-       $output = $auth->update_profile($payload);
-       return $output;
+        $output = $auth->update_profile($payload);
+        return $output;
         
        
     }
     
     private static function getSetParams($payload)
     {
-        foreach($payload as $key=>$value){
-           if($value == null){
-               unset($payload[$key]);
-           }
-           
-       }
-       return $payload;
+        foreach ($payload as $key => $value) {
+            if ($value == null) {
+                unset($payload[$key]);
+            }
+        }
+        return $payload;
     }
     /**
      * This method will execute on service importation
@@ -137,7 +150,4 @@ class devless
         //add code here
 
     }
-
-
 }
-

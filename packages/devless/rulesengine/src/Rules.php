@@ -6,7 +6,6 @@ use App\Helpers\ActionClass;
 use App\Helpers\Helper;
 use App\Helpers\Response;
 
-
 class Rules
 {
 
@@ -45,7 +44,7 @@ class Rules
     public function onQuery()
     {
         $this->execOrNot = ($this->actionType == 'GET')? true : false;
-        return $this ;   
+        return $this ;
     }
     
     
@@ -53,21 +52,21 @@ class Rules
     public function onUpdate()
     {
         $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
-        return $this ;   
+        return $this ;
     }
     
     
     public function onCreate()
     {
         $this->execOrNot = ($this->actionType == 'POST')? true : false;
-        return $this ;   
+        return $this ;
     }
     
     
     public function onDelete()
     {
         $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
-        return $this ;   
+        return $this ;
     }
     
     /**
@@ -77,7 +76,9 @@ class Rules
      */
     public function whenever($assert)
     {
-        if(!$this->execOrNot){return $this;}
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $this->assertion['whenever'] = $assert;
         $this->called['whenever'] = true;
 
@@ -91,7 +92,9 @@ class Rules
      */
     public function elseWhenever($assert)
     {
-        if(!$this->execOrNot){return $this;}
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $this->assertion['elseWhenever'] = $assert;
         $this->called['elseWhenever'] = true;
 
@@ -104,31 +107,35 @@ class Rules
      */
     public function ifAllFails()
     {
-        if(!$this->execOrNot){return $this;}
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $this->assertion['ifAllFails'] =
             (!$this->assertion['elseWhenever'] || !$this->assertion['whenever']) ? : false;
         $this->called['ifAllFails'] = true;
             return $this;
     }
 
-    public function succeedWith($msg=null)
+    public function succeedWith($msg = null)
     {
-        $evaluator = function() use($msg) {
-          return Response::respond(1001, $msg);
+        $evaluator = function () use ($msg) {
+            return Response::respond(1001, $msg);
         };
 
         return $this->executor($evaluator);
 
     }
 
-    public function failWith($msg=null)
+    public function failWith($msg = null)
     {
-       if(!$this->execOrNot){return $this;} 
-       $evaluator = function() use($msg) {
-           return Helper::interrupt(1001, $msg);
-       };
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        $evaluator = function () use ($msg) {
+            return Helper::interrupt(1001, $msg);
+        };
 
-       return $this->executor($evaluator);
+        return $this->executor($evaluator);
     }
 
     /**
@@ -138,9 +145,11 @@ class Rules
      * @param null $params
      * @return mixed|string
      */
-    public function run($service, $method, $params=null)
+    public function run($service, $method, $params = null)
     {
-        if(!$this->execOrNot){return $this;}
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $evaluator = function () use ($service, $method, $params) {
 
             $results = ActionClass::execute($service, $method, $params);
@@ -160,12 +169,14 @@ class Rules
      */
     public function executor($evaluator)
     {
-        if(!$this->execOrNot){return $this;}
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $whenever = $this->assertion['whenever'];
         $elseWhenever = $this->assertion['elseWhenever'];
         $ifAllFails = $this->assertion['ifAllFails'];
 
-        $error = function($msg='you cannot call on elseWhenever without calling on whenever') {
+        $error = function ($msg = 'you cannot call on elseWhenever without calling on whenever') {
             $this->answered = true;
             $this->results = $msg;
 
@@ -173,24 +184,16 @@ class Rules
 
         if ($this->called['elseWhenever'] && !$this->called['whenever']) {
             $error();
-           
-        } elseif($ifAllFails && !$this->called['whenever'] ) {
+        } elseif ($ifAllFails && !$this->called['whenever']) {
             $msg = 'You cannot call on ifAllFails without calling on whenever';
             $error($msg);
-           
-        } elseif((($whenever && !$this->answered) && $this->called['whenever']) ||
+        } elseif ((($whenever && !$this->answered) && $this->called['whenever']) ||
             (($elseWhenever && !$this->answered) && $this->called['whenever'] && $this->called['elseWhenever']) ||
             ($ifAllFails && !$this->answered && ( $this->called['whenever'] || $this->called['elseWhenever'] ))) {
-
             $this->results =  $evaluator();
-            
-
-        } 
+        }
         
         return ($this->called['ifAllFails'])? $this->results : $this;
 
     }
-
-
-
 }
