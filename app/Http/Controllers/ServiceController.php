@@ -44,6 +44,7 @@ class ServiceController extends Controller
         $service = new Service();
         $service_name_from_form = $request->input("name");
         $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
+        $service_name_from_form = str_replace('-', '_', $service_name_from_form);
         $service_name = $service_name_from_form;
         $validator = Validator::make(
                 
