@@ -7,12 +7,6 @@ Versioning ot this project follows the  [Sermantic Versioning Specification](htt
 
 Coding standards are also based on the [PSR-2-coding-style-guide](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
 
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
-
-Versioning ot this project follows the  [Sermantic Versioning Specification](http://semver.org/)
-
-Coding standards are also based on the [PSR-2-coding-style-guide](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
-
 **Devless Api Engine(DAE)** is an opensource api engine that allows  crud access to databases as well as execute php scripts and rules . 
 
 Current implementation of the devless api engine is in php and ontop of the laravel framework. 
