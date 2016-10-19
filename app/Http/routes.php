@@ -76,6 +76,10 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function () {
 
 //routes available to only login users
 Route::group(['middleware' => 'user.auth'], function () {
+    
+    //get list of users 
+    Route::get('devless_users', 'UserController@get_all_users');
+
     //service views
     Route::resource('services', 'ServiceController');
 

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - @127.0.0.1" uuid="72dea1d3-f774-4253-a0c9-df5a22106ff6">
+    <database-info product="MySQL" version="5.7.11" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="mixed" quoted-identifiers="upper"/>
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.6">
+      <schema id="1" name="admingen">
+        <visible>1</visible>
+      </schema>
+      <schema id="2" name="analytics"/>
+      <schema id="3" name="ASVCS"/>
+      <schema id="4" name="bootcms"/>
+      <schema id="5" name="codoforum"/>
+      <schema id="6" name="devless"/>
+      <schema id="7" name="devless-rec"/>
+      <schema id="8" name="devless_db_socket"/>
+      <schema id="9" name="devless_demo"/>
+      <schema id="10" name="devless_docs"/>
+      <schema id="11" name="devless_key"/>
+      <schema id="12" name="devless_laravel"/>
+      <schema id="13" name="devless_main"/>
+      <schema id="14" name="devless_new"/>
+      <schema id="15" name="devless_production"/>
+      <schema id="16" name="devless_recover"/>
+      <schema id="17" name="devless_status"/>
+      <schema id="18" name="devless_store"/>
+      <schema id="19" name="devless_test"/>
+      <schema id="20" name="devless_training"/>
+      <schema id="21" name="devold"/>
+      <schema id="22" name="devstore"/>
+      <schema id="23" name="drupal"/>
+      <schema id="24" name="dv"/>
+      <schema id="25" name="dvwiki"/>
+      <schema id="26" name="flarum"/>
+      <schema id="27" name="gov"/>
+      <schema id="28" name="information_schema"/>
+      <schema id="29" name="inter"/>
+      <schema id="30" name="lychee"/>
+      <schema id="31" name="mupati"/>
+      <schema id="32" name="mysql"/>
+      <schema id="33" name="my_wiki"/>
+      <schema id="34" name="notorm_db"/>
+      <schema id="35" name="octoba"/>
+      <schema id="36" name="octopus"/>
+      <schema id="37" name="omg"/>
+      <schema id="38" name="performance_schema"/>
+      <schema id="39" name="server"/>
+      <schema id="40" name="sys"/>
+      <schema id="41" name="tut"/>
+      <schema id="42" name="word"/>
+      <schema id="43" name="word2"/>
+      <schema id="44" name="wordpress"/>
+      <table id="45" parent="1" name="b&apos;"/>
+      <column id="46" parent="45" name="id">
+        <mandatory>1</mandatory>
+        <data-type>int(11) unsigned|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <key id="47" parent="45" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+    </database-model>
+  </data-source>
+</component>

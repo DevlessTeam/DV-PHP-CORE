@@ -21,7 +21,12 @@ class UserController extends Controller
             return view('auth.index');
         }
     }
-
+    
+    public function get_all_users()
+    {
+        $users = User::orderBy('id', 'asc')->paginate(10);
+        return view('users.index', compact('users'));
+    }
     public function post_login(Request $request)
     {
         $loginCredentials = [

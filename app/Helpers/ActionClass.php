@@ -25,8 +25,7 @@ class ActionClass
 
 
         $serviceInstance = new $service();
-        $results = $serviceInstance->$method($params);
-
+        $results = $serviceInstance->$method(...$params);
         return $results;
     }
 }

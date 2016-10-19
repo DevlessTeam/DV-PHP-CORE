@@ -27,7 +27,7 @@
               <h3>
                 <a href="#" data-toggle="modal" data-target="#service-desc">
                     <!--src="{{$service['image_url']}}"--> 
-                    {{$service['name']}}<img width=2 class="plugin-icon img-responsive" alt="N/A">
+                    {{$service['name']}}<img width=2 class="plugin-icon img-responsive" src="{{$service['image_url']}}" alt="N/A">
                 </a>
               </h3>
             </div>
@@ -56,12 +56,12 @@
 </div><!--body wrapper end-->
 <script>
             function install(url, service_name) {
-                   $('#'+service_name).html('Installing...');
+                   $('#'+service_name).html('...');
                    httpGetAsync("{{url('/')}}"+'/install_service?url='+url, function(output){
                        console.log(output);
                    state = JSON.parse(output);
                    if(state.status == "true"){
-                       $('#'+service_name).html('Installed');
+                       $('#'+service_name).html('Done');
                    } else {
                        $('#'+service_name).html('Failed :(');
                    }

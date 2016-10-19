@@ -19,7 +19,6 @@
             $('.modal-backdrop').removeClass("modal-backdrop");
             modalHide();
         });
-
         function modalHide() {
             setTimeout(function(){
                 $('#flash_msg').modal('hide');
