@@ -5,9 +5,8 @@
                 <!--logo and logo icon start-->
                 <div class="logo dark-logo-bg hidden-xs hidden-sm">
                     <a href="https://devless.io">
-                         <img src="{{url('/img/logo.png')}}" width="20" height="20" alt="Devless">
+                         <img src="{{url('/img/logo.png')}}" alt="Devless">
                         <!--<i class="fa fa-maxcdn"></i>-->
-                        <span class="brand-name">Devless</span>
                     </a>
                 </div>
 
@@ -42,7 +41,13 @@
                             <li><a href="{{ route('services.create') }}">Add New</a></li>
                         </ul>
                     </li>
-                    <li><a href="{{ url('datatable') }}"><i class="fa fa-database"></i><span>Data Tables</span></a></li>
+                    <li class="menu-list">
+                        <a href="#"><i class="fa fa-database"></i><span>Data Tables</span></a>
+                        <ul class="child-list">
+                            <li><a href="{{ url('datatable') }}">Service Tables</a></li>
+                            <li><a href="{{ url('devless_users') }}">Users</a></li>
+                        </ul>
+                    </li>
                      <li><a href="{{ url('hub') }}"><i class="fa fa-cubes"></i><span>Service Hub</span></a></li>
                    
                     <li class="menu-list">

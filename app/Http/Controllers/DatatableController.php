@@ -42,9 +42,9 @@ class DatatableController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($table_name)
     {
-        //
+        return \DB::getSchemaBuilder()->getColumnListing($table_name);
     }
 
     /**

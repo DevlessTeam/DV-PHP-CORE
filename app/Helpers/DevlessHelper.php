@@ -6,12 +6,14 @@ use App\Http\Controllers\ServiceController;
 use DB;
 use Hash;
 use Session;
+use Devless\SDK\SDK;
 use App\User as user;
 use Alchemy\Zippy\Zippy;
 use App\Helpers\DataStore;
 use Devless\Schema\DbHandler as DvSchema;
 use Symfony\Component\VarDumper\Cloner\Data;
 use App\Helpers\Jwt as jwt;
+
 /*
 * @author Eddymens <eddymens@devless.io
 */
@@ -65,7 +67,7 @@ class DevlessHelper extends Helper
 
         return $service_components;
     }
-    
+
     /** Get all service attributes
      * @return string
      */
@@ -121,7 +123,7 @@ class DevlessHelper extends Helper
      * @param $extension
      * @return string
      */
-    public static function zip_folder($service_folder_path, $extension)
+    public static function zip_folder($service_folder_path, $extension, $delete = false)
     {
         $dvext = $extension;
         // Load Zippy
@@ -138,7 +140,7 @@ class DevlessHelper extends Helper
 
 
         rename($service_folder_path.'.zip', $service_folder_path.$dvext);
-        self::deleteDirectory($service_folder_path);
+        ($delete)?self::deleteDirectory($service_folder_path): false;
         return $folder_name.$dvext;
 
     }
@@ -402,8 +404,8 @@ class DevlessHelper extends Helper
                 ->orWhere('email', $email)
                 ->orWhere('phone_number', $phone_number)->get();
          
-        if($existing_users != null) {
-            return Response::respond(1001,"Seems User already exists");
+        if ($existing_users != null) {
+            return Response::respond(1001, "Seems User already exists");
         }
         
         $user = new User;
@@ -492,7 +494,7 @@ class DevlessHelper extends Helper
             return false;
         }
         if ($user_data !== null) {
-           $correct_password = 
+            $correct_password =
                    (Helper::compare_hash($password, $user_data->password))?true: false ;
             $user_data->session_token = $session_token = md5(uniqid(1, true));
 
@@ -517,7 +519,7 @@ class DevlessHelper extends Helper
     }
 
     /**
-     * update devless user profile 
+     * update devless user profile
      * @param $payload
      * @return bool
      * @internal param type $request
@@ -756,7 +758,7 @@ class DevlessHelper extends Helper
 
             '{{MAINDOC}}'=> '/**
  * Created by Devless.
- * User: '.$username.'
+ * Author: '.$username.'
  * Date Created: '.$time.'
  * @Service: '.$serviceName.'
  * @Version: 1.0
@@ -768,7 +770,7 @@ class DevlessHelper extends Helper
     }
 
     /**
-     * execute on import and delete function 
+     * execute scripts after installing and deleting services
      * @param type $payload
      * @return boolean
      */
@@ -793,14 +795,82 @@ class DevlessHelper extends Helper
         
     }
     
-    public static function rmdir_recursive($dir) {
-        foreach(scandir($dir) as $file) {
-            if ('.' === $file || '..' === $file) continue;
-            if (is_dir("$dir/$file")) rmdir_recursive("$dir/$file");
-            else unlink("$dir/$file");
+     /**
+      * remove stale service assets before installing new one
+      * @param type $dir
+      * @return boolean
+      */
+    public static function rmdir_recursive($dir)
+    {
+        foreach (scandir($dir) as $file) {
+            if ('.' === $file || '..' === $file) {
+                continue;
+            }
+            if (is_dir("$dir/$file")) {
+                self::rmdir_recursive("$dir/$file");
+            } else {
+                unlink("$dir/$file");
+            }
         }
         rmdir($dir);
         return true;
     }
     
+    /**
+     * start post request and close immediately
+     * @param type $url
+     * @param type $params
+     */
+    public static function curl_post_async($url, $params)
+    {
+        foreach ($params as $key => &$val) {
+            if (is_array($val)) {
+                $val = implode(',', $val);
+            }
+            $post_params[] = $key.'='.urlencode($val);
+        }
+        $post_string = implode('&', $post_params);
+
+        $parts=parse_url($url);
+
+        $fp = fsockopen(
+            $parts['host'],
+            isset($parts['port'])?$parts['port']:80,
+            $errno,
+            $errstr,
+            30
+        );
+
+        $out = "POST ".$parts['path']." HTTP/1.1\r\n";
+        $out.= "Host: ".$parts['host']."\r\n";
+        $out.= "Content-Type: application/x-www-form-urlencoded\r\n";
+        $out.= "Content-Length: ".strlen($post_string)."\r\n";
+        $out.= "Connection: Close\r\n\r\n";
+        if (isset($post_string)) {
+            $out.= $post_string;
+        }
+
+        fwrite($fp, $out);
+        fclose($fp);
+    }
+    
+    public static function instance_log($url, $token, $purpose)
+    {
+        $sdk = new SDK($url, $token);
+        $instance = DataStore::instanceInfo();
+        
+        $user = $instance['admin'];
+        $app  = $instance['app'];
+        $data = [
+          'username' => $user->username,
+          'email' => $user->email,
+          'token' => $app->token,
+          'connected_on' => Date(DATE_RFC2822),
+          'instance_url' => $_SERVER['HTTP_HOST'],
+          'purpose'      => $purpose
+        ];
+        $status = $sdk->addData('INSTANCE_LOG', 'instance', $data);
+        return ($status['status_code'] == 609)? true : false;
+        
+    }
 }

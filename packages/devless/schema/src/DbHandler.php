@@ -1,10 +1,12 @@
 <?php
 namespace Devless\Schema;
+
 use App\Helpers\Helper;
 use App\Helpers\Response as Response;
 use App\Http\Controllers\ServiceController as Service;
 use Illuminate\Database\Schema\Blueprint as Blueprint;
 use Illuminate\Http\Request;
+
 class DbHandler
 {
     public $db_types = [
@@ -86,6 +88,10 @@ class DbHandler
         //setup db connection
         $connector = $this->_connector($payload);
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
+       
+        (isset($payload['params'][0]['name']) && count($payload['params'][0]['name'])> 0
+                && gettype($payload['params'][0]['field']) == 'array' || isset($payload['params'][0]['field'][0]) )? true :
+        Helper::interrupt(641);
         foreach ($payload['params'] as $table) {
             $table_name = $table['name'];
             if (!\Schema::connection('DYNAMIC_DB_CONFIG')->
@@ -174,9 +180,8 @@ class DbHandler
         $service_name = $payload['service_name'];
         $table = $payload['params'][0]['name'];
         //remove service appendage from service
-        if(($pos = strpos($table, $service_name.'_')) !== false)
-        {
-           $tableWithoutService = substr($table, $pos + 1);
+        if (($pos = strpos($table, $service_name.'_')) !== false) {
+            $tableWithoutService = substr($table, $pos + 1);
         } else {
             $tableWithoutService = $table;
         }
@@ -308,9 +313,13 @@ class DbHandler
                 }
             }
             if (isset($queried_table_list)) {
-                $related = function ($results) use($queried_table_list, $service_name, $table_name, $payload) {
-                    return $this->_get_related_data($payload, $results, $table_name,
-                            $queried_table_list);
+                $related = function ($results) use ($queried_table_list, $service_name, $table_name, $payload) {
+                    return $this->_get_related_data(
+                        $payload,
+                        $results,
+                        $table_name,
+                        $queried_table_list
+                    );
                 };
                 $endOutput = [];
                 $complete_query = $complete_query.'
@@ -457,9 +466,9 @@ class DbHandler
             ($field['name'])->onDelete('cascade')->$unique();
         } else {
             Helper::interrupt(
-                 602,
-                 'For some reason database schema could not be created'
-             );
+                602,
+                'For some reason database schema could not be created'
+            );
         }
     }
     /**
@@ -546,7 +555,8 @@ class DbHandler
      * @param $primaryTable
      * @return array
      */
-    private function _get_related_data($payload, $results, $primaryTable, $tables) {
+    private function _get_related_data($payload, $results, $primaryTable, $tables)
+    {
         $serviceTables = $this->_get_all_service_tables($payload);
         $tables = (in_array("*", $tables))?
                 $this->_get_all_related_tables($primaryTable) : $tables;
@@ -555,16 +565,16 @@ class DbHandler
         //loop over list of tables check if exist
         foreach ($results as $eachResult) {
                    $eachResult->related = [];
-                   array_walk($tables, function($table) use($eachResult, &$output, $service) {
+                   array_walk($tables, function ($table) use ($eachResult, &$output, $service) {
                        $refField = $service.'_'.$table.'_id';
                        $referenceId = (isset($eachResult->$refField))? $eachResult->$refField:
                                     Helper::interrupt(640);
                        $relatedData = \DB::table($service.'_'.$table)
                            ->where('id', $referenceId)
                            ->get();
-                       array_push($eachResult->related,[$table =>[$relatedData]]);
+                       array_push($eachResult->related, [$table =>$relatedData]);
                    });
-                   array_push($output, $eachResult);
+                    array_push($output, $eachResult);
         }
         return $output;
     }
@@ -577,8 +587,8 @@ class DbHandler
     {
         $relatedTables = [];
         $schema = $this->get_tableMeta($tableName);
-        array_walk($schema['schema']['field'], function($field)
-                use($tableName, &$relatedTables) {
+        array_walk($schema['schema']['field'], function ($field)
+ use ($tableName, &$relatedTables) {
             if ($field['field_type'] == 'reference') {
                 array_push($relatedTables, $field['ref_table']);
             }

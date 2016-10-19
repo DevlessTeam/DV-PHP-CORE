@@ -21,7 +21,7 @@ class CreateTableMetaTable extends Migration
             $table->integer('service_id')->unsigned();
             $table->foreign('service_id')->references('id')->on('services')
                    ->onDelete('cascade');
-           // $table->timestamps();
+            //$table->timestamps();
         });
     }
 
@@ -33,6 +33,6 @@ class CreateTableMetaTable extends Migration
     public function down()
     {
         //
-        Schema::drop('tableMeta');
+        Schema::drop('table_metas');
     }
 }

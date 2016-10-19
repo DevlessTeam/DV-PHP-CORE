@@ -1,15 +1,9 @@
-[![Build Status](https://api.travis-ci.org/DevlessTeam/DV-PHP-CORE.svg)](https://travis-ci.org/DevlessTeam/DV-PHP-CORE)
+[![Build Status](https://api.travis-ci.org/DevlessTeam/DV-PHP-CORE.svg?branch=master)](https://travis-ci.org/DevlessTeam/DV-PHP-CORE)
  
 ##Devless Api Engine(DAE)
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
-Versioning ot this project follows the  [Sermantic Versioning Specification](http://semver.org/)
-
-Coding standards are also based on the [PSR-2-coding-style-guide](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
-
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
-
-Versioning ot this project follows the  [Sermantic Versioning Specification](http://semver.org/)
+Versioning to this project follows the  [Sermantic Versioning Specification](http://semver.org/)
 
 Coding standards are also based on the [PSR-2-coding-style-guide](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
 
@@ -43,8 +37,10 @@ If everything goes on smoothly you should be able to access the setup screen at 
 
 If you will need help setting up you may check out the laravel [installation](https://laravel.com/docs/5.1) guide as the devless core is based of laravel. 
 
-You may also seek help from the [devless forum](forum.devless.io) and also get started with the [devless application](docs.devless.io)
+Checkout out the [docs](https://docs.devless.io)
 ## How to contribute 
-**Devless api Engine is currently not open for contribution**
-* But we would love to hear from  you though. email us @ edmond@devless.io
-* Please dont forget to visit our landing page @ [devless.io](devless.io)
+**Please checkout the [Contribute](https://guides.github.com/activities/contributing-to-open-source/) guide on how to contribute**
+No contribution is too small 
+
+* We would love to hear from  you email us @ info@devless.io
+* Also forget to visit our landing page @ [devless.io](https://devless.io)

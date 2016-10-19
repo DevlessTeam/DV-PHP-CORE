@@ -17,6 +17,7 @@ $devless_object_keys = [
     'method'       => 'POST',
     'params'       =>  '', 
     'public'       =>  '',
+    'script_init_vars'    =>  '',
     'active'       =>  '',
     'calls'        =>  '',
     'driver'       =>  '',

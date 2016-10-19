@@ -106,12 +106,13 @@
                                     @endif
                                 </div>
                             </div>
+                             
                             <div class="form-group">
                                 <div class="col-lg-offset-2 col-lg-10">
                                     <!-- Button trigger modal -->
-<button type="button" class="btn btn-info  pull-left" data-toggle="modal" data-target="#connect-to-app">
-    Connect to my App
-</button>
+                                    <button type="button" class="btn btn-info  pull-left" data-toggle="modal" data-target="#connect-to-app">
+                                        Connect to my App
+                                    </button>
                                     <button type="submit" class="btn btn-info pull-right">Save Changes</button>
                                 </div>
                             </div>
@@ -178,7 +179,6 @@
           "processData": false,
           "data": "{\"action\":\"regen\"}"
         };
-
         $.ajax(settings).done(function (response) {
           console.log(response);
           result = JSON.parse(response);
@@ -186,7 +186,6 @@
               $("#token").val(result.payload.new_token);
           }
           else{
-
               alert("token could not be updated");
           }
         });

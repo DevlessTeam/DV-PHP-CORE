@@ -8,6 +8,7 @@ use Response as output;
 use Session;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Validator;
+use App\Helpers\Jwt;
 
 /*
  * @author eddymens <eddymens@devless.io>
@@ -69,6 +70,7 @@ class Helper
         638 => 'Sorry no such method or method is private/protected',
         639 => 'Sorry RPC can only be processed over POST request',
         640 => 'Sorry no such related tables',
+        641 => 'Something is wrong with your payload',
         700 => 'Internal system error',
     ];
 
@@ -81,7 +83,7 @@ class Helper
     public static $validator_type =
     [
         'boolean'    => 'boolean',
-        'decimal'    => 'numeric',
+        'decimals'    => 'numeric',
         'email'      => 'email',
         'integer'    => 'integer',
         'password'   => 'alphanum',
