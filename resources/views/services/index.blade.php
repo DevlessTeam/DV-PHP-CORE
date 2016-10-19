@@ -19,9 +19,9 @@
                      <a href="{{ route('services.create') }}">
                     <div class="panel-header"><br><h4><center>Create Service</center></h4></div>
                     <div class="panel-body">
-                       
+
                         <center><i class="fa fa-plus fa-5x" aria-hidden="true"></i></center>
-                        
+
                         <br>
 
 
@@ -74,7 +74,7 @@
                        You have no Services, lets walkthrough a quick tutorial on how to create a Service. Click on Getting Started to begin.
                    </div>
                    <div class="modal-footer">
-                       <a href="http://devless.io/#!/tutorial/" target="_blank" class="btn btn-primary">Getting Started</a>
+                       <a href="https://www.youtube.com/watch?v=SI5OT0oeqJI" target="_blank" class="btn btn-primary">Getting Started</a>
                    </div>
                </div>
            </div>
