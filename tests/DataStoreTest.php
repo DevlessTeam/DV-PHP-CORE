@@ -71,15 +71,68 @@ class DataStoreTest extends TestCase
         $this->assertTrue(isset($params['orderBy']));
         $this->assertEquals($params['orderBy'][0], $keyword);
     }
-
+    
+    /*
+     * Test Instance info
+     */
     public function testInstanceInfo()
     {
         
-    $results = DataStore::instanceInfo();
+        $results = DataStore::instanceInfo();
+
+        $this->assertEquals($results['app']->name, 'appName');
+        $this->assertEquals($results['admin']->username, 'eddymens');
     
-    $this->assertEquals($results['app']->name, 'appName');
-    $this->assertEquals($results['admin']->username, 'eddymens');
+    }
     
+    /*
+     * Test set Dump
+     */
+    public function testsetDump()
+    {
+        $setDump = DataStore::setDump('key', 'value');
+        
+        $this->assertTrue($setDump);
+    }
+    
+    /*
+     * Test get Dump
+     */
+    public function testgetDump()
+    {
+        DataStore::setDump('key', 'value');
+        
+        $getDump = DataStore::getDump('key');
+        
+        $this->assertEquals($getDump, 'value');
+    }
+    
+    /*
+     * Test update Dump
+     */
+    public function testupdateDump()
+    {
+        DataStore::setDump('key', 'value');
+        
+        DataStore::updateDump('key', 'value2');
+        
+        $getDump = DataStore::getDump('key');
+        
+        $this->assertEquals($getDump, 'value2');
+    }
+    
+    /*
+     * Test destroy Dump
+     */
+    public function testdestroyDump()
+    {
+        DataStore::setDump('key', 'value');
+        
+        DataStore::destroyDump('key');
+        
+        $getDump = DataStore::getDump('key');
+        
+        $this->assertEquals($getDump, null);
     }
 }
 

@@ -16,8 +16,7 @@ class DevlessDump extends Migration
             $table->increments('id');
             $table->string('key');
             $table->text('value');
-            $table->text('notes');
-            $table->timestamps();
+            $table->text('notes')->default('');
         });
     }
 
