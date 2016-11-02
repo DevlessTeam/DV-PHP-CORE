@@ -6,8 +6,7 @@ namespace App\Helpers;
  */
 class ActionClass
 {
-    
-    
+
     /**
      * execute service action class
      * @param string $service
@@ -22,7 +21,6 @@ class ActionClass
 
         (file_exists($serviceMethodPath))?
             require_once $serviceMethodPath : false;
-
 
         $serviceInstance = new $service();
         $results = $serviceInstance->$method(...$params);

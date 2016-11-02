@@ -231,7 +231,7 @@ class ServiceController extends Controller
      */
     public function service(Request $request, $service, $resource)
     {
-        
+        $this-> _devlessCheckHeaders($request);
         $serviceOutput = $this->resource($request, $service, $resource);
         return response($serviceOutput);
     }
@@ -391,6 +391,11 @@ class ServiceController extends Controller
         $resource_access_right = json_decode($resource_access_right, true);
         return $resource_access_right;
     }
+    
+    /**
+     * check if Devless headers are set
+     * @param type $request
+     */
     private function _devlessCheckHeaders($request)
     {
         $is_token_set = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
