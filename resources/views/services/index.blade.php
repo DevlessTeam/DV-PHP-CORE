@@ -74,7 +74,9 @@
                        You have no Services, lets walkthrough a quick tutorial on how to create a Service. Click on Getting Started to begin.
                    </div>
                    <div class="modal-footer">
+
                        <a href="https://www.youtube.com/watch?v=vyNgmZ9zVOM" target="_blank" class="btn btn-primary">Getting Started</a>
+
                    </div>
                </div>
            </div>

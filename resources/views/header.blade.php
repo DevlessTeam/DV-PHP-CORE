@@ -11,22 +11,22 @@
     <title>Devless 1.0 </title>
 
     <!--right slidebar-->
-    <link href="{{ url('/css/slidebars.css') }}" rel="stylesheet">
+    <link href="{{ Request::secure(Request::root()).'/css/slidebars.css' }}" rel="stylesheet">
 
     <!--switchery-->
-    <link href="{{url('/js/switchery/switchery.min.css')}}" rel="stylesheet" type="text/css" media="screen" />
+    <link href="{{ Request::secure(Request::root()).'/js/switchery/switchery.min.css'}}" rel="stylesheet" type="text/css" media="screen" />
 
     <!--Form Wizard-->
-    <link rel="stylesheet" type="text/css" href="{{ url('/css/jquery.steps.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ Request::secure(Request::root()).'/css/jquery.steps.css' }}" />
 
     <!--common style-->
-    <link href="{{ url('/css/style.css') }}" rel="stylesheet">
-    <link href="{{ url('/css/style-responsive.css') }}" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{ url('/css/custom.css')}}">
+    <link href="{{ Request::secure(Request::root()).'/css/style.css' }}" rel="stylesheet">
+    <link href="{{ Request::secure(Request::root()).'/css/style-responsive.css' }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ Request::secure(Request::root()).'/css/custom.css'}}">
     @if( \Request::path() == 'privacy' || \Request::path() == 'datatable' || \Request::path() == 'services')
-      <link rel="stylesheet" href="{{ url('/css/helper.css') }}" media="screen" title="no title" charset="utf-8">
-      <script src="{{ url('/js/jquery-1.10.2.min.js') }}"></script>
-      <script src="{{ url('/js/bootstrap.min.js') }}"></script>
+      <link rel="stylesheet" href="{{ Request::secure(Request::root()).'/css/helper.css' }}" media="screen" title="no title" charset="utf-8">
+      <script src="{{ Request::secure(Request::root()).'/js/jquery-1.10.2.min.js' }}"></script>
+      <script src="{{ Request::secure(Request::root()).'/js/bootstrap.min.js' }}"></script>
     @endif
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -46,4 +46,4 @@
           <!--toggle button end-->
         </div>
         <!-- header section end-->
-      @endif
+@endif
