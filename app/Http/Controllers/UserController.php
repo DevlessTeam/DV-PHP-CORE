@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\App;
-use App\Helpers\DevlessHelper as DLH;
-use App\User;
 use DB;
 use Hash;
-use Illuminate\Http\Request;
+use App\App;
+use App\User;
 use Session;
-
+use Illuminate\Http\Request;
+use App\Helpers\DevlessHelper as DLH;
+use App\Helpers\Helper as helper;
 class UserController extends Controller
 {
     // TODO: Session store needs to authenticate with a session table for security
@@ -55,12 +55,26 @@ class UserController extends Controller
         return redirect('/');
     }
 
-    public function get_register()
+    public function get_register(Request $request)
     {
         $app = [
         'app_key'   => str_random(40),
         'app_token' => md5(uniqid(1, true)),
          ];
+         if($params = helper::query_string()) {
+             if(isset($params['url_install']) && isset($params['url_install'])&&
+                     isset($params['username']) && isset($params['password']) &&
+                     isset($params['app_name']) ){
+                $username = $params['username'][0];
+                $password = $params['password'][0];
+                $app_name = $params['app_name'][0];
+                $app_token = md5(uniqid(1, true));
+                $app_description = (isset($params['app_description']))?
+                        $params['app_description'][0]:'';
+                return $this->registrer($request, $username, $password, 
+                        $app_name, $app_token, $app_description );
+             }
+         } 
 
         return view('auth.create', compact('app'));
     }
@@ -76,18 +90,47 @@ class UserController extends Controller
         'app_description'       => 'required|max:255',
         ]);
 
+        $username = $request->input('username');
+        $password = $request->input('password');
+        $app_name = $request->input('app_name');
+        $app_token = md5(uniqid(1, true));
+        $app_description = $request->input('app_description');
+        return $this->registrer($request, $username, $password, $app_name, $app_token, $app_description );
+        
+    }
+    
+    /**
+     * registrer responsible for registring new apps
+     * @param type $username
+     * @param type $email
+     * @param type $password
+     * @param type $app_name
+     * @param type $app_token
+     * @param type $app_description
+     * @return type
+     */
+    public function registrer
+            (
+            Request $request,
+            $username,
+            $email,
+            $password, 
+            $app_name, 
+            $app_token,
+            $app_description = ''
+            ) {
         $user = new User();
-        $user->username = $request->input('username');
-        $user->email = $request->input('email');
-        $user->password = bcrypt($request->input('password'));
+        $user->username = $username;
+        $user->email = $email;
+        $user->password = bcrypt($password);
         $user->role = 1;
         $user->status = 0;
 
 
         $app = new App();
-        $app->name = $request->input('app_name');
-        $app->description = $request->input('app_description');
-        $app->token = $request->input('app_token');
+        $app->name = $app_name;
+        $app->description = $app_description;
+        $app->token = $app_token;
 
         if ($user->save() && $app->save()) {
             $request->session()->put('user', $user->id);
