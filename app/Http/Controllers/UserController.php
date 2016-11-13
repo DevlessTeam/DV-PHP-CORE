@@ -122,7 +122,6 @@ class UserController extends Controller
             $app_token,
             $app_description = ''
             ) {
-           dd($username, $email, $password, $app_name, $app_token, $app_description);
         $user = new User();
         $user->username = $username;
         $user->email = $email;
