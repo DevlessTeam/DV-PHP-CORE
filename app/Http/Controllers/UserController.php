@@ -21,7 +21,7 @@ class UserController extends Controller
             return view('auth.index');
         }
     }
-    
+
     public function get_all_users()
     {
         $users = User::orderBy('id', 'asc')->paginate(10);
@@ -71,10 +71,10 @@ class UserController extends Controller
                 $app_token = md5(uniqid(1, true));
                 $app_description = (isset($params['app_description']))?
                         $params['app_description'][0]:'';
-                return $this->registrer($request, $username, $password, 
+                return $this->registrer($request, $username, $password,
                         $app_name, $app_token, $app_description );
              }
-         } 
+         }
 
         return view('auth.create', compact('app'));
     }
@@ -95,10 +95,10 @@ class UserController extends Controller
         $app_name = $request->input('app_name');
         $app_token = md5(uniqid(1, true));
         $app_description = $request->input('app_description');
-        return $this->registrer($request, $username, $password, $app_name, $app_token, $app_description );
-        
+        return $this->registrer($request, $username, $email, $password, $app_name, $app_token, $app_description );
+
     }
-    
+
     /**
      * registrer responsible for registring new apps
      * @param type $username
@@ -114,8 +114,8 @@ class UserController extends Controller
             Request $request,
             $username,
             $email,
-            $password, 
-            $app_name, 
+            $password,
+            $app_name,
             $app_token,
             $app_description = ''
             ) {

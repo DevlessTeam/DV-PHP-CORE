@@ -15,6 +15,7 @@ class Response extends Helper
 
     public static function respond($status_code, $message = null, $payload = [])
     {
+
         if ($message == null) {
             $message =  (isset(self::$MESSAGE_HEAP[$status_code]))? self::$MESSAGE_HEAP[$status_code] :
             $message;
