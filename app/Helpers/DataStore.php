@@ -42,6 +42,7 @@ class DataStore extends Helper
         $method = 'GET';
         $result  =
             $service->assign_to_service($payload['service_name'], self::$resourceType, $method, self::$payload['params'], true);
+        self::cleanUp();
         return $result;
     }
     /**
@@ -57,11 +58,13 @@ class DataStore extends Helper
         $method = 'POST';
         $pushToStore = function ($data) use ($tableName, $method, $service, $payload) {
             $dataToAdd = [['name' => $tableName, 'field' => [$data]]];
+            self::cleanUp();
             return $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToAdd, true);
         };
         foreach ($data as $datum) {
                 $results = $pushToStore($datum);
         }
+        self::cleanUp();
         return $results;
     }
     /**
@@ -78,6 +81,7 @@ class DataStore extends Helper
         $dataToPatch =
                 [['name' => $tableName, 'params' => [['where'=>$payload['params']['where'][0], 'data'=>[$data]]] ]];
         $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToPatch, true);
+        self::cleanUp();
         return $result;
     }
     /**
@@ -121,6 +125,7 @@ class DataStore extends Helper
             [['name' => $tableName, 'params' => $parameters ]];
 
         $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $deletePayload. true);
+        self::cleanUp();
         return $result;
     }
     /**
@@ -172,6 +177,12 @@ class DataStore extends Helper
             (null == isset(self::$payload['params'][$methodName]))?  self::$payload['params'][$methodName] = [] :self::$payload['params'][$methodName] ;
         array_push(self::$payload['params'][$methodName], $args);
         return (is_null(self::$instance))? self::$instance = new self() : self::$instance;
+    }
+
+    private static function cleanUp()
+    {
+        self::$payload = null;
+        self::$instance = null;
     }
     /**
      * get instance information
