@@ -15,7 +15,7 @@ use App\Http\Controllers\RpcController as Rpc;
 
 class ServiceController extends Controller
 {
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -49,7 +49,7 @@ class ServiceController extends Controller
         $service_name_from_form = str_replace('-', '_', $service_name_from_form);
         $service_name = $service_name_from_form;
         $validator = Validator::make(
-                
+
             ['Service Name'=>$service_name,'Devless'=>'devless'],
             [
                 'Service Name'=>'required|unique:services,name|min:3|max:15|different:Devless',
@@ -71,7 +71,7 @@ class ServiceController extends Controller
         $service->resource_access_right =
             '{"query":0,"create":0,"update":0,"delete":0,"schema":0,"script":0, "view":0}';
         $service->active = 1;
-        $service->script = 'use App\Helpers\Assert as Assert;  
+        $service->script = 'use App\Helpers\Assert as Assert;
  $rules
  -> onQuery()
  -> onUpdate()
@@ -147,7 +147,7 @@ class ServiceController extends Controller
                 $var_init = $this->var_init($script);
                 $service->script_init_vars = $var_init;
                 $service->script = $script;
-                        
+
                 $service->save();
                 return Response::respond(626);
             }
@@ -188,9 +188,9 @@ class ServiceController extends Controller
         $service_name = $service->name;
         $view_path = config('devless')['views_directory'];
         $assets_path = $view_path.$service_name;
-        
+
         $table_meta = \App\TableMeta::where('service_id', $id)->orderBy('id', 'desc')->get();
-        
+
         foreach ($table_meta as $meta) {
             $table_name = $meta->table_name;
             DLH::purge_table($service_name, $table_name);
@@ -284,20 +284,21 @@ class ServiceController extends Controller
         $parameters = null,
         $internal_access = false
     ) {
-        
+
         $current_service = $this->service_exist($service_name);
         if (!$current_service == false) {
             //check service access right
             $is_it_public = $current_service->public;
             $is_admin = Helper::is_admin_login();
             $accessed_internally = $internal_access;
-            if ($is_it_public == 0 || $is_admin == true ||
-                $accessed_internally == true) {
-                $resource_access_right = $this->_get_resource_access_right($current_service);
-                
+            if ($is_it_public == 0 || $is_admin == true) {
+
+                $resource_access_right =
+                  $this->_get_resource_access_right($current_service, $accessed_internally);
+
                 $payload =
                     [
-                        'id'=>$current_service->id,
+                        'id'=> $current_service->id,
                         'service_name' =>$current_service->name,
                         'database' =>$current_service->database,
                         'driver' => $current_service->driver,
@@ -315,7 +316,7 @@ class ServiceController extends Controller
                 $newServiceElements = $this->before_assigning_service_action($resource, $payload);
                 $resource = $newServiceElements['resource'];
                 $payload = $newServiceElements['payload'];
-                
+
                 //keep names of resources in the singular
                 switch ($resource) {
                     case 'db':
@@ -358,7 +359,7 @@ class ServiceController extends Controller
         } else {
             Helper::interrupt(604);
         }
-        
+
     }
     /**
      * get parameters set in from request
@@ -385,13 +386,20 @@ class ServiceController extends Controller
      * @param object $service service payload
      * @return array resource access right
      */
-    private function _get_resource_access_right($service)
+    private function _get_resource_access_right($service, $master_access=false)
     {
+        $mutate_resource_rights =
+                function($rights) {return array_map(function($access_code)
+                        { return $access_code ?: 1; }, $rights);};
+
         $resource_access_right = $service->resource_access_right;
         $resource_access_right = json_decode($resource_access_right, true);
+        $resource_access_right = ($master_access)?
+            $mutate_resource_rights($resource_access_right) : $resource_access_right;
+
         return $resource_access_right;
     }
-    
+
     /**
      * check if Devless headers are set
      * @param type $request
@@ -413,7 +421,7 @@ class ServiceController extends Controller
      */
     public function check_resource_access_right_type($access_type)
     {
-        
+
         $is_user_login = Helper::is_admin_login();
         if (! $is_user_login && $access_type == 0) {
             Helper::interrupt(627);
@@ -442,17 +450,17 @@ class ServiceController extends Controller
         }
         return $output;
     }
-    
+
     /**
      * create service views
      * @return string
      */
     public function service_views()
     {
-            
+
             $folder_path = config('devless')['views_directory'];
             $db_name = \Config::get('database.connections.'.\Config::get('database.default').'.database');
-            
+
             //get db name
             DLH::zip_folder($folder_path, 'download.zip');
             $mode = 0777;
@@ -461,9 +469,9 @@ class ServiceController extends Controller
             copy($zip, public_path().'/download.zip');
             unlink($zip);
             return "created";
-       
+
     }
-    
+
     public function var_init($code)
     {
         $declarationString = '';

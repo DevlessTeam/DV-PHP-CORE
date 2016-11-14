@@ -397,17 +397,17 @@ class DevlessHelper extends Helper
     public function signup($payload)
     {
         $username = (isset($payload['username']))?$payload['username']:'';
-        
+
         $email = (isset($payload['email']))?$payload['email']:'';
         $phone_number = (isset($payload['phone_number']))?$payload['phone_number']:'';
         $existing_users =  \DB::table('users')->orWhere('username', $username)
                 ->orWhere('email', $email)
                 ->orWhere('phone_number', $phone_number)->get();
-         
+
         if ($existing_users != null) {
             return Response::respond(1001, "Seems User already exists");
         }
-        
+
         $user = new User;
 
         $secret = config('app')['key'];
@@ -781,7 +781,7 @@ class DevlessHelper extends Helper
 
         (file_exists($serviceMethodPath))?
             require_once $serviceMethodPath : false;
-        
+
         if (class_exists($service)) {
                 $serviceInstance = new $service();
             $results = (isset($payload['delete']) && !isset($payload['install']) && $payload['delete'] == '__onDelete')?
@@ -792,9 +792,9 @@ class DevlessHelper extends Helper
         } else {
             return false;
         }
-        
+
     }
-    
+
      /**
       * remove stale service assets before installing new one
       * @param type $dir
@@ -815,7 +815,7 @@ class DevlessHelper extends Helper
         rmdir($dir);
         return true;
     }
-    
+
     /**
      * start post request and close immediately
      * @param type $url
@@ -853,12 +853,12 @@ class DevlessHelper extends Helper
         fwrite($fp, $out);
         fclose($fp);
     }
-    
+
     public static function instance_log($url, $token, $purpose)
     {
         $sdk = new SDK($url, $token);
         $instance = DataStore::instanceInfo();
-        
+
         $user = $instance['admin'];
         $app  = $instance['app'];
         $data = [
@@ -871,6 +871,7 @@ class DevlessHelper extends Helper
         ];
         $status = $sdk->addData('INSTANCE_LOG', 'instance', $data);
         return ($status['status_code'] == 609)? true : false;
-        
+
     }
+
 }

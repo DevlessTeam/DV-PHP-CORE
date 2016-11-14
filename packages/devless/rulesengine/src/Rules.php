@@ -156,7 +156,6 @@ class Rules
             $this->answered = true;
             return $results;
         };
-
         return $this->executor($evaluator);
 
     }

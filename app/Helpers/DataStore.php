@@ -41,7 +41,7 @@ class DataStore extends Helper
         $payload = self::$payload;
         $method = 'GET';
         $result  =
-            $service->assign_to_service($payload['service_name'], self::$resourceType, $method, self::$payload['params']);
+            $service->assign_to_service($payload['service_name'], self::$resourceType, $method, self::$payload['params'], true);
         return $result;
     }
     /**
@@ -57,7 +57,7 @@ class DataStore extends Helper
         $method = 'POST';
         $pushToStore = function ($data) use ($tableName, $method, $service, $payload) {
             $dataToAdd = [['name' => $tableName, 'field' => [$data]]];
-            return $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToAdd);
+            return $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToAdd, true);
         };
         foreach ($data as $datum) {
                 $results = $pushToStore($datum);
@@ -77,7 +77,7 @@ class DataStore extends Helper
         $method = 'PATCH';
         $dataToPatch =
                 [['name' => $tableName, 'params' => [['where'=>$payload['params']['where'][0], 'data'=>[$data]]] ]];
-        $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToPatch);
+        $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToPatch, true);
         return $result;
     }
     /**
@@ -119,8 +119,8 @@ class DataStore extends Helper
             [[$action=>"true", 'where'=>$payload['params']['where'][0]]]: [[$action=>"true"]];
         $deletePayload =
             [['name' => $tableName, 'params' => $parameters ]];
-        
-        $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $deletePayload);
+
+        $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $deletePayload. true);
         return $result;
     }
     /**
@@ -179,7 +179,7 @@ class DataStore extends Helper
      */
     public static function instanceInfo()
     {
-        
+
         $adminData = \DB::table('users')->where('role', 1)
                 ->select('username', 'email')->first();
         $appData   =  \DB::table('apps')->select('name', 'description', 'token')->first();
@@ -187,7 +187,7 @@ class DataStore extends Helper
         $instanceInfo['admin'] = $adminData;
         return $instanceInfo;
     }
-    
+
     /**
      * get data from Devless dump
      * @return boolean
@@ -199,22 +199,22 @@ class DataStore extends Helper
         } else {
             return null;
         }
-        
+
     }
-    
-    
+
+
      /**
      * add data to devless dump
      * @return boolean
      */
     public static function setDump($key, $value)
     {
-        
+
         $status = \DB::table('devless_dump')->insert(['key'=>$key, 'value'=>$value]);
-       
+
         return $status;
     }
-    
+
     /**
      * get data from Devless dump
      * @return boolean
@@ -222,11 +222,11 @@ class DataStore extends Helper
     public static function updateDump($key, $value)
     {
         $status = \DB::table('devless_dump')->where('key', $key)->update(['value'=>$value]);
-        
+
         return $status;
     }
-    
-     
+
+
     /**
      * destroy devless dump
      * @return boolean
@@ -234,7 +234,7 @@ class DataStore extends Helper
     public static function destroyDump($key)
     {
         $status = \DB::table('devless_dump')->where('key', $key)->delete();
-        
+
         return $status;
     }
 }
