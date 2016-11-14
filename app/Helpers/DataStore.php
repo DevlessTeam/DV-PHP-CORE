@@ -120,11 +120,11 @@ class DataStore extends Helper
         $tableName = self::$payload['params']['table'][0];
         $method = 'DELETE';
         $parameters  = ($action == 'delete' && isset($payload['params']['where'][0]))?
-            [[$action=>"true", 'where'=>$payload['params']['where'][0]]]: [[$action=>"true"]];
+            [[$action=>"true", 'where'=>$payload['params']['where'][0]]] : [[$action=>"true"]];
         $deletePayload =
             [['name' => $tableName, 'params' => $parameters ]];
 
-        $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $deletePayload. true);
+        $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $deletePayload, true);
         self::cleanUp();
         return $result;
     }
