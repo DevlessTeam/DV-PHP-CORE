@@ -13,7 +13,7 @@ class Rules
     private $assertion = [
         "elseWhenever" => false,
         "whenever"     => false,
-        "ifAllFails"   => false,
+        "otherwise"   => false,
 
 
     ];
@@ -22,7 +22,7 @@ class Rules
     private $called = [
         "elseWhenever" => false,
         "whenever"     => false,
-        "ifAllFails"   => false,
+        "otherwise"   => false,
 
 
     ];
@@ -30,7 +30,7 @@ class Rules
 
     private $results = '';
     private $answered = false;
-    
+
     private $execOrNot = true;
     private $actionType = '';
 
@@ -39,36 +39,36 @@ class Rules
         $this->actionType = $actionType;
         return $this;
     }
-    
-    
+
+
     public function onQuery()
     {
         $this->execOrNot = ($this->actionType == 'GET')? true : false;
         return $this ;
     }
-    
-    
-    
+
+
+
     public function onUpdate()
     {
         $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
         return $this ;
     }
-    
-    
+
+
     public function onCreate()
     {
         $this->execOrNot = ($this->actionType == 'POST')? true : false;
         return $this ;
     }
-    
-    
+
+
     public function onDelete()
     {
         $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
         return $this ;
     }
-    
+
     /**
      * if equivalence
      * @param $assert
@@ -105,14 +105,14 @@ class Rules
      * else equivalence
      * @return $this
      */
-    public function ifAllFails()
+    public function otherwise()
     {
         if (!$this->execOrNot) {
             return $this;
         }
-        $this->assertion['ifAllFails'] =
+        $this->assertion['otherwise'] =
             (!$this->assertion['elseWhenever'] || !$this->assertion['whenever']) ? : false;
-        $this->called['ifAllFails'] = true;
+        $this->called['otherwise'] = true;
             return $this;
     }
 
@@ -173,7 +173,7 @@ class Rules
         }
         $whenever = $this->assertion['whenever'];
         $elseWhenever = $this->assertion['elseWhenever'];
-        $ifAllFails = $this->assertion['ifAllFails'];
+        $otherwise = $this->assertion['otherwise'];
 
         $error = function ($msg = 'you cannot call on elseWhenever without calling on whenever') {
             $this->answered = true;
@@ -183,16 +183,16 @@ class Rules
 
         if ($this->called['elseWhenever'] && !$this->called['whenever']) {
             $error();
-        } elseif ($ifAllFails && !$this->called['whenever']) {
-            $msg = 'You cannot call on ifAllFails without calling on whenever';
+        } elseif ($otherwise && !$this->called['whenever']) {
+            $msg = 'You cannot call on otherwise without calling on whenever';
             $error($msg);
         } elseif ((($whenever && !$this->answered) && $this->called['whenever']) ||
             (($elseWhenever && !$this->answered) && $this->called['whenever'] && $this->called['elseWhenever']) ||
-            ($ifAllFails && !$this->answered && ( $this->called['whenever'] || $this->called['elseWhenever'] ))) {
+            ($otherwise && !$this->answered && ( $this->called['whenever'] || $this->called['elseWhenever'] ))) {
             $this->results =  $evaluator();
         }
-        
-        return ($this->called['ifAllFails'])? $this->results : $this;
+
+        return ($this->called['otherwise'])? $this->results : $this;
 
     }
 }
