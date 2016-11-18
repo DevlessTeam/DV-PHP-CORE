@@ -572,7 +572,7 @@ class DbHandler
                        $relatedData = \DB::table($service.'_'.$table)
                            ->where('id', $referenceId)
                            ->get();
-                       array_push($eachResult->related, [$table =>$relatedData]);
+                       $eachResult->related[$table] = $relatedData;
                    });
                     array_push($output, $eachResult);
         }
