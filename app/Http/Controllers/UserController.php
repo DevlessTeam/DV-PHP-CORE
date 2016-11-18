@@ -65,7 +65,7 @@ class UserController extends Controller
          if($params = helper::query_string()) {
              if(isset($params['url_install']) && isset($params['url_install'])&&
                      isset($params['username']) && isset($params['password']) &&
-                     isset($params['app_name']) && isset($params['email']) && !(\DB::table('apps')->get()) ){
+                     isset($params['app_name']) && isset($params['email']) && (\DB::table('apps')->get()) ){
                 $username = $params['username'][0];
                 $email = $params['email'][0];
                 $password = $params['password'][0];
