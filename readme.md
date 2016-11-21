@@ -43,4 +43,4 @@ Checkout out the [docs](https://docs.devless.io)
 No contribution is too small 
 
 * We would love to hear from  you email us @ info@devless.io
-* Also forget to visit our landing page @ [devless.io](https://devless.io)
+* Also dont forget to visit our landing page @ [devless.io](https://devless.io)
