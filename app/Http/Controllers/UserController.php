@@ -21,7 +21,7 @@ class UserController extends Controller
             return view('auth.index');
         }
     }
-    
+
     public function get_all_users()
     {
         $users = User::orderBy('id', 'asc')->paginate(10);
@@ -61,20 +61,22 @@ class UserController extends Controller
         'app_key'   => str_random(40),
         'app_token' => md5(uniqid(1, true)),
          ];
+
          if($params = helper::query_string()) {
              if(isset($params['url_install']) && isset($params['url_install'])&&
                      isset($params['username']) && isset($params['password']) &&
-                     isset($params['app_name']) ){
+                     isset($params['app_name']) && isset($params['email']) && (\DB::table('apps')->get()) ){
                 $username = $params['username'][0];
+                $email = $params['email'][0];
                 $password = $params['password'][0];
                 $app_name = $params['app_name'][0];
                 $app_token = md5(uniqid(1, true));
                 $app_description = (isset($params['app_description']))?
                         $params['app_description'][0]:'';
-                return $this->registrer($request, $username, $password, 
+                return $this->registrer($request, $username, $email, $password,
                         $app_name, $app_token, $app_description );
              }
-         } 
+         }
 
         return view('auth.create', compact('app'));
     }
@@ -91,14 +93,15 @@ class UserController extends Controller
         ]);
 
         $username = $request->input('username');
+        $email = $request->input('email');
         $password = $request->input('password');
         $app_name = $request->input('app_name');
         $app_token = md5(uniqid(1, true));
         $app_description = $request->input('app_description');
-        return $this->registrer($request, $username, $password, $app_name, $app_token, $app_description );
-        
+        return $this->registrer($request, $username, $email, $password, $app_name, $app_token, $app_description );
+
     }
-    
+
     /**
      * registrer responsible for registring new apps
      * @param type $username
@@ -114,8 +117,8 @@ class UserController extends Controller
             Request $request,
             $username,
             $email,
-            $password, 
-            $app_name, 
+            $password,
+            $app_name,
             $app_token,
             $app_description = ''
             ) {

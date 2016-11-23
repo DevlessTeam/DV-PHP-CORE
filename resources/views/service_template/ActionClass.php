@@ -1,6 +1,4 @@
 <?php
-
-
 {{MAINDOC}}
 
 //Action method for serviceName
