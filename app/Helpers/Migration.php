@@ -15,7 +15,6 @@ class Migration extends Helper
     {
         $devlessfunc = new DVHelper();
         $service_components = $devlessfunc::get_service_components($service_name);
-
         $folder_name = ($devlessfunc::add_service_to_folder($service_name, $service_components));
 
         ($folder_name) ?

@@ -140,7 +140,7 @@ class DevlessHelper extends Helper
 
 
         rename($service_folder_path.'.zip', $service_folder_path.$dvext);
-        ($delete)?self::deleteDirectory($service_folder_path): false;
+        self::deleteDirectory($service_folder_path);
         return $folder_name.$dvext;
 
     }
@@ -263,6 +263,7 @@ class DevlessHelper extends Helper
      */
     public static function deleteDirectory($dir)
     {
+        
         if (!file_exists($dir)) {
             return true;
         }
