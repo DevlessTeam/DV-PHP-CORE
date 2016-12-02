@@ -30,7 +30,7 @@
     <div class="wrapper">
       <div class="row">
         <a href="https://devless.io">
-          <img src="{{url('/img/logo.png')}}" class="setup-logo" alt="Devless">
+          <img src="{{Request::secure(Request::root()).'/img/logo.png'}}" class="setup-logo" alt="Devless">
         </a>
         <div class="col-lg-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
           <section class="panel">
