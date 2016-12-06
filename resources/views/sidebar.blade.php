@@ -5,7 +5,7 @@
                 <!--logo and logo icon start-->
                 <div class="logo dark-logo-bg hidden-xs hidden-sm">
                     <a href="/">
-                         <img src="{{url('/img/logo.png')}}" alt="Devless">
+                         <img src="{{Request::secure(Request::root()).'/img/logo.png'}}" alt="Devless">
                         <!--<i class="fa fa-maxcdn"></i>-->
                     </a>
                 </div>

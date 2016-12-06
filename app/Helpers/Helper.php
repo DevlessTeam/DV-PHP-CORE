@@ -251,11 +251,11 @@ class Helper
     {
         $user_token = request()->header('devless-user-token');
 
-        if (self::is_admin_login() || $access_state == false) {
+        if (self::is_admin_login() && $access_state == true) {
             $admin = User::where('role', 1)->first();
             $user_cred['id'] = $admin->id;
             $user_cred['token'] = 'non for admin';
-        } elseif ($user_token !== null || $access_state == false) {
+        } elseif ($user_token !== null && $access_state == true) {
             $user_data = self::verify_user_token($user_token);
 
             if (isset($user_data->id)) {

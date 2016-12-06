@@ -652,11 +652,16 @@ class DbHandler
     private function set_auth_id_if_required($db_action, $payload)
     {
         $service = new Service();
+        $user_id = ($db_action != 'query')? 1: '';
         $access_type = $payload['resource_access_right'];
         $access_state = $service
             ->check_resource_access_right_type($access_type[$db_action]);
-        $user_cred = Helper::get_authenticated_user_cred($access_state);
-        $payload['user_id'] = $user_cred['id'];
+        
+        if($access_state == TRUE) {
+            $user_cred = Helper::get_authenticated_user_cred($access_state);
+            $user_id = $user_cred['id'];
+        }
+        $payload['user_id'] = $user_id;
         return $payload;
     }
     /**

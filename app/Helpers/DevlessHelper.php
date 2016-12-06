@@ -263,6 +263,7 @@ class DevlessHelper extends Helper
      */
     public static function deleteDirectory($dir)
     {
+        
         if (!file_exists($dir)) {
             return true;
         }
