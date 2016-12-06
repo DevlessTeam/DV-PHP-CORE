@@ -67,10 +67,9 @@
                       $('#notif').modal({
                            keyboard: true
                       });
-                      function Redirect(){
-                      $('#notif').modal('hide');
-                       }
-
+                      setTimeout(function  () {
+                          $('#notif').modal('hide');
+                      },3000)
                       
                        $('#'+service_name).html('Failed :(').closest('button').attr('disabled', 'true');
                    }
@@ -96,7 +95,9 @@
          <div class="modal-body">
             <div id="left">
       <div>
-          <center><p style="font-weight:bold;"><font color="white"> <i class="fa fa-bell-o fa-2x"></i> <br>Service already installed. <br>
+          <center><p style="font-weight:bold;"><font color="white">
+           <i class="fa fa-bell-o fa-2x"></i> <br>Service already installed. <br>
+            Check services menu <br>
            If service not installed, Please Try again</font></p>
     </center>
    
