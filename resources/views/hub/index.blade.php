@@ -98,7 +98,7 @@
           <center><p style="font-weight:bold;"><font color="white">
            <i class="fa fa-bell-o fa-2x"></i> <br>Service already installed. <br>
             Check services menu <br>
-           If service not installed, Please Try again</font></p>
+           If service not installed, Please Try again.</font></p>
     </center>
    
          </div>
