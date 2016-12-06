@@ -71,7 +71,7 @@
                           $('#notif').modal('hide');
                       },3000)
                       
-                       $('#'+service_name).html('Failed :(').closest('button').attr('disabled', 'true');
+                       $('#'+service_name).html('Installed').closest('button').attr('disabled', 'true');
                    }
                })
            }
