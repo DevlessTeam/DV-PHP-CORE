@@ -391,7 +391,7 @@ class DbHandler
      * @return true
      *
      * @internal param table_name $table_name
-     */
+     */ 
     public function field_type_exist($field)
     {
         //check if soft data type has equivalent db type

@@ -61,9 +61,18 @@
                        console.log(output);
                    state = JSON.parse(output);
                    if(state.status == "true"){
-                       $('#'+service_name).html('Done');
+                       $('#'+service_name).html('Done').closest('button').attr('disabled', 'true');
+
                    } else {
-                       $('#'+service_name).html('Failed :(');
+                      $('#notif').modal({
+                           keyboard: true
+                      });
+                      function Redirect(){
+                      $('#notif').modal('hide');
+                       }
+
+                      
+                       $('#'+service_name).html('Failed :(').closest('button').attr('disabled', 'true');
                    }
                })
            }
@@ -78,4 +87,26 @@
 }           }
 </script>
 
+
+<div class="modal fade" id="notif" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true" >
+   <div class="modal-dialog" style="width:250px;height:3%;">
+      <div class="modal-content" style="background-color:#7BE454;">
+        
+         <div class="modal-body">
+            <div id="left">
+      <div>
+          <center><p style="font-weight:bold;"><font color="white"> <i class="fa fa-bell-o fa-2x"></i> <br>Service already installed. <br>
+           If service not installed, Please Try again</font></p>
+    </center>
+   
+         </div>
+        
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</div>
+</div>
 @endsection
+
+
