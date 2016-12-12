@@ -74,6 +74,7 @@ return [
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
             'strict'    => false,
+            'port'      => env('DB_PORT', 3306),
         ],
 
         'pgsql' => [
@@ -85,6 +86,7 @@ return [
             'charset'  => 'utf8',
             'prefix'   => '',
             'schema'   => 'public',
+            'port'     => env('DB_PORT','')
         ],
 
         'sqlsrv' => [
