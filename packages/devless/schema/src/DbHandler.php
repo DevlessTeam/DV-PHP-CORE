@@ -68,8 +68,7 @@ class DbHandler
      */
     public function store(Request $request)
     {
-        //
-        $resource = 'schema';
+
         $this->create_schema($request['resource']);
     }
     /**
@@ -88,7 +87,7 @@ class DbHandler
         //setup db connection
         $connector = $this->_connector($payload);
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
-       
+
         (isset($payload['params'][0]['name']) && count($payload['params'][0]['name'])> 0
                 && gettype($payload['params'][0]['field']) == 'array' || isset($payload['params'][0]['field'][0]) )? true :
         Helper::interrupt(641);
@@ -293,7 +292,7 @@ class DbHandler
                 $payload['params']['size'],
                 $payload['params']['offset']
             );
-            
+
             //finally loop over remaining query params (where)
             foreach ($payload['params'] as $key => $query) {
                 foreach ($query as $one) {
@@ -350,7 +349,7 @@ class DbHandler
         $service_name = $payload['service_name'];
         //connectors mysql pgsql sqlsrv sqlite
          $this->_connector($payload);
-         
+
         //dynamically create columns with schema builder
         $db_type = $this->db_types;
         $table_meta_data = [];
@@ -365,7 +364,7 @@ class DbHandler
                 //default field
                 $table->increments('id');
                 $table->integer('devless_user_id');
-                
+
                 //generate remaining fields
                 foreach ($new_payload['field'] as $field) {
                     $field['ref_table'] = $service_name.'_'.$field['ref_table'];
@@ -462,7 +461,7 @@ class DbHandler
             ($field['name'])->default($field['default'])->onDelete('cascade')
             ->$unique();
         } elseif ($column_type == 1) {
-            $table->$db_type[$field['field_type']]
+            $table->{$db_type[$field['field_type']]}
             ($field['name'])->onDelete('cascade')->$unique();
         } else {
             Helper::interrupt(
@@ -489,6 +488,7 @@ class DbHandler
         $database,
         $username,
         $password,
+        $port,
         $charset = 'utf8',
         $prefix = '',
         $collation = 'utf8_unicode_ci'
@@ -504,12 +504,14 @@ class DbHandler
         'password'  => $password,
         'charset'   => $charset,
         'prefix'    => $prefix,
+        'port'      => $port,
         ];
         if ($driver == 'mysql') {
             $conn['collation'] = $collation;
+        } else if ($driver == 'pgsql') {
+             $conn['schema'] = 'public';
         }
-        
-        
+
         \Config::set('database.connections.DYNAMIC_DB_CONFIG', $conn);
     }
     /**
@@ -524,7 +526,7 @@ class DbHandler
     private function _connector($connector_params)
     {
         $driver = $connector_params['driver'];
-        
+
         //get current database else connect to remote
         if ($driver == 'default'|| $driver == "") {
             $default_database = config('database.default');
@@ -538,14 +540,16 @@ class DbHandler
             $username = (isset($default_connector['username'])) ? $default_connector['username'] : false;
             $password = (isset($default_connector['password'])) ? $default_connector['password'] : false;
             $database = $default_connector['database'];
+            $port     = (isset($default_connector['port']))? $default_connector['port'] : false;
         } else {
             $driver = $connector_params['driver'];
             $hostname = $connector_params['hostname'];
             $database = $connector_params['database'];
             $username = $connector_params['username'];
             $password = $connector_params['password'];
+            $port     = $connection_params['port'];
         }
-        $this->db_socket($driver, $hostname, $database, $username, $password);
+        $this->db_socket($driver, $hostname, $database, $username, $password, $port);
         return true;
     }
     /**
@@ -656,7 +660,7 @@ class DbHandler
         $access_type = $payload['resource_access_right'];
         $access_state = $service
             ->check_resource_access_right_type($access_type[$db_action]);
-        
+
         if($access_state == TRUE) {
             $user_cred = Helper::get_authenticated_user_cred($access_state);
             $user_id = $user_cred['id'];

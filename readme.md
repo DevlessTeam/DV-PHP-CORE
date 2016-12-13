@@ -3,7 +3,7 @@
 ##Devless Api Engine(DAE)
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
-Versioning to this project follows the  [Sermantic Versioning Specification](http://semver.org/)
+The project versioning is based on [Sermantic Versioning Specification](http://semver.org/)
 
 Coding standards are also based on the [PSR-2-coding-style-guide](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
 
@@ -43,4 +43,4 @@ Checkout out the [docs](https://docs.devless.io)
 No contribution is too small 
 
 * We would love to hear from  you email us @ info@devless.io
-* Also forget to visit our landing page @ [devless.io](https://devless.io)
+* Also dont forget to visit our landing page @ [devless.io](https://devless.io)
