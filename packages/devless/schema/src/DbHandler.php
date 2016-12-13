@@ -461,7 +461,7 @@ class DbHandler
             ($field['name'])->default($field['default'])->onDelete('cascade')
             ->$unique();
         } elseif ($column_type == 1) {
-            $table->$db_type[$field['field_type']]
+            $table->{$db_type[$field['field_type']]}
             ($field['name'])->onDelete('cascade')->$unique();
         } else {
             Helper::interrupt(
