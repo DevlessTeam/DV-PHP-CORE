@@ -263,7 +263,7 @@ class DevlessHelper extends Helper
      */
     public static function deleteDirectory($dir)
     {
-        
+
         if (!file_exists($dir)) {
             return true;
         }
@@ -326,8 +326,8 @@ class DevlessHelper extends Helper
             $service_name[$old_service_id] = $service['name'];
             unset($service['id']);
             \DB::table('services')->insert($service);
-            $new_service_id = \DB::getPdo()->lastInsertId();
-            $service_id_map[$old_service_id] = $new_service_id ;
+            $last_service = \DB::table('services')->orderBy('id', 'desc')->first();
+            $service_id_map[$old_service_id] = $last_service->id ;
         };
         if (!isset($service_object['service'][0])) {
             $install_services($service_object['service']);

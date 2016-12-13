@@ -68,8 +68,7 @@ class DbHandler
      */
     public function store(Request $request)
     {
-        //
-        $resource = 'schema';
+
         $this->create_schema($request['resource']);
     }
     /**
@@ -509,8 +508,9 @@ class DbHandler
         ];
         if ($driver == 'mysql') {
             $conn['collation'] = $collation;
+        } else if ($driver == 'pgsql') {
+             $conn['schema'] = 'public';
         }
-
 
         \Config::set('database.connections.DYNAMIC_DB_CONFIG', $conn);
     }
