@@ -235,7 +235,7 @@ class DbHandler
         }
         $destroy_query = $destroy_query.';';
         $result = eval('return'.$destroy_query);
-        if ($result == false && $result != null) {
+        if ($result == 0 ) {
             Helper::interrupt(614, 'could not '.$task.' '.$element);
         }
         return Response::respond(636, 'The table or field has been '.$task);
