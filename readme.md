@@ -7,9 +7,9 @@ The project versioning is based on [Sermantic Versioning Specification](http://s
 
 Coding standards are also based on the [PSR-2-coding-style-guide](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
 
-**Devless API Engine(DAE)** is an opensource API engine that allows CRUD access to databases as well as execute php scripts and rules. 
+**Devless API Engine(DAE)** is an opensource API engine that allows CRUD access to databases as well as execute PHP scripts and rules. 
 
-Current implementation of the Devless API Engine is in Php and built on top of the Laravel framework. 
+Current implementation of the Devless API Engine is in PHP and built on top of the Laravel framework. 
 
 **DAE** can be used as a standalone (accessed solely via API calls) however a management console is provided to interact with the API engine.
 
