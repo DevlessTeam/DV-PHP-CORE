@@ -250,7 +250,7 @@ class Helper
     public static function get_authenticated_user_cred($access_state)
     {
         $user_token = request()->header('devless-user-token');
-
+        $user_cred = [];
         if (self::is_admin_login() && $access_state == true) {
             $admin = User::where('role', 1)->first();
             $user_cred['id'] = $admin->id;
@@ -268,7 +268,7 @@ class Helper
             } else {
                 self::interrupt(628, null, [], true);
             }
-        } else {
+        } else if(!$access_state == false) {
             self::interrupt(628, null, [], true);
         }
 

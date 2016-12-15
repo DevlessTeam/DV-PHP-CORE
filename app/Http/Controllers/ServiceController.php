@@ -422,17 +422,17 @@ class ServiceController extends Controller
      */
     public function check_resource_access_right_type($access_type)
     {
-
+        
         $is_user_login = Helper::is_admin_login();
-        if (! $is_user_login && $access_type == 0) {
+        if (! $is_user_login && $access_type == 0) { //private
             Helper::interrupt(627);
-        } //private
-        elseif ($access_type == 1) {
+        } 
+        elseif ($access_type == 1) {  //public
             return false;
-        } //public
-        elseif ($access_type == 2) {
+        }
+        elseif ($access_type == 2) { //authentication required
             return true;
-        }//authentication required
+        }
         return true;
     }
     /**
