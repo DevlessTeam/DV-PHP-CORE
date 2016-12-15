@@ -374,9 +374,12 @@ scriptEngine.logout = function() {
             })
 	}
 }
-
+var connection = $('.devless-connection')[0];
+var devless_token = connection.attributes['devless-con-token'].value;
+var devless_url   = connection.attributes['src'].value.split('js')[0]; 
 //Devless init
-var constants = { "token":"c49b49479d1572c377f912b86fb7cf69", "domain":"http://localhost:8000" }; SDK = new Devless(constants);
+var constants = { "token":devless_token, "domain":devless_url };
+SDK = new Devless(constants);
 devless.init = function() {
 	$.each(devless.components, function(index, node) {
 			devless.singleCourier = node;

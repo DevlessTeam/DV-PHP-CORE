@@ -144,17 +144,12 @@
 
 			<div class="tab-content">
                             <div class="tab-pane active" id="web">
-                                <code>
-                                    var constants = {
-                                        "token":"{{$app->token}}",
-                                        "domain":"{{URL::to('/')}}"
-                                        };
-                                        
-                                    Devless = new Devless(constants);
-
-                                    
-
-                                </code>
+                                 <pre>
+<code class="language-markup"><xmp style="word-wrap: break-word;
+">
+<script src="{{URL::to('/')}}/js/devless-sdk.js" dv-con-token="{{$app->token}}"></script>
+</xmp></code></pre>
+                                
                             </div>
                             <div class="tab-pane" id="android"><center>NA</center></div>
 			  <div class="tab-pane" id="ios"><center>NA</center></div>
