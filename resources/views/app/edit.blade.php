@@ -147,13 +147,16 @@
                                  <pre>
 <code class="language-markup"><xmp style="word-wrap: break-word;
 ">
-<script src="{{URL::to('/')}}/js/devless-sdk.js" dv-con-token="{{$app->token}}"></script>
+<script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="{{$app->token}}"></script>
+
 </xmp></code></pre>
                                 
                             </div>
                             <div class="tab-pane" id="android"><center>NA</center></div>
 			  <div class="tab-pane" id="ios"><center>NA</center></div>
-			  <div class="tab-pane" id="raw"><center>NA</center></div>
+                                  <div class="tab-pane" id="raw"><center>
+                                          Domain: 
+                              </center></div>
 			</div>
       </div>
       
