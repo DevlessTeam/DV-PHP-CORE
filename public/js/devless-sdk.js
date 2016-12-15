@@ -69,7 +69,17 @@ devless.coreLib.render = function(component, data, service, table) {
 		$.each(record, function(field, value) {
 			if(field !== 'devless_user_id') {
 					$( template ).find('.var-' + field).each(function(){
-						$(this).text(value);
+                                            $(this).text(value);
+                                            var attri = ['src', 'href'];
+                                            for(var i=0; i< attri.length; i++){
+                                                if($(this)[0][attri[i]] != undefined ){
+                                                    if($(this)[0][attri[i]].length == 0){
+                                                        $(this)[0][attri[i]] = value;
+                                                    } else{
+                                                        $(this)[0][attri[i]] = $(this)[0][attri[i]].replace('var-'+field, value);
+                                                    }
+                                                }
+                                            }
 					});
 					template = scriptEngine.bindToDelete(template, record.id, service, table);
 					template = scriptEngine.bindToUpdate(template, record.id, service, table, record);
@@ -275,7 +285,7 @@ scriptEngine.oneof = function( service, table ) {
 			devless.init();
 		});
 	}
-	devless.coreLib.form(devless.singleCourier, update)
+	devless.coreLib.form(devless.singleCourier, update);
 	return this;
 }
 scriptEngine.signup = function() {
@@ -293,7 +303,7 @@ scriptEngine.signup = function() {
 				}
 			});
 	}
-	devless.coreLib.form(devless.singleCourier, register)
+	devless.coreLib.form(devless.singleCourier, register);
 }
 
 scriptEngine.signin = function(record) {
@@ -311,7 +321,7 @@ scriptEngine.signin = function(record) {
 					}
 				});
 	}
-	devless.coreLib.form(devless.singleCourier, login)
+	devless.coreLib.form(devless.singleCourier, login);
 }
 scriptEngine.profile = function() {
 	var component = devless.singleCourier;
@@ -351,13 +361,12 @@ scriptEngine.updateProfile = function() {
 					console.log("profile update went through")
 					 window.location.href = window.location.origin + '/' + actionUrl;
 				} else {
-					console.log("profile updates failed")
 					devless.coreLib.notify('Profile could not be updated');
 				}
 
 			});
 	}
-		devless.coreLib.form(component, updateScript)
+		devless.coreLib.form(component, updateScript);
 
 }
 scriptEngine.logout = function() {
