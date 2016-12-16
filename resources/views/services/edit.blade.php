@@ -138,7 +138,7 @@
                                         <a data-toggle="tab" href="#mtab">Tables</a>
                                     </li>
                                     <li class="">
-                                        <a data-toggle="tab" onclick="set_script()" href="#jtab">Script</a>
+                                        <a data-toggle="tab" onclick="set_script()" href="#jtab">Rules</a>
                                     </li>
                                 </ul>
                             </header>
