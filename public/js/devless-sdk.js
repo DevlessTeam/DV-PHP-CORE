@@ -73,7 +73,8 @@ devless.coreLib.render = function(component, data, service, table) {
                                             var attri = ['src', 'href'];
                                             for(var i=0; i< attri.length; i++){
                                                 if($(this)[0][attri[i]] != undefined ){
-                                                    if($(this)[0][attri[i]].length == 0){
+                                                    if($(this)[0][attri[i]] == window.location.href){
+                                                        console.log("came here");
                                                         $(this)[0][attri[i]] = value;
                                                     } else{
                                                         $(this)[0][attri[i]] = $(this)[0][attri[i]].replace('var-'+field, value);
