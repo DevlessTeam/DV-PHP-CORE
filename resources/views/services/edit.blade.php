@@ -161,7 +161,7 @@
                                                 <label for="g-txt" >Database Type</label>
                                                 <select id="db-type" name="driver"  class="form-control m-b-10">
                                                     <?php $options = ['Default'=>'default','Sqlite'=>'sqlite',
-                                                        'MySql'=>'mysql','Postgres'=>'Pgsql','SQL Server'=>'sqlsrv'];?>
+                                                        'MySql'=>'mysql','Postgres'=>'pgsql','SQL Server'=>'sqlsrv'];?>
                                                     @foreach($options as $option_index => $option_value )
                                                     <option value="{{$option_value}}" @if($option_value == $service->driver)selected @endif >{{$option_index}}</option>
                                                     @endforeach
@@ -191,6 +191,13 @@
                                                 <input class="form-control" id="password" name="password" placeholder="password" value="{{$service->password}}" type="password">
                                                 @if($errors->has("password"))
                                                   <span class="help-block">{{ $errors->first("password") }}</span>
+                                                @endif
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="g-txt">Port</label>
+                                                <input class="form-control" id="port" name="port" placeholder="port" value="{{$service->port}}" type="port">
+                                                @if($errors->has("port"))
+                                                  <span class="help-block">{{ $errors->first("port") }}</span>
                                                 @endif
                                             </div>
                                             <button class="btn btn-info" type=
@@ -420,12 +427,13 @@
                   {
                       response = JSON.parse(response);
                   }
-                  status_code = response.status_code;
-                  message = response.message;
-                  payload = response.payload;
+                  var status_code = response.status_code;
+                  var message = response.message;
+                  var payload = response.payload;
 
                   if(status_code == 700){
-                      alert( payload.message);
+                      console.log(message)
+                      alert(message);
                       $('#crt-tbl').prop('disabled', false);
                   }
                   else if(status_code == 606){

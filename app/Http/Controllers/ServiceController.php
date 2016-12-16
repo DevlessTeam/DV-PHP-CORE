@@ -66,6 +66,7 @@ class ServiceController extends Controller
         $service->password = $request->input('password');
         $service->database = $request->input('database');
         $service->hostname = $request->input('hostname');
+        $service->port = $request->input('port');
         $service->script_init_vars = '$rules = null;';
         $service->driver = $request->input('driver');
         $service->resource_access_right =
@@ -85,6 +86,7 @@ class ServiceController extends Controller
                 'database' => $service->database,
                 'hostname' => $service->hostname,
                 'driver'   => $service->driver,
+                'port'     => $service->port,
             ];
         $db = new Db();
         if (!$db->check_db_connection($connection)) {
@@ -156,8 +158,9 @@ class ServiceController extends Controller
             $service->password = $request->input('password');
             $service->database = $request->input('database');
             $service->hostname = $request->input('hostname');
-            $service->driver = $request->input('driver');
-            $service->active = $request->input("active");
+            $service->driver   = $request->input('driver');
+            $service->port     = $request->input('port');
+            $service->active   = $request->input("active");
             $connection =
                 [
                     'username' => $service->username,
@@ -165,6 +168,7 @@ class ServiceController extends Controller
                     'database' => $service->database,
                     'hostname' => $service->hostname,
                     'driver'   => $service->driver,
+                    'port'     => $service->port,
                 ];
             $db = new Db();
             if (!$db->check_db_connection($connection)) {
@@ -296,7 +300,18 @@ class ServiceController extends Controller
 
                 $resource_access_right =
                   $this->_get_resource_access_right($current_service, $accessed_internally);
-
+                
+                $fields = ['id', 'service_name', 'database', 'driver', 'hostname',
+                    'username', 'password','script_init_vars', 'calls',
+                    'port','script'];
+                
+                $payload['method'] = $method;
+                $payload['params'] = $parameters;
+                $payload['resource_access_right'] = $resource_access_right;
+                foreach( $fields as $field ) {
+                    $payload[$field] = $current_service->$field;
+                }
+                
                 $payload =
                     [
                         'id'=> $current_service->id,
@@ -310,6 +325,7 @@ class ServiceController extends Controller
                         'calls' =>  $current_service->calls,
                         'resource_access_right' =>$resource_access_right,
                         'script' => $current_service->script,
+                        'port'   => $current_service->port,
                         'method' => $method,
                         'params' => $parameters,
                     ];

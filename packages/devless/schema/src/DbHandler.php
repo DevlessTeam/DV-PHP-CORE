@@ -542,12 +542,12 @@ class DbHandler
             $database = $default_connector['database'];
             $port     = (isset($default_connector['port']))? $default_connector['port'] : false;
         } else {
-            $driver = $connector_params['driver'];
+            $driver   = $connector_params['driver'];
             $hostname = $connector_params['hostname'];
             $database = $connector_params['database'];
             $username = $connector_params['username'];
             $password = $connector_params['password'];
-            $port     = $connection_params['port'];
+            $port     = $connector_params['port'];
         }
         $this->db_socket($driver, $hostname, $database, $username, $password, $port);
         return true;
