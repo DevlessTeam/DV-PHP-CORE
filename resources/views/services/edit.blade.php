@@ -132,20 +132,20 @@
                             <header class="panel-heading tab-dark ">
                                 <ul class="nav nav-tabs nav-justified">
                                     <li class="active">
-                                        <a data-toggle="tab" href="#jus">Database</a>
-                                    </li>
-                                    <li class="">
                                         <a data-toggle="tab" href="#mtab">Tables</a>
                                     </li>
                                     <li class="">
                                         <a data-toggle="tab" onclick="set_script()" href="#jtab">Rules</a>
+                                    </li>
+                                    <li class="">
+                                        <a data-toggle="tab" href="#jus">Remote DB Config</a>
                                     </li>
                                 </ul>
                             </header>
 
                             <div class="panel-body">
                                 <div class="tab-content">
-                                    <div class="tab-pane active" id="jus">
+                                    <div class="tab-pane" id="jus">
                                         <form role="form">
                                             <div class="form-group">
                                                 <label for="g-title">Name</label>
@@ -204,7 +204,7 @@
                                             "submit">Update</button>
                                         </form>
                                     </div>
-                                    <div class="tab-pane" id="mtab">
+                                    <div class="tab-pane active " id="mtab">
                                                 <section class="panel">
                     <header class="panel-heading head-border">
 
