@@ -301,17 +301,6 @@ class ServiceController extends Controller
                 $resource_access_right =
                   $this->_get_resource_access_right($current_service, $accessed_internally);
                 
-                $fields = ['id', 'service_name', 'database', 'driver', 'hostname',
-                    'username', 'password','script_init_vars', 'calls',
-                    'port','script'];
-                
-                $payload['method'] = $method;
-                $payload['params'] = $parameters;
-                $payload['resource_access_right'] = $resource_access_right;
-                foreach( $fields as $field ) {
-                    $payload[$field] = $current_service->$field;
-                }
-                
                 $payload =
                     [
                         'id'=> $current_service->id,

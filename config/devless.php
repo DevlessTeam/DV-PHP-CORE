@@ -24,6 +24,7 @@ $devless_object_keys = [
     'hostname'     =>  '',
     'username'     =>  '',
     'password'     =>  '',
+    'port'         =>  null,
 ];
 
 foreach ($devless_object_keys as $key => $value)

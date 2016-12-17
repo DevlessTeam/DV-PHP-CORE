@@ -251,6 +251,10 @@ scriptEngine.oneto = function(service, table) {
 }
 
 scriptEngine.update = function(component) {
+        $('<input>').attr({
+            type: 'hidden',
+            name: 'id'
+        }).appendTo(devless.singleCourier.element);
 	return this;
 }
 scriptEngine.bindToUpdate = function(template, id, service, table, data) {
