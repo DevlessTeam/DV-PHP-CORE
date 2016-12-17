@@ -53,6 +53,7 @@
                 @foreach($table_meta as $table_data)
                 <option value="{{$table_data['name']}}">{{$table_data['name']}}</option>
                 @endforeach
+                <option value="______________devless_users">DevLess User</option>
             </select>
             </div>
         </div>

@@ -360,19 +360,32 @@ class DbHandler
         hasTable($service_name.'_'.$table_name)) {
             \Schema::connection('DYNAMIC_DB_CONFIG')->
             create($table_name, function (Blueprint
-        $table) use ($new_payload, $db_type, $service_name) {
+        $table) use (&$new_payload, $db_type, $service_name) {
                 //default field
                 $table->increments('id');
                 $table->integer('devless_user_id');
 
                 //generate remaining fields
+                $count = 0;
                 foreach ($new_payload['field'] as $field) {
                     $field['ref_table'] = $service_name.'_'.$field['ref_table'];
                     $field['field_type'] = strtolower($field['field_type']);
-                    //checks if fieldType and references exist
+                    
+                    //check if users table is being referenced 
+                    if( $field['field_type'] == 'reference' &&
+                            strpos($field['ref_table'], '______________devless_users')
+                            == true) {
+                        
+                            $field['ref_table'] = 'users';
+                        
+                            $new_payload['field'][$count]['ref_table'] = 'users';
+                            $new_payload['field'][$count]['name'] = 'users_id';
+                        }
+                            
                     $this->field_type_exist($field);
                     //generate columns
                     $this->column_generator($field, $table, $db_type);
+                    $count++;
                 }
                 //store table_meta details
             });
@@ -393,6 +406,7 @@ class DbHandler
      */
     public function field_type_exist($field)
     {
+       
         //check if soft data type has equivalent db type
         if (!isset($this->db_types[$field['field_type']])) {
             Helper::interrupt(600, $field['field_type'].' does not exist');
@@ -570,12 +584,19 @@ class DbHandler
         foreach ($results as $eachResult) {
                    $eachResult->related = [];
                    array_walk($tables, function ($table) use ($eachResult, &$output, $service) {
-                       $refField = $service.'_'.$table.'_id';
+                       $refTable = ($table != 'users')? $service.'_'.$table : 'users';
+                       $refField = $refTable.'_id';
                        $referenceId = (isset($eachResult->$refField))? $eachResult->$refField:
                                     Helper::interrupt(640);
-                       $relatedData = \DB::table($service.'_'.$table)
-                           ->where('id', $referenceId)
-                           ->get();
+                       $relatedData = ($table != 'users')?  \DB::table($refTable)->where('id', $referenceId)
+                                                                ->get(): \DB::table($refTable)->where('id', $referenceId)
+                                                                ->select('username','first_name', 'last_name', 'email','phone_number',
+                                                                        'status', 'phone_number')
+                                                                ->get();
+                           
+                           
+                          
+                       
                        $eachResult->related[$table] = $relatedData;
                    });
                     array_push($output, $eachResult);
