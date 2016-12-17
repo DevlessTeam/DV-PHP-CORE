@@ -456,7 +456,9 @@ class DevlessHelper extends Helper
         if ($token = Helper::get_authenticated_user_cred(true)) {
             $db = new DB();
             $user_data = $db::table('users')->where('id', $token['id'])
-                ->select('id', 'username', 'email', 'phone_number', 'first_name', 'last_name')
+                ->select('id', 'username', 'email', 'phone_number', 
+                        'first_name', 'last_name', 'status', 'created_at',
+                        'updated_at', 'remember_token')
                 ->first();
 
 
