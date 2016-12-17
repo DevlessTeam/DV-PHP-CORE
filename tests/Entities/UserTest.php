@@ -1,7 +1,6 @@
 <?php
 
 use App\User;
-use Illuminate\Support\Facades\Hash;
 
 class UserTest extends TestCase
 {
@@ -37,10 +36,12 @@ class UserTest extends TestCase
      */
     public function it_should_return_the_casted_role_and_status()
     {
+        $user = factory(User::class)->create(['role' => 0, 'status' => 1]);
+
+        $this->assertEquals($user->role, false);
+        $this->assertEquals($user->status, true);
         $this->assertEquals($this->users->first()->role, true);
-        $this->assertEquals($this->users->last()->role, true);
         $this->assertEquals($this->users->first()->status, false);
-        $this->assertEquals($this->users->last()->status, false);
     }
 
     /**

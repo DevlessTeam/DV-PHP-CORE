@@ -1,7 +1,5 @@
 <?php
 
-use App\User;
-
 class SetupTest extends TestCase
 {
     public function setUp()
@@ -9,14 +7,12 @@ class SetupTest extends TestCase
         parent::setUp();
 
         $this->artisan('migrate');
-
-        factory(User::class)->create();
     }
 
     /**
      * @test
      */
-    public function it_should_create_a_user_with_an_app()
+    public function it_should_create_a_user_with_a_service()
     {
         //setup Devless
         $this->visit('/setup')

@@ -47,7 +47,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         } catch (Exception $e) {
             //silence is golden
         }
-        
+
         parent::tearDown();
     }
 }

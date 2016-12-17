@@ -1,8 +1,5 @@
 <?php
 
-use App\User;
-use App\App;
-
 class ApiTest extends TestCase
 {
     private $apiUrl;
@@ -20,16 +17,11 @@ class ApiTest extends TestCase
         $this->artisan('migrate');
 
         $this->apiUrl = '/api/v1/';
-
         $this->subUrl = $this->apiUrl . 'service/';
-
         $this->dbUrl = 'db/';
-
         $this->scriptUrl = '/script/';
 
-        factory(App::class)->create();
-
-        factory(User::class)->create();
+        $this->prepare();
     }
 
     /**
@@ -93,13 +85,12 @@ class ApiTest extends TestCase
             ->seeJsonEquals(['message' => 'Created table successfully',
                 'payload' => [], 'status_code' => 606]);
 
-
-        //to be moved to testAddData
+        // to be moved to testAddData
         $url = $this->subUrl;
         $dbAction = $this->dbUrl;
         $serviceName = $this->serviceName;
 
-        $schemaStruct = '{  
+        $schemaStruct = '{
             "resource":[
                 {
                     "name":"' . $this->serviceTable . '",
@@ -140,20 +131,33 @@ class ApiTest extends TestCase
         $this->json('DELETE', $url . $serviceName . '/' . $dbAction, $deleteObj)
             ->seeJson(['message' => 'dropped table successfully',
                 'payload' => [], 'status_code' => 613]);
-
     }
 
-    public function testAddData()
+    private function prepare()
     {
-        //silence is golden
-    }
+        //setup Devless
+        $this->visit('/setup')
+            ->type('test@test.com', 'email')
+            ->type('eddymens', 'username')
+            ->type('password', 'password')
+            ->type('password', 'password_confirmation')
+            ->type('test', 'app_description')
+            ->type('appName', 'app_name')
+            ->press('Create App')
+            ->see('Setup successful. Welcome to Devless');
 
-    public function testGetData()
-    {
-        //silence is golden
-    }
+        //login to Devless
+        $this->click('Logout')
+            ->type('password', 'password')
+            ->type('test@test.com', 'email')
+            ->press('Login')
+            ->see('Welcome Back');
 
-    public function testDestroy()
-    {
+        //create service
+        $this->visit('/services/create')
+            ->see('ADD SERVICE')
+            ->type($this->serviceName, 'name')
+            ->press('Create')
+            ->see('Service Created Successfully');
     }
 }
