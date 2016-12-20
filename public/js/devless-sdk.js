@@ -90,8 +90,7 @@ devless.coreLib.render = function(component, data, service, table) {
 		$( template )[0].style.display = 'block';
                 
                 var screenPainter = function(field, value){
-                    console.log(field)
-                    if(field !== 'devless_user_id') {
+                        if(field !== 'devless_user_id') {
                                                  $( template ).find('.var-' + field).each(function(){
                                                      $(this).text(value);
                                                      var attri = ['src', 'href'];
@@ -184,7 +183,6 @@ devless.scriptBuilder = function(queries) {
                     query[i] = devless.coreLib.getParams(query[i])||query[i]
                 }
                 query = query.join(':');
-
                 script = query.replace(/-/g, "().")+"()";
 		$.each(script.split('.'), function(index, methods){
 			methods = methods.replace(':', '(');
@@ -243,6 +241,8 @@ devless.findComponent = function( key, searchValue ) {
 devless.components = devless.getComponents(devless.tags());
 
 scriptEngine = {}
+SDK.queryParams = {};
+SDK.queryParams.related = '*';
 scriptEngine.dv = function() {
 	return this;
 }
@@ -272,7 +272,8 @@ scriptEngine.get = function(service, table) {
 
 scriptEngine.all = function(service, table) {
 	var reference = devless.singleCourier;
-	SDK.queryData(service, table, {related:'*'}, function(response) {
+        SDK.queryParams;
+        SDK.queryData(service, table, SDK.queryParams, function(response) {
                         devless.coreLib.render(reference, response.payload.results, service, table);
 			devless.coreLib.notify(response.message);
 	});
@@ -338,6 +339,11 @@ scriptEngine.oneof = function( service, table ) {
 	}
 	devless.coreLib.form(devless.singleCourier, update);
 	return this;
+}
+scriptEngine.where = function(key, value){
+    SDK.queryParams.where = [];
+    SDK.queryParams.where.push(key+','+value);
+    return this;
 }
 scriptEngine.signup = function() {
 	var actionUrl = $(devless.singleCourier.element).attr('action');
