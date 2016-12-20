@@ -92,7 +92,10 @@ devless.coreLib.render = function(component, data, service, table) {
                 var screenPainter = function(field, value){
                         if(field !== 'devless_user_id') {
                                                  $( template ).find('.var-' + field).each(function(){
-                                                     $(this).text(value);
+                                                     if($(this)[0].tagName != 'IMG' && $(this)[0].tagName != 'A') {
+                                                         console.log($(this).text(value))
+                                                     }
+                                                        
                                                      var attri = ['src', 'href'];
                                                      for(var i=0; i< attri.length; i++){
                                                          if($(this)[0][attri[i]] != undefined ){
