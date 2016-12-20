@@ -88,28 +88,42 @@ devless.coreLib.render = function(component, data, service, table) {
 		var template = $( reference ).find('.devless-wrapper-template')[0].cloneNode(true, true);
 		$( template )[0].className = 'devless-wrapper-'+uniqueId;
 		$( template )[0].style.display = 'block';
-                var getUrl = window.location;
-                var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
                 
-                $.each(record, function(field, value) {
-			if(field !== 'devless_user_id') {
-					$( template ).find('.var-' + field).each(function(){
-                                            $(this).text(value);
-                                            var attri = ['src', 'href'];
-                                            for(var i=0; i< attri.length; i++){
-                                                if($(this)[0][attri[i]] != undefined ){
-                                                    if($(this)[0][attri[i]] == window.location.href.replace('#', '') ){
-                                                        $(this)[0][attri[i]] = value;
-                                                    } else{
-                                                        $(this)[0][attri[i]] = $(this)[0][attri[i]].replace('var-'+field, value);
-                                                    }
-                                                }
-                                            }
-					});
-					template = scriptEngine.bindToDelete(template, record.id, service, table);
-					template = scriptEngine.bindToUpdate(template, record.id, service, table, record);
-			}
-		});
+                var screenPainter = function(field, value){
+                    console.log(field)
+                    if(field !== 'devless_user_id') {
+                                                 $( template ).find('.var-' + field).each(function(){
+                                                     $(this).text(value);
+                                                     var attri = ['src', 'href'];
+                                                     for(var i=0; i< attri.length; i++){
+                                                         if($(this)[0][attri[i]] != undefined ){
+                                                             if($(this)[0][attri[i]] == window.location.href.replace('#', '') ){
+                                                                 $(this)[0][attri[i]] = value;
+                                                             } else{
+                                                                 $(this)[0][attri[i]] = $(this)[0][attri[i]].replace('var-'+field, value);
+                                                             }
+                                                         }
+                                                     }
+                                                 });
+                                                 template = scriptEngine.bindToDelete(template, record.id, service, table);
+                                                 template = scriptEngine.bindToUpdate(template, record.id, service, table, record);
+                             }
+                }
+               
+            
+                $.each(record, function(field, value) { 
+                     screenPainter(field, value)
+                 });
+                    
+                $.each(record.related, function(prefix, data){
+                        $.each(data[0], function(field, value){
+                            screenPainter(prefix+'-'+field, value);
+                        })
+                })
+
+                
+              
+		
 		$( reference ).prepend( $( template )[0] );
 	})
 
@@ -264,6 +278,8 @@ scriptEngine.all = function(service, table) {
 	});
 	return this;
 }
+
+
 
 scriptEngine.add = function() {
 	return this;
