@@ -38,7 +38,14 @@ return e.returnedInstance="",l.call(o,n,t,"POST",function(e){e=JSON.parse(e),631
 d.prototype={queryData:s,addData:t,updateData:n,deleteData:o,getToken:r,setToken:a,call:i},d.init=function(e){var s=this
 s.devless_token=e.token,s.devless_instance_url=e.domain},d.init.prototype=d.prototype,e.Devless=e.DV=d}(window);
 
-devless = {}
+var connection = $('.devless-connection')[0];
+var devless_token = connection.attributes['devless-con-token'].value;
+var devless_url   = connection.attributes['src'].value.split('/js/')[0]; 
+//Devless init
+var constants = { "token":devless_token, "domain":devless_url };
+SDK = new Devless(constants);
+
+var devless = {}
 devless.singleCourier = '';
 devless.components = [];
 devless.coreLib = {};
@@ -49,6 +56,21 @@ devless.coreLib.notify = function(message) {
 		this.style.display = 'block';
 	})
 }
+
+devless.coreLib.getParams = function(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
 
 devless.coreLib.render = function(component, data, service, table) {
 	reference = component.element;
@@ -66,15 +88,17 @@ devless.coreLib.render = function(component, data, service, table) {
 		var template = $( reference ).find('.devless-wrapper-template')[0].cloneNode(true, true);
 		$( template )[0].className = 'devless-wrapper-'+uniqueId;
 		$( template )[0].style.display = 'block';
-		$.each(record, function(field, value) {
+                var getUrl = window.location;
+                var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+                
+                $.each(record, function(field, value) {
 			if(field !== 'devless_user_id') {
 					$( template ).find('.var-' + field).each(function(){
                                             $(this).text(value);
                                             var attri = ['src', 'href'];
                                             for(var i=0; i< attri.length; i++){
                                                 if($(this)[0][attri[i]] != undefined ){
-                                                    if($(this)[0][attri[i]] == window.location.href){
-                                                        console.log("came here");
+                                                    if($(this)[0][attri[i]] == window.location.href.replace('#', '') ){
                                                         $(this)[0][attri[i]] = value;
                                                     } else{
                                                         $(this)[0][attri[i]] = $(this)[0][attri[i]].replace('var-'+field, value);
@@ -141,8 +165,13 @@ devless.scriptBuilder = function(queries) {
 	var executableMethod = '';
 	var executableScript = [];
 	$.each(queries, function(index, query){
+                query = query.split(':');
+                for(var i=1; i< query.length; i++) {
+                    query[i] = devless.coreLib.getParams(query[i])||query[i]
+                }
+                query = query.join(':');
 
-		script = query.replace(/-/g, "().")+"()";
+                script = query.replace(/-/g, "().")+"()";
 		$.each(script.split('.'), function(index, methods){
 			methods = methods.replace(':', '(');
 			methods = methods.replace(/:/g, ",");
@@ -159,6 +188,7 @@ devless.scriptBuilder = function(queries) {
 		executableScript.push(executableMethod.slice(0, -1));
 		executableMethod = '';
 	});
+        
 	return executableScript;
 
 }
@@ -228,8 +258,8 @@ scriptEngine.get = function(service, table) {
 
 scriptEngine.all = function(service, table) {
 	var reference = devless.singleCourier;
-	SDK.queryData(service, table, {}, function(response) {
-			devless.coreLib.render(reference, response.payload.results, service, table);
+	SDK.queryData(service, table, {related:'*'}, function(response) {
+                        devless.coreLib.render(reference, response.payload.results, service, table);
 			devless.coreLib.notify(response.message);
 	});
 	return this;
@@ -388,12 +418,6 @@ scriptEngine.logout = function() {
             })
 	}
 }
-var connection = $('.devless-connection')[0];
-var devless_token = connection.attributes['devless-con-token'].value;
-var devless_url   = connection.attributes['src'].value.split('/js/')[0]; 
-//Devless init
-var constants = { "token":devless_token, "domain":devless_url };
-SDK = new Devless(constants);
 
 devless.init = function() {
 	$.each(devless.components, function(index, node) {

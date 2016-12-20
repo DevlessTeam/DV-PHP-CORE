@@ -1,3 +1,4 @@
+<?php $app_state = ''?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
