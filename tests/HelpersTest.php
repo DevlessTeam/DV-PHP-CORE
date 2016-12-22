@@ -1,9 +1,21 @@
 <?php
 
 use App\Helpers\Helper;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 
-class HelpersTest extends PHPUnit_Framework_TestCase
+class HelpersTest extends TestCase
 {
+    private $user;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->user = factory(User::class)->create();
+        Auth::login($this->user);
+    }
+
     /**
      * Message stack test.
      *
@@ -50,7 +62,7 @@ class HelpersTest extends PHPUnit_Framework_TestCase
         $invalidSample =
             [
                 'boolean'    => 'true',
-                'decimals'    => 'string instead of decimal',
+                'decimals'   => 'string instead of decimal',
                 'email'      => 'edmonddevless.io',
                 'integer'    => 'string here',
                 'password'   => true,
@@ -75,9 +87,7 @@ class HelpersTest extends PHPUnit_Framework_TestCase
             $output = Helper::field_check($invalidSample[$fieldType], $fieldType);
             $type   = gettype($output);
             $this->assertEquals('object', $type);
-
         }
-
     }
 
 
@@ -99,8 +109,6 @@ class HelpersTest extends PHPUnit_Framework_TestCase
         unset($_SERVER['QUERY_STRING']);
         $output = Helper::query_string();
         $this->assertEquals('', $output);
-
-
     }
 
 
@@ -116,11 +124,7 @@ class HelpersTest extends PHPUnit_Framework_TestCase
         $formattedSessionTime = date('Y-m-d',strtotime($sessionTime));
 
         $this->assertEquals(date('Y-m-d'), $formattedSessionTime);
-
-
     }
-
-
 }
 
 
