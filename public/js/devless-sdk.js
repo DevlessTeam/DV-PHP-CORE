@@ -129,19 +129,17 @@ devless.coreLib.render = function(component, data, service, table) {
 		
 		_jql( reference ).prepend( _jql( template )[0] );
 	})
-
-	// if(response.payload.results ==undefined ) { _jql(reference).find('[class="devless-wrapper-'+uniqueId+'"]')[0].remove()}
+    if(data.length <= 0) { _jql(reference).find('[class="devless-wrapper-'+uniqueId+'"]')[0].remove()}
 
 }
 
 devless.coreLib.form = function(component, callback) {
 	var reference = component.element;
 	var data = {};
-	var formElements = {}
+	var numFields = 0;
 	_jql( reference ).submit(function( event ) {
 		event.preventDefault();
 		var inputs = this.elements
-		var tempVar = '';
 		_jql.each(inputs, function(index, element){
 			if(element.name == ""){return;}
 			if((element.type == "radio"||element.type == "checkbox") && !element.checked){return;}
@@ -149,18 +147,31 @@ devless.coreLib.form = function(component, callback) {
 				var reader = new FileReader();
 				reader.addEventListener('load', function(){
 					 data[element.name] = reader.result;
+					 numFields++;
 				}, false)
-				 reader.onerror = function(e) {
+                reader.onerror = function(e) {
 					console.error(e);
 				};
 				reader.readAsDataURL(element.files[0]);
 			}
 			if(element.type !== 'file') {
 				data[element.name] = element.value;
+				numFields++;
 			}
 			element.value = '';
 		});
-		callback(data);
+        if(numFields == inputs.length-1){
+            callback(data);
+        } else {
+            var intvl = setInterval(function() {
+                if (numFields == inputs.length-1) {
+                    clearInterval(intvl);
+                    callback(data);
+                }
+            }, 1);
+
+        }
+
 	});
 }
 //get all tags
@@ -269,17 +280,17 @@ scriptEngine.delete = function() {
 	return this;
 }
 
-scriptEngine.get = function(service, table) {
+scriptEngine.get = function() {
 
 	return this;
 }
 
 scriptEngine.all = function(service, table) {
 	var reference = devless.singleCourier;
-        SDK.queryParams;
         SDK.queryData(service, table, SDK.queryParams, function(response) {
                         devless.coreLib.render(reference, response.payload.results, service, table);
-			devless.coreLib.notify(response.message);
+                        (response.status_code != 625)?devless.coreLib.notify(response.message):'';
+			
 	});
 	return this;
 }
@@ -290,8 +301,10 @@ scriptEngine.add = function() {
 	return this;
 }
 scriptEngine.oneto = function(service, table) {
-	persist = function(data) {
-		SDK.addData(service, table, data, function(response){
+	persist = function(storeData) {
+	    datum = storeData;
+	    SDK.addData(service, table, storeData, function(response){
+	        console.log(datum);
 			devless.coreLib.notify(response.message);
 			devless.init();
 		})
@@ -301,7 +314,7 @@ scriptEngine.oneto = function(service, table) {
 	return this;
 }
 
-scriptEngine.update = function(component) {
+scriptEngine.update = function() {
         _jql('<input>').attr({
             type: 'hidden',
             name: 'id'
@@ -453,7 +466,7 @@ devless.init = function() {
 					eval('scriptEngine.'+script);
 				}
 				catch (e) {
-						console.error(node.queries[index]+` could not be resolved to an executable script `+ e)
+						console.error(node.queries[index]+` could not be resolved to an executable script `+ e);
 				}
 			});
 	});
