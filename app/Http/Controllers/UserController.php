@@ -30,8 +30,8 @@ class UserController extends Controller
     public function post_login(Request $request)
     {
         $loginCredentials = [
-        'email'    => $request->input('email'),
-        'password' => $request->input('password'),
+            'email'    => $request->input('email'),
+            'password' => $request->input('password'),
         ];
 
         $user = DB::table('users')->where('email', $request->input('email'))->first();
@@ -57,26 +57,29 @@ class UserController extends Controller
 
     public function get_register(Request $request)
     {
+        if($app_object = DB::table('apps')->first()) {
+            return redirect('/');
+        }
         $app = [
-        'app_key'   => str_random(40),
-        'app_token' => md5(uniqid(1, true)),
-         ];
+            'app_key'   => str_random(40),
+            'app_token' => md5(uniqid(1, true)),
+        ];
 
-         if($params = helper::query_string()) {
-             if(isset($params['url_install']) && isset($params['url_install'])&&
-                     isset($params['username']) && isset($params['password']) &&
-                     isset($params['app_name']) && isset($params['email']) && !(\DB::table('apps')->get()) ){
+        if($params = helper::query_string()) {
+            if(isset($params['url_install']) && isset($params['url_install'])&&
+                isset($params['username']) && isset($params['password']) &&
+                isset($params['app_name']) && isset($params['email']) && !(\DB::table('apps')->get()) ){
                 $username = $params['username'][0];
                 $email = $params['email'][0];
                 $password = $params['password'][0];
                 $app_name = $params['app_name'][0];
                 $app_token = md5(uniqid(1, true));
                 $app_description = (isset($params['app_description']))?
-                        $params['app_description'][0]:'';
+                    $params['app_description'][0]:'';
                 return $this->registrer($request, $username, $email, $password,
-                        $app_name, $app_token, $app_description );
-             }
-         }
+                    $app_name, $app_token, $app_description );
+            }
+        }
 
         return view('auth.create', compact('app'));
     }
@@ -84,12 +87,12 @@ class UserController extends Controller
     public function post_register(Request $request)
     {
         $this->validate($request, [
-        'username'              => 'required|max:255|unique:users',
-        'email'                 => 'required|email|max:255|unique:users',
-        'password'              => 'required|confirmed|min:6',
-        'password_confirmation' => 'required|min:6',
-        'app_name'              => 'required|max:255',
-        'app_description'       => 'required|max:255',
+            'username'              => 'required|max:255|unique:users',
+            'email'                 => 'required|email|max:255|unique:users',
+            'password'              => 'required|confirmed|min:6',
+            'password_confirmation' => 'required|min:6',
+            'app_name'              => 'required|max:255',
+            'app_description'       => 'required|max:255',
         ]);
 
         $username = $request->input('username');
@@ -113,15 +116,15 @@ class UserController extends Controller
      * @return type
      */
     public function registrer
-            (
-            Request $request,
-            $username,
-            $email,
-            $password,
-            $app_name,
-            $app_token,
-            $app_description = ''
-            ) {
+    (
+        Request $request,
+        $username,
+        $email,
+        $password,
+        $app_name,
+        $app_token,
+        $app_description = ''
+    ) {
         $user = new User();
         $user->username = $username;
         $user->email = $email;
