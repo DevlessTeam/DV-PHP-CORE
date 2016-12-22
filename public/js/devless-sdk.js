@@ -302,10 +302,8 @@ scriptEngine.add = function() {
 }
 scriptEngine.oneto = function(service, table) {
 	persist = function(storeData) {
-	    datum = storeData;
 	    SDK.addData(service, table, storeData, function(response){
-	        console.log(datum);
-			devless.coreLib.notify(response.message);
+	    	devless.coreLib.notify(response.message);
 			devless.init();
 		})
 
