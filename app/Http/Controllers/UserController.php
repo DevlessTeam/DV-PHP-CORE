@@ -57,6 +57,9 @@ class UserController extends Controller
 
     public function get_register(Request $request)
     {
+        if($app_object = DB::table('apps')->first()) {
+            return redirect('/');
+        }
         $app = [
         'app_key'   => str_random(40),
         'app_token' => md5(uniqid(1, true)),
