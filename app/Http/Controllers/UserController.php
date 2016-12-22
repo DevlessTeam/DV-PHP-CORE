@@ -10,6 +10,9 @@ use Session;
 use Illuminate\Http\Request;
 use App\Helpers\DevlessHelper as DLH;
 use App\Helpers\Helper as helper;
+use App\Jobs\RegisterUserJob;
+use App\Http\Requests\RegisterUserRequest;
+
 class UserController extends Controller
 {
     // TODO: Session store needs to authenticate with a session table for security
@@ -81,68 +84,18 @@ class UserController extends Controller
         return view('auth.create', compact('app'));
     }
 
-    public function post_register(Request $request)
+    public function post_register(RegisterUserRequest $request)
     {
-        $this->validate($request, [
-        'username'              => 'required|max:255|unique:users',
-        'email'                 => 'required|email|max:255|unique:users',
-        'password'              => 'required|confirmed|min:6',
-        'password_confirmation' => 'required|min:6',
-        'app_name'              => 'required|max:255',
-        'app_description'       => 'required|max:255',
-        ]);
-
-        $username = $request->input('username');
-        $email = $request->input('email');
-        $password = $request->input('password');
-        $app_name = $request->input('app_name');
-        $app_token = md5(uniqid(1, true));
-        $app_description = $request->input('app_description');
-        return $this->registrer($request, $username, $email, $password, $app_name, $app_token, $app_description );
-
-    }
-
-    /**
-     * registrer responsible for registring new apps
-     * @param type $username
-     * @param type $email
-     * @param type $password
-     * @param type $app_name
-     * @param type $app_token
-     * @param type $app_description
-     * @return type
-     */
-    public function registrer
-            (
-            Request $request,
-            $username,
-            $email,
-            $password,
-            $app_name,
-            $app_token,
-            $app_description = ''
-            ) {
-        $user = new User();
-        $user->username = $username;
-        $user->email = $email;
-        $user->password = bcrypt($password);
-        $user->role = 1;
-        $user->status = 0;
-
-
-        $app = new App();
-        $app->name = $app_name;
-        $app->description = $app_description;
-        $app->token = $app_token;
-
-        if ($user->save() && $app->save()) {
+        try {
+            $user = $this->dispatch(new RegisterUserJob($request));
             $request->session()->put('user', $user->id);
             DLH::flash('Setup successful. Welcome to Devless', 'success');
 
             return redirect('services');
-        }
+        } catch (\Exception $e) {
+            DLH::flash('Error setting up', 'error');
 
-        return back()->withInput();
-        DLH::flash('Error setting up', 'error');
+            return back()->withInput();
+        }
     }
 }

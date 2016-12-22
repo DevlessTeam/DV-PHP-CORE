@@ -1,6 +1,7 @@
 <?php
 
 use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserTest extends TestCase
 {
@@ -42,6 +43,16 @@ class UserTest extends TestCase
         $this->assertEquals($user->status, true);
         $this->assertEquals($this->users->first()->role, true);
         $this->assertEquals($this->users->first()->status, false);
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_hash_password()
+    {
+        $user = factory(User::class)->create(['password' => 'userpassword']);
+
+        $this->assertTrue(Hash::check('userpassword', $user->password));
     }
 
     /**
