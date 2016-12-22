@@ -104,26 +104,26 @@ class ViewController extends Controller
     public function create_views($service_name, $type)
     {
         switch ($type) {
-            case 'init':
-                $source_path =  base_path().'/resources/views/service_template';
-                $destination_path = config('devless')['views_directory'].$service_name;
+        case 'init':
+            $source_path =  base_path().'/resources/views/service_template';
+            $destination_path = config('devless')['views_directory'].$service_name;
                 
-                if (file_exists($destination_path)) {
-                    DevlessHelper::rmdir_recursive($destination_path);
-                }
+            if (file_exists($destination_path)) {
+                DevlessHelper::rmdir_recursive($destination_path);
+            }
                 
-                if (mkdir($destination_path)) {
-                    $copied_to_destination =  DevlessHelper::recurse_copy($source_path, $destination_path);
+            if (mkdir($destination_path)) {
+                $copied_to_destination =  DevlessHelper::recurse_copy($source_path, $destination_path);
 
-                    $payload['serviceName'] = $service_name;
-                    $exec_success = DevlessHelper::execOnViewsCreation($payload);
+                $payload['serviceName'] = $service_name;
+                $exec_success = DevlessHelper::execOnViewsCreation($payload);
 
-                    return ($exec_success && $copied_to_destination);
-                } else {
-                    return false;
-                }
-            default:
+                return ($exec_success && $copied_to_destination);
+            } else {
                 return false;
+            }
+        default:
+            return false;
         }
     }
 

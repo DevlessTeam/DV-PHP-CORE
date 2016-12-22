@@ -71,7 +71,8 @@ class Rules
 
     /**
      * if equivalence
-     * @param $assert
+     *
+     * @param  $assert
      * @return $this
      */
     public function whenever($assert)
@@ -87,7 +88,8 @@ class Rules
 
     /**
      * elseif equivalence
-     * @param $assert
+     *
+     * @param  $assert
      * @return $this
      */
     public function elseWhenever($assert)
@@ -103,6 +105,7 @@ class Rules
 
     /**
      * else equivalence
+     *
      * @return $this
      */
     public function otherwise()
@@ -140,9 +143,10 @@ class Rules
 
     /**
      * Call on an ActionClass
-     * @param $service
-     * @param $method
-     * @param null $params
+     *
+     * @param  $service
+     * @param  $method
+     * @param  null    $params
      * @return mixed|string
      */
     public function run($service, $method, $params = null)
@@ -163,7 +167,8 @@ class Rules
 
     /**
      * Execute callback functions with the chain
-     * @param $evaluator
+     *
+     * @param  $evaluator
      * @return Rules|string
      */
     public function executor($evaluator)
@@ -186,9 +191,10 @@ class Rules
         } elseif ($otherwise && !$this->called['whenever']) {
             $msg = 'You cannot call on otherwise without calling on whenever';
             $error($msg);
-        } elseif ((($whenever && !$this->answered) && $this->called['whenever']) ||
-            (($elseWhenever && !$this->answered) && $this->called['whenever'] && $this->called['elseWhenever']) ||
-            ($otherwise && !$this->answered && ( $this->called['whenever'] || $this->called['elseWhenever'] ))) {
+        } elseif ((($whenever && !$this->answered) && $this->called['whenever']) 
+            || (($elseWhenever && !$this->answered) && $this->called['whenever'] && $this->called['elseWhenever']) 
+            || ($otherwise && !$this->answered && ( $this->called['whenever'] || $this->called['elseWhenever'] ))
+        ) {
             $this->results =  $evaluator();
         }
 

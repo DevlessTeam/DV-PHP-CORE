@@ -66,9 +66,10 @@ class UserController extends Controller
         ];
 
         if($params = helper::query_string()) {
-            if(isset($params['url_install']) && isset($params['url_install'])&&
-                isset($params['username']) && isset($params['password']) &&
-                isset($params['app_name']) && isset($params['email']) && !(\DB::table('apps')->get()) ){
+            if(isset($params['url_install']) && isset($params['url_install'])
+                && isset($params['username']) && isset($params['password']) 
+                && isset($params['app_name']) && isset($params['email']) && !(\DB::table('apps')->get()) 
+            ) {
                 $username = $params['username'][0];
                 $email = $params['email'][0];
                 $password = $params['password'][0];
@@ -76,8 +77,10 @@ class UserController extends Controller
                 $app_token = md5(uniqid(1, true));
                 $app_description = (isset($params['app_description']))?
                     $params['app_description'][0]:'';
-                return $this->registrer($request, $username, $email, $password,
-                    $app_name, $app_token, $app_description );
+                return $this->registrer(
+                    $request, $username, $email, $password,
+                    $app_name, $app_token, $app_description 
+                );
             }
         }
 
@@ -86,14 +89,16 @@ class UserController extends Controller
 
     public function post_register(Request $request)
     {
-        $this->validate($request, [
+        $this->validate(
+            $request, [
             'username'              => 'required|max:255|unique:users',
             'email'                 => 'required|email|max:255|unique:users',
             'password'              => 'required|confirmed|min:6',
             'password_confirmation' => 'required|min:6',
             'app_name'              => 'required|max:255',
             'app_description'       => 'required|max:255',
-        ]);
+            ]
+        );
 
         $username = $request->input('username');
         $email = $request->input('email');
@@ -101,22 +106,22 @@ class UserController extends Controller
         $app_name = $request->input('app_name');
         $app_token = md5(uniqid(1, true));
         $app_description = $request->input('app_description');
-        return $this->registrer($request, $username, $email, $password, $app_name, $app_token, $app_description );
+        return $this->registrer($request, $username, $email, $password, $app_name, $app_token, $app_description);
 
     }
 
     /**
      * registrer responsible for registring new apps
-     * @param type $username
-     * @param type $email
-     * @param type $password
-     * @param type $app_name
-     * @param type $app_token
-     * @param type $app_description
+     *
+     * @param  type $username
+     * @param  type $email
+     * @param  type $password
+     * @param  type $app_name
+     * @param  type $app_token
+     * @param  type $app_description
      * @return type
      */
-    public function registrer
-    (
+    public function registrer(
         Request $request,
         $username,
         $email,
