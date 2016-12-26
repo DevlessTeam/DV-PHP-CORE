@@ -20,7 +20,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     public function createApplication()
     {
-        putenv('DB_CONNECTION=sqlite_testing');
+        putenv('DB_CONNECTION=mysql');
         
         $app = require __DIR__.'/../bootstrap/app.php';
 
@@ -65,6 +65,14 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
              ->type($this->serviceName, 'name')
              ->press('Create')
              ->see('Service Created Successfully');
+
+        /*create table*/
+       /* $this->visit('services/1/edit')
+             //->click('New Table')
+             ->see('Add Tables')
+             ->type($this->serviceTable,'name')
+             ->type('description','description')
+             ->press('Create Table');*/
     }
 
     public function tearDown()

@@ -49,7 +49,8 @@ class DbHandler
      * @return \App\Helpers\json|\Illuminate\Http\Response
      */
     public function access_db($payload)
-    {
+    {   
+
         $payload['user_id'] = '';
         $request = $payload['method'];
         $db_action = (isset($this->dbActionAssoc[$request])) ? $this->dbActionAssoc[$request]
@@ -123,7 +124,7 @@ class DbHandler
      * @internal param string $resource
      */
     public function update($payload)
-    {
+    {   
         $connector = $this->_connector($payload);
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
         $service_name = $payload['service_name'];
@@ -172,7 +173,7 @@ class DbHandler
      * @internal param string $resource
      */
     public function destroy($payload)
-    {
+    {  
         $connector = $this->_connector($payload);
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
         //check if table name is set
@@ -249,7 +250,7 @@ class DbHandler
      * @internal param string $resource
      */
     public function db_query($payload)
-    {
+    {   
         $service_name = $payload['service_name'];
         $connector = $this->_connector($payload);
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
