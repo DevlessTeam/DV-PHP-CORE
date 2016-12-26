@@ -12,9 +12,9 @@ class ScriptHandler
      * Call on services from within scripts and views.
      *
      * @param $json_payload
-     * @param string $service_name
-     * @param string $resource
-     * @param string $method
+     * @param string       $service_name
+     * @param string       $resource
+     * @param string       $method
      *
      * @return array|object
      *
@@ -40,9 +40,9 @@ class ScriptHandler
     /**
      * script execution sandbox.
      *
-     * @param $Dvresource
-     * @param array $payload request parameters
-     * @return array
+     * @param    $Dvresource
+     * @param    array      $payload request parameters
+     * @return   array
      * @internal param string $resource name of resource belonging to a service
      */
     public function run_script($Dvresource, $payload)
@@ -65,7 +65,7 @@ class ScriptHandler
 
         $EVENT['params'] = (isset($payload['params'][0]['field'])) ? $payload['params'][0]['field'][0] : [];
 
-//NB: position matters here
+        //NB: position matters here
         $code = <<<EOT
 $payload[script];
 EOT;

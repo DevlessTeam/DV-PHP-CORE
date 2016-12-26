@@ -1,4 +1,3 @@
-<?php $app_state = ''?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +8,7 @@
     <meta name="keyword" content="Devless, opensource, BAAS, Backend as a service, robust, php, laravel ">
     <link rel="shortcut icon" href="javascript:;" type="image/png">
 
-    <title>Devless 1.0.1 </title>
+    <title>Devless 1.1.2 </title>
 
     <!--right slidebar-->
     <link href="{{ Request::secure(Request::root()).'/css/slidebars.css' }}" rel="stylesheet">

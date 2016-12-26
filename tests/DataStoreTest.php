@@ -2,9 +2,19 @@
 
 use App\Helpers\DataStore;
 
+use App\App;
+use App\User;
+
 class DataStoreTest extends TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
 
+        factory(User::class)->create(['username' => 'eddymens']);
+
+        factory(App::class)->create(['name' => 'appName']);
+    }
 
     /**
      * Test service initiator.
