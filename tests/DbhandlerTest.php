@@ -21,11 +21,19 @@ class DbhandlerTest extends TestCase
     {
         \Schema::dropIfExists($this->serviceName . '_' . $this->serviceTable);
         Artisan::call('migrate:reset', ["--force" => true]);
-        //parent::tearDown();
+        $query = 'DROP TABLE ' . $this->serviceName . '_' . $this->serviceTable;
+        $db = new SQLite3(database_path('Dbhandlertestdb.sqlite3'));
+        try {
+            $db->exec($query);
+        } catch (Exception $e) {
+            //silence is golden
+        }
+        parent::tearDown();
     }
 
     public function testCreateSchema()
-    {
+    {   
+
         $this->assertEquals(606, $this->createSchemaRespones["status_code"]);
     }
 
