@@ -20,7 +20,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     public function createApplication()
     {
-        putenv('DB_CONNECTION=mysql');
+        putenv('DB_CONNECTION=dbhandlertestdb');
 
         $app = require __DIR__ . '/../bootstrap/app.php';
 

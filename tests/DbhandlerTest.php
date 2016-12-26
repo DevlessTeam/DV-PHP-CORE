@@ -21,7 +21,7 @@ class DbhandlerTest extends TestCase
     {
         \Schema::dropIfExists($this->serviceName . '_' . $this->serviceTable);
         Artisan::call('migrate:reset', ["--force" => true]);
-        parent::tearDown();
+        //parent::tearDown();
     }
 
     public function testCreateSchema()
@@ -51,7 +51,7 @@ class DbhandlerTest extends TestCase
     public function testUpdateData($payload)
     {
         $this->withSession(['user' => 1]);
-        $response = $this->dbHandler->access_db($this->userInputActionProvider()[0][0]);
+        $response = $this->dbHandler->access_db($this->inputForDataInsertIntDb()[0][0]);
         $this->assertEquals(609, $response["status_code"]);
         $response = $this->dbHandler->access_db($payload);
         $this->assertEquals(619, $response["status_code"]);
@@ -66,7 +66,7 @@ class DbhandlerTest extends TestCase
     {
 
         $this->withSession(['user' => 1]);
-        $response = $this->dbHandler->access_db($this->userInputActionProvider()[0][0]);
+        $response = $this->dbHandler->access_db($this->inputForDataInsertIntDb()[0][0]);
         $this->assertEquals(609, $response["status_code"]);
         $response = $this->dbHandler->access_db($payload);
         $this->assertEquals(625, $response["status_code"]);
@@ -80,7 +80,7 @@ class DbhandlerTest extends TestCase
     public function testDestroyDb($payload)
     {
         $this->withSession(['user' => 1]);
-        $response = $this->dbHandler->access_db($this->userInputActionProvider()[0][0]);
+        $response = $this->dbHandler->access_db($this->inputForDataInsertIntDb()[0][0]);
         $this->assertEquals(609, $response["status_code"]);
         $response = $this->dbHandler->access_db($payload);
         $this->assertEquals(636, $response["status_code"]);
@@ -94,7 +94,7 @@ class DbhandlerTest extends TestCase
                     "id" => 1,
                     "service_name" => $this->serviceName,
                     "database" => "default",
-                    "driver" => "default",
+                    "driver" => "sqlite",
                     "hostname" => "",
                     "username" => "test@test.com",
                     "password" => "password",
@@ -135,7 +135,7 @@ class DbhandlerTest extends TestCase
                     "id" => 1,
                     "service_name" => $this->serviceName,
                     "database" => "",
-                    "driver" => "default",
+                    "driver" => "sqlite",
                     "hostname" => "",
                     "username" => "",
                     "password" => "",
@@ -179,7 +179,7 @@ class DbhandlerTest extends TestCase
                     "id" => 1,
                     "service_name" => $this->serviceName,
                     "database" => "",
-                    "driver" => "default",
+                    "driver" => "sqlite",
                     "hostname" => "",
                     "username" => "",
                     "password" => "",
@@ -221,7 +221,7 @@ class DbhandlerTest extends TestCase
                     "id" => 1,
                     "service_name" => $this->serviceName,
                     "database" => "",
-                    "driver" => "default",
+                    "driver" => "sqlite",
                     "hostname" => "",
                     "username" => "",
                     "password" => "",
@@ -264,7 +264,7 @@ class DbhandlerTest extends TestCase
             "id" => 1,
             "service_name" => $this->serviceName,
             "database" => "",
-            "driver" => "default",
+            "driver" => "sqlite",
             "hostname" => "",
             "username" => "",
             "password" => "",
