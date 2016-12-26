@@ -57,6 +57,11 @@ return [
             'database' => database_path('devless-rec.sqlite3'),
             'prefix'   => '',
         ],
+        'dbhandlertestdb' => [
+            'driver'   => 'sqlite',
+            'database' => database_path('Dbhandlertestdb.sqlite3'),
+            'prefix'   => '',
+        ],
 
         'sqlite_testing' => [
             'driver'   => 'sqlite',
@@ -68,8 +73,8 @@ return [
             'driver'    => 'mysql',
             'host'      => env('DB_HOST', 'localhost'),
             'database'  => env('DB_DATABASE', 'homestead'),
-            'username'  => env('DB_USERNAME', 'secret'),
-            'password'  => env('DB_PASSWORD', ''),
+            'username'  => env('DB_USERNAME', 'homestead'),
+            'password'  => env('DB_PASSWORD', 'secret'),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
