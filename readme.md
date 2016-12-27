@@ -2,19 +2,18 @@
  
 ## DevLess provides the perfect starting point for your next big idea. Forget all the boilerplate and focus on what matters: your APPLICATION and USERS its like Laravel Spark but also comes with the ease Parse had. https://devless.io/
 
-[Service page](https://lh6.googleusercontent.com/f2UKb824OYXqRESnCtUl1pHRtKKgDgaIXZtkvrUeGIEcP23L1UQxWsaV81o5vFtyCzb6Gyl2=w1280-h726-rw)
 **How?**
 
 **Well first upto 93% of the things you do on DevLess is pure configuration via a GUI**
-
-**How?**
+![Service Image](https://lh6.googleusercontent.com/f2UKb824OYXqRESnCtUl1pHRtKKgDgaIXZtkvrUeGIEcP23L1UQxWsaV81o5vFtyCzb6Gyl2=w1280-h726-rw)
 
 **For example this is how you create tables no DevLess (migration equivalence in frameworks)**
+![Tables Image](https://lh3.googleusercontent.com/6_IpS783QOLpeuMEVlyyfRZ5RCueD8VotIETooefjB0se2wPyiHWRrvCL-L3VycWtmUqnj2F=w1280-h726-rw)
 
-**Deciding on which table to make  available to end users is based just a configuration away**
-
+**Deciding on which table to make  available to end users via a generated api is just a configuration away**
+![Privacy Image](https://lh3.googleusercontent.com/6_IpS783QOLpeuMEVlyyfRZ5RCueD8VotIETooefjB0se2wPyiHWRrvCL-L3VycWtmUqnj2F=w1280-h726-rw)
  **working with Data is a joy**
-
+ ![data table](https://lh3.googleusercontent.com/PdLEI3T6ybki66uIgdf8Vn3d-OWb_3FiEespWw9InSwVFKWm9WZ05FbrWgjo0_ZxpgN-iNAc=w1280-h726-rw)
 **Deployment is a breeze all you have to do is export your app and import it into DevLess instance on the cloud could be via our [docker image](https://hub.docker.com/r/eddymens/devless/)**
 
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
