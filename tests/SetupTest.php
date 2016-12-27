@@ -6,14 +6,18 @@ class SetupTest extends TestCase
     {
         parent::setUp();
 
-        $this->artisan('migrate');
     }
 
     /**
      * @test
      */
     public function it_should_create_a_user_with_a_service()
-    {
+    {    
+        //cleans up the migration made by Super class Setup method
+        \Schema::dropIfExists($this->serviceName . '_' . $this->serviceTable);
+        Artisan::call('migrate:reset', ["--force" => true]);
+        Artisan::call('migrate', ["--force" => true]);
+
         //setup Devless
         $this->visit('/setup')
             ->type('test@test.com', 'email')
