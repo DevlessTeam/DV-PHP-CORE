@@ -17,6 +17,7 @@ class UserTest extends TestCase
     {
         parent::setUp();
 
+        $this->artisan('migrate:reset');
         $this->artisan('migrate');
 
         $this->users = factory(User::class, 10)->create();
@@ -25,17 +26,17 @@ class UserTest extends TestCase
     /**
      * @test
      */
-    public function it_should_return_the_count_of_users_created()
+    public function itShouldReturnTheCountOfUsersCreated()
     {
         $users = User::all();
-
+        
         $this->assertCount(10, $users);
     }
 
     /**
      * @test
      */
-    public function it_should_return_the_casted_role_and_status()
+    public function itShouldReturnTheCastedRoleAndStatus()
     {
         $user = factory(User::class)->create(['role' => 0, 'status' => 1]);
 
@@ -48,7 +49,8 @@ class UserTest extends TestCase
     /**
      * @test
      */
-    public function it_should_hash_password()
+
+    public function itShouldHashPassword()
     {
         $user = factory(User::class)->create(['password' => 'userpassword']);
 
@@ -58,7 +60,8 @@ class UserTest extends TestCase
     /**
      * @test
      */
-    public function it_checks_admin_role()
+    public function itChecksAdminRole()
+
     {
         $user = factory(User::class)->create(['role' => 0]);
 

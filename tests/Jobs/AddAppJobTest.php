@@ -19,7 +19,8 @@ class AddAppJobTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-
+        $this->artisan('migrate:reset');
+        $this->artisan('migrate');
         $this->token = App::get_token();
     }
 

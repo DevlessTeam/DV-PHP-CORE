@@ -17,6 +17,8 @@ class RegisterUserJobTest extends TestCase
     public function setUp()
     {
         parent::setUp();
+        $this->artisan('migrate:reset');
+        $this->artisan('migrate');
     }
 
     /**
