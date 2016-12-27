@@ -1,6 +1,7 @@
 <?php
 
 use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserTest extends TestCase
 {
@@ -48,7 +49,19 @@ class UserTest extends TestCase
     /**
      * @test
      */
+
+    public function itShouldHashPassword()
+    {
+        $user = factory(User::class)->create(['password' => 'userpassword']);
+
+        $this->assertTrue(Hash::check('userpassword', $user->password));
+    }
+
+    /**
+     * @test
+     */
     public function itChecksAdminRole()
+
     {
         $user = factory(User::class)->create(['role' => 0]);
 
