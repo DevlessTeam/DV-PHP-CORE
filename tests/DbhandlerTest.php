@@ -6,14 +6,14 @@ class DbhandlerTest extends TestCase
 {
     private $dbHandler = null;
 
-    private $createSchemaRespones;
+    private $createSchemaResponse;
 
     public function setUp()
     {
 
         parent::setUp();
         $this->dbHandler = new Schema\DbHandler();
-        $this->createSchemaRespones = $this->dbHandler->create_schema($this->inputForCreateSchema());
+        $this->createSchemaResponse = $this->dbHandler->create_schema($this->inputForCreateSchema());
 
     }
 
