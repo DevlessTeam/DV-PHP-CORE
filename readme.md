@@ -12,7 +12,7 @@
 
 **Deciding on which table to make  available to end users via automagically generated APIs is just a tab away**
 ![Privacy Image](https://lh6.googleusercontent.com/TaBPRv_e2yygiofMHq7Klir_9I0drAVRfEJqmYpFqq1qXBJ4Q2ewAGjoamOOFtbQsYMaVzjQ=w1280-h726-rw)
- **working with Data is a joy**
+ **Working with Data is a joy**
  ![data table](https://lh6.googleusercontent.com/haCxBXnLcnc6xucPbaDKAx_-AofC0NO1A4xgkdmgYxtL39NkfSCnGBzlfKOWousSUHJZ1OIt=w1280-h726-rw)
 **Deployment is a breeze all you have to do is export your app and import it into another DevLess instance on the cloud could be via our [docker image](https://hub.docker.com/r/eddymens/devless/)**
 
