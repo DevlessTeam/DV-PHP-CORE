@@ -7,11 +7,11 @@
 **Well first upto 93% of the things you do on DevLess is pure configuration via a GUI**
 ![Service Image](https://lh4.googleusercontent.com/ssUMl_QR7_qaGpuhOvVxdhEeEqPM0MweolufUz8w56j6T_TlV1q0ZE-N_fiPgMhVMjBQoYzQ=w1280-h726-rw)
 
-**For example this is how you create tables no DevLess (migration equivalence in frameworks)*
+**For example this is how you create tables on DevLess (migration equivalence in frameworks)*
 ![Tables Image](https://lh3.googleusercontent.com/6_IpS783QOLpeuMEVlyyfRZ5RCueD8VotIETooefjB0se2wPyiHWRrvCL-L3VycWtmUqnj2F=w1280-h726-rw)
 
-**Deciding on which table to make  available to end users via a generated api is just a configuration away**
-![Privacy Image](https://lh3.googleusercontent.com/6_IpS783QOLpeuMEVlyyfRZ5RCueD8VotIETooefjB0se2wPyiHWRrvCL-L3VycWtmUqnj2F=w1280-h726-rw)
+**Deciding on which table to make  available to end users via automatically generated api is just a configuration away**
+![Privacy Image](https://lh6.googleusercontent.com/TaBPRv_e2yygiofMHq7Klir_9I0drAVRfEJqmYpFqq1qXBJ4Q2ewAGjoamOOFtbQsYMaVzjQ=w1280-h726-rw)
  **working with Data is a joy**
  ![data table](https://lh3.googleusercontent.com/PdLEI3T6ybki66uIgdf8Vn3d-OWb_3FiEespWw9InSwVFKWm9WZ05FbrWgjo0_ZxpgN-iNAc=w1280-h726-rw)
 **Deployment is a breeze all you have to do is export your app and import it into DevLess instance on the cloud could be via our [docker image](https://hub.docker.com/r/eddymens/devless/)**
