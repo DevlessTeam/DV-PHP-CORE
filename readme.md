@@ -13,7 +13,7 @@
 **Deciding on which table to make  available to end users via automatically generated api is just a configuration away**
 ![Privacy Image](https://lh6.googleusercontent.com/TaBPRv_e2yygiofMHq7Klir_9I0drAVRfEJqmYpFqq1qXBJ4Q2ewAGjoamOOFtbQsYMaVzjQ=w1280-h726-rw)
  **working with Data is a joy**
- ![data table](https://lh3.googleusercontent.com/PdLEI3T6ybki66uIgdf8Vn3d-OWb_3FiEespWw9InSwVFKWm9WZ05FbrWgjo0_ZxpgN-iNAc=w1280-h726-rw)
+ ![data table](https://lh6.googleusercontent.com/haCxBXnLcnc6xucPbaDKAx_-AofC0NO1A4xgkdmgYxtL39NkfSCnGBzlfKOWousSUHJZ1OIt=w1280-h726-rw)
 **Deployment is a breeze all you have to do is export your app and import it into DevLess instance on the cloud could be via our [docker image](https://hub.docker.com/r/eddymens/devless/)**
 
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
