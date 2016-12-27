@@ -49,6 +49,20 @@ class User extends Model implements
     ];
 
     /**
+     * Hash password
+     *
+     * @param $password
+     */
+    public function setPasswordAttribute($password)
+    {
+        if (Hash::needsRehash($password)) {
+            $this->attributes['password'] = Hash::make($password);
+        } else {
+            $this->attributes['password'] = $password;
+        }
+    }
+
+    /**
      * Check if a user is an administator
      *
      * @return \Illuminate\Support\Collection|mixed|static
