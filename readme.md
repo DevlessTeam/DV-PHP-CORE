@@ -5,9 +5,9 @@
 **How?**
 
 **Well first upto 93% of the things you do on DevLess is pure configuration via a GUI**
-![Service Image](https://lh6.googleusercontent.com/f2UKb824OYXqRESnCtUl1pHRtKKgDgaIXZtkvrUeGIEcP23L1UQxWsaV81o5vFtyCzb6Gyl2=w1280-h726-rw)
+![Service Image](https://lh4.googleusercontent.com/ssUMl_QR7_qaGpuhOvVxdhEeEqPM0MweolufUz8w56j6T_TlV1q0ZE-N_fiPgMhVMjBQoYzQ=w1280-h726-rw)
 
-**For example this is how you create tables no DevLess (migration equivalence in frameworks)**
+**For example this is how you create tables no DevLess (migration equivalence in frameworks)*
 ![Tables Image](https://lh3.googleusercontent.com/6_IpS783QOLpeuMEVlyyfRZ5RCueD8VotIETooefjB0se2wPyiHWRrvCL-L3VycWtmUqnj2F=w1280-h726-rw)
 
 **Deciding on which table to make  available to end users via a generated api is just a configuration away**
