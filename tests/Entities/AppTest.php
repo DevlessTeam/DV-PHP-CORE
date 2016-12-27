@@ -16,6 +16,8 @@ class AppTest extends TestCase
     {
         parent::setUp();
 
+        
+        $this->artisan('migrate:reset');
         $this->artisan('migrate');
 
         $this->apps = factory(App::class, 10)->create();

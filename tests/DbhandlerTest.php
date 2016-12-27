@@ -17,24 +17,10 @@ class DbhandlerTest extends TestCase
 
     }
 
-    /*public function tearDown()
-    {
-    \Schema::dropIfExists($this->serviceName . '_' . $this->serviceTable);
-    Artisan::call('migrate:reset', ["--force" => true]);
-    $query = 'DROP TABLE ' . $this->serviceName . '_' . $this->serviceTable;
-    $db = new SQLite3(database_path('Dbhandlertestdb.sqlite3'));
-    try {
-    $db->exec($query);
-    } catch (Exception $e) {
-    //silence is golden
-    }
-    parent::tearDown();
-    }*/
-
     public function testCreateSchema()
     {
 
-        $this->assertEquals(606, $this->createSchemaRespones["status_code"]);
+        $this->assertEquals(606, $this->createSchemaResponse["status_code"]);
     }
 
     /**
