@@ -21,6 +21,7 @@ class DbHandler
         'boolean'    => 'boolean',
         'email'      => 'string',
         'reference'  => 'integer',
+        'base64'     => 'binary',
     ];
     public $query_params = [
         'order'    => 'orderBy',

@@ -12,7 +12,7 @@ class RpcController extends Controller
     /**
      * Relay rpc request to ActionClass
      *
-     * @param $payload
+     * @param  $payload
      * @return \Illuminate\Http\Response
      */
     public function index($payload)
@@ -27,7 +27,7 @@ class RpcController extends Controller
                             config('devless')['views_directory'].$service.'/ActionClass.php';
        
         if (file_exists($serviceMethodPath)) {
-            require_once $serviceMethodPath;
+            include_once $serviceMethodPath;
         } else {
             return Response::respond(604);
         }

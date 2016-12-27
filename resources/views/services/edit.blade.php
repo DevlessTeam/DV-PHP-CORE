@@ -39,7 +39,7 @@
            <div  class="form-group">
             <label for="field-type">Field Type</label>
 
-            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'REFERENCE'] ?>
+            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'REFERENCE'] ?>
             <select class="form-control"  name="field-type" id="field-type">
                 @foreach($options as  $option)
                 <option value="{{$option}}">{{$option}}</option>

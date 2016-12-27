@@ -93,6 +93,7 @@ class Helper
         'textarea'   => 'string',
         'timestamp'  => 'integer',
         'url'        => 'url',
+        'base64'     => 'string',
 
     ];
 

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use DB;
 use Hash;
 use App\App;
@@ -12,7 +10,6 @@ use App\Helpers\DevlessHelper as DLH;
 use App\Helpers\Helper as helper;
 use App\Jobs\RegisterUserJob;
 use App\Http\Requests\RegisterUserRequest;
-
 class UserController extends Controller
 {
     // TODO: Session store needs to authenticate with a session table for security
@@ -24,7 +21,6 @@ class UserController extends Controller
             return view('auth.index');
         }
     }
-
     public function get_all_users()
     {
         $users = User::orderBy('id', 'asc')->paginate(10);
@@ -36,35 +32,28 @@ class UserController extends Controller
         'email'    => $request->input('email'),
         'password' => $request->input('password'),
         ];
-
         $user = DB::table('users')->where('email', $request->input('email'))->first();
         if ($user && Hash::check($request->input('password'), $user->password)) {
             $request->session()->put('user', $user->id);
             DLH::flash('Welcome Back', 'success');
-
             return redirect('services');
         } else {
             Session::flash('error', 'Incorrect login credentials');
-
             return back();
         }
     }
-
     public function get_logout()
     {
         \Session::forget('user');
         \Session::flush();
-
         return redirect('/');
     }
-
     public function get_register(Request $request)
     {
         $app = [
         'app_key'   => str_random(40),
         'app_token' => md5(uniqid(1, true)),
          ];
-
          if($params = helper::query_string()) {
              if(isset($params['url_install']) && isset($params['url_install'])&&
                      isset($params['username']) && isset($params['password']) &&
@@ -80,21 +69,17 @@ class UserController extends Controller
                         $app_name, $app_token, $app_description );
              }
          }
-
         return view('auth.create', compact('app'));
     }
-
     public function post_register(RegisterUserRequest $request)
     {
         try {
             $user = $this->dispatch(new RegisterUserJob($request));
             $request->session()->put('user', $user->id);
             DLH::flash('Setup successful. Welcome to Devless', 'success');
-
             return redirect('services');
         } catch (\Exception $e) {
             DLH::flash('Error setting up', 'error');
-
             return back()->withInput();
         }
     }
