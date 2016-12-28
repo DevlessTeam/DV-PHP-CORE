@@ -5,7 +5,7 @@
 **How?**
 
 **Well first upto 93% of the things you do on DevLess is pure configuration via GUI**
-![Service Image](https://lh4.googleusercontent.com/ssUMl_QR7_qaGpuhOvVxdhEeEqPM0MweolufUz8w56j6T_TlV1q0ZE-N_fiPgMhVMjBQoYzQ=w1280-h726-rw)
+![Service Image](http://www.imageno.com/thumbs/20161228/va8igp0gf1hs.jpg)
 
 **For example this is how you create tables on DevLess (migration equivalence in frameworks)*
 ![Tables Image](https://lh3.googleusercontent.com/6_IpS783QOLpeuMEVlyyfRZ5RCueD8VotIETooefjB0se2wPyiHWRrvCL-L3VycWtmUqnj2F=w1280-h726-rw)
