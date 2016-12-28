@@ -8,7 +8,7 @@
 ![Service Image](http://fs5.directupload.net/images/161228/8rrzj4ms.png)
 
 **For example this is how you create tables on DevLess (migration equivalence in frameworks)*
-![Tables Image](https://lh3.googleusercontent.com/6_IpS783QOLpeuMEVlyyfRZ5RCueD8VotIETooefjB0se2wPyiHWRrvCL-L3VycWtmUqnj2F=w1280-h726-rw)
+![Tables Image](http://fs5.directupload.net/images/161228/6mzzjt8c.png)
 
 **Deciding on which table to make  available to end users via automagically generated APIs is just a tab away**
 ![Privacy Image](https://lh6.googleusercontent.com/TaBPRv_e2yygiofMHq7Klir_9I0drAVRfEJqmYpFqq1qXBJ4Q2ewAGjoamOOFtbQsYMaVzjQ=w1280-h726-rw)
