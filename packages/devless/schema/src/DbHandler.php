@@ -380,7 +380,7 @@ class DbHandler
                         
                             $field['ref_table'] = 'users';
                         
-                            $new_payload['field'][$count]['ref_table'] = 'users';
+                            $new_payload['field'][$count]['ref_table'] = '______________devless_users';
                             $new_payload['field'][$count]['name'] = 'users_id';
                         }
                             
