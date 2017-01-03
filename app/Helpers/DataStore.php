@@ -179,6 +179,15 @@ class DataStore extends Helper
         return (is_null(self::$instance))? self::$instance = new self() : self::$instance;
     }
 
+    /**
+     * grab all related tables
+     * @param $value
+     * @return mixed
+     */
+    public static function related($value)
+    {
+        return self::bindToParams('related', $value);
+    }
     private static function cleanUp()
     {
         self::$payload = null;
