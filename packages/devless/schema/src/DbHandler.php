@@ -375,12 +375,12 @@ class DbHandler
 
                     //check if users table is being referenced 
                     if( $field['field_type'] == 'reference' &&
-                        strpos($field['ref_table'], '______________devless_users')
+                        strpos($field['ref_table'], '_devless_users')
                         == true) {
 
                         $field['ref_table'] = 'users';
 
-                        $new_payload['field'][$count]['ref_table'] = '______________devless_users';
+                        $new_payload['field'][$count]['ref_table'] = '_devless_users';
                         $new_payload['field'][$count]['name'] = 'users_id';
                     }
 
@@ -586,11 +586,11 @@ class DbHandler
         foreach ($results as $eachResult) {
             $eachResult->related = [];
             array_walk($tables, function ($table) use ($eachResult, &$output, $service) {
-                $refTable = ($table != '______________devless_users')? $service.'_'.$table : 'users';
+                $refTable = ($table != '_devless_users')? $service.'_'.$table : 'users';
                 $refField = $refTable.'_id';
                 $referenceId = (isset($eachResult->$refField))? $eachResult->$refField:
                     Helper::interrupt(640);
-                $relatedData = ($table != 'users')?  \DB::table($refTable)->where('id', $referenceId)
+                $relatedData = ($table != '_devless_users')?  \DB::table($refTable)->where('id', $referenceId)
                     ->get(): \DB::table($refTable)->where('id', $referenceId)
                     ->select('username','first_name', 'last_name', 'email','phone_number',
                         'status', 'phone_number')
