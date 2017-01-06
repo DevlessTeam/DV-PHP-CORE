@@ -17,11 +17,12 @@ class HelpersTest extends TestCase
     }
 
     /**
+     * @test
      * Message stack test.
      *
      * @return void
      */
-    public function testResponseMessage()
+    public function it_should_check_response_message()
     {
 
         $stack = rand(0, 614);
@@ -37,11 +38,12 @@ class HelpersTest extends TestCase
 
 
     /**
+     * @test
      * Field validator test.
      *
      * @return void
      */
-    public function testFieldCheck()
+    public function it_should_validate_fields()
     {
         $validSample =
             [
@@ -94,11 +96,12 @@ class HelpersTest extends TestCase
 
 
     /**
+     * @test
      * url query string test.
      *
      * @return void
      */
-    public function testQueryString()
+    public function it_should_check_query_string()
     {
         $_SERVER['QUERY_STRING'] = 'name=edmond&name=charles&age=12';
 
@@ -115,11 +118,12 @@ class HelpersTest extends TestCase
 
 
     /**
+     * @test
      * sessionTimestamp test.
      *
      * @return void
      */
-    public function testSessionTimestamp()
+    public function it_should_check_session_time_stamp()
     {
         $sessionTime = Helper::session_timestamp();
 
