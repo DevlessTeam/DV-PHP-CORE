@@ -321,7 +321,9 @@ class DevlessHelper extends Helper
         $service_name = [];
         $service_id_map = [];
         $install_services = function ($service) use (&$service_id, &$service_name, &$service_id_map) {
-
+            if(count(\DB::table('services')->where('name', $service['name'])->get()) != 0 ){
+                return false;
+            }
             $old_service_id = $service['id'];
             $service_name[$old_service_id] = $service['name'];
             unset($service['id']);
@@ -344,6 +346,9 @@ class DevlessHelper extends Helper
         ) {
 
             if (sizeof($service_table) !== 0) {
+                if(\Schema::hasTable($service_table['table_name'])){
+                        return false;
+                }
                 $old_service_id = $service_table['service_id'];
                 $new_service_id = $service_id_map[$old_service_id];
                 $service_table['schema'] = json_decode($service_table['schema'], true);
@@ -826,6 +831,8 @@ class DevlessHelper extends Helper
      */
     public static function curl_post_async($url, $params)
     {
+        //did this intentionally(Eddymens)
+        return false;
         foreach ($params as $key => &$val) {
             if (is_array($val)) {
                 $val = implode(',', $val);
