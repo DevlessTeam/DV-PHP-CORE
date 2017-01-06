@@ -39,13 +39,13 @@ class DataStoreTest extends TestCase
 
     /**
      *  @test
+     *  @depends it_should_initialize_a_devless_service
      *  Test size parameter
      *  @return void
      */
-    public function it_should_get_size_of_datastore()
-    {
+    public function it_should_get_size_of_datastore($dataStore)
+    {       
             $size = rand();
-            $dataStore = $this->it_should_initialize_a_devless_service();
             $dataStore->size($size);
             $params = DataStore::$payload['params'];
 
@@ -56,13 +56,13 @@ class DataStoreTest extends TestCase
 
     /**
      * @test
+     * @depends it_should_initialize_a_devless_service
      * Test offset parameter
      * @return void
      */
-    public  function it_should_check_the_offset_parameter()
+    public  function it_should_check_the_offset_parameter($dataStore)
     {
             $offset = rand();
-            $dataStore = $this->it_should_initialize_a_devless_service();
             $dataStore->offset($offset);
             $params = DataStore::$payload['params'];
 
@@ -72,13 +72,13 @@ class DataStoreTest extends TestCase
 
     /**
      * @test
+     * @depends it_should_initialize_a_devless_service
      * Test order parameter
      * @return void
      */
-    public  function it_should_check_orderby_parameter()
+    public  function it_should_check_orderby_parameter($dataStore)
     {
         $keyword = rand();
-        $dataStore = $this->it_should_initialize_a_devless_service();
         $dataStore->orderBy($keyword);
         $params = DataStore::$payload['params'];
 
@@ -88,13 +88,13 @@ class DataStoreTest extends TestCase
     
     /**
      * @test
+     * @depends it_should_initialize_a_devless_service
      * Test Instance info
      */
     public function it_should_verify_instance_infomation()
     {
         
         $results = DataStore::instanceInfo();
-
         $this->assertEquals($results['app']->name, 'appName');
         $this->assertEquals($results['admin']->username, 'eddymens');
     
@@ -102,6 +102,7 @@ class DataStoreTest extends TestCase
     
     /**
      * @test
+     * @depends it_should_initialize_a_devless_service
      * Test set Dump
      */
     public function it_should_set_dump()
@@ -113,6 +114,7 @@ class DataStoreTest extends TestCase
     
     /**
      * @test
+     * @depends it_should_set_dump
      * Test get Dump
      */
     public function it_should_get_dump()
@@ -126,6 +128,7 @@ class DataStoreTest extends TestCase
     
     /**
      * @test
+     * @depends it_should_get_dump
      * Test update Dump
      */
     public function it_should_update_dump()
@@ -141,6 +144,7 @@ class DataStoreTest extends TestCase
     
     /**
      * @test
+     * @depends it_should_update_dump
      * Test destroy Dump
      */
     public function it_should_destroy_dump()
