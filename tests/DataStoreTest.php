@@ -17,10 +17,11 @@ class DataStoreTest extends TestCase
     }
 
     /**
+     * @test
      * Test service initiator.
      * @return DataStore
      */
-    public function testService()
+    public function it_should_initialize_a_devless_service()
     {
             $serviceMock = Mockery::mock('App\Http\Controllers\ServiceController');
             $serviceMock->shouldReceive('assign_to_service')->with()->andReturn("eddymens");
@@ -37,13 +38,14 @@ class DataStoreTest extends TestCase
     }
 
     /**
-     *Test size parameter
+     *  @test
+     *  Test size parameter
      *  @return void
      */
-    public function testSize()
+    public function it_should_get_size_of_datastore()
     {
             $size = rand();
-            $dataStore = $this->testService();
+            $dataStore = $this->it_should_initialize_a_devless_service();
             $dataStore->size($size);
             $params = DataStore::$payload['params'];
 
@@ -53,13 +55,14 @@ class DataStoreTest extends TestCase
     }
 
     /**
+     * @test
      * Test offset parameter
      * @return void
      */
-    public  function testOffset()
+    public  function it_should_check_the_offset_parameter()
     {
             $offset = rand();
-            $dataStore = $this->testService();
+            $dataStore = $this->it_should_initialize_a_devless_service();
             $dataStore->offset($offset);
             $params = DataStore::$payload['params'];
 
@@ -68,13 +71,14 @@ class DataStoreTest extends TestCase
     }
 
     /**
+     * @test
      * Test order parameter
      * @return void
      */
-    public  function testOrderBy()
+    public  function it_should_check_orderby_parameter()
     {
         $keyword = rand();
-        $dataStore = $this->testService();
+        $dataStore = $this->it_should_initialize_a_devless_service();
         $dataStore->orderBy($keyword);
         $params = DataStore::$payload['params'];
 
@@ -82,10 +86,11 @@ class DataStoreTest extends TestCase
         $this->assertEquals($params['orderBy'][0], $keyword);
     }
     
-    /*
+    /**
+     * @test
      * Test Instance info
      */
-    public function testInstanceInfo()
+    public function it_should_verify_instance_infomation()
     {
         
         $results = DataStore::instanceInfo();
@@ -95,20 +100,22 @@ class DataStoreTest extends TestCase
     
     }
     
-    /*
+    /**
+     * @test
      * Test set Dump
      */
-    public function testsetDump()
+    public function it_should_set_dump()
     {
         $setDump = DataStore::setDump('key', 'value');
         
         $this->assertTrue($setDump);
     }
     
-    /*
+    /**
+     * @test
      * Test get Dump
      */
-    public function testgetDump()
+    public function it_should_get_dump()
     {
         DataStore::setDump('key', 'value');
         
@@ -117,10 +124,11 @@ class DataStoreTest extends TestCase
         $this->assertEquals($getDump, 'value');
     }
     
-    /*
+    /**
+     * @test
      * Test update Dump
      */
-    public function testupdateDump()
+    public function it_should_update_dump()
     {
         DataStore::setDump('key', 'value');
         
@@ -131,10 +139,11 @@ class DataStoreTest extends TestCase
         $this->assertEquals($getDump, 'value2');
     }
     
-    /*
+    /**
+     * @test
      * Test destroy Dump
      */
-    public function testdestroyDump()
+    public function it_should_destroy_dump()
     {
         DataStore::setDump('key', 'value');
         

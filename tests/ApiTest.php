@@ -23,27 +23,33 @@ class ApiTest extends TestCase
     }
 
     /**
+     * @test
      * Temporal test for complete service creation cycle.
      *
      * @return void
      */
-    public function testLog()
+    public function it_should_check_Log()
     {
         $subUrl = $this->apiUrl;
 
         $this->visit($subUrl . 'log')
             ->see('no log available');
     }
-
-    public function testHealth()
+    
+    /**
+     * @test
+     */
+    public function it_should_check_app_Health()
     {
         $subUrl = $this->apiUrl;
 
         $this->visit($subUrl . 'status')
             ->see('healthy');
     }
-
-    public function testSchema()
+    /**
+     * @test
+     */
+    public function it_should_create_schema()
     {
         $url = $this->subUrl;
         $serviceName = $this->serviceName;
