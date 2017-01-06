@@ -50,4 +50,14 @@
         </table>
     </section>
                 </div>
+<ul class="pagination">
+    <li class="disabled"><span>&laquo;</span></li>
+    <li class="active"><span>1</span></li><li>
+        <a href="http://localhost:8000/devless_users?page=2">2</a>
+    </li>
+    <li>
+        <a href="http://localhost:8000/services?page=2" rel="next">&raquo;</a>
+    </li>
+</ul>
+
 @endsection

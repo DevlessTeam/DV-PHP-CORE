@@ -23,7 +23,7 @@ class UserController extends Controller
     }
     public function get_all_users()
     {
-        $users = User::orderBy('id', 'asc')->paginate(10);
+        $users = User::orderBy('id', 'desc')->paginate(10);
         return view('users.index', compact('users'));
     }
     public function post_login(Request $request)
