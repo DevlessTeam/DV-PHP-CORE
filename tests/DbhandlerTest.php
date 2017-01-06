@@ -16,19 +16,22 @@ class DbhandlerTest extends TestCase
         $this->createSchemaResponse = $this->dbHandler->create_schema($this->inputForCreateSchema());
 
     }
-
-    public function testCreateSchema()
+    /**
+     * @test
+     */
+    public function it_should_create_schema()
     {
 
         $this->assertEquals(606, $this->createSchemaResponse["status_code"]);
     }
 
     /**
-     * @depends testCreateSchema
-     * @dataProvider inputForDataInsertIntDb
+     * @test
+     * @depends it_should_create_schema
+     * @dataProvider inputForInsertDataIntoDb
      */
 
-    public function testInsertsDataIntoDb($payload)
+    public function it_should_insert_data_into_db($payload)
     {
         $this->withSession(['user' => 1]);
         $response = $this->dbHandler->access_db($payload);
@@ -37,50 +40,53 @@ class DbhandlerTest extends TestCase
     }
 
     /**
-     * @depends testInsertsDataIntoDb
+     * @test
+     * @depends it_should_insert_data_into_db
      * @dataProvider inputForUpdateProvider
      *
      */
 
-    public function testUpdateData($payload)
+    public function it_should_update_db($payload)
     {
         $this->withSession(['user' => 1]);
-        $response = $this->dbHandler->access_db($this->inputForDataInsertIntDb()[0][0]);
+        $response = $this->dbHandler->access_db($this->inputForInsertDataIntoDb()[0][0]);
         $this->assertEquals(609, $response["status_code"]);
         $response = $this->dbHandler->access_db($payload);
         $this->assertEquals(619, $response["status_code"]);
     }
 
     /**
-     * @depends testInsertsDataIntoDb
+     *@test
+     * @depends it_should_insert_data_into_db
      * @dataProvider inputForQueryDb
      */
 
-    public function testQuerydb($payload)
+    public function it_should_query_db($payload)
     {
 
         $this->withSession(['user' => 1]);
-        $response = $this->dbHandler->access_db($this->inputForDataInsertIntDb()[0][0]);
+        $response = $this->dbHandler->access_db($this->inputForInsertDataIntoDb()[0][0]);
         $this->assertEquals(609, $response["status_code"]);
         $response = $this->dbHandler->access_db($payload);
         $this->assertEquals(625, $response["status_code"]);
     }
 
     /**
-     * @depends testInsertsDataIntoDb
-     * @dataProvider inputForDetroyDbProvider
+     *@test
+     * @depends it_should_insert_data_into_db
+     * @dataProvider inputForDeleteRecordProvider
      */
 
-    public function testDestroyDb($payload)
+    public function it_should_delete_record_from_db($payload)
     {
         $this->withSession(['user' => 1]);
-        $response = $this->dbHandler->access_db($this->inputForDataInsertIntDb()[0][0]);
+        $response = $this->dbHandler->access_db($this->inputForInsertDataIntoDb()[0][0]);
         $this->assertEquals(609, $response["status_code"]);
         $response = $this->dbHandler->access_db($payload);
         $this->assertEquals(636, $response["status_code"]);
     }
 
-    public function inputForDataInsertIntDb()
+    public function inputForInsertDataIntoDb()
     {
         return [
             [
@@ -165,7 +171,7 @@ class DbhandlerTest extends TestCase
             ],
         ];
     }
-    public function inputForDetroyDbProvider()
+    public function inputForDeleteRecordProvider()
     {
         return [
             [

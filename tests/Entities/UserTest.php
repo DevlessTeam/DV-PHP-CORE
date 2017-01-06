@@ -26,7 +26,7 @@ class UserTest extends TestCase
     /**
      * @test
      */
-    public function itShouldReturnTheCountOfUsersCreated()
+    public function it_should_return_the_count_of_users_created()
     {
         $users = User::all();
         
@@ -36,7 +36,7 @@ class UserTest extends TestCase
     /**
      * @test
      */
-    public function itShouldReturnTheCastedRoleAndStatus()
+    public function it_should_return_the_casted_role_and_status()
     {
         $user = factory(User::class)->create(['role' => 0, 'status' => 1]);
 
@@ -50,7 +50,7 @@ class UserTest extends TestCase
      * @test
      */
 
-    public function itShouldHashPassword()
+    public function it_should_hash_password()
     {
         $user = factory(User::class)->create(['password' => 'userpassword']);
 
@@ -60,7 +60,7 @@ class UserTest extends TestCase
     /**
      * @test
      */
-    public function itChecksAdminRole()
+    public function it_checks_admin_role()
 
     {
         $user = factory(User::class)->create(['role' => 0]);
