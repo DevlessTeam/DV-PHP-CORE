@@ -298,5 +298,4 @@ class DbhandlerTest extends TestCase
             ],
         ];
     }
-
 }

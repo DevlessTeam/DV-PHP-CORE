@@ -136,6 +136,4 @@ class ApiTest extends TestCase
             ->seeJson(['message' => 'dropped table successfully',
                 'payload' => [], 'status_code' => 613]);
     }
-
-    
 }

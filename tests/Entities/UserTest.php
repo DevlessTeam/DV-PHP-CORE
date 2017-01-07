@@ -61,7 +61,6 @@ class UserTest extends TestCase
      * @test
      */
     public function it_checks_admin_role()
-
     {
         $user = factory(User::class)->create(['role' => 0]);
 

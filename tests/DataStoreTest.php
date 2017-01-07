@@ -26,7 +26,7 @@ class DataStoreTest extends TestCase
             $serviceMock = Mockery::mock('App\Http\Controllers\ServiceController');
             $serviceMock->shouldReceive('assign_to_service')->with()->andReturn("eddymens");
 
-            $dataStore = DataStore::service($this->serviceName,  $this->serviceTable, $serviceMock);
+            $dataStore = DataStore::service($this->serviceName, $this->serviceTable, $serviceMock);
 
             $payload = DataStore::$payload;
 
@@ -44,7 +44,7 @@ class DataStoreTest extends TestCase
      *  @return void
      */
     public function it_should_get_size_of_datastore($dataStore)
-    {       
+    {
             $size = rand();
             $dataStore->size($size);
             $params = DataStore::$payload['params'];
@@ -60,7 +60,7 @@ class DataStoreTest extends TestCase
      * Test offset parameter
      * @return void
      */
-    public  function it_should_check_the_offset_parameter($dataStore)
+    public function it_should_check_the_offset_parameter($dataStore)
     {
             $offset = rand();
             $dataStore->offset($offset);
@@ -76,7 +76,7 @@ class DataStoreTest extends TestCase
      * Test order parameter
      * @return void
      */
-    public  function it_should_check_orderby_parameter($dataStore)
+    public function it_should_check_orderby_parameter($dataStore)
     {
         $keyword = rand();
         $dataStore->orderBy($keyword);
@@ -158,5 +158,3 @@ class DataStoreTest extends TestCase
         $this->assertEquals($getDump, null);
     }
 }
-
-
