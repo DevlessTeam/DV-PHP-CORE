@@ -2,9 +2,10 @@
 
 namespace Devless\RulesEngine;
 
-use App\Helpers\ActionClass;
 use App\Helpers\Helper;
 use App\Helpers\Response;
+use App\Helpers\ActionClass;
+use App\Helpers\DevlessHelper;
 
 class Rules
 {
@@ -34,13 +35,23 @@ class Rules
     private $execOrNot = true;
     private $actionType = '';
 
-    public function requestType($actionType)
+    private $tableName = '';
+
+    public function requestType($requestPayload)
     {
+        $tableName = DevlessHelper::get_tablename_from_payload($requestPayload);
+        $actionType = $requestPayload['method'];
+
         $this->actionType = $actionType;
+        $this->tableName  = $tableName;
         return $this;
     }
 
 
+    /**
+     * Check if table is being queried
+     * @return $this
+     */
     public function onQuery()
     {
         $this->execOrNot = ($this->actionType == 'GET')? true : false;
@@ -48,7 +59,10 @@ class Rules
     }
 
 
-
+    /**
+     * Check if data is being updated on table
+     * @return $this
+     */
     public function onUpdate()
     {
         $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
@@ -56,6 +70,10 @@ class Rules
     }
 
 
+    /**
+     * Check if data is being added to table
+     * @return $this
+     */
     public function onCreate()
     {
         $this->execOrNot = ($this->actionType == 'POST')? true : false;
@@ -63,6 +81,10 @@ class Rules
     }
 
 
+    /**
+     * Check if data is being deleted from table
+     * @return $this
+     */
     public function onDelete()
     {
         $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
@@ -70,7 +92,7 @@ class Rules
     }
 
     /**
-     * if equivalence
+     * equivalence of if
      *
      * @param  $assert
      * @return $this
@@ -87,7 +109,7 @@ class Rules
     }
 
     /**
-     * elseif equivalence
+     * equivalence of elseif
      *
      * @param  $assert
      * @return $this
@@ -104,7 +126,7 @@ class Rules
     }
 
     /**
-     * else equivalence
+     * equivalence of else
      *
      * @return $this
      */
@@ -117,6 +139,12 @@ class Rules
             (!$this->assertion['elseWhenever'] || !$this->assertion['whenever']) ? : false;
         $this->called['otherwise'] = true;
             return $this;
+    }
+
+    public function onTable($tableName)
+    {
+
+        return this;
     }
 
     public function succeedWith($msg = null)

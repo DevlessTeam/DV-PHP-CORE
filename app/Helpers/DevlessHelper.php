@@ -892,4 +892,10 @@ class DevlessHelper extends Helper
         return ($status['status_code'] == 609)? true : false;
 
     }
+
+    public static function get_tablename_from_payload($payload)
+    {
+        //
+        return ;
+    }
 }

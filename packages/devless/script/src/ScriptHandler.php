@@ -50,7 +50,7 @@ class ScriptHandler
         
         $service = new Service();
         $rules = new Rules();
-        $rules->requestType($payload['method']);
+        $rules->requestType($payload);
         $user_cred['id'] = (isset($user_cred['id']))? $user_cred['id'] :'';
         $user_cred['token'] = (isset($user_cred['token']))? $user_cred['token'] :'';
         //available internal params
