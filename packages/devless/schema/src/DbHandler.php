@@ -236,7 +236,7 @@ class DbHandler
         }
         $destroy_query = $destroy_query.';';
         $result = eval('return'.$destroy_query);
-        if ($result == 0 ) {
+        if ($result == 0) {
             Helper::interrupt(614, 'could not '.$task.' '.$element);
         }
         return Response::respond(636, 'The table or field has been '.$task);
@@ -373,11 +373,10 @@ class DbHandler
                     $field['ref_table'] = $service_name.'_'.$field['ref_table'];
                     $field['field_type'] = strtolower($field['field_type']);
 
-                    //check if users table is being referenced 
-                    if( $field['field_type'] == 'reference' &&
+                    //check if users table is being referenced
+                    if ($field['field_type'] == 'reference' &&
                         strpos($field['ref_table'], '_devless_users')
                         == true) {
-
                         $field['ref_table'] = 'users';
 
                         $new_payload['field'][$count]['ref_table'] = '_devless_users';
@@ -524,7 +523,7 @@ class DbHandler
         ];
         if ($driver == 'mysql') {
             $conn['collation'] = $collation;
-        } else if ($driver == 'pgsql') {
+        } elseif ($driver == 'pgsql') {
             $conn['schema'] = 'public';
         }
 
@@ -592,8 +591,15 @@ class DbHandler
                     Helper::interrupt(640);
                 $relatedData = ($table != '_devless_users')?  \DB::table($refTable)->where('id', $referenceId)
                     ->get(): \DB::table($refTable)->where('id', $referenceId)
-                    ->select('username','first_name', 'last_name', 'email','phone_number',
-                        'status', 'phone_number')
+                    ->select(
+                        'username',
+                        'first_name',
+                        'last_name',
+                        'email',
+                        'phone_number',
+                        'status',
+                        'phone_number'
+                    )
                     ->get();
 
 
@@ -615,7 +621,7 @@ class DbHandler
         $relatedTables = [];
         $schema = $this->get_tableMeta($tableName);
         array_walk($schema['schema']['field'], function ($field)
-        use ($tableName, &$relatedTables) {
+ use ($tableName, &$relatedTables) {
             if ($field['field_type'] == 'reference') {
                 array_push($relatedTables, $field['ref_table']);
             }
@@ -684,7 +690,7 @@ class DbHandler
         $access_state = $service
             ->check_resource_access_right_type($access_type[$db_action]);
 
-        if($access_state == TRUE) {
+        if ($access_state == true) {
             $user_cred = Helper::get_authenticated_user_cred($access_state);
             $user_id = $user_cred['id'];
         }
