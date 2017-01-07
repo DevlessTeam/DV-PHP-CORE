@@ -3,7 +3,6 @@
 namespace Devless\RulesEngine;
 
 use App\Helpers\Helper;
-use App\Helpers\Response;
 use App\Helpers\ActionClass;
 use App\Helpers\DevlessHelper;
 
@@ -150,7 +149,7 @@ class Rules
     public function succeedWith($msg = null)
     {
         $evaluator = function () use ($msg) {
-            return Response::respond(1001, $msg);
+            return Helper::interrupt(1000, $msg);
         };
 
         return $this->executor($evaluator);
