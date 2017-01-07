@@ -141,10 +141,10 @@ class Rules
             return $this;
     }
 
-    public function onTable($tableName)
+    public function onTable($expectedTableName)
     {
-
-        return this;
+        $this->execOrNot = ($this->tableName == $expectedTableName)? true:false;
+        return $this;
     }
 
     public function succeedWith($msg = null)
@@ -168,6 +168,7 @@ class Rules
 
         return $this->executor($evaluator);
     }
+
 
     /**
      * Call on an ActionClass
