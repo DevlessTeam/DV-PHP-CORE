@@ -47,7 +47,7 @@ class ScriptHandler
      */
     public function run_script($Dvresource, $payload)
     {
-        
+
         $service = new Service();
         $rules = new Rules();
         $rules->requestType($payload);
@@ -72,6 +72,7 @@ EOT;
          $_____service_name = $payload['service_name'];
          $_____init_vars = $payload['script_init_vars'];
          $exec = function () use ($code, $rules, $EVENT, $_____service_name, $_____init_vars) {
+
                 //store script params temorally
                 $_____midRules = $rules;
                 $_____mindEvent = $EVENT;
