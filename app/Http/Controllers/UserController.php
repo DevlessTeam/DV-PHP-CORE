@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+
 use DB;
 use Hash;
 use App\App;
@@ -10,6 +11,7 @@ use App\Helpers\DevlessHelper as DLH;
 use App\Helpers\Helper as helper;
 use App\Jobs\RegisterUserJob;
 use App\Http\Requests\RegisterUserRequest;
+
 class UserController extends Controller
 {
     // TODO: Session store needs to authenticate with a session table for security
@@ -54,21 +56,28 @@ class UserController extends Controller
         'app_key'   => str_random(40),
         'app_token' => md5(uniqid(1, true)),
          ];
-         if($params = helper::query_string()) {
-             if(isset($params['url_install']) && isset($params['url_install'])&&
-                     isset($params['username']) && isset($params['password']) &&
-                     isset($params['app_name']) && isset($params['email']) && !(\DB::table('apps')->get()) ){
+        if ($params = helper::query_string()) {
+            if (isset($params['url_install']) && isset($params['url_install'])&&
+                   isset($params['username']) && isset($params['password']) &&
+                   isset($params['app_name']) && isset($params['email']) && !(\DB::table('apps')->get()) ) {
                 $username = $params['username'][0];
                 $email = $params['email'][0];
                 $password = $params['password'][0];
                 $app_name = $params['app_name'][0];
                 $app_token = md5(uniqid(1, true));
                 $app_description = (isset($params['app_description']))?
-                        $params['app_description'][0]:'';
-                return $this->registrer($request, $username, $email, $password,
-                        $app_name, $app_token, $app_description );
-             }
-         }
+                       $params['app_description'][0]:'';
+                return $this->registrer(
+                    $request,
+                    $username,
+                    $email,
+                    $password,
+                    $app_name,
+                    $app_token,
+                    $app_description
+                );
+            }
+        }
         return view('auth.create', compact('app'));
     }
     public function post_register(RegisterUserRequest $request)

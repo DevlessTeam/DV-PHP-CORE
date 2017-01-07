@@ -29,18 +29,21 @@
 
 //routes for only endpoints
     Route::group(
-        ['prefix' => 'api/v1', 'middleware' => 'cors'], function () {
+        ['prefix' => 'api/v1', 'middleware' => 'cors'],
+        function () {
 
             //check system status
             Route::get(
-                'status', function () {
+                'status',
+                function () {
                     return ['status_code' => 111, 'message' => 'healthy', 'payload' => []];
                 }
             );
 
             //system logs
             Route::get(
-                'log', function () {
+                'log',
+                function () {
                     return 'no log available';
                 }
             );
@@ -56,7 +59,8 @@
 
     //routes available to only login users
     Route::group(
-        ['middleware' => 'user.auth'], function () {
+        ['middleware' => 'user.auth'],
+        function () {
     
             //get list of users
             Route::get('devless_users', 'UserController@get_all_users');

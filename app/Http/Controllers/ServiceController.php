@@ -300,7 +300,6 @@ class ServiceController extends Controller
             $is_admin = Helper::is_admin_login();
             $accessed_internally = $internal_access;
             if ($is_it_public == 0 || $is_admin == true) {
-
                 $resource_access_right =
                   $this->_get_resource_access_right($current_service, $accessed_internally);
                 
@@ -328,23 +327,23 @@ class ServiceController extends Controller
 
                 //keep names of resources in the singular
                 switch ($resource) {
-                case 'db':
-                    $db = new Db();
-                    return $db->access_db($payload);
+                    case 'db':
+                        $db = new Db();
+                        return $db->access_db($payload);
                         break;
-                case 'schema':
-                    $db = new Db();
-                    return $db->create_schema($payload);
+                    case 'schema':
+                        $db = new Db();
+                        return $db->create_schema($payload);
                         break;
-                case 'view':
-                    return $payload;
-                case 'rpc':
-                    ($method != 'POST')? Helper::interrupt(639): true;
-                    $rpc = new Rpc();
-                    return $rpc->index($payload);
-                default:
-                    Helper::interrupt(605);
-                    break;
+                    case 'view':
+                        return $payload;
+                    case 'rpc':
+                        ($method != 'POST')? Helper::interrupt(639): true;
+                        $rpc = new Rpc();
+                        return $rpc->index($payload);
+                    default:
+                        Helper::interrupt(605);
+                        break;
                 }
             } else {
                 Helper::interrupt(624);
@@ -386,7 +385,8 @@ class ServiceController extends Controller
             $parameters = Helper::query_string();
         } else {
             Helper::interrupt(
-                608, 'Request method '.$method.
+                608,
+                'Request method '.$method.
                 ' is not supported'
             );
         }
@@ -398,14 +398,15 @@ class ServiceController extends Controller
      * @param  object $service service payload
      * @return array resource access right
      */
-    private function _get_resource_access_right($service, $master_access=false)
+    private function _get_resource_access_right($service, $master_access = false)
     {
         $mutate_resource_rights =
                 function ($rights) {
                     return array_map(
                         function ($access_code) {
-                            return $access_code ?: 1; 
-                        }, $rights
+                            return $access_code ?: 1;
+                        },
+                        $rights
                     );
                 };
 
@@ -444,11 +445,9 @@ class ServiceController extends Controller
         $is_user_login = Helper::is_admin_login();
         if (! $is_user_login && $access_type == 0) { //private
             Helper::interrupt(627);
-        } 
-        elseif ($access_type == 1) {  //public
+        } elseif ($access_type == 1) {  //public
             return false;
-        }
-        elseif ($access_type == 2) { //authentication required
+        } elseif ($access_type == 2) { //authentication required
             return true;
         }
         return true;

@@ -321,7 +321,7 @@ class DevlessHelper extends Helper
         $service_name = [];
         $service_id_map = [];
         $install_services = function ($service) use (&$service_id, &$service_name, &$service_id_map) {
-            if(count(\DB::table('services')->where('name', $service['name'])->get()) != 0 ){
+            if (count(\DB::table('services')->where('name', $service['name'])->get()) != 0) {
                 return false;
             }
             $old_service_id = $service['id'];
@@ -346,7 +346,7 @@ class DevlessHelper extends Helper
         ) {
 
             if (sizeof($service_table) !== 0) {
-                if(\Schema::hasTable($service_table['table_name'])){
+                if (\Schema::hasTable($service_table['table_name'])) {
                         return false;
                 }
                 $old_service_id = $service_table['service_id'];
@@ -461,9 +461,18 @@ class DevlessHelper extends Helper
         if ($token = Helper::get_authenticated_user_cred(true)) {
             $db = new DB();
             $user_data = $db::table('users')->where('id', $token['id'])
-                ->select('id', 'username', 'email', 'phone_number', 
-                        'first_name', 'last_name', 'status', 'created_at',
-                        'updated_at', 'remember_token')
+                ->select(
+                    'id',
+                    'username',
+                    'email',
+                    'phone_number',
+                    'first_name',
+                    'last_name',
+                    'status',
+                    'created_at',
+                    'updated_at',
+                    'remember_token'
+                )
                 ->first();
 
 
@@ -883,5 +892,4 @@ class DevlessHelper extends Helper
         return ($status['status_code'] == 609)? true : false;
 
     }
-
 }

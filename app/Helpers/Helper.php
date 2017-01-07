@@ -269,7 +269,7 @@ class Helper
             } else {
                 self::interrupt(628, null, [], true);
             }
-        } else if(!$access_state == false) {
+        } elseif (!$access_state == false) {
             self::interrupt(628, null, [], true);
         }
 

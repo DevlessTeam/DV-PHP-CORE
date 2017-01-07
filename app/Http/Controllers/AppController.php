@@ -35,7 +35,8 @@ class AppController extends Controller
     public function update(Request $request)
     {
         $this->validate(
-            $request, [
+            $request,
+            [
             'username' => 'required|max:255',
             'email' => 'required|email|max:255',
             'password' => 'confirmed|min:6',
