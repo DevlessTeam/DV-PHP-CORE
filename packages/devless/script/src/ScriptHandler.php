@@ -2,40 +2,13 @@
 
 namespace Devless\Script;
 
+use Devless\RulesEngine\Rules;
 use App\Helpers\Messenger as messenger;
 use App\Http\Controllers\ServiceController as Service;
-use Devless\RulesEngine\Rules;
+
 
 class ScriptHandler
 {
-    /**
-     * Call on services from within scripts and views.
-     *
-     * @param $json_payload
-     * @param string       $service_name
-     * @param string       $resource
-     * @param string       $method
-     *
-     * @return array|object
-     *
-     * @internal param json $payload request payload
-     */
-    public function internal_services($json_payload, $service_name, $resource, $method)
-    {
-        $json_payload = json_decode($json_payload, true);
-        $service = new Service();
-        //prepare request payload
-        $request = [
-            'resource' => $json_payload['resource'],
-            'method' => $method,
-        ];
-
-        session()->put('script_call', 'true');
-        $service->resource($request, $service_name, $resource, $internal_access = true);
-        session()->forget('script_call');
-
-        return json_decode(json_encode(messenger::message(), true), true);
-    }
 
     /**
      * script execution sandbox.

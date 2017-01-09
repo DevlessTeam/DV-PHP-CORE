@@ -66,7 +66,7 @@ class AppController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete entire Devless app
      *
      * @param  int $id
      * @return Response
@@ -79,11 +79,12 @@ class AppController extends Controller
         return redirect()->route('app.index');
     }
 
-    public function store()
-    {
-        dd("store");
-    }
 
+    /**
+     * Generate app access token
+     * @param Request $request
+     * @return array
+     */
     public function token(Request $request)
     {
         $app = App::first();

@@ -2,10 +2,11 @@
 namespace Devless\Schema;
 
 use App\Helpers\Helper;
+use Illuminate\Http\Request;
 use App\Helpers\Response as Response;
 use App\Http\Controllers\ServiceController as Service;
 use Illuminate\Database\Schema\Blueprint as Blueprint;
-use Illuminate\Http\Request;
+
 
 class DbHandler
 {
