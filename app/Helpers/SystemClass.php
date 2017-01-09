@@ -131,10 +131,7 @@ class devless
         return $payload;
     }
 
-    public static function look($statement)
-    {
-        \App\Helpers\Helper::interrupt(121,$statement);
-    }
+
     /**
      * This method will execute on service importation
      * @ACL private

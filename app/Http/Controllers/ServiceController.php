@@ -302,7 +302,7 @@ class ServiceController extends Controller
             if ($is_it_public == 0 || $is_admin == true) {
                 $resource_access_right =
                   $this->_get_resource_access_right($current_service, $accessed_internally);
-                
+
                 $payload =
                     [
                         'id'=> $current_service->id,
@@ -392,10 +392,12 @@ class ServiceController extends Controller
         }
         return $parameters;
     }
+
     /**
      * get and convert resource_access_right to array
      *
      * @param  object $service service payload
+     * @param bool $master_access
      * @return array resource access right
      */
     private function _get_resource_access_right($service, $master_access = false)
@@ -427,10 +429,7 @@ class ServiceController extends Controller
     {
         $is_token_set = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
         $is_admin = Helper::is_admin_login();
-        $state = ( $is_token_set || $is_admin )? true : false;
-        if (!$state) {
-            Helper::interrupt(631);
-        }
+        (!( $is_token_set || $is_admin ))?Helper::interrupt(631):'';
     }
     /**
      * check user resource  action access right eg: query db or write to table
@@ -470,27 +469,6 @@ class ServiceController extends Controller
         return $output;
     }
 
-    /**
-     * create service views
-     *
-     * @return string
-     */
-    public function service_views()
-    {
-
-            $folder_path = config('devless')['views_directory'];
-            $db_name = \Config::get('database.connections.'.\Config::get('database.default').'.database');
-
-            //get db name
-            DLH::zip_folder($folder_path, 'download.zip');
-            $mode = 0777;
-            $zip = $folder_path.'/'.'download.zip';
-            chmod($zip, $mode);
-            copy($zip, public_path().'/download.zip');
-            unlink($zip);
-            return "created";
-
-    }
 
     public function var_init($code)
     {
