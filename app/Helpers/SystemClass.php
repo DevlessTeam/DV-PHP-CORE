@@ -131,25 +131,4 @@ class devless
         return $payload;
     }
 
-
-    /**
-     * This method will execute on service importation
-     * @ACL private
-     */
-    public function __onImport()
-    {
-        //add code here
-
-    }
-
-
-    /**
-     * This method will execute on service exportation
-     * @ACL private
-     */
-    public function __onDelete()
-    {
-        //add code here
-
-    }
 }
