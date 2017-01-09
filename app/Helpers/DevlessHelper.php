@@ -900,16 +900,15 @@ class DevlessHelper extends Helper
      */
     public static function get_tablename_from_payload($payload)
     {
-
         if(strtoupper($payload['method']) == 'GET') {
             $tableName = (isset($payload['params']['table']))?$payload['params']['table']
-                        :
-                Helper::interrupt(611);
+                        :'';
+
 
         } else {
             $tableName = (isset($payload['params'][0]['name']))?$payload['params'][0]['name']
-                :
-                Helper::interrupt(611);
+                :'';
+
         }
         return $tableName;
     }

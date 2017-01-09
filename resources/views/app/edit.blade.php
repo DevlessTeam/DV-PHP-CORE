@@ -178,7 +178,6 @@
           "data": "{\"action\":\"regen\"}"
         };
         $.ajax(settings).done(function (response) {
-          console.log(response);
           result = JSON.parse(response);
           if(result.status_code == 622){
               $("#token").val(result.payload.new_token);
@@ -195,6 +194,5 @@
             return false;
         }
     }
-    ('#options-tab a:last').tab('show')
     </script>
 @endsection
