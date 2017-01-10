@@ -46,19 +46,20 @@ var devless_url   = connection.attributes['src'].value.split('/js/')[0];
 var constants = { "token":devless_token, "domain":devless_url };
 SDK = new Devless(constants);
 
-    var devless_main = {}
-    devless_mainsingleCourier = '';
-    devless_maincomponents = [];
-    devless_maincoreLib = {};
 
-    devless_maincoreLib.notify = function(message) {
+    var devless_main = {}
+    devless_main.singleCourier = '';
+    devless_main.components = [];
+    devless_main.coreLib = {};
+
+    devless_main.coreLib.notify = function(message) {
         _jql('.dv-notify').each(function() {
             this.textContent = message;
             this.style.display = 'block';
         })
     }
 
-    devless_maincoreLib.getParams = function(sParam) {
+    devless_main.coreLib.getParams = function(sParam) {
         var sPageURL = decodeURIComponent(window.location.search.substring(1)),
             sURLVariables = sPageURL.split('&'),
             sParameterName,
@@ -73,7 +74,7 @@ SDK = new Devless(constants);
         }
     };
 
-    devless_maincoreLib.render = function(component, data, service, table) {
+    devless_main.coreLib.render = function(component, data, service, table) {
         reference = component.element;
         var uniqueId = Math.round(Math.random()*200000000000000)
         if( _jql( reference ).find('[class="devless-wrapper-template"]').length == 0 ) {
@@ -133,7 +134,7 @@ SDK = new Devless(constants);
 
     }
 
-    devless_maincoreLib.form = function(component, callback) {
+    devless_main.coreLib.form = function(component, callback) {
         var reference = component.element;
         var data = {};
         var numFields = 0;
@@ -175,12 +176,12 @@ SDK = new Devless(constants);
         });
     }
 //get all tags
-    devless_maintags = function() {
+    devless_main.tags = function() {
         return this.classTags = _jql('html').find('[class*= dv]');
     }
 
 //get all queries from tags
-    devless_maingetQueries = function(node) {
+    devless_main.getQueries = function(node) {
         var queries = [];
         _jql.each(node.className.split(' '), function(index, value) {
             (value.startsWith('dv-'))? queries.push(value): '';
@@ -189,13 +190,13 @@ SDK = new Devless(constants);
     }
 
 //get all component scripts
-    devless_mainscriptBuilder = function(queries) {
+    devless_main.scriptBuilder = function(queries) {
         var executableMethod = '';
         var executableScript = [];
         _jql.each(queries, function(index, query){
             query = query.split(':');
             for(var i=1; i< query.length; i++) {
-                query[i] = devless_maincoreLib.getParams(query[i])||query[i]
+                query[i] = devless_main.coreLib.getParams(query[i])||query[i]
             }
             query = query.join(':');
             script = query.replace(/-/g, "().")+"()";
@@ -221,11 +222,11 @@ SDK = new Devless(constants);
     }
 
 
-    devless_maingetComponents = function(tags) {
+    devless_main.getComponents = function(tags) {
         var tempComponents = []
         _jql.each(tags, function(index, node){
-            var queries = devless_maingetQueries(node);
-            var script = devless_mainscriptBuilder(queries);
+            var queries = devless_main.getQueries(node);
+            var script = devless_main.scriptBuilder(queries);
             var label = assignLable();
             var element = node;
             var component = {'element':element, 'label':label,
@@ -235,9 +236,9 @@ SDK = new Devless(constants);
         return tempComponents;
     }
 
-    devless_mainfindComponent = function( key, searchValue ) {
+    devless_main.findComponent = function( key, searchValue ) {
         returnComponent = false;
-        _jql.each( devless_maincomponents, function( index, component ) {
+        _jql.each( devless_main.components, function( index, component ) {
             _jql.each( component, function( index, value ){
                 if( index == key) {
                     _jql.each(value, function(index, eachValue){
@@ -253,7 +254,7 @@ SDK = new Devless(constants);
     }
 
 //components
-    devless_maincomponents = devless_maingetComponents(devless_maintags());
+    devless_main.components = devless_main.getComponents(devless_main.tags());
 
     scriptEngine = {}
     SDK.queryParams = {};
@@ -262,14 +263,14 @@ SDK = new Devless(constants);
         return this;
     }
     scriptEngine.notify = function(message) {
-        //devless_maincoreLib.notify(message);
+        //devless_main.coreLib.notify(message);
     }
     scriptEngine.bindToDelete = function(template, id, service, table) {
         _jql(template).find('.dv-delete').each(function(){
             this.onclick = function(){
                 SDK.deleteData(service, table, "id", id, function(response){
-                    devless_maincoreLib.notify(response.message);
-                    devless_maininit();
+                    devless_main.coreLib.notify(response.message);
+                    devless_main.init();
 
                 })
             };
@@ -286,10 +287,10 @@ SDK = new Devless(constants);
     }
 
     scriptEngine.all = function(service, table) {
-        var reference = devless_mainsingleCourier;
+        var reference = devless_main.singleCourier;
         SDK.queryData(service, table, SDK.queryParams, function(response) {
-            devless_maincoreLib.render(reference, response.payload.results, service, table);
-            (response.status_code != 625)?devless_maincoreLib.notify(response.message):'';
+            devless_main.coreLib.render(reference, response.payload.results, service, table);
+            (response.status_code != 625)?devless_main.coreLib.notify(response.message):'';
 
         });
         return this;
@@ -303,12 +304,12 @@ SDK = new Devless(constants);
     scriptEngine.oneto = function(service, table) {
         persist = function(storeData) {
             SDK.addData(service, table, storeData, function(response){
-                devless_maincoreLib.notify(response.message);
-                devless_maininit();
+                devless_main.coreLib.notify(response.message);
+                devless_main.init();
             })
 
         }
-        devless_maincoreLib.form(devless_mainsingleCourier, persist);
+        devless_main.coreLib.form(devless_main.singleCourier, persist);
         return this;
     }
 
@@ -316,12 +317,12 @@ SDK = new Devless(constants);
         _jql('<input>').attr({
             type: 'hidden',
             name: 'id'
-        }).appendTo(devless_mainsingleCourier.element);
+        }).appendTo(devless_main.singleCourier.element);
         return this;
     }
     scriptEngine.bindToUpdate = function(template, id, service, table, data) {
         var className = 'dv-update-oneof:'+service+':'+table;
-        component = devless_mainfindComponent('queries', className);
+        component = devless_main.findComponent('queries', className);
         _jql( template ).find('.dv-update').each(function(){
             this.onclick = function(){
                 scriptEngine.populateForm(component, data);
@@ -348,11 +349,11 @@ SDK = new Devless(constants);
             if( data.id == undefined ) { throw ` id could not be found in the form. Try adding <input type="hidden" name="id" /> to the update form ` }
 
             SDK.updateData( service, table,"id", data.id, data, function( response ) {
-                devless_maincoreLib.notify(response.message);
-                devless_maininit();
+                devless_main.coreLib.notify(response.message);
+                devless_main.init();
             });
         }
-        devless_maincoreLib.form(devless_mainsingleCourier, update);
+        devless_main.coreLib.form(devless_main.singleCourier, update);
         return this;
     }
     scriptEngine.where = function(key, value){
@@ -361,61 +362,61 @@ SDK = new Devless(constants);
         return this;
     }
     scriptEngine.signup = function() {
-        var actionUrl = _jql(devless_mainsingleCourier.element).attr('action');
+        var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
         actionUrl = (actionUrl != undefined)? actionUrl: '#';
         register = function(record) {
             SDK.call('devless', 'signUp', [ record['email'], record['password'], record['username'], record['phonenumber'],
                 record['firstname'], record['lastname'] ], function(response){
                 if( response.payload.result.message == undefined ) {
                     SDK.setToken(response.payload.result);
-                    devless_maincoreLib.notify("signup was successful");
+                    devless_main.coreLib.notify("signup was successful");
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else {
-                    devless_maincoreLib.notify(response.payload.result.message)
+                    devless_main.coreLib.notify(response.payload.result.message)
                 }
             });
         }
-        devless_maincoreLib.form(devless_mainsingleCourier, register);
+        devless_main.coreLib.form(devless_main.singleCourier, register);
     }
 
     scriptEngine.signin = function(record) {
-        var actionUrl = _jql(devless_mainsingleCourier.element).attr('action');
+        var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
         actionUrl = (actionUrl != undefined)? actionUrl: '#';
         login = function(record) {
             SDK.call('devless', 'login', [record['username'], record['email'], record['phonenumber'],
                 record['password']], function(response){
                 if(response.payload.result !== false) {
                     SDK.setToken(response.payload.result);
-                    devless_maincoreLib.notify("Loggend In successfully");
+                    devless_main.coreLib.notify("Loggend In successfully");
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else{
-                    devless_maincoreLib.notify("Login failed");
+                    devless_main.coreLib.notify("Login failed");
                 }
             });
         }
-        devless_maincoreLib.form(devless_mainsingleCourier, login);
+        devless_main.coreLib.form(devless_main.singleCourier, login);
     }
     scriptEngine.profile = function() {
-        var component = devless_mainsingleCourier;
+        var component = devless_main.singleCourier;
         SDK.call('devless', 'profile', [], function(response){
             if(response.payload.error) {
-                devless_maincoreLib.notify(response.payload.error.message);
+                devless_main.coreLib.notify(response.payload.error.message);
             } else {
                 data = response.payload.result;
                 data.firstname = data.first_name;
                 data.firstname = data.last_name;
-                devless_maincoreLib.render(component, [data])
+                devless_main.coreLib.render(component, [data])
             }
         })
     }
 
     scriptEngine.updateProfile = function() {
-        var component = devless_mainsingleCourier;
-        var actionUrl = _jql(devless_mainsingleCourier.element).attr('action');
+        var component = devless_main.singleCourier;
+        var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
         actionUrl = (actionUrl != undefined)? actionUrl: '#';
         SDK.call('devless', 'profile', [], function(response){
             if(response.payload.error) {
-                devless_maincoreLib.notify(response.payload.error.message);
+                devless_main.coreLib.notify(response.payload.error.message);
             } else {
                 data = response.payload.result;
                 data.firstname = data.first_name;
@@ -429,36 +430,36 @@ SDK = new Devless(constants);
             SDK.call('devless', 'updateProfile', [ record['email'], record['password'], record['username'], record['phonenumber'],
                 record['firstname'], record['lastname'] ], function(response){
                 if(response.payload.result == true ) {
-                    devless_maincoreLib.notify('Profile updated successfully');
+                    devless_main.coreLib.notify('Profile updated successfully');
                     console.log("profile update went through")
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else {
-                    devless_maincoreLib.notify('Profile could not be updated');
+                    devless_main.coreLib.notify('Profile could not be updated');
                 }
 
             });
         }
-        devless_maincoreLib.form(component, updateScript);
+        devless_main.coreLib.form(component, updateScript);
 
     }
     scriptEngine.logout = function() {
-        devless_mainsingleCourier.element.onclick = function() {
-            var actionUrl = _jql(devless_mainsingleCourier.element).attr('action');
+        devless_main.singleCourier.element.onclick = function() {
+            var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
             actionUrl = (actionUrl != undefined)? actionUrl: '#';
             SDK.call('devless', 'logout', [], function(response){
                 if(response.payload.result == true) {
-                    devless_maincoreLib.notify('Logout was successful')
+                    devless_main.coreLib.notify('Logout was successful')
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else {
-                    devless_maincoreLib.notify('Sorry could not log you out')
+                    devless_main.coreLib.notify('Sorry could not log you out')
                 }
             })
         }
     }
 
-    devless_maininit = function() {
-        _jql.each(devless_maincomponents, function(index, node) {
-            devless_mainsingleCourier = node;
+    devless_main.init = function() {
+        _jql.each(devless_main.components, function(index, node) {
+            devless_main.singleCourier = node;
             _jql.each(node.scripts, function(index, script) {
                 try{
                     eval('scriptEngine.'+script);
@@ -470,8 +471,6 @@ SDK = new Devless(constants);
         });
 
     }
-    devless_maininit();
+    devless_main.init();
 
 })();
-
-
