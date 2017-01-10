@@ -113,7 +113,7 @@ class DbHandler
         }
         if ($output) {
             return Response::respond(609, 'Data has been added to '.$table['name']
-                .' table succefully');
+                .' table successfully');
         }
     }
     /**
