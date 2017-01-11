@@ -51,7 +51,7 @@ class Helper
         619 => 'Table was updated successfully',
         620 => 'Could not delete table',
         621 => 'Could not find asset file',
-        622 => 'Token updated succefully',
+        622 => 'Token updated successfully',
         623 => 'Token could not be updated',
         624 => 'Sorry this is not an open endpoint',
         625 => 'Got response successfully',
