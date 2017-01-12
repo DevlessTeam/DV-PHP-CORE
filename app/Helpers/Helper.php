@@ -128,7 +128,7 @@ class Helper
     public static function interrupt($stack, $message = null, $payload = [])
     {
         $message = ($message !== null) ? $message : self::responseMessage($stack);
-        throw new HttpException(500, $message, null, [], $stack);
+        throw new HttpException(500, $message, null, $payload, $stack);
     }
 
     /**

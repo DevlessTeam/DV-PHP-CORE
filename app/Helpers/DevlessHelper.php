@@ -416,8 +416,6 @@ class DevlessHelper extends Helper
 
         $user = new User;
 
-        $secret = config('app')['key'];
-
         $token = $this->auth_fields_handler($payload, $user);
 
         if ($token == false) {
