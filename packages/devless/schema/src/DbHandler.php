@@ -180,12 +180,14 @@ class DbHandler
         //check if table name is set
         $service_name = $payload['service_name'];
         $table = $payload['params'][0]['name'];
+
         //remove service appendage from service
         if (($pos = strpos($table, $service_name.'_')) !== false) {
             $tableWithoutService = substr($table, $pos + 1);
         } else {
             $tableWithoutService = $table;
         }
+
         $table_name = ($tableWithoutService == $payload['params'][0]['name'])
             ? $service_name.'_'.$tableWithoutService:
             $payload['params'][0]['name'];
@@ -282,7 +284,7 @@ class DbHandler
             (isset($payload['params']['related'])) ? $queried_table_list =
                 $payload['params']['related'] : false;
             unset($payload['params']['related']);
-            $related = [];
+
             if (isset($payload['params']['orderBy'])) {
                 $complete_query = $complete_query
                     .'->orderBy("'.$payload['params']['orderBy'][0].'" )';
@@ -452,7 +454,7 @@ class DbHandler
      *
      * @return object
      */
-    public function column_generator($field, $table, $db_type)
+    private function column_generator($field, $table, $db_type)
     {
         $column_type = $this->check_column_constraints($field);
         $unique = '';
@@ -549,19 +551,18 @@ class DbHandler
             if (isset($default_connector['hostname'])) {
                 $hostname = $default_connector['hostname'];
             } else {
-                $hostname = (isset($default_connector['host'])) ? $default_connector['host'] : false;
+                $hostname = (isset($default_connector['host'])) ? $default_connector['host'] : '';
             }
-            $username = (isset($default_connector['username'])) ? $default_connector['username'] : false;
-            $password = (isset($default_connector['password'])) ? $default_connector['password'] : false;
+            $username = (isset($default_connector['username'])) ? $default_connector['username'] : '';
+            $password = (isset($default_connector['password'])) ? $default_connector['password'] : '';
             $database = $default_connector['database'];
-            $port     = (isset($default_connector['port']))? $default_connector['port'] : false;
+            $port     = (isset($default_connector['port']))? $default_connector['port'] : '';
         } else {
-            $driver   = $connector_params['driver'];
-            $hostname = $connector_params['hostname'];
-            $database = $connector_params['database'];
-            $username = $connector_params['username'];
-            $password = $connector_params['password'];
-            $port     = $connector_params['port'];
+
+            $fields = ['driver', 'hostname', 'database', 'username', 'password', 'port'];
+            foreach($fields as $field) {
+                ${$field} = $connector_params[$field];
+            }
         }
         $this->db_socket($driver, $hostname, $database, $username, $password, $port);
         return true;
@@ -657,8 +658,7 @@ class DbHandler
     {
         $tableMeta = \DB::table('table_metas')->
         where('table_name', $table_name)->first();
-        $tableMeta = json_decode(json_encode($tableMeta), true);
-        $tableMeta['schema'] = json_decode($tableMeta['schema'], true);
+        $tableMeta = json_decode($tableMeta->schema, true);
         return $tableMeta;
     }
     /**
