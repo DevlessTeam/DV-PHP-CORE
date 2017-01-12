@@ -85,10 +85,9 @@ class DbHandler
      */
     public function add_data($payload)
     {
-        $service_id = $payload['id'];
         $service_name = $payload['service_name'];
         //setup db connection
-        $connector = $this->_connector($payload);
+        $this->_connector($payload);
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
 
         (isset($payload['params'][0]['name']) && count($payload['params'][0]['name'])> 0
@@ -127,7 +126,7 @@ class DbHandler
      */
     public function update($payload)
     {
-        $connector = $this->_connector($payload);
+        $this->_connector($payload);
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
         $service_name = $payload['service_name'];
         if (isset(
@@ -176,7 +175,7 @@ class DbHandler
      */
     public function destroy($payload)
     {
-        $connector = $this->_connector($payload);
+        $this->_connector($payload);
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
         //check if table name is set
         $service_name = $payload['service_name'];
@@ -285,7 +284,6 @@ class DbHandler
             unset($payload['params']['related']);
             $related = [];
             if (isset($payload['params']['orderBy'])) {
-                $order_by = $payload['params']['orderBy'];
                 $complete_query = $complete_query
                     .'->orderBy("'.$payload['params']['orderBy'][0].'" )';
                 unset($payload['params']['orderBy']);
@@ -350,12 +348,12 @@ class DbHandler
     public function create_schema($payload)
     {
         $service_name = $payload['service_name'];
+
         //connectors mysql pgsql sqlsrv sqlite
         $this->_connector($payload);
 
         //dynamically create columns with schema builder
         $db_type = $this->db_types;
-        $table_meta_data = [];
         $new_payload = $payload['params'][0];
         $new_payload['id'] = $payload['id'];
         $table_name = $service_name.'_'.$new_payload['name'];
@@ -672,7 +670,7 @@ class DbHandler
      */
     public function check_db_connection(array $connection_params)
     {
-        $connector = $this->_connector($connection_params);
+        $this->_connector($connection_params);
         return true;
     }
     /**
@@ -719,7 +717,6 @@ class DbHandler
     ) {
         $table_meta = $this->get_tableMeta($service_name.'_'.$table_name);
         $schema = $table_meta['schema'];
-        $hit = 0;
         $count = 0;
         foreach ($table_data as $field_unit) {
             foreach ($field_unit as $field => $field_value) {

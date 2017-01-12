@@ -490,11 +490,8 @@ class DevlessHelper extends Helper
     public function login($payload)
     {
 
-        $fields = get_defined_vars();
-
         $user =  new user();
-        $fields = $fields['payload'];
-        $secret = config('app')['key'];
+        $fields = $payload;
 
         foreach ($fields as $field => $value) {
             $field = strtolower($field);
