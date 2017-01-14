@@ -46,7 +46,7 @@ EOT;
          $_____init_vars = $payload['script_init_vars'];
          $exec = function () use ($code, $rules, $EVENT, $_____service_name, $_____init_vars) {
 
-                //store script params temorally
+                //store script params temporally
                 $_____midRules = $rules;
                 $_____mindEvent = $EVENT;
                $declarationString = '';

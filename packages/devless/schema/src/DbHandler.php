@@ -658,7 +658,8 @@ class DbHandler
     {
         $tableMeta = \DB::table('table_metas')->
         where('table_name', $table_name)->first();
-        $tableMeta = json_decode($tableMeta->schema, true);
+        $tableMeta = json_decode(json_encode($tableMeta), true);
+        $tableMeta['schema'] = json_decode($tableMeta['schema'], true);
         return $tableMeta;
     }
     /**

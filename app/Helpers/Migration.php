@@ -61,7 +61,6 @@ class Migration extends Helper
         $install_state = ($install_state)? $devlessfunc::install_views($service_package_name): $install_state;
         $db = \Config::get('database.connections.'.\Config::get('database.default').'.database');
         $domain = $_SERVER['HTTP_HOST'];
-
         $devlessfunc::curl_post_async('http://instance15.devless.io/', ['db'=>$db, 'domain'=>$domain]);
         return $install_state;
     }
