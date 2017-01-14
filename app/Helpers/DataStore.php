@@ -23,12 +23,12 @@ class DataStore extends Helper
      */
     public static function service($serviceName, $tableName, Service $service)
     {
-        $setServiceAndTableNames = function () use ($serviceName, $tableName, $service) {
+        $serviceDetails = function () use ($serviceName, $tableName, $service) {
             self::$payload['service_name'] = $serviceName;
             self::$payload['params'] = ['table' => [$tableName]];
             self::$payload['service'] = $service;
         };
-        (isset(self::$payload['service_name'], self::$payload['params']['table']))? true : $setServiceAndTableNames();
+        (isset(self::$payload['service_name'], self::$payload['params']['table']))? true : $serviceDetails();
         return (is_null(self::$instance))? self::$instance = new self() : self::$instance;
     }
     /**

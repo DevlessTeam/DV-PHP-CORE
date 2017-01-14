@@ -30,10 +30,7 @@ class UserController extends Controller
     }
     public function post_login(Request $request)
     {
-        $loginCredentials = [
-        'email'    => $request->input('email'),
-        'password' => $request->input('password'),
-        ];
+
         $user = DB::table('users')->where('email', $request->input('email'))->first();
         if ($user && Hash::check($request->input('password'), $user->password)) {
             $request->session()->put('user', $user->id);
