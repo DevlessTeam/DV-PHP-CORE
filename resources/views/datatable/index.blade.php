@@ -46,7 +46,7 @@ td {
                 <select id="table_name" name="table_name" class="form-control m-b-10">
                     @if(\Request::has('table_name'))
                         @foreach($tables as $table)
-                            <option value="{{$table->id}}">{{$table->table_name}}</option>
+                            <option value="{{$table->id}}">{{json_decode($table->schema)->name}}</option>
                         @endforeach
                     @else
                         <option disabled selected value> -- select a table -- </option>
@@ -120,6 +120,10 @@ td {
 <script charset="utf-8">
 window.onload(function() {
 
+    var service_id;
+    var service_name;
+    var service_table;
+
     document.getElementById('empty_handler').style.display = 'none';
     document.getElementById('page-nav').style.display = 'none';
     document.getElementById('previous').classList.add = 'disabled';
@@ -127,6 +131,13 @@ window.onload(function() {
     $(window).load(function() {
         $('#page-nav').hide();
         $('.header-control').hide();
+        
+        /* Handles Service and table name build when view data is click from the Service Panel */        
+        if ($('#service option:selected').val() != '' && $('#table_name option:selected').val() != '') {
+            var tb_name = $('#service option:selected').text() + '_' + $('#table_name option:selected').text();
+            service_name = $('#service option:selected').text();
+            tableCall(tb_name);
+        }
     });
 
     var entries;
@@ -142,30 +153,18 @@ window.onload(function() {
         $.get('/datatable/'+table_entries+'/entries', function(data) {
             $('#addbtn').prop("disabled", false);
             navOption(data);
-            if (data.data.length == 0){
+            if (data.data.length === 0){
                 $('#empty_handler').show('fast', function(){
                     $('.header-control').hide();
                     $('#page-nav').hide();
                 });
             } else {
-                $(window).load(function() {
-                    $('#page-nav').show();
-                });
+                $('#page-nav').show();
             }
-
-            $('#page-nav').show();
 
         });
     }
 
-    if ($('#service option:selected').val() != '' && $('#table_name option:selected').val() != '') {
-        var tb_name = $('#service option:selected').text() + '_' + $('#table_name option:selected').text();
-        tableCall(tb_name);
-    }
-
-    var service_id;
-    var service_name;
-    var service_table;
     var c;
     $('#service').change(function() {
         service_id = $('#service').val();
