@@ -111,9 +111,10 @@
                                 <div class="col-lg-offset-2 col-lg-10">
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-info  pull-left" data-toggle="modal" data-target="#connect-to-app">
+                                        <i class="fa fa-plug"></i>
                                         Connect to my App
                                     </button>
-                                    <button type="submit" class="btn btn-info pull-right">Save Changes</button>
+                                    <button type="submit" class="btn btn-info pull-right"><i class="fa fa-floppy-o"></i> Save Changes</button>
                                 </div>
                             </div>
                         </form>

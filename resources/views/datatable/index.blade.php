@@ -6,7 +6,7 @@
         <h3>
             Data Table
         </h3>
-        <button type="button" id="addbtn" class="btn btn-primary pull-right" style="position: relative; bottom: 23px;" disabled="true">Add Data</button>
+        <button type="button" id="addbtn" class="btn btn-primary pull-right" style="position: relative; bottom: 23px;" disabled="true"><i class="fa fa-plus"></i> Add Data</button>
         <span class="sub-title">Data Table/</span>
     </div>
 @endsection
