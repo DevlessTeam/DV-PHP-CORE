@@ -50,11 +50,21 @@ SDK = new Devless(constants);
     devless_main.components = [];
     devless_main.coreLib = {};
 
-    devless_main.coreLib.notify = function(message) {
+    devless_main.coreLib.notify = function(message, status) {
         _jql('.dv-notify').each(function() {
             this.textContent = message;
             this.style.display = 'block';
         })
+
+        if(status == 1) {
+            _jql('.dv-notify-success').each(function() {
+                this.style.display = 'block';
+            })
+        } else if(status == 0 ) {
+            _jql('.dv-notify-failed').each(function() {
+                this.style.display = 'block';
+            })
+        }
     }
 
     devless_main.coreLib.getParams = function(sParam) {
@@ -122,13 +132,9 @@ SDK = new Devless(constants);
                     screenPainter(prefix+'-'+field, value);
                 })
             })
-
-
-
-
-            _jql( reference ).prepend( _jql( template )[0] );
+            _jql( reference ).prepend(_jql( template )[0].innerHTML);
         })
-        if(data.length <= 0) { _jql(reference).find('[class="devless-wrapper-'+uniqueId+'"]')[0].remove()}
+        if(data == 'undefined') { _jql(reference).find('[class="devless-wrapper-'+uniqueId+'"]')[0].remove()}
 
     }
 
@@ -175,7 +181,7 @@ SDK = new Devless(constants);
     }
 //get all tags
     devless_main.tags = function() {
-        return this.classTags = _jql('html').find('[class*= dv]');
+        return _jql('html').find('[class*= dv]');
     }
 
 //get all queries from tags
@@ -261,13 +267,16 @@ SDK = new Devless(constants);
         return this;
     }
     scriptEngine.notify = function(message) {
-        //devless_main.coreLib.notify(message);
+        return this;
     }
+    scriptEngine.success = function() { return this;}
+    scriptEngine.failed = function() { return this;}
     scriptEngine.bindToDelete = function(template, id, service, table) {
         _jql(template).find('.dv-delete').each(function(){
             this.onclick = function(){
                 SDK.deleteData(service, table, "id", id, function(response){
-                    devless_main.coreLib.notify(response.message);
+                    (response.status_code == 636)?devless_main.coreLib.notify(response.message,1):
+                        devless_main.coreLib.notify(response.message,0);
                     devless_main.init();
 
                 })
@@ -288,7 +297,7 @@ SDK = new Devless(constants);
         var reference = devless_main.singleCourier;
         SDK.queryData(service, table, SDK.queryParams, function(response) {
             devless_main.coreLib.render(reference, response.payload.results, service, table);
-            (response.status_code != 625)?devless_main.coreLib.notify(response.message):'';
+            (response.status_code != 625)?devless_main.coreLib.notify(response.message,1):devless_main.coreLib.notify(response.message,0);
 
         });
         return this;
@@ -302,6 +311,8 @@ SDK = new Devless(constants);
     scriptEngine.oneto = function(service, table) {
         persist = function(storeData) {
             SDK.addData(service, table, storeData, function(response){
+                (response.status_code == 609)?devless_main.coreLib.notify(response.message,1):
+                    devless_main.coreLib.notify(response.messagem,0);
                 devless_main.coreLib.notify(response.message);
                 devless_main.init();
             })
@@ -347,7 +358,9 @@ SDK = new Devless(constants);
             if( data.id == undefined ) { throw ` id could not be found in the form. Try adding <input type="hidden" name="id" /> to the update form ` }
 
             SDK.updateData( service, table,"id", data.id, data, function( response ) {
-                devless_main.coreLib.notify(response.message);
+                (response.status_code == 619)?devless_main.coreLib.notify(response.message,1):
+                    devless_main.coreLib.notify(response.message,0);
+
                 devless_main.init();
             });
         }
@@ -385,7 +398,7 @@ SDK = new Devless(constants);
                 record['password']], function(response){
                 if(response.payload.result !== false) {
                     SDK.setToken(response.payload.result);
-                    devless_main.coreLib.notify("Loggend In successfully");
+                    devless_main.coreLib.notify("Log in successfully");
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else{
                     devless_main.coreLib.notify("Login failed");
@@ -456,6 +469,15 @@ SDK = new Devless(constants);
     }
 
     devless_main.init = function() {
+        _jql('.dv-notify-success').each(function() {
+            this.style.display = 'none';
+        })
+        _jql('.dv-notify-failed').each(function() {
+            this.style.display = 'none';
+        })
+        _jql('.dv-notify').each(function() {
+            this.style.display = 'none';
+        })
         _jql.each(devless_main.components, function(index, node) {
             devless_main.singleCourier = node;
             _jql.each(node.scripts, function(index, script) {
@@ -467,6 +489,7 @@ SDK = new Devless(constants);
                 }
             });
         });
+
 
     }
     devless_main.init();
