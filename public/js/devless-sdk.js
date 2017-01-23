@@ -297,7 +297,7 @@ SDK = new Devless(constants);
         var reference = devless_main.singleCourier;
         SDK.queryData(service, table, SDK.queryParams, function(response) {
             devless_main.coreLib.render(reference, response.payload.results, service, table);
-            (response.status_code != 625)?devless_main.coreLib.notify(response.message,1):devless_main.coreLib.notify(response.message,0);
+            (response.status_code == 625)?devless_main.coreLib.notify(response.message,1):devless_main.coreLib.notify(response.message,0);
 
         });
         return this;
