@@ -56,7 +56,7 @@
                     </div>
 
                     <br><br><br>
-                    <button class="btn btn-info" type="submit">Export</button>
+                    <button class="btn btn-info" type="submit"><i class="fa fa-download"></i> Export</button>
                   </form>
                 </div>
                 <div class="tab-pane" id="mtab">
@@ -80,7 +80,7 @@
                         <br><br>
                       </div>
                     </div>
-                    <button class="btn btn-info" type="submit">Import</button>
+                    <button class="btn btn-info" type="submit"><i class="fa fa-upload"></i> Import</button>
                   </form>
                 </div>
               </div>

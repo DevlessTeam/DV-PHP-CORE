@@ -112,7 +112,7 @@
                     </div>
                         <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
-                                <button type="submit" class="btn btn-info pull-right">Create</button>
+                                <button type="submit" class="btn btn-info pull-right"><i class="fa fa-plus"></i> Create</button>
                             </div>
                         </div>
                         </form>

@@ -231,8 +231,18 @@
                                     <td>{{$table_data['name']}}</td>
                                     <td>{{$table_data['description']}}</td>
                                     <td>{{sizeOf($table_data['field'])}} field(s)</td>
-                                    <td><a href="/datatable?service_name={{$service->name}}&table_name={{$table_data['name']}}" class="btn btn-default">View Data</a>
-                                        <button onclick="destroy_table('{{$table_data['name']}}','{{$service->name}}')" class="btn btn-danger btn-sm">Delete Table</button></td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                        <a href="" class="btn btn-default"><i class="fa fa-edit"></i> </a>
+                                            </div>
+                                            <div class="col-lg-4">
+                                        <a href="/datatable?service_name={{$service->name}}&table_name={{$table_data['name']}}" class="btn btn-default"><i class="fa fa-table"></i></a>
+                                            </div><div class="col-lg-4">
+                                        <button onclick="destroy_table('{{$table_data['name']}}','{{$service->name}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> </button>
+                                            </div>
+                                            </div>
+                                    </td>
                                 </tr>
                                     <?php $count++; ?>
                                     @endforeach
@@ -242,7 +252,7 @@
                             </tbody>
                         </table>
                         <br>
-                        <button type="button" class="btn btn-info " data-toggle="modal" data-target="#schema-table">New Table</button>
+                        <button type="button" class="btn btn-info " data-toggle="modal" data-target="#schema-table"><i class="fa fa-table"></i> New Table</button>
                     </div>
                 </section>
                                     </div>
