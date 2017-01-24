@@ -51,6 +51,7 @@
     devless_main.coreLib = {};
 
     devless_main.coreLib.notify = function(message, status) {
+        console.log("notfied was called")
         _jql('.dv-notify').each(function() {
             this.textContent = message;
             this.style.display = 'block';
@@ -59,6 +60,7 @@
         if(status == 1) {
             _jql('.dv-notify-success').each(function() {
                 this.style.display = 'block';
+                console.log("am here")
             })
         } else if(status == 0 ) {
             _jql('.dv-notify-failed').each(function() {
@@ -319,8 +321,7 @@
         persist = function(storeData) {
             SDK.addData(service, table, storeData, function(response){
                 (response.status_code == 609)?devless_main.coreLib.notify(response.message,1):
-                    devless_main.coreLib.notify(response.messagem,0);
-                devless_main.coreLib.notify(response.message);
+                    devless_main.coreLib.notify(response.message,0);
                 devless_main.init();
             })
 
@@ -476,15 +477,6 @@
     }
 
     devless_main.init = function() {
-        _jql('.dv-notify-success').each(function() {
-            this.style.display = 'none';
-        })
-        _jql('.dv-notify-failed').each(function() {
-            this.style.display = 'none';
-        })
-        _jql('.dv-notify').each(function() {
-            this.style.display = 'none';
-        })
         _jql.each(devless_main.components, function(index, node) {
             devless_main.singleCourier = node;
             _jql.each(node.scripts, function(index, script) {
@@ -499,6 +491,15 @@
 
 
     }
+    _jql('.dv-notify-success').each(function() {
+        this.style.display = 'none';
+    })
+    _jql('.dv-notify-failed').each(function() {
+        this.style.display = 'none';
+    })
+    _jql('.dv-notify').each(function() {
+        this.style.display = 'none';
+    })
     devless_main.init();
 
 })();
