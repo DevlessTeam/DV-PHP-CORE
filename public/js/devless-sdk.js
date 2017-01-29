@@ -51,7 +51,6 @@
     devless_main.coreLib = {};
 
     devless_main.coreLib.notify = function(message, status) {
-        console.log("notfied was called")
         _jql('.dv-notify').each(function() {
             this.textContent = message;
             this.style.display = 'block';
@@ -60,7 +59,6 @@
         if(status == 1) {
             _jql('.dv-notify-success').each(function() {
                 this.style.display = 'block';
-                console.log("am here")
             })
         } else if(status == 0 ) {
             _jql('.dv-notify-failed').each(function() {
@@ -364,7 +362,6 @@
     scriptEngine.oneof = function( service, table ) {
         update = function( data ) {
             if( data.id == undefined ) { throw ` id could not be found in the form. Try adding <input type="hidden" name="id" /> to the update form ` }
-
             SDK.updateData( service, table,"id", data.id, data, function( response ) {
                 (response.status_code == 619)?devless_main.coreLib.notify(response.message,1):
                     devless_main.coreLib.notify(response.message,0);
@@ -476,6 +473,35 @@
         }
     }
 
+    scriptEngine.addXMLRequestCallback = function(callback){
+        var oldSend, i;
+        if( XMLHttpRequest.callbacks ) {
+            XMLHttpRequest.callbacks.push( callback );
+        } else {
+            XMLHttpRequest.callbacks = [callback];
+            oldSend = XMLHttpRequest.prototype.send;
+            XMLHttpRequest.prototype.send = function(){
+                for( i = 0; i < XMLHttpRequest.callbacks.length; i++ ) {
+                    XMLHttpRequest.callbacks[i]( this );
+                }
+                oldSend.apply(this, arguments);
+            }
+        }
+    }
+
+    devlessCallbacks = function(callback) {
+        scriptEngine.addXMLRequestCallback( function( xhr ) {
+            xhr.onreadystatechange=function(){
+                if ( xhr.readyState == 4 && xhr.status == 200 ) {
+                    callback(JSON.parse(xhr.responseText));
+                }
+            }
+
+        });
+    }
+
+
+
     devless_main.init = function() {
         _jql.each(devless_main.components, function(index, node) {
             devless_main.singleCourier = node;
@@ -502,4 +528,6 @@
     })
     devless_main.init();
 
-})();
+
+
+})(window);
