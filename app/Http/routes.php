@@ -61,9 +61,10 @@
     Route::group(
         ['middleware' => 'user.auth'],
         function () {
-    
+
             //get list of users
             Route::get('devless_users', 'UserController@get_all_users');
+            Route::get('retrieve_users', 'UserController@retrieve_all_users');
 
             //service views
             Route::resource('services', 'ServiceController');
@@ -73,7 +74,7 @@
 
             //install service
             Route::get('install_service', 'HubController@get_service');
-        
+
             //app views
             Route::resource('app', 'AppController');
 
