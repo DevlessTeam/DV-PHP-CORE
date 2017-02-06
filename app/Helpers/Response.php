@@ -27,13 +27,6 @@ class Response extends Helper
             'payload'     => $payload,
         ];
 
-        //return results from db functions called from scripts
-        if (session('script_call') == true) {
-            messenger::createMessage($response);
-        } else {
-            return  $response;
-        }
-
         return $response;
     }
 }
