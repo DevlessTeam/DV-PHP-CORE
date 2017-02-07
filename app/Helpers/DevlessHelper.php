@@ -694,9 +694,6 @@ class DevlessHelper extends Helper
         $property = $class->getMethod($method);
         $docComment  = $property->getDocComment();
 
-        //check DocComment
-        $ACLS =  ['@ACL public', '@ACL private', '@ACL protected'];
-
         $access_type = function () use ($docComment) {
             (strpos(($docComment), '@ACL private'))? Helper::interrupt(627) :
                 (strpos($docComment, '@ACL protected'))? Helper::get_authenticated_user_cred(2) :
@@ -704,7 +701,7 @@ class DevlessHelper extends Helper
 
         };
 
-        array_filter($ACLS, $access_type);
+        $access_type();
 
     }
 

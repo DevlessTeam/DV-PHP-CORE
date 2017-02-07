@@ -18,10 +18,9 @@ class Migration extends Helper
         $folder_name = ($devlessfunc::add_service_to_folder($service_name, $service_components));
 
         ($folder_name) ?
-        $zipped_service_name = $devlessfunc::zip_folder($folder_name, '.srv')
+        $zipped_service_name = $devlessfunc::zip_folder($folder_name, '.srv', true)
                                     : //or
         $devlessfunc::flash('failed to create files(630)', 'error');
-
 
 
         return $zipped_service_name;
@@ -43,10 +42,9 @@ class Migration extends Helper
         }
 
         ($package_name) ?
-        $zipped_package_name = $devlessfunc::zip_folder($package_name, '.pkg')
+        $zipped_package_name = $devlessfunc::zip_folder($package_name, '.pkg', true)
                                   : //or
         $devlessfunc::flash('failed to create files(630)', 'error');
-
 
 
         return $zipped_package_name;
