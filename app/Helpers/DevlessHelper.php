@@ -152,35 +152,30 @@ class DevlessHelper extends Helper
      * @param bool $delete_package
      * @return bool|string
      */
-    public static function expand_package($service_folder_path, $delete_package)
+    public static function expand_package($service_folder_path, $delete_package=true)
     {
         $zip = new \ZipArchive;
-
-        $service_basename = basename($service_folder_path);
-        $state_or_payload = true;
 
         //convert from srv/pkg to zip
         $new_service_folder_path = preg_replace('"\.srv$"', '.zip', $service_folder_path);
         $new_service_folder_path = preg_replace('"\.pkg$"', '.zip', $service_folder_path);
 
-        $state_or_payload =
             (rename($service_folder_path, $new_service_folder_path))? $new_service_folder_path
                 :false;
 
         $res = $zip->open($new_service_folder_path);
         if ($res === true) {
             $zip->extractTo(config('devless')['views_directory']);
+            $extract_name = config('devless')['views_directory'].$zip->getNameIndex(0);
             $zip->close();
 
             self::deleteDirectory($new_service_folder_path);
-            $state_or_payload = ($delete_package)? self::deleteDirectory($service_folder_path):false;
+            ($delete_package)? self::deleteDirectory($service_folder_path):false;
         } else {
             return false;
         }
 
-        $folder_name = preg_replace('"\.srv$"', '', $service_basename);
-        $exported_folder_path = config('devless')['views_directory'].$folder_name;
-        return $exported_folder_path;
+        return $extract_name;
     }
 
 
@@ -309,7 +304,7 @@ class DevlessHelper extends Helper
     public static function install_service($service_path)
     {
         $builder = new DvSchema();
-        $service_file_path = $service_path.'/service.json';
+        $service_file_path = $service_path.'service.json';
         $service_file_path = preg_replace('"\.srv"', '', $service_file_path);
         $service_file_path = preg_replace('"\.pkg"', '', $service_file_path);
         $fh = fopen($service_file_path, 'r');
@@ -385,10 +380,8 @@ class DevlessHelper extends Helper
      */
     public static function install_views($service_name)
     {
-        $service_name = preg_replace('"\.srv$"', '', $service_name);
-        $service_name = preg_replace('"\.pkg$"', '', $service_name);
         $system_view_directory = config('devless')['views_directory'];
-        $service_view_directory = $system_view_directory.$service_name.'/view_assets';
+        $service_view_directory = $service_name.'view_assets';
         self::recurse_copy($service_view_directory, $system_view_directory);
         self::deleteDirectory($service_view_directory);
 
@@ -823,46 +816,6 @@ class DevlessHelper extends Helper
         }
         rmdir($dir);
         return true;
-    }
-
-    /**
-     * start post request and close immediately
-     * @param type $url
-     * @param type $params
-     */
-    public static function curl_post_async($url, $params)
-    {
-        //did this intentionally(Eddymens)
-        return false;
-        foreach ($params as $key => &$val) {
-            if (is_array($val)) {
-                $val = implode(',', $val);
-            }
-            $post_params[] = $key.'='.urlencode($val);
-        }
-        $post_string = implode('&', $post_params);
-
-        $parts=parse_url($url);
-
-        $fp = fsockopen(
-            $parts['host'],
-            isset($parts['port'])?$parts['port']:80,
-            $errno,
-            $errstr,
-            30
-        );
-
-        $out = "POST ".$parts['path']." HTTP/1.1\r\n";
-        $out.= "Host: ".$parts['host']."\r\n";
-        $out.= "Content-Type: application/x-www-form-urlencoded\r\n";
-        $out.= "Content-Length: ".strlen($post_string)."\r\n";
-        $out.= "Connection: Close\r\n\r\n";
-        if (isset($post_string)) {
-            $out.= $post_string;
-        }
-
-        fwrite($fp, $out);
-        fclose($fp);
     }
 
     public static function instance_log($url, $token, $purpose)
