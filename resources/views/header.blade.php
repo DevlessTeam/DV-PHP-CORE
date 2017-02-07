@@ -19,6 +19,9 @@
     <!--Form Wizard-->
     <link rel="stylesheet" type="text/css" href="{{ Request::secure(Request::root()).'/css/jquery.steps.css' }}" />
 
+    <!-- datatables css -->
+    <link href="{{ Request::secure(Request::root()).'/css/jquery.dataTables.min.css'  }}" rel="stylesheet">
+
     <!--common style-->
     <link href="{{ Request::secure(Request::root()).'/css/style.css' }}" rel="stylesheet">
     <link href="{{ Request::secure(Request::root()).'/css/style-responsive.css' }}" rel="stylesheet">
