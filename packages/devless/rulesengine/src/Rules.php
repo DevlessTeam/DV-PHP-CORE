@@ -28,7 +28,7 @@ class Rules
     ];
 
 
-    private $results = '';
+    public $results = '';
     private $answered = false;
 
     private $execOrNot = true;
