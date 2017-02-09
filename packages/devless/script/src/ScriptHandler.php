@@ -37,19 +37,17 @@ class ScriptHandler
         ];
 
         $EVENT['params'] = (isset($payload['params'][0]['field'])) ? $payload['params'][0]['field'][0] : [];
-
         //NB: position matters here
         $code = <<<EOT
 $payload[script];
 EOT;
          $_____service_name = $payload['service_name'];
          $_____init_vars = $payload['script_init_vars'];
-         $exec = function () use ($code, $rules, $EVENT, $_____service_name, $_____init_vars) {
+         $exec = function () use ($code, $rules, $EVENT, $_____service_name, $_____init_vars, $payload) {
 
                 //store script params temporally
-                $_____midRules = $rules;
-                $_____mindEvent = $EVENT;
-               $declarationString = '';
+               $_____midRules = $rules;
+               $_____mindEvent = $EVENT;
                //get declared vars
                $declarationString = $_____init_vars ;
                eval($declarationString);
@@ -57,7 +55,13 @@ EOT;
                $rules = $_____midRules;
                $EVENT = $_____mindEvent;
                extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
-               eval($code);
+               eval($code.'dd($input_alt2)');
+               foreach ($EVENT['params'] as $key => $value) {
+                   dd($key, ${'input_'.$key});
+                   $EVENT['params'][$key] = ${'input_'.$key};
+               }
+
+               dd($EVENT['params']);
          };
         
         ob_start();
