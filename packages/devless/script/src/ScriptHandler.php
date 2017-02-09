@@ -32,7 +32,7 @@ class ScriptHandler
             'params' => '',
             'script' => $payload['script'],
             'user_id' => $user_cred['id'],
-             'user_token' => $user_cred['token'],
+            'user_token' => $user_cred['token'],
             'requestType' => $Dvresource,
         ];
 
@@ -41,36 +41,38 @@ class ScriptHandler
         $code = <<<EOT
 $payload[script];
 EOT;
-         $_____service_name = $payload['service_name'];
-         $_____init_vars = $payload['script_init_vars'];
-         $exec = function () use ($code, $rules, $EVENT, $_____service_name, $_____init_vars, $payload) {
+        $_____service_name = $payload['service_name'];
+        $_____init_vars = $payload['script_init_vars'];
+        $exec = function () use ($code, $rules, $EVENT, $_____service_name, $_____init_vars, $payload) {
 
-                //store script params temporally
-               $_____midRules = $rules;
-               $_____mindEvent = $EVENT;
-               //get declared vars
-               $declarationString = $_____init_vars ;
-               eval($declarationString);
-               //restore script params
-               $rules = $_____midRules;
-               $EVENT = $_____mindEvent;
-               extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
-               eval($code.'dd($input_alt2)');
-               foreach ($EVENT['params'] as $key => $value) {
-                   dd($key, ${'input_'.$key});
-                   $EVENT['params'][$key] = ${'input_'.$key};
-               }
+            //store script params temporally
+            $_____midRules = $rules;
+            $_____mindEvent = $EVENT;
+            //get declared vars
+            $declarationString = $_____init_vars ;
+            eval($declarationString);
+            //restore script params
+            $rules = $_____midRules;
+            $EVENT = $_____mindEvent;
+            extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
+            eval($code);
+            foreach ($EVENT['params'] as $key => $value) {
+                $EVENT['params'][$key] = ${'input_'.$key};
+            }
 
-               dd($EVENT['params']);
-         };
-        
+            return $EVENT['params'];
+        };
+
         ob_start();
-        $output = $exec();
+        $params = $exec();
+        if (isset($payload['params'][0]['field'])) {
+            $payload['params'][0]['field'][0] = $params;
+        }
         ob_end_clean();
-        
+
         $results['payload'] = $payload;
         $results['resource'] = $Dvresource;
-        
+
         return $results;
     }
 }
