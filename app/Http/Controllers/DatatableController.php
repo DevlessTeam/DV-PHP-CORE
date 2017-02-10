@@ -14,15 +14,16 @@ class DatatableController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->service_name && $request->table_name) {
-            $service = \DB::table('services')->where('name', $request->service_name)->first();
-            $tables = \DB::table('table_metas')->where('service_id', $service->id)->get();
+            if ($request->service_name && $request->table_name) {
+                    $service = \DB::table('services')->where('name', $request->service_name)->first();
+                    $tables = \DB::table('table_metas')->where('service_id', $service->id)->get();
 
-            return view('datatable.index', compact('service', 'tables'));
-        }
-        $services = Service::all();
+                    return view('datatable.index', compact('service', 'tables'));
+            }
+            
+            $services = Service::all();
 
-        return view('datatable.index', compact('services'));
+            return view('datatable.index', compact('services'));
     }
 
     /**
@@ -31,6 +32,22 @@ class DatatableController extends Controller
      */
     public function create($id)
     {
+        $service = \DB::table('services')->where('id', $id)->first();
+
+        if ($service->driver != "default") {
+            $conn = \Config::get("database.connections.$service->driver");
+
+            $conn["database"] = $service->database;
+            $conn["host"] = $service->hostname;
+            $conn["port"] = $service->port;
+            $conn["username"] = $service->username;
+            $conn["password"] = $service->password;
+
+            \Session::set('DB_OTF', $conn);
+        } else {
+            \Session::forget('DB_OTF');
+        }
+        
         return \DB::table('table_metas')->where('service_id', $id)->get();
     }
 
@@ -39,9 +56,22 @@ class DatatableController extends Controller
      * @param $table_name
      * @return \Illuminate\Http\Response
      */
-    public function store($table_name)
+    public function metas($table_name)
     {
-        return \DB::getSchemaBuilder()->getColumnListing($table_name);
+            $database = \Session::get('DB_OTF');
+            $otf = new \App\Helpers\OTF([
+                    'driver'   => $database['driver'],
+                    'host'     => $database['host'], 
+                    'database' => $database['database'],
+                    'username' => $database['username'],
+                    'password' => $database['password'],
+                    'port'     => $database['port'],
+            ]);
+            if($database["driver"] != null) {
+                    return $otf->getConnection()->getSchemaBuilder()
+                            ->getColumnListing($table_name);
+            }
+            return \DB::getSchemaBuilder()->getColumnListing($table_name);
     }
 
     /**
@@ -52,13 +82,29 @@ class DatatableController extends Controller
      * @internal param int $id
      *
      */
-    public function show($name)
+    public function entries($name)
     {
-        $conn = \DB::connection()->getDatabaseName();
-        if ($conn == 'database.sqlite3') {
-            return \DB::connection('devless-rec')->table($name)->paginate(10);
-        } else {
-            return \DB::table($name)->paginate(10);
-        }
+            $conn = \DB::connection()->getDatabaseName();
+        
+            $database = \Session::get('DB_OTF');
+        
+            if($database["driver"] != null) {
+                    $otf = new \App\Helpers\OTF([
+                        'driver'   => $database['driver'],
+                        'host'     => $database['host'], 
+                        'database' => $database['database'],
+                        'username' => $database['username'],
+                        'password' => $database['password'],
+                        'port'     => $database['port'],
+                    ]);
+
+                    return $otf->getTable($name)->paginate(10);
+            }
+            elseif ($conn == 'database.sqlite3') {
+                    return \DB::connection('devless-rec')->table($name)
+                            ->paginate(10);
+            } else {
+                    return \DB::table($name)->paginate(10);
+            }
     }
 }
