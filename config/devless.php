@@ -41,7 +41,7 @@ return[
   'name'                  => 'devless',   
   'views_directory_name'  => 'service_views',
   'views_directory'       => base_path().'/resources/views/service_views/',
-  'version'               => '1.1.2',
+  'version'               => '1.2.3',
 ];
 
 

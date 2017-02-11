@@ -140,10 +140,10 @@ class devless
      * @return mixed
      * @ACL public
      */
-    public function addData($serviceName, $table, $fields)
+    public function addData($serviceName, $table, $data)
     {
         $service = new service();
-        $output = DS::service($serviceName, $table, $service)->addData($fields);
+        $output = DS::service($serviceName, $table, $service)->addData([$data]);
         return $output;
     }
 
@@ -158,6 +158,7 @@ class devless
         $service = new service();
         $output = DS::service($serviceName, $table, $service)->queryData();
         return $output;
+
     }
 
     /**
@@ -167,10 +168,10 @@ class devless
      * @return mixed
      * @ACL public
      */
-    public function updateData($serviceName, $table, $id)
+    public function updateData($serviceName, $table, $id, $data )
     {
         $service = new service();
-        $output = DS::service($serviceName, $table, $service)->where('id', $id)->update();
+        $output = DS::service($serviceName, $table, $service)->where('id', $id)->update($data);
         return $output;
     }
 
