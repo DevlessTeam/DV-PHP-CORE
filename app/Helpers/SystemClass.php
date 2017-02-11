@@ -2,6 +2,8 @@
 
 
 use App\Helpers\DevlessHelper as DVH;
+use App\Helpers\DataStore as DS;
+use App\Http\Controllers\ServiceController as service;
 
 /**
  * Created by Devless.
@@ -130,5 +132,62 @@ class devless
         }
         return $payload;
     }
+
+    /**
+     * @param $serviceName
+     * @param $table
+     * @param $fields
+     * @return mixed
+     * @ACL public
+     */
+    public function addData($serviceName, $table, $data)
+    {
+        $service = new service();
+        $output = DS::service($serviceName, $table, $service)->addData([$data]);
+        return $output;
+    }
+
+    /**
+     * @param $serviceName
+     * @param $table
+     * @return mixed
+     * @ACL public
+     */
+    public function queryData($serviceName, $table)
+    {
+        $service = new service();
+        $output = DS::service($serviceName, $table, $service)->queryData();
+        return $output;
+
+    }
+
+    /**
+     * @param $serviceName
+     * @param $table
+     * @param $id
+     * @return mixed
+     * @ACL public
+     */
+    public function updateData($serviceName, $table, $id, $data )
+    {
+        $service = new service();
+        $output = DS::service($serviceName, $table, $service)->where('id', $id)->update($data);
+        return $output;
+    }
+
+    /**
+     * @param $serviceName
+     * @param $table
+     * @param $id
+     * @return mixed
+     * @ACL public
+     */
+    public function deleteData($serviceName, $table, $id)
+    {
+        $service = new service();
+        $output = DS::service($serviceName, $table, $service)->where('id', $id)->delete();
+        return $output;
+    }
+
 
 }
