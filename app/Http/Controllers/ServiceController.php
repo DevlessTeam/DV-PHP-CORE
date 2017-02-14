@@ -10,8 +10,8 @@ use Devless\Schema\DbHandler as Db;
 use App\Helpers\DevlessHelper as DLH;
 use App\Helpers\Response as Response;
 use Devless\Script\ScriptHandler as script;
-use App\Http\Controllers\ViewController as DvViews;
 use App\Http\Controllers\RpcController as Rpc;
+use App\Http\Controllers\ViewController as DvViews;
 
 class ServiceController extends Controller
 {
@@ -210,7 +210,7 @@ class ServiceController extends Controller
         return redirect()->route('services.index');
     }
     /**
-     * download service packages
+     * Download service packages
      *
      * @param    $filename
      * @return

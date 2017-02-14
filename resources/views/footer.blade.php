@@ -61,4 +61,5 @@ Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
 @endif
 @include('notifier')
 </body>
+
 </html>
