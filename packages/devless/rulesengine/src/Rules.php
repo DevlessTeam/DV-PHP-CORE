@@ -142,7 +142,7 @@ class Rules
 
     public function onTable($expectedTableName)
     {
-        $this->execOrNot = ($this->tableName == $expectedTableName)? true:false;
+        $this->execOrNot = ($this->tableName[0] == $expectedTableName)? true:false;
         return $this;
     }
 
@@ -183,7 +183,6 @@ class Rules
             return $this;
         }
         $evaluator = function () use ($service, $method, $params) {
-
             $results = ActionClass::execute($service, $method, $params);
             $this->answered = true;
             return $results;

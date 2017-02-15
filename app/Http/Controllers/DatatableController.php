@@ -14,12 +14,12 @@ class DatatableController extends Controller
      */
     public function index(Request $request)
     {
-            if ($request->service_name && $request->table_name) {
-                    $service = \DB::table('services')->where('name', $request->service_name)->first();
-                    $tables = \DB::table('table_metas')->where('service_id', $service->id)->get();
+        if ($request->service_name && $request->table_name) {
+            $service = \DB::table('services')->where('name', $request->service_name)->first();
+            $tables = \DB::table('table_metas')->where('service_id', $service->id)->get();
 
-                    return view('datatable.index', compact('service', 'tables'));
-            }
+            return view('datatable.index', compact('service', 'tables'));
+        }
             
             $services = Service::all();
 
@@ -61,13 +61,13 @@ class DatatableController extends Controller
             $database = \Session::get('DB_OTF');
             $otf = new \App\Helpers\OTF([
                     'driver'   => $database['driver'],
-                    'host'     => $database['host'], 
+                    'host'     => $database['host'],
                     'database' => $database['database'],
                     'username' => $database['username'],
                     'password' => $database['password'],
                     'port'     => $database['port'],
             ]);
-            if($database["driver"] != null) {
+            if ($database["driver"] != null) {
                     return $otf->getConnection()->getSchemaBuilder()
                             ->getColumnListing($table_name);
             }
@@ -88,23 +88,22 @@ class DatatableController extends Controller
         
             $database = \Session::get('DB_OTF');
         
-            if($database["driver"] != null) {
-                    $otf = new \App\Helpers\OTF([
-                        'driver'   => $database['driver'],
-                        'host'     => $database['host'], 
-                        'database' => $database['database'],
-                        'username' => $database['username'],
-                        'password' => $database['password'],
-                        'port'     => $database['port'],
-                    ]);
+        if ($database["driver"] != null) {
+            $otf = new \App\Helpers\OTF([
+                'driver'   => $database['driver'],
+                'host'     => $database['host'],
+                'database' => $database['database'],
+                'username' => $database['username'],
+                'password' => $database['password'],
+                'port'     => $database['port'],
+            ]);
 
-                    return $otf->getTable($name)->paginate(10);
-            }
-            elseif ($conn == 'database.sqlite3') {
-                    return \DB::connection('devless-rec')->table($name)
-                            ->paginate(10);
-            } else {
-                    return \DB::table($name)->paginate(10);
-            }
+            return $otf->getTable($name)->paginate(10);
+        } elseif ($conn == 'database.sqlite3') {
+            return \DB::connection('devless-rec')->table($name)
+                    ->paginate(10);
+        } else {
+            return \DB::table($name)->paginate(10);
+        }
     }
 }

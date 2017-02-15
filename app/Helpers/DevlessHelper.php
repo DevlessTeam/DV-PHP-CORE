@@ -152,7 +152,7 @@ class DevlessHelper extends Helper
      * @param bool $delete_package
      * @return bool|string
      */
-    public static function expand_package($service_folder_path, $delete_package=true)
+    public static function expand_package($service_folder_path, $delete_package = true)
     {
         $zip = new \ZipArchive;
 
@@ -845,15 +845,12 @@ class DevlessHelper extends Helper
      */
     public static function get_tablename_from_payload($payload)
     {
-        if(strtoupper($payload['method']) == 'GET') {
+        if (strtoupper($payload['method']) == 'GET') {
             $tableName = (isset($payload['params']['table']))?$payload['params']['table']
                         :'';
-
-
         } else {
             $tableName = (isset($payload['params'][0]['name']))?$payload['params'][0]['name']
                 :'';
-
         }
         return $tableName;
     }

@@ -321,9 +321,12 @@ class ServiceController extends Controller
                         'params' => $parameters,
                     ];
                 // run script before assigning to method
-                $newServiceElements = $this->before_assigning_service_action($resource, $payload);
-                $resource = $newServiceElements['resource'];
-                $payload = $newServiceElements['payload'];
+                if (! $internal_access) {
+                    $newServiceElements = $this->before_assigning_service_action($resource, $payload);
+                    $resource = $newServiceElements['resource'];
+                    $payload = $newServiceElements['payload'];
+                }
+
                 //keep names of resources in the singular
                 switch ($resource) {
                     case 'db':
