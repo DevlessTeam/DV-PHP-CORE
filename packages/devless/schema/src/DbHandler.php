@@ -27,6 +27,7 @@ class DbHandler
     public $query_params = [
         'order'    => 'orderBy',
         'where'    => 'where',
+        'orWhere'    => 'orWhere',
         'take'     => 'take',
         'relation' => 'relation',
     ];
