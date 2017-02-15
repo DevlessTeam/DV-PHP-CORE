@@ -10,6 +10,7 @@ if ($url !== false) {
 	$host = $url["host"];
 	$username = $url["user"];
 	$password = $url["pass"];
+    $port = $url["port"];
 	$database = substr($url["path"], 1);
 } else {
 	$host = env('DB_HOST', 'localhost');
@@ -106,6 +107,7 @@ return [
             'database' => $database,
             'username' => $username,
             'password' => $password,
+            'port'     => $port,
             'charset'  => 'utf8',
             'prefix'   => '',
             'schema'   => 'public',
