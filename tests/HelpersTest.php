@@ -1,15 +1,28 @@
 <?php
 
 use App\Helpers\Helper;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 
-class HelpersTest extends PHPUnit_Framework_TestCase
+class HelpersTest extends TestCase
 {
+    private $user;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->user = factory(User::class)->create();
+        Auth::login($this->user);
+    }
+
     /**
+     * @test
      * Message stack test.
      *
      * @return void
      */
-    public function testResponseMessage()
+    public function it_should_check_response_message()
     {
 
         $stack = rand(0, 614);
@@ -25,11 +38,12 @@ class HelpersTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * @test
      * Field validator test.
      *
      * @return void
      */
-    public function testFieldCheck()
+    public function it_should_validate_fields()
     {
         $validSample =
             [
@@ -44,13 +58,14 @@ class HelpersTest extends PHPUnit_Framework_TestCase
                 'textarea'   => 'string',
                 'timestamp'  => 12345,
                 'url'        => 'https://devless.io/#!/main',
+                'base64'     => 'any string',
 
             ];
 
         $invalidSample =
             [
                 'boolean'    => 'true',
-                'decimals'    => 'string instead of decimal',
+                'decimals'   => 'string instead of decimal',
                 'email'      => 'edmonddevless.io',
                 'integer'    => 'string here',
                 'password'   => true,
@@ -60,13 +75,13 @@ class HelpersTest extends PHPUnit_Framework_TestCase
                 'textarea'   => 2,
                 'timestamp'  => 'timestamp',
                 'url'        => 'devless.io/#!/main',
+                'base64'     => 2,
 
             ];
 
         $fieldTypes  = Helper::$validator_type;
 
-        foreach($fieldTypes as $fieldType => $vaidatorKey){
-
+        foreach ($fieldTypes as $fieldType => $vaidatorKey) {
             //check against valid field types
             $output = Helper::field_check($validSample[$fieldType], $fieldType);
             $this->assertTrue($output);
@@ -75,55 +90,44 @@ class HelpersTest extends PHPUnit_Framework_TestCase
             $output = Helper::field_check($invalidSample[$fieldType], $fieldType);
             $type   = gettype($output);
             $this->assertEquals('object', $type);
-
         }
-
     }
 
 
     /**
+     * @test
      * url query string test.
      *
      * @return void
      */
-    public function testQueryString()
+    public function it_should_check_query_string()
     {
         $_SERVER['QUERY_STRING'] = 'name=edmond&name=charles&age=12';
 
         $output = Helper::query_string();
-        $this->assertEquals($output['name'][0],'edmond');
-        $this->assertEquals($output['name'][1],'charles');
-        $this->assertEquals($output['age'][0],'12');
+        $this->assertEquals($output['name'][0], 'edmond');
+        $this->assertEquals($output['name'][1], 'charles');
+        $this->assertEquals($output['age'][0], '12');
 
         //query string when parameters are not set
         unset($_SERVER['QUERY_STRING']);
         $output = Helper::query_string();
         $this->assertEquals('', $output);
-
-
     }
 
 
     /**
+     * @test
      * sessionTimestamp test.
      *
      * @return void
      */
-    public function testSessionTimestamp()
+    public function it_should_check_session_time_stamp()
     {
         $sessionTime = Helper::session_timestamp();
 
-        $formattedSessionTime = date('Y-m-d',strtotime($sessionTime));
+        $formattedSessionTime = date('Y-m-d', strtotime($sessionTime));
 
         $this->assertEquals(date('Y-m-d'), $formattedSessionTime);
-
-
     }
-
-
 }
-
-
-
-
-

@@ -1,5 +1,23 @@
 <?php
 
+$url = getenv("DATABASE_URL");
+$host = "";
+$username = "";
+$password = "";
+$database = "";
+if ($url !== false) {
+	$url = parse_url($url);
+	$host = $url["host"];
+	$username = $url["user"];
+	$password = $url["pass"];
+	$database = substr($url["path"], 1);
+} else {
+	$host = env('DB_HOST', 'localhost');
+	$username = env('DB_USERNAME', 'forge');
+	$password = env('DB_PASSWORD', '');
+	$database = env('DB_DATABASE', 'forge');
+}
+
 return [
 
     /*
@@ -26,7 +44,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => 'pgsql',
 
     /*
     |--------------------------------------------------------------------------
@@ -57,6 +75,11 @@ return [
             'database' => database_path('devless-rec.sqlite3'),
             'prefix'   => '',
         ],
+        'dbhandlertestdb' => [
+            'driver'   => 'sqlite',
+            'database' => database_path('Dbhandlertestdb.sqlite3'),
+            'prefix'   => '',
+        ],
 
         'sqlite_testing' => [
             'driver'   => 'sqlite',
@@ -66,25 +89,27 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'     => '45.33.95.89',
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host'      => env('DB_HOST', 'localhost'),
+            'database'  => env('DB_DATABASE', 'homestead'),
+            'username'  => env('DB_USERNAME', 'homestead'),
+            'password'  => env('DB_PASSWORD', 'secret'),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
             'strict'    => false,
+            'port'      => env('DB_PORT', 3306),
         ],
 
         'pgsql' => [
             'driver'   => 'pgsql',
-            'host'     => env('DB_HOST', 'localhost'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host'      => $host,
+            'database'  => $database,
+            'username'  => $username,
+            'password'  => $password,
             'charset'  => 'utf8',
             'prefix'   => '',
             'schema'   => 'public',
+            'port'     => env('DB_PORT','')
         ],
 
         'sqlsrv' => [

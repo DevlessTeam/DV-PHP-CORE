@@ -28,19 +28,22 @@ class AppController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @return Response
+     * @param    Request $request
+     * @return   Response
      * @internal param int $id
      */
     public function update(Request $request)
     {
-        $this->validate($request, [
+        $this->validate(
+            $request,
+            [
             'username' => 'required|max:255',
             'email' => 'required|email|max:255',
             'password' => 'confirmed|min:6',
             'password_confirmation' => 'min:6',
             'old_password' => 'required',
-        ]);
+            ]
+        );
 
         $user = User::findOrFail(Session('user'));
         $app = App::first();
@@ -63,9 +66,9 @@ class AppController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete entire Devless app
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function destroy($id)
@@ -76,11 +79,12 @@ class AppController extends Controller
         return redirect()->route('app.index');
     }
 
-    public function store()
-    {
-        dd("store");
-    }
 
+    /**
+     * Generate app access token
+     * @param Request $request
+     * @return array
+     */
     public function token(Request $request)
     {
         $app = App::first();

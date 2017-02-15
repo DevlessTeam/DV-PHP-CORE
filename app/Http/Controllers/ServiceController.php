@@ -10,8 +10,8 @@ use Devless\Schema\DbHandler as Db;
 use App\Helpers\DevlessHelper as DLH;
 use App\Helpers\Response as Response;
 use Devless\Script\ScriptHandler as script;
-use App\Http\Controllers\ViewController as DvViews;
 use App\Http\Controllers\RpcController as Rpc;
+use App\Http\Controllers\ViewController as DvViews;
 
 class ServiceController extends Controller
 {
@@ -38,7 +38,7 @@ class ServiceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param  Request $request
      * @return Response
      */
     public function store(Request $request)
@@ -66,6 +66,7 @@ class ServiceController extends Controller
         $service->password = $request->input('password');
         $service->database = $request->input('database');
         $service->hostname = $request->input('hostname');
+        $service->port = $request->input('port');
         $service->script_init_vars = '$rules = null;';
         $service->driver = $request->input('driver');
         $service->resource_access_right =
@@ -85,6 +86,7 @@ class ServiceController extends Controller
                 'database' => $service->database,
                 'hostname' => $service->hostname,
                 'driver'   => $service->driver,
+                'port'     => $service->port,
             ];
         $db = new Db();
         if (!$db->check_db_connection($connection)) {
@@ -105,7 +107,7 @@ class ServiceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function show($id)
@@ -116,7 +118,7 @@ class ServiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function edit($id)
@@ -133,8 +135,8 @@ class ServiceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
-     * @param Request $request
+     * @param  int     $id
+     * @param  Request $request
      * @return Response
      */
     public function update(Request $request, $id)
@@ -156,8 +158,9 @@ class ServiceController extends Controller
             $service->password = $request->input('password');
             $service->database = $request->input('database');
             $service->hostname = $request->input('hostname');
-            $service->driver = $request->input('driver');
-            $service->active = $request->input("active");
+            $service->driver   = $request->input('driver');
+            $service->port     = $request->input('port');
+            $service->active   = $request->input("active");
             $connection =
                 [
                     'username' => $service->username,
@@ -165,6 +168,7 @@ class ServiceController extends Controller
                     'database' => $service->database,
                     'hostname' => $service->hostname,
                     'driver'   => $service->driver,
+                    'port'     => $service->port,
                 ];
             $db = new Db();
             if (!$db->check_db_connection($connection)) {
@@ -179,7 +183,7 @@ class ServiceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function destroy($id)
@@ -206,8 +210,9 @@ class ServiceController extends Controller
         return redirect()->route('services.index');
     }
     /**
-     * download service packages
-     * @param $filename
+     * Download service packages
+     *
+     * @param    $filename
      * @return
      * @internal param $request
      */
@@ -223,10 +228,11 @@ class ServiceController extends Controller
     }
     /**
      * All api calls go through here
-     * @param array|Request $request request params
-     * @param string $service service to be accessed
-     * @param string $resource resource to be accessed
-     * @return Response
+     *
+     * @param    array|Request $request  request params
+     * @param    string        $service  service to be accessed
+     * @param    string        $resource resource to be accessed
+     * @return   Response
      * @internal param $newServiceElements
      */
     public function service(Request $request, $service, $resource)
@@ -238,11 +244,12 @@ class ServiceController extends Controller
     }
     /**
      * Refer request to the right service and resource
-     * @param array $request request params
-     * @param $service_name
-     * @param string $resource resource to be accessed
-     * @param bool $internal_access
-     * @return Response
+     *
+     * @param    array        $request         request params
+     * @param    $service_name
+     * @param    string       $resource        resource to be accessed
+     * @param    bool         $internal_access
+     * @return   Response
      * @internal param string $service service to be accessed
      */
     public function resource($request, $service_name, $resource, $internal_access = false)
@@ -251,7 +258,7 @@ class ServiceController extends Controller
         ($internal_access == true)? $method = $request['method'] :
             $method = $request->method();
         $method = strtoupper($method);
-        #check method type and get payload accordingly
+        // check method type and get payload accordingly
         if ($internal_access == true) {
             $parameters = $request['resource'];
         } else {
@@ -268,12 +275,12 @@ class ServiceController extends Controller
     /**
      * assign request to a devless resource eg: db, view, script, schema, .
      *
-     * @param $service_name
-     * @param  string $resource
-     * @param array $method http verb
-     * @param null $parameters
-     * @param bool $internal_access
-     * @return Response
+     * @param    $service_name
+     * @param    string       $resource
+     * @param    array        $method          http verb
+     * @param    null         $parameters
+     * @param    bool         $internal_access
+     * @return   Response
      * @internal param string $service name of service to be access
      * @internal param array $parameter contains all parameters passed from route
      * @internal param bool $internal_service true if service is being called internally
@@ -293,7 +300,6 @@ class ServiceController extends Controller
             $is_admin = Helper::is_admin_login();
             $accessed_internally = $internal_access;
             if ($is_it_public == 0 || $is_admin == true) {
-
                 $resource_access_right =
                   $this->_get_resource_access_right($current_service, $accessed_internally);
 
@@ -310,13 +316,16 @@ class ServiceController extends Controller
                         'calls' =>  $current_service->calls,
                         'resource_access_right' =>$resource_access_right,
                         'script' => $current_service->script,
+                        'port'   => $current_service->port,
                         'method' => $method,
                         'params' => $parameters,
                     ];
                 // run script before assigning to method
-                $newServiceElements = $this->before_assigning_service_action($resource, $payload);
-                $resource = $newServiceElements['resource'];
-                $payload = $newServiceElements['payload'];
+                if (! $internal_access) {
+                    $newServiceElements = $this->before_assigning_service_action($resource, $payload);
+                    $resource = $newServiceElements['resource'];
+                    $payload = $newServiceElements['payload'];
+                }
 
                 //keep names of resources in the singular
                 switch ($resource) {
@@ -351,8 +360,8 @@ class ServiceController extends Controller
      */
     public function service_exist($service_name)
     {
-        if ($current_service = serviceModel::where('name', $service_name)->
-        where('active', 1)->first()) {
+        if ($current_service = serviceModel::where('name', $service_name)->where('active', 1)->first()
+        ) {
             return $current_service;
         } elseif (config('devless')['devless_service']->name == $service_name) {
             $current_service = config('devless')['devless_service'];
@@ -365,8 +374,8 @@ class ServiceController extends Controller
     /**
      * get parameters set in from request
      *
-     * @param string $method reuquest method type
-     * @param array $request request parameters
+     * @param  string $method  reuquest method type
+     * @param  array  $request request parameters return array of parameters
      * return array of parameters
      * @return array|mixed
      */
@@ -377,21 +386,33 @@ class ServiceController extends Controller
         } elseif ($method == 'GET') {
             $parameters = Helper::query_string();
         } else {
-            Helper::interrupt(608, 'Request method '.$method.
-                ' is not supported');
+            Helper::interrupt(
+                608,
+                'Request method '.$method.
+                ' is not supported'
+            );
         }
         return $parameters;
     }
+
     /**
      * get and convert resource_access_right to array
-     * @param object $service service payload
+     *
+     * @param  object $service service payload
+     * @param bool $master_access
      * @return array resource access right
      */
-    private function _get_resource_access_right($service, $master_access=false)
+    private function _get_resource_access_right($service, $master_access = false)
     {
         $mutate_resource_rights =
-                function($rights) {return array_map(function($access_code)
-                        { return $access_code ?: 1; }, $rights);};
+                function ($rights) {
+                    return array_map(
+                        function ($access_code) {
+                            return $access_code ?: 1;
+                        },
+                        $rights
+                    );
+                };
 
         $resource_access_right = $service->resource_access_right;
         $resource_access_right = json_decode($resource_access_right, true);
@@ -403,41 +424,39 @@ class ServiceController extends Controller
 
     /**
      * check if Devless headers are set
+     *
      * @param type $request
      */
     private function _devlessCheckHeaders($request)
     {
         $is_token_set = ($request->header('Devless-token') == $request['devless_token'] )? true : false;
         $is_admin = Helper::is_admin_login();
-        $state = ( $is_token_set || $is_admin )? true : false;
-        if (!$state) {
-            Helper::interrupt(631);
-        }
+        (!( $is_token_set || $is_admin ))?Helper::interrupt(631):'';
     }
     /**
      * check user resource  action access right eg: query db or write to table
-     * @param $access_type
-     * @return bool
+     *
+     * @param    $access_type
+     * @return   bool
      * @internal param object $service service payload
      */
     public function check_resource_access_right_type($access_type)
     {
-
+        
         $is_user_login = Helper::is_admin_login();
-        if (! $is_user_login && $access_type == 0) {
+        if (! $is_user_login && $access_type == 0) { //private
             Helper::interrupt(627);
-        } //private
-        elseif ($access_type == 1) {
+        } elseif ($access_type == 1) {  //public
             return false;
-        } //public
-        elseif ($access_type == 2) {
+        } elseif ($access_type == 2) { //authentication required
             return true;
-        }//authentication required
+        }
         return true;
     }
     /**
      * operations to execute before assigning action to resource
-     * @param string $resource
+     *
+     * @param  string $resource
      * @params array $payload
      * @return array
      */
@@ -452,26 +471,6 @@ class ServiceController extends Controller
         return $output;
     }
 
-    /**
-     * create service views
-     * @return string
-     */
-    public function service_views()
-    {
-
-            $folder_path = config('devless')['views_directory'];
-            $db_name = \Config::get('database.connections.'.\Config::get('database.default').'.database');
-
-            //get db name
-            DLH::zip_folder($folder_path, 'download.zip');
-            $mode = 0777;
-            $zip = $folder_path.'/'.'download.zip';
-            chmod($zip, $mode);
-            copy($zip, public_path().'/download.zip');
-            unlink($zip);
-            return "created";
-
-    }
 
     public function var_init($code)
     {

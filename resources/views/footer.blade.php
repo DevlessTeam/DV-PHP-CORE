@@ -22,6 +22,9 @@ Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
 <!--notification pan-->
 <script src="{{ Request::secure(Request::root()).'/js/modernizr.min.js' }}"></script>
 
+<!-- datatable -->
+<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
 <!--Nice Scroll-->
 <script src="{{ Request::secure(Request::root()).'/js/jquery.nicescroll.js' }}" type="text/javascript"></script>
 
@@ -58,4 +61,5 @@ Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
 @endif
 @include('notifier')
 </body>
+
 </html>

@@ -55,7 +55,7 @@
                             <div class=" col-lg-10 col-sm-10">
                                 <select id="db-type" name="driver"  class="form-control m-b-10">
                                     <?php $options = ['Default'=>'default','Sqlite'=>'sqlite',
-                                    'MySql'=>'mysql','Postgres'=>'Pgsql','SQL Server'=>'sqlsrv'];?>
+                                    'MySql'=>'mysql','Postgres'=>'pgsql','SQL Server'=>'sqlsrv'];?>
                                     @foreach($options as $option_index => $option_value )
                                     <option value="{{$option_value}}" @if($option_value == "default")selected @endif >{{$option_index}}</option>
                                     @endforeach
@@ -102,8 +102,17 @@
                             </div>
                         </div>
                         <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label" for="g-txt">Port Number</label>
+                        <div class=" col-lg-10 col-sm-10">
+                            <input class="form-control" id="port" name="port" placeholder="Port" value="" type="number">
+                            @if($errors->has("port"))
+                                <span class="help-block">{{ $errors->first("port") }}</span>
+                            @endif
+                        </div>
+                    </div>
+                        <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
-                                <button type="submit" class="btn btn-info pull-right">Create</button>
+                                <button type="submit" class="btn btn-info pull-right"><i class="fa fa-plus"></i> Create</button>
                             </div>
                         </div>
                         </form>

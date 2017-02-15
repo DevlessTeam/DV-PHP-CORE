@@ -2,10 +2,10 @@
 namespace Devless\Schema;
 
 use App\Helpers\Helper;
+use Illuminate\Http\Request;
 use App\Helpers\Response as Response;
 use App\Http\Controllers\ServiceController as Service;
 use Illuminate\Database\Schema\Blueprint as Blueprint;
-use Illuminate\Http\Request;
 
 class DbHandler
 {
@@ -21,24 +21,26 @@ class DbHandler
         'boolean'    => 'boolean',
         'email'      => 'string',
         'reference'  => 'integer',
+        'base64'     => 'binary',
     ];
     public $query_params = [
         'order'    => 'orderBy',
         'where'    => 'where',
+        'orWhere'  => 'orWhere',
         'take'     => 'take',
         'relation' => 'relation',
     ];
     public $dbActionAssoc = [
-    'GET'    => 'query',
-    'POST'   => 'create',
-    'PATCH'  => 'update',
-    'DELETE' => 'delete',
+        'GET'    => 'query',
+        'POST'   => 'create',
+        'PATCH'  => 'update',
+        'DELETE' => 'delete',
     ];
     private $dbActionMethod = [
-    'GET'    => 'db_query',
-    'POST'   => 'add_data',
-    'PATCH'  => 'update',
-    'DELETE' => 'destroy',
+        'GET'    => 'db_query',
+        'POST'   => 'add_data',
+        'PATCH'  => 'update',
+        'DELETE' => 'destroy',
     ];
     /**
      * Access db functions based on request method type.
@@ -50,10 +52,11 @@ class DbHandler
      */
     public function access_db($payload)
     {
+
         $payload['user_id'] = '';
         $request = $payload['method'];
         $db_action = (isset($this->dbActionAssoc[$request])) ? $this->dbActionAssoc[$request]
-                     : Helper::interrupt(607);
+            : Helper::interrupt(607);
         $payload = $this->set_auth_id_if_required($db_action, $payload);
         $dbActionName = $this->dbActionMethod[$request];
         return $this->$dbActionName($payload);
@@ -68,8 +71,7 @@ class DbHandler
      */
     public function store(Request $request)
     {
-        //
-        $resource = 'schema';
+
         $this->create_schema($request['resource']);
     }
     /**
@@ -83,15 +85,14 @@ class DbHandler
      */
     public function add_data($payload)
     {
-        $service_id = $payload['id'];
         $service_name = $payload['service_name'];
         //setup db connection
-        $connector = $this->_connector($payload);
+        $this->_connector($payload);
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
-       
+
         (isset($payload['params'][0]['name']) && count($payload['params'][0]['name'])> 0
-                && gettype($payload['params'][0]['field']) == 'array' || isset($payload['params'][0]['field'][0]) )? true :
-        Helper::interrupt(641);
+            && gettype($payload['params'][0]['field']) == 'array' || isset($payload['params'][0]['field'][0]) )? true :
+            Helper::interrupt(641);
         foreach ($payload['params'] as $table) {
             $table_name = $table['name'];
             if (!\Schema::connection('DYNAMIC_DB_CONFIG')->
@@ -111,7 +112,7 @@ class DbHandler
         }
         if ($output) {
             return Response::respond(609, 'Data has been added to '.$table['name']
-            .' table succefully');
+                .' table successfully');
         }
     }
     /**
@@ -125,7 +126,7 @@ class DbHandler
      */
     public function update($payload)
     {
-        $connector = $this->_connector($payload);
+        $this->_connector($payload);
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
         $service_name = $payload['service_name'];
         if (isset(
@@ -143,13 +144,13 @@ class DbHandler
             $data = $payload['params'][0]['params'][0]['data'];
             if ($payload['user_id'] !== '') {
                 $result = $db->table($table_name)
-                ->where($explosion[0], $explosion[1])
-                ->where('devless_user_id', $payload['user_id'])
-                ->update($data[0]);
+                    ->where($explosion[0], $explosion[1])
+                    ->where('devless_user_id', $payload['user_id'])
+                    ->update($data[0]);
             } else {
                 $result = $db->table($table_name)
-                ->where($explosion[0], $explosion[1])
-                ->update($data[0]);
+                    ->where($explosion[0], $explosion[1])
+                    ->update($data[0]);
             }
             if ($result == 1) {
                 return Response::respond(
@@ -174,20 +175,22 @@ class DbHandler
      */
     public function destroy($payload)
     {
-        $connector = $this->_connector($payload);
+        $this->_connector($payload);
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
         //check if table name is set
         $service_name = $payload['service_name'];
         $table = $payload['params'][0]['name'];
+
         //remove service appendage from service
         if (($pos = strpos($table, $service_name.'_')) !== false) {
             $tableWithoutService = substr($table, $pos + 1);
         } else {
             $tableWithoutService = $table;
         }
+
         $table_name = ($tableWithoutService == $payload['params'][0]['name'])
-                ? $service_name.'_'.$tableWithoutService:
-                  $payload['params'][0]['name'];
+            ? $service_name.'_'.$tableWithoutService:
+            $payload['params'][0]['name'];
         if (!\Schema::connection('DYNAMIC_DB_CONFIG')->
         hasTable($table_name)) {
             Helper::interrupt(634);
@@ -203,7 +206,7 @@ class DbHandler
             if ($payload['params'][0]['params'][0]['drop'] == true) {
                 \Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name);
                 (Helper::is_admin_login()) ?
-                \DB::table('table_metas')->where('table_name', $table_name)->delete() : Helper::interrupt(620);
+                    \DB::table('table_metas')->where('table_name', $table_name)->delete() : Helper::interrupt(620);
                 return Response::respond(613, 'dropped table successfully');
                 $task = 'drop';
             }
@@ -235,7 +238,7 @@ class DbHandler
         }
         $destroy_query = $destroy_query.';';
         $result = eval('return'.$destroy_query);
-        if ($result == false && $result != null) {
+        if ($result == 0) {
             Helper::interrupt(614, 'could not '.$task.' '.$element);
         }
         return Response::respond(636, 'The table or field has been '.$task);
@@ -264,28 +267,27 @@ class DbHandler
             if ($payload['user_id'] !== '') {
                 $user_id = $payload['user_id'];
                 $base_query = '$db->table("'.$service_name.'_'.$payload['params']['table'][0].'")'
-                .'->where("devless_user_id",'.$user_id.')';
+                    .'->where("devless_user_id",'.$user_id.')';
             } else {
                 $base_query = '$db->table("'.$service_name.'_'.$payload['params']['table'][0].'")';
             }
             $table_name = $service_name.'_'.$payload['params']['table'][0];
             $complete_query = $base_query;
             (isset($payload['params']['offset'])) ?
-            $complete_query = $complete_query
-            .'->skip('.$payload['params']['offset'][0].')' :
-            false;
-            (isset($payload['params']['size'])) ?
-            $complete_query = $complete_query
-            .'->take('.$payload['params']['size'][0].')' :
-            $complete_query = $base_query;
-            (isset($payload['params']['related'])) ? $queried_table_list =
-            $payload['params']['related'] : false;
-            unset($payload['params']['related']);
-            $related = [];
-            if (isset($payload['params']['orderBy'])) {
-                $order_by = $payload['params']['orderBy'];
                 $complete_query = $complete_query
-                .'->orderBy("'.$payload['params']['orderBy'][0].'" )';
+                    .'->skip('.$payload['params']['offset'][0].')' :
+                false;
+            (isset($payload['params']['size'])) ?
+                $complete_query = $complete_query
+                    .'->take('.$payload['params']['size'][0].')' :
+                $complete_query = $base_query;
+            (isset($payload['params']['related'])) ? $queried_table_list =
+                $payload['params']['related'] : false;
+            unset($payload['params']['related']);
+
+            if (isset($payload['params']['orderBy'])) {
+                $complete_query = $complete_query
+                    .'->orderBy("'.$payload['params']['orderBy'][0].'" )';
                 unset($payload['params']['orderBy']);
             }
             unset(
@@ -293,7 +295,7 @@ class DbHandler
                 $payload['params']['size'],
                 $payload['params']['offset']
             );
-            
+
             //finally loop over remaining query params (where)
             foreach ($payload['params'] as $key => $query) {
                 foreach ($query as $one) {
@@ -302,8 +304,8 @@ class DbHandler
                         $query_params = explode(',', $one);
                         if (isset($query_params[1], $query_params[0])) {
                             $complete_query = $complete_query.
-                            '->'.$this->query_params[$key].'("'.$query_params[0].
-                            '","'.$query_params[1].'")';
+                                '->'.$this->query_params[$key].'("'.$query_params[0].
+                                '","'.$query_params[1].'")';
                         } else {
                             Helper::interrupt(612);
                         }
@@ -348,12 +350,12 @@ class DbHandler
     public function create_schema($payload)
     {
         $service_name = $payload['service_name'];
+
         //connectors mysql pgsql sqlsrv sqlite
-         $this->_connector($payload);
-         
+        $this->_connector($payload);
+
         //dynamically create columns with schema builder
         $db_type = $this->db_types;
-        $table_meta_data = [];
         $new_payload = $payload['params'][0];
         $new_payload['id'] = $payload['id'];
         $table_name = $service_name.'_'.$new_payload['name'];
@@ -361,19 +363,31 @@ class DbHandler
         hasTable($service_name.'_'.$table_name)) {
             \Schema::connection('DYNAMIC_DB_CONFIG')->
             create($table_name, function (Blueprint
-        $table) use ($new_payload, $db_type, $service_name) {
+                                          $table) use (&$new_payload, $db_type, $service_name) {
                 //default field
                 $table->increments('id');
                 $table->integer('devless_user_id');
-                
+
                 //generate remaining fields
+                $count = 0;
                 foreach ($new_payload['field'] as $field) {
                     $field['ref_table'] = $service_name.'_'.$field['ref_table'];
                     $field['field_type'] = strtolower($field['field_type']);
-                    //checks if fieldType and references exist
+
+                    //check if users table is being referenced
+                    if ($field['field_type'] == 'reference' &&
+                        strpos($field['ref_table'], '_devless_users')
+                        == true) {
+                        $field['ref_table'] = 'users';
+
+                        $new_payload['field'][$count]['ref_table'] = '_devless_users';
+                        $new_payload['field'][$count]['name'] = 'users_id';
+                    }
+
                     $this->field_type_exist($field);
                     //generate columns
                     $this->column_generator($field, $table, $db_type);
+                    $count++;
                 }
                 //store table_meta details
             });
@@ -394,6 +408,7 @@ class DbHandler
      */
     public function field_type_exist($field)
     {
+
         //check if soft data type has equivalent db type
         if (!isset($this->db_types[$field['field_type']])) {
             Helper::interrupt(600, $field['field_type'].' does not exist');
@@ -402,8 +417,8 @@ class DbHandler
             if (!\Schema::connection('DYNAMIC_DB_CONFIG')->
             hasTable($field['ref_table'])) {
                 //
-                     Helper::interrupt(601, 'referenced table '
-                .$field['ref_table'].' does not exist');
+                Helper::interrupt(601, 'referenced table '
+                    .$field['ref_table'].' does not exist');
             }
         }
     }
@@ -439,7 +454,7 @@ class DbHandler
      *
      * @return object
      */
-    public function column_generator($field, $table, $db_type)
+    private function column_generator($field, $table, $db_type)
     {
         $column_type = $this->check_column_constraints($field);
         $unique = '';
@@ -448,21 +463,21 @@ class DbHandler
         }
         if ($column_type == 4) {
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
-            ->unsigned()->$unique();
+                ->unsigned()->$unique();
             $table->foreign($field['ref_table'].'_id')->references('id')
-            ->on($field['ref_table'])->onDelete('cascade');
+                ->on($field['ref_table'])->onDelete('cascade');
         } elseif ($column_type == 3) {
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
-            ->unsigned()->$unique();
+                ->unsigned()->$unique();
             $table->foreign($field['ref_table'].'_id')->references('id')
-            ->on($field['ref_table'])->default($field['default'])
-            ->onDelete('cascade');
+                ->on($field['ref_table'])->default($field['default'])
+                ->onDelete('cascade');
         } elseif ($column_type == 2) {
             $table->$db_type[$field['field_type']]
             ($field['name'])->default($field['default'])->onDelete('cascade')
-            ->$unique();
+                ->$unique();
         } elseif ($column_type == 1) {
-            $table->$db_type[$field['field_type']]
+            $table->{$db_type[$field['field_type']]}
             ($field['name'])->onDelete('cascade')->$unique();
         } else {
             Helper::interrupt(
@@ -489,6 +504,7 @@ class DbHandler
         $database,
         $username,
         $password,
+        $port,
         $charset = 'utf8',
         $prefix = '',
         $collation = 'utf8_unicode_ci'
@@ -497,19 +513,21 @@ class DbHandler
             $database = database_path('devless-rec.sqlite3');
         }
         $conn = [
-        'driver'    => $driver,
-        'host'      => $host,
-        'database'  => $database,
-        'username'  => $username,
-        'password'  => $password,
-        'charset'   => $charset,
-        'prefix'    => $prefix,
+            'driver'    => $driver,
+            'host'      => $host,
+            'database'  => $database,
+            'username'  => $username,
+            'password'  => $password,
+            'charset'   => $charset,
+            'prefix'    => $prefix,
+            'port'      => $port,
         ];
         if ($driver == 'mysql') {
             $conn['collation'] = $collation;
+        } elseif ($driver == 'pgsql') {
+            $conn['schema'] = 'public';
         }
-        
-        
+
         \Config::set('database.connections.DYNAMIC_DB_CONFIG', $conn);
     }
     /**
@@ -524,7 +542,7 @@ class DbHandler
     private function _connector($connector_params)
     {
         $driver = $connector_params['driver'];
-        
+
         //get current database else connect to remote
         if ($driver == 'default'|| $driver == "") {
             $default_database = config('database.default');
@@ -533,19 +551,19 @@ class DbHandler
             if (isset($default_connector['hostname'])) {
                 $hostname = $default_connector['hostname'];
             } else {
-                $hostname = (isset($default_connector['host'])) ? $default_connector['host'] : false;
+                $hostname = (isset($default_connector['host'])) ? $default_connector['host'] : '';
             }
-            $username = (isset($default_connector['username'])) ? $default_connector['username'] : false;
-            $password = (isset($default_connector['password'])) ? $default_connector['password'] : false;
+            $username = (isset($default_connector['username'])) ? $default_connector['username'] : '';
+            $password = (isset($default_connector['password'])) ? $default_connector['password'] : '';
             $database = $default_connector['database'];
+            $port     = (isset($default_connector['port']))? $default_connector['port'] : '';
         } else {
-            $driver = $connector_params['driver'];
-            $hostname = $connector_params['hostname'];
-            $database = $connector_params['database'];
-            $username = $connector_params['username'];
-            $password = $connector_params['password'];
+            $fields = ['driver', 'hostname', 'database', 'username', 'password', 'port'];
+            foreach ($fields as $field) {
+                ${$field} = $connector_params[$field];
+            }
         }
-        $this->db_socket($driver, $hostname, $database, $username, $password);
+        $this->db_socket($driver, $hostname, $database, $username, $password, $port);
         return true;
     }
     /**
@@ -559,22 +577,36 @@ class DbHandler
     {
         $serviceTables = $this->_get_all_service_tables($payload);
         $tables = (in_array("*", $tables))?
-                $this->_get_all_related_tables($primaryTable) : $tables;
+            $this->_get_all_related_tables($primaryTable) : $tables;
         $output = [];
         $service = $payload['service_name'];
         //loop over list of tables check if exist
         foreach ($results as $eachResult) {
-                   $eachResult->related = [];
-                   array_walk($tables, function ($table) use ($eachResult, &$output, $service) {
-                       $refField = $service.'_'.$table.'_id';
-                       $referenceId = (isset($eachResult->$refField))? $eachResult->$refField:
-                                    Helper::interrupt(640);
-                       $relatedData = \DB::table($service.'_'.$table)
-                           ->where('id', $referenceId)
-                           ->get();
-                       $eachResult->related[$table] = $relatedData;
-                   });
-                    array_push($output, $eachResult);
+            $eachResult->related = [];
+            array_walk($tables, function ($table) use ($eachResult, &$output, $service) {
+                $refTable = ($table != '_devless_users')? $service.'_'.$table : 'users';
+                $refField = $refTable.'_id';
+                $referenceId = (isset($eachResult->$refField))? $eachResult->$refField:
+                    Helper::interrupt(640);
+                $relatedData = ($table != '_devless_users')?  \DB::table($refTable)->where('id', $referenceId)
+                    ->get(): \DB::table($refTable)->where('id', $referenceId)
+                    ->select(
+                        'username',
+                        'first_name',
+                        'last_name',
+                        'email',
+                        'phone_number',
+                        'status',
+                        'phone_number'
+                    )
+                    ->get();
+
+
+
+
+                $eachResult->related[$table] = $relatedData;
+            });
+            array_push($output, $eachResult);
         }
         return $output;
     }
@@ -599,7 +631,7 @@ class DbHandler
     {
         $serviceId = $payload['id'];
         $tables = \DB::table('table_metas')
-                ->where('service_id', $serviceId)->get();
+            ->where('service_id', $serviceId)->get();
         return $tables;
     }
     /**
@@ -612,7 +644,7 @@ class DbHandler
     private function _set_table_meta($service_name, $schema)
     {
         \DB::table('table_metas')->insert(['schema' => json_encode($schema),
-                    'table_name' => $service_name.'_'.$schema['name'], 'service_id' => $schema['id'], ]);
+            'table_name' => $service_name.'_'.$schema['name'], 'service_id' => $schema['id'], ]);
         return true;
     }
     /**
@@ -638,7 +670,7 @@ class DbHandler
      */
     public function check_db_connection(array $connection_params)
     {
-        $connector = $this->_connector($connection_params);
+        $this->_connector($connection_params);
         return true;
     }
     /**
@@ -656,8 +688,8 @@ class DbHandler
         $access_type = $payload['resource_access_right'];
         $access_state = $service
             ->check_resource_access_right_type($access_type[$db_action]);
-        
-        if($access_state == TRUE) {
+
+        if ($access_state == true) {
             $user_cred = Helper::get_authenticated_user_cred($access_state);
             $user_id = $user_cred['id'];
         }
@@ -685,7 +717,6 @@ class DbHandler
     ) {
         $table_meta = $this->get_tableMeta($service_name.'_'.$table_name);
         $schema = $table_meta['schema'];
-        $hit = 0;
         $count = 0;
         foreach ($table_data as $field_unit) {
             foreach ($field_unit as $field => $field_value) {
@@ -693,14 +724,14 @@ class DbHandler
                     if ($fields['name'] == $field) {
                         //pass field_type and value to validate
                         $err_msg =
-                        Helper::field_check(
-                            $field_value,
-                            $fields['field_type']
-                        );
+                            Helper::field_check(
+                                $field_value,
+                                $fields['field_type']
+                            );
                         if ($check_password == true &&
-                        strtolower($fields['field_type']) == 'password') {
+                            strtolower($fields['field_type']) == 'password') {
                             $table_data[$count]['password'] =
-                            Helper::password_hash($table_data[$count]['password']);
+                                Helper::password_hash($table_data[$count]['password']);
                         }
                         if (is_object($err_msg) == true) {
                             Helper::interrupt(616, $err_msg);

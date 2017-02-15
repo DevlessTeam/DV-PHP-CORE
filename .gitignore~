@@ -1,0 +1,10 @@
+.idea/*
+/vendor
+/storage
+/node_modules
+Homestead.yaml
+Homestead.json
+.env
+/nbproject
+.idea
+.phpintel/*

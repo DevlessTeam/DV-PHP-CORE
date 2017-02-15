@@ -51,7 +51,7 @@ class Helper
         619 => 'Table was updated successfully',
         620 => 'Could not delete table',
         621 => 'Could not find asset file',
-        622 => 'Token updated succefully',
+        622 => 'Token updated successfully',
         623 => 'Token could not be updated',
         624 => 'Sorry this is not an open endpoint',
         625 => 'Got response successfully',
@@ -93,6 +93,7 @@ class Helper
         'textarea'   => 'string',
         'timestamp'  => 'integer',
         'url'        => 'url',
+        'base64'     => 'string',
 
     ];
 
@@ -127,7 +128,7 @@ class Helper
     public static function interrupt($stack, $message = null, $payload = [])
     {
         $message = ($message !== null) ? $message : self::responseMessage($stack);
-        throw new HttpException(500, $message, null, [], $stack);
+        throw new HttpException(500, $message, null, $payload, $stack);
     }
 
     /**
@@ -250,7 +251,7 @@ class Helper
     public static function get_authenticated_user_cred($access_state)
     {
         $user_token = request()->header('devless-user-token');
-
+        $user_cred = [];
         if (self::is_admin_login() && $access_state == true) {
             $admin = User::where('role', 1)->first();
             $user_cred['id'] = $admin->id;
@@ -268,7 +269,7 @@ class Helper
             } else {
                 self::interrupt(628, null, [], true);
             }
-        } else {
+        } elseif (!$access_state == false) {
             self::interrupt(628, null, [], true);
         }
 

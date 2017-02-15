@@ -8,7 +8,7 @@
     <meta name="keyword" content="Devless, opensource, BAAS, Backend as a service, robust, php, laravel ">
     <link rel="shortcut icon" href="javascript:;" type="image/png">
 
-    <title>Devless 1.0.1 </title>
+    <title>Devless 1.2.3 </title>
 
     <!--right slidebar-->
     <link href="{{ Request::secure(Request::root()).'/css/slidebars.css' }}" rel="stylesheet">
@@ -18,6 +18,9 @@
 
     <!--Form Wizard-->
     <link rel="stylesheet" type="text/css" href="{{ Request::secure(Request::root()).'/css/jquery.steps.css' }}" />
+
+    <!-- datatables css -->
+    <link href="{{ Request::secure(Request::root()).'/css/jquery.dataTables.min.css'  }}" rel="stylesheet">
 
     <!--common style-->
     <link href="{{ Request::secure(Request::root()).'/css/style.css' }}" rel="stylesheet">

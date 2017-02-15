@@ -12,7 +12,7 @@ class {{ServiceName}}
      */
     public function methodone()
     {
-        return "Sample Protected Method";
+        return "Sample Private Method";
     }
 
 
@@ -31,7 +31,7 @@ class {{ServiceName}}
      */
     public function methodthree()
     {
-        return "Sample Protected Method";
+        return "Sample Public Method";
     }
 
     /**

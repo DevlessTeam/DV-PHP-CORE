@@ -38,8 +38,8 @@
              </div>
            <div  class="form-group">
             <label for="field-type">Field Type</label>
-            
-            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'REFERENCE'] ?>
+
+            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'REFERENCE'] ?>
             <select class="form-control"  name="field-type" id="field-type">
                 @foreach($options as  $option)
                 <option value="{{$option}}">{{$option}}</option>
@@ -53,8 +53,9 @@
                 @foreach($table_meta as $table_data)
                 <option value="{{$table_data['name']}}">{{$table_data['name']}}</option>
                 @endforeach
+                <option value="_devless_users">DevLess User</option>
             </select>
-            </div> 
+            </div>
         </div>
           <div class="form-group">
            <label for="default-field">Default Value(optional)</label>
@@ -132,20 +133,20 @@
                             <header class="panel-heading tab-dark ">
                                 <ul class="nav nav-tabs nav-justified">
                                     <li class="active">
-                                        <a data-toggle="tab" href="#jus">Database</a>
-                                    </li>
-                                    <li class="">
                                         <a data-toggle="tab" href="#mtab">Tables</a>
                                     </li>
                                     <li class="">
-                                        <a data-toggle="tab" onclick="set_script()" href="#jtab">Script</a>
+                                        <a data-toggle="tab" onclick="set_script()" href="#jtab">Rules</a>
+                                    </li>
+                                    <li class="">
+                                        <a data-toggle="tab" href="#jus">Remote DB Config</a>
                                     </li>
                                 </ul>
                             </header>
 
                             <div class="panel-body">
                                 <div class="tab-content">
-                                    <div class="tab-pane active" id="jus">
+                                    <div class="tab-pane" id="jus">
                                         <form role="form">
                                             <div class="form-group">
                                                 <label for="g-title">Name</label>
@@ -161,7 +162,7 @@
                                                 <label for="g-txt" >Database Type</label>
                                                 <select id="db-type" name="driver"  class="form-control m-b-10">
                                                     <?php $options = ['Default'=>'default','Sqlite'=>'sqlite',
-                                                        'MySql'=>'mysql','Postgres'=>'Pgsql','SQL Server'=>'sqlsrv'];?>
+                                                        'MySql'=>'mysql','Postgres'=>'pgsql','SQL Server'=>'sqlsrv'];?>
                                                     @foreach($options as $option_index => $option_value )
                                                     <option value="{{$option_value}}" @if($option_value == $service->driver)selected @endif >{{$option_index}}</option>
                                                     @endforeach
@@ -193,11 +194,18 @@
                                                   <span class="help-block">{{ $errors->first("password") }}</span>
                                                 @endif
                                             </div>
+                                            <div class="form-group">
+                                                <label for="g-txt">Port</label>
+                                                <input class="form-control" id="port" name="port" placeholder="port" value="{{$service->port}}" type="port">
+                                                @if($errors->has("port"))
+                                                  <span class="help-block">{{ $errors->first("port") }}</span>
+                                                @endif
+                                            </div>
                                             <button class="btn btn-info" type=
                                             "submit">Update</button>
                                         </form>
                                     </div>
-                                    <div class="tab-pane" id="mtab">
+                                    <div class="tab-pane active " id="mtab">
                                                 <section class="panel">
                     <header class="panel-heading head-border">
 
@@ -223,8 +231,18 @@
                                     <td>{{$table_data['name']}}</td>
                                     <td>{{$table_data['description']}}</td>
                                     <td>{{sizeOf($table_data['field'])}} field(s)</td>
-                                    <td><a href="/datatable?service_name={{$service->name}}&table_name={{$table_data['name']}}" class="btn btn-default">View Data</a>
-                                        <button onclick="destroy_table('{{$table_data['name']}}','{{$service->name}}')" class="btn btn-danger btn-sm">Delete Table</button></td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                        <a href="" class="btn btn-default"><i class="fa fa-edit"></i> </a>
+                                            </div>
+                                            <div class="col-lg-4">
+                                        <a href="/datatable?service_name={{$service->name}}&table_name={{$table_data['name']}}" class="btn btn-default"><i class="fa fa-table"></i></a>
+                                            </div><div class="col-lg-4">
+                                        <button onclick="destroy_table('{{$table_data['name']}}','{{$service->name}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> </button>
+                                            </div>
+                                            </div>
+                                    </td>
                                 </tr>
                                     <?php $count++; ?>
                                     @endforeach
@@ -234,7 +252,7 @@
                             </tbody>
                         </table>
                         <br>
-                        <button type="button" class="btn btn-info " data-toggle="modal" data-target="#schema-table">New Table</button>
+                        <button type="button" class="btn btn-info " data-toggle="modal" data-target="#schema-table"><i class="fa fa-table"></i> New Table</button>
                     </div>
                 </section>
                                     </div>
@@ -310,9 +328,9 @@
         if (this.nodeType === 1) $(this).html( $(this).html().replace(/removeIndicator/g, "fields"+window.count) )
         })
     window.count = window.count + 1 ;
-    
+
     }
-    
+
     function create_table(service_name){
          $('#crt-tbl').prop('disabled', true);
          $.fn.serializeObject = function()
@@ -365,16 +383,16 @@
                 function trim(str){
                     console.log(str);
                     if(typeof str == "string"){
-                        
+
                         return str.replace(/\s+/g, '').toLowerCase();
                     }else{
                         return str;
                     }
-                }    
+                }
                 window.schema_json.resource[0].name = trim(form_array[0]);
                 window.schema_json.resource[0].description = form_array[1]  ;
                 var len = ((form_array.length)-4)/8;
-                
+
                 for (var i = 1; i <= len; i++) {
                     position = ((len-i)*8)
                     if(form_array[6+position] == ""){ _default = null;}else{_default = form_array[6+position]; }
@@ -383,7 +401,7 @@
                     {
                         console.log('appended service')
                         referenced_table_name = service_name+'_'+trim(form_array[5+position])+'_id';
-                        
+
                     }else{
                         referenced_table_name = trim(form_array[3+position]);
                         console.log('went for else instead')
@@ -399,7 +417,7 @@
                         "is_unique":trim(form_array[9+position]),
                      };
                 }
-                
+
                 if (len => 1) {
                    table_schema =   JSON.stringify(window.schema_json);
                    var settings = {
@@ -418,24 +436,26 @@
                   console.log(response);
                   if(typeof(response) == "string")
                   {
-                      response = JSON.parse(response); 
+                      response = JSON.parse(response);
                   }
-                  status_code = response.status_code;
-                  message = response.message;
-                  payload = response.payload;
-                  
+                  var status_code = response.status_code;
+                  var message = response.message;
+                  var payload = response.payload;
+
                   if(status_code == 700){
-                      alert( payload.message);
+                      console.log(message)
+                      alert(message);
+                      $('#crt-tbl').prop('disabled', false);
                   }
                   else if(status_code == 606){
                         window.location.href = "/services/"+{{$service->id}}+"/edit";
-                        
+
                   }else{
                         alert(message);
-                        
+
                   }
                 });} else {
-                     
+
                      alert('Please add at least a field');
                      $('#crt-tbl').prop('disabled', false);
                 }
@@ -444,8 +464,8 @@
                 alert('Sorry seems like you have no fields set ');
                 $('#crt-tbl').prop('disabled', false);
             }
-            
-            
+
+
     }
    function destroy_field(field_id){
        $('.'+field_id).remove();

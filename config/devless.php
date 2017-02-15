@@ -24,6 +24,7 @@ $devless_object_keys = [
     'hostname'     =>  '',
     'username'     =>  '',
     'password'     =>  '',
+    'port'         =>  null,
 ];
 
 foreach ($devless_object_keys as $key => $value)
@@ -40,7 +41,7 @@ return[
   'name'                  => 'devless',   
   'views_directory_name'  => 'service_views',
   'views_directory'       => base_path().'/resources/views/service_views/',
-  'version'               => '1.0.1',
+  'version'               => '1.2.3',
 ];
 
 

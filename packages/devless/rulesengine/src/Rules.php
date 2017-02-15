@@ -2,9 +2,9 @@
 
 namespace Devless\RulesEngine;
 
-use App\Helpers\ActionClass;
 use App\Helpers\Helper;
-use App\Helpers\Response;
+use App\Helpers\ActionClass;
+use App\Helpers\DevlessHelper;
 
 class Rules
 {
@@ -28,19 +28,29 @@ class Rules
     ];
 
 
-    private $results = '';
+    public $results = '';
     private $answered = false;
 
     private $execOrNot = true;
     private $actionType = '';
 
-    public function requestType($actionType)
+    private $tableName = '';
+
+    public function requestType($requestPayload)
     {
+        $tableName = DevlessHelper::get_tablename_from_payload($requestPayload);
+        $actionType = $requestPayload['method'];
+
         $this->actionType = $actionType;
+        $this->tableName  = $tableName;
         return $this;
     }
 
 
+    /**
+     * Check if table is being queried
+     * @return $this
+     */
     public function onQuery()
     {
         $this->execOrNot = ($this->actionType == 'GET')? true : false;
@@ -48,7 +58,10 @@ class Rules
     }
 
 
-
+    /**
+     * Check if data is being updated on table
+     * @return $this
+     */
     public function onUpdate()
     {
         $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
@@ -56,6 +69,10 @@ class Rules
     }
 
 
+    /**
+     * Check if data is being added to table
+     * @return $this
+     */
     public function onCreate()
     {
         $this->execOrNot = ($this->actionType == 'POST')? true : false;
@@ -63,6 +80,10 @@ class Rules
     }
 
 
+    /**
+     * Check if data is being deleted from table
+     * @return $this
+     */
     public function onDelete()
     {
         $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
@@ -70,8 +91,9 @@ class Rules
     }
 
     /**
-     * if equivalence
-     * @param $assert
+     * equivalence of if
+     *
+     * @param  $assert
      * @return $this
      */
     public function whenever($assert)
@@ -86,8 +108,9 @@ class Rules
     }
 
     /**
-     * elseif equivalence
-     * @param $assert
+     * equivalence of elseif
+     *
+     * @param  $assert
      * @return $this
      */
     public function elseWhenever($assert)
@@ -102,7 +125,8 @@ class Rules
     }
 
     /**
-     * else equivalence
+     * equivalence of else
+     *
      * @return $this
      */
     public function otherwise()
@@ -116,10 +140,16 @@ class Rules
             return $this;
     }
 
+    public function onTable($expectedTableName)
+    {
+        $this->execOrNot = ($this->tableName[0] == $expectedTableName)? true:false;
+        return $this;
+    }
+
     public function succeedWith($msg = null)
     {
         $evaluator = function () use ($msg) {
-            return Response::respond(1001, $msg);
+            return Helper::interrupt(1000, $msg);
         };
 
         return $this->executor($evaluator);
@@ -138,11 +168,13 @@ class Rules
         return $this->executor($evaluator);
     }
 
+
     /**
      * Call on an ActionClass
-     * @param $service
-     * @param $method
-     * @param null $params
+     *
+     * @param  $service
+     * @param  $method
+     * @param  null    $params
      * @return mixed|string
      */
     public function run($service, $method, $params = null)
@@ -151,7 +183,6 @@ class Rules
             return $this;
         }
         $evaluator = function () use ($service, $method, $params) {
-
             $results = ActionClass::execute($service, $method, $params);
             $this->answered = true;
             return $results;
@@ -163,7 +194,8 @@ class Rules
 
     /**
      * Execute callback functions with the chain
-     * @param $evaluator
+     *
+     * @param  $evaluator
      * @return Rules|string
      */
     public function executor($evaluator)
@@ -186,9 +218,10 @@ class Rules
         } elseif ($otherwise && !$this->called['whenever']) {
             $msg = 'You cannot call on otherwise without calling on whenever';
             $error($msg);
-        } elseif ((($whenever && !$this->answered) && $this->called['whenever']) ||
-            (($elseWhenever && !$this->answered) && $this->called['whenever'] && $this->called['elseWhenever']) ||
-            ($otherwise && !$this->answered && ( $this->called['whenever'] || $this->called['elseWhenever'] ))) {
+        } elseif ((($whenever && !$this->answered) && $this->called['whenever'])
+            || (($elseWhenever && !$this->answered) && $this->called['whenever'] && $this->called['elseWhenever'])
+            || ($otherwise && !$this->answered && ( $this->called['whenever'] || $this->called['elseWhenever'] ))
+        ) {
             $this->results =  $evaluator();
         }
 

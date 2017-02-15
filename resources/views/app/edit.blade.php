@@ -111,9 +111,10 @@
                                 <div class="col-lg-offset-2 col-lg-10">
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-info  pull-left" data-toggle="modal" data-target="#connect-to-app">
+                                        <i class="fa fa-plug"></i>
                                         Connect to my App
                                     </button>
-                                    <button type="submit" class="btn btn-info pull-right">Save Changes</button>
+                                    <button type="submit" class="btn btn-info pull-right"><i class="fa fa-floppy-o"></i> Save Changes</button>
                                 </div>
                             </div>
                         </form>
@@ -144,21 +145,19 @@
 
 			<div class="tab-content">
                             <div class="tab-pane active" id="web">
-                                <code>
-                                    var constants = {
-                                        "token":"{{$app->token}}",
-                                        "domain":"{{URL::to('/')}}"
-                                        };
-                                        
-                                    Devless = new Devless(constants);
+                                 <pre>
+<code class="language-markup"><xmp style="word-wrap: break-word;
+">
+<script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="{{$app->token}}"></script>
 
-                                    
-
-                                </code>
+</xmp></code></pre>
+                                
                             </div>
                             <div class="tab-pane" id="android"><center>NA</center></div>
 			  <div class="tab-pane" id="ios"><center>NA</center></div>
-			  <div class="tab-pane" id="raw"><center>NA</center></div>
+                                  <div class="tab-pane" id="raw"><center>
+                                          Domain: 
+                              </center></div>
 			</div>
       </div>
       
@@ -180,7 +179,6 @@
           "data": "{\"action\":\"regen\"}"
         };
         $.ajax(settings).done(function (response) {
-          console.log(response);
           result = JSON.parse(response);
           if(result.status_code == 622){
               $("#token").val(result.payload.new_token);
@@ -197,6 +195,5 @@
             return false;
         }
     }
-    ('#options-tab a:last').tab('show')
     </script>
 @endsection
