@@ -41,6 +41,7 @@ class OTF {
 		// Create the connection
 		$this->connection = DB::connection($database);
 	}
+
 	/**
 	 * Get the on the fly connection.
 	 *
@@ -50,6 +51,7 @@ class OTF {
 	{
 		return $this->connection;
 	}
+
 	/**
 	 * Get a table from the on the fly connection.
 	 *
