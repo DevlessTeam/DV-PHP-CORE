@@ -30,7 +30,7 @@ class UserController extends Controller
 
     public function retrieve_all_users()
     {
-        $users = User::where('role','>', 1)->orderBy('id', 'desc')->get();
+        $users = User::where('role', '>', 1)->orderBy('id', 'desc')->get();
         return $users;
     }
     public function post_login(Request $request)

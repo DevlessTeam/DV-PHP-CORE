@@ -6,7 +6,6 @@ use Devless\RulesEngine\Rules;
 use App\Helpers\Messenger as messenger;
 use App\Http\Controllers\ServiceController as Service;
 
-
 class ScriptHandler
 {
 

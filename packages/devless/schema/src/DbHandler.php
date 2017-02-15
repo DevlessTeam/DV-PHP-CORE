@@ -7,7 +7,6 @@ use App\Helpers\Response as Response;
 use App\Http\Controllers\ServiceController as Service;
 use Illuminate\Database\Schema\Blueprint as Blueprint;
 
-
 class DbHandler
 {
     public $db_types = [
@@ -27,7 +26,7 @@ class DbHandler
     public $query_params = [
         'order'    => 'orderBy',
         'where'    => 'where',
-        'orWhere'    => 'orWhere',
+        'orWhere'  => 'orWhere',
         'take'     => 'take',
         'relation' => 'relation',
     ];
@@ -559,9 +558,8 @@ class DbHandler
             $database = $default_connector['database'];
             $port     = (isset($default_connector['port']))? $default_connector['port'] : '';
         } else {
-
             $fields = ['driver', 'hostname', 'database', 'username', 'password', 'port'];
-            foreach($fields as $field) {
+            foreach ($fields as $field) {
                 ${$field} = $connector_params[$field];
             }
         }

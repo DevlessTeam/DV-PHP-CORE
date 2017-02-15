@@ -168,7 +168,7 @@ class devless
      * @return mixed
      * @ACL public
      */
-    public function updateData($serviceName, $table, $id, $data )
+    public function updateData($serviceName, $table, $id, $data)
     {
         $service = new service();
         $output = DS::service($serviceName, $table, $service)->where('id', $id)->update($data);
@@ -188,6 +188,4 @@ class devless
         $output = DS::service($serviceName, $table, $service)->where('id', $id)->delete();
         return $output;
     }
-
-
 }
