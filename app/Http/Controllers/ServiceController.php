@@ -321,7 +321,7 @@ class ServiceController extends Controller
                         'params' => $parameters,
                     ];
                 // run script before assigning to method
-                if (! $internal_access) {
+                if (! $internal_access && $resource != 'view') {
                     $newServiceElements = $this->before_assigning_service_action($resource, $payload);
                     $resource = $newServiceElements['resource'];
                     $payload = $newServiceElements['payload'];
