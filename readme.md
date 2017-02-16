@@ -56,6 +56,30 @@ If you will need help setting up you may check out the Laravel [installation](ht
 
 Checkout out the [docs](https://docs.devless.io)
 
+## Questions and Support
+Follow or join these channels for questions and support, and to keep updated on latest releases and announcements.
+
+<table class='equalwidth follow'>
+  <tr>
+		<td>
+			<a href='https://slack.devless.io' target="_blank">
+        <b>Slack</b><br><br>
+        <img src='https://raw.githubusercontent.com/gliechtenstein/images/master/slack_smaller.png'>
+        <br>
+        Join Now >
+      </a>
+		</td>
+		<td>
+			<a target="_blank" href='https://www.twitter.com/devlessio'>
+        <b>Twitter</b><br><br>
+				<img src='https://raw.githubusercontent.com/gliechtenstein/images/master/twitter_smaller.png'>
+        <br>
+        Follow >
+			</a>
+		</td>
+	</tr>
+</table>
+
 ## How to contribute 
 **Please checkout the [Contribute](https://guides.github.com/activities/contributing-to-open-source/) guide on how to contribute**
 No contribution is too small 
