@@ -600,10 +600,6 @@ class DbHandler
                         'phone_number'
                     )
                     ->get();
-
-
-
-
                 $eachResult->related[$table] = $relatedData;
             });
             array_push($output, $eachResult);
@@ -620,7 +616,7 @@ class DbHandler
         $relatedTables = [];
         $schema = $this->get_tableMeta($tableName);
         array_walk($schema['schema']['field'], function ($field)
- use ($tableName, &$relatedTables) {
+        use ($tableName, &$relatedTables) {
             if ($field['field_type'] == 'reference') {
                 array_push($relatedTables, $field['ref_table']);
             }
@@ -697,7 +693,7 @@ class DbHandler
         return $payload;
     }
     /**
-     * validate entry data against schema field type.
+     * validate incoming  data against schema field type.
      *
      * @param string $table_name
      * @param $service_name
@@ -715,6 +711,7 @@ class DbHandler
         $table_data,
         $check_password = false
     ) {
+        
         $table_meta = $this->get_tableMeta($service_name.'_'.$table_name);
         $schema = $table_meta['schema'];
         $count = 0;
