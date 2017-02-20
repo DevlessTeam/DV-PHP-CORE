@@ -23,7 +23,7 @@ class ActionClass
         }
 
         /** @var TYPE_NAME $serviceMethodPath */
-        (file_exists($serviceMethodPath))
+        (file_exists($serviceMethodPath))?
             require_once $serviceMethodPath : false;
 
         $serviceInstance = new $service();
