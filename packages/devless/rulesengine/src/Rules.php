@@ -177,13 +177,17 @@ class Rules
      * @param  null    $params
      * @return mixed|string
      */
-    public function run($service, $method, $params = null)
+    public function run($service, $method, $params = null, $remoteUrl = null, $token = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
-        $evaluator = function () use ($service, $method, $params) {
-            $results = ActionClass::execute($service, $method, $params);
+        $evaluator = function () use ($service, $method, $params, $remoteUrl, $token) {
+            if($remoteUrl && $token) {
+                $results = ActionClass::remoteExecut($service, $method, $params, $remoteUrl, $token);
+            } else {
+                $results = ActionClass::execute($service, $method, $params);
+            }
             $this->answered = true;
             return $results;
         };

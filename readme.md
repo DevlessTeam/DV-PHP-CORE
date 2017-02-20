@@ -52,7 +52,11 @@ Current implementation of the Devless API Engine is in PHP and built on top of t
 
 If everything goes on smoothly you should be able to access the setup screen at [localhost:8000](http://localhost:8000)
 
-If you will need help setting up you may check out the Laravel [installation](https://laravel.com/docs/5.1) guide as the Devless core is based off of Laravel. 
+If you will need help setting up you may check out the Laravel [installation](https://laravel.com/docs/5.1) guide as the Devless core is based off of Laravel.
+
+Alternatively, you can deploy your own copy unto Heroku😎 
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/DevlessTeam/DV-PHP-CORE/tree/heroku2)
 
 Checkout out the [docs](https://docs.devless.io)
 
@@ -84,5 +88,5 @@ Follow or join these channels for questions and support, and to keep updated on 
 **Please checkout the [Contribute](https://guides.github.com/activities/contributing-to-open-source/) guide on how to contribute**
 No contribution is too small 
 
-* We would love to hear from  you email us @ <info@devless.io>
-* Also don't forget to visit our landing page @ [devless.io](https://devless.io)
+* We would love to hear from  you email us ⇒ <info@devless.io>
+* Also don't forget to visit our landing page ⇒ [devless.io](https://devless.io)
