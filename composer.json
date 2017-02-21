@@ -41,6 +41,7 @@
     },
     "scripts": {
         "post-root-package-install": [
+            "apt-get install php-zip",
             "php -r \"copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
