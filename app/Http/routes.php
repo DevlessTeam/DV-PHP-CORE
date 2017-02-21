@@ -38,7 +38,6 @@
             \App\Helpers\DevlessHelper::install_views($folder_path);
             \App\Helpers\DevlessHelper::deleteDirectory(config('devless')['views_directory'].'views_backup');
 
-
             //backup services
         } else if(filemtime(config('devless')['views_directory']) !=
             \App\Helpers\DataStore::getDump('devless_views_updated_on')) {
@@ -50,7 +49,9 @@
 
         }
     }
-    restore_directory();
+    if(Schema::hasTable('devless_dump')) {
+        restore_directory();
+    }
     Route::get('/', 'UserController@get_login');
 
 
