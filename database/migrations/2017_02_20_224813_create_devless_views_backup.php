@@ -12,7 +12,7 @@ class CreateDevlessViewsBackup extends Migration
      */
     public function up()
     {
-        DB::statement('CREATE TABLE (
+        DB::statement('CREATE TABLE devless_views(
           id integer PRIMARY KEY
          ,view bytea
          ,service_name text
