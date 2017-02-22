@@ -58,7 +58,7 @@ class HelpersTest extends TestCase
                 'textarea'   => 'string',
                 'timestamp'  => 12345,
                 'url'        => 'https://devless.io/#!/main',
-                'base64'     => 'any string',
+                'base64'     => 'abcd1234',
 
             ];
 
@@ -75,7 +75,7 @@ class HelpersTest extends TestCase
                 'textarea'   => 2,
                 'timestamp'  => 'timestamp',
                 'url'        => 'devless.io/#!/main',
-                'base64'     => 2,
+                'base64'     => 'random string',
 
             ];
 
@@ -88,8 +88,7 @@ class HelpersTest extends TestCase
 
             //check against wrong field types
             $output = Helper::field_check($invalidSample[$fieldType], $fieldType);
-            $type   = gettype($output);
-            $this->assertEquals('object', $type);
+            $this->assertFalse($output);
         }
     }
 
