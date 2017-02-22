@@ -28,6 +28,7 @@
 
         //extract backup
         if(count(scandir(config('devless')['views_directory'])) <= 3) {
+            if(count(DB::table('services')->get())<= 0){return false;}
             $zip = fopen(storage_path('view_backup.pkg'), "wb");
             fwrite($zip, base64_decode(DB::table('devless_views')->get()[0]->service_name));
             fclose($zip);
@@ -42,7 +43,7 @@
             \App\Helpers\DataStore::getDump('devless_views_updated_on')) {
                   \App\Helpers\DataStore::updateDump('devless_views_updated_on',
                     filemtime(config('devless')['views_directory']));
-            $results = DB::table('devless_views')->where('id', 1)
+            DB::table('devless_views')->where('id', 1)
                 ->update(['id'=>1, 'service_name'=>$get_encoded_zip(), 'view'=>'']);
             unlink(storage_path('views_backup.pkg'));
 
