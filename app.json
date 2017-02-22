@@ -19,7 +19,7 @@
     },
     "buildpacks": [
         {
-            "url": "https://github.com/heroku/heroku-buildpack-php"
+            "url": "https://github.com/lifekent/heroku-buildpack-laravel"
         }
 
     ],
