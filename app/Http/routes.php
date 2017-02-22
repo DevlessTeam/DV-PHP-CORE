@@ -28,7 +28,7 @@
 
         //extract backup
         if(count(scandir(config('devless')['views_directory'])) <= 3) {
-            if(count(DB::table('services')->get()<= 0||count(DB::table('devless_views')->get()))<= 0){return false;}
+            if(count(DB::table('services')->get())<= 0||count(DB::table('devless_views')->get())<= 0){return false;}
             $zip = fopen(storage_path('view_backup.pkg'), "wb");
             fwrite($zip, base64_decode(DB::table('devless_views')->get()[0]->service_name));
             fclose($zip);
