@@ -724,7 +724,7 @@ class DbHandler
                             $table_data[$count]['password'] =
                                 Helper::password_hash($table_data[$count]['password']);
                         }
-                        if (Helper::field_check($field_value, $fields['field_type'])) {
+                        if (!Helper::field_check($field_value, $fields['field_type'])) {
                             Helper::interrupt(616, 'The field '.$fields['name'].' cannot  be set to `'.$field_value.'`. Its not a/an '. $fields['field_type']);
                         }
                     }
