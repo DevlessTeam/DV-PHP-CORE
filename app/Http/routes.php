@@ -10,48 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-    function restore_directory()
-    {
 
-        $get_encoded_zip = function(){
-            $zip = file_get_contents(storage_path(\App\Helpers\Migration::export_app('views_backup')));
-            return base64_encode($zip);
-        };
-
-        //initialize service backup
-        if(! \App\Helpers\DataStore::getDump('devless_views_updated_on')) {
-                \App\Helpers\DataStore::setDump('devless_views_updated_on',
-                    filemtime(config('devless')['views_directory']));
-            DB::table('devless_views')->insert(['id'=>1, 'service_name'=>$get_encoded_zip(), 'view'=>'']);
-            unlink(storage_path('views_backup.pkg'));
-        }
-
-        //extract backup
-        if(count(scandir(config('devless')['views_directory'])) <= 3) {
-            if(count(DB::table('services')->get())<= 0||count(DB::table('devless_views')->get())<= 0){return false;}
-            $zip = fopen(storage_path('view_backup.pkg'), "wb");
-            fwrite($zip, base64_decode(DB::table('devless_views')->get()[0]->service_name));
-            fclose($zip);
-
-            $service_path = storage_path('view_backup.pkg');
-            $folder_path = \App\Helpers\DevlessHelper::expand_package($service_path, true);
-            \App\Helpers\DevlessHelper::install_views($folder_path);
-            \App\Helpers\DevlessHelper::deleteDirectory(config('devless')['views_directory'].'views_backup');
-
-            //backup services
-        } else if(filemtime(config('devless')['views_directory']) !=
-            \App\Helpers\DataStore::getDump('devless_views_updated_on')) {
-                  \App\Helpers\DataStore::updateDump('devless_views_updated_on',
-                    filemtime(config('devless')['views_directory']));
-            DB::table('devless_views')->where('id', 1)
-                ->update(['id'=>1, 'service_name'=>$get_encoded_zip(), 'view'=>'']);
-            unlink(storage_path('views_backup.pkg'));
-
-        }
-    }
-    if(Schema::hasTable('devless_dump')) {
-        restore_directory();
-    }
     Route::get('/', 'UserController@get_login');
 
 
