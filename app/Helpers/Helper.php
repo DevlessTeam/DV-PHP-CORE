@@ -93,12 +93,9 @@ class Helper
         'textarea'   => 'string',
         'timestamp'  => 'integer',
         'url'        => 'url',
-        'base64'     => 'string',
+        'base64'     => 'alphanum',
 
     ];
-
-    public static $preFunctionName = 'DvBefore';
-    public static $postFunctionName = 'DvAfter';
 
     /**
      * fetch message based on status code.
@@ -173,11 +170,11 @@ class Helper
             [$field_name => $field_value],
             [$field_name => $check_against]
         );
-        if (!$state->fails()) {
-            return true;
-        } else {
-            return $state->messages();
+        if ($state->fails()) {
+            return false;
         }
+
+        return true;
     }
 
     /**

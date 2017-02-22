@@ -719,19 +719,13 @@ class DbHandler
             foreach ($field_unit as $field => $field_value) {
                 foreach ($schema['field'] as $fields) {
                     if ($fields['name'] == $field) {
-                        //pass field_type and value to validate
-                        $err_msg =
-                            Helper::field_check(
-                                $field_value,
-                                $fields['field_type']
-                            );
                         if ($check_password == true &&
                             strtolower($fields['field_type']) == 'password') {
                             $table_data[$count]['password'] =
                                 Helper::password_hash($table_data[$count]['password']);
                         }
-                        if (is_object($err_msg) == true) {
-                            Helper::interrupt(616, $err_msg);
+                        if (Helper::field_check($field_value, $fields['field_type'])) {
+                            Helper::interrupt(616, 'The field '.$fields['name'].' cannot  be set to `'.$field_value.'`. Its not a/an '. $fields['field_type']);
                         }
                     }
                 }
