@@ -13,10 +13,11 @@ if ($url !== false) {
     $port = $url["port"];
 	$database = substr($url["path"], 1);
 } else {
-	$host = env('DB_HOST', 'localhost');
+	$host =     env('DB_HOST', 'localhost');
 	$username = env('DB_USERNAME', 'forge');
 	$password = env('DB_PASSWORD', '');
-	$database = env('DB_DATABASE', 'forge');
+    $database = env('DB_DATABASE', 'forge');
+    $port     = env('DB_PORT', '5432');
 }
 
 return [
