@@ -184,7 +184,7 @@ class Rules
         }
         $evaluator = function () use ($service, $method, $params, $remoteUrl, $token) {
             if($remoteUrl && $token) {
-                $results = ActionClass::remoteExecut($service, $method, $params, $remoteUrl, $token);
+                $results = ActionClass::remoteExecute($service, $method, $params, $remoteUrl, $token);
             } else {
                 $results = ActionClass::execute($service, $method, $params);
             }
