@@ -7,7 +7,7 @@ class {{ServiceName}}
     public $serviceName = '{{ServiceName}}';
 
     /**
-     * Sample method accessible to via endpoint
+     * Method cannnot be accessed via any SDK
      * @ACL private
      */
     public function methodone()
@@ -17,7 +17,7 @@ class {{ServiceName}}
 
 
     /**
-     * Sample method accessible only by authenticated users
+     * Method accessible only by authenticated users
      * @ACL protected
      */
     public function methodtwo()
@@ -26,7 +26,7 @@ class {{ServiceName}}
     }
 
     /**
-     * Sample method not accessible via endpoint
+     * Method is accessible via any DevLess SDK
      * @ACL public
      */
     public function methodthree()
