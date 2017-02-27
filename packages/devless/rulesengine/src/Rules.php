@@ -142,7 +142,8 @@ class Rules
 
     public function onTable($expectedTableName)
     {
-        $this->execOrNot = ($this->tableName[0] == $expectedTableName)? true:false;
+        $this->tableName = (is_array($this->tableName))? $this->tableName[0]:$this->tableName;
+        $this->execOrNot = ($this->tableName == $expectedTableName)? true:false;
         return $this;
     }
 
@@ -222,7 +223,7 @@ class Rules
         } elseif ($otherwise && !$this->called['whenever']) {
             $msg = 'You cannot call on otherwise without calling on whenever';
             $error($msg);
-        } elseif ((($whenever && !$this->answered) && $this->called['whenever'])
+        } elseif (( ($whenever && !$this->answered) && $this->called['whenever'])
             || (($elseWhenever && !$this->answered) && $this->called['whenever'] && $this->called['elseWhenever'])
             || ($otherwise && !$this->answered && ( $this->called['whenever'] || $this->called['elseWhenever'] ))
         ) {
