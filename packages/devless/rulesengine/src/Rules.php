@@ -86,7 +86,7 @@ class Rules
      */
     public function onDelete()
     {
-        $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
+        $this->execOrNot = ($this->actionType == 'DELETE')? true : false;
         return $this ;
     }
 
@@ -142,6 +142,10 @@ class Rules
 
     public function onTable($expectedTableName)
     {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+
         $this->tableName = (is_array($this->tableName))? $this->tableName[0]:$this->tableName;
         $this->execOrNot = ($this->tableName == $expectedTableName)? true:false;
         return $this;
