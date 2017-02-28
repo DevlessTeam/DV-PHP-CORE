@@ -136,7 +136,7 @@
                                         <a data-toggle="tab" href="#mtab">Tables</a>
                                     </li>
                                     <li class="">
-                                        <a data-toggle="tab" onclick="set_script()" href="#jtab">Rules</a>
+                                        <a data-toggle="tab" onclick="set_script()" href="#jtab">Rules<span id="saving" style="display:none;color:green;"><i class="fa fa-save"> saving...</i></span></a>
                                     </li>
                                     <li class="">
                                         <a data-toggle="tab" href="#jus">Remote DB Config</a>
@@ -210,7 +210,7 @@
                     <header class="panel-heading head-border">
 
                     </header>
-                    <div class="table-responsive">
+                    <div class="table-responsive" id="service-tables">
                         <table class="table">
                             <thead>
                                  @if(sizeOf($table_meta) > 0)
@@ -233,13 +233,13 @@
                                     <td>{{sizeOf($table_data['field'])}} field(s)</td>
                                     <td>
                                         <div class="row">
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-4 col-md-4 col-sm-4">
                                         <a href="" class="btn btn-default"><i class="fa fa-edit"></i> </a>
                                             </div>
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-4 col-md-4 col-sm-4">
                                         <a href="/datatable?service_name={{$service->name}}&table_name={{$table_data['name']}}" class="btn btn-default"><i class="fa fa-table"></i></a>
-                                            </div><div class="col-lg-4">
-                                        <button onclick="destroy_table('{{$table_data['name']}}','{{$service->name}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> </button>
+                                            </div><div class="col-lg-4 col-md-4 col-sm-4">
+                                                <a href="#" onclick="destroy_table('{{$table_data['name']}}','{{$service->name}}')" class="btn btn-danger delete-{{$table_data['name']}}"><i class="fa fa-trash"></i> </a>
                                             </div>
                                             </div>
                                     </td>
@@ -259,7 +259,7 @@
                                                                    <div class="tab-pane" id="jtab">
 
 
-<textarea class="code-box" name="script" rows="20" style="width: 100%">
+<textarea  class="code-box" name="script" rows="20" style="width: 100%">
 {{$service->script}}
 </textarea>
                                                                        <br>
@@ -297,17 +297,15 @@
            "processData": false,
             "data": "{\"resource\":[{\"name\":\""+table_name+"\",\"params\":[{\"drop\":\"true\"}]}]}"
            }
+         $(".delete-"+table_name)[0].innerText = "...";
          $.ajax(settings).done(function (response) {
              console.log(response)
-           //response_object = JSON.parse(response);
            status_code = response.status_code;
-           if (status_code == 613) {
-                $("#"+table_name).remove();
+           if (status_code != 613) {
+             alert('could not delete table ');
            }
-           else
-           {
-               alert('could not delete table ');
-           }
+           partialUpdate(['service-tables']);
+
          });}
     }
   function append_field(){
@@ -448,8 +446,8 @@
                       $('#crt-tbl').prop('disabled', false);
                   }
                   else if(status_code == 606){
-                        window.location.href = "/services/"+{{$service->id}}+"/edit";
-
+                        partialUpdate(['service-tables']);
+                        $('#schema-table').click()
                   }else{
                         alert(message);
 
@@ -491,13 +489,36 @@ var settings = {
   "mimeType": "multipart/form-data",
   "data": form
 }
+$('#saving')[0].style.display = 'block';
 $.ajax(settings).done(function (response) {
   result = JSON.parse(response);
-  console.log(result);
-   (result.status_code == 626)?$('.code-console').css('color','greenyellow')
+    $('#saving')[0].style.display = 'none';
+   (result.status_code == 626)?$('.code-console').css('color','green')
  : $('.code-console').css('color','red');
   $('.code-console').html('<font size="3">'+result.message+'</font>');
+
+  setTimeout(function(){
+      $('.code-console').html('');
+  }, 930)
 });
    }
+
+
+
+//save script
+document.addEventListener("keydown", function(e) {
+    if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        run_script();
+    }
+});
+
+function partialUpdate(ids) {
+    $.each(ids, function(index, id){
+        $('#'+id).load(document.URL +  ' #'+id);
+    });
+
+}
 </script>
 @endsection
+

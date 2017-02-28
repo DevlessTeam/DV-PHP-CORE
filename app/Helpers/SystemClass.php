@@ -138,7 +138,7 @@ class devless
      * @param $table
      * @param $fields
      * @return mixed
-     * @ACL public
+     * @ACL prviate
      */
     public function addData($serviceName, $table, $data)
     {
@@ -151,7 +151,7 @@ class devless
      * @param $serviceName
      * @param $table
      * @return mixed
-     * @ACL public
+     * @ACL private
      */
     public function queryData($serviceName, $table)
     {
@@ -166,7 +166,7 @@ class devless
      * @param $table
      * @param $id
      * @return mixed
-     * @ACL public
+     * @ACL private
      */
     public function updateData($serviceName, $table, $id, $data)
     {
@@ -180,7 +180,7 @@ class devless
      * @param $table
      * @param $id
      * @return mixed
-     * @ACL public
+     * @ACL private
      */
     public function deleteData($serviceName, $table, $id)
     {
@@ -188,4 +188,7 @@ class devless
         $output = DS::service($serviceName, $table, $service)->where('id', $id)->delete();
         return $output;
     }
+
+
+
 }
