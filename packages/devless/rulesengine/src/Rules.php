@@ -153,6 +153,7 @@ class Rules
 
     public function succeedWith($msg = null)
     {
+        $this->execOrNot = true;
         $evaluator = function () use ($msg) {
             return Helper::interrupt(1000, $msg);
         };
