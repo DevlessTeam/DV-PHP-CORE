@@ -71,7 +71,6 @@ class DbHandler
      */
     public function store(Request $request)
     {
-
         $this->create_schema($request['resource']);
     }
     /**
@@ -310,7 +309,7 @@ class DbHandler
                             Helper::interrupt(612);
                         }
                     } else {
-                        Helper::interrupt(610);
+                        Helper::interrupt(610, "Query parameter `$key` does not exist");
                     }
                 }
             }
@@ -349,6 +348,7 @@ class DbHandler
      */
     public function create_schema($payload)
     {
+        $this->set_auth_id_if_required('schema', $payload);
         $service_name = $payload['service_name'];
 
         //connectors mysql pgsql sqlsrv sqlite
@@ -711,7 +711,7 @@ class DbHandler
         $table_data,
         $check_password = false
     ) {
-        
+
         $table_meta = $this->get_tableMeta($service_name.'_'.$table_name);
         $schema = $table_meta['schema'];
         $count = 0;
