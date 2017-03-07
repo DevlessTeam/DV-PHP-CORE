@@ -48,7 +48,7 @@
         </div>
         <div  class="form-group">
             <div style="display:block;" >
-            <label for="field-reference">Reference Table</label>
+            <label forƒ="field-reference">Reference Table</label>
             <select class="form-control"  name="field-reference" id="field-reference" >
                 @foreach($table_meta as $table_data)
                 <option value="{{$table_data['name']}}">{{$table_data['name']}}</option>
