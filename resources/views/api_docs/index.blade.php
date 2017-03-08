@@ -62,7 +62,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="api_url" class="col-lg-2 col-sm-2 control-label">Api Url</label>
+                                    <label for="api_url" class="col-lg-2 col-sm-2 control-label">Endpoint</label>
                                     <div class="col-lg-10">
                                         <input type="text" class="form-control" id="api_url" name="api_url" readonly="true">
                                     </div>
