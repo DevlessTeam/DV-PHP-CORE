@@ -53,7 +53,7 @@ class Rules
      */
     public function onQuery()
     {
-        $this->execOrNot = ($this->actionType == 'GET');
+        $this->execOrNot = ($this->actionType == 'GET')? true : false;
         return $this ;
     }
 
@@ -64,7 +64,7 @@ class Rules
      */
     public function onUpdate()
     {
-        $this->execOrNot = ($this->actionType == 'PATCH');
+        $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
         return $this ;
     }
 
@@ -75,7 +75,7 @@ class Rules
      */
     public function onCreate()
     {
-        $this->execOrNot = ($this->actionType == 'POST');
+        $this->execOrNot = ($this->actionType == 'POST')? true : false;
         return $this ;
     }
 
@@ -86,7 +86,7 @@ class Rules
      */
     public function onDelete()
     {
-        $this->execOrNot = ($this->actionType == 'DELETE');
+        $this->execOrNot = ($this->actionType == 'DELETE')? true : false;
         return $this ;
     }
 
@@ -142,18 +142,17 @@ class Rules
 
     public function onTable($expectedTableName)
     {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+
         $this->tableName = (is_array($this->tableName))? $this->tableName[0]:$this->tableName;
-        $this->execOrNot = ( ($this->execOrNot) && ($this->tableName == $expectedTableName) );
+        $this->execOrNot = ($this->tableName == $expectedTableName)? true:false;
         return $this;
     }
 
     public function succeedWith($msg = null)
     {
-
-        if (!$this->execOrNot) {
-            $this->execOrNot = true;
-            return $this;
-        }
         $evaluator = function () use ($msg) {
             return Helper::interrupt(1000, $msg);
         };
@@ -165,7 +164,6 @@ class Rules
     public function failWith($msg = null)
     {
         if (!$this->execOrNot) {
-            $this->execOrNot = true;
             return $this;
         }
         $evaluator = function () use ($msg) {
@@ -187,7 +185,6 @@ class Rules
     public function run($service, $method, $params = null, $remoteUrl = null, $token = null)
     {
         if (!$this->execOrNot) {
-            $this->execOrNot = true;
             return $this;
         }
         $evaluator = function () use ($service, $method, $params, $remoteUrl, $token) {
@@ -201,6 +198,17 @@ class Rules
         };
         return $this->executor($evaluator);
 
+    }
+
+    /**
+     * Get results variable and set to variable
+     * @param $input_var
+     * @return $this
+     */
+    public function getRunResult(&$input_var)
+    {
+        $input_var = $this->results;
+        return $this;
     }
 
 
