@@ -348,7 +348,9 @@ class DbHandler
      */
     public function create_schema($payload)
     {
-        $this->set_auth_id_if_required('schema', $payload);
+        if(!Helper::is_admin_login()){
+            $this->set_auth_id_if_required('schema', $payload);
+        }
         $service_name = $payload['service_name'];
 
         //connectors mysql pgsql sqlsrv sqlite
