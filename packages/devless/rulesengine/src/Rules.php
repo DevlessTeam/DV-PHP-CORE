@@ -103,6 +103,7 @@ class Rules
         }
         $this->assertion['whenever'] = $assert;
         $this->called['whenever'] = true;
+        $this->execOrNot = true;
 
         return $this;
     }
@@ -120,6 +121,7 @@ class Rules
         }
         $this->assertion['elseWhenever'] = $assert;
         $this->called['elseWhenever'] = true;
+        $this->execOrNot = true;
 
         return $this;
     }
@@ -135,24 +137,25 @@ class Rules
             return $this;
         }
         $this->assertion['otherwise'] =
-            (!$this->assertion['elseWhenever'] || !$this->assertion['whenever']) ? : false;
+            (!$this->assertion['elseWhenever'] && !$this->assertion['whenever']) ? : false;
         $this->called['otherwise'] = true;
+        $this->execOrNot = true;
         return $this;
     }
 
     public function onTable($expectedTableName)
     {
-        if (!$this->execOrNot) {
-            return $this;
-        }
 
         $this->tableName = (is_array($this->tableName))? $this->tableName[0]:$this->tableName;
-        $this->execOrNot = ($this->tableName == $expectedTableName)? true:false;
+        $this->execOrNot = ($this->tableName == $expectedTableName);
         return $this;
     }
 
     public function succeedWith($msg = null)
     {
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $evaluator = function () use ($msg) {
             return Helper::interrupt(1000, $msg);
         };
@@ -220,9 +223,7 @@ class Rules
      */
     public function executor($evaluator)
     {
-        if (!$this->execOrNot) {
-            return $this;
-        }
+
         $whenever = $this->assertion['whenever'];
         $elseWhenever = $this->assertion['elseWhenever'];
         $otherwise = $this->assertion['otherwise'];
@@ -238,13 +239,12 @@ class Rules
         } elseif ($otherwise && !$this->called['whenever']) {
             $msg = 'You cannot call on otherwise without calling on whenever';
             $error($msg);
-        } elseif (( ($whenever && !$this->answered) && $this->called['whenever'])
-            || (($elseWhenever && !$this->answered) && $this->called['whenever'] && $this->called['elseWhenever'])
-            || ($otherwise && !$this->answered && ( $this->called['whenever'] || $this->called['elseWhenever'] ))
+        } elseif (( ($whenever ) && $this->called['whenever'])
+            || (($elseWhenever ) && $this->called['whenever'] && $this->called['elseWhenever'])
+            || ($otherwise && ( $this->called['whenever'] || $this->called['elseWhenever'] ))
         ) {
             $this->results =  $evaluator();
         }
-
         return ($this->called['otherwise'])? $this->results : $this;
 
     }
