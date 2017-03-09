@@ -53,7 +53,7 @@ class Rules
      */
     public function onQuery()
     {
-        $this->execOrNot = ($this->actionType == 'GET')? true : false;
+        $this->execOrNot = ($this->actionType == 'GET');
         return $this ;
     }
 
@@ -64,7 +64,7 @@ class Rules
      */
     public function onUpdate()
     {
-        $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
+        $this->execOrNot = ($this->actionType == 'PATCH');
         return $this ;
     }
 
@@ -75,7 +75,7 @@ class Rules
      */
     public function onCreate()
     {
-        $this->execOrNot = ($this->actionType == 'POST')? true : false;
+        $this->execOrNot = ($this->actionType == 'POST');
         return $this ;
     }
 
@@ -86,7 +86,7 @@ class Rules
      */
     public function onDelete()
     {
-        $this->execOrNot = ($this->actionType == 'DELETE')? true : false;
+        $this->execOrNot = ($this->actionType == 'DELETE');
         return $this ;
     }
 
@@ -98,9 +98,7 @@ class Rules
      */
     public function whenever($assert)
     {
-        if (!$this->execOrNot) {
-            return $this;
-        }
+        if(!$this->execOrNot)return $this;
         $this->assertion['whenever'] = $assert;
         $this->called['whenever'] = true;
         $this->execOrNot = true;
@@ -116,9 +114,7 @@ class Rules
      */
     public function elseWhenever($assert)
     {
-        if (!$this->execOrNot) {
-            return $this;
-        }
+        if(!$this->execOrNot)return $this;
         $this->assertion['elseWhenever'] = $assert;
         $this->called['elseWhenever'] = true;
         $this->execOrNot = true;
@@ -133,9 +129,7 @@ class Rules
      */
     public function otherwise()
     {
-        if (!$this->execOrNot) {
-            return $this;
-        }
+        if(!$this->execOrNot)return $this;
         $this->assertion['otherwise'] =
             (!$this->assertion['elseWhenever'] && !$this->assertion['whenever']) ? : false;
         $this->called['otherwise'] = true;
@@ -153,9 +147,7 @@ class Rules
 
     public function succeedWith($msg = null)
     {
-        if (!$this->execOrNot) {
-            return $this;
-        }
+        if(!$this->execOrNot)return $this;
         $evaluator = function () use ($msg) {
             return Helper::interrupt(1000, $msg);
         };
@@ -166,9 +158,7 @@ class Rules
 
     public function failWith($msg = null)
     {
-        if (!$this->execOrNot) {
-            return $this;
-        }
+        if(!$this->execOrNot)return $this;
         $evaluator = function () use ($msg) {
             return Helper::interrupt(1001, $msg);
         };
@@ -187,17 +177,15 @@ class Rules
      */
     public function run($service, $method, $params = null, $remoteUrl = null, $token = null)
     {
-        if (!$this->execOrNot) {
-            return $this;
-        }
+        if(!$this->execOrNot)return $this;
         $evaluator = function () use ($service, $method, $params, $remoteUrl, $token) {
             if($remoteUrl && $token) {
-                $results = ActionClass::remoteExecute($service, $method, $params, $remoteUrl, $token);
+                $this->results = ActionClass::remoteExecute($service, $method, $params, $remoteUrl, $token);
             } else {
-                $results = ActionClass::execute($service, $method, $params);
+                $this->results = ActionClass::execute($service, $method, $params);
             }
             $this->answered = true;
-            return $results;
+            return true;
         };
         return $this->executor($evaluator);
 
@@ -210,6 +198,7 @@ class Rules
      */
     public function getRunResult(&$input_var)
     {
+        if(!$this->execOrNot)return $this;
         $input_var = $this->results;
         return $this;
     }
@@ -243,7 +232,7 @@ class Rules
             || (($elseWhenever ) && $this->called['whenever'] && $this->called['elseWhenever'])
             || ($otherwise && ( $this->called['whenever'] || $this->called['elseWhenever'] ))
         ) {
-            $this->results =  $evaluator();
+            $evaluator();
         }
         return ($this->called['otherwise'])? $this->results : $this;
 
