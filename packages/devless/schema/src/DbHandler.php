@@ -393,7 +393,7 @@ class DbHandler
                 }
                 //store table_meta details
             });
-            $this->_set_table_meta($service_name, $new_payload);
+            $this->set_table_meta($service_name, $new_payload);
             return Response::respond(606);
         } else {
             Helper::interrupt(603, $table_name.' table already exist');
@@ -639,11 +639,26 @@ class DbHandler
      *@return array
      *
      */
-    private function _set_table_meta($service_name, $schema)
+    public function set_table_meta($service_name, $schema)
     {
         \DB::table('table_metas')->insert(['schema' => json_encode($schema),
             'table_name' => $service_name.'_'.$schema['name'], 'service_id' => $schema['id'], ]);
         return true;
+    }
+
+    /**
+     * Update table meta
+     * @param $service_name
+     * @param $schema
+     * @return bool
+     */
+    public function update_table_meta($service_name, $tableName, $schema)
+    {
+        if(\DB::table('table_metas')->where('table_name', $service_name.'_'.$tableName)
+            ->update(['schema'=>json_encode($schema['schema']), 'table_name'=>$schema['table_name']])){
+            return true;
+        }
+        return false;
     }
     /**
      *Get table meta.
