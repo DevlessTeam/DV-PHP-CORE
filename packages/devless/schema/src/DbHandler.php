@@ -709,6 +709,17 @@ class DbHandler
         $payload['user_id'] = $user_id;
         return $payload;
     }
+
+    /**
+     * Get DevLess table name
+     * @param $serviceName
+     * @param $tableName
+     * @return string
+     */
+    public function devlessTableName($serviceName, $tableName)
+    {
+        return $serviceName.'_'.$tableName;
+    }
     /**
      * validate incoming  data against schema field type.
      *

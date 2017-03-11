@@ -85,83 +85,83 @@
       </div></form></div>
   </div>
 </div>
-    <div id="edit-schema-table" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+    {{--<div id="edit-schema-table" class="modal fade" role="dialog">--}}
+        {{--<div class="modal-dialog">--}}
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Edit {Table Name}</h4>
-                </div>
-                <div class="modal-body">
-                    <form id="form">
-                        <div  class="form-group">
-                            <label for="name-field">Table Name</label>
-                            <input type="text" id="name" name="name" class="form-control" placeholder="Table Name"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" id="description" rows="3" name="description"></textarea>
-                        </div>
-                        <HR>
-                        <center> Add Fields </center>
+            {{--<!-- Modal content-->--}}
+            {{--<div class="modal-content">--}}
+                {{--<div class="modal-header">--}}
+                    {{--<button type="button" class="close" data-dismiss="modal">&times;</button>--}}
+                    {{--<h4 class="modal-title">Edit {Table Name}</h4>--}}
+                {{--</div>--}}
+                {{--<div class="modal-body">--}}
+                    {{--<form id="form">--}}
+                        {{--<div  class="form-group">--}}
+                            {{--<label for="name-field">Table Name</label>--}}
+                            {{--<input type="text" id="name" name="name" class="form-control" placeholder="Table Name"/>--}}
+                        {{--</div>--}}
+                        {{--<div class="form-group">--}}
+                            {{--<label for="description">Description</label>--}}
+                            {{--<textarea class="form-control" id="description" rows="3" name="description"></textarea>--}}
+                        {{--</div>--}}
+                        {{--<HR>--}}
+                        {{--<center> Add Fields </center>--}}
 
-                        <div class="removeIndicator" id="fields" >
-                            <div  class="form-group">
-                                <label for="name-field">Field Name</label>
-                                <button type="button" class="btn btn-danger pull-right" id="delete-field" onclick="destroy_field('removeIndicator')">Remove</button>
-                                <input type="text" id="field-name"  name="field-name" class="form-control" placeholder="Field Name"/>
-                            </div>
-                            <div  class="form-group">
-                                <label for="field-type">Field Type</label>
+                        {{--<div class="removeIndicator" id="fields" >--}}
+                            {{--<div  class="form-group">--}}
+                                {{--<label for="name-field">Field Name</label>--}}
+                                {{--<button type="button" class="btn btn-danger pull-right" id="delete-field" onclick="destroy_field('removeIndicator')">Remove</button>--}}
+                                {{--<input type="text" id="field-name"  name="field-name" class="form-control" placeholder="Field Name"/>--}}
+                            {{--</div>--}}
+                            {{--<div  class="form-group">--}}
+                                {{--<label for="field-type">Field Type</label>--}}
 
-                                <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'REFERENCE'] ?>
-                                <select class="form-control"  name="field-type" id="field-type">
-                                    @foreach($options as  $option)
-                                        <option value="{{$option}}">{{$option}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div  class="form-group">
-                                <div style="display:block;" >
-                                    <label for="field-reference">Reference Table</label>
-                                    <select class="form-control"  name="field-reference" id="field-reference" >
-                                        @foreach($table_meta as $table_data)
-                                            <option value="{{$table_data['name']}}">{{$table_data['name']}}</option>
-                                        @endforeach
-                                        <option value="_devless_users">DevLess User</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="default-field">Default Value(optional)</label>
-                                <input type="text" id="default" name="default" class="form-control" />
-                            </div>
+                                {{--<?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'REFERENCE'] ?>--}}
+                                {{--<select class="form-control"  name="field-type" id="field-type">--}}
+                                    {{--@foreach($options as  $option)--}}
+                                        {{--<option value="{{$option}}">{{$option}}</option>--}}
+                                    {{--@endforeach--}}
+                                {{--</select>--}}
+                            {{--</div>--}}
+                            {{--<div  class="form-group">--}}
+                                {{--<div style="display:block;" >--}}
+                                    {{--<label for="field-reference">Reference Table</label>--}}
+                                    {{--<select class="form-control"  name="field-reference" id="field-reference" >--}}
+                                        {{--@foreach($table_meta as $table_data)--}}
+                                            {{--<option value="{{$table_data['name']}}">{{$table_data['name']}}</option>--}}
+                                        {{--@endforeach--}}
+                                        {{--<option value="_devless_users">DevLess User</option>--}}
+                                    {{--</select>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="form-group">--}}
+                                {{--<label for="default-field">Default Value(optional)</label>--}}
+                                {{--<input type="text" id="default" name="default" class="form-control" />--}}
+                            {{--</div>--}}
 
-                            <div class="form-group">
-                                <label for="option-field">Field Options</label>
+                            {{--<div class="form-group">--}}
+                                {{--<label for="option-field">Field Options</label>--}}
 
-                                <input type="checkbox" id="required"  name="required"/>REQUIRED?
-
-
-                                <div style="display:none;">
-                                    <input type="checkbox" id="validate" name="validate"/>VALIDATE?
-                                </div>
+                                {{--<input type="checkbox" id="required"  name="required"/>REQUIRED?--}}
 
 
-                                <input type="checkbox" id="unique" name="unique"/> UNIQUE FIELD?
-                            </div>
-                        </div>
-                        <div class="dynamic-space"></div>
+                                {{--<div style="display:none;">--}}
+                                    {{--<input type="checkbox" id="validate" name="validate"/>VALIDATE?--}}
+                                {{--</div>--}}
 
-                        <div class="modal-footer">
-                            <button type="button" onclick="append_field()" class="btn btn-info pull-left" >Add a Field</button>
-                            <button type="button" id="crt-tbl" onclick="create_table('{{$service->name}}')" class="btn btn-info pull-right" >Create Table</button>
-                        </div>
-                </div></form></div>
-        </div>
-    </div>
+
+                                {{--<input type="checkbox" id="unique" name="unique"/> UNIQUE FIELD?--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="dynamic-space"></div>--}}
+
+                        {{--<div class="modal-footer">--}}
+                            {{--<button type="button" onclick="append_field()" class="btn btn-info pull-left" >Add a Field</button>--}}
+                            {{--<button type="button" id="crt-tbl" onclick="create_table('{{$service->name}}')" class="btn btn-info pull-right" >Create Table</button>--}}
+                        {{--</div>--}}
+                {{--</div></form></div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
             <!--body wrapper start-->
             <div class="wrapper no-pad">
                 <div class="profile-desk">
