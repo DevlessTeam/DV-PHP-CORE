@@ -109,5 +109,8 @@
             Route::get('datatable/{datatable?}', 'DatatableController@create');
             Route::get('datatable/{entries?}/entries', 'DatatableController@entries');
             Route::get('datatable/{entries?}/metas', 'DatatableController@metas');
+
+            //Misc Route
+            Route::get('edit-table/{action}/{service}/{table}/{params}', 'ServiceController@editTable');
         }
     );

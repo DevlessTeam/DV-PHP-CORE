@@ -19,7 +19,7 @@ class SchemaEdit
      * @param $newName
      * @return bool
      */
-    public function editTableName($serviceName, $oldName, $newName)
+    public function updateTableName($serviceName, $oldName, $newName)
     {
         $dbHandler = new DbHandler();
         $tableName = $dbHandler->devlessTableName($serviceName, $oldName);
@@ -41,14 +41,14 @@ class SchemaEdit
      * @param $newDesc
      * @return bool
      */
-    public function editTableDesc($serviceName, $tableName, $newDesc)
+    public function updateTableDesc($serviceName, $tableName, $newDesc)
     {
         $dbHandler = new DbHandler();
         $compTableName = $dbHandler->devlessTableName($serviceName, $tableName);
         if($tableMeta = $dbHandler->get_tableMeta($compTableName)){
             $tableMeta['schema']['description'] = $newDesc;
             $dbHandler->update_table_meta($serviceName, $tableName, $tableMeta);
-            return false;
+            return true;
         }
         return false;
     }
@@ -61,7 +61,7 @@ class SchemaEdit
      * @param $newName
      * @return bool
      */
-    public function editFieldName($serviceName, $tableName, $oldName, $newName)
+    public function updateFieldName($serviceName, $tableName, $oldName, $newName)
     {
         $dbHandler = new DbHandler();
         $compTableName = $dbHandler->devlessTableName($serviceName, $tableName);

@@ -3,12 +3,65 @@
 @section('header')
    <!-- page head start-->
             <div class="page-head">
-                <h3>Service</h3><span class="sub-title">{{ucwords($service->name)}}</span>            </div><!-- page head end-->
+                <h3>Service</h3><span class="sub-title">{{ucwords($service->name)}}</span>
+           </div><!-- page head end-->
 @endsection
 
 @section('content')
     @include('error')
-<div id="schema-table" class="modal fade" role="dialog">
+    <!-- Edit Table Name and Description -->
+    <div id="editTable" class="modal fade" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="container col-md-12 col-sm-12" style="color: #000; background-color: #f3f3f3; padding: 10px;">
+                    <div class="form-group" id="addform">
+                        <label><b>Name</b></label>
+                        <input type="text" id="newTableName" class="form-control" name="tableName" placeholder="table name">
+                        <label><b>Description</b></label>
+                        <input type="text" id="newDesc" class="form-control" name="tableDesc" placeholder="table desc">
+                        <input type="hidden" id="edit-serviceName">
+                        <input type="hidden" id="edit-tableName">
+                    </div>
+                    <div class="pull-right">
+                    <button  class="btn btn-default" onclick="updateTable()"><i class="fa fa-edit"></i> Update Table</button>
+                    <button  data-dismiss="modal" class="btn btn-warning">Cancel</button>
+                    </div>
+            </div>
+        </div>
+        </div>
+    </div>
+<!-- End Edit Table Name and Description -->
+    <!-- Add field to table -->
+    <div id="addFieldToTable" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="container col-md-12 col-sm-12" style="color: #000; background-color: #f3f3f3; padding: 10px;">
+                        <div class="form-group" id="addform">
+                            <label for="heroku_users_urls_id"><b>New Field Name</b></label>
+                            <input type="text" class="form-control" id="newFieldName" placeholder="Field Name">
+                        </div>
+                        <div  class="form-group">
+                            <label for="field-type">Field Type</label>
+
+                            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64'] ?>
+                            <select class="form-control"  name="field-type" id="fieldType">
+                                @foreach($options as  $option)
+                                    <option value="{{$option}}">{{$option}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <input type="hidden" id="add-serviceName">
+                        <input type="hidden" id="add-tableName">
+                        <div class="pull-right">
+                            <button class="btn btn-default" onclick="addNewField()"><i class="fa fa-plus"></i> Add Field</button>
+                            <button type="#" data-dismiss="modal" class="btn btn-warning">Cancel</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Add field to table -->
+    <div id="schema-table" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -85,83 +138,6 @@
       </div></form></div>
   </div>
 </div>
-    {{--<div id="edit-schema-table" class="modal fade" role="dialog">--}}
-        {{--<div class="modal-dialog">--}}
-
-            {{--<!-- Modal content-->--}}
-            {{--<div class="modal-content">--}}
-                {{--<div class="modal-header">--}}
-                    {{--<button type="button" class="close" data-dismiss="modal">&times;</button>--}}
-                    {{--<h4 class="modal-title">Edit {Table Name}</h4>--}}
-                {{--</div>--}}
-                {{--<div class="modal-body">--}}
-                    {{--<form id="form">--}}
-                        {{--<div  class="form-group">--}}
-                            {{--<label for="name-field">Table Name</label>--}}
-                            {{--<input type="text" id="name" name="name" class="form-control" placeholder="Table Name"/>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="description">Description</label>--}}
-                            {{--<textarea class="form-control" id="description" rows="3" name="description"></textarea>--}}
-                        {{--</div>--}}
-                        {{--<HR>--}}
-                        {{--<center> Add Fields </center>--}}
-
-                        {{--<div class="removeIndicator" id="fields" >--}}
-                            {{--<div  class="form-group">--}}
-                                {{--<label for="name-field">Field Name</label>--}}
-                                {{--<button type="button" class="btn btn-danger pull-right" id="delete-field" onclick="destroy_field('removeIndicator')">Remove</button>--}}
-                                {{--<input type="text" id="field-name"  name="field-name" class="form-control" placeholder="Field Name"/>--}}
-                            {{--</div>--}}
-                            {{--<div  class="form-group">--}}
-                                {{--<label for="field-type">Field Type</label>--}}
-
-                                {{--<?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'REFERENCE'] ?>--}}
-                                {{--<select class="form-control"  name="field-type" id="field-type">--}}
-                                    {{--@foreach($options as  $option)--}}
-                                        {{--<option value="{{$option}}">{{$option}}</option>--}}
-                                    {{--@endforeach--}}
-                                {{--</select>--}}
-                            {{--</div>--}}
-                            {{--<div  class="form-group">--}}
-                                {{--<div style="display:block;" >--}}
-                                    {{--<label for="field-reference">Reference Table</label>--}}
-                                    {{--<select class="form-control"  name="field-reference" id="field-reference" >--}}
-                                        {{--@foreach($table_meta as $table_data)--}}
-                                            {{--<option value="{{$table_data['name']}}">{{$table_data['name']}}</option>--}}
-                                        {{--@endforeach--}}
-                                        {{--<option value="_devless_users">DevLess User</option>--}}
-                                    {{--</select>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                            {{--<div class="form-group">--}}
-                                {{--<label for="default-field">Default Value(optional)</label>--}}
-                                {{--<input type="text" id="default" name="default" class="form-control" />--}}
-                            {{--</div>--}}
-
-                            {{--<div class="form-group">--}}
-                                {{--<label for="option-field">Field Options</label>--}}
-
-                                {{--<input type="checkbox" id="required"  name="required"/>REQUIRED?--}}
-
-
-                                {{--<div style="display:none;">--}}
-                                    {{--<input type="checkbox" id="validate" name="validate"/>VALIDATE?--}}
-                                {{--</div>--}}
-
-
-                                {{--<input type="checkbox" id="unique" name="unique"/> UNIQUE FIELD?--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="dynamic-space"></div>--}}
-
-                        {{--<div class="modal-footer">--}}
-                            {{--<button type="button" onclick="append_field()" class="btn btn-info pull-left" >Add a Field</button>--}}
-                            {{--<button type="button" id="crt-tbl" onclick="create_table('{{$service->name}}')" class="btn btn-info pull-right" >Create Table</button>--}}
-                        {{--</div>--}}
-                {{--</div></form></div>--}}
-        {{--</div>--}}
-    {{--</div>--}}
             <!--body wrapper start-->
             <div class="wrapper no-pad">
                 <div class="profile-desk">
@@ -295,9 +271,9 @@
                                     <th>#</th>
                                     <th>Table Name</th>
                                     <th>Description</th>
-                                    <th>#N0 of Fields</th>
+                                    <th>Fields</th>
 
-                                    <th>Options</th>
+                                    <th class="text-center">Options</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -305,14 +281,12 @@
                                     @foreach($table_meta as $table_data)
                                 <tr id="{{$table_data['name']}}">
                                     <th scope="row">{{$count}}</th>
-                                    <td>{{$table_data['name']}}</td>
-                                    <td>{{$table_data['description']}}</td>
-                                    <td>{{sizeOf($table_data['field'])}} field(s)</td>
+                                    <td><button id="editTable" onclick="tableFieldPopulation([{'name':'newTableName', 'value':'{{$table_data['name']}}'},{'name':'newDesc', 'value':'{{$table_data['description']}}'},{'name':'edit-serviceName', 'value':'{{$service->name}}'},{'name':'edit-tableName', 'value':'{{$table_data['name']}}'}])" data-toggle="modal" data-target="#editTable"  class="btn btn-default" title="{{$table_data['name']}}">{{substr($table_data['name'], 0, 25)}} <i class="fa fa-edit"></i></button></td>
+                                    <td><button  onclick="tableFieldPopulation([{'name':'newTableName', 'value':'{{$table_data['name']}}'},{'name':'newDesc', 'value':'{{$table_data['description']}}'},{'name':'edit-serviceName', 'value':'{{$service->name}}'},{'name':'edit-tableName', 'value':'{{$table_data['name']}}'}])" class="btn btn-default" data-toggle="modal" data-target="#editTable" title="{{$table_data['description']}}">{{substr($table_data['description'], 0, 25)}} ...  <i class="fa fa-edit"></i></button></td>
+                                    <td><button class="btn btn-default">{{sizeOf($table_data['field'])}} field(s) <i class="fa fa-edit"></i></button> </td>
                                     <td>
                                         <div class="row">
-                                            <div class="col-lg-4 col-md-4 col-sm-4">
-                                        <a href="" class="btn btn-default"><i class="fa fa-edit"></i> </a>
-                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4"><a class="btn btn-default" data-toggle="modal" data-target="#addFieldToTable" onclick="tableFieldPopulation([{'name':'add-serviceName', 'value':'{{$service->name}}'},{'name':'add-tableName', 'value':'{{$table_data['name']}}'}])"><i class="fa fa-plus"></i></a> </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4">
                                         <a href="/datatable?service_name={{$service->name}}&table_name={{$table_data['name']}}" class="btn btn-default"><i class="fa fa-table"></i></a>
                                             </div><div class="col-lg-4 col-md-4 col-sm-4">
@@ -351,252 +325,8 @@
                     </aside>
                 </div>
             </div><!--body wrapper end-->
+
 <!--body wrapper end-->
-<script>
-    //page init function
-    function init(){
-        window.count = 0;
-        window.main_old_fields =  $('.removeIndicator').clone();
-        window.schema_json = {"resource":[{"name":"","description":"","field":[]}]  }
-    }
-    //destroy table
-    function destroy_table(table_name, service_name){
-        if(confirm('Are you sure you want to delete '+table_name+' table?')){
-            var settings = {
-           "async": true,
-           "crossDomain": true,
-           "url": "/api/v1/service/"+service_name+"/db",
-           "method": "DELETE",
-           "headers": {
-             "content-type": "application/json",
-             "cache-control": "no-cache",
-           },
-           "processData": false,
-            "data": "{\"resource\":[{\"name\":\""+table_name+"\",\"params\":[{\"drop\":\"true\"}]}]}"
-           }
-         $(".delete-"+table_name)[0].innerText = "...";
-         $.ajax(settings).done(function (response) {
-             console.log(response)
-           status_code = response.status_code;
-           if (status_code != 613) {
-             alert('could not delete table ');
-           }
-           partialUpdate(['service-tables']);
-
-         });}
-    }
-  function append_field(){
-    field_names = ['name', 'description', 'field-name', 'field-type', 'field-reference',
-                'default','required', 'validate', 'unique'];
-    old_fields = window.main_old_fields.clone();
-          field_names.forEach(
-    function(i){
-              field_name = i+window.count;
-              old_fields.find('#'+i).attr('name', field_name ).attr('id', field_name );
-         }
-    )
-    new_fields = old_fields;
-    $( ".dynamic-space").append(new_fields);
-    old_fields.attr('class', 'fields'+window.count);
-    old_fields.contents().each(function () {
-        if (this.nodeType === 3) this.nodeValue = $.trim($(this).text()).replace(/removeIndicator/g, "fields"+window.count)
-        if (this.nodeType === 1) $(this).html( $(this).html().replace(/removeIndicator/g, "fields"+window.count) )
-        })
-    window.count = window.count + 1 ;
-
-    }
-
-    function create_table(service_name){
-         $('#crt-tbl').prop('disabled', true);
-         $.fn.serializeObject = function()
-        {
-            var o = {};
-            var a = this.serializeArray();
-            $.each(a, function() {
-                if (o[this.name] !== undefined) {
-                    if (!o[this.name].push) {
-                        o[this.name] = [o[this.name]];
-                    }
-                    o[this.name].push(this.value || '');
-                } else {
-                    o[this.name] = this.value || '';
-                }
-            });
-            return o;
-        };
-        object = $('#form').serializeObject();
-        var array = $.map(object, function(value, index) {
-        return [value];
-        });
-        count = 0
-        jQuery(
-            function($)
-            {
-              count = 0 ;
-              form_array = [];
-              $.each($('#form')[0].elements,
-                     function(i,o)
-                     {
-                      var _this=$(o);
-                      field_id = _this.attr('id');
-                       if(typeof field_id == "string" && field_id.indexOf("validate")>= 0){
-                           form_array[count] = $('#'+_this.attr('id')).is(':checked');
-                       }
-                       else if(typeof field_id == "string" && field_id.indexOf("required")>= 0){
-                           form_array[count] = $('#'+_this.attr('id')).is(':checked');
-                       }
-                       else if(typeof field_id == "string" && field_id.indexOf("unique")>= 0){
-                           form_array[count] = $('#'+_this.attr('id')).is(':checked');
-                       }else{
-                           form_array[count] = $('#'+_this.attr('id')).val();
-                       }
-                    count++;
-                     })
-            }
-          );
-            if(form_array.length > 4){
-                function trim(str){
-                    console.log(str);
-                    if(typeof str == "string"){
-
-                        return str.replace(/\s+/g, '').toLowerCase();
-                    }else{
-                        return str;
-                    }
-                }
-                window.schema_json.resource[0].name = trim(form_array[0]);
-                window.schema_json.resource[0].description = form_array[1]  ;
-                var len = ((form_array.length)-4)/8;
-
-                for (var i = 1; i <= len; i++) {
-                    position = ((len-i)*8)
-                    if(form_array[6+position] == ""){ _default = null;}else{_default = form_array[6+position]; }
-                    console.log("field tpe", trim(form_array[4+position]));
-                    if(trim(form_array[4+position]) == "reference")
-                    {
-                        console.log('appended service')
-                        referenced_table_name = service_name+'_'+trim(form_array[5+position])+'_id';
-
-                    }else{
-                        referenced_table_name = trim(form_array[3+position]);
-                        console.log('went for else instead')
-                    }
-                    console.log('ref after passing', referenced_table_name);
-                    window.schema_json.resource[0].field[i-1] = {
-                        "name":    referenced_table_name,
-                        "field_type":trim(form_array[4+position]),
-                        "ref_table":trim(form_array[5+position]),
-                        "default":_default,
-                        "required":trim(form_array[7+position]),
-                        "validation":trim(form_array[8+position]),
-                        "is_unique":trim(form_array[9+position]),
-                     };
-                }
-
-                if (len => 1) {
-                   table_schema =   JSON.stringify(window.schema_json);
-                   var settings = {
-                    "async": true,
-                    "crossDomain": true,
-                    "url": "/api/v1/service/"+service_name+"/schema",
-                    "method": "POST",
-                    "headers": {
-                      "content-type": "application/json",
-                      "cache-control": "no-cache",
-                    },
-                    "processData": false,
-                    "data": table_schema
-                  }
-                $.ajax(settings).done(function (response) {
-                  console.log(response);
-                  if(typeof(response) == "string")
-                  {
-                      response = JSON.parse(response);
-                  }
-                  var status_code = response.status_code;
-                  var message = response.message;
-                  var payload = response.payload;
-
-                  if(status_code == 700){
-                      console.log(message)
-                      alert(message);
-                      $('#crt-tbl').prop('disabled', false);
-                  }
-                  else if(status_code == 606){
-                          window.location.reload();
-//                        partialUpdate(['service-tables']);
-//                        $('#schema-table').click()
-                  }else{
-                        alert(message);
-
-                  }
-                });} else {
-
-                     alert('Please add at least a field');
-                     $('#crt-tbl').prop('disabled', false);
-                }
-            }
-            else{
-                alert('Sorry seems like you have no fields set ');
-                $('#crt-tbl').prop('disabled', false);
-            }
-
-
-    }
-   function destroy_field(field_id){
-       $('.'+field_id).remove();
-   }
-   function set_script(){
-       setTimeout(function(){ $('.code-box').ace({ theme: 'github', lang: 'php'}); }, 1);
-   }
-   function run_script(){
-       var form = new FormData();
-form.append("call_type", "solo");
-form.append("script", $('.code-box').val());
-form.append("_method", "PUT");
-var settings = {
-  "async": true,
-  "crossDomain": true,
-  "url": "{{ route('services.update', $service->id) }}",
-  "method": "POST",
-  "headers": {
-    "cache-control": "no-cache",
-  },
-  "processData": false,
-  "contentType": false,
-  "mimeType": "multipart/form-data",
-  "data": form
-}
-$('#saving')[0].style.display = 'block';
-$.ajax(settings).done(function (response) {
-  result = JSON.parse(response);
-    $('#saving')[0].style.display = 'none';
-   (result.status_code == 626)?$('.code-console').css('color','green')
- : $('.code-console').css('color','red');
-  $('.code-console').html('<font size="3">'+result.message+'</font>');
-
-  setTimeout(function(){
-      $('.code-console').html('');
-  }, 930)
-});
-   }
-
-
-
-//save script
-document.addEventListener("keydown", function(e) {
-    if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-        e.preventDefault();
-        run_script();
-    }
-});
-
-function partialUpdate(ids) {
-    $.each(ids, function(index, id){
-        $('#'+id).load(document.URL +  ' #'+id);
-    });
-
-}
-</script>
+<script src="{{ Request::secure(Request::root()).'/js/service_edit.js' }}"></script>
 @endsection
 
