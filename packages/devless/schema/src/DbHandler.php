@@ -348,7 +348,7 @@ class DbHandler
      */
     public function create_schema($payload)
     {
-        if(!Helper::is_admin_login()){
+        if (!Helper::is_admin_login()) {
             $this->set_auth_id_if_required('schema', $payload);
         }
         $service_name = $payload['service_name'];
@@ -618,7 +618,7 @@ class DbHandler
         $relatedTables = [];
         $schema = $this->get_tableMeta($tableName);
         array_walk($schema['schema']['field'], function ($field)
-        use ($tableName, &$relatedTables) {
+ use ($tableName, &$relatedTables) {
             if ($field['field_type'] == 'reference') {
                 array_push($relatedTables, $field['ref_table']);
             }
@@ -654,8 +654,8 @@ class DbHandler
      */
     public function update_table_meta($service_name, $tableName, $schema)
     {
-        if(\DB::table('table_metas')->where('table_name', $service_name.'_'.$tableName)
-            ->update(['schema'=>json_encode($schema['schema']), 'table_name'=>$schema['table_name']])){
+        if (\DB::table('table_metas')->where('table_name', $service_name.'_'.$tableName)
+            ->update(['schema'=>json_encode($schema['schema']), 'table_name'=>$schema['table_name']])) {
             return true;
         }
         return false;

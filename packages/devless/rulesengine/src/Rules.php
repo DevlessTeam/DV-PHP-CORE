@@ -98,7 +98,9 @@ class Rules
      */
     public function whenever($assert)
     {
-        if(!$this->execOrNot)return $this;
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $this->assertion['whenever'] = $assert;
         $this->called['whenever'] = true;
         $this->execOrNot = true;
@@ -114,7 +116,9 @@ class Rules
      */
     public function elseWhenever($assert)
     {
-        if(!$this->execOrNot)return $this;
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $this->assertion['elseWhenever'] = $assert;
         $this->called['elseWhenever'] = true;
         $this->execOrNot = true;
@@ -129,7 +133,9 @@ class Rules
      */
     public function otherwise()
     {
-        if(!$this->execOrNot)return $this;
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $this->assertion['otherwise'] =
             (!$this->assertion['elseWhenever'] && !$this->assertion['whenever']) ? : false;
         $this->called['otherwise'] = true;
@@ -147,7 +153,9 @@ class Rules
 
     public function succeedWith($msg = null)
     {
-        if(!$this->execOrNot)return $this;
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $evaluator = function () use ($msg) {
             return Helper::interrupt(1000, $msg);
         };
@@ -158,7 +166,9 @@ class Rules
 
     public function failWith($msg = null)
     {
-        if(!$this->execOrNot)return $this;
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $evaluator = function () use ($msg) {
             return Helper::interrupt(1001, $msg);
         };
@@ -177,9 +187,11 @@ class Rules
      */
     public function run($service, $method, $params = null, $remoteUrl = null, $token = null)
     {
-        if(!$this->execOrNot)return $this;
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $evaluator = function () use ($service, $method, $params, $remoteUrl, $token) {
-            if($remoteUrl && $token) {
+            if ($remoteUrl && $token) {
                 $this->results = ActionClass::remoteExecute($service, $method, $params, $remoteUrl, $token);
             } else {
                 $this->results = ActionClass::execute($service, $method, $params);
@@ -198,7 +210,9 @@ class Rules
      */
     public function getRunResult(&$input_var)
     {
-        if(!$this->execOrNot)return $this;
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $input_var = $this->results;
         return $this;
     }

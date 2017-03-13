@@ -24,7 +24,9 @@ class SchemaEdit
         $dbHandler = new DbHandler();
         $tableName = $dbHandler->devlessTableName($serviceName, $oldName);
         $tableMeta = $dbHandler->get_tableMeta($tableName);
-        if(!$tableMeta){return false;}
+        if (!$tableMeta) {
+            return false;
+        }
         \Schema::rename($tableName, $dbHandler->devlessTableName($serviceName, $newName));
         $tableMeta['table_name'] =$dbHandler->devlessTableName($serviceName, $newName);
         $tableMeta['schema']['name'] = $newName;
@@ -45,7 +47,7 @@ class SchemaEdit
     {
         $dbHandler = new DbHandler();
         $compTableName = $dbHandler->devlessTableName($serviceName, $tableName);
-        if($tableMeta = $dbHandler->get_tableMeta($compTableName)){
+        if ($tableMeta = $dbHandler->get_tableMeta($compTableName)) {
             $tableMeta['schema']['description'] = $newDesc;
             $dbHandler->update_table_meta($serviceName, $tableName, $tableMeta);
             return true;
@@ -67,11 +69,17 @@ class SchemaEdit
         $compTableName = $dbHandler->devlessTableName($serviceName, $tableName);
         $tableMeta = $dbHandler->get_tableMeta($compTableName);
         \Schema::table($compTableName, function (Blueprint $table) use
-            ($oldName, $newName, $dbHandler, $compTableName, &$tableMeta){
+            (
+            $oldName,
+            $newName,
+            $dbHandler,
+            $compTableName,
+            &$tableMeta
+) {
             $count = 0;
             $table->renameColumn($oldName, $newName);
-            foreach($tableMeta['schema']['field'] as $field ) {
-                if($field['name'] == $oldName){
+            foreach ($tableMeta['schema']['field'] as $field) {
+                if ($field['name'] == $oldName) {
                     $tableMeta['schema']['field'][$count]['name'] = $newName;
                 }
                 $count++;
@@ -93,15 +101,23 @@ class SchemaEdit
      */
     public function addField($serviceName, $tableName, $fieldName, $fieldType)
     {
-        if($fieldType == 'reference'){return false;}
+        if ($fieldType == 'reference') {
+            return false;
+        }
         $dbHandler = new DbHandler();
         $compTableName = $dbHandler->devlessTableName($serviceName, $tableName);
         $newField = json_decode('{"name":"'.$fieldName.'","field_type":"'.$fieldType.'","ref_table":
         "_devless_users","default":null,"required":false,"validation":false,
         "is_unique":false}');
         $tableMeta = $dbHandler->get_tableMeta($compTableName);
-        \Schema::table($compTableName, function (Blueprint $table) use ($fieldName,
-        $tableName, $fieldType, $dbHandler, &$tableMeta, $newField) {
+        \Schema::table($compTableName, function (Blueprint $table) use (
+            $fieldName,
+            $tableName,
+            $fieldType,
+            $dbHandler,
+            &$tableMeta,
+            $newField
+) {
             $fieldType = $dbHandler->db_types[$fieldType];
             array_push($tableMeta['schema']['field'], $newField);
             $table->$fieldType($fieldName);
@@ -124,14 +140,14 @@ class SchemaEdit
         $dbHandler = new DbHandler();
         $compTableName = $dbHandler->devlessTableName($serviceName, $tableName);
         $tableMeta = $dbHandler->get_tableMeta($compTableName);
-        if(!$tableMeta['schema']){
+        if (!$tableMeta['schema']) {
             return false;
         }
         \Schema::table($compTableName, function (Blueprint $table) use ($fieldName, $tableMeta) {
             $table->dropColumn($fieldName);
             $count = 0;
             foreach ($tableMeta['schema']['field'] as $field) {
-                if($field['name'] == $fieldName) {
+                if ($field['name'] == $fieldName) {
                     unset($tableMeta['schema']['field'][$count]);
                 }
                 $count++;
@@ -139,6 +155,4 @@ class SchemaEdit
         });
         $dbHandler->update_table_meta($serviceName, $tableName, $tableMeta);
     }
-
-
 }
