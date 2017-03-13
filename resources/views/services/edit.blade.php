@@ -66,6 +66,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="container col-md-12 col-sm-12"  style="color: #000; background-color: #f3f3f3; padding: 10px;">
+            <h4>Fields<h4>
                    <div class="input-group" id="fieldTemplate">
                        <input type="text" class="form-control" readonly name="user_bets" value="id">
                        <span class="input-group-btn">

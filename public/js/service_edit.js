@@ -293,7 +293,7 @@ function displayAllFields(service, table) {
   var url = window.location.origin;
 	$('#ef-serviceName')[0].value = service;
 	$('#ef-tableName')[0].value = table;
-	$.get(url+'/datatable/'+service+'_'+table+'/metas', 
+  $.get(url+'/datatable/'+service+'_'+table+'/metas', 
 		function(response){
       $('#fieldList')[0].textContent = '';
 			for(var i = 0; response.length > i; i++) {
