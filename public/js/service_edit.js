@@ -268,6 +268,52 @@ function addNewField() {
 	var params  = newFieldName+'-:-'+fieldType;
 	SchemaEdit(action, service, table, params);
 }
+
+function updateFieldName(id) {
+	var service = $('#ef-serviceName')[0].value;
+	var table 	= $('#ef-tableName')[0].value;
+	var newFieldName = $("input[name="+id+"]").val();
+	var oldFieldName = id;
+	var action 	= 'updateFieldName';
+	var params  = oldFieldName+'-:-'+newFieldName;
+	SchemaEdit(action, service, table, params);
+}
+
+
+function deleteFieldName(id) {
+	var service = $('#ef-serviceName')[0].value;
+	var table 	= $('#ef-tableName')[0].value;
+	var fieldName = id;
+	var action 	= 'deleteField';
+	var params  = fieldName;
+	SchemaEdit(action, service, table, params);
+}
+function displayAllFields(service, table) {
+	var comb_tableName = service+'_'+table;
+	$('#ef-serviceName')[0].value = service;
+	$('#ef-tableName')[0].value = table;
+	$.get('http://localhost:8000/datatable/heroku_deploy_bet/metas', 
+		function(response){
+			for(var i = 0; response.length > i; i++) {
+				console.log(response[i])
+				if(response[i] !== 'devless_user_id' && response[i] !== 'id') {
+					var field = $('#fieldTemplate')[0].cloneNode(true, true);
+					field.id = Math.random();
+					$(field).find("input[name=user_bets]")[0].value = response[i];
+					$(field).find("input[name=user_bets]")[0].name = response[i];
+					$.each($(field).find("#user_bets"), function(key, field) {
+							field.id = response[i]		
+					});
+					$('#fieldList')[0].append(field);
+				}
+				
+				
+			}
+
+			$('#fieldTemplate')[0].style.display = 'none';
+	});
+}
+
 function SchemaEdit(action, service, table, params) {
 	var url = window.location.origin;
 	var settings = {
@@ -283,14 +329,13 @@ function SchemaEdit(action, service, table, params) {
 }
 
 $.ajax(settings).done(function (response) {
-  response = JSON.parse(response);	
-  if(response.status_code == 700 ) {
-  	alert(response.message);
+  if( typeof response == 'string') {
+  	response = JSON.parse(response);
   }
   if(response.status == 'ok') {
   	window.location.reload();
   } else {
-  	alert('Field/Table could not be modified');
+  	alert('Field/Table could not be modified'+'       '+response.message);
   }
 });
 }

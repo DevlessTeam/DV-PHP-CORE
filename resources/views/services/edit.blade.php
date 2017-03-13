@@ -61,6 +61,31 @@
         </div>
     </div>
     <!-- End Add field to table -->
+     <!-- Edit Fields -->
+    <div id="editFields" class="modal fade" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="container col-md-12 col-sm-12"  style="color: #000; background-color: #f3f3f3; padding: 10px;">
+                   <div class="input-group" id="fieldTemplate">
+                       <input type="text" class="form-control" name="user_bets" value="id">
+                       <span class="input-group-btn">
+                            <button class="btn btn-default" id="user_bets" onclick="updateFieldName(this.id)" type="button">Update</button>
+                            <button class="btn btn-danger" id="user_bets" onclick="deleteFieldName(this.id)" type="button" >Delete</button>
+                       </span>
+                       <br>
+                   </div>
+                    <input type="hidden" id="ef-serviceName">
+                    <input type="hidden" id="ef-tableName">
+                    <div id="fieldList"></div>
+                    <br>
+                    <div class="pull-right">
+                    <button  data-dismiss="modal" class="btn btn-warning">Cancel</button>
+                    </div>
+            </div>
+        </div>
+        </div>
+    </div>
+<!-- End field edit -->
     <div id="schema-table" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -283,7 +308,7 @@
                                     <th scope="row">{{$count}}</th>
                                     <td><button id="editTable" onclick="tableFieldPopulation([{'name':'newTableName', 'value':'{{$table_data['name']}}'},{'name':'newDesc', 'value':'{{$table_data['description']}}'},{'name':'edit-serviceName', 'value':'{{$service->name}}'},{'name':'edit-tableName', 'value':'{{$table_data['name']}}'}])" data-toggle="modal" data-target="#editTable"  class="btn btn-default" title="{{$table_data['name']}}">{{substr($table_data['name'], 0, 25)}} <i class="fa fa-edit"></i></button></td>
                                     <td><button  onclick="tableFieldPopulation([{'name':'newTableName', 'value':'{{$table_data['name']}}'},{'name':'newDesc', 'value':'{{$table_data['description']}}'},{'name':'edit-serviceName', 'value':'{{$service->name}}'},{'name':'edit-tableName', 'value':'{{$table_data['name']}}'}])" class="btn btn-default" data-toggle="modal" data-target="#editTable" title="{{$table_data['description']}}">{{substr($table_data['description'], 0, 25)}} ...  <i class="fa fa-edit"></i></button></td>
-                                    <td><button class="btn btn-default">{{sizeOf($table_data['field'])}} field(s) <i class="fa fa-edit"></i></button> </td>
+                                    <td><button onclick="displayAllFields('{{$service->name}}','{{$table_data['name']}}')" class="btn btn-default" data-target="#editFields" data-toggle="modal" >{{sizeOf($table_data['field'])}} field(s) <i class="fa fa-edit"></i></button> </td>
                                     <td>
                                         <div class="row">
                                             <div class="col-lg-4 col-md-4 col-sm-4"><a class="btn btn-default" data-toggle="modal" data-target="#addFieldToTable" onclick="tableFieldPopulation([{'name':'add-serviceName', 'value':'{{$service->name}}'},{'name':'add-tableName', 'value':'{{$table_data['name']}}'}])"><i class="fa fa-plus"></i></a> </div>
@@ -330,3 +355,4 @@
 <script src="{{ Request::secure(Request::root()).'/js/service_edit.js' }}"></script>
 @endsection
 
+83092bf
