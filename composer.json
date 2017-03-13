@@ -11,7 +11,8 @@
         "alchemy/zippy": "^0.3.5",
         "fguillot/json-rpc": "@stable",
         "bugsnag/bugsnag": "^3.4",
-        "devless/php-sdk": "v1.0.0"
+        "devless/php-sdk": "v1.0.0",
+        "doctrine/dbal": "^2.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

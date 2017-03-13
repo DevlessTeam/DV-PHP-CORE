@@ -71,7 +71,6 @@ class DbHandler
      */
     public function store(Request $request)
     {
-
         $this->create_schema($request['resource']);
     }
     /**
@@ -310,7 +309,7 @@ class DbHandler
                             Helper::interrupt(612);
                         }
                     } else {
-                        Helper::interrupt(610);
+                        Helper::interrupt(610, "Query parameter `$key` does not exist");
                     }
                 }
             }
@@ -349,6 +348,9 @@ class DbHandler
      */
     public function create_schema($payload)
     {
+        if (!Helper::is_admin_login()) {
+            $this->set_auth_id_if_required('schema', $payload);
+        }
         $service_name = $payload['service_name'];
 
         //connectors mysql pgsql sqlsrv sqlite
@@ -391,7 +393,7 @@ class DbHandler
                 }
                 //store table_meta details
             });
-            $this->_set_table_meta($service_name, $new_payload);
+            $this->set_table_meta($service_name, $new_payload);
             return Response::respond(606);
         } else {
             Helper::interrupt(603, $table_name.' table already exist');
@@ -616,7 +618,7 @@ class DbHandler
         $relatedTables = [];
         $schema = $this->get_tableMeta($tableName);
         array_walk($schema['schema']['field'], function ($field)
-        use ($tableName, &$relatedTables) {
+ use ($tableName, &$relatedTables) {
             if ($field['field_type'] == 'reference') {
                 array_push($relatedTables, $field['ref_table']);
             }
@@ -637,11 +639,26 @@ class DbHandler
      *@return array
      *
      */
-    private function _set_table_meta($service_name, $schema)
+    public function set_table_meta($service_name, $schema)
     {
         \DB::table('table_metas')->insert(['schema' => json_encode($schema),
             'table_name' => $service_name.'_'.$schema['name'], 'service_id' => $schema['id'], ]);
         return true;
+    }
+
+    /**
+     * Update table meta
+     * @param $service_name
+     * @param $schema
+     * @return bool
+     */
+    public function update_table_meta($service_name, $tableName, $schema)
+    {
+        if (\DB::table('table_metas')->where('table_name', $service_name.'_'.$tableName)
+            ->update(['schema'=>json_encode($schema['schema']), 'table_name'=>$schema['table_name']])) {
+            return true;
+        }
+        return false;
     }
     /**
      *Get table meta.
@@ -692,6 +709,17 @@ class DbHandler
         $payload['user_id'] = $user_id;
         return $payload;
     }
+
+    /**
+     * Get DevLess table name
+     * @param $serviceName
+     * @param $tableName
+     * @return string
+     */
+    public function devlessTableName($serviceName, $tableName)
+    {
+        return $serviceName.'_'.$tableName;
+    }
     /**
      * validate incoming  data against schema field type.
      *
@@ -711,7 +739,7 @@ class DbHandler
         $table_data,
         $check_password = false
     ) {
-        
+
         $table_meta = $this->get_tableMeta($service_name.'_'.$table_name);
         $schema = $table_meta['schema'];
         $count = 0;
