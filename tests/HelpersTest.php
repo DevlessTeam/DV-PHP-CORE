@@ -48,7 +48,7 @@ class HelpersTest extends TestCase
         $validSample =
             [
                 'boolean'    => true,
-                'decimals'    => 12.2324344,
+                'decimals'   => 12.2324344,
                 'email'      => 'edmond@devless.io',
                 'integer'    => 1,
                 'password'   => 'al32j4hk2jh4hghg23hghj',

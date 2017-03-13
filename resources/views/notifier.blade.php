@@ -25,12 +25,10 @@
    $('.modal-backdrop').removeClass("modal-backdrop");
 });
 
-   function Redirect(){
+   function hide(){
    $('#notif').modal('hide');
    }
-   setTimeout('Redirect()', 2000);
+   setTimeout('hide()', 2000);
 </script>
-@endif
-@if(session::has('flash_message'))
 {{session()->forget('flash_message')}}
 @endif
