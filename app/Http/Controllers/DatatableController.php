@@ -52,7 +52,7 @@ class DatatableController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Get Table Meta data
      * @param $table_name
      * @return \Illuminate\Http\Response
      */

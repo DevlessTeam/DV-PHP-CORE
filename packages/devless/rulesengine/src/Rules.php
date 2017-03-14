@@ -1,95 +1,69 @@
 <?php
-
 namespace Devless\RulesEngine;
-
 use App\Helpers\Helper;
 use App\Helpers\ActionClass;
 use App\Helpers\DevlessHelper;
-
 class Rules
 {
-
-
     private $assertion = [
         "elseWhenever" => false,
         "whenever"     => false,
         "otherwise"   => false,
-
-
     ];
-
-
     private $called = [
         "elseWhenever" => false,
         "whenever"     => false,
         "otherwise"   => false,
-
-
     ];
-
-
     public $results = '';
     private $answered = false;
-
     private $execOrNot = true;
     private $actionType = '';
-
     private $tableName = '';
-
     public function requestType($requestPayload)
     {
         $tableName = DevlessHelper::get_tablename_from_payload($requestPayload);
         $actionType = $requestPayload['method'];
-
         $this->actionType = $actionType;
         $this->tableName  = $tableName;
         return $this;
     }
-
-
     /**
      * Check if table is being queried
      * @return $this
      */
     public function onQuery()
     {
-        $this->execOrNot = ($this->actionType == 'GET')? true : false;
+        $this->execOrNot = ($this->actionType == 'GET');
         return $this ;
     }
-
-
     /**
      * Check if data is being updated on table
      * @return $this
      */
     public function onUpdate()
     {
-        $this->execOrNot = ($this->actionType == 'PATCH')? true : false;
+        $this->execOrNot = ($this->actionType == 'PATCH');
         return $this ;
     }
-
-
     /**
      * Check if data is being added to table
      * @return $this
      */
     public function onCreate()
     {
-        $this->execOrNot = ($this->actionType == 'POST')? true : false;
+        $this->execOrNot = ($this->actionType == 'POST');
         return $this ;
     }
-
-
     /**
      * Check if data is being deleted from table
      * @return $this
      */
     public function onDelete()
     {
-        $this->execOrNot = ($this->actionType == 'DELETE')? true : false;
+        $this->execOrNot = ($this->actionType == 'DELETE');
         return $this ;
     }
-
     /**
      * equivalence of if
      *
@@ -103,10 +77,9 @@ class Rules
         }
         $this->assertion['whenever'] = $assert;
         $this->called['whenever'] = true;
-
+        $this->execOrNot = true;
         return $this;
     }
-
     /**
      * equivalence of elseif
      *
@@ -120,10 +93,9 @@ class Rules
         }
         $this->assertion['elseWhenever'] = $assert;
         $this->called['elseWhenever'] = true;
-
+        $this->execOrNot = true;
         return $this;
     }
-
     /**
      * equivalence of else
      *
@@ -135,32 +107,27 @@ class Rules
             return $this;
         }
         $this->assertion['otherwise'] =
-            (!$this->assertion['elseWhenever'] || !$this->assertion['whenever']) ? : false;
+            (!$this->assertion['elseWhenever'] && !$this->assertion['whenever']) ? : false;
         $this->called['otherwise'] = true;
-            return $this;
+        $this->execOrNot = true;
+        return $this;
     }
-
     public function onTable($expectedTableName)
+    {
+        $this->tableName = (is_array($this->tableName))? $this->tableName[0]:$this->tableName;
+        $this->execOrNot = ($this->tableName == $expectedTableName);
+        return $this;
+    }
+    public function succeedWith($msg = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
-
-        $this->tableName = (is_array($this->tableName))? $this->tableName[0]:$this->tableName;
-        $this->execOrNot = ($this->tableName == $expectedTableName)? true:false;
-        return $this;
-    }
-
-    public function succeedWith($msg = null)
-    {
         $evaluator = function () use ($msg) {
             return Helper::interrupt(1000, $msg);
         };
-
         return $this->executor($evaluator);
-
     }
-
     public function failWith($msg = null)
     {
         if (!$this->execOrNot) {
@@ -169,11 +136,8 @@ class Rules
         $evaluator = function () use ($msg) {
             return Helper::interrupt(1001, $msg);
         };
-
         return $this->executor($evaluator);
     }
-
-
     /**
      * Call on an ActionClass
      *
@@ -188,19 +152,29 @@ class Rules
             return $this;
         }
         $evaluator = function () use ($service, $method, $params, $remoteUrl, $token) {
-            if($remoteUrl && $token) {
-                $results = ActionClass::remoteExecute($service, $method, $params, $remoteUrl, $token);
+            if ($remoteUrl && $token) {
+                $this->results = ActionClass::remoteExecute($service, $method, $params, $remoteUrl, $token);
             } else {
-                $results = ActionClass::execute($service, $method, $params);
+                $this->results = ActionClass::execute($service, $method, $params);
             }
             $this->answered = true;
-            return $results;
+            return true;
         };
         return $this->executor($evaluator);
-
     }
-
-
+    /**
+     * Get results variable and set to variable
+     * @param $input_var
+     * @return $this
+     */
+    public function getRunResult(&$input_var)
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        $input_var = $this->results;
+        return $this;
+    }
     /**
      * Execute callback functions with the chain
      *
@@ -209,32 +183,24 @@ class Rules
      */
     public function executor($evaluator)
     {
-        if (!$this->execOrNot) {
-            return $this;
-        }
         $whenever = $this->assertion['whenever'];
         $elseWhenever = $this->assertion['elseWhenever'];
         $otherwise = $this->assertion['otherwise'];
-
         $error = function ($msg = 'you cannot call on elseWhenever without calling on whenever') {
             $this->answered = true;
             $this->results = $msg;
-
         };
-
         if ($this->called['elseWhenever'] && !$this->called['whenever']) {
             $error();
         } elseif ($otherwise && !$this->called['whenever']) {
             $msg = 'You cannot call on otherwise without calling on whenever';
             $error($msg);
-        } elseif (( ($whenever && !$this->answered) && $this->called['whenever'])
-            || (($elseWhenever && !$this->answered) && $this->called['whenever'] && $this->called['elseWhenever'])
-            || ($otherwise && !$this->answered && ( $this->called['whenever'] || $this->called['elseWhenever'] ))
+        } elseif (( ($whenever ) && $this->called['whenever'])
+            || (($elseWhenever ) && $this->called['whenever'] && $this->called['elseWhenever'])
+            || ($otherwise && ( $this->called['whenever'] || $this->called['elseWhenever'] ))
         ) {
-            $this->results =  $evaluator();
+            $evaluator();
         }
-
         return ($this->called['otherwise'])? $this->results : $this;
-
     }
 }
