@@ -131,7 +131,7 @@ class ServiceController extends Controller
             $table_meta[$count]  = (json_decode($each_table_meta->schema, true));
             $count++;
         }
-        return view('services.edit', compact('service', 'table_meta'));
+        return view('services.edit', compact('service', 'table_meta', 'id'));
     }
     /**
      * Update the specified resource in storage.

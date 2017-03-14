@@ -353,7 +353,8 @@
             </div><!--body wrapper end-->
 
 <!--body wrapper end-->
+<script type="text/javascript">
+    window.devless_edit_url = window.location.origin+'/services/'+{{$id}}+'/edit';
+</script>
 <script src="{{ Request::secure(Request::root()).'/js/service_edit.js' }}"></script>
 @endsection
-
-83092bf
