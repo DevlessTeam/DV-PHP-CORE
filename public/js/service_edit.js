@@ -290,19 +290,24 @@ function deleteFieldName(id) {
 }
 function displayAllFields(service, table) {
 	var comb_tableName = service+'_'+table;
+  var url = window.location.origin;
 	$('#ef-serviceName')[0].value = service;
 	$('#ef-tableName')[0].value = table;
-	$.get('http://localhost:8000/datatable/heroku_deploy_bet/metas', 
+  $.get(url+'/datatable/'+service+'_'+table+'/metas', 
 		function(response){
+      $('#fieldList')[0].textContent = '';
 			for(var i = 0; response.length > i; i++) {
 				console.log(response[i])
 				if(response[i] !== 'devless_user_id' && response[i] !== 'id') {
 					var field = $('#fieldTemplate')[0].cloneNode(true, true);
 					field.id = Math.random();
 					$(field).find("input[name=user_bets]")[0].value = response[i];
-					$(field).find("input[name=user_bets]")[0].name = response[i];
+          $(field).find("input[name=user_bets]")[0].readOnly = false;
+          $(field).find("input[name=user_bets]")[0].name = response[i];
+					
 					$.each($(field).find("#user_bets"), function(key, field) {
-							field.id = response[i]		
+							field.id = response[i];	
+              field.disabled = false;	
 					});
 					$('#fieldList')[0].append(field);
 				}
@@ -310,7 +315,7 @@ function displayAllFields(service, table) {
 				
 			}
 
-			$('#fieldTemplate')[0].style.display = 'none';
+			
 	});
 }
 

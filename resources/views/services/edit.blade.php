@@ -66,11 +66,12 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="container col-md-12 col-sm-12"  style="color: #000; background-color: #f3f3f3; padding: 10px;">
+            <h4>Fields<h4>
                    <div class="input-group" id="fieldTemplate">
-                       <input type="text" class="form-control" name="user_bets" value="id">
+                       <input type="text" class="form-control" readonly name="user_bets" value="id">
                        <span class="input-group-btn">
-                            <button class="btn btn-default" id="user_bets" onclick="updateFieldName(this.id)" type="button">Update</button>
-                            <button class="btn btn-danger" id="user_bets" onclick="deleteFieldName(this.id)" type="button" >Delete</button>
+                            <button class="btn btn-default" id="user_bets" disabled onclick="updateFieldName(this.id)" type="button">Update</button>
+                            <button disabled class="btn btn-danger" id="user_bets" onclick="deleteFieldName(this.id)" type="button" >Delete</button>
                        </span>
                        <br>
                    </div>
