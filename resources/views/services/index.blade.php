@@ -43,7 +43,7 @@
 
                         <div class="btn-group" role="group">
                             <a type="button" href="{{ route('services.edit', $service->id) }}" class="btn btn-default">Edit</a>
-                            <a type="button" href="/service/{{$service->name}}/view/index/" target="_blank" class="btn btn-default disabled">Admin</a>
+                            <a type="button" href="/service/{{$service->name}}/view/index/" target="_blank" class="btn btn-default">Admin</a>
                             <form action="{{ route('services.destroy', $service->id) }}" method="POST"
                                   style="display: inline;"
                                   onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false }">

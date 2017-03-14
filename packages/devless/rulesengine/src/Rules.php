@@ -1,52 +1,33 @@
 <?php
-
 namespace Devless\RulesEngine;
-
 use App\Helpers\Helper;
 use App\Helpers\ActionClass;
 use App\Helpers\DevlessHelper;
-
 class Rules
 {
-
-
     private $assertion = [
         "elseWhenever" => false,
         "whenever"     => false,
         "otherwise"   => false,
-
-
     ];
-
-
     private $called = [
         "elseWhenever" => false,
         "whenever"     => false,
         "otherwise"   => false,
-
-
     ];
-
-
     public $results = '';
     private $answered = false;
-
     private $execOrNot = true;
     private $actionType = '';
-
     private $tableName = '';
-
     public function requestType($requestPayload)
     {
         $tableName = DevlessHelper::get_tablename_from_payload($requestPayload);
         $actionType = $requestPayload['method'];
-
         $this->actionType = $actionType;
         $this->tableName  = $tableName;
         return $this;
     }
-
-
     /**
      * Check if table is being queried
      * @return $this
@@ -56,8 +37,6 @@ class Rules
         $this->execOrNot = ($this->actionType == 'GET');
         return $this ;
     }
-
-
     /**
      * Check if data is being updated on table
      * @return $this
@@ -67,8 +46,6 @@ class Rules
         $this->execOrNot = ($this->actionType == 'PATCH');
         return $this ;
     }
-
-
     /**
      * Check if data is being added to table
      * @return $this
@@ -78,8 +55,6 @@ class Rules
         $this->execOrNot = ($this->actionType == 'POST');
         return $this ;
     }
-
-
     /**
      * Check if data is being deleted from table
      * @return $this
@@ -89,7 +64,6 @@ class Rules
         $this->execOrNot = ($this->actionType == 'DELETE');
         return $this ;
     }
-
     /**
      * equivalence of if
      *
@@ -104,10 +78,8 @@ class Rules
         $this->assertion['whenever'] = $assert;
         $this->called['whenever'] = true;
         $this->execOrNot = true;
-
         return $this;
     }
-
     /**
      * equivalence of elseif
      *
@@ -122,10 +94,8 @@ class Rules
         $this->assertion['elseWhenever'] = $assert;
         $this->called['elseWhenever'] = true;
         $this->execOrNot = true;
-
         return $this;
     }
-
     /**
      * equivalence of else
      *
@@ -142,15 +112,12 @@ class Rules
         $this->execOrNot = true;
         return $this;
     }
-
     public function onTable($expectedTableName)
     {
-
         $this->tableName = (is_array($this->tableName))? $this->tableName[0]:$this->tableName;
         $this->execOrNot = ($this->tableName == $expectedTableName);
         return $this;
     }
-
     public function succeedWith($msg = null)
     {
         if (!$this->execOrNot) {
@@ -159,11 +126,8 @@ class Rules
         $evaluator = function () use ($msg) {
             return Helper::interrupt(1000, $msg);
         };
-
         return $this->executor($evaluator);
-
     }
-
     public function failWith($msg = null)
     {
         if (!$this->execOrNot) {
@@ -172,11 +136,8 @@ class Rules
         $evaluator = function () use ($msg) {
             return Helper::interrupt(1001, $msg);
         };
-
         return $this->executor($evaluator);
     }
-
-
     /**
      * Call on an ActionClass
      *
@@ -200,9 +161,7 @@ class Rules
             return true;
         };
         return $this->executor($evaluator);
-
     }
-
     /**
      * Get results variable and set to variable
      * @param $input_var
@@ -216,8 +175,6 @@ class Rules
         $input_var = $this->results;
         return $this;
     }
-
-
     /**
      * Execute callback functions with the chain
      *
@@ -226,17 +183,13 @@ class Rules
      */
     public function executor($evaluator)
     {
-
         $whenever = $this->assertion['whenever'];
         $elseWhenever = $this->assertion['elseWhenever'];
         $otherwise = $this->assertion['otherwise'];
-
         $error = function ($msg = 'you cannot call on elseWhenever without calling on whenever') {
             $this->answered = true;
             $this->results = $msg;
-
         };
-
         if ($this->called['elseWhenever'] && !$this->called['whenever']) {
             $error();
         } elseif ($otherwise && !$this->called['whenever']) {
@@ -249,6 +202,5 @@ class Rules
             $evaluator();
         }
         return ($this->called['otherwise'])? $this->results : $this;
-
     }
 }
