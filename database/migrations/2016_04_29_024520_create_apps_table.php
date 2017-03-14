@@ -15,7 +15,7 @@ class CreateAppsTable extends Migration
         Schema::create('apps', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('token')->default(md5(uniqid()));
             $table->timestamps();
         });
