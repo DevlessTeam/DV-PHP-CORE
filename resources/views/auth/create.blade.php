@@ -40,7 +40,7 @@
             <div class="panel-body">
               <form action="{{ url('/setup') }}" class="form-horizontal" method="POST">
                 <div class="form-group @if($errors->has('username')) has-error @endif" >
-                  <label for="username" class="col-lg-2 control-label">Username</label>
+                  <label for="username" class="col-lg-2 control-label">Username<font color="red">*</font></label>
                   <div class="col-lg-10">
                     <input type="text" id="username-field" name="username" class="form-control" required="">
                     @if($errors->has("username"))
@@ -49,7 +49,7 @@
                   </div>
                 </div>
                 <div class="form-group @if($errors->has('email')) has-error @endif" >
-                  <label for="email" class="col-lg-2 control-label">Email</label>
+                  <label for="email" class="col-lg-2 control-label">Email<font color="red">*</font></label>
                   <div class="col-lg-10">
                     <input type="email" id="email-field" name="email" class="form-control" required="">
                     @if($errors->has("email"))
@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="form-group @if($errors->has('password')) has-error @endif">
-                  <label for="password" class="col-lg-2 control-label"  >Password</label>
+                  <label for="password" class="col-lg-2 control-label"  >Password<font color="red">*</font></label>
                   <div class="col-lg-10">
                     <input type="password" class="form-control" name="password" required="">
                     @if($errors->has("password"))
@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="form-group @if($errors->has('password_confirmation')) has-error @endif">
-                  <label for="password_confirmation" class="col-lg-2 control-label"  >Confirm Password</label>
+                  <label for="password_confirmation" class="col-lg-2 control-label"  >Confirm Password<font color="red">*</font></label>
                   <div class="col-lg-10">
                     <input type="password" class="form-control" name="password_confirmation" required="">
                     @if($errors->has("password_confirmation"))
@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="form-group @if($errors->has('app_name')) has-error @endif" >
-                  <label for="app_name" class="col-lg-2 control-label">App Name</label>
+                  <label for="app_name" class="col-lg-2 control-label">App Name<font color="red">*</font></label>
                   <div class="col-lg-10">
                     <input type="text" id="app_name-field" name="app_name" class="form-control" required="">
                     @if($errors->has("app_name"))
@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 <div class="form-group @if($errors->has('app_token')) has-error @endif" >
-                  <label for="app_token" class="col-lg-2 control-label">App Token</label>
+                  <label for="app_token" class="col-lg-2 control-label">App Token<font color="red">*</font></label>
                   <div class="col-lg-10">
                     <input type="text" id="app_token-field" name="app_token" class="form-control" readonly="" value="{{$app['app_token']}}">
                     @if($errors->has("app_token"))
