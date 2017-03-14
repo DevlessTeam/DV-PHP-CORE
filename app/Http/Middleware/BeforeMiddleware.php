@@ -40,7 +40,7 @@ class BeforeMiddleware
 
         if ($app_exists == null && $request_path != 'setup') {
             return redirect('/setup');
-        } elseif ($app_exists == null && $request_path != 'setup') {
+        } elseif ($app_exists !== null && $request_path == 'setup') {
             return redirect('/');
         }
         return $next($request);
