@@ -120,7 +120,7 @@ class SchemaEdit
 ) {
             $fieldType = $dbHandler->db_types[$fieldType];
             array_push($tableMeta['schema']['field'], $newField);
-            $table->$fieldType($fieldName);
+            $table->$fieldType($fieldName)->nullable();
 
 
         });
