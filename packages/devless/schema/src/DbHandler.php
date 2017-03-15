@@ -313,6 +313,7 @@ class DbHandler
                     }
                 }
             }
+            $count = $db->table($table_name)->count();
             if (isset($queried_table_list)) {
                 $related = function ($results) use ($queried_table_list, $service_name, $table_name, $payload) {
                     return $this->_get_related_data(
@@ -323,17 +324,19 @@ class DbHandler
                     );
                 };
                 $endOutput = [];
+                
+                
                 $complete_query = $complete_query.'
-                    ->chunk(100, function($results) use(&$endOutput, $related) {
+                    ->chunk($count, function($results) use (&$endOutput, $related) {
                         $endOutput =  $related($results);
                     });';
             } else {
                 $complete_query = 'return '.$complete_query.'->get();';
             }
-            $count = $db->table($table_name)->count();
             $query_output = eval($complete_query);
             $results['properties']['count'] = $count;
             $results['results'] = (isset($queried_table_list))? $endOutput : $query_output;
+            $results['properties']['current_count'] = count($results['results']);
             return Response::respond(625, null, $results);
         } else {
             Helper::interrupt(611);

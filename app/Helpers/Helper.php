@@ -9,7 +9,7 @@ use Session;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Validator;
 use App\Helpers\Jwt;
-
+use App\Helpers\Response as Response;
 /*
  * @author eddymens <eddymens@devless.io>
 *composed of most common used classes and functions
@@ -120,7 +120,7 @@ class Helper
      * @param output message  $message
      * @param additional data $payload
      *
-     * @return json
+     * @return Exception
      */
     public static function interrupt($stack, $message = null, $payload = [])
     {

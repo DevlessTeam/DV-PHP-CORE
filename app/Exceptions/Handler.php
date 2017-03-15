@@ -46,8 +46,9 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         $statusCode = 700;
-        $payload = [];
-
+        $emptyClass = new \stdClass();
+        $payload = ( empty($payload) )? $emptyClass : $payload;
+        
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         } elseif ($e instanceof HttpException) {

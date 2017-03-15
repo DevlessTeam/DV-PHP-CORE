@@ -29,7 +29,7 @@ class RegisterUserRequest extends Request
             'password'  => 'required|confirmed|min:6',
             'password_confirmation' => 'required|min:6',
             'app_name'  => 'required|max:255',
-            'app_description'  => 'required|max:255'
+            'app_description'  => 'max:255'
         ];
     }
 }
