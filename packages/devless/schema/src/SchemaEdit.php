@@ -143,12 +143,12 @@ class SchemaEdit
         if (!$tableMeta['schema']) {
             return false;
         }
-        \Schema::table($compTableName, function (Blueprint $table) use ($fieldName, $tableMeta) {
+        \Schema::table($compTableName, function (Blueprint $table) use ($fieldName, &$tableMeta) {
             $table->dropColumn($fieldName);
             $count = 0;
             foreach ($tableMeta['schema']['field'] as $field) {
                 if ($field['name'] == $fieldName) {
-                    unset($tableMeta['schema']['field'][$count]);
+                    array_splice($tableMeta['schema']['field'], $count  , 1);
                 }
                 $count++;
             }
