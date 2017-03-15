@@ -323,17 +323,18 @@ class DbHandler
                     );
                 };
                 $endOutput = [];
+                $count = $db->table($table_name)->count();
                 $complete_query = $complete_query.'
-                    ->chunk(50000, function($results) use(&$endOutput, $related) {
+                    ->chunk($count, function($results) use (&$endOutput, $related) {
                         $endOutput =  $related($results);
                     });';
             } else {
                 $complete_query = 'return '.$complete_query.'->get();';
             }
-            $count = $db->table($table_name)->count();
             $query_output = eval($complete_query);
             $results['properties']['count'] = $count;
             $results['results'] = (isset($queried_table_list))? $endOutput : $query_output;
+            $results['properties']['current_count'] = count($results['results']);
             return Response::respond(625, null, $results);
         } else {
             Helper::interrupt(611);
