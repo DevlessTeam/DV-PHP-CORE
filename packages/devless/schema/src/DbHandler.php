@@ -313,6 +313,7 @@ class DbHandler
                     }
                 }
             }
+            $count = $db->table($table_name)->count();
             if (isset($queried_table_list)) {
                 $related = function ($results) use ($queried_table_list, $service_name, $table_name, $payload) {
                     return $this->_get_related_data(
@@ -323,7 +324,8 @@ class DbHandler
                     );
                 };
                 $endOutput = [];
-                $count = $db->table($table_name)->count();
+                
+                
                 $complete_query = $complete_query.'
                     ->chunk($count, function($results) use (&$endOutput, $related) {
                         $endOutput =  $related($results);
