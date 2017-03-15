@@ -324,7 +324,7 @@ class DbHandler
                 };
                 $endOutput = [];
                 $complete_query = $complete_query.'
-                    ->chunk(100, function($results) use(&$endOutput, $related) {
+                    ->chunk(50000, function($results) use(&$endOutput, $related) {
                         $endOutput =  $related($results);
                     });';
             } else {
