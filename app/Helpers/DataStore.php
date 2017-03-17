@@ -21,8 +21,10 @@ class DataStore extends Helper
      * @param Service $service
      * @return DataStore
      */
-    public static function service($serviceName, $tableName, Service $service)
+    public static function service($serviceName, $tableName, Service $service = null)
     {
+        $serviceInstance = new Service();
+        $service = ($service == null )? $serviceInstance : $service;
         $serviceDetails = function () use ($serviceName, $tableName, $service) {
             self::$payload['service_name'] = $serviceName;
             self::$payload['params'] = ['table' => [$tableName]];
