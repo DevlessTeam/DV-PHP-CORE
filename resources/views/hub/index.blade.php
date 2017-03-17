@@ -20,20 +20,20 @@
     <div class="row">
         @if(count($services) > 0)
              @foreach($services as $service)
-             <div class="col-lg-4 col-md-6 col-sm-6 mr-b-20 plugin-card">
+             <div class="col-lg-4 col-md-6 col-sm-6 mr-b-20 plugin-card service-template">
         <div class="dv-prod">
           <div class="plugin-card-top">
             <div class="name column-name">
               <h3>
                 <a href="#" data-toggle="modal" data-target="#service-desc">
-                    <!--src="{{$service['image_url']}}"--> 
-                    {{$service['name']}}<img width=2 class="plugin-icon img-responsive" src="{{$service['image_url']}}" alt="N/A">
+                    <!--src="{{$service['img']}}"--> 
+                    {{$service['name']}}<img width="3" class="plugin-icon img-responsive" src="{{$service['img']}}" alt="N/A">
                 </a>
               </h3>
             </div>
             <div class="desc column-description">
-              <p>{{$service['description']}} </p>
-              <!--<a href="#" data-toggle="modal" data-target="#service-desc">More Details</a>-->
+              <p>{{$service['desc']}} </p>
+              <a href="#" data-toggle="modal" data-target="#service-desc">More Details</a>
             </div>
           </div>
           <div class="plugin-card-bottom">
@@ -109,5 +109,6 @@
 </div>
 </div>
 @endsection
+
 
 

@@ -754,7 +754,7 @@ class DevlessHelper extends Helper
         $username = $instanceInfo['admin']->username;
         $files = ['ActionClass.php'];
         $time = date('jS \of F Y h:i:s A');
-
+        $version = config('devless')['version'];
         $replacements = [
             '{{ServiceName}}' => $serviceName,
 
@@ -762,8 +762,8 @@ class DevlessHelper extends Helper
  * Created by Devless.
  * Author: '.$username.'
  * Date Created: '.$time.'
- * @Service: '.$serviceName.'
- * @Version: 1.0
+ * Service: '.$serviceName.'
+ * Version: '.$version.'
  */
 ',
         ];
