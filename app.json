@@ -1,0 +1,27 @@
+{
+    "name": "Devless Management Console",
+    "description": "Simplest way to integrate services into your applicaitons.",
+    "keywords": [
+        "Devless",
+        "backend",
+        "third-party",
+        "console",
+        "integrations"
+    ],
+    "website": "https://devless.io",
+    "repository": "https://github.com/DevlessTeam/DV-PHP-CORE",
+    "logo": "https://devless.io/images/dv_logo.jpg",
+    "addons": [
+        "heroku-postgresql"
+    ],
+    "scripts": {
+        "postdeploy": "php artisan migrate"
+    },
+    "buildpacks": [
+        {
+            "url": "https://github.com/heroku/heroku-buildpack-php"
+        }
+
+    ],
+    "success_url": "/setup"
+}

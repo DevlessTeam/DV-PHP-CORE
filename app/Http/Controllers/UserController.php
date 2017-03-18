@@ -11,7 +11,6 @@ use App\Helpers\DevlessHelper as DLH;
 use App\Helpers\Helper as helper;
 use App\Jobs\RegisterUserJob;
 use App\Http\Requests\RegisterUserRequest;
-
 class UserController extends Controller
 {
     // TODO: Session store needs to authenticate with a session table for security
