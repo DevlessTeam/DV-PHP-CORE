@@ -199,10 +199,11 @@
 form.append("call_type", "solo");
 form.append("script", $('.code-box').val());
 form.append("_method", "PUT");
+var script_url = $('#script_url')[0].textContent;
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url": "{{ route('services.update', $service->id) }}",
+  "url": script_url,
   "method": "POST",
   "headers": {
     "cache-control": "no-cache",

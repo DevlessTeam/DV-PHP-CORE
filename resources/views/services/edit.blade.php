@@ -86,6 +86,8 @@
         </div>
         </div>
     </div>
+<div style="display:none;" id="script_url">
+  {{ route('services.update', $service->id) }}</div>
 <!-- End field edit -->
     <div id="schema-table" class="modal fade" role="dialog">
   <div class="modal-dialog">
