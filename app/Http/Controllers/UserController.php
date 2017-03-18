@@ -11,7 +11,6 @@ use App\Helpers\DevlessHelper as DLH;
 use App\Helpers\Helper as helper;
 use App\Jobs\RegisterUserJob;
 use App\Http\Requests\RegisterUserRequest;
-use App\Http\Controllers\herokuController as heroku;
 class UserController extends Controller
 {
     // TODO: Session store needs to authenticate with a session table for security
@@ -20,8 +19,6 @@ class UserController extends Controller
         if (\Session::has('user')) {
             return redirect('/services');
         } else {
-            $heroku = new heroku();
-            $heroku->extract_all_view_files();
             return view('auth.index');
         }
     }
