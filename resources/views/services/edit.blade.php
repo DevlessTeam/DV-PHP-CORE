@@ -86,6 +86,8 @@
         </div>
         </div>
     </div>
+<div style="display:none;" id="script_url">
+  {{ route('services.update', $service->id) }}</div>
 <!-- End field edit -->
     <div id="schema-table" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -127,7 +129,7 @@
         </div>
         <div  class="form-group">
             <div style="display:block;" >
-            <label for="field-reference">Reference Table</label>
+            <label forƒ="field-reference">Reference Table</label>
             <select class="form-control"  name="field-reference" id="field-reference" >
                 @foreach($table_meta as $table_data)
                 <option value="{{$table_data['name']}}">{{$table_data['name']}}</option>
@@ -353,7 +355,8 @@
             </div><!--body wrapper end-->
 
 <!--body wrapper end-->
+<script type="text/javascript">
+    window.devless_edit_url = window.location.origin+'/services/'+{{$id}}+'/edit';
+</script>
 <script src="{{ Request::secure(Request::root()).'/js/service_edit.js' }}"></script>
 @endsection
-
-83092bf

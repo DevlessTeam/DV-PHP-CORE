@@ -167,8 +167,9 @@ class DevlessHelper extends Helper
         if ($res === true) {
             $zip->extractTo(config('devless')['views_directory']);
             $extract_name = config('devless')['views_directory'].$zip->getNameIndex(0);
+            $extract_name = str_replace('service.json', '', $extract_name);
             $zip->close();
-
+            
             self::deleteDirectory($new_service_folder_path);
             ($delete_package)? self::deleteDirectory($service_folder_path):false;
         } else {
@@ -303,6 +304,7 @@ class DevlessHelper extends Helper
      */
     public static function install_service($service_path)
     {
+
         $builder = new DvSchema();
         $service_file_path = $service_path.'service.json';
         $service_file_path = preg_replace('"\.srv"', '', $service_file_path);
@@ -754,7 +756,7 @@ class DevlessHelper extends Helper
         $username = $instanceInfo['admin']->username;
         $files = ['ActionClass.php'];
         $time = date('jS \of F Y h:i:s A');
-
+        $version = config('devless')['version'];
         $replacements = [
             '{{ServiceName}}' => $serviceName,
 
@@ -762,8 +764,8 @@ class DevlessHelper extends Helper
  * Created by Devless.
  * Author: '.$username.'
  * Date Created: '.$time.'
- * @Service: '.$serviceName.'
- * @Version: 1.0
+ * Service: '.$serviceName.'
+ * Version: '.$version.'
  */
 ',
         ];

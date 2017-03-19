@@ -21,8 +21,10 @@ class DataStore extends Helper
      * @param Service $service
      * @return DataStore
      */
-    public static function service($serviceName, $tableName, Service $service)
+    public static function service($serviceName, $tableName, Service $service = null)
     {
+        $serviceInstance = new Service();
+        $service = ($service == null )? $serviceInstance : $service;
         $serviceDetails = function () use ($serviceName, $tableName, $service) {
             self::$payload['service_name'] = $serviceName;
             self::$payload['params'] = ['table' => [$tableName]];
@@ -33,7 +35,7 @@ class DataStore extends Helper
     }
     /**
      * Query service tables
-     * @return mixed
+     * @return array
      */
     public static function queryData()
     {
@@ -45,10 +47,19 @@ class DataStore extends Helper
         self::cleanUp();
         return $result;
     }
+
+    /**
+     * Query service tables
+     * @return array
+    */
+    public static function getData()
+    {
+        return self::queryData();
+    }
     /**
      * Add data to the service table
      * @param $data
-     * @return mixed
+     * @return array
      */
     public static function addData($data)
     {
@@ -70,7 +81,7 @@ class DataStore extends Helper
     /**
      * Update record at specific entry
      * @param $data
-     * @return mixed
+     * @return array
      */
     public static function update($data)
     {
@@ -86,7 +97,7 @@ class DataStore extends Helper
     }
     /**
      * Delete records from service table
-     * @return mixed
+     * @return array
      */
     public static function delete()
     {
@@ -94,7 +105,7 @@ class DataStore extends Helper
     }
     /**
      * Truncate service table
-     * @return mixed
+     * @return array
      */
     public static function truncate()
     {
@@ -102,7 +113,7 @@ class DataStore extends Helper
     }
     /**
      * Drop service table
-     * @return mixed
+     * @return array
      */
     public static function drop()
     {
@@ -111,7 +122,7 @@ class DataStore extends Helper
     /**
      * select delete action
      * @param $action
-     * @return mixed
+     * @return array
      */
     private static function destroyAction($action)
     {

@@ -168,7 +168,7 @@
                       $('#crt-tbl').prop('disabled', false);
                   }
                   else if(status_code == 606){
-                          window.location.reload();
+                          window.location.href = window.devless_edit_url;
 //                        partialUpdate(['service-tables']);
 //                        $('#schema-table').click()
                   }else{
@@ -199,10 +199,11 @@
 form.append("call_type", "solo");
 form.append("script", $('.code-box').val());
 form.append("_method", "PUT");
+var script_url = $('#script_url')[0].textContent;
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url": "{{ route('services.update', $service->id) }}",
+  "url": script_url,
   "method": "POST",
   "headers": {
     "cache-control": "no-cache",
@@ -338,7 +339,7 @@ $.ajax(settings).done(function (response) {
   	response = JSON.parse(response);
   }
   if(response.status == 'ok') {
-  	window.location.reload();
+  	window.location.href = window.devless_edit_url;
   } else {
   	alert('Field/Table could not be modified'+'       '+response.message);
   }
