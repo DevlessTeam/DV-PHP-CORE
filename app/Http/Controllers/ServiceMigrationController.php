@@ -64,7 +64,8 @@ class ServiceMigrationController extends Controller
                            DLH::flash('Sorry service could not be installed', 'error');
                     }
                 } else {
-                    DLH::flash('Service seems to already exist or in storage', 'error');
+                    unlink(storage_path().'/'.$service_package_name);
+                    DLH::flash('Service seems to already exist. Or try installing again', 'error');
                 }
             } else {
                 DLH::flash('Service could not be uploaded', 'error');
