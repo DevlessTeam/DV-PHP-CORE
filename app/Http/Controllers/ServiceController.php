@@ -478,7 +478,7 @@ class ServiceController extends Controller
         $params = explode('-:-', $params);
         $updateTable = function () use ($se, $service, $table, $params) {
             if (!sizeof($params) == 2) {
-                return '{status:"failed"}';
+                return ['status'=>'failed'];
             }
             $se->updateTableName($service, $table, $params[0]);
             $se->updateTableDesc($service, $params[0], $params[1]);
@@ -487,26 +487,26 @@ class ServiceController extends Controller
 
         $addField = function () use ($se, $service, $table, $params) {
             if (!sizeof($params) == 2) {
-                return '{status:"failed"}';
+                return ['status'=>'failed'];
             }
             $se->addField($service, $table, $params[0], strtolower($params[1]));
-            return '{"status":"ok"}';
+            return ['status'=>'ok'];
         };
 
         $updateFieldName = function () use ($se, $service, $table, $params) {
             if (!sizeof($params) == 2) {
-                return '{status:"failed"}';
+                return ['status'=>'ok'];
             }
             $se->updateFieldName($service, $table, $params[0], $params[1]);
-            return '{"status":"ok"}';
+            return ['status'=>'ok'];
         };
 
         $deleteField = function () use ($se, $service, $table, $params) {
             if (!sizeof($params) == 1) {
-                return '{status:"failed"}';
+                return ['status'=>'failed'];
             }
             $se->delField($service, $table, $params[0]);
-            return '{"status":"ok"}';
+            return ['status'=>'ok'];
         };
         return $$action();
         
