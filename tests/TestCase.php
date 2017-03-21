@@ -37,11 +37,8 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         //setup Devless
         $this->visit('/setup')
                 ->type('test@test.com', 'email')
-                ->type('eddymens', 'username')
                 ->type('password', 'password')
                 ->type('password', 'password_confirmation')
-                ->type('test', 'app_description')
-                ->type('appName', 'app_name')
                 ->press('Create App')
                 ->see('Setup successful. Welcome to Devless');
 
