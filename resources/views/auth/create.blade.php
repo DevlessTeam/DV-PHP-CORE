@@ -73,7 +73,7 @@
                     <input type="hidden" id="app_name-field" name="app_name" value="Set app name" class="form-control" required="">
                     
                         <textarea class="form-control" id="app_description-field"  rows="3" type="hidden" name="app_description" style="display: none;">Add description here</textarea>
-                </div>
+                
                     <input type="hidden" id="app_token-field" name="app_token" class="form-control" readonly value="{{$app['app_token']}}">
                     <button type="submit" class="btn btn-info " style="margin-left: 80%" >Create App </button><br><br>
               </form>
