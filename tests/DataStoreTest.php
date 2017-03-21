@@ -95,8 +95,9 @@ class DataStoreTest extends TestCase
     {
         
         $results = DataStore::instanceInfo();
-        $this->assertEquals($results['app']->name, 'appName');
-        $this->assertEquals($results['admin']->username, 'eddymens');
+        
+        $this->assertEquals($results['app']->name, 'Set app name');
+        $this->assertEquals($results['admin']->username, 'Add username here');
     
     }
     
