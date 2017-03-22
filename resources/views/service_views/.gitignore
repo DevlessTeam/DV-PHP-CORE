@@ -2,3 +2,7 @@
 *
 # Except this file
 !.gitignore
+!notify/
+
+# ...even if they are in subdirectories
+!*/
