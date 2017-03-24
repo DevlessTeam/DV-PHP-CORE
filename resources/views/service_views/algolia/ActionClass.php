@@ -7,7 +7,7 @@
  * Version: 1.2.7
  */
  
-
+use App\Helpers\DataStore as DS 
 
 //Action method for serviceName
 class algolia
