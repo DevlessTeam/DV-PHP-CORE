@@ -206,33 +206,38 @@ $(function() {
 			"auth_token": $('#authToken').val(),
 			"account_id": $('#accountId').val()
 		};
-
-		SDK.updateData("notify", "sms_config", "id", "1", data,function  (response) {
-			if (response.payload.error) {
-				toastr.error('Sms settings not updated. Try again or contact Devless Support', 'Error');
-				console.log(response);
+		SDK.updateData("notify", "sms_config", "id", 1, data,function  (response) {
+			if (response.status_code == 619) {
+				toastr.success('Sms  settings updated', 'Success');
 			} else {
-
-				toastr.success('Sms settings Updated', 'Success');
+				SDK.addData("notify", "sms_config", data,function  (response) {
+					if(response.status_code == 609) {
+						return toastr.success('Sms  settings added', 'Success');
+					}
+					toastr.error('Sms could not be set. Try again or contact Devless Support', 'Error');
+				});
 			}
 		});
 	});
 
 	$("#emailSettings").submit(function(e) {
 		e.preventDefault();
-		console.log('email update');
+		console.log('email updated');
 		data = {
 			"sender_email": $('#senderEmail').val(),
 			"sender_name": $('#senderName').val(),
 			"api_key": $('#apiKey').val()
 		};
-		SDK.updateData("notify", "email_config", "id", "1", data,function  (response) {
-			if (response.payload.error) {
-				toastr.error('Email settings not updated. Try again or contact Devless Support', 'Error');
-				console.log(response);
-			} else {
-
+		SDK.updateData("notify", "email_config", "id", 1, data,function  (response) {
+			if (response.status_code == 619) {
 				toastr.success('Email  settings updated', 'Success');
+			} else {
+				SDK.addData("notify", "email_config", data,function  (response) {
+					if(response.status_code == 609) {
+						return toastr.success('Email  settings added', 'Success');
+					}
+					toastr.error('Email could not be set. Try again or contact Devless Support', 'Error');
+				});
 			}
 		});
 	});
@@ -248,15 +253,19 @@ $(function() {
 			"broadcast_event" :$('#brodEvent').val(),
 			"broadcast_channel" :$('#brodChannel').val()
 		};
-		SDK.updateData("notify", "push_config", "id", "1", data,function  (response) {
-			if (response.payload.error) {
-				toastr.error('Push Notification settings not updated. Try again or contact Devless Support', 'Error');
-				console.log(response);
+		SDK.updateData("notify", "push_config", "id", 1, data,function  (response) {
+			if (response.status_code == 619) {
+				toastr.success('Push  settings updated', 'Success');
 			} else {
-
-				toastr.success('Push Notification  settings updated', 'Success');
+				SDK.addData("notify", "push_config", data,function  (response) {
+					if(response.status_code == 609) {
+						return toastr.success('Push  settings added', 'Success');
+					}
+					toastr.error('Push could not be set. Try again or contact Devless Support', 'Error');
+				});
 			}
 		});
+	
 	});
 
 	
