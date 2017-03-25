@@ -141,7 +141,7 @@ class Rules
     /**
      * Call on an ActionClass
      *
-     * @param  $service
+     * @param  $serviece
      * @param  $method
      * @param  null    $params
      * @return mixed|string
