@@ -12,7 +12,7 @@ $(function() {
 		SDK.call('notify', 'sms', [UsersNumbers, message], function(response) {
 			$('.loader').hide();
 			if (response.payload.error) {
-				toastr.error('Sms not Sent. Try again or contact Devless Support', 'Error');
+				toastr.error('Sms not Sent. '+response.payload.error, 'Error');
 			} else {
 
 				toastr.success('Sms Sent', 'Success');
@@ -40,7 +40,7 @@ $(function() {
 		SDK.call('notify', 'smsFromRecords', [message, userInfoColumns, serviceName, table, usersNumberColumn, condition, limit], function(response) {
 			$('.loader').hide();
 			if (response.payload.error) {
-				toastr.error('Sms not Sent. Try again or contact Devless Support', 'Error');
+				toastr.error('Sms not Sent. '+response.payload.error, 'Error');
 				console.log(response.payload.error);
 			} else {
 
@@ -65,7 +65,7 @@ $(function() {
 		SDK.call('notify', 'email', [UsersEmails, subject, message], function(response) {
 			$('.loader').hide();
 			if (response.payload.error) {
-				toastr.error('Email not Sent. Try again or contact Devless Support', 'Error');
+				toastr.error('Email not Sent. '+response.payload.error, 'Error');
 			} else {
 
 				toastr.success('Email Sent', 'Success');
@@ -94,8 +94,7 @@ $(function() {
 		SDK.call('notify', 'emailFromRecords', [emailSubject, message, userInfoColumns, serviceName, table, usersEmailColumn, condition, limit], function(response) {
 			$('.loader').hide();
 			if (response.payload.error) {
-				toastr.error('Email not Sent. Try again or contact Devless Support', 'Error');
-				console.log(response.payload.error);
+				toastr.error('Email not Sent. '+JSON.stringify(response.payload.error), 'Error');
 			} else {
 
 				toastr.success('Email Sent', 'Success');
@@ -117,7 +116,7 @@ $(function() {
 		SDK.call('notify', 'push', [UserChannel, event, randomMessage], function(response) {
 			$('.loader').hide();
 			if (response.payload.error) {
-				toastr.error('Push Notification not Sent. Try again or contact Devless Support', 'Error');
+				toastr.error('Push Notification not Sent. '+response.payload.error, 'Error');
 			} else {
 
 				toastr.success('Push Notification', 'Success');
@@ -147,7 +146,7 @@ $(function() {
 		SDK.call('notify', 'pushFromRecords', ['', event, usermessage, userInfoColumns, serviceName, table, usersChannelColumn, condition, limit], function(response) {
 			$('.loader').hide();
 			if (response.payload.error) {
-				toastr.error('Push Notification not Sent. Try again or contact Devless Support', 'Error');
+				toastr.error('Push Notification not Sent. '+response.payload.error, 'Error');
 				console.log(response);
 			} else {
 
@@ -214,7 +213,7 @@ $(function() {
 					if(response.status_code == 609) {
 						return toastr.success('Sms  settings added', 'Success');
 					}
-					toastr.error('Sms could not be set. Try again or contact Devless Support', 'Error');
+					toastr.error('Sms could not be set. '+response.message, 'Error');
 				});
 			}
 		});
@@ -236,7 +235,7 @@ $(function() {
 					if(response.status_code == 609) {
 						return toastr.success('Email  settings added', 'Success');
 					}
-					toastr.error('Email could not be set. Try again or contact Devless Support', 'Error');
+					toastr.error('Email could not be set. '+response.message, 'Error');
 				});
 			}
 		});
@@ -261,7 +260,7 @@ $(function() {
 					if(response.status_code == 609) {
 						return toastr.success('Push  settings added', 'Success');
 					}
-					toastr.error('Push could not be set. Try again or contact Devless Support', 'Error');
+					toastr.error('Push could not be set. '+response.message, 'Error');
 				});
 			}
 		});

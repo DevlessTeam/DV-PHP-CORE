@@ -28,10 +28,8 @@ abstract class NotifyBaseClass
 
                 if (strpos($condition, $operator)) {
                     list($tableColumn, $compareValue) = explode($operator, $condition);
-                    $query->where(preg_replace("/[^a-zA-Z]/", "", $tableColumn), $operator,preg_replace("/[^a-zA-Z]/", "", $compareValue));
+                    $query->where(preg_replace("/[^a-zA-Z]/", "", $tableColumn), $operator, $compareValue);
                     break;
-                } else {
-
                 }
             }
         }
