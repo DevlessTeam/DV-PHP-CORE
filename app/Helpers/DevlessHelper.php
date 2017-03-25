@@ -557,7 +557,9 @@ class DevlessHelper extends Helper
             }
 
             if ($user::where('id', $token['id'])->update($payload)) {
-                return true;
+                return \DB::table('users')->where('id', $token['id'])
+                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email'])
+                ->first();
             }
         }
 
