@@ -98,12 +98,12 @@ class DatatableController extends Controller
                 'port'     => $database['port'],
             ]);
 
-            return $otf->getTable($name)->paginate(10);
+            return $otf->getTable($name)->get();
         } elseif ($conn == 'database.sqlite3') {
             return \DB::connection('devless-rec')->table($name)
-                    ->paginate(10);
+                    ->get();
         } else {
-            return \DB::table($name)->paginate(10);
+            return \DB::table($name)->get();
         }
     }
 }
