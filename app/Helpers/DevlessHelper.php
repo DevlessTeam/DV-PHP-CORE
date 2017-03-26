@@ -433,8 +433,14 @@ class DevlessHelper extends Helper
                 ];
 
             $prepared_token = $this->set_session_token($token_payload, $user->id);
-
-            return $prepared_token;
+            $profile = \DB::table('users')->where('id', $user->id)
+                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email'])
+                ->first();
+            $user_obj = [
+                'profile' => $profile,
+                'token'   => $prepared_token
+            ];
+            return $user_obj;
         } else {
             return false;
         }
@@ -513,8 +519,14 @@ class DevlessHelper extends Helper
                     ];
 
                 $prepared_token = $this->set_session_token($token_payload, $user_data->id);
-
-                return $prepared_token;
+                $profile = \DB::table('users')->where('id', $user_data->id)
+                    ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email'])
+                    ->first();
+                $user_obj = [
+                    'profile' => $profile,
+                    'token'   => $prepared_token
+                ];
+                return $user_obj;
             } else {
                 return false;
             }
@@ -557,7 +569,9 @@ class DevlessHelper extends Helper
             }
 
             if ($user::where('id', $token['id'])->update($payload)) {
-                return true;
+                return \DB::table('users')->where('id', $token['id'])
+                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email'])
+                ->first();
             }
         }
 
@@ -636,7 +650,8 @@ class DevlessHelper extends Helper
                 'first_name' => 'text',
                 'last_name' => 'text',
                 'remember_token' => 'text',
-                'status'         => 'text'
+                'status'         => 'text',
+                'phone_number' =>  'text'
 
             ];
 
@@ -656,9 +671,6 @@ class DevlessHelper extends Helper
                 }
             }
         }
-
-
-
         return $user;
 
 

@@ -29,6 +29,7 @@ class DbHandler
         'orWhere'  => 'orWhere',
         'take'     => 'take',
         'relation' => 'relation',
+        'search'   => 'search'
     ];
     public $dbActionAssoc = [
         'GET'    => 'query',
@@ -288,6 +289,19 @@ class DbHandler
                 $complete_query = $complete_query
                     .'->orderBy("'.$payload['params']['orderBy'][0].'" )';
                 unset($payload['params']['orderBy']);
+            }
+            if(isset($payload['params']['search'])){
+                $search_query = '[';
+                $split_query = explode(',', $payload['params']['search'][0]);
+                $search_key = $split_query[0];
+                $search_words = explode(' ', $split_query[1]);
+                foreach($search_words as $search_word){
+                  $search_query = $search_query."\"$search_word\",";
+                }
+                $search_query = $search_query."]";
+                $complete_query = $complete_query.'->whereIn("'.$search_key.'",'.$search_query.')';;
+                unset($payload['params']['search']);
+
             }
             unset(
                 $payload['params']['table'],
