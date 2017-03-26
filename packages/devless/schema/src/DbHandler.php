@@ -29,6 +29,7 @@ class DbHandler
         'orWhere'  => 'orWhere',
         'take'     => 'take',
         'relation' => 'relation',
+        'search'   => 'search'
     ];
     public $dbActionAssoc = [
         'GET'    => 'query',
@@ -263,14 +264,11 @@ class DbHandler
             hasTable($service_name.'_'.$payload['params']['table'][0])) {
                 return Helper::interrupt(634);
             }
-            if ($payload['user_id'] !== '') {
-                $user_id = $payload['user_id'];
-                $base_query = '$db->table("'.$service_name.'_'.$payload['params']['table'][0].'")'
-                    .'->where("devless_user_id",'.$user_id.')';
-            } else {
-                $base_query = '$db->table("'.$service_name.'_'.$payload['params']['table'][0].'")';
-            }
+            
             $table_name = $service_name.'_'.$payload['params']['table'][0];
+               
+            $base_query = '$db->table("'.$table_name.'")';
+            
             $complete_query = $base_query;
             (isset($payload['params']['offset'])) ?
                 $complete_query = $complete_query
@@ -288,6 +286,16 @@ class DbHandler
                 $complete_query = $complete_query
                     .'->orderBy("'.$payload['params']['orderBy'][0].'" )';
                 unset($payload['params']['orderBy']);
+            }
+            if(isset($payload['params']['search'])){
+                $split_query = explode(',', $payload['params']['search'][0]);
+                $search_key = $split_query[0];
+                $search_words = explode(' ', $split_query[1]);
+                foreach($search_words as $search_word){
+                    $complete_query = $complete_query.'->orWhere("'.$search_key.'","LIKE","%'.$search_word.'%")';
+                }
+                unset($payload['params']['search']);
+                
             }
             unset(
                 $payload['params']['table'],
@@ -333,6 +341,9 @@ class DbHandler
             } else {
                 $complete_query = 'return '.$complete_query.'->get();';
             }
+            ($payload['user_id'] !== '')?
+                $complete_query = $complete_query.'->where("devless_user_id",'.$payload['user_id'].')':'';
+            
             $query_output = eval($complete_query);
             $results['properties']['count'] = $count;
             $results['results'] = (isset($queried_table_list))? $endOutput : $query_output;
