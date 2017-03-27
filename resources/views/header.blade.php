@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <meta name="description" content="Devless is a backend as a service framework that provide developers an easier way to rollout their web and mobile platform ">
-    <meta name="author" content="Devless">
-    <meta name="keyword" content="Devless, opensource, BAAS, Backend as a service, robust, php, laravel ">
+    <meta name="description" content="DevLess is a backend as a service framework that provide developers an easier way to rollout their web and mobile platform ">
+    <meta name="author" content="DevLess">
+    <meta name="keyword" content="DevLess, opensource, BAAS, Backend as a service, robust, php, laravel ">
     <link rel="shortcut icon" href="favico.png" type="image/png">
 
     <title>DevLess {{config('devless')['version']}}</title>
