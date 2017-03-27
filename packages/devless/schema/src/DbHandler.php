@@ -303,6 +303,9 @@ class DbHandler
                 $payload['params']['offset']
             );
 
+            ($payload['user_id'] !== '')?
+                $complete_query = $complete_query.'->where("devless_user_id",'.$payload['user_id'].')':'';
+               
             //finally loop over remaining query params (where)
             foreach ($payload['params'] as $key => $query) {
                 foreach ($query as $one) {
@@ -341,9 +344,6 @@ class DbHandler
             } else {
                 $complete_query = 'return '.$complete_query.'->get();';
             }
-            ($payload['user_id'] !== '')?
-                $complete_query = $complete_query.'->where("devless_user_id",'.$payload['user_id'].')':'';
-            
             $query_output = eval($complete_query);
             $results['properties']['count'] = $count;
             $results['results'] = (isset($queried_table_list))? $endOutput : $query_output;
