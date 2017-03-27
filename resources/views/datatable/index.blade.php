@@ -56,18 +56,7 @@ td {
         </div>
 
         <div class="col-sm-12">
-            <section class="panel">
-                <table id="excelDataTable" class="schema-table table" width="100%" style="table-layout: fixed; word-wrap: break-word;">
-                </table>
-                <h3 id="empty_handler" class="text-center alert alert-info" style="margin: -5px;">Empty!</h3>
-            </section>
-            <nav id="page-nav">
-                <ul class="pager">
-                    <li class="previous"><a id="previous"><span aria-hidden="true">&larr;</span> Older</a></li>
-                    <span class="badge" id="first_no"> </span> Out of <span class="badge" id="last_no"></span>
-                    <li class="next"><a id="next">Newer <span aria-hidden="true">&rarr;</span></a></li>
-                </ul>
-            </nav>
+            <section class="panel"></section>
         </div>
     </div>
 </div>
@@ -106,13 +95,7 @@ td {
 <div id="error_flash" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="container col-md-12 col-sm-12" style="color: #000; background-color: #f3f3f3; padding: 10px;">
-        <pre>
-          <div id="error_display">
-
-          </div>
-        </pre>
-      </div>
+        <textarea id="error_display" cols="30" rows="5" wrap="hard"></textarea>
     </div>
   </div>
 </div>
@@ -120,62 +103,49 @@ td {
 <script charset="utf-8">
 window.onload(function() {
 
-    var service_id;
-    var service_name;
-    var service_table;
-
-    document.getElementById('empty_handler').style.display = 'none';
-    document.getElementById('page-nav').style.display = 'none';
-    document.getElementById('previous').classList.add = 'disabled';
+    var c;
+    var payload;
+    var last_id;
+    var module_id;
+    var element_id;
+    var module_name;
+    var module_table;
 
     $(window).load(function() {
-        $('#page-nav').hide();
-        $('.header-control').hide();
         
         /* Handles Service and table name build when view data is click from the Service Panel */        
         if ($('#service option:selected').val() != '' && $('#table_name option:selected').val() != '') {
             var tb_name = $('#service option:selected').text() + '_' + $('#table_name option:selected').text();
-            service_name = $('#service option:selected').text();
+            module_name = $('#service option:selected').text();
             tableCall(tb_name);
         }
     });
 
     var entries;
-    var nextUrl;
-    var prevUrl;
     var metas;
+    let Datatable;
 
+    // Initiate table build
     function tableCall(table_entries) {
         $.get('/datatable/'+table_entries+'/metas', function(response){
-          metas = response;
+            delete response[1];
+            metas = response;
         });
 
-        $.get('/datatable/'+table_entries+'/entries', function(data) {
+        $.get('/datatable/'+table_entries+'/entries', function(resp) {
             $('#addbtn').prop("disabled", false);
-            navOption(data);
-            if (data.data.length === 0){
-                $('#empty_handler').show('fast', function(){
-                    $('.header-control').hide();
-                    $('#page-nav').hide();
-                });
-            } else {
-                $('#page-nav').show();
-            }
+            navOption(resp);
 
         });
     }
 
-    var c;
+    // Ajax to retrieve table names and append it to the DOM on module name change
     $('#service').change(function() {
-        service_id = $('#service').val();
-        service_name = $('#service option:selected').text();
-        console.log(service_name);
-        $('#excelDataTable').html(' ');
-        $('#empty_handler').hide('fast', function() {
-            $('#page-nav').hide();
-        });
+        module_id = $('#service').val();
+        module_name = $('#service option:selected').text();
+        
         $('#table_name').find('option').remove().end().append('<option disabled selected value> -- select a table -- </option>');
-        $.get('/datatable/'+service_id, function(data) {
+        $.get('/datatable/'+module_id, function(data) {
             var tables = data;
             for (var i = 0; i < tables.length; i++) {
                 $('#table_name').append('<option value="'+JSON.parse(tables[i].id)+'">'+JSON.parse(tables[i].schema).name+'</option>');
@@ -183,87 +153,64 @@ window.onload(function() {
         });
     });
 
+    // setting module table name when viewing from module edit
+    if (window.location.search !== '') {
+        module_table = $('#table_name option:selected').text();
+    }
+
+    // Handles removal of table from the DOM on table option change
     $('#table_name').change(function(data) {
-        service_table = $('#table_name option:selected').text();
-        var table_entries = service_name + '_' + service_table;
-        $('#excelDataTable').html(' ');
+        module_table = $('#table_name option:selected').text();
+        var table_entries = module_name + '_' + module_table;
+        $('#dataOne').remove();
+        $('#dataOne_wrapper').remove();
         tableCall(table_entries);
     });
 
+    // Handle table creation with row & columns
     function buildHtmlTable() {
+        const table = '<table id="dataOne" cellspacing="0" width="100%" class="display compact"><thead id="table_head"></thead><tbody id="table_body"></tbody></table>';
+        $('.panel').append(table);
         var columns = addAllColumnHeaders(entries);
 
-        for (var i = 0 ; i < entries.length ; i++) {
-            var row$ = $('<tr/>').addClass('details');
-            row$.append($('<td/>'));
-            for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
-                var cellValue = entries[i][columns[colIndex]];
+        for(i = 0; i < entries.length; i++) {
+            table_bd = '<tr id="dtRow">';
+            for(j = 0; j < columns.length; j++) {
 
-                row$.append($('<td/>').html(cellValue));
+                table_bd += '<td>'+entries[i][columns[j]]+'</td>';
             }
-            $("#excelDataTable").append(row$);
+            table_bd += '</tr>';
+            $('#table_body').append(table_bd);
         }
+
+        Datatable = $('table').DataTable();
     }
 
+    // Creation of table headers
     function addAllColumnHeaders(entries) {
-        var columnSet = [];
-        var headerTr$ = $('<tr/>');
-        headerTr$.append($('<th/>'));
+        let table_head = '<tr>';
+        let header = [];
 
-        for (var i = 0 ; i < entries.length ; i++) {
-            var rowHash = entries[i];
-            for (var key in rowHash) {
-                if ($.inArray(key, columnSet) == -1){
-                    columnSet.push(key);
-                    headerTr$.append($('<th/>').html(key.toUpperCase()));
-                }
+        metas.map((v, i) => {
+            if (v !== 'devless_user_id'){
+                header.push(v)
+                table_head += '<th>'+v.toUpperCase()+'</th>';
             }
-        }
-        $("#excelDataTable").append(headerTr$);
+        });
+        
+        table_head += '</tr>';
+        $('#table_head').append(table_head);
 
-        return columnSet;
+        return header;
     }
 
-    $('#previous').click(function(){
-        $.get(prevUrl, function(data) {
-            $('#excelDataTable').html(' ');
-            navOption(data);
-        });
-    });
-
-    $('#next').click(function() {
-        $.get(nextUrl, function(data) {
-            $('#excelDataTable').html(' ');
-            navOption(data);
-        });
-    });
-
+    // Building of table
     function navOption(data) {
-        entries = data.data;
-        prevUrl = data.prev_page_url;
-        nextUrl = data.next_page_url;
-        $('#first_no').html(data.current_page);
-        $('#last_no').html(data.last_page);
+        entries = data;
         buildHtmlTable();
-        checkPage(data);
     }
 
-    function checkPage(data) {
-        if (data.from == data.last_page) {
-            $('#previous').addClass('disabled');
-            $('#next').addClass('disabled');
-        } else if (data.current_page == data.last_page) {
-            $('#previous').removeClass('disabled');
-            $('#next').addClass('disabled');
-        } else if (data.current_page == data.from ) {
-            $('#previous').addClass('disabled');
-            $('#next').removeClass('disabled');
-        } else {
-            $('#next').removeClass('disabled');
-            $('#previous').removeClass('disabled');
-        }
-    }
-
+    // Code snippet for converting form data into an object (key & value)
     function jQExtn() {
       $.fn.serializeObject = function()
       {
@@ -283,85 +230,96 @@ window.onload(function() {
       };
     }
 
+    // Handles the form creation with data when a row is clicked
+    $(document).on('click', 'tr', function () {
+        // grab row id 
+        element_id = $(this).find('tr').context._DT_RowIndex;  
 
-    $(document).on('click', '.details', function () {
-
-      c = $(this).find('td').map(function(){
-        return $(this).html();
-      }).get();
-      console.log(c);
+        c = $(this).find('td').map(function(){
+            return $(this).html();
+        }).get();
 
       $(function modal() {
           $('#flash_msg').modal({show: true, backdrop: 'static'});
           $('#formData').html(" ");
           for (var i = 2; i < metas.length; i++) {
-            $('#formData').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'" value="'+c[i+1]+'">');
+            $('#formData').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'" value="'+c[i-1]+'">');
           }
       });
       jQExtn();
     })
 
-    var form_value;
+    // Handle submission of data to the backend
     $(function() {
         $('form').submit(function(e) {
           e.preventDefault();
-          payload = $('form').serializeObject();
+          payload = $(this).serializeObject();
+          // Grabs the last id in the table & increases it
+          last_id = Datatable.data()[Datatable.data().length - 1][0];
+          table_array = [parseInt(last_id)+1];
+
+          // Grabs values from the payload (form data) and push them into an array for DataTable library
+          $.map(payload, function(v, i) {
+              table_array.push(v);
+          });
 
           switch ($(this).find("button:focus")[0].innerText) {
             case "Cancel":
-                $('#add_form').modal('hide');
-                $('#flash_msg').modal('hide');
+                alertHandle();
                 break;
             case "Submit":
-                var info = {resource:[{name:service_table, field: [payload]}]};
-                $.post("api/v1/service/"+service_name+"/db", info).success(function(data){
-                  console.log(data);
-                  if(data.status_code === 609){
-                    location.reload();
-                  } else {
-                    $('#add_form').modal('hide');
-                    $('#flash_msg').modal('hide');
-                    $('#error_flash').modal('show');
-                    $('#error_display').text(JSON.stringify(data.message));
-                  }
+                var info = {resource:[{name:module_table, field: [payload]}]};
+                console.log('pay ', payload);
+                $.post("api/v1/service/"+module_name+"/db", info).success(function(data){
+                    alertHandle();
+                    if(data.status_code === 609){
+                        Datatable.row.add(table_array).draw();
+                    } else {
+                        $('#error_flash').modal('show');
+                        $('#error_display').text(JSON.stringify(data.message));
+                    }
                 });
                 break;
             case "Update":
-                var info = {resource:[{name:service_table, params: [{where: "id,"+c[1], data:[payload]}]}]};
+                var info = {resource:[{name:module_table, params: [{where: "id,"+c[0], data:[payload]}]}]};
+                
+                // Grab id from the row since it doesn't need to be changed during update
+                update_array = [Datatable.row(element_id).data()[0]];
+                // Push data into array for the row to be updated
+                $.map(payload, function(v, i) {
+                    update_array.push(v);
+                });
+
                 $.ajax({
-                    url: "api/v1/service/"+service_name+"/db",
+                    url: "api/v1/service/"+module_name+"/db",
                     type: "PATCH",
                     data: info
                 })
                 .done(function(data) {
+                    alertHandle();
                     if(data.status_code === 619){
-                      location.reload();
+                        Datatable.row(element_id).data(update_array);
                     } else {
-                      $('#add_form').modal('hide');
-                      $('#flash_msg').modal('hide');
                       $('#error_flash').modal('show');
                       $('#error_display').text(JSON.stringify(data.message));
                     }
                 });
                 break;
             case "Delete":
-                var info = {resource:[{name:service_table, params: [{delete:true, where: "id,"+c[1]}]}]};
-                console.log('payload', info);
+                var info = {resource:[{name:module_table, params: [{delete:true, where: "id,"+c[0]}]}]};
                 $.ajax({
-                    url: "api/v1/service/"+service_name+"/db",
+                    url: "api/v1/service/"+module_name+"/db",
                     type: "DELETE",
                     data: info
                 })
                 .done(function(data) {
-                  console.log(data);
-                  if(data.status_code === 636){
-                    location.reload();
-                  } else {
-                    $('#add_form').modal('hide');
-                    $('#flash_msg').modal('hide');
-                    $('#error_flash').modal('show');
-                    $('#error_display').text(JSON.stringify(data));
-                  }
+                    alertHandle();
+                    if(data.status_code === 636){
+                        Datatable.row(element_id).remove().draw();
+                    } else {
+                        $('#error_flash').modal('show');
+                        $('#error_display').text(JSON.stringify(data));
+                    }
                 });
                 break;
           }
@@ -370,6 +328,7 @@ window.onload(function() {
         });
     });
 
+    // Handles form creation when the add btn is clicked
     $('#addbtn').click(function(){
       $(function modal() {
           $('#add_form').modal({show: true, backdrop: 'static'});
@@ -381,6 +340,13 @@ window.onload(function() {
       });
       jQExtn();
     });
+
+    // Hides form modal
+    function alertHandle() {
+        $('#formData').html(" ");
+        $('#add_form').modal('hide');
+        $('#flash_msg').modal('hide');
+    }
 
 }());
 
