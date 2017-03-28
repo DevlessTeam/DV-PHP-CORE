@@ -14,6 +14,7 @@
     Route::get('/', 'UserController@get_login');
 
 
+
     Route::get('/service_assets', 'ServiceController@service_views');
 
     Route::post('login', 'UserController@post_login');
@@ -63,6 +64,9 @@
         ['middleware' => 'user.auth'],
         function () {
 
+            //Dasboard
+            Route::get('/dashboard', 'dashboardController@index');
+                
             //get list of users
             Route::get('devless_users', 'UserController@get_all_users');
             Route::get('retrieve_users', 'UserController@retrieve_all_users');
