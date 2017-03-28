@@ -448,18 +448,11 @@ class DbHandler
     public function check_column_constraints($field)
     {
         //create column with default and reference
-        if ($field['field_type'] == 'reference' && $field['default'] !== null) {
-            return 4;
-        } elseif ($field['field_type'] == 'reference' && $field['default'] == null) {
-            return 3;
-        } elseif ($field['field_type'] != 'reference' && $field['default'] != null) {
-            return 2;
-        }
-        if (($field['field_type'] !== 'reference' && $field['default'] == null)) {
-            return 1;
-        } else {
-            Helper::interrupt(602, 'Database schema could not be created');
-        }
+         if($field['field_type'] == 'reference') {
+            return ($field['default'] == null)? 3 : 4;
+        } 
+        return ($field['default'] == null)? 1 : 2;
+  
     }
     /**
      * generate column data query .
@@ -478,23 +471,33 @@ class DbHandler
             $unique = 'unique';
         }
         if ($column_type == 4) {
+
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
                 ->unsigned()->$unique();
+            
             $table->foreign($field['ref_table'].'_id')->references('id')
                 ->on($field['ref_table'])->onDelete('cascade');
+        
         } elseif ($column_type == 3) {
+        
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
                 ->unsigned()->$unique();
+        
             $table->foreign($field['ref_table'].'_id')->references('id')
                 ->on($field['ref_table'])->default($field['default'])
                 ->onDelete('cascade');
+        
         } elseif ($column_type == 2) {
+        
             $table->$db_type[$field['field_type']]
             ($field['name'])->default($field['default'])->onDelete('cascade')
                 ->$unique();
+        
         } elseif ($column_type == 1) {
+        
             $table->{$db_type[$field['field_type']]}
             ($field['name'])->onDelete('cascade')->$unique();
+        
         } else {
             Helper::interrupt(
                 602,
