@@ -21,7 +21,7 @@ class DatatableController extends Controller
             return view('datatable.index', compact('service', 'tables'));
         }
             
-            $services = Service::all();
+            $services = Service::orderBy('created_at', 'desc')->get();
 
             return view('datatable.index', compact('services'));
     }
