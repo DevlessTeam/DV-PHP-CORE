@@ -62,16 +62,15 @@ class ServiceController extends Controller
             return redirect()->route('services.create')->with('errors', $errors)->withInput();
         }
         $service->name = $service_name;
-        $service->description = $request->input("description");
-        $service->username = $request->input("username");
-        $service->password = $request->input('password');
-        $service->database = $request->input('database');
-        $service->hostname = $request->input('hostname');
-        $service->port = $request->input('port');
+        $serviceFields = ['description', 'username', 'password',
+                'database', 'password', 'database', 'hostname', 'driver', 'port'];
+        foreach( $serviceFields as $serviceField){
+                $service->{$serviceField} = $request->input($serviceField);
+                $connection[$serviceField] = $service->{$serviceField};
+        }
         $service->script_init_vars = '$rules = null;';
-        $service->driver = $request->input('driver');
         $service->resource_access_right =
-            '{"query":0,"create":0,"update":0,"delete":0,"schema":0,"script":0, "view":0}';
+            '{"query":1,"create":1,"update":1,"delete":1,"schema":0,"script":0, "view":0}';
         $service->active = 1;
         $service->script = 'use App\Helpers\Assert as Assert;
  $rules
@@ -80,15 +79,6 @@ class ServiceController extends Controller
  -> onDelete()
  -> onCreate()
  ';
-        $connection =
-            [
-                'username' => $service->username,
-                'password' => $service->password,
-                'database' => $service->database,
-                'hostname' => $service->hostname,
-                'driver'   => $service->driver,
-                'port'     => $service->port,
-            ];
         $db = new Db();
         if (!$db->check_db_connection($connection)) {
             DLH::flash("Sorry connection could not be made to Database", 'error');
@@ -154,23 +144,13 @@ class ServiceController extends Controller
                 $service->save();
                 return Response::respond(626);
             }
-            $service->description = $request->input("description");
-            $service->username = $request->input("username");
-            $service->password = $request->input('password');
-            $service->database = $request->input('database');
-            $service->hostname = $request->input('hostname');
-            $service->driver   = $request->input('driver');
-            $service->port     = $request->input('port');
-            $service->active   = $request->input("active");
-            $connection =
-                [
-                    'username' => $service->username,
-                    'password' => $service->password,
-                    'database' => $service->database,
-                    'hostname' => $service->hostname,
-                    'driver'   => $service->driver,
-                    'port'     => $service->port,
-                ];
+            $connection = [];
+            $serviceFields = ['description', 'username', 'password',
+                'database', 'password', 'database', 'hostname', 'driver', 'port', 'active'];
+            foreach( $serviceFields as $serviceField){
+                $service->{$serviceField} = $request->input($serviceField);
+                $connection[$serviceField] = $service->{$serviceField};
+            }
             $db = new Db();
             if (!$db->check_db_connection($connection)) {
                 DLH::flash("Sorry connection could not be made to Database", 'error');
