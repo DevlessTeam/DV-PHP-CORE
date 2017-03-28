@@ -1,0 +1,5 @@
+@include('header2')
+    @include('sidebar')
+    @yield('header')
+    @yield('content')
+@include('footer')
