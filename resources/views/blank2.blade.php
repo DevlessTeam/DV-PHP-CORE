@@ -1,3 +1,4 @@
+{{-- Page title & Title Right --}}
 <div class="page-title">
 	<div class="title_left">
 		<h3>Welcome to Devless</h3>
@@ -9,9 +10,11 @@
 		</div>
 	</div>
 </div>
+{{-- Page title end --}}
 
 <div class="clearfix"></div>
 
+{{-- Content --}}
 <div class="row">
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="x_panel">
@@ -25,3 +28,4 @@
 		</div>
 	</div>
 </div>
+{{-- Content end --}}

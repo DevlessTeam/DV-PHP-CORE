@@ -2,5 +2,5 @@
 @include('sidebar2')
 @include('top2')
 @yield('content')
-{{-- @include('blank2') --}}
+{{-- copy content from blank2.blade to begin --}}
 @include('footer2')
