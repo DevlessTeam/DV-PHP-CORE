@@ -21,10 +21,16 @@
 	<!--[if lt IE 9]><script src="js/html5shiv.js"></script><script src="js/respond.min.js"></script><![endif]-->
 
 	<style type="text/css">
-		body {
+		body{
+			font-size: 14px;
+		}
+		.main_menu {
 			color: #797979;
 			font-family: "Varela Round",sans-serif;
 			font-size: 14px;
+		}
+		.nav_menu {
+			background: #fff;
 		}
 		.logo-wrap img {
     height: 35px;
@@ -44,9 +50,6 @@
     box-shadow: none;
     color: #fff;
 }
-.nav.side-menu > li.active > a {
-	margin-bottom: 0
-}
 .nav.child_menu li {
     padding-left: 50px;
 }
@@ -59,7 +62,7 @@
 			font-family: "Proxima Nova",Helvetica,Arial,sans-serif;
 		}
 		h3 {
-			font-size: 28px;
+			font-size: 25px;
 		}
 		body .container.body .right_col {
 			background: #f5f5f7;
@@ -113,6 +116,9 @@
 		}
 		.nav > li > a {
 		   padding: 13px 20px 12px;
+		}
+		footer {
+			border-top: 1px solid #d9dee4;
 		}
 
 	</style>
