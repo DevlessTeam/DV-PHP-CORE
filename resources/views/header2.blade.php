@@ -16,6 +16,7 @@
 	<link href="{{ Request::secure(Request::root()).'/css/custom.min.css' }}" rel="stylesheet">
 	<link href="{{ Request::secure(Request::root()).'/css/proxima-nova.css' }}" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"> 
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]><script src="js/html5shiv.js"></script><script src="js/respond.min.js"></script><![endif]-->
@@ -23,6 +24,7 @@
 	<style type="text/css">
 		body{
 			font-size: 14px;
+			font-family: 'Open Sans', "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
 		}
 		.main_menu {
 			color: #797979;
@@ -119,6 +121,9 @@
 		}
 		footer {
 			border-top: 1px solid #d9dee4;
+		}
+		.x_title {
+			border-width: 1px;
 		}
 
 	</style>
