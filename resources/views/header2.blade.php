@@ -15,6 +15,8 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.css" rel="stylesheet">
 	<link href="{{ Request::secure(Request::root()).'/css/custom.min.css' }}" rel="stylesheet">
 	<link href="{{ Request::secure(Request::root()).'/css/proxima-nova.css' }}" rel="stylesheet">
+	<link href="{{ Request::secure(Request::root()).'/css/shCore.css' }}" rel="stylesheet">
+	<link href="{{ Request::secure(Request::root()).'/css/shCoreDefault.css' }}" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"> 
 
@@ -25,6 +27,7 @@
 		body{
 			font-size: 14px;
 			font-family: 'Open Sans', "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+			background: #F5F5F7;
 		}
 		.main_menu {
 			color: #797979;
