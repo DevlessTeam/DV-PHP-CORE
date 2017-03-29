@@ -14,7 +14,7 @@
             <div class="menu_section">
 
                 <ul class="nav side-menu">
-                    <li class="active"><a href="#"><i class="fa fa-laptop"></i>Dashboard</a></li>
+                    <li class="active"><a href="{{ url('dashboard') }}"><i class="fa fa-laptop"></i>Dashboard</a></li>
                     <li><a href="{{route('app.index')}}"><i class="fa fa-desktop"></i>App</a></li>
                     <li><a><i class="fa fa-gears"></i> Services <span class="fa fa-chevron-right"></span></a>
                         <ul class="nav child_menu">
