@@ -10,7 +10,7 @@
 
 	<div class="title_right">
 		<div class="col-md-5 col-sm-5 col-xs-12 pull-right title-btn">
-			<button class="btn btn-primary addon-btn pull-right" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plug"></i>Connect to My App</button>
+			<button class="btn btn-primary addon-btn pull-right" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plug"></i>Connect to Application</button>
 		</div>
 	</div>
 </div>
@@ -27,7 +27,7 @@
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
-				Add content to the page ...
+				Content goes here
 			</div>
 		</div>
 	</div>
@@ -41,16 +41,16 @@
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
 				</button>
-				<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+				<h4 class="modal-title" id="myModalLabel">Connect to Application</h4>
 			</div>
 			<div class="modal-body">
-				<h4>Text in a modal</h4>
-				<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-				<p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
+				<p>Copy and Paste the script below and paste into your web application app</p>
+				{{-- Todo: add app token --}}
+				<pre class="prettyprint syntaxhighlight lines brush: xml">
+					<!-- Add this script to your Application -->
+					<script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="2bc974309a1606a5b599d2843377161e"></script>
+				</pre>
+				{{-- <button type="button" class="btn btn-primary">Copy to Clipboard</button> --}}
 			</div>
 
 		</div>
