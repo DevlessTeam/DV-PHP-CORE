@@ -264,14 +264,11 @@ class DbHandler
             hasTable($service_name.'_'.$payload['params']['table'][0])) {
                 return Helper::interrupt(634);
             }
-            if ($payload['user_id'] !== '') {
-                $user_id = $payload['user_id'];
-                $base_query = '$db->table("'.$service_name.'_'.$payload['params']['table'][0].'")'
-                    .'->where("devless_user_id",'.$user_id.')';
-            } else {
-                $base_query = '$db->table("'.$service_name.'_'.$payload['params']['table'][0].'")';
-            }
+            
             $table_name = $service_name.'_'.$payload['params']['table'][0];
+               
+            $base_query = '$db->table("'.$table_name.'")';
+            
             $complete_query = $base_query;
             (isset($payload['params']['offset'])) ?
                 $complete_query = $complete_query
@@ -291,17 +288,14 @@ class DbHandler
                 unset($payload['params']['orderBy']);
             }
             if(isset($payload['params']['search'])){
-                $search_query = '[';
                 $split_query = explode(',', $payload['params']['search'][0]);
                 $search_key = $split_query[0];
                 $search_words = explode(' ', $split_query[1]);
                 foreach($search_words as $search_word){
-                  $search_query = $search_query."\"$search_word\",";
+                    $complete_query = $complete_query.'->orWhere("'.$search_key.'","LIKE","%'.$search_word.'%")';
                 }
-                $search_query = $search_query."]";
-                $complete_query = $complete_query.'->whereIn("'.$search_key.'",'.$search_query.')';;
                 unset($payload['params']['search']);
-
+                
             }
             unset(
                 $payload['params']['table'],
@@ -309,6 +303,9 @@ class DbHandler
                 $payload['params']['offset']
             );
 
+            ($payload['user_id'] !== '')?
+                $complete_query = $complete_query.'->where("devless_user_id",'.$payload['user_id'].')':'';
+               
             //finally loop over remaining query params (where)
             foreach ($payload['params'] as $key => $query) {
                 foreach ($query as $one) {
@@ -451,18 +448,11 @@ class DbHandler
     public function check_column_constraints($field)
     {
         //create column with default and reference
-        if ($field['field_type'] == 'reference' && $field['default'] !== null) {
-            return 4;
-        } elseif ($field['field_type'] == 'reference' && $field['default'] == null) {
-            return 3;
-        } elseif ($field['field_type'] != 'reference' && $field['default'] != null) {
-            return 2;
-        }
-        if (($field['field_type'] !== 'reference' && $field['default'] == null)) {
-            return 1;
-        } else {
-            Helper::interrupt(602, 'Database schema could not be created');
-        }
+         if($field['field_type'] == 'reference') {
+            return ($field['default'] == null)? 3 : 4;
+        } 
+        return ($field['default'] == null)? 1 : 2;
+  
     }
     /**
      * generate column data query .
@@ -481,23 +471,33 @@ class DbHandler
             $unique = 'unique';
         }
         if ($column_type == 4) {
+
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
                 ->unsigned()->$unique();
+            
             $table->foreign($field['ref_table'].'_id')->references('id')
                 ->on($field['ref_table'])->onDelete('cascade');
+        
         } elseif ($column_type == 3) {
+        
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
                 ->unsigned()->$unique();
+        
             $table->foreign($field['ref_table'].'_id')->references('id')
                 ->on($field['ref_table'])->default($field['default'])
                 ->onDelete('cascade');
+        
         } elseif ($column_type == 2) {
+        
             $table->$db_type[$field['field_type']]
             ($field['name'])->default($field['default'])->onDelete('cascade')
                 ->$unique();
+        
         } elseif ($column_type == 1) {
+        
             $table->{$db_type[$field['field_type']]}
             ($field['name'])->onDelete('cascade')->$unique();
+        
         } else {
             Helper::interrupt(
                 602,
@@ -772,6 +772,8 @@ class DbHandler
                         if (!Helper::field_check($field_value, $fields['field_type'])) {
                             Helper::interrupt(616, 'The field '.$fields['name'].' cannot  be set to `'.$field_value.'`. Its not a/an '. $fields['field_type']);
                         }
+                        if($fields['required'] && strlen($field_value) == 0 ){Helper::interrupt(616, $field.' cannot be empty');}
+                        
                     }
                 }
             }
