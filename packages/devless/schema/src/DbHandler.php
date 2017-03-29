@@ -772,6 +772,8 @@ class DbHandler
                         if (!Helper::field_check($field_value, $fields['field_type'])) {
                             Helper::interrupt(616, 'The field '.$fields['name'].' cannot  be set to `'.$field_value.'`. Its not a/an '. $fields['field_type']);
                         }
+                        if($fields['required'] && strlen($field_value) == 0 ){Helper::interrupt(616, $field.' cannot be empty');}
+                        
                     }
                 }
             }

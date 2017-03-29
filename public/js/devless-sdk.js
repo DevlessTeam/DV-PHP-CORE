@@ -151,9 +151,10 @@
         var numFields = 0;
         _jql( reference ).submit(function( event ) {
             event.preventDefault();
-            var inputs = this.elements
+            var inputs = this.elements;
+            var numFields = '';
             _jql.each(inputs, function(index, element){
-                if(element.name == ""){return;}
+            	if(element.name == ""){return;}
                 if((element.type == "radio"||element.type == "checkbox") && !element.checked){return;}
                 if(element.type == 'file' && element.files[0] != undefined){
                     var reader = new FileReader();
@@ -172,17 +173,21 @@
                 }
                 element.value = '';
             });
+            console.log(numFields, inputs.length-1);
             if(numFields == inputs.length-1){
                 callback(data);
+                console.log("callback from if:", callback)
             } else {
                 var intvl = setInterval(function() {
                     if (numFields == inputs.length-1) {
                         clearInterval(intvl);
                         callback(data);
+                        console.log("calllback from else",callback)
                     }
                 }, 1);
 
             }
+
 
         });
     }
@@ -320,10 +325,11 @@
             SDK.addData(service, table, storeData, function(response){
                 (response.status_code == 609)?devless_main.coreLib.notify(response.message,1):
                     devless_main.coreLib.notify(response.message,0);
-                devless_main.init();
+                // devless_main.init();
             })
 
         }
+        
         devless_main.coreLib.form(devless_main.singleCourier, persist);
         return this;
     }
@@ -503,18 +509,19 @@
 
 
     devless_main.init = function() {
-        _jql.each(devless_main.components, function(index, node) {
+    	_jql.each(devless_main.components, function(index, node) {
             devless_main.singleCourier = node;
             _jql.each(node.scripts, function(index, script) {
                 try{
-                    eval('scriptEngine.'+script);
+            		eval('scriptEngine.'+script);	
                 }
                 catch (e) {
                     console.error(node.queries[index]+` could not be resolved to an executable script `+ e);
                 }
             });
+            
         });
-
+    	window.initialRender = false;
 
     }
     _jql('.dv-notify-success').each(function() {
@@ -526,7 +533,9 @@
     _jql('.dv-notify').each(function() {
         this.style.display = 'none';
     })
+    window.initialRender = true;
     devless_main.init();
+    
 
 
 
