@@ -1,3 +1,8 @@
+				<!-- /page content wrap continues -->
+				</div>
+			</div>
+			<!-- /page content wrap ends -->
+
 			<!-- footer content -->
 			<footer>
 				<div class="pull-right">

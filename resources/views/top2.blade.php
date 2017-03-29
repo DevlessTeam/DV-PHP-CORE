@@ -94,3 +94,7 @@
 	</div>
 </div>
 <!-- /top navigation -->
+
+<!-- page content wrap -->
+<div class="right_col" role="main">
+	<div class="">
