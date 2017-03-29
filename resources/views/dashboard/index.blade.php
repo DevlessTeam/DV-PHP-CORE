@@ -2,17 +2,6 @@
 
 @section('content')
 
-<style type="text/css">
-	.tuts-div {
-		border: 1px solid #d9dee4;
-		padding: 35px 15px;
-		text-align: center;
-		border-radius: 3px;
-	}
-	.tuts-div i {
-	    font-size: 35px;
-	}
-</style>
 {{-- Page title & Title Right --}}
 <div class="page-title">
 	<div class="title_left">
