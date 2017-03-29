@@ -23,7 +23,6 @@
 	<!-- Custom Theme Scripts -->
 	<script src="{{ Request::secure(Request::root()).'/js/custom.min.js' }}"></script>
 
-	<script src="{{ Request::secure(Request::root()).'/js/shAutoloader.js' }}"></script>
 	<script src="{{ Request::secure(Request::root()).'/js/shCore.js' }}"></script>
 	<script src="{{ Request::secure(Request::root()).'/js/shBrushXml.js' }}"></script>
 	<script type="text/javascript">SyntaxHighlighter.all();</script>
