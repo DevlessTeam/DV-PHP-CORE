@@ -23,6 +23,10 @@ td {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+#dtRow {
+    cursor: pointer;
+}
 </style>
 
 <div class="wrapper">
@@ -231,7 +235,7 @@ window.onload(function() {
     }
 
     // Handles the form creation with data when a row is clicked
-    $(document).on('click', 'tr', function () {
+    $(document).on('click', '#dtRow', function () {
         // grab row id 
         element_id = $(this).find('tr').context._DT_RowIndex;  
 
@@ -269,11 +273,13 @@ window.onload(function() {
                 break;
             case "Submit":
                 var info = {resource:[{name:module_table, field: [payload]}]};
-                console.log('pay ', payload);
                 $.post("api/v1/service/"+module_name+"/db", info).success(function(data){
                     alertHandle();
                     if(data.status_code === 609){
                         Datatable.row.add(table_array).draw();
+                        row_index = Datatable.row([Datatable.data().length - 1]);
+                        new_row = $('#dataOne').DataTable().row(row_index).node();
+                        $(new_row).attr('id', 'dtRow');
                     } else {
                         $('#error_flash').modal('show');
                         $('#error_display').text(JSON.stringify(data.message));

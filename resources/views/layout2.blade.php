@@ -1,0 +1,5 @@
+@include('header2')
+@include('sidebar2')
+@include('top2')
+@include('blank2')
+@include('footer2')

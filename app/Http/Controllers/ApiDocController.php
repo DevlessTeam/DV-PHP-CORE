@@ -15,7 +15,7 @@ class ApiDocController extends Controller
      */
     public function index()
     {
-        $services = Service::all();
+        $services = Service::orderBy('created_at', 'desc')->get();
 
         return view('api_docs.index', compact('services'));
     }
