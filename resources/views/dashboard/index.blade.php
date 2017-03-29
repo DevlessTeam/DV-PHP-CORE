@@ -1,93 +1,60 @@
 @extends('layout2')
 
-@section('header')
-
-<style type="text/css">
-	.page-head {
-		min-height: 75px;
-	}
-	.page-head h3 {
-		font-size: 32px;
-	}
-	.bdr-gray {
-		border: 1px solid #f4f5f5;
-		padding: 30px 0;
-	}
-	.bdr-gray i {
-		font-size: 50px;
-	}
-	.bdr-gray h4 {
-		font-size: 20px
-	}
-	.dash-tuts {
-		margin-top: 30px;
-	}
-</style>
-<!-- page head start-->
-<div class="page-head">
-	<div class="col-md-8">
-		<h3>Welcome to Devless</h3>
-	</div>
-	<div class="col-md-4">
-		<button class="btn btn-info addon-btn pull-right"><i class="fa fa-plug pull-right"></i>Connect to My App</button>
-	</div>
-</div>
-<!-- page head end-->
-
-@endsection
-
 @section('content')
 
-<!--body wrapper start-->
-<div class="wrapper">
-	<!--state overview end-->
+{{-- Page title --}}
+<div class="page-title">
+	<div class="title_left">
+		<h3>Welcome to Devless</h3>
+	</div>
 
-	<div class="row">
-		<div class="col-md-9">
-			<section class="panel">
-				<div class="panel-body">
-					<h3>New to Devless?</h3>
-					<p>Learn the key concepts of DevLess by following our 5-minute step-by-step tutorial. You can choose between building a simple blog or an e-commerce storefront. We provide templates to make this super easy.</p>
-					<div class="row dash-tuts">
-						<div class="col-md-4">
-							<div class="bdr-gray">
-								<div class="text-center"><i class="fa fa-tag"></i></div>
-								<h4 class="text-center">Build a Blog</h3>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="bdr-gray">
-									<div class="text-center"><i class="fa fa-tag"></i></div>
-									<h4 class="text-center">Build a Blog</h3>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="bdr-gray">
-										<div class="text-center"><i class="fa fa-tag"></i></div>
-										<h4 class="text-center">Build a Blog</h3>
-										</div>
-									</div>
-								</div>
-							</div>
-						</section>
+	<div class="title_right">
+		<div class="col-md-5 col-sm-5 col-xs-12 pull-right title-btn">
+			<button class="btn btn-primary addon-btn pull-right" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plug"></i>Connect to Application</button>
+		</div>
+	</div>
+</div>
+{{-- Page title end --}}
 
-						<section class="panel" id="block-panel">
-							<div class="panel-body">
-								Content Comes Here
-							</div>
-						</section>
-					</div>
-					<div class="col-md-3">
-						<section class="panel" style="min-height: 450px;">
-							<div class="panel-body">
+<div class="clearfix"></div>
 
-							</div>
-						</section>
-					</div>
-				</div>
-			</div><!--body wrapper end-->
+{{-- Content begins --}}
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12">
+		<div class="x_panel">
+			<div class="x_title">
+				<h2>Dashboard</h2>
+				<div class="clearfix"></div>
+			</div>
+			<div class="x_content">
+				Content goes here
+			</div>
+		</div>
+	</div>
+</div>
 
-			@endsection
+{{-- Modal --}}
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
 
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">Connect to Application</h4>
+			</div>
+			<div class="modal-body">
+				<p>Copy and Paste the script below and paste into your web application app</p>
+				{{-- Todo: add app token --}}
+				<pre class="prettyprint syntaxhighlight lines brush: xml">
+					<!-- Add this script to your Application -->
+					<script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="2bc974309a1606a5b599d2843377161e"></script>
+				</pre>
+				{{-- <button type="button" class="btn btn-primary">Copy to Clipboard</button> --}}
+			</div>
 
-
+		</div>
+	</div>
+</div>
+{{-- End Content --}}
+@endsection
