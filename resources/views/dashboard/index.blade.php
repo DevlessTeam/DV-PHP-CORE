@@ -46,15 +46,41 @@
 			<div class="modal-body">
 				<p>Copy and Paste the script below and paste into your web application app</p>
 				{{-- Todo: add app token --}}
-				<pre class="prettyprint syntaxhighlight lines brush: xml">
+				<pre class="prettyprint syntaxhighlight lines brush: xml" id="script">
 					<!-- Add this script to your Application -->
-					<script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="2bc974309a1606a5b599d2843377161e"></script>
+					<script src='{{URL::to("/")}}/js/devless-sdk.js' class='devless-connection' devless-con-token='{{$app->token}}'></script>
 				</pre>
-				{{-- <button type="button" class="btn btn-primary">Copy to Clipboard</button> --}}
+				<button type="button" class="btn btn-primary" id="copyBtn" onclick="copyBtn()">Copy to Clipboard</button>
 			</div>
 
 		</div>
 	</div>
 </div>
 {{-- End Content --}}
+
+<script type="text/javascript">
+
+	/* Copy text to Clipboard */
+	var copyBtn = function() {
+
+		var el;
+
+		var text = document.querySelector('.code')
+				.querySelector('.number2').innerText;
+
+		el = document.createElement("input");
+
+		el.setAttribute("value", text);
+
+		$('.modal-body').append(el);
+
+		el.select();
+
+		document.execCommand("copy", true);
+
+		$('input').remove();
+
+	};
+</script>
 @endsection
+
