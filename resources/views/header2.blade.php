@@ -32,6 +32,13 @@
     margin-top: 15px;
     opacity: 0.8;
 }
+.sidebar-footer {
+    background: #313a46;
+}
+.sidebar-footer a {
+    background: #2c3541;
+    color: #98a6ad;
+}
 .nav.side-menu > li > a:hover, .nav.side-menu > li.active > a {
     background: #313A46;
     box-shadow: none;
