@@ -119,7 +119,7 @@
 		.main_menu .fa-chevron-right {
 		    margin-right: 0;
 		}
-		.nav > li > a {
+		#sidebar-menu .nav > li > a {
 		   padding: 13px 20px 12px;
 		}
 		footer {
