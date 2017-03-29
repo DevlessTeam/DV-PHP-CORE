@@ -1,7 +1,12 @@
+				<!-- /page content wrap continues -->
+				</div>
+			</div>
+			<!-- /page content wrap ends -->
+
 			<!-- footer content -->
 			<footer>
 				<div class="pull-right">
-					Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+					DevLess - {{config('devless')['version']}}
 				</div>
 				<div class="clearfix"></div>
 			</footer>
@@ -15,8 +20,12 @@
 	<script src="{{ Request::secure(Request::root()).'/js/fastclick.js' }}"></script>
 	<!-- NProgress -->
 	<script src="{{ Request::secure(Request::root()).'/js/nprogress.js' }}"></script>
-
 	<!-- Custom Theme Scripts -->
 	<script src="{{ Request::secure(Request::root()).'/js/custom.min.js' }}"></script>
+
+	<script src="{{ Request::secure(Request::root()).'/js/shAutoloader.js' }}"></script>
+	<script src="{{ Request::secure(Request::root()).'/js/shCore.js' }}"></script>
+	<script src="{{ Request::secure(Request::root()).'/js/shBrushXml.js' }}"></script>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
 </body>
 </html>
