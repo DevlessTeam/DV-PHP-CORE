@@ -26,5 +26,6 @@
 	<script src="{{ Request::secure(Request::root()).'/js/shCore.js' }}"></script>
 	<script src="{{ Request::secure(Request::root()).'/js/shBrushXml.js' }}"></script>
 	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	<script src="{{ Request::secure(Request::root()).'/js/dv-scripts.js' }}"></script>
 </body>
 </html>
