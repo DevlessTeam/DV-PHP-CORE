@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.css" rel="stylesheet">
-	<link href="{{ Request::secure(Request::root()).'/css/custom.min.css' }}" rel="stylesheet">
+	<link href="{{ Request::secure(Request::root()).'/css/gent-custom.min.css' }}" rel="stylesheet">
 	<link href="{{ Request::secure(Request::root()).'/css/proxima-nova.css' }}" rel="stylesheet">
 	<link href="{{ Request::secure(Request::root()).'/css/shCore.css' }}" rel="stylesheet">
 	<link href="{{ Request::secure(Request::root()).'/css/shCoreDefault.css' }}" rel="stylesheet">

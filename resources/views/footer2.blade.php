@@ -21,7 +21,7 @@
 	<!-- NProgress -->
 	<script src="{{ Request::secure(Request::root()).'/js/nprogress.js' }}"></script>
 	<!-- Custom Theme Scripts -->
-	<script src="{{ Request::secure(Request::root()).'/js/custom.min.js' }}"></script>
+	<script src="{{ Request::secure(Request::root()).'/js/gent-custom.min.js' }}"></script>
 
 	<script src="{{ Request::secure(Request::root()).'/js/shCore.js' }}"></script>
 	<script src="{{ Request::secure(Request::root()).'/js/shBrushXml.js' }}"></script>
