@@ -8,7 +8,7 @@
 
 			<div class="title_right">
 				<div class="col-md-5 col-sm-5 col-xs-12 pull-right title-btn">
-					<button class="btn btn-info addon-btn pull-right"><i class="fa fa-plug"></i>Connect to My App</button>
+					<button class="btn btn-primary addon-btn pull-right"><i class="fa fa-plug"></i>Connect to My App</button>
 				</div>
 			</div>
 		</div>
