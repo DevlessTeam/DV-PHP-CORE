@@ -111,3 +111,9 @@ footer {
 .tuts-div i {
     font-size: 35px;
 }
+.input-group-btn button {
+	margin-right: 0;
+}
+.nav-md .container.body .right_col {
+	margin-bottom: 35px;
+}
