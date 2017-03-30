@@ -85,8 +85,7 @@
 					<div class="ln_solid"></div>
 					<div class="form-group">
 						<div class="text-center col-md-4 col-sm-4 col-xs-12 col-md-offset-4 col-sm-offset-4">
-							<button class="btn btn-primary" type="button">Cancel</button>
-							<button type="submit" class="btn btn-success">Save Changes</button>
+							<button class="btn btn-success addon-btn" type="submit"><i class="fa fa-save"></i>Save Changes</button>
 						</div>
 					</div>
 
