@@ -117,3 +117,6 @@ footer {
 .nav-md .container.body .right_col {
 	margin-bottom: 35px;
 }
+label {
+	font-weight: normal;
+}
