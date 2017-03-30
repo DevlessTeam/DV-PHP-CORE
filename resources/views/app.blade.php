@@ -84,9 +84,9 @@
 					</div>
 					<div class="ln_solid"></div>
 					<div class="form-group">
-						<div class="col-md-4 col-sm-4 col-xs-12 col-md-offset-4">
-							<button class="btn btn-primary addon-btn"><i class="fa fa-plug"></i>Connect to My App</button>
-							<button type="submit" class="btn btn-success pull-right">Save Changes</button>
+						<div class="text-center col-md-4 col-sm-4 col-xs-12 col-md-offset-4 col-sm-offset-4">
+							<button class="btn btn-primary" type="button">Cancel</button>
+							<button type="submit" class="btn btn-success">Save Changes</button>
 						</div>
 					</div>
 
