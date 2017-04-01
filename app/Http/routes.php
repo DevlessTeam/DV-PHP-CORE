@@ -65,7 +65,7 @@
         function () {
 
             //Dasboard
-            Route::get('/dashboard', 'dashboardController@index');
+            Route::get('/dashboard', 'DashboardController@index');
                 
             //get list of users
             Route::get('devless_users', 'UserController@get_all_users');

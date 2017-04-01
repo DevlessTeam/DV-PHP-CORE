@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\App;
+use App\User;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class dashboardController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +17,9 @@ class dashboardController extends Controller
      */
     public function index()
     {
-        return view('dashboard.index');
+        $app = App::first();
+        $user = User::findOrFail(Session('user'));
+        return view('dashboard.index', compact('app', 'user'));
     }
 
     /**
