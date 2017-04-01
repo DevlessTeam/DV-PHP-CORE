@@ -111,6 +111,12 @@
                                             <input type="text" id="related-field" class="form-control" >
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="search" class="col-lg-2 col-sm-2 control-label">Search</label>
+                                        <div class="col-lg-10">
+                                            <input type="text" id="search-field" class="form-control" >
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </section>
