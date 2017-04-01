@@ -159,6 +159,16 @@ class DataStore extends Helper
         return self::bindToParams('where', $column.','.$value);
     }
     /**
+     * orWhere to include data that match $value from $column 
+     * @param $column
+     * @param $value
+     * @return DataStore
+     */
+    public static function orWhere($column, $value)
+    {
+        return self::bindToParams('orWhere', $column.','.$value);
+    }
+    /**
      * Order records by a given field
      * @param $value
      * @return DataStore
@@ -175,6 +185,16 @@ class DataStore extends Helper
     public static function size($value)
     {
         return self::bindToParams('size', $value);
+    }
+    /**
+     * Search for a data with $value from $column
+     * @param $column
+     * @param $value
+     * @return DataStore
+     */
+    public static function search($column, $value)
+    {
+        return self::bindToParams('search', $column.','.$value);
     }
     /**
      * add parameter to Global params

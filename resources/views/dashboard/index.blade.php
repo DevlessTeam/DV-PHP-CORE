@@ -2,7 +2,7 @@
 
 @section('content')
 
-{{-- Page title --}}
+{{-- Page title & Title Right --}}
 <div class="page-title">
 	<div class="title_left">
 		<h3>Welcome to Devless</h3>
@@ -18,20 +18,113 @@
 
 <div class="clearfix"></div>
 
-{{-- Content begins --}}
+{{-- Content --}}
 <div class="row">
-	<div class="col-md-12 col-sm-12 col-xs-12">
+	<div class="col-md-8 col-sm-8 col-xs-12">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel">
+					<div class="x_title">
+						<h2>New to Devless?</h2>
+						<ul class="nav navbar-right panel_toolbox">
+							<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+							</li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="#">Settings 1</a>
+									</li>
+									<li><a href="#">Settings 2</a>
+									</li>
+								</ul>
+							</li>
+							<li><a class="close-link"><i class="fa fa-close"></i></a>
+							</li>
+						</ul>
+						<div class="clearfix"></div>
+					</div>
+					<div class="x_content">
+						<p>Learn the key concepts of DevLess by following our 5-minute step-by-step tutorial. You can choose between building a simple blog or an e-commerce storefront. We provide templates to make this super easy.</p>
+						<div class="row">
+							<div class="col-md-4">
+								<div class="tuts-div">
+									<i class="fa fa-close"></i><h4>Build a Blog</h4>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="tuts-div">
+									<i class="fa fa-close"></i><h4>Build a Blog</h4>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="tuts-div">
+									<i class="fa fa-close"></i><h4>Build a Blog</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel">
+					<div class="x_title">
+						<h2>Daily active users</h2>
+						<ul class="nav navbar-right panel_toolbox">
+							<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+							</li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="#">Settings 1</a>
+									</li>
+									<li><a href="#">Settings 2</a>
+									</li>
+								</ul>
+							</li>
+							<li><a class="close-link"><i class="fa fa-close"></i></a>
+							</li>
+						</ul>
+						<div class="clearfix"></div>
+					</div>
+					<div class="x_content">
+						Enter Content
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="col-md-4 col-sm-4 col-xs-12">
 		<div class="x_panel">
 			<div class="x_title">
-				<h2>Dashboard</h2>
+				<h2>Recent Activities</h2>
+				<ul class="nav navbar-right panel_toolbox">
+					<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#">Settings 1</a>
+							</li>
+							<li><a href="#">Settings 2</a>
+							</li>
+						</ul>
+					</li>
+					<li><a class="close-link"><i class="fa fa-close"></i></a>
+					</li>
+				</ul>
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
-				Content goes here
+				Content Here
 			</div>
 		</div>
 	</div>
 </div>
+{{-- Content end --}}
 
 {{-- Modal --}}
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
@@ -46,15 +139,17 @@
 			<div class="modal-body">
 				<p>Copy and Paste the script below and paste into your web application app</p>
 				{{-- Todo: add app token --}}
-				<pre class="prettyprint syntaxhighlight lines brush: xml">
+				<pre class="prettyprint syntaxhighlight lines brush: xml" id="script">
 					<!-- Add this script to your Application -->
-					<script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="2bc974309a1606a5b599d2843377161e"></script>
+					<script src='{{URL::to("/")}}/js/devless-sdk.js' class='devless-connection' devless-con-token='{{$app->token}}'></script>
 				</pre>
-				{{-- <button type="button" class="btn btn-primary">Copy to Clipboard</button> --}}
+				<button type="button" class="btn btn-primary" id="copyBtn" onclick="copyBtn()">Copy to Clipboard</button>
 			</div>
 
 		</div>
 	</div>
 </div>
 {{-- End Content --}}
+
 @endsection
+
