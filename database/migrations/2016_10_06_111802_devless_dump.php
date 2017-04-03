@@ -14,7 +14,7 @@ class DevlessDump extends Migration
     {
        Schema::create('devless_dump', function ($table) {
             $table->increments('id');
-            $table->string('key');
+            $table->string('key')->unique();
             $table->text('value');
             $table->text('notes')->default('');
         });

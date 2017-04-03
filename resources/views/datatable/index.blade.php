@@ -258,8 +258,14 @@ window.onload(function() {
         $('form').submit(function(e) {
           e.preventDefault();
           payload = $(this).serializeObject();
+          
           // Grabs the last id in the table & increases it
-          last_id = Datatable.data()[Datatable.data().length - 1][0];
+          if(Datatable.data().length === 0){
+                last_id = 0;
+          } else {
+                last_id = Datatable.data()[Datatable.data().length - 1][0];
+          }
+
           table_array = [parseInt(last_id)+1];
 
           // Grabs values from the payload (form data) and push them into an array for DataTable library
