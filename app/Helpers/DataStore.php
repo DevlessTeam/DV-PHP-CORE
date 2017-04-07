@@ -245,12 +245,8 @@ class DataStore extends Helper
      */
     public static function getDump($key)
     {
-        if ($dump = \DB::table('devless_dump')->where('key', $key)->first()) {
-            return $dump->value;
-        } else {
-            return null;
-        }
-
+        return ($dump = \DB::table('devless_dump')->where('key', $key)->first())? 
+        $dump->value : null;
     }
 
 
@@ -258,12 +254,12 @@ class DataStore extends Helper
      * add data to devless dump
      * @return boolean
      */
-    public static function setDump($key, $value)
+    public static function setDump($key, $value, updateIfSet=false)
     {
 
         $status = \DB::table('devless_dump')->insert(['key'=>$key, 'value'=>$value]);
-
-        return $status;
+        return (!$status && $updateIfSet)? self::updateDump($key, $value) : $status;
+    
     }
 
     /**
@@ -272,9 +268,7 @@ class DataStore extends Helper
      */
     public static function updateDump($key, $value)
     {
-        $status = \DB::table('devless_dump')->where('key', $key)->update(['value'=>$value]);
-
-        return $status;
+       return \DB::table('devless_dump')->where('key', $key)->update(['value'=>$value]);
     }
 
 
@@ -284,8 +278,6 @@ class DataStore extends Helper
      */
     public static function destroyDump($key)
     {
-        $status = \DB::table('devless_dump')->where('key', $key)->delete();
-
-        return $status;
+        return \DB::table('devless_dump')->where('key', $key)->delete();
     }
 }
