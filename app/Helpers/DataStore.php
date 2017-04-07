@@ -245,8 +245,9 @@ class DataStore extends Helper
      */
     public static function getDump($key)
     {
-        return ($dump = \DB::table('devless_dump')->where('key', $key)->first())? 
-        $dump->value : null;
+         $output = \DB::table('devless_dump')->where('key', $key)->first();
+         if(!$output) {return null;}
+         return $output->value;
     }
 
 
@@ -254,7 +255,7 @@ class DataStore extends Helper
      * add data to devless dump
      * @return boolean
      */
-    public static function setDump($key, $value, updateIfSet=false)
+    public static function setDump($key, $value, $updateIfSet=false)
     {
 
         $status = \DB::table('devless_dump')->insert(['key'=>$key, 'value'=>$value]);
