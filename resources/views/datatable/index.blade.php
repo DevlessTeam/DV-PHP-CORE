@@ -132,7 +132,7 @@ window.onload(function() {
     // Initiate table build
     function tableCall(table_entries) {
         $.get('/datatable/'+table_entries+'/metas', function(response){
-            delete response[1];
+            //delete response[1];
             metas = response;
         });
 
@@ -195,12 +195,19 @@ window.onload(function() {
         let table_head = '<tr>';
         let header = [];
 
-        metas.map((v, i) => {
+        for (i=0; i< metas.length; i++){
+            if( metas[i] !== 'devless_user_id'){
+                header.push(metas[i]);
+                table_head += '<th>'+metas[i].toUpperCase()+'</th>';
+            }
+        }
+
+        /*metas.map((v, i) => {
             if (v !== 'devless_user_id'){
                 header.push(v)
                 table_head += '<th>'+v.toUpperCase()+'</th>';
             }
-        });
+        });*/
         
         table_head += '</tr>';
         $('#table_head').append(table_head);
@@ -247,7 +254,7 @@ window.onload(function() {
           $('#flash_msg').modal({show: true, backdrop: 'static'});
           $('#formData').html(" ");
           for (var i = 2; i < metas.length; i++) {
-            $('#formData').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'" value="'+c[i-1]+'">');
+                $('#formData').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'" value="'+c[i-1]+'">');
           }
       });
       jQExtn();
