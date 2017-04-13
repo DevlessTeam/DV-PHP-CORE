@@ -390,7 +390,7 @@
             SDK.call('devless', 'signUp', [ record['email'], record['password'], record['username'], record['phonenumber'],
                 record['firstname'], record['lastname'] ], function(response){
                 if( response.payload.result.message == undefined ) {
-                    SDK.setToken(response.payload.result);
+                    SDK.setToken(response.payload.result['token']);
                     devless_main.coreLib.notify("signup was successful");
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else {
@@ -408,7 +408,7 @@
             SDK.call('devless', 'login', [record['username'], record['email'], record['phonenumber'],
                 record['password']], function(response){
                 if(response.payload.result !== false) {
-                    SDK.setToken(response.payload.result);
+                    SDK.setToken(response.payload.result['token']);
                     devless_main.coreLib.notify("Log in successfully");
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else{
@@ -424,7 +424,7 @@
             if(response.payload.error) {
                 devless_main.coreLib.notify(response.payload.error.message);
             } else {
-                data = response.payload.result;
+                data = response.payload.result['profile'];
                 data.firstname = data.first_name;
                 data.firstname = data.last_name;
                 devless_main.coreLib.render(component, [data])
@@ -440,7 +440,7 @@
             if(response.payload.error) {
                 devless_main.coreLib.notify(response.payload.error.message);
             } else {
-                data = response.payload.result;
+                data = response.payload.result['profile'];
                 data.firstname = data.first_name;
                 data.firstname = data.last_name;
                 scriptEngine.populateForm(component,
