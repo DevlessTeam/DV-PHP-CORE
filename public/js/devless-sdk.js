@@ -424,7 +424,7 @@
             if(response.payload.error) {
                 devless_main.coreLib.notify(response.payload.error.message);
             } else {
-                data = response.payload.result['profile'];
+                data = response.payload.result;
                 data.firstname = data.first_name;
                 data.firstname = data.last_name;
                 devless_main.coreLib.render(component, [data])
@@ -440,7 +440,7 @@
             if(response.payload.error) {
                 devless_main.coreLib.notify(response.payload.error.message);
             } else {
-                data = response.payload.result['profile'];
+                data = response.payload.result;
                 data.firstname = data.first_name;
                 data.firstname = data.last_name;
                 scriptEngine.populateForm(component,
@@ -453,7 +453,6 @@
                 record['firstname'], record['lastname'] ], function(response){
                 if(response.payload.result == true ) {
                     devless_main.coreLib.notify('Profile updated successfully');
-                    console.log("profile update went through")
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else {
                     devless_main.coreLib.notify('Profile could not be updated');
