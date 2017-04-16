@@ -29,7 +29,8 @@ class DbHandler
         'orWhere'  => 'orWhere',
         'take'     => 'take',
         'relation' => 'relation',
-        'search'   => 'search'
+        'search'   => 'search', 
+        'randomize' => 'randomize'
     ];
     public $dbActionAssoc = [
         'GET'    => 'query',
@@ -286,6 +287,12 @@ class DbHandler
                 $complete_query = $complete_query
                     .'->orderBy("'.$payload['params']['orderBy'][0].'" )';
                 unset($payload['params']['orderBy']);
+            }
+
+            if(isset($payload['params']['randomize'])) {
+                $complete_query = $complete_query
+                 .'->orderByRaw("RAND()")';
+                unset($payload['params']['randomize']);
             }
             if(isset($payload['params']['search'])){
                 $split_query = explode(',', $payload['params']['search'][0]);
