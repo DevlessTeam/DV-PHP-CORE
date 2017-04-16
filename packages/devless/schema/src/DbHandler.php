@@ -257,6 +257,7 @@ class DbHandler
     {
         $service_name = $payload['service_name'];
         $connector = $this->_connector($payload);
+        $queried_table_list = null;
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
         $results = [];
         //check if table name is set
@@ -271,45 +272,51 @@ class DbHandler
             $base_query = '$db->table("'.$table_name.'")';
             
             $complete_query = $base_query;
-            (isset($payload['params']['offset'])) ?
-                $complete_query = $complete_query
-                    .'->skip('.$payload['params']['offset'][0].')' :
-                false;
-            (isset($payload['params']['size'])) ?
-                $complete_query = $complete_query
-                    .'->take('.$payload['params']['size'][0].')' :
-                $complete_query = $base_query;
-            (isset($payload['params']['related'])) ? $queried_table_list =
-                $payload['params']['related'] : false;
-            unset($payload['params']['related']);
+            $query_params = [
+                'offset'=>function() use(&$complete_query, &$payload){   
+                        $complete_query =
+                        $complete_query.'->skip('.$payload['params']['offset'][0].')';},
 
-            if (isset($payload['params']['orderBy'])) {
-                $complete_query = $complete_query
-                    .'->orderBy("'.$payload['params']['orderBy'][0].'" )';
-                unset($payload['params']['orderBy']);
-            }
+                'size'=>function() use(&$complete_query, &$payload){
+                        $complete_query = $complete_query
+                        .'->take('.$payload['params']['size'][0].')';},
 
-            if(isset($payload['params']['randomize'])) {
-                $complete_query = $complete_query
-                 .'->orderByRaw("RAND()")';
-                unset($payload['params']['randomize']);
+                'related'=>function() use(&$complete_query, &$payload, &$queried_table_list){
+                        $queried_table_list =$payload['params']['related'];
+                        unset($payload['params']['related']);},
+
+                'orderBy'=>function() use(&$complete_query, &$payload){
+                        $complete_query = $complete_query
+                        .'->orderBy("'.$payload['params']['orderBy'][0].'" )';
+                        unset($payload['params']['orderBy']);},
+
+                'randomize'=>function() use(&$complete_query, &$payload) {
+                        $complete_query = $complete_query
+                        .'->orderByRaw("RAND()")';
+                        unset($payload['params']['randomize']);
+                },
+                'search'=>function() use(&$complete_query, &$payload){
+                        $split_query = explode(',', $payload['params']['search'][0]);
+                        $search_key = $split_query[0];
+                        $search_words = explode(' ', $split_query[1]);
+                        foreach($search_words as $search_word){
+                            $complete_query = $complete_query.'->orWhere("'.$search_key.'","LIKE","%'.$search_word.'%")';
+                        }
+                        unset($payload['params']['search']);
+                        },
+            ];
+            unset($payload['params']['table']);
+            foreach($payload['params'] as $param_name =>$param_value){
+                (isset($query_params[$param_name]))? $query_params[$param_name]():'';
             }
-            if(isset($payload['params']['search'])){
-                $split_query = explode(',', $payload['params']['search'][0]);
-                $search_key = $split_query[0];
-                $search_words = explode(' ', $split_query[1]);
-                foreach($search_words as $search_word){
-                    $complete_query = $complete_query.'->orWhere("'.$search_key.'","LIKE","%'.$search_word.'%")';
-                }
-                unset($payload['params']['search']);
                 
-            }
+          
             unset(
                 $payload['params']['table'],
                 $payload['params']['size'],
                 $payload['params']['offset']
             );
-
+            
             ($payload['user_id'] !== '')?
                 $complete_query = $complete_query.'->where("devless_user_id",'.$payload['user_id'].')':'';
                
