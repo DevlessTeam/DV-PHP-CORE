@@ -312,6 +312,7 @@
             (response.status_code != 625)?devless_main.coreLib.notify(response.message,0):'';
 
         });
+        SDK.queryParams = [];
         return this;
     }
 
