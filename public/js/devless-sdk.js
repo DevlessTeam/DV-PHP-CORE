@@ -384,7 +384,15 @@
         SDK.queryParams.where = [];
         SDK.queryParams.where.push(key+','+value);
         return this;
-    }
+    },
+    scriptEngine.random = function(){
+        SDK.queryParams.randomize = "1";
+        return this;
+    },
+    scriptEngine.param = function(key, value){
+        SDK.queryParams[key] = value;
+        return this;
+    },
     scriptEngine.signup = function() {
         var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
         actionUrl = (actionUrl != undefined)? actionUrl: '#';
