@@ -257,7 +257,7 @@ class DbHandler
     {
         $service_name = $payload['service_name'];
         $connector = $this->_connector($payload);
-        $queried_table_list = null;
+        $queried_table_list = null;$size_count = null;
         $db = \DB::connection('DYNAMIC_DB_CONFIG');
         $results = [];
         //check if table name is set
@@ -277,9 +277,10 @@ class DbHandler
                         $complete_query =
                         $complete_query.'->skip('.$payload['params']['offset'][0].')';},
 
-                'size'=>function() use(&$complete_query, &$payload){
+                'size'=>function() use(&$complete_query, &$payload, &$size_count){
                         $complete_query = $complete_query
-                        .'->take('.$payload['params']['size'][0].')';},
+                        .'->take('.$payload['params']['size'][0].')';
+                        $size_count = $payload['params']['size'][0];},
 
                 'related'=>function() use(&$complete_query, &$payload, &$queried_table_list){
                         $queried_table_list =$payload['params']['related'];
@@ -338,7 +339,7 @@ class DbHandler
                     }
                 }
             }
-            $count = $db->table($table_name)->count();
+            $count = ($size_count)? $size_count: $db->table($table_name)->count();
             if (isset($queried_table_list)) {
                 $related = function ($results) use ($queried_table_list, $service_name, $table_name, $payload) {
                     return $this->_get_related_data(
@@ -350,11 +351,11 @@ class DbHandler
                 };
                 $endOutput = [];
                 
-                
                 $complete_query = $complete_query.'
                     ->chunk($count, function($results) use (&$endOutput, $related) {
                         $endOutput =  $related($results);
                     });';
+
             } else {
                 $complete_query = 'return '.$complete_query.'->get();';
             }
