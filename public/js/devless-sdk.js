@@ -49,18 +49,17 @@
     devless_main.singleCourier = '';
     devless_main.components = [];
     devless_main.coreLib = {};
-    var generalErrorState = 0; 
+    devless_main.generalErrorState = 0; 
 
     devless_main.coreLib.notify = function(message, status) {
         _jql('.dv-notify').each(function() {
             this.textContent = message;
             this.style.display = 'block';
         })
-
-        if(status == 1) {
+        devless_main.generalErrorState = status;
+    	if(status == 1) {
             _jql('.dv-notify-success').each(function() {
                 this.style.display = 'block';
-                generalErrorState = 1;
             })
         } else if(status == 0 ) {
             _jql('.dv-notify-failed').each(function() {
@@ -174,19 +173,26 @@
                     numFields++;
                 }
             });
+            formCallback = function(){
+            	_jql.each(inputs, function(index, element){
+            		console.log(devless_main.generalErrorState);
+            		if(devless_main.generalErrorState == 1){
+            			element.value = '';	
+            		}
+            		
+            	})
+            }
             if(numFields == inputs.length-1){
-                callback(data);
+                callback(data, formCallback);
             } else {
                 var intvl = setInterval(function() {
                     if (numFields == inputs.length-1) {
                         clearInterval(intvl);
-                        callback(data);
+                        callback(data, formCallback);
                     }
                 }, 1);
 
             }
-            //clear all fields if no errors found
-            (generalErrorState)? element.value = '' :false;
         });
     }
 //get all tags
@@ -321,10 +327,11 @@
         return this;
     }
     scriptEngine.oneto = function(service, table) {
-        persist = function(storeData) {
+        persist = function(storeData, callback) {
             SDK.addData(service, table, storeData, function(response){
                 (response.status_code == 609)?devless_main.coreLib.notify(response.message,1):
                     devless_main.coreLib.notify(response.message,0);
+                    callback();
                  devless_main.init();
             })
 
@@ -366,12 +373,12 @@
         })
     }
     scriptEngine.oneof = function( service, table ) {
-        update = function( data ) {
+        update = function( data, callback ) {
             if( data.id == undefined ) { throw ` id could not be found in the form. Try adding <input type="hidden" name="id" /> to the update form ` }
             SDK.updateData( service, table,"id", data.id, data, function( response ) {
                 (response.status_code == 619)?devless_main.coreLib.notify(response.message,1):
                     devless_main.coreLib.notify(response.message,0);
-
+                callback()   
                 devless_main.init();
             });
         }
@@ -394,7 +401,7 @@
     scriptEngine.signup = function() {
         var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
         actionUrl = (actionUrl != undefined)? actionUrl: '#';
-        register = function(record) {
+        register = function(record, callback) {
             SDK.call('devless', 'signUp', [ record['email'], record['password'], record['username'], record['phonenumber'],
                 record['firstname'], record['lastname'] ], function(response){
                 if( response.payload.result.message == undefined ) {
@@ -404,6 +411,7 @@
                 } else {
                     devless_main.coreLib.notify(response.payload.result.message)
                 }
+                callback();
             });
         }
         devless_main.coreLib.form(devless_main.singleCourier, register);
@@ -412,7 +420,7 @@
     scriptEngine.signin = function(record) {
         var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
         actionUrl = (actionUrl != undefined)? actionUrl: '#';
-        login = function(record) {
+        login = function(record, callback) {
             SDK.call('devless', 'login', [record['username'], record['email'], record['phonenumber'],
                 record['password']], function(response){
                 if(response.payload.result !== false) {
@@ -422,6 +430,7 @@
                 } else{
                     devless_main.coreLib.notify("Login failed");
                 }
+                callback();
             });
         }
         devless_main.coreLib.form(devless_main.singleCourier, login);
@@ -456,7 +465,7 @@
             }
         })
 
-        var updateScript = function(record) {
+        var updateScript = function(record, callback) {
             SDK.call('devless', 'updateProfile', [ record['email'], record['password'], record['username'], record['phonenumber'],
                 record['firstname'], record['lastname'] ], function(response){
                 if(response.payload.result == true ) {
@@ -465,6 +474,7 @@
                 } else {
                     devless_main.coreLib.notify('Profile could not be updated');
                 }
+                callback();
 
             });
         }
