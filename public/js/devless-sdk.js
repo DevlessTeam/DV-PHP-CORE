@@ -49,6 +49,7 @@
     devless_main.singleCourier = '';
     devless_main.components = [];
     devless_main.coreLib = {};
+    var generalErrorState = 0; 
 
     devless_main.coreLib.notify = function(message, status) {
         _jql('.dv-notify').each(function() {
@@ -59,6 +60,7 @@
         if(status == 1) {
             _jql('.dv-notify-success').each(function() {
                 this.style.display = 'block';
+                generalErrorState = 1;
             })
         } else if(status == 0 ) {
             _jql('.dv-notify-failed').each(function() {
@@ -163,7 +165,7 @@
                         numFields++;
                     }, false)
                     reader.onerror = function(e) {
-                        console.error(e);
+                        devless_main.coreLib.notify(e,0);
                     };
                     reader.readAsDataURL(element.files[0]);
                 }
@@ -171,24 +173,20 @@
                     data[element.name] = element.value;
                     numFields++;
                 }
-                element.value = '';
             });
-            console.log(numFields, inputs.length-1);
             if(numFields == inputs.length-1){
                 callback(data);
-                console.log("callback from if:", callback)
             } else {
                 var intvl = setInterval(function() {
                     if (numFields == inputs.length-1) {
                         clearInterval(intvl);
                         callback(data);
-                        console.log("calllback from else",callback)
                     }
                 }, 1);
 
             }
-
-
+            //clear all fields if no errors found
+            (generalErrorState)? element.value = '' :false;
         });
     }
 //get all tags
@@ -327,7 +325,7 @@
             SDK.addData(service, table, storeData, function(response){
                 (response.status_code == 609)?devless_main.coreLib.notify(response.message,1):
                     devless_main.coreLib.notify(response.message,0);
-                // devless_main.init();
+                 devless_main.init();
             })
 
         }
