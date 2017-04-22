@@ -290,6 +290,9 @@
     scriptEngine.bindToDelete = function(template, id, service, table) {
         template.find('.dv-delete').each(function(){
             this.onclick = function(){
+            	if(!confirm("Are you sure you want to delete")){
+            		return false;
+            	}
                 SDK.deleteData(service, table, "id", id, function(response){
                     (response.status_code == 636)?devless_main.coreLib.notify(response.message,1):
                         devless_main.coreLib.notify(response.message,0);
