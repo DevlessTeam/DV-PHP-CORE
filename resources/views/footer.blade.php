@@ -59,7 +59,18 @@ Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
 <script src="{{ Request::secure(Request::root()).'/js/ace/mode-php.js' }}" type="text/javascript" ></script>
 <script src="{{ Request::secure(Request::root()).'/js/ace/jquery-ace.min.js' }}" type="text/javascript" ></script>
 @endif
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+function copyToBoard(text){
+	prompt("Ctrl/CMD+c to copy", text);
+}
+</script>
+
 @include('notifier')
 </body>
 
 </html>
+	

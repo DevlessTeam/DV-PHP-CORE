@@ -137,16 +137,16 @@
       </div>
       <div class="modal-body">
                     <ul class="nav nav-tabs" id="options-tab">
-			  <li><a data-target="#web" data-toggle="tab">Web</a></li>
-			  <li><a data-target="#android" data-toggle="tab">Android</a></li>
-			  <li><a data-target="#ios" data-toggle="tab">IOS</a></li>
+        <li><a data-target="#web" data-toggle="tab">Web</a></li>
+        <li><a data-target="#android" data-toggle="tab">Android</a></li>
+        <li><a data-target="#ios" data-toggle="tab">IOS</a></li>
                           <li><a data-target="#raw" data-toggle="tab">Raw</a></li>
-			</ul>
+      </ul>
 
-			<div class="tab-content">
+      <div class="tab-content">
                             <div class="tab-pane active" id="web">
                                  <pre>
-<code class="language-markup"><xmp style="word-wrap: break-word;
+<code class="language-markup"><xmp style="display: inline;
 ">
 <script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="{{$app->token}}"></script>
 
@@ -154,11 +154,12 @@
                                 
                             </div>
                             <div class="tab-pane" id="android"><center>NA</center></div>
-			  <div class="tab-pane" id="ios"><center>NA</center></div>
+        <div class="tab-pane" id="ios"><center>NA</center></div>
                                   <div class="tab-pane" id="raw"><center>
-                                          Domain: 
+                                          Domain URL: {{URL::to('/')}}<br>
+                                          Token: {{$app->token}}
                               </center></div>
-			</div>
+      </div>
       </div>
       
     </div>
