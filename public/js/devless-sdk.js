@@ -335,7 +335,7 @@
                 (response.status_code == 609)?devless_main.coreLib.notify(response.message,1):
                     devless_main.coreLib.notify(response.message,0);
                     callback();
-                 devless_main.init();
+                 //devless_main.init();
             })
 
         }
