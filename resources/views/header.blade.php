@@ -44,7 +44,7 @@
           <!--toggle button start-->
           <a class="toggle-btn"><i class="fa fa-outdent"></i></a>
           <br>
-          <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#quick-guide" style="margin-left: 67%"><i class="fa fa-book"></i> Quick Guide</button>
+          <button class="btn btn-sm btn-warning pull-right" data-toggle="modal" data-target="#quick-guide" style="margin-right: 15.5%"><i class="fa fa-book"></i> Quick Guide</button>
           <!--toggle button end-->
         </div>
         <!-- header section end-->
@@ -74,7 +74,7 @@
                    </div>
                </div>
            </div>
-       </div>   
+       </div>
 @endif
 
 <div id="sample-frontend" style="display: none">
@@ -103,7 +103,7 @@
 <table>
   <tr>
     <th>Name</th>
-    <th>Email</th> 
+    <th>Email</th>
     <th>Location</th>
     <th>Options</th>
   </tr>
@@ -111,13 +111,13 @@
   <tbody class="dv-get-all:addressbook:addresses">
   <tr>
     <td class="var-name">...</td><!-- Prefixing the fields with var will render them on screen eg: var-name -->
-    <td class="var-email">...</td> 
+    <td class="var-email">...</td>
     <td class="var-location">...</td>
     <td>
-        <button class="dv-update">update</button>
+        <button class="dv-update">Update</button>
         <button class="dv-delete">Delete</button>
     </td>
-  </tr> 
+  </tr>
   </tbody>
 </table>
 
