@@ -401,10 +401,11 @@ class DevlessHelper extends Helper
 
         $email = (isset($payload['email']))?$payload['email']:'';
         $phone_number = (isset($payload['phone_number']))?$payload['phone_number']:'';
-        $existing_users =  \DB::table('users')->orWhere('username', $username)
-                ->orWhere('email', $email)
-                ->orWhere('phone_number', $phone_number)->get();
 
+        $existing_users =  \DB::table('users')->orWhere('username', $username)->whereNotIn('username', [''])
+                ->orWhere('email', $email)->whereNotIn('email', [''])
+                ->orWhere('phone_number', $phone_number)->whereNotIn('phone_number', [''])
+                ->get();
         if ($existing_users != null) {
             return Response::respond(1001, "Seems User already exists");
         }
