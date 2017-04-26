@@ -401,10 +401,11 @@ class DevlessHelper extends Helper
 
         $email = (isset($payload['email']))?$payload['email']:'';
         $phone_number = (isset($payload['phone_number']))?$payload['phone_number']:'';
-        $existing_users =  \DB::table('users')->orWhere('username', $username)
-                ->orWhere('email', $email)
-                ->orWhere('phone_number', $phone_number)->get();
 
+        $existing_users =  \DB::table('users')->orWhere('username', $username)->whereNotIn('username', [''])
+                ->orWhere('email', $email)->whereNotIn('email', [''])
+                ->orWhere('phone_number', $phone_number)->whereNotIn('phone_number', [''])
+                ->get();
         if ($existing_users != null) {
             return Response::respond(1001, "Seems User already exists");
         }
@@ -434,7 +435,7 @@ class DevlessHelper extends Helper
 
             $prepared_token = $this->set_session_token($token_payload, $user->id);
             $profile = \DB::table('users')->where('id', $user->id)
-                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email'])
+                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email', 'role'])
                 ->first();
             $user_obj = [
                 'profile' => $profile,
@@ -470,7 +471,8 @@ class DevlessHelper extends Helper
                     'status',
                     'created_at',
                     'updated_at',
-                    'remember_token'
+                    'remember_token',
+                    'role'
                 )
                 ->first();
 
@@ -520,7 +522,7 @@ class DevlessHelper extends Helper
 
                 $prepared_token = $this->set_session_token($token_payload, $user_data->id);
                 $profile = \DB::table('users')->where('id', $user_data->id)
-                    ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email'])
+                    ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email', 'role'])
                     ->first();
                 $user_obj = [
                     'profile' => $profile,
@@ -570,7 +572,7 @@ class DevlessHelper extends Helper
 
             if ($user::where('id', $token['id'])->update($payload)) {
                 return \DB::table('users')->where('id', $token['id'])
-                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email'])
+                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email', 'role'])
                 ->first();
             }
         }
