@@ -116,8 +116,8 @@ window.onload(function() {
     var module_table;
 
     $(window).load(function() {
-        
-        /* Handles Service and table name build when view data is click from the Service Panel */        
+
+        /* Handles Service and table name build when view data is click from the Service Panel */
         if ($('#service option:selected').val() != '' && $('#table_name option:selected').val() != '') {
             var tb_name = $('#service option:selected').text() + '_' + $('#table_name option:selected').text();
             module_name = $('#service option:selected').text();
@@ -147,7 +147,7 @@ window.onload(function() {
     $('#service').change(function() {
         module_id = $('#service').val();
         module_name = $('#service option:selected').text();
-        
+
         $('#table_name').find('option').remove().end().append('<option disabled selected value> -- select a table -- </option>');
         $.get('/datatable/'+module_id, function(data) {
             var tables = data;
@@ -187,7 +187,7 @@ window.onload(function() {
             $('#table_body').append(table_bd);
         }
 
-        Datatable = $('table').DataTable();
+        Datatable = $('#dataOne').DataTable();
     }
 
     // Creation of table headers
@@ -208,7 +208,7 @@ window.onload(function() {
                 table_head += '<th>'+v.toUpperCase()+'</th>';
             }
         });*/
-        
+
         table_head += '</tr>';
         $('#table_head').append(table_head);
 
@@ -243,8 +243,8 @@ window.onload(function() {
 
     // Handles the form creation with data when a row is clicked
     $(document).on('click', '#dtRow', function () {
-        // grab row id 
-        element_id = $(this).find('tr').context._DT_RowIndex;  
+        // grab row id
+        element_id = $(this).find('tr').context._DT_RowIndex;
 
         c = $(this).find('td').map(function(){
             return $(this).html();
@@ -265,7 +265,7 @@ window.onload(function() {
         $('form').submit(function(e) {
           e.preventDefault();
           payload = $(this).serializeObject();
-          
+
           // Grabs the last id in the table & increases it
           if(Datatable.data().length === 0){
                 last_id = 0;
@@ -301,7 +301,7 @@ window.onload(function() {
                 break;
             case "Update":
                 var info = {resource:[{name:module_table, params: [{where: "id,"+c[0], data:[payload]}]}]};
-                
+
                 // Grab id from the row since it doesn't need to be changed during update
                 update_array = [Datatable.row(element_id).data()[0]];
                 // Push data into array for the row to be updated
