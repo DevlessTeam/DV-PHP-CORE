@@ -435,7 +435,7 @@ class DevlessHelper extends Helper
 
             $prepared_token = $this->set_session_token($token_payload, $user->id);
             $profile = \DB::table('users')->where('id', $user->id)
-                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email'])
+                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email', 'role'])
                 ->first();
             $user_obj = [
                 'profile' => $profile,
@@ -471,7 +471,8 @@ class DevlessHelper extends Helper
                     'status',
                     'created_at',
                     'updated_at',
-                    'remember_token'
+                    'remember_token',
+                    'role'
                 )
                 ->first();
 
@@ -521,7 +522,7 @@ class DevlessHelper extends Helper
 
                 $prepared_token = $this->set_session_token($token_payload, $user_data->id);
                 $profile = \DB::table('users')->where('id', $user_data->id)
-                    ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email'])
+                    ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email', 'role'])
                     ->first();
                 $user_obj = [
                     'profile' => $profile,
@@ -571,7 +572,7 @@ class DevlessHelper extends Helper
 
             if ($user::where('id', $token['id'])->update($payload)) {
                 return \DB::table('users')->where('id', $token['id'])
-                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email'])
+                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email', 'role'])
                 ->first();
             }
         }
