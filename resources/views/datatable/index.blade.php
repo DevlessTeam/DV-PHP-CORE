@@ -24,6 +24,21 @@ td {
     text-overflow: ellipsis;
 }
 
+.loader {
+    border: 16px solid rgba(0,0,0,.5); /* Light grey */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+    border-top: 16px solid #3498db;
+    border-bottom: 16px solid #3498db;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 #dtRow {
     cursor: pointer;
 }
@@ -59,8 +74,9 @@ td {
             </div>
         </div>
 
-        <div class="col-sm-12">
-            <section class="panel"></section>
+        <div class="col-sm-12" id="loader">
+            <!-- <div class="loader col-md-offset-5" style="margin-top: 50px;"></div> -->
+            <!-- <section class="panel"></section> -->
         </div>
     </div>
 </div>
@@ -186,7 +202,7 @@ window.onload(function() {
             table_bd += '</tr>';
             $('#table_body').append(table_bd);
         }
-
+        $('.loader').remove();
         Datatable = $('#dataOne').DataTable();
     }
 
@@ -202,13 +218,6 @@ window.onload(function() {
             }
         }
 
-        /*metas.map((v, i) => {
-            if (v !== 'devless_user_id'){
-                header.push(v)
-                table_head += '<th>'+v.toUpperCase()+'</th>';
-            }
-        });*/
-
         table_head += '</tr>';
         $('#table_head').append(table_head);
 
@@ -218,6 +227,7 @@ window.onload(function() {
     // Building of table
     function navOption(data) {
         entries = data;
+        $('#loader').append('<div class="loader col-md-offset-5" style="margin-top: 50px;"></div><section class="panel"></section>');
         buildHtmlTable();
     }
 
