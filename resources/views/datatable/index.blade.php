@@ -131,15 +131,13 @@ window.onload(function() {
 
     // Initiate table build
     function tableCall(table_entries) {
-        $.get('/datatable/'+table_entries+'/metas', function(response){
-            //delete response[1];
-            metas = response;
-        });
+        $.when($.get('/datatable/'+table_entries+'/metas')).done(function(x){
+          metas = x;
+        })
 
         $.get('/datatable/'+table_entries+'/entries', function(resp) {
             $('#addbtn').prop("disabled", false);
             navOption(resp);
-
         });
     }
 
