@@ -44,7 +44,7 @@
           <!--toggle button start-->
           <a class="toggle-btn"><i class="fa fa-outdent"></i></a>
           <br>
-          <button class="btn btn-sm btn-warning pull-right" data-toggle="modal" data-target="#quick-guide" style="margin-right: 15.5%"><i class="fa fa-book"></i> Quick Guide</button>
+          <button class="btn btn-sm btn-warning pull-right" data-toggle="modal" data-target="#quick-guide" style="margin-right: 20%"><i class="fa fa-book"></i> Quick Guide</button>
           <!--toggle button end-->
         </div>
         <!-- header section end-->
