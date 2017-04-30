@@ -59,7 +59,7 @@ td {
             </div>
         </div>
 
-        <div class="col-sm-12">
+        <div class="col-sm-12" id="loader">
             <section class="panel"></section>
         </div>
     </div>
@@ -131,15 +131,13 @@ window.onload(function() {
 
     // Initiate table build
     function tableCall(table_entries) {
-        $.get('/datatable/'+table_entries+'/metas', function(response){
-            //delete response[1];
-            metas = response;
-        });
+        $.when($.get('/datatable/'+table_entries+'/metas')).done(function(x){
+          metas = x;
+        })
 
         $.get('/datatable/'+table_entries+'/entries', function(resp) {
             $('#addbtn').prop("disabled", false);
             navOption(resp);
-
         });
     }
 
@@ -186,7 +184,7 @@ window.onload(function() {
             table_bd += '</tr>';
             $('#table_body').append(table_bd);
         }
-
+        $('.loader').remove();
         Datatable = $('#dataOne').DataTable();
     }
 
@@ -201,13 +199,6 @@ window.onload(function() {
                 table_head += '<th>'+metas[i].toUpperCase()+'</th>';
             }
         }
-
-        /*metas.map((v, i) => {
-            if (v !== 'devless_user_id'){
-                header.push(v)
-                table_head += '<th>'+v.toUpperCase()+'</th>';
-            }
-        });*/
 
         table_head += '</tr>';
         $('#table_head').append(table_head);
