@@ -47,9 +47,10 @@ class ScriptHandler
                     'onQuery'  => 'GET',
                     'onUpdate' => 'PATCH',
                     'onDelete' => 'DELETE',
-                    'onCreate' => 'POST'
+                    'onCreate' => 'POST',
+                    'all'      => 'all'
                 ];
-                if($auth_actions[$expected_action] !== $actual_action){return;}
+                if($auth_actions[$expected_action] !== $actual_action && $auth_actions[$expected_action] != "all"){return;}
 
                 $devlessHelper->serviceAuth($service_name, $auth_table, $affected_tables, $accessed_table);
         };

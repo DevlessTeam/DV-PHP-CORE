@@ -902,6 +902,7 @@ class DevlessHelper extends Helper
     public static function did_custom_login($toke_reference, $token)
     {
         $ds = new DataStore();   
+
         if($ds->getDump($toke_reference) == $token) {
             return true;
         }
