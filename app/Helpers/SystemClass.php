@@ -1,8 +1,8 @@
 <?php
 
-
-use App\Helpers\DevlessHelper as DVH;
+use App\Helpers\Helper;
 use App\Helpers\DataStore as DS;
+use App\Helpers\DevlessHelper as DVH;
 use App\Http\Controllers\ServiceController as service;
 
 /**
@@ -187,5 +187,28 @@ class devless
         $service = new service();
         $output = DS::service($serviceName, $table, $service)->where('id', $id)->delete();
         return $output;
+    }
+
+
+    /**
+     * @param $serviceName
+     * @param $tableName
+     * @param $identifier
+     * @param $password
+     * @return array
+     * @ACL public
+     */
+    public function customLogin($serviceName, $authName, $identifier, $password)
+    {
+        $ds = new DS();
+        $user_details = $ds->service($serviceName, $authName)->where($identifier[0], $identifier[1])->getData()['payload']['results'][0];
+        $valid_user = Helper::compare_hash($password, $user_details->password);
+        if($valid_user) {
+            $token = substr(md5(uniqid(rand(1,6))), 0, 300);    
+             $token_reference = $serviceName.'_'.$authName.'_'.$token;    
+            $ds->setDump($token_reference, $token);    
+            return ['id' => $user_details->id,'token' => $token ];
+        }
+        return false;
     }
 }
