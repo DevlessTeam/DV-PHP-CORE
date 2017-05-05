@@ -20,7 +20,6 @@ class ScriptHandler
      */
     public function run_script($Dvresource, $payload)
     {
-
         $service = new Service();
         $rules = new Rules();
         $rules->requestType($payload);
@@ -35,6 +34,7 @@ class ScriptHandler
             'user_id' => $user_cred['id'],
             'user_token' => $user_cred['token'],
             'requestType' => $Dvresource,
+            'access_rights' => $payload['resource_access_right']
         ];
 
         $EVENT['params'] = (isset($payload['params'][0]['field'])) ? $payload['params'][0]['field'][0] : [];
@@ -61,7 +61,7 @@ $payload[script];
 EOT;
         $_____service_name = $payload['service_name'];
         $_____init_vars = $payload['script_init_vars'];
-        $exec = function () use ($code, $rules, $EVENT, $_____service_name, $_____init_vars, $payload, $applyCustomAuth) {
+        $exec = function () use ($code, $rules, &$EVENT, $_____service_name, $_____init_vars, $payload, $applyCustomAuth) {
 
             //store script params temporally
             $_____midRules = $rules;
@@ -75,8 +75,10 @@ EOT;
             $EVENT = $_____mindEvent;
             $applyCustomAuth = $_____applyCustomAuth;
             extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
-            
+            $rules->accessRights = $EVENT['access_rights'];
             eval($code);
+            $EVENT['access_rights'] = $rules->accessRights;
+            
             foreach ($EVENT['params'] as $key => $value) {
                 $EVENT['params'][$key] = ${'input_'.$key};
             }
@@ -90,10 +92,10 @@ EOT;
             $payload['params'][0]['field'][0] = $params;
         }
         ob_end_clean();
-
+        
+        $payload['resource_access_right'] = $EVENT['access_rights'];
         $results['payload'] = $payload;
         $results['resource'] = $Dvresource;
-
         return $results;
     }
 }

@@ -884,7 +884,12 @@ class DevlessHelper extends Helper
      * @return Exception
      */
     public static function serviceAuth($service_name, $auth_table, $affected_tables, $accessed_table) {
-        $token = (isset(getallheaders()['devless-user-token']))?getallheaders()['devless-user-token']:"NA";
+        $headers = [];
+        foreach(getallheaders() as $header_key => $header_value)
+        {
+            $headers[strtolower($header_key)] = $header_value;
+        }
+        $token = (isset($headers['devless-user-token']))?$headers['devless-user-token']:"NA";
         
         $token_reference = $service_name.'_'.$auth_table.'_'.$token;    
 

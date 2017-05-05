@@ -6,20 +6,33 @@ use App\Helpers\DevlessHelper;
 class Rules
 {
     private $assertion = [
-        "elseWhenever" => false,
-        "whenever"     => false,
-        "otherwise"   => false,
+        'elseWhenever' => false,
+        'whenever'     => false,
+        'otherwise'   => false,
     ];
     private $called = [
-        "elseWhenever" => false,
-        "whenever"     => false,
-        "otherwise"   => false,
+        'elseWhenever' => false,
+        'whenever'     => false,
+        'otherwise'   => false,
     ];
     public $results = '';
     private $answered = false;
     private $execOrNot = true;
     private $actionType = '';
     private $tableName = '';
+    private $methodAction = [
+        'GET' => 'query', 
+        'POST' => 'create',
+        'PATCH' => 'update',
+        'DELETE' => 'delete'
+    ];
+    public $accessRights = [
+        'query'  =>  3,
+        'create' => 3,
+        'update' => 3,
+        'delete' => 3
+    ];
+
     public function requestType($requestPayload)
     {
         $tableName = DevlessHelper::get_tablename_from_payload($requestPayload);
@@ -112,12 +125,61 @@ class Rules
         $this->execOrNot = true;
         return $this;
     }
+    /**
+     * check if on intended table
+     *
+     * @param  string $expectedTableName
+     * @return mixed|string
+     */
     public function onTable($expectedTableName)
     {
         $this->tableName = (is_array($this->tableName))? $this->tableName[0]:$this->tableName;
         $this->execOrNot = ($this->tableName == $expectedTableName);
         return $this;
     }
+
+    /**
+     * Convert table access right to authenticated
+     *
+     * @return instance
+     */
+    public function authenticateUser()
+    {
+        $action = $this->methodAction[$this->actionType];
+        $this->accessRights[$action] = 2;
+        return $this;
+    }
+
+    /**
+     * Lock down table access
+     *
+     * @return instance
+     */
+    public function lockDownTable()
+    {
+        $action = $this->methodAction[$this->actionType];
+        $this->accessRights[$action] = 0;
+        return $this;
+    }
+
+    /**
+     * Open Up table access to everyone 
+     *
+     * @return instance
+     */
+    public function providePublicAccess()
+    {
+        $action = $this->methodAction[$this->actionType];
+        $this->accessRights[$action] = 1;
+        return $this;
+    }
+
+    /**
+     * Stop execcution with an exception
+     *
+     * @param  null $msg
+     * @return mixed|string
+     */
     public function succeedWith($msg = null)
     {
         if (!$this->execOrNot) {
@@ -128,6 +190,13 @@ class Rules
         };
         return $this->executor($evaluator);
     }
+
+    /**
+     * Stop execution with an exception
+     *
+     * @param  null $msg
+     * @return mixed|string
+     */
     public function failWith($msg = null)
     {
         if (!$this->execOrNot) {
@@ -141,7 +210,7 @@ class Rules
     /**
      * Call on an ActionClass
      *
-     * @param  $serviece
+     * @param  $service
      * @param  $method
      * @param  null    $params
      * @return mixed|string

@@ -201,7 +201,11 @@ class devless
     public function customLogin($serviceName, $authName, $identifier, $password)
     {
         $ds = new DS();
-        $user_details = $ds->service($serviceName, $authName)->where($identifier[0], $identifier[1])->getData()['payload']['results'][0];
+        $user_details = $ds->service($serviceName, $authName)->where($identifier[0], $identifier[1])->getData()['payload']['results'];
+        if(!$user_details) {
+            Helper::interrupt(628);
+        }
+        $user_details = $user_details[0];
         $valid_user = Helper::compare_hash($password, $user_details->password);
         if($valid_user) {
             $token = substr(md5(uniqid(rand(1,6))), 0, 300);    
@@ -211,4 +215,5 @@ class devless
         }
         return false;
     }
+
 }
