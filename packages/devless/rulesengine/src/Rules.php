@@ -85,12 +85,13 @@ class Rules
      */
     public function whenever($assert)
     {
+
         if (!$this->execOrNot) {
             return $this;
         }
         $this->assertion['whenever'] = $assert;
         $this->called['whenever'] = true;
-        $this->execOrNot = true;
+        $this->execOrNot = ($assert);
         return $this;
     }
     /**
@@ -101,12 +102,15 @@ class Rules
      */
     public function elseWhenever($assert)
     {
+        $this->execOrNot = $this->assertion['otherwise'] =
+            (!$this->assertion['whenever']) ? : false;
+         
         if (!$this->execOrNot) {
             return $this;
         }
         $this->assertion['elseWhenever'] = $assert;
         $this->called['elseWhenever'] = true;
-        $this->execOrNot = true;
+        $this->execOrNot = ($assert);
         return $this;
     }
     /**
@@ -116,13 +120,14 @@ class Rules
      */
     public function otherwise()
     {
+        $this->execOrNot = $this->assertion['otherwise'] =
+            (!$this->assertion['elseWhenever'] && !$this->assertion['whenever']) ? : false;
+        
         if (!$this->execOrNot) {
             return $this;
         }
-        $this->assertion['otherwise'] =
-            (!$this->assertion['elseWhenever'] && !$this->assertion['whenever']) ? : false;
         $this->called['otherwise'] = true;
-        $this->execOrNot = true;
+        $this->execOrNot = $this->assertion['otherwise'];
         return $this;
     }
     /**
@@ -133,6 +138,11 @@ class Rules
      */
     public function onTable($expectedTableName)
     {
+
+        if (!$this->execOrNot) {
+            return $this;
+        }
+
         $this->tableName = (is_array($this->tableName))? $this->tableName[0]:$this->tableName;
         $this->execOrNot = ($this->tableName == $expectedTableName);
         return $this;
@@ -145,6 +155,7 @@ class Rules
      */
     public function authenticateUser()
     {
+
         if (!$this->execOrNot) {
             return $this;
         }
@@ -279,6 +290,6 @@ class Rules
         ) {
             $evaluator();
         }
-        return ($this->called['otherwise'])? $this->results : $this;
+        return $this;
     }
 }
