@@ -36,7 +36,8 @@ class devless
         $phone_number = null,
         $first_name = null,
         $last_name = null,
-        $remember_token = null
+        $remember_token = null,
+        $role = null
     ) {
     
         $payload = get_defined_vars();
@@ -188,32 +189,4 @@ class devless
         $output = DS::service($serviceName, $table, $service)->where('id', $id)->delete();
         return $output;
     }
-
-
-    /**
-     * @param $serviceName
-     * @param $tableName
-     * @param $identifier
-     * @param $password
-     * @return array
-     * @ACL public
-     */
-    public function customLogin($serviceName, $authName, $identifier, $password)
-    {
-        $ds = new DS();
-        $user_details = $ds->service($serviceName, $authName)->where($identifier[0], $identifier[1])->getData()['payload']['results'];
-        if(!$user_details) {
-            Helper::interrupt(628);
-        }
-        $user_details = $user_details[0];
-        $valid_user = Helper::compare_hash($password, $user_details->password);
-        if($valid_user) {
-            $token = substr(md5(uniqid(rand(1,6))), 0, 300);    
-             $token_reference = $serviceName.'_'.$authName.'_'.$token;    
-            $ds->setDump($token_reference, $token);    
-            return ['id' => $user_details->id,'token' => $token ];
-        }
-        return false;
-    }
-
 }
