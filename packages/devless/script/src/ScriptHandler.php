@@ -42,38 +42,25 @@ class ScriptHandler
         $devlessHelper = new DevlessHelper();
         $actual_action = $EVENT['method'];
 
-        $applyCustomAuth = function($service_name, $auth_table, $affected_tables, $expected_action) use($devlessHelper, $actual_action, $accessed_table) {
-                $auth_actions = [
-                    'onQuery'  => 'GET',
-                    'onUpdate' => 'PATCH',
-                    'onDelete' => 'DELETE',
-                    'onCreate' => 'POST',
-                    'all'      => 'all'
-                ];
-                if($auth_actions[$expected_action] !== $actual_action && $auth_actions[$expected_action] != "all"){return;}
-
-                $devlessHelper->serviceAuth($service_name, $auth_table, $affected_tables, $accessed_table);
-        };
-
         //NB: position matters here
         $code = <<<EOT
 $payload[script];
 EOT;
         $_____service_name = $payload['service_name'];
         $_____init_vars = $payload['script_init_vars'];
-        $exec = function () use ($code, $rules, &$EVENT, $_____service_name, $_____init_vars, $payload, $applyCustomAuth) {
+        $exec = function () use ($code, $rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {
 
             //store script params temporally
             $_____midRules = $rules;
             $_____mindEvent = $EVENT;
-            $_____applyCustomAuth = $applyCustomAuth;
+            
             //get declared vars
             $declarationString = $_____init_vars ;
             eval($declarationString);
             //restore script params
             $rules = $_____midRules;
             $EVENT = $_____mindEvent;
-            $applyCustomAuth = $_____applyCustomAuth;
+            
             extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
             $rules->accessRights = $EVENT['access_rights'];
             eval($code);

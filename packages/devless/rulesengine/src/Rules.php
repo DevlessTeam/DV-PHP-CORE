@@ -145,6 +145,9 @@ class Rules
      */
     public function authenticateUser()
     {
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $action = $this->methodAction[$this->actionType];
         $this->accessRights[$action] = 2;
         return $this;
@@ -157,6 +160,9 @@ class Rules
      */
     public function lockDownTable()
     {
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $action = $this->methodAction[$this->actionType];
         $this->accessRights[$action] = 0;
         return $this;
@@ -169,6 +175,9 @@ class Rules
      */
     public function providePublicAccess()
     {
+        if (!$this->execOrNot) {
+            return $this;
+        }
         $action = $this->methodAction[$this->actionType];
         $this->accessRights[$action] = 1;
         return $this;
