@@ -64,6 +64,7 @@ EOT;
             extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
             $rules->accessRights = $EVENT['access_rights'];
             eval($code);
+            
             $EVENT['access_rights'] = $rules->accessRights;
             
             foreach ($EVENT['params'] as $key => $value) {
