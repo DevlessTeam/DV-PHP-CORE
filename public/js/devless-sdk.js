@@ -410,9 +410,11 @@
                 if( response.payload.result.message == undefined ) {
                     SDK.setToken(response.payload.result['token']);
                     devless_main.coreLib.notify("signup was successful");
+                    devless_main.coreLib.notify(response.message,1);
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else {
                     devless_main.coreLib.notify(response.payload.result.message)
+                    devless_main.coreLib.notify(response.message,0);
                 }
                 callback();
             });
@@ -429,9 +431,11 @@
                 if(response.payload.result !== false) {
                     SDK.setToken(response.payload.result['token']);
                     devless_main.coreLib.notify("Log in successfully");
+                    devless_main.coreLib.notify(response.message,1);
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else{
                     devless_main.coreLib.notify("Login failed");
+                    devless_main.coreLib.notify(response.message,0);
                 }
                 callback();
             });
@@ -483,7 +487,7 @@
         }
         devless_main.coreLib.form(component, updateScript);
 
-    }
+    }	
     scriptEngine.logout = function() {
         devless_main.singleCourier.element.onclick = function() {
             var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
@@ -491,9 +495,11 @@
             SDK.call('devless', 'logout', [], function(response){
                 if(response.payload.result == true) {
                     devless_main.coreLib.notify('Logout was successful')
+                    devless_main.coreLib.notify(response.message,1);
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else {
                     devless_main.coreLib.notify('Sorry could not log you out')
+                    devless_main.coreLib.notify(response.message,0);
                 }
             })
         }
