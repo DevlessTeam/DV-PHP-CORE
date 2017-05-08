@@ -4,6 +4,7 @@ namespace Devless\Script;
 
 use Devless\RulesEngine\Rules;
 use App\Helpers\DevlessHelper;
+use App\Helpers\Helper;
 use App\Helpers\Messenger as messenger;
 use App\Http\Controllers\ServiceController as Service;
 
@@ -23,13 +24,13 @@ class ScriptHandler
         $service = new Service();
         $rules = new Rules();
         $rules->requestType($payload);
-        $user_cred['id'] = (isset($user_cred['id']))? $user_cred['id'] :'';
-        $user_cred['token'] = (isset($user_cred['token']))? $user_cred['token'] :'';
+        $user_cred = Helper::get_authenticated_user_cred(false);
+        $user_cred = (empty($user_cred))? ['id'=>'','token'=>'']:$user_cred;
         $accessed_table = DevlessHelper::get_tablename_from_payload($payload);
         //available internal params
         $EVENT = [
             'method' => $payload['method'],
-            'params' => '',
+            'params' => [],
             'script' => $payload['script'],
             'user_id' => $user_cred['id'],
             'user_token' => $user_cred['token'],
@@ -37,7 +38,15 @@ class ScriptHandler
             'access_rights' => $payload['resource_access_right']
         ];
 
-        $EVENT['params'] = (isset($payload['params'][0]['field'])) ? $payload['params'][0]['field'][0] : [];
+
+        if(isset($payload['params'][0]['field'])) {
+
+            $EVENT['params'] = $payload['params'][0]['field'][0];
+        } else if(isset($payload['params'][0]['params'][0]['data'][0])) {
+            $EVENT['params'] = $payload['params'][0]['params'][0]['data'][0];
+        } else if(isset($payload['params'][0])){
+            $EVENT['params'] = $payload['params'][0];
+        }
 
         $devlessHelper = new DevlessHelper();
         $actual_action = $EVENT['method'];
