@@ -487,7 +487,7 @@
         }
         devless_main.coreLib.form(component, updateScript);
 
-    }
+    }	
     scriptEngine.logout = function() {
         devless_main.singleCourier.element.onclick = function() {
             var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
