@@ -71,6 +71,7 @@ class Helper
         639 => 'Sorry RPC can only be processed over POST request',
         640 => 'Sorry no such related tables',
         641 => 'Something is wrong with your payload',
+        642 => 'No Such Rule Keyword',
         700 => 'Internal system error',
     ];
 
