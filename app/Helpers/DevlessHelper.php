@@ -915,5 +915,25 @@ class DevlessHelper extends Helper
 
     }
 
+    /**
+     * Check for closest word in an array 
+     * @param $word 
+     * @param $options
+     * @return string
+     */
+    public static function find_closest_word($word, $options)
+    {
+            $best_closesness = 1;
+            $closest_word = null;
+            foreach($options as $each_option) {
+                $levenshtein_count = levenshtein($word, $each_option);
+                if($levenshtein_count <= $best_closesness) {
+                    $closest_word = $each_option;
+                    $levenshtein_count = $best_closesness;
+                }
+            }
+            return $closest_word;
+    }
+
 
 }
