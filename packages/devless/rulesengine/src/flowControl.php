@@ -51,7 +51,7 @@ trait flowControl
     public function otherwise()
     {
         $this->execOrNot = $this->assertion['otherwise'] =
-            (!$this->assertion['elseWhenever'] && !$this->assertion['whenever']) ?: false;
+            (!$this->assertion['elseWhenever'] || !$this->assertion['whenever']) ?: false;
 
         if (!$this->execOrNot) {
             return $this;
