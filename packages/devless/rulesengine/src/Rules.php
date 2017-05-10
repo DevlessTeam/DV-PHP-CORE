@@ -45,12 +45,17 @@ class Rules
     public $beSureTo = null;
     public $lastly = null;
 
+    public $authenticateUser = null;
+    public $lockDownTable = null;
+    public $makeTablePublic = null;
+
     public function __construct()
     {
         $this->then = $this->also = 
         $this->firstly = $this->secondly = 
         $this->thirdly = $this->beSureTo = 
-        $this->lastly = $this;
+        $this->lastly = $this->authenticateUser = 
+        $this->lockDownTable = $this->makeTablePublic = $this;
     }
 
     public function requestType($requestPayload)

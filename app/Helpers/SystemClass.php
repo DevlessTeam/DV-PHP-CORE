@@ -154,11 +154,15 @@ class devless
      * @return mixed
      * @ACL public
      */
-    public function queryData($serviceName, $table)
+    public function queryData($serviceName, $table, $whereKey=null, $whereValue=null)
     {
         $service = new service();
-        $output = DS::service($serviceName, $table, $service)->related('*')->queryData();
-        return $output;
+        
+        $queryBuilder = ($whereKey && $whereValue)? DS::service($serviceName, $table, $service)
+            ->where($whereKey, $whereValue): DS::service($serviceName, $table, $service);
+
+        $output = $queryBuilder->related('*')->queryData();
+        return $output['payload']['results'];
 
     }
 
@@ -169,10 +173,10 @@ class devless
      * @return mixed
      * @ACL public
      */
-    public function updateData($serviceName, $table, $where_key, $where_value, $data)
+    public function updateData($serviceName, $table, $whereKey, $whereValue, $data)
     {
         $service = new service();
-        $output = DS::service($serviceName, $table, $service)->where($where_key, $where_value)->update($data);
+        $output = DS::service($serviceName, $table, $service)->where($whereKey, $whereValue)->update($data);
         return $output;
     }
 
