@@ -4,7 +4,6 @@ namespace Devless\RulesEngine;
 
 use App\Helpers\Helper;
 use App\Helpers\ActionClass;
-use App\Helpers\Response as Response;
 
 trait actions
 {
