@@ -193,4 +193,26 @@ class devless
         $output = DS::service($serviceName, $table, $service)->where('id', $id)->delete();
         return $output;
     }
+
+    /**
+     * @param $serviceName
+     * @param $table
+     * @param $id
+     * @return mixed
+     * @ACL private
+     */
+    public function getUserProfile($input)
+    {
+        if(is_array($input)){
+            $id = $input['id'];
+        } else {
+            $id = $input;
+        }
+        $profile = DB::table('users')->where('id', $id)->get();
+        if($profile) 
+        {
+            return (array)$profile[0];
+        }
+        return [];
+    }
 }
