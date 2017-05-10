@@ -3,6 +3,7 @@
 namespace Devless\RulesEngine;
 
 use App\Helpers\DevlessHelper;
+use App\Helpers\Helper;
 
 class Rules
 {
@@ -36,6 +37,22 @@ class Rules
         'delete' => 3,
     ];
 
+    public $then = null;
+    public $also = null;
+    public $firstly = null;
+    public $secondly = null;
+    public $thirdly = null;
+    public $beSureTo = null;
+    public $lastly = null;
+
+    public function __construct()
+    {
+        $this->then = $this->also = 
+        $this->firstly = $this->secondly = 
+        $this->thirdly = $this->beSureTo = 
+        $this->lastly = $this;
+    }
+
     public function requestType($requestPayload)
     {
         $tableName = DevlessHelper::get_tablename_from_payload($requestPayload);
@@ -44,6 +61,17 @@ class Rules
         $this->tableName = $tableName;
 
         return $this;
+    }
+
+    public function __call($method, $args)
+    {
+        if(!method_exists($this, $method))
+        {
+            $closest_method = 
+                DevlessHelper::find_closest_word($method, get_class_methods($this));
+            Helper::interrupt(642, 'There is no such method `'.$method.
+                '` perharps you meant '.$closest_method. '?');
+        }
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Devless\RulesEngine;
 
 trait fillers
 {
+
     /**
      * also filler statement.
      *
