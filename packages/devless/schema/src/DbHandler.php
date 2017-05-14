@@ -60,7 +60,8 @@ class DbHandler
         $db_action = (isset($this->dbActionAssoc[$request])) ? $this->dbActionAssoc[$request]
             : Helper::interrupt(607);
         $payload = $this->set_auth_id_if_required($db_action, $payload);
-        $dbActionName = $this->dbActionMethod[$request];
+
+    $dbActionName = $this->dbActionMethod[$request];
 
         return $this->$dbActionName($payload);
     }
@@ -633,7 +634,8 @@ class DbHandler
                         'email',
                         'phone_number',
                         'status',
-                        'phone_number'
+                        'phone_number',
+                        'role'
                     )
                     ->get();
                 $eachResult->related[$table] = $relatedData;
@@ -745,13 +747,15 @@ class DbHandler
         $service = new Service();
         $user_id = ($db_action != 'query') ? 1 : '';
         $access_type = $payload['resource_access_right'];
+
         $access_state = $service
             ->check_resource_access_right_type($access_type[$db_action]);
-
+         
         if ($access_state == true) {
             $user_cred = Helper::get_authenticated_user_cred($access_state);
             $user_id = $user_cred['id'];
         }
+        
         $payload['user_id'] = $user_id;
 
         return $payload;
