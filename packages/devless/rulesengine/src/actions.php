@@ -14,14 +14,19 @@ trait actions
      *
      * @return mixed|string
      */
-    public function onTable($expectedTableName)
+    public function onTable()
     {
+        $expectedTableNames = func_get_args();
         if (!$this->execOrNot) {
             return $this;
         }
-
+        if(!is_array($expectedTableNames)){
+            $tempTableList = [];
+            array_push($tempTableList, $expectedTableNames);
+            $expectedTableNames = $tempTableList;
+        }
         $this->tableName = (is_array($this->tableName)) ? $this->tableName[0] : $this->tableName;
-        $this->execOrNot = ($this->tableName == $expectedTableName);
+        $this->execOrNot = (in_array($this->tableName , $expectedTableNames));
 
         return $this;
     }
