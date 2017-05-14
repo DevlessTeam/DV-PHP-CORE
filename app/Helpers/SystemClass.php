@@ -139,7 +139,7 @@ class devless
      * @param $table
      * @param $fields
      * @return mixed
-     * @ACL public
+     * @ACL private
      */
     public function addData($serviceName, $table, $data)
     {
@@ -152,7 +152,7 @@ class devless
      * @param $serviceName
      * @param $table
      * @return mixed
-     * @ACL public
+     * @ACL private
      */
     public function queryData($serviceName, $table, $whereKey=null, $whereValue=null)
     {
@@ -171,7 +171,7 @@ class devless
      * @param $table
      * @param $id
      * @return mixed
-     * @ACL public
+     * @ACL private
      */
     public function updateData($serviceName, $table, $whereKey, $whereValue, $data)
     {
@@ -185,7 +185,7 @@ class devless
      * @param $table
      * @param $id
      * @return mixed
-     * @ACL public
+     * @ACL private
      */
     public function deleteData($serviceName, $table, $id)
     {
