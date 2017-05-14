@@ -14,8 +14,9 @@ trait actions
      *
      * @return mixed|string
      */
-    public function onTable($expectedTableNames)
+    public function onTable()
     {
+        $expectedTableNames = func_get_args();
         if (!$this->execOrNot) {
             return $this;
         }
