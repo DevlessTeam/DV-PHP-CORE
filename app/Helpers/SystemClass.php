@@ -203,6 +203,7 @@ class devless
      */
     public function getUserProfile($input)
     {
+        (empty($input))? Helper::interrupt(628):false;
         if(is_array($input)){
             $id = $input['id'];
         } else {
