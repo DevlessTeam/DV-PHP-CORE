@@ -128,6 +128,7 @@ window.onload(function() {
 
     var entries;
     var Datatable;
+    var metaForm;
 
     // Initiate table build
     function tableCall(table_entries) {
@@ -135,6 +136,7 @@ window.onload(function() {
 
         $.get('/datatable/'+table_entries+'/metas', function(res) {
             metas = res;
+            metaForm = metas;
             if (metas !== undefined) {
                 $.get('/datatable/'+table_entries+'/entries', function(resp) {
                     $('#addbtn').prop("disabled", false);
@@ -251,8 +253,8 @@ window.onload(function() {
       $(function modal() {
           $('#flash_msg').modal({show: true, backdrop: 'static'});
           $('#formData').html(" ");
-          for (var i = 2; i < metas.length; i++) {
-                $('#formData').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'" value="'+c[i-1]+'">');
+          for (var i = 2; i < metaForm.length; i++) {
+                $('#formData').append('<label for="'+metaForm[i]+'"><b>'+metaForm[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metaForm[i]+'" id="'+metaForm[i]+'" value="'+c[i-1]+'">');
           }
       });
       jQExtn();
@@ -351,8 +353,8 @@ window.onload(function() {
           $('#add_form').modal({show: true, backdrop: 'static'});
 
           $('#addform').html(" ");
-          for (var i = 2; i < metas.length; i++) {
-            $('#addform').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'">');
+          for (var i = 2; i < metaForm.length; i++) {
+            $('#addform').append('<label for="'+metaForm[i]+'"><b>'+metaForm[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metaForm[i]+'" id="'+metaForm[i]+'">');
           }
       });
       jQExtn();
