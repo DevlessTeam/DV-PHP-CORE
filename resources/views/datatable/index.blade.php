@@ -27,7 +27,6 @@ td {
 #dtRow {
     cursor: pointer;
 }
-
 </style>
 
 <div class="wrapper">
@@ -60,7 +59,7 @@ td {
             </div>
         </div>
 
-        <div class="col-sm-12 tab" id="loader">
+        <div class="col-sm-12" id="loader">
             <section class="panel"></section>
         </div>
     </div>
@@ -127,23 +126,19 @@ window.onload(function() {
     });
 
     var entries;
-    var Datatable;
-    var metaForm;
+    var metas;
+    let Datatable;
 
     // Initiate table build
     function tableCall(table_entries) {
-        var metas;
-
-        $.get('/datatable/'+table_entries+'/metas', function(res) {
-            metas = res;
-            metaForm = metas;
-            if (metas !== undefined) {
-                $.get('/datatable/'+table_entries+'/entries', function(resp) {
-                    $('#addbtn').prop("disabled", false);
-                    navOption(resp, metas);
-                })
-            }
+        $.when($.get('/datatable/'+table_entries+'/metas')).done(function(x){
+          metas = x;
         })
+
+        $.get('/datatable/'+table_entries+'/entries', function(resp) {
+            $('#addbtn').prop("disabled", false);
+            navOption(resp);
+        });
     }
 
     // Ajax to retrieve table names and append it to the DOM on module name change
@@ -175,16 +170,16 @@ window.onload(function() {
     });
 
     // Handle table creation with row & columns
-    function buildHtmlTable(data, metaData) {
+    function buildHtmlTable() {
         const table = '<table id="dataOne" cellspacing="0" width="100%" class="display compact"><thead id="table_head"></thead><tbody id="table_body"></tbody></table>';
         $('.panel').append(table);
-        var columns = addAllColumnHeaders(metaData);
+        var columns = addAllColumnHeaders(entries);
 
-        for(i = 0; i < data.length; i++) {
+        for(i = 0; i < entries.length; i++) {
             table_bd = '<tr id="dtRow">';
             for(j = 0; j < columns.length; j++) {
 
-                table_bd += '<td>'+data[i][columns[j]]+'</td>';
+                table_bd += '<td>'+entries[i][columns[j]]+'</td>';
             }
             table_bd += '</tr>';
             $('#table_body').append(table_bd);
@@ -194,13 +189,9 @@ window.onload(function() {
     }
 
     // Creation of table headers
-    function addAllColumnHeaders(metas) {
+    function addAllColumnHeaders(entries) {
         let table_head = '<tr>';
         let header = [];
-
-        if ( metas === undefined) {
-            alert('Please refresh your page. Xhr failed');
-        }
 
         for (i=0; i< metas.length; i++){
             if( metas[i] !== 'devless_user_id'){
@@ -216,9 +207,9 @@ window.onload(function() {
     }
 
     // Building of table
-    function navOption(data, metas) {
-        var entries = data;
-        buildHtmlTable(entries, metas);
+    function navOption(data) {
+        entries = data;
+        buildHtmlTable();
     }
 
     // Code snippet for converting form data into an object (key & value)
@@ -253,8 +244,8 @@ window.onload(function() {
       $(function modal() {
           $('#flash_msg').modal({show: true, backdrop: 'static'});
           $('#formData').html(" ");
-          for (var i = 2; i < metaForm.length; i++) {
-                $('#formData').append('<label for="'+metaForm[i]+'"><b>'+metaForm[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metaForm[i]+'" id="'+metaForm[i]+'" value="'+c[i-1]+'">');
+          for (var i = 2; i < metas.length; i++) {
+                $('#formData').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'" value="'+c[i-1]+'">');
           }
       });
       jQExtn();
@@ -353,8 +344,8 @@ window.onload(function() {
           $('#add_form').modal({show: true, backdrop: 'static'});
 
           $('#addform').html(" ");
-          for (var i = 2; i < metaForm.length; i++) {
-            $('#addform').append('<label for="'+metaForm[i]+'"><b>'+metaForm[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metaForm[i]+'" id="'+metaForm[i]+'">');
+          for (var i = 2; i < metas.length; i++) {
+            $('#addform').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'">');
           }
       });
       jQExtn();
