@@ -13,13 +13,7 @@
 
 @section('content')
 <style media="screen">
-table {
-    table-layout: fixed;
-    width: 300px;
-}
-
 td {
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -176,7 +170,7 @@ window.onload(function() {
 
     // Handle table creation with row & columns
     function buildHtmlTable(data, metaData) {
-        const table = '<table id="dataOne" cellspacing="0" width="100%" class="display compact"><thead id="table_head"></thead><tbody id="table_body"></tbody></table>';
+        const table = '<div class="table-responsive"><table id="dataOne" cellspacing="0" width="100%" class="display compact cell-border"><thead id="table_head"></thead><tbody id="table_body"></tbody></table></div>';
         $('.panel').append(table);
         var columns = addAllColumnHeaders(metaData);
 
