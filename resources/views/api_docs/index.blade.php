@@ -201,12 +201,16 @@
                     }
                 })
             });
+
+            var request_type;
             
             //Handles table change
             $('#table').change(function() {
-            $('#operation').prop('selectedIndex',0);
-            $('#body_params').hide();
-            $('#response').hide();
+                $('#operation').prop('selectedIndex',0);
+                $('#body_params').hide();
+                $('#query').hide();
+                $('#response').hide();
+                request_type = null;
             });
             
             //texteditor for payload
@@ -215,7 +219,6 @@
             editor.getSession().setMode("ace/mode/json");
             
             // Handles the form rendering
-            var request_type;
             var table_name;
             $('#operation').change(function () {
                 $('#api_url').val('api/v1/service/'+service_name+'/db');
