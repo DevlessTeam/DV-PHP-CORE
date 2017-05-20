@@ -27,6 +27,7 @@ td {
 #dtRow {
     cursor: pointer;
 }
+
 </style>
 
 <div class="wrapper">
@@ -59,7 +60,7 @@ td {
             </div>
         </div>
 
-        <div class="col-sm-12" id="loader">
+        <div class="col-sm-12 tab" id="loader">
             <section class="panel"></section>
         </div>
     </div>
@@ -126,19 +127,21 @@ window.onload(function() {
     });
 
     var entries;
-    var metas;
-    let Datatable;
+    var Datatable;
 
     // Initiate table build
     function tableCall(table_entries) {
-        $.when($.get('/datatable/'+table_entries+'/metas')).done(function(x){
-          metas = x;
-        })
+        var metas;
 
-        $.get('/datatable/'+table_entries+'/entries', function(resp) {
-            $('#addbtn').prop("disabled", false);
-            navOption(resp);
-        });
+        $.get('/datatable/'+table_entries+'/metas', function(res) {
+            metas = res;
+            if (metas !== undefined) {
+                $.get('/datatable/'+table_entries+'/entries', function(resp) {
+                    $('#addbtn').prop("disabled", false);
+                    navOption(resp, metas);
+                })
+            }
+        })
     }
 
     // Ajax to retrieve table names and append it to the DOM on module name change
@@ -170,16 +173,16 @@ window.onload(function() {
     });
 
     // Handle table creation with row & columns
-    function buildHtmlTable() {
+    function buildHtmlTable(data, metaData) {
         const table = '<table id="dataOne" cellspacing="0" width="100%" class="display compact"><thead id="table_head"></thead><tbody id="table_body"></tbody></table>';
         $('.panel').append(table);
-        var columns = addAllColumnHeaders(entries);
+        var columns = addAllColumnHeaders(metaData);
 
-        for(i = 0; i < entries.length; i++) {
+        for(i = 0; i < data.length; i++) {
             table_bd = '<tr id="dtRow">';
             for(j = 0; j < columns.length; j++) {
 
-                table_bd += '<td>'+entries[i][columns[j]]+'</td>';
+                table_bd += '<td>'+data[i][columns[j]]+'</td>';
             }
             table_bd += '</tr>';
             $('#table_body').append(table_bd);
@@ -189,9 +192,13 @@ window.onload(function() {
     }
 
     // Creation of table headers
-    function addAllColumnHeaders(entries) {
+    function addAllColumnHeaders(metas) {
         let table_head = '<tr>';
         let header = [];
+
+        if ( metas === undefined) {
+            alert('Please refresh your page. Xhr failed');
+        }
 
         for (i=0; i< metas.length; i++){
             if( metas[i] !== 'devless_user_id'){
@@ -207,9 +214,9 @@ window.onload(function() {
     }
 
     // Building of table
-    function navOption(data) {
-        entries = data;
-        buildHtmlTable();
+    function navOption(data, metas) {
+        var entries = data;
+        buildHtmlTable(entries, metas);
     }
 
     // Code snippet for converting form data into an object (key & value)
