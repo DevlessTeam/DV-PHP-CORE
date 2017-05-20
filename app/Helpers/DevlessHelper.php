@@ -868,6 +868,72 @@ class DevlessHelper extends Helper
             $tableName = (isset($payload['params'][0]['name']))?$payload['params'][0]['name']
                 :'';
         }
+        if(is_array($tableName)){
+                $tableName = $tableName[0];
+        }
         return $tableName;
     }
+
+
+    /**
+     * Get table name from payload
+     * @param string $service_name
+     * @param string $affected_tables
+     * @param array $accessed_table
+     * @param string $token
+     * @return Exception
+     */
+    public static function serviceAuth($service_name, $auth_table, $affected_tables, $accessed_table) {
+        $headers = [];
+        foreach(getallheaders() as $header_key => $header_value)
+        {
+            $headers[strtolower($header_key)] = $header_value;
+        }
+        $token = (isset($headers['devless-user-token']))?$headers['devless-user-token']:"NA";
+        
+        $token_reference = $service_name.'_'.$auth_table.'_'.$token;    
+
+        if(in_array($accessed_table, $affected_tables)){
+            self::did_custom_login($token_reference, $token)?:Helper::interrupt(628);
+        }
+        return true;
+    }
+
+    /**
+     * Check if user token is available 
+     * @param $payload
+     * @return string
+     */
+    public static function did_custom_login($toke_reference, $token)
+    {
+        $ds = new DataStore();   
+
+        if($ds->getDump($toke_reference) == $token) {
+            return true;
+        }
+            return false;
+
+    }
+
+    /**
+     * Check for closest word in an array 
+     * @param $word 
+     * @param $options
+     * @return string
+     */
+    public static function find_closest_word($word, $options)
+    {
+            $best_closesness = 1;
+            $closest_word = null;
+            foreach($options as $each_option) {
+                $levenshtein_count = levenshtein($word, $each_option);
+                if($levenshtein_count <= $best_closesness) {
+                    $closest_word = $each_option;
+                    $levenshtein_count = $best_closesness;
+                }
+            }
+            return $closest_word;
+    }
+
+
 }

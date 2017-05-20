@@ -71,6 +71,7 @@ class Helper
         639 => 'Sorry RPC can only be processed over POST request',
         640 => 'Sorry no such related tables',
         641 => 'Something is wrong with your payload',
+        642 => 'No Such Rule Keyword',
         700 => 'Internal system error',
     ];
 
@@ -242,18 +243,20 @@ class Helper
 
     /**
      * Get authenticated user cred.
-     * @param $access_state
+     * @param $force_auth
      * @return array
      */
-    public static function get_authenticated_user_cred($access_state)
+    public static function get_authenticated_user_cred($force_auth)
     {
         $user_token = request()->header('devless-user-token');
         $user_cred = [];
-        if (self::is_admin_login() && $access_state == true) {
+        
+        if (self::is_admin_login() && $force_auth == true) {
             $admin = User::where('role', 1)->first();
             $user_cred['id'] = $admin->id;
             $user_cred['token'] = 'non for admin';
-        } elseif ($user_token !== null && $access_state == true) {
+        } elseif ($user_token != null &&  $user_token != 'null' && 
+                ($force_auth == true || $force_auth == false )) {
             $user_data = self::verify_user_token($user_token);
 
             if (isset($user_data->id)) {
@@ -266,7 +269,7 @@ class Helper
             } else {
                 self::interrupt(628, null, [], true);
             }
-        } elseif (!$access_state == false) {
+        } elseif ($force_auth == true) {
             self::interrupt(628, null, [], true);
         }
 

@@ -288,7 +288,7 @@ class ServiceController extends Controller
                     [
                         'id'=> $current_service->id,
                         'service_name' =>$current_service->name,
-                        'database' =>$current_service->database,
+                        'database' => $current_service->database,
                         'driver' => $current_service->driver,
                         'hostname' => $current_service->hostname,
                         'username' => $current_service->username,
@@ -303,7 +303,7 @@ class ServiceController extends Controller
                     ];
                 // run script before assigning to method
                 if (! $internal_access && $resource != 'view' && $resource != 'rpc') {
-                    $newServiceElements = $this->before_assigning_service_action($resource, $payload);
+                    $newServiceElements = $this->before_assigning_service_action($resource, $payload,$accessed_internally);
                     $resource = $newServiceElements['resource'];
                     $payload = $newServiceElements['payload'];
                 }
@@ -385,21 +385,14 @@ class ServiceController extends Controller
      */
     private function _get_resource_access_right($service, $master_access = false)
     {
-        $mutate_resource_rights =
-                function ($rights) {
-                    return array_map(
-                        function ($access_code) {
-                            return $access_code ?: 1;
-                        },
-                        $rights
-                    );
-                };
-
+        $master_resource_rights = ["query"=>1, "update"=>1,
+             "delete"=>1, "script"=>1, "schema"=>1, "script"=>1, "create"=>1];
+         
         $resource_access_right = $service->resource_access_right;
         $resource_access_right = json_decode($resource_access_right, true);
         $resource_access_right = ($master_access)?
-            $mutate_resource_rights($resource_access_right) : $resource_access_right;
-
+            $master_resource_rights : $resource_access_right;
+        
         return $resource_access_right;
     }
 
@@ -441,11 +434,11 @@ class ServiceController extends Controller
      * @params array $payload
      * @return array
      */
-    public function before_assigning_service_action($resource, $payload)
+    public function before_assigning_service_action($resource, $payload, $internalAccess=false)
     {
         $output['resource'] = $resource;
         $output['payload'] = $payload;
-        if ($resource != 'schema') {
+        if ($resource != 'schema' && !$internalAccess) {
             $script = new script;
             $output =  $script->run_script($resource, $payload);
         }

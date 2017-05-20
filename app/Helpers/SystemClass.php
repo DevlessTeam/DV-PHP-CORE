@@ -1,8 +1,8 @@
 <?php
 
-
-use App\Helpers\DevlessHelper as DVH;
+use App\Helpers\Helper;
 use App\Helpers\DataStore as DS;
+use App\Helpers\DevlessHelper as DVH;
 use App\Http\Controllers\ServiceController as service;
 
 /**
@@ -36,7 +36,8 @@ class devless
         $phone_number = null,
         $first_name = null,
         $last_name = null,
-        $remember_token = null
+        $remember_token = null,
+        $role = null
     ) {
     
         $payload = get_defined_vars();
@@ -138,7 +139,7 @@ class devless
      * @param $table
      * @param $fields
      * @return mixed
-     * @ACL public
+     * @ACL private
      */
     public function addData($serviceName, $table, $data)
     {
@@ -151,13 +152,17 @@ class devless
      * @param $serviceName
      * @param $table
      * @return mixed
-     * @ACL public
+     * @ACL private
      */
-    public function queryData($serviceName, $table)
+    public function queryData($serviceName, $table, $whereKey=null, $whereValue=null)
     {
         $service = new service();
-        $output = DS::service($serviceName, $table, $service)->queryData();
-        return $output;
+        
+        $queryBuilder = ($whereKey && $whereValue)? DS::service($serviceName, $table, $service)
+            ->where($whereKey, $whereValue): DS::service($serviceName, $table, $service);
+
+        $output = $queryBuilder->related('*')->queryData();
+        return $output['payload']['results'];
 
     }
 
@@ -166,12 +171,12 @@ class devless
      * @param $table
      * @param $id
      * @return mixed
-     * @ACL public
+     * @ACL private
      */
-    public function updateData($serviceName, $table, $id, $data)
+    public function updateData($serviceName, $table, $whereKey, $whereValue, $data)
     {
         $service = new service();
-        $output = DS::service($serviceName, $table, $service)->where('id', $id)->update($data);
+        $output = DS::service($serviceName, $table, $service)->where($whereKey, $whereValue)->update($data);
         return $output;
     }
 
@@ -180,12 +185,35 @@ class devless
      * @param $table
      * @param $id
      * @return mixed
-     * @ACL public
+     * @ACL private
      */
     public function deleteData($serviceName, $table, $id)
     {
         $service = new service();
         $output = DS::service($serviceName, $table, $service)->where('id', $id)->delete();
         return $output;
+    }
+
+    /**
+     * @param $serviceName
+     * @param $table
+     * @param $id
+     * @return mixed
+     * @ACL private
+     */
+    public function getUserProfile($input)
+    {
+        (empty($input))? Helper::interrupt(628):false;
+        if(is_array($input)){
+            $id = $input['id'];
+        } else {
+            $id = $input;
+        }
+        $profile = DB::table('users')->where('id', $id)->get();
+        if($profile) 
+        {
+            return (array)$profile[0];
+        }
+        return [];
     }
 }

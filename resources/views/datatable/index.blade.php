@@ -24,24 +24,10 @@ td {
     text-overflow: ellipsis;
 }
 
-.loader {
-    border: 16px solid rgba(0,0,0,.5); /* Light grey */
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 2s linear infinite;
-    border-top: 16px solid #3498db;
-    border-bottom: 16px solid #3498db;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
 #dtRow {
     cursor: pointer;
 }
+
 </style>
 
 <div class="wrapper">
@@ -74,9 +60,8 @@ td {
             </div>
         </div>
 
-        <div class="col-sm-12" id="loader">
-            <!-- <div class="loader col-md-offset-5" style="margin-top: 50px;"></div> -->
-            <!-- <section class="panel"></section> -->
+        <div class="col-sm-12 tab" id="loader">
+            <section class="panel"></section>
         </div>
     </div>
 </div>
@@ -142,21 +127,23 @@ window.onload(function() {
     });
 
     var entries;
-    var metas;
-    let Datatable;
+    var Datatable;
+    var metaForm;
 
     // Initiate table build
     function tableCall(table_entries) {
-        $.get('/datatable/'+table_entries+'/metas', function(response){
-            //delete response[1];
-            metas = response;
-        });
+        var metas;
 
-        $.get('/datatable/'+table_entries+'/entries', function(resp) {
-            $('#addbtn').prop("disabled", false);
-            navOption(resp);
-
-        });
+        $.get('/datatable/'+table_entries+'/metas', function(res) {
+            metas = res;
+            metaForm = metas;
+            if (metas !== undefined) {
+                $.get('/datatable/'+table_entries+'/entries', function(resp) {
+                    $('#addbtn').prop("disabled", false);
+                    navOption(resp, metas);
+                })
+            }
+        })
     }
 
     // Ajax to retrieve table names and append it to the DOM on module name change
@@ -188,16 +175,16 @@ window.onload(function() {
     });
 
     // Handle table creation with row & columns
-    function buildHtmlTable() {
+    function buildHtmlTable(data, metaData) {
         const table = '<table id="dataOne" cellspacing="0" width="100%" class="display compact"><thead id="table_head"></thead><tbody id="table_body"></tbody></table>';
         $('.panel').append(table);
-        var columns = addAllColumnHeaders(entries);
+        var columns = addAllColumnHeaders(metaData);
 
-        for(i = 0; i < entries.length; i++) {
+        for(i = 0; i < data.length; i++) {
             table_bd = '<tr id="dtRow">';
             for(j = 0; j < columns.length; j++) {
 
-                table_bd += '<td>'+entries[i][columns[j]]+'</td>';
+                table_bd += '<td>'+data[i][columns[j]]+'</td>';
             }
             table_bd += '</tr>';
             $('#table_body').append(table_bd);
@@ -207,9 +194,13 @@ window.onload(function() {
     }
 
     // Creation of table headers
-    function addAllColumnHeaders(entries) {
+    function addAllColumnHeaders(metas) {
         let table_head = '<tr>';
         let header = [];
+
+        if ( metas === undefined) {
+            alert('Please refresh your page. Xhr failed');
+        }
 
         for (i=0; i< metas.length; i++){
             if( metas[i] !== 'devless_user_id'){
@@ -225,10 +216,9 @@ window.onload(function() {
     }
 
     // Building of table
-    function navOption(data) {
-        entries = data;
-        $('#loader').append('<div class="loader col-md-offset-5" style="margin-top: 50px;"></div><section class="panel"></section>');
-        buildHtmlTable();
+    function navOption(data, metas) {
+        var entries = data;
+        buildHtmlTable(entries, metas);
     }
 
     // Code snippet for converting form data into an object (key & value)
@@ -263,8 +253,8 @@ window.onload(function() {
       $(function modal() {
           $('#flash_msg').modal({show: true, backdrop: 'static'});
           $('#formData').html(" ");
-          for (var i = 2; i < metas.length; i++) {
-                $('#formData').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'" value="'+c[i-1]+'">');
+          for (var i = 2; i < metaForm.length; i++) {
+                $('#formData').append('<label for="'+metaForm[i]+'"><b>'+metaForm[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metaForm[i]+'" id="'+metaForm[i]+'" value="'+c[i-1]+'">');
           }
       });
       jQExtn();
@@ -363,8 +353,8 @@ window.onload(function() {
           $('#add_form').modal({show: true, backdrop: 'static'});
 
           $('#addform').html(" ");
-          for (var i = 2; i < metas.length; i++) {
-            $('#addform').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'">');
+          for (var i = 2; i < metaForm.length; i++) {
+            $('#addform').append('<label for="'+metaForm[i]+'"><b>'+metaForm[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metaForm[i]+'" id="'+metaForm[i]+'">');
           }
       });
       jQExtn();
