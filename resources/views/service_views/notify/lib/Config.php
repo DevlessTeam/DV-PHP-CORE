@@ -45,7 +45,7 @@ class Config
                 'app_secret' => (isset($pushConfig->app_secret)) ? $pushConfig->app_secret : '',
                 'app_general_broadcast_channel' =>  (isset($pushConfig->broadcast_channel)) ? $pushConfig->broadcast_channel : '' ,
                 'app_general_broadcast_event' => (isset($pushConfig->broadcast_event)) ? $pushConfig->broadcast_event : '',
-                'app_option' => ['encrypted' => (isset($pushConfig->app_options)) ? (bool)$pushConfig->app_options  : ''],
+                'app_option' => ['encrypted' =>  true, 'cluster' => $pushConfig->app_options],
 
             ],
         ];

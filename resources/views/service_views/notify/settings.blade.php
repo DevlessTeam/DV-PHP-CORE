@@ -64,8 +64,11 @@
                     <br>
                     <label>APP OPTION</label>
                     <select name="" id="appOptions" class="form-control" required="required">
-                        <option value="true">true</option>
-                        <option value="false">false</option>
+                        <option value="eu">Ireland (eu)</option>
+                        <option value="us2">US East Coast(us2)</option>
+                        <option value="mt1">US East Coast(mt1)</option>
+                        <option value="ap1">Singapore(ap1)</option>
+                        <option value="ap2">Mumbai India(ap2)</option>
                     </select>
                     <br>
                     <label>Broadcast Event</label>
