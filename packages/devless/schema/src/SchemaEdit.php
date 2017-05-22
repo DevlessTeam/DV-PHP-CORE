@@ -145,7 +145,7 @@ class SchemaEdit
      *
      * @return bool
      */
-    public function delField($serviceName, $tableName, $fieldName)
+    public function delField($sericeName, $tableName, $fieldName)
     {
         $dbHandler = new DbHandler();
         $compTableName = $dbHandler->devlessTableName($serviceName, $tableName);
