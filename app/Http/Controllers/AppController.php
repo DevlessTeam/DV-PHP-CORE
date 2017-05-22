@@ -1,18 +1,17 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use Hash;
 use Session;
 use App\App;
 use App\User;
-use App\Http\Requests;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use \App\Helpers\DevlessHelper as DLH;
+use App\Helpers\DevlessHelper as DLH;
 use App\Helpers\Response as Response;
 
 class AppController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -22,14 +21,17 @@ class AppController extends Controller
     {
         $app = App::first();
         $user = User::findOrFail(Session('user'));
+
         return view('app.edit', compact('app', 'user'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param    Request $request
-     * @return   Response
+     * @param Request $request
+     *
+     * @return Response
+     *
      * @internal param int $id
      */
     public function update(Request $request)
@@ -54,21 +56,23 @@ class AppController extends Controller
                 $user->password = bcrypt($request->input('password'));
             }
 
-            $app->name = $request->input("name");
-            $app->description = $request->input("description");
+            $app->name = $request->input('name');
+            $app->description = $request->input('description');
 
-            ($app->save() && $user->save())? DLH::flash("App updated successfully", 'success'):
-                DLH::flash("Changes did not take effect", 'error');
+            ($app->save() && $user->save()) ? DLH::flash('App updated successfully', 'success') :
+                DLH::flash('Changes did not take effect', 'error');
         } else {
-            DLH::flash("Could not get app properties or password is incorrect", 'error');
+            DLH::flash('Could not get app properties or password is incorrect', 'error');
         }
+
         return back();
     }
 
     /**
-     * Delete entire Devless app
+     * Delete entire Devless app.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return Response
      */
     public function destroy($id)
@@ -79,10 +83,11 @@ class AppController extends Controller
         return redirect()->route('app.index');
     }
 
-
     /**
-     * Generate app access token
+     * Generate app access token.
+     *
      * @param Request $request
+     *
      * @return array
      */
     public function token(Request $request)
@@ -91,11 +96,10 @@ class AppController extends Controller
         if (isset($request['action'])) {
             $new_token = $app->token = md5(uniqid(1, true));
             if ($app->save()) {
-                return Response::respond(622, null, ['new_token'=>$new_token]);
+                return Response::respond(622, null, ['new_token' => $new_token]);
             } else {
                 return Response::respond(623);
             }
         }
-
     }
 }
