@@ -2,6 +2,15 @@
 
 namespace App\Helpers;
 
+use App\User;
+use Hash;
+use Response as output;
+use Session;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Validator;
+use App\Helpers\Jwt;
+use App\Helpers\Response as Response;
+
 /*
 *@author Eddymens <eddymens@devless.io>
  */
@@ -30,3 +39,4 @@ class Response extends Helper
         return $response;
     }
 }
+
