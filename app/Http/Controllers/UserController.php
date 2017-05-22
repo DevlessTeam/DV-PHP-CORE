@@ -37,8 +37,7 @@ class UserController extends Controller
     }
     public function post_login(Request $request)
     {
-        $user = DB::table('users')->where('email', $request->input('email'))
-                   when('role', 1) ->first();
+        $user = DB::table('users')->where('email', $request->input('email'))->where('role', 1) ->first();
         if ($user && Hash::check($request->input('password'), $user->password)) {
             $request->session()->put('user', $user->id);
             DLH::flash('Welcome Back', 'success');
