@@ -7,7 +7,6 @@ use App\Helpers\Migration;
 use Illuminate\Http\Request;
 use App\Helpers\DevlessHelper as DLH;
 
-
 class HubController extends Controller
 {
     private $url = 'http://devless.herokuapp.com';

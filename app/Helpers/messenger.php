@@ -2,9 +2,11 @@
 
 namespace App\Helpers;
 
+use Response as output;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
 trait messenger
 {
-
     /**
      * fetch message based on status code.
      *
@@ -35,5 +37,4 @@ trait messenger
         $message = ($message !== null) ? $message : self::responseMessage($stack);
         throw new HttpException(500, $message, null, $payload, $stack);
     }
-
 }

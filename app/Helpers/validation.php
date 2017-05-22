@@ -2,36 +2,29 @@
 
 namespace App\Helpers;
 
-use App\User;
-use Hash;
-use Response as output;
-use Session;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Validator;
-use App\Helpers\Jwt;
-use App\Helpers\Response as Response;	
 
 trait validation
 {
-	 /**
+    /**
      * convert soft types to validator rules.
      *
      * @var string
      */
     public static $validator_type =
     [
-        'boolean'    => 'boolean',
-        'decimals'   => 'numeric',
-        'email'      => 'email',
-        'integer'    => 'integer',
-        'password'   => 'alphanum',
+        'boolean' => 'boolean',
+        'decimals' => 'numeric',
+        'email' => 'email',
+        'integer' => 'integer',
+        'password' => 'alphanum',
         'percentage' => 'integer',
-        'reference'  => 'integer',
-        'text'       => 'string',
-        'textarea'   => 'string',
-        'timestamp'  => 'integer',
-        'url'        => 'url',
-        'base64'     => 'alphanum',
+        'reference' => 'integer',
+        'text' => 'string',
+        'textarea' => 'string',
+        'timestamp' => 'integer',
+        'url' => 'url',
+        'base64' => 'alphanum',
 
     ];
 
@@ -72,7 +65,6 @@ trait validation
             $check_against = self::$validator_type[$check_against];
         }
 
-
         $state = Validator::make(
             [$field_name => $field_value],
             [$field_name => $check_against]
@@ -108,5 +100,4 @@ trait validation
             return '';
         }
     }
-
 }

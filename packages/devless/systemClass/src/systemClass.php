@@ -8,33 +8,35 @@ use App\Http\Controllers\ServiceController as service;
 /**
  * Created by Devless.
  * User: eddymens
- * Date Created: 23rd of September 2016 09:01:20 AM.
- *
+ * Date Created: 23rd of September 2016 09:01:20 AM
  * @Service: event
  * @Version: 1.0
  */
+
 
 //Action method for serviceName
 class devless
 {
     public $serviceName = 'dvauth';
     private $auth;
-
+    
     public function __construct()
     {
         $this->auth = new DVH();
+        
     }
 
     /**
+     * Sample DevLess Method   
      * @ACL public
-     **/
+     */
     public function hello()
     {
-        return 'Hello World';
+        return 'Hello World!';
     }
+
     /**
-     * method for handling user signup.
-     *
+     * method for handling user signup
      * @ACL public
      */
     public function signUp(
@@ -47,67 +49,66 @@ class devless
         $remember_token = null,
         $role = null
     ) {
+    
         $payload = get_defined_vars();
-
+       
         $payload = self::getSetParams($payload);
-
+       
         $auth = $this->auth;
-
+       
         $output = $auth->signup($payload);
-
         return $output;
+        
+       
     }
 
+
     /**
-     * method for handling user login.
-     *
+     * method for handling user login
      * @ACL public
      */
     public function login($username = null, $email = null, $phone_number = null, $password = null)
     {
         $payload = get_defined_vars();
-
+       
         $payload = self::getSetParams($payload);
-
+       
         $auth = $this->auth;
-
+       
         $output = $auth->login($payload);
-
         return $output;
+       
     }
-
+    
     /**
-     * get user profile.
-     *
+     * get user profile
      * @ACL public
-     */
+    */
     public function profile()
     {
         $auth = $this->auth;
-
+        
         $profile = $auth->get_profile();
-
+        
         return $profile;
     }
-
+    
     /**
-     * logout.
-     *
+     * logout
      * @ACL public
      */
     public function logout()
     {
         $auth = $this->auth;
         $logState = $auth->logOut();
-
+        
         return $logState;
     }
-
+    
     /**
-     * method for handling user login.
-     *
+     * method for handling user login
      * @ACL public
-     */
+    */
     public function updateProfile(
         $email = null,
         $password = null,
@@ -117,20 +118,22 @@ class devless
         $last_name = null,
         $remember_token = null
     ) {
+    
         $payload = get_defined_vars();
-
+       
         foreach ($payload as $key => $value) {
             if ($value == null) {
                 unset($payload[$key]);
             }
         }
         $auth = $this->auth;
-
+       
         $output = $auth->update_profile($payload);
-
         return $output;
+        
+       
     }
-
+    
     private static function getSetParams($payload)
     {
         foreach ($payload as $key => $value) {
@@ -138,7 +141,6 @@ class devless
                 unset($payload[$key]);
             }
         }
-
         return $payload;
     }
 
@@ -146,7 +148,6 @@ class devless
      * @param $serviceName
      * @param $table
      * @param $fields
-     *
      * @return mixed
      * @ACL private
      */
@@ -154,34 +155,31 @@ class devless
     {
         $service = new service();
         $output = DS::service($serviceName, $table, $service)->addData([$data]);
-
         return $output;
     }
 
     /**
      * @param $serviceName
      * @param $table
-     *
      * @return mixed
      * @ACL private
      */
-    public function queryData($serviceName, $table, $whereKey = null, $whereValue = null)
+    public function queryData($serviceName, $table, $whereKey=null, $whereValue=null)
     {
         $service = new service();
-
-        $queryBuilder = ($whereKey && $whereValue) ? DS::service($serviceName, $table, $service)
-            ->where($whereKey, $whereValue) : DS::service($serviceName, $table, $service);
+        
+        $queryBuilder = ($whereKey && $whereValue)? DS::service($serviceName, $table, $service)
+            ->where($whereKey, $whereValue): DS::service($serviceName, $table, $service);
 
         $output = $queryBuilder->related('*')->queryData();
-
         return $output['payload']['results'];
+
     }
 
     /**
      * @param $serviceName
      * @param $table
      * @param $id
-     *
      * @return mixed
      * @ACL private
      */
@@ -189,7 +187,6 @@ class devless
     {
         $service = new service();
         $output = DS::service($serviceName, $table, $service)->where($whereKey, $whereValue)->update($data);
-
         return $output;
     }
 
@@ -197,7 +194,6 @@ class devless
      * @param $serviceName
      * @param $table
      * @param $id
-     *
      * @return mixed
      * @ACL private
      */
@@ -205,7 +201,6 @@ class devless
     {
         $service = new service();
         $output = DS::service($serviceName, $table, $service)->where('id', $id)->delete();
-
         return $output;
     }
 
@@ -213,23 +208,22 @@ class devless
      * @param $serviceName
      * @param $table
      * @param $id
-     *
      * @return mixed
      * @ACL private
      */
     public function getUserProfile($input)
     {
-        (empty($input)) ? Helper::interrupt(628) : false;
-        if (is_array($input)) {
+        (empty($input))? Helper::interrupt(628):false;
+        if(is_array($input)){
             $id = $input['id'];
         } else {
             $id = $input;
         }
         $profile = DB::table('users')->where('id', $id)->get();
-        if ($profile) {
-            return (array) $profile[0];
+        if($profile) 
+        {
+            return (array)$profile[0];
         }
-
         return [];
     }
 }

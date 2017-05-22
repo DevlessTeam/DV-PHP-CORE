@@ -2,18 +2,13 @@
 
 namespace App\Helpers;
 
-use App\User;
 use Hash;
-use Response as output;
 use Session;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Validator;
-use App\Helpers\Jwt;
-use App\Helpers\Response as Response;
+use App\User;
 
 trait auth
 {
-	  /**
+    /**
      * Hash password.
      *
      * @param type $password
@@ -53,26 +48,28 @@ trait auth
 
     /**
      * Get authenticated user cred.
+     *
      * @param $force_auth
+     *
      * @return array
      */
     public static function get_authenticated_user_cred($force_auth)
     {
         $user_token = request()->header('devless-user-token');
         $user_cred = [];
-        
+
         if (self::is_admin_login() && $force_auth == true) {
             $admin = User::where('role', 1)->first();
             $user_cred['id'] = $admin->id;
             $user_cred['token'] = 'non for admin';
-        } elseif ($user_token != null &&  $user_token != 'null' && 
-                ($force_auth == true || $force_auth == false )) {
+        } elseif ($user_token != null && $user_token != 'null' &&
+                ($force_auth == true || $force_auth == false)) {
             $user_data = self::verify_user_token($user_token);
 
             if (isset($user_data->id)) {
                 $user_cred =
                     [
-                        'id'    => $user_data->id,
+                        'id' => $user_data->id,
                         'token' => $user_data->session_token,
 
                     ];
@@ -121,9 +118,6 @@ trait auth
             $user_data->save();
         }
 
-
-
         return $user_data;
     }
-
 }

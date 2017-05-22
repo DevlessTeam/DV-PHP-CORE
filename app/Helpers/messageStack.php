@@ -1,10 +1,14 @@
-<?php 
+<?php
 
 namespace App\Helpers;
 
+use App\User;
+use Validator;
+
+
 trait messageStack
 {
-	/**
+    /**
      * application error heap.
      *
      * @var type
@@ -61,6 +65,4 @@ trait messageStack
         642 => 'No Such Rule Keyword',
         700 => 'Internal system error',
     ];
-
-
 }

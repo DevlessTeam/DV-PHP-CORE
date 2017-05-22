@@ -2,29 +2,36 @@
 
 namespace App\Helpers;
 
+use DB;
+use Session;
+use App\User as user;
+use App\Helpers\Jwt as jwt;
+
 trait devlessAuth
 {
-	   /**
-     * signup new users onto devless
+    /**
+     * signup new users onto devless.
+     *
      * @param type $payload
+     *
      * @return alphanum
      */
     public function signup($payload)
     {
-        $username = (isset($payload['username']))?$payload['username']:'';
+        $username = (isset($payload['username'])) ? $payload['username'] : '';
 
-        $email = (isset($payload['email']))?$payload['email']:'';
-        $phone_number = (isset($payload['phone_number']))?$payload['phone_number']:'';
+        $email = (isset($payload['email'])) ? $payload['email'] : '';
+        $phone_number = (isset($payload['phone_number'])) ? $payload['phone_number'] : '';
 
-        $existing_users =  \DB::table('users')->orWhere('username', $username)->whereNotIn('username', [''])
+        $existing_users = \DB::table('users')->orWhere('username', $username)->whereNotIn('username', [''])
                 ->orWhere('email', $email)->whereNotIn('email', [''])
                 ->orWhere('phone_number', $phone_number)->whereNotIn('phone_number', [''])
                 ->get();
         if ($existing_users != null) {
-            return Response::respond(1001, "Seems User already exists");
+            return Response::respond(1001, 'Seems User already exists');
         }
 
-        $user = new User;
+        $user = new User();
 
         $token = $this->auth_fields_handler($payload, $user);
 
@@ -36,7 +43,7 @@ trait devlessAuth
         $user->session_token = $session_token = md5(uniqid(1, true));
 
         //check if either username or email and password is set
-        if (!isset($user->password) || ! (isset($user->username) || isset($user->email))) {
+        if (!isset($user->password) || !(isset($user->username) || isset($user->email))) {
             return false;
         }
 
@@ -49,25 +56,22 @@ trait devlessAuth
 
             $prepared_token = $this->set_session_token($token_payload, $user->id);
             $profile = \DB::table('users')->where('id', $user->id)
-                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email', 'role'])
+                ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'role'])
                 ->first();
             $user_obj = [
                 'profile' => $profile,
-                'token'   => $prepared_token
+                'token' => $prepared_token,
             ];
+
             return $user_obj;
         } else {
             return false;
         }
-
-
-
-
-
     }
 
     /**
-     * get authenticated user details
+     * get authenticated user details.
+     *
      * @return array
      */
     public function get_profile()
@@ -90,8 +94,6 @@ trait devlessAuth
                 )
                 ->first();
 
-
-
             return $user_data;
         }
 
@@ -99,15 +101,17 @@ trait devlessAuth
     }
 
     /**
-     * authenticate and login devless users
+     * authenticate and login devless users.
+     *
      * @param $payload
+     *
      * @return alphanum
+     *
      * @internal param type $request
      */
     public function login($payload)
     {
-
-        $user =  new user();
+        $user = new user();
         $fields = $payload;
 
         foreach ($fields as $field => $value) {
@@ -115,16 +119,16 @@ trait devlessAuth
             ${$field} = $value;
         }
 
-        if (isset($email,$password)) {
+        if (isset($email, $password)) {
             $user_data = $user::where('email', $email)->first();
-        } elseif (isset($username,$password)) {
+        } elseif (isset($username, $password)) {
             $user_data = $user::where('username', $username)->first();
         } else {
             return false;
         }
         if ($user_data !== null) {
             $correct_password =
-                   (Helper::compare_hash($password, $user_data->password))?true: false ;
+                   (Helper::compare_hash($password, $user_data->password)) ? true : false;
             $user_data->session_token = $session_token = md5(uniqid(1, true));
 
             if ($correct_password && $user_data->save()) {
@@ -136,12 +140,13 @@ trait devlessAuth
 
                 $prepared_token = $this->set_session_token($token_payload, $user_data->id);
                 $profile = \DB::table('users')->where('id', $user_data->id)
-                    ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email', 'role'])
+                    ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'role'])
                     ->first();
                 $user_obj = [
                     'profile' => $profile,
-                    'token'   => $prepared_token
+                    'token' => $prepared_token,
                 ];
+
                 return $user_obj;
             } else {
                 return false;
@@ -149,26 +154,27 @@ trait devlessAuth
         } else {
             return false;
         }
-
-
     }
 
     /**
-     * update devless user profile
+     * update devless user profile.
+     *
      * @param $payload
+     *
      * @return bool
+     *
      * @internal param type $request
      */
     public function update_profile($payload)
     {
         if ($token = Helper::get_authenticated_user_cred(true)) {
-            $user =  new user();
+            $user = new user();
 
             //unchangeable fields
             $indices = [
                 'session_token',
                 'status',
-                'role'
+                'role',
             ];
 
             $unset = function ($payload, $index) {
@@ -176,9 +182,8 @@ trait devlessAuth
             };
 
             foreach ($indices as $index) {
-                (isset($payload[$index]))? $unset($payload, $index) : false;
+                (isset($payload[$index])) ? $unset($payload, $index) : false;
             }
-
 
             if (isset($payload['password'])) {
                 $payload['password'] = Helper::password_hash($payload['password']);
@@ -186,7 +191,7 @@ trait devlessAuth
 
             if ($user::where('id', $token['id'])->update($payload)) {
                 return \DB::table('users')->where('id', $token['id'])
-                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email', 'role'])
+                ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'role'])
                 ->first();
             }
         }
@@ -195,14 +200,16 @@ trait devlessAuth
     }
 
     /**
-     * delete a devless user
+     * delete a devless user.
+     *
      * @return bool
+     *
      * @internal param type $request
      */
     public function delete()
     {
         if ($token = Helper::get_authenticated_user_cred(true)) {
-            $user =  new user();
+            $user = new user();
             if ($user::where('id', $token['id'])->delete()) {
                 return true;
             }
@@ -211,12 +218,11 @@ trait devlessAuth
         return false;
     }
 
-
     public function logout()
     {
         if ($token = Helper::get_authenticated_user_cred(true)) {
-            $user =  new user();
-            if ($user::where('id', $token['id'])->update(['session_token'=> ""])) {
+            $user = new user();
+            if ($user::where('id', $token['id'])->update(['session_token' => ''])) {
                 return true;
             }
         }
@@ -224,16 +230,16 @@ trait devlessAuth
         return false;
     }
 
-    
     /**
-     * check if needed auth fields are satisfied
+     * check if needed auth fields are satisfied.
+     *
      * @param $fields
      * @param $user
+     *
      * @return mixed
      */
     public function auth_fields_handler($fields, $user)
     {
-
         $expected_fields =
             [
                 'email' => 'email',
@@ -242,14 +248,13 @@ trait devlessAuth
                 'first_name' => 'text',
                 'last_name' => 'text',
                 'remember_token' => 'text',
-                'status'         => 'text',
-                'phone_number' =>  'text'
+                'status' => 'text',
+                'phone_number' => 'text',
 
             ];
 
         foreach ($fields as $field => $value) {
             $field = strtolower($field);
-
 
             if (isset($expected_fields[$field])) {
                 $valid = Helper::field_check($value, $expected_fields[$field]);
@@ -259,40 +264,35 @@ trait devlessAuth
                 if ($field == 'password') {
                     $user->$field = Helper::password_hash($value);
                 } else {
-                    $user->$field = $value ;
+                    $user->$field = $value;
                 }
             }
         }
+
         return $user;
-
-
     }
 
-  
-
     /**
-     * set session token
+     * set session token.
+     *
      * @param $payload
      * @param $user_id
+     *
      * @return bool
+     *
      * @internal param type $request
      */
     public function set_session_token($payload, $user_id)
     {
-
         $jwt = new jwt();
         $secret = config('app')['key'];
 
         $payload = json_encode($payload);
 
-        if (DB::table('users')->where('id', $user_id)->update(['session_time'=>Helper::session_timestamp()])) {
+        if (DB::table('users')->where('id', $user_id)->update(['session_time' => Helper::session_timestamp()])) {
             return $jwt->encode($payload, $secret);
         } else {
             return false;
         }
-
-
     }
-    
-
 }
