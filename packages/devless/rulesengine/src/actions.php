@@ -17,7 +17,7 @@ trait actions
     public function onTable()
     {
         $expectedTableNames = func_get_args();
-        if (!$this->execOrNot) {
+        if (!$this->execOrNot && !$this->isCurrentDBAction) {
             return $this;
         }
        
@@ -36,7 +36,7 @@ trait actions
      */
     public function succeedWith($msg = null)
     {
-        if (!$this->execOrNot) {
+        if (!$this->execOrNot && !$this->isCurrentDBAction) {
             return $this;
         }
         $evaluator = function () use ($msg) {
@@ -55,7 +55,7 @@ trait actions
      */
     public function failWith($msg = null)
     {
-        if (!$this->execOrNot) {
+        if (!$this->execOrNot && !$this->isCurrentDBAction) {
             return $this;
         }
         $evaluator = function () use ($msg) {
@@ -75,7 +75,7 @@ trait actions
      */
     public function run($service, $method, $params = null, $remoteUrl = null, $token = null)
     {
-        if (!$this->execOrNot) {
+        if (!$this->execOrNot && !$this->isCurrentDBAction) {
             return $this;
         }
         $evaluator = function () use ($service, $method, $params, $remoteUrl, $token) {
@@ -100,7 +100,7 @@ trait actions
      */
     public function getRunResult(&$input_var)
     {
-        if (!$this->execOrNot) {
+        if (!$this->execOrNot && !$this->isCurrentDBAction) {
             return $this;
         }
         $input_var = $this->results;
