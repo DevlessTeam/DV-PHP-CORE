@@ -5,6 +5,7 @@ namespace App\Helpers;
 use Hash;
 use Session;
 use App\User;
+use App\Helpers\Jwt as jwt;
 
 trait auth
 {
