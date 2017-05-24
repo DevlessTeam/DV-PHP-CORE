@@ -17,7 +17,7 @@ trait actions
     public function onTable()
     {
         $expectedTableNames = func_get_args();
-        if (!$this->execOrNot && !$this->isCurrentDBAction) {
+        if (!$this->isCurrentDBAction) {
             return $this;
         }
        

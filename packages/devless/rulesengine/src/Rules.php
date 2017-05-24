@@ -22,6 +22,7 @@ class Rules
     public $results = '';
     private $answered = false;
     private $execOrNot = true;
+    private $isCurrentDBAction = false;
     private $actionType = '';
     private $tableName = '';
     private $methodAction = [
