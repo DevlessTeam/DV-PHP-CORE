@@ -11,7 +11,7 @@ trait tableActions
      */
     public function onQuery()
     {
-        $this->isCurrentDBAction = ($this->actionType == 'GET');
+        $this->execOrNot = $this->isCurrentDBAction = ($this->actionType == 'GET');
 
         return $this;
     }
@@ -22,7 +22,7 @@ trait tableActions
      */
     public function onUpdate()
     {
-        $this->isCurrentDBAction = ($this->actionType == 'PATCH');
+        $this->execOrNot = $this->isCurrentDBAction = ($this->actionType == 'PATCH');
 
         return $this;
     }
@@ -33,7 +33,7 @@ trait tableActions
      */
     public function onCreate()
     {
-        $this->isCurrentDBAction = ($this->actionType == 'POST');
+        $this->execOrNot = $this->isCurrentDBAction = ($this->actionType == 'POST');
 
         return $this;
     }
@@ -44,7 +44,7 @@ trait tableActions
      */
     public function onDelete()
     {
-        $this->isCurrentDBAction = ($this->actionType == 'DELETE');
+        $this->execOrNot = $this->isCurrentDBAction = ($this->actionType == 'DELETE');
 
         return $this;
     }
