@@ -411,7 +411,9 @@
                     SDK.setToken(response.payload.result['token']);
                     devless_main.coreLib.notify("signup was successful");
                     devless_main.coreLib.notify(response.message,1);
-                    window.location.href = window.location.origin + '/' + actionUrl;
+                    if(actionUrl != '#') {
+                    	window.location.href = window.location.origin + '/' + actionUrl;
+                    }
                 } else {
                     devless_main.coreLib.notify(response.payload.result.message)
                     devless_main.coreLib.notify(response.message,0);
@@ -432,7 +434,9 @@
                     SDK.setToken(response.payload.result['token']);
                     devless_main.coreLib.notify("Log in successfully");
                     devless_main.coreLib.notify(response.message,1);
-                    window.location.href = window.location.origin + '/' + actionUrl;
+                    if(actionUrl != '#') {
+                    	window.location.href = window.location.origin + '/' + actionUrl;
+                    }
                 } else{
                     devless_main.coreLib.notify("Login failed");
                     devless_main.coreLib.notify(response.message,0);
