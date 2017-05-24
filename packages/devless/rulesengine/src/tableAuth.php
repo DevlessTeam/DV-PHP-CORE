@@ -11,7 +11,7 @@ trait tableAuth
      */
     public function authenticateUser()
     {
-        if (!$this->execOrNot && !$this->isCurrentDBAction) {
+        if (!$this->execOrNot || !$this->isCurrentDBAction) {
             return $this;
         }
         $action = $this->methodAction[$this->actionType];
@@ -27,7 +27,7 @@ trait tableAuth
      */
     public function lockDownTable()
     {
-        if (!$this->execOrNot && !$this->isCurrentDBAction) {
+        if (!$this->execOrNot || !$this->isCurrentDBAction) {
             return $this;
         }
         $action = $this->methodAction[$this->actionType];
@@ -43,7 +43,7 @@ trait tableAuth
      */
     public function makeTablePublic()
     {
-        if (!$this->execOrNot && !$this->isCurrentDBAction) {
+        if (!$this->execOrNot || !$this->isCurrentDBAction) {
             return $this;
         }
         $action = $this->methodAction[$this->actionType];
