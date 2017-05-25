@@ -411,7 +411,9 @@
                     SDK.setToken(response.payload.result['token']);
                     devless_main.coreLib.notify("signup was successful");
                     devless_main.coreLib.notify(response.message,1);
-                    window.location.href = window.location.origin + '/' + actionUrl;
+                    if(actionUrl != '#') {
+                    	window.location.href = window.location.origin + '/' + actionUrl;
+                    }
                 } else {
                     devless_main.coreLib.notify(response.payload.result.message)
                     devless_main.coreLib.notify(response.message,0);
@@ -432,7 +434,9 @@
                     SDK.setToken(response.payload.result['token']);
                     devless_main.coreLib.notify("Log in successfully");
                     devless_main.coreLib.notify(response.message,1);
-                    window.location.href = window.location.origin + '/' + actionUrl;
+                    if(actionUrl != '#') {
+                    	window.location.href = window.location.origin + '/' + actionUrl;
+                    }
                 } else{
                     devless_main.coreLib.notify("Login failed");
                     devless_main.coreLib.notify(response.message,0);
@@ -449,8 +453,10 @@
                 devless_main.coreLib.notify(response.payload.error.message);
             } else {
                 data = response.payload.result;
-                data.firstname = data.firstname;
-                data.lastname = data.lastname;
+                data.firstname = data.first_name;
+                data.firstname = data.last_name;
+                delete(data.first_name)
+                delete(data.last_name);
                 devless_main.coreLib.render(component, [data])
             }
         })
@@ -465,8 +471,10 @@
                 devless_main.coreLib.notify(response.payload.error.message);
             } else {
                 data = response.payload.result;
-                data.firstname = data.firstname;
-                data.lastname = data.lastname;
+                data.firstname = data.first_name;
+                data.firstname = data.last_name;
+                delete(data.first_name)
+                delete(data.last_name);
                 scriptEngine.populateForm(component,
                     data);
             }
