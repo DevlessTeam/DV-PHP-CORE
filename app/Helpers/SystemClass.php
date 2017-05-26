@@ -205,7 +205,6 @@ class devless
     {
         $service = new service();
         $output = DS::service($serviceName, $table, $service)->where('id', $id)->delete();
-
         return $output;
     }
 
@@ -221,13 +220,13 @@ class devless
     {
         (empty($input)) ? Helper::interrupt(628) : false;
         if (is_array($input)) {
-            $id = $input['id'];
+            $id = $input['user_id'];
         } else {
             $id = $input;
         }
-        $profile = DB::table('users')->where('id', $id)->get();
+        $profile = DB::table('users')->where('id', $id)->first();
         if ($profile) {
-            return (array) $profile[0];
+            return (array) $profile;
         }
 
         return [];

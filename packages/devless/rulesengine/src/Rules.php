@@ -71,6 +71,7 @@ class Rules
         {
             $closest_method = 
                 DevlessHelper::find_closest_word($method, get_class_methods($this));
+            
             Helper::interrupt(642, 'There is no such method `'.$method.
                 '` perharps you meant '.$closest_method. '?');
         }
