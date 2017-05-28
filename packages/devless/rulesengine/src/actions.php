@@ -142,7 +142,7 @@
          *
          * @return $this
          */
-        public function assign(&$input, &$output)
+        public function assignValues(&$input, &$output)
         {
             $output = $input;    
             return $this;
