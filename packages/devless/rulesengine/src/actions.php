@@ -39,6 +39,7 @@
             if (!$this->execOrNot) {
                 return $this;
             }
+
             $msg  = (is_array($msg))? json_encode($msg):$msg;
             $evaluator = function () use ($msg) {
                 return Helper::interrupt(1000, $msg);
@@ -103,6 +104,7 @@
         public function getRunResult(&$input_var)
         {
             $this->to($input_var);
+            return $this;
         }
 
         /**
@@ -129,7 +131,7 @@
             if (!$this->execOrNot) {
                 return $this;
             }
-            $input_var = $this->results;
+            $output = $this->results;
 
             return $this;
         }
