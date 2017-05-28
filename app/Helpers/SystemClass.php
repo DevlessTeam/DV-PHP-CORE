@@ -213,7 +213,7 @@ class devless
      * @param $table
      * @param $id
      *
-     * @return mixed
+     * @return array
      * @ACL private
      */
     public function getUserProfile($input)
@@ -230,5 +230,15 @@ class devless
         }
 
         return [];
+    }
+
+    /**
+     * Get all users within the system 
+     * @return array
+     * @ACL private
+     */
+    public function getAllUsers()
+    {
+        return DB::table('users')->get();
     }
 }

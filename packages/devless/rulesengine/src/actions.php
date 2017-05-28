@@ -39,6 +39,7 @@
             if (!$this->execOrNot) {
                 return $this;
             }
+            $msg  = (is_array($msg))? json_encode($msg):$msg;
             $evaluator = function () use ($msg) {
                 return Helper::interrupt(1000, $msg);
             };
@@ -58,6 +59,7 @@
             if (!$this->execOrNot) {
                 return $this;
             }
+            $msg  = (is_array($msg))? json_encode($msg):$msg;
             $evaluator = function () use ($msg) {
                 return Helper::interrupt(1001, $msg);
             };
@@ -100,11 +102,49 @@
          */
         public function getRunResult(&$input_var)
         {
+            $this->to($input_var);
+        }
+
+        /**
+         * Assign one input to another 
+         *
+         * @param $input_var
+         *
+         * @return $this
+         */
+        public function assign($input)
+        {
+            $this->results = $input;    
+        }
+
+        /**
+         * Get results variable and set to variable.
+         *
+         * @param $output
+         *
+         * @return $this
+         */
+        public function to(&$output)
+        {
             if (!$this->execOrNot) {
                 return $this;
             }
             $input_var = $this->results;
 
+            return $this;
+        }
+
+        /**
+         * Assign $input to $output 
+         *
+         * @param $input
+         * @param $output  
+         *
+         * @return $this
+         */
+        public function assign(&$input, &$output)
+        {
+            $output = $input;    
             return $this;
         }
     }
