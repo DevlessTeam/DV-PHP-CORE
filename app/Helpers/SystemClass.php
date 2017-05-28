@@ -239,6 +239,9 @@ class devless
      */
     public function getAllUsers()
     {
-        return DB::table('users')->get();
+        return DB::table('users')->select(
+            [
+                "id", "username", "email", "first_name", "last_name", "status"
+            ])->get();
     }
 }
