@@ -78,8 +78,7 @@ class ServiceController extends Controller
         $service->resource_access_right =
             '{"query":1,"create":1,"update":1,"delete":1,"schema":0,"script":0, "view":0}';
         $service->active = 1;
-        $service->script = 'use App\Helpers\Assert as Assert;
- $rules
+        $service->script = '
  -> onQuery()
  -> onUpdate()
  -> onDelete()
@@ -149,9 +148,11 @@ class ServiceController extends Controller
                 $script = $request->input('script');
                 $service_name = $service->name;
                 $db = new DataStore();
-                $var_init = $this->var_init($script);
-                $service->script_init_vars = $var_init;
-                $service->script = $script;
+                $scriptHandler = new script();
+                $compiled_script  = $scriptHandler->compile_script($script);
+                $service->script_init_vars = $compiled_script['var_init'];
+                $service->script = $compiled_script['script'];
+                //create special field for uncompiled scripts 
 
                 $service->save();
 

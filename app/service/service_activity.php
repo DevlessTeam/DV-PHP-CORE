@@ -119,28 +119,4 @@ trait service_activity
 
         return $output;
     }
-
-    /**
-     * Initialize variables in Rules.
-     *
-     * @param $code
-     *
-     * @return string
-     */
-    public function var_init($code)
-    {
-        $declarationString = '';
-        $tokens = token_get_all('<?php '.$code);
-        foreach ($tokens as $token) {
-            if (is_array($token)) {
-                $start = 1;
-                if ($token[0] == 312) {
-                    $variable = substr($token[1], $start);
-                    $declarationString .= "$$variable = null;";
-                }
-            }
-        }
-
-        return $declarationString;
-    }
 }

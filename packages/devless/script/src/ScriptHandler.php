@@ -2,13 +2,33 @@
 
 namespace Devless\Script;
 
+use App\Helpers\Helper;
 use Devless\RulesEngine\Rules;
 use App\Helpers\DevlessHelper;
-use App\Helpers\Helper;
+use App\Helpers\Assert as Assert;
 use App\Http\Controllers\ServiceController as Service;
 
 class ScriptHandler
 {
+
+    public function compile_script($code)
+    {
+        $declarationString = '';
+        $tokens = token_get_all('<?php '.$code);
+        foreach ($tokens as $token) {
+            if (is_array($token)) {
+                $start = 1;
+                if ($token[0] == 312) {
+                    $variable = substr($token[1], $start);
+                    $declarationString .= "$$variable = null;";
+                }
+            }
+        }
+        $compiled_script['var_init'] = $declarationString;
+        $compiled_script['script'] = $code;
+        return $compiled_script;
+    }
+
     /**
      * script execution sandbox.
      *
@@ -55,7 +75,7 @@ $payload[script];
 EOT;
         $_____service_name = $payload['service_name'];
         $_____init_vars = $payload['script_init_vars'];
-        $exec = function () use ($code, $rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {
+        $exec = function () use ($code, $rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {   
 
             //store script params temporally
             $_____midRules = $rules;
@@ -70,7 +90,14 @@ EOT;
 
             extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
             $rules->accessRights = $EVENT['access_rights'];
-            eval($code);
+
+            $imports = "use App\Helpers\Assert as Assert;";
+            
+            eval(
+                $imports.
+                ' $rules'
+                .$code)
+            ;
 
             $EVENT['access_rights'] = $rules->accessRights;
 
