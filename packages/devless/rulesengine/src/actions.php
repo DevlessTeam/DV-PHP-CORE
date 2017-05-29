@@ -39,7 +39,7 @@
             if (!$this->execOrNot) {
                 return $this;
             }
-
+            
             $msg  = (is_array($msg))? json_encode($msg):$msg;
             $evaluator = function () use ($msg) {
                 return Helper::interrupt(1000, $msg);
@@ -82,6 +82,7 @@
                 return $this;
             }
             $evaluator = function () use ($service, $method, $params, $remoteUrl, $token) {
+                $params = ($params) ? $params : [];
                 if ($remoteUrl && $token) {
                     $this->results = ActionClass::remoteExecute($service, $method, $params, $remoteUrl, $token);
                 } else {
@@ -103,6 +104,25 @@
          */
         public function getRunResult(&$input_var)
         {
+            if (!$this->execOrNot) {
+                return $this;
+            }
+            $this->to($input_var);
+            return $this;
+        }
+
+        /**
+         * Get results variable and set to variable.
+         *
+         * @param $input_var
+         *
+         * @return $this
+         */
+        public function storeIn(&$input_var)
+        {
+            if (!$this->execOrNot) {
+                return $this;
+            }
             $this->to($input_var);
             return $this;
         }
@@ -116,6 +136,9 @@
          */
         public function assign($input)
         {
+            if (!$this->execOrNot) {
+                return $this;
+            }
             $this->results = $input;    
         }
 
