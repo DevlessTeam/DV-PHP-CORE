@@ -7,7 +7,7 @@ use App\Helpers\Helper;
 
 class Rules
 {
-    use fillers, tableAuth, tableActions, flowControl, actions;
+    use fillers, tableAuth, tableActions, flowControl, actions, math, date, generators;
 
     private $assertion = [
         'elseWhenever' => false,
@@ -45,6 +45,7 @@ class Rules
     public $thirdly = null;
     public $beSureTo = null;
     public $lastly = null;
+    public $next = null;
 
 
     public function __construct()
@@ -52,7 +53,7 @@ class Rules
         $this->then = $this->also = 
         $this->firstly = $this->secondly = 
         $this->thirdly = $this->beSureTo = 
-        $this->lastly = $this;
+        $this->next = $this->lastly = $this;
     }
 
     public function requestType($requestPayload)
@@ -73,8 +74,7 @@ class Rules
                 DevlessHelper::find_closest_word($method, get_class_methods($this));
 
             $failMessage = 'There is no such method `'.$method;
-            $failMessage += (strlen($closestMethod) > 0)? '` perharps you meant '.$closestMethod. '?' : '';
-            
+            $failMessage .= (strlen($closestMethod) > 0)? '` perharps you meant '.$closestMethod. '?' : '';
             Helper::interrupt(642, $failMessage);
         }
     }

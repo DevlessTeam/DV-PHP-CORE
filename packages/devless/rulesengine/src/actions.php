@@ -82,6 +82,7 @@
                 return $this;
             }
             $evaluator = function () use ($service, $method, $params, $remoteUrl, $token) {
+                $params = ($params) ? $params : [];
                 if ($remoteUrl && $token) {
                     $this->results = ActionClass::remoteExecute($service, $method, $params, $remoteUrl, $token);
                 } else {
@@ -89,7 +90,7 @@
                 }
                 $this->answered = true;
 
-                return true;
+                return $this;
             };
 
             return $this->executor($evaluator);
@@ -103,7 +104,23 @@
          */
         public function getRunResult(&$input_var)
         {
+            if (!$this->execOrNot) {
+                return $this;
+            }
             $this->to($input_var);
+            return $this;
+        }
+
+        /**
+         * Get results variable and set to variable.
+         *
+         * @param $input_var
+         *
+         * @return $this
+         */
+        public function storeAs(&$input_var)
+        {
+            $this->getRunResult($input_var);
             return $this;
         }
 
@@ -116,8 +133,13 @@
          */
         public function assign($input)
         {
+            if (!$this->execOrNot) {
+                return $this;
+            }
             $this->results = $input;    
+            return $this;
         }
+
 
         /**
          * Get results variable and set to variable.
@@ -137,6 +159,19 @@
         }
 
         /**
+        * Get results variable and set to variable.
+         *
+         * @param $output
+         *
+         * @return $this
+         */
+        public function from($output)
+        {
+            $this->to($input);
+            return $this;
+        }
+
+        /**
          * Assign $input to $output 
          *
          * @param $input
@@ -149,4 +184,6 @@
             $output = $input;    
             return $this;
         }
+
+
     }
