@@ -29,6 +29,10 @@
                 <h4 class="modal-title" id="myModalLabel">Add User</h4>
             </div>
             <div class="modal-body">
+                <div class="alert alert-success alert-dismissible" role="alert" style="display: none;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>Success!</strong> User created.
+                </div>
                 <form class="form-horizontal">
                     <div class="form-group">
                         <label for="username" class="col-sm-2 control-label">Username</label>
@@ -57,7 +61,7 @@
                     <div class="form-group">
                         <label for="phone_number" class="col-sm-2 control-label">Phone Number</label>
                         <div class="col-sm-10">
-                        <input type="text" class="form-control" name="phone_number" id="phone_name" placeholder="+233245678192">
+                        <input type="text" class="form-control" name="phone_number" id="phone_number" placeholder="+233245678192">
                         </div>
                     </div>
                     <div class="form-group">
@@ -128,8 +132,8 @@
         })
 
         $('#save').click(function() {
-            var id = Datatable.data()[0][0] + 1;
-            var username = $('').val()
+            var id = parseInt(Datatable.data()[0][0]) + 1;
+            var username = $('#username').val()
             var phone_number = $('#phone_number').val();
             var email = $('#email').val();
             var fname = $('#first_name').val();
@@ -141,7 +145,7 @@
                 SDK.call('devless', 'signUp', [email, password, username, phone_number, fname, lname], function(res) {
                     if(res.payload.result) {
                         Datatable.row.add([id, username, fname, lname, phone_number, email, 'true']).draw();
-                        alert('User added successfully');
+                        $('.alert').show();
                     } else {
                         alert('User creation failed');
                     }
