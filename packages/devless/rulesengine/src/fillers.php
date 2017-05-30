@@ -73,4 +73,14 @@ trait fillers
     {
         return $this;
     }
+
+    /**
+     * next filler statement.
+     *
+     * @return instance
+     */
+    public function next()
+    {
+        return $this;
+    }
 }

@@ -39,7 +39,7 @@
             if (!$this->execOrNot) {
                 return $this;
             }
-            
+
             $msg  = (is_array($msg))? json_encode($msg):$msg;
             $evaluator = function () use ($msg) {
                 return Helper::interrupt(1000, $msg);
@@ -90,7 +90,7 @@
                 }
                 $this->answered = true;
 
-                return true;
+                return $this;
             };
 
             return $this->executor($evaluator);
@@ -118,12 +118,9 @@
          *
          * @return $this
          */
-        public function storeIn(&$input_var)
+        public function storeAs(&$input_var)
         {
-            if (!$this->execOrNot) {
-                return $this;
-            }
-            $this->to($input_var);
+            $this->getRunResult($input_var);
             return $this;
         }
 
@@ -140,7 +137,9 @@
                 return $this;
             }
             $this->results = $input;    
+            return $this;
         }
+
 
         /**
          * Get results variable and set to variable.
@@ -160,6 +159,19 @@
         }
 
         /**
+        * Get results variable and set to variable.
+         *
+         * @param $output
+         *
+         * @return $this
+         */
+        public function from($output)
+        {
+            $this->to($input);
+            return $this;
+        }
+
+        /**
          * Assign $input to $output 
          *
          * @param $input
@@ -172,4 +184,6 @@
             $output = $input;    
             return $this;
         }
+
+
     }

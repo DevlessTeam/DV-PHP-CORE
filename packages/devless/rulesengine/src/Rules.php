@@ -7,7 +7,7 @@ use App\Helpers\Helper;
 
 class Rules
 {
-    use fillers, tableAuth, tableActions, flowControl, actions, math;
+    use fillers, tableAuth, tableActions, flowControl, actions, math, date, generators;
 
     private $assertion = [
         'elseWhenever' => false,
@@ -45,6 +45,7 @@ class Rules
     public $thirdly = null;
     public $beSureTo = null;
     public $lastly = null;
+    public $next = null;
 
 
     public function __construct()
@@ -52,7 +53,7 @@ class Rules
         $this->then = $this->also = 
         $this->firstly = $this->secondly = 
         $this->thirdly = $this->beSureTo = 
-        $this->lastly = $this;
+        $this->next = $this->lastly = $this;
     }
 
     public function requestType($requestPayload)
