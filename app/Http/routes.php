@@ -66,6 +66,7 @@
             //get list of users
             Route::get('devless_users', 'UserController@get_all_users');
             Route::get('retrieve_users', 'UserController@retrieve_all_users');
+            Route::delete('remvoe_user', 'UserController@remove_user');
 
             //service views
             Route::resource('services', 'ServiceController');
