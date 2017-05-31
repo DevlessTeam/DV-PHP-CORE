@@ -26,14 +26,14 @@ trait math {
      *
      * @return $this
      */
-	public function subtract($num=0)
+	public function subtract()
 	{
 		if (!$this->execOrNot) {
             return $this;
         }
 
         if(count(func_get_args()) == 1){
-        	 $this->results = ($this->results - func_get_args()[0]);
+             $this->results = ($this->results - func_get_args()[0]);
 		} else {
         	foreach (func_get_args() as $key => $number) {
         		$total = ($key == 0)? $number : $total - $number;

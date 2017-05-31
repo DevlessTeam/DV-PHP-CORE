@@ -167,7 +167,7 @@
          */
         public function from($output)
         {
-            $this->to($input);
+            $this->assign($output);
             return $this;
         }
 
