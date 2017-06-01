@@ -35,6 +35,10 @@ class UserController extends Controller
 
         return $users;
     }
+    public function remove_user(Request $request)
+    {
+        return $request;
+    }
     public function post_login(Request $request)
     {
         $user = DB::table('users')->where('email', $request->input('email'))->where('role', 1) ->first();
