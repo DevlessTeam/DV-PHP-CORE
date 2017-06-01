@@ -88,7 +88,7 @@ trait math {
      *
      * @return $this
      */
-	public function FindSquareOf($number)
+	public function FindSquareRootOf($number)
 	{
 		if(!$this->execOrNot) {
 			return $this;
