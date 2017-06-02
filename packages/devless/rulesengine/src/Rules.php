@@ -72,7 +72,6 @@ class Rules
         {
             $closestMethod = 
                 DevlessHelper::find_closest_word($method, get_class_methods($this));
-             dd($closestMethod);   
             $failMessage = 'There is no such method `'.$method;
             $failMessage .= (strlen($closestMethod) > 0)? '` perharps you meant '.$closestMethod. '?' : '';
             Helper::interrupt(642, $failMessage);
