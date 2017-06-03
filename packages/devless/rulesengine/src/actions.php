@@ -88,6 +88,44 @@
             return $this;
 
         }
+
+        /**
+         * Make remote requests
+         *
+         * @param  STRING $method
+         * @param  STRING $url
+         * @param  JSON $data
+         *
+         * @return $this
+         */
+        public function makeRemoteRequest($method, $url, $data='{}', $headers=[])
+        {
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => $url,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => strtoupper($method),
+              CURLOPT_POSTFIELDS => $data,
+              CURLOPT_HTTPHEADER => $headers,
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+              $this->results = $err;
+            } else {
+                $this->results =  json_decode($response, true);
+            }
+            return $this;
+        }
         /**
          * Get results variable and set to variable.
          *
