@@ -41,11 +41,9 @@
             }
 
             $msg  = (is_array($msg))? json_encode($msg):$msg;
-            $evaluator = function () use ($msg) {
-                return Helper::interrupt(1000, $msg);
-            };
-
-            return $this->executor($evaluator);
+            Helper::interrupt(1000, $msg);
+            return $this;
+            
         }
 
         /**
@@ -61,11 +59,8 @@
                 return $this;
             }
             $msg  = (is_array($msg))? json_encode($msg):$msg;
-            $evaluator = function () use ($msg) {
-                return Helper::interrupt(1001, $msg);
-            };
-
-            return $this->executor($evaluator);
+            Helper::interrupt(1001, $msg);
+            return $this;
         }
         /**
          * Call on an ActionClass.
@@ -81,19 +76,17 @@
             if (!$this->execOrNot) {
                 return $this;
             }
-            $evaluator = function () use ($service, $method, $params, $remoteUrl, $token) {
-                $params = ($params) ? $params : [];
-                if ($remoteUrl && $token) {
-                    $this->results = ActionClass::remoteExecute($service, $method, $params, $remoteUrl, $token);
-                } else {
-                    $this->results = ActionClass::execute($service, $method, $params);
-                }
-                $this->answered = true;
+            
+            $params = ($params) ? $params : [];
+            if ($remoteUrl && $token) {
+                $this->results = ActionClass::remoteExecute($service, $method, $params, $remoteUrl, $token);
+            } else {
+                $this->results = ActionClass::execute($service, $method, $params);
+            }
+            $this->answered = true;
 
-                return $this;
-            };
+            return $this;
 
-            return $this->executor($evaluator);
         }
         /**
          * Get results variable and set to variable.

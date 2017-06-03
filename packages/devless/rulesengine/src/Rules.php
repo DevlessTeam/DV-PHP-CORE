@@ -103,7 +103,10 @@ class Rules
             || (($elseWhenever) && $this->called['whenever'] && $this->called['elseWhenever'])
             || ($otherwise && ($this->called['whenever'] || $this->called['elseWhenever']))
         ) {
+
             $evaluator();
+        } else {
+            dd("stop");
         }
 
         return $this;
