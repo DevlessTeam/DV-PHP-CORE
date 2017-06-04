@@ -91,7 +91,7 @@ EOT;
             extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
             $rules->accessRights = $EVENT['access_rights'];
 
-            $imports = "use App\Helpers\Assert as Assert;";
+            $imports = "use App\Helpers\Assert as AssertIts;";
             
             eval(
                 $imports.
