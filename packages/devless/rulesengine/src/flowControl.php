@@ -31,14 +31,12 @@ trait flowControl
      */
     public function elseWhenever($assert)
     {
-        $this->execOrNot = $this->assertion['otherwise'] =
-            (!$this->assertion['whenever']) ?: false;
-        
         if(!$this->isCurrentDBAction){return $this;}   
-        
-        if ( $this->assertion['elseWhenever'] || $this->execOrNot ) {
+        if($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
+            $this->execOrNot = false;
             return $this;
         }
+        
         $this->assertion['elseWhenever'] = $assert;
         $this->called['elseWhenever'] = true;
         $this->execOrNot = ($assert);
@@ -52,15 +50,14 @@ trait flowControl
      */
     public function otherwise()
     {
-        $this->execOrNot = $this->assertion['otherwise'] =
-            (!$this->assertion['elseWhenever'] || !$this->assertion['whenever']) ?: false;
-        
-        if(!$this->isCurrentDBAction){return $this;}      
-        if (!$this->execOrNot) {
+        if(!$this->isCurrentDBAction){return $this;}   
+        if($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
+            $this->execOrNot = false;
             return $this;
-        }
+        }  
+        
         $this->called['otherwise'] = true;
-        $this->execOrNot = $this->assertion['otherwise'];
+        $this->execOrNot = true;
 
         return $this;
     }

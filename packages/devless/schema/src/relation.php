@@ -70,6 +70,13 @@ trait relation
 
         return $relatedTables;
     }
+    /**
+     *Get all service tables.
+     *
+     *@param $stableName
+     *
+     *@return array
+     */
     private function _get_all_service_tables($payload)
     {
         $serviceId = $payload['id'];
