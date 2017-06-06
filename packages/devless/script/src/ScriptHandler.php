@@ -92,12 +92,11 @@ EOT;
             $rules->accessRights = $EVENT['access_rights'];
 
             $imports = "use App\Helpers\Assert as AssertIts;";
-            
-            eval(
-                $imports.
-                ' $rules'
-                .$code)
-            ;
+            $headers = $imports.' $rules';
+            $footer  = '';
+            $finalCode = (strpos($code, 'use App\Helpers\Assert')!=false)? $code : $headers.$code.$footer;
+
+            eval($finalCode);
 
             $EVENT['access_rights'] = $rules->accessRights;
 
