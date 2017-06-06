@@ -58,8 +58,6 @@ function DvNavigate($payload, $pageName)
     return  $pagePath;
 }
 
-
-
 /**
  * Redirect to url after time.
  *

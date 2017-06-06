@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use DB;
@@ -11,6 +12,7 @@ use App\Helpers\DevlessHelper as DLH;
 use App\Helpers\Helper as helper;
 use App\Jobs\RegisterUserJob;
 use App\Http\Requests\RegisterUserRequest;
+
 class UserController extends Controller
 {
     // TODO: Session store needs to authenticate with a session table for security
@@ -30,18 +32,24 @@ class UserController extends Controller
     public function retrieve_all_users()
     {
         $users = User::orderBy('id', 'desc')->get();
+
         return $users;
+    }
+    public function remove_user(Request $request)
+    {
+        return $request;
     }
     public function post_login(Request $request)
     {
-
-        $user = DB::table('users')->where('email', $request->input('email'))->first();
+        $user = DB::table('users')->where('email', $request->input('email'))->where('role', 1) ->first();
         if ($user && Hash::check($request->input('password'), $user->password)) {
             $request->session()->put('user', $user->id);
             DLH::flash('Welcome Back', 'success');
+
             return redirect('services');
         } else {
             Session::flash('error', 'Incorrect login credentials');
+
             return back();
         }
     }
@@ -49,25 +57,27 @@ class UserController extends Controller
     {
         \Session::forget('user');
         \Session::flush();
+
         return redirect('/');
     }
     public function get_register(Request $request)
     {
         $app = [
-        'app_key'   => str_random(40),
+        'app_key' => str_random(40),
         'app_token' => md5(uniqid(1, true)),
          ];
         if ($params = helper::query_string()) {
-            if (isset($params['url_install']) && isset($params['url_install'])&&
+            if (isset($params['url_install']) && isset($params['url_install']) &&
                    isset($params['username']) && isset($params['password']) &&
-                   isset($params['app_name']) && isset($params['email']) && !(\DB::table('apps')->get()) ) {
+                   isset($params['app_name']) && isset($params['email']) && !(\DB::table('apps')->get())) {
                 $username = $params['username'][0];
                 $email = $params['email'][0];
                 $password = $params['password'][0];
                 $app_name = $params['app_name'][0];
                 $app_token = md5(uniqid(1, true));
-                $app_description = (isset($params['app_description']))?
-                       $params['app_description'][0]:'';
+                $app_description = (isset($params['app_description'])) ?
+                       $params['app_description'][0] : '';
+
                 return $this->registrer(
                     $request,
                     $username,
@@ -79,6 +89,7 @@ class UserController extends Controller
                 );
             }
         }
+
         return view('auth.create', compact('app'));
     }
     public function post_register(RegisterUserRequest $request)
@@ -87,9 +98,11 @@ class UserController extends Controller
             $user = $this->dispatch(new RegisterUserJob($request));
             $request->session()->put('user', $user->id);
             DLH::flash('Setup successful. Welcome to Devless', 'success');
+
             return redirect('services');
         } catch (\Exception $e) {
             DLH::flash('Error setting up', 'error');
+
             return back()->withInput();
         }
     }

@@ -7,7 +7,7 @@ use App\Helpers\Helper;
 
 class Rules
 {
-    use fillers, tableAuth, tableActions, flowControl, actions;
+    use fillers, tableAuth, tableActions, flowControl, actions, math, string, date, generators;
 
     private $assertion = [
         'elseWhenever' => false,
@@ -22,6 +22,7 @@ class Rules
     public $results = '';
     private $answered = false;
     private $execOrNot = true;
+    private $isCurrentDBAction = false;
     private $actionType = '';
     private $tableName = '';
     private $methodAction = [
@@ -44,6 +45,7 @@ class Rules
     public $thirdly = null;
     public $beSureTo = null;
     public $lastly = null;
+    public $next = null;
 
 
     public function __construct()
@@ -51,7 +53,7 @@ class Rules
         $this->then = $this->also = 
         $this->firstly = $this->secondly = 
         $this->thirdly = $this->beSureTo = 
-        $this->lastly = $this;
+        $this->next = $this->lastly = $this;
     }
 
     public function requestType($requestPayload)
@@ -68,10 +70,11 @@ class Rules
     {
         if(!method_exists($this, $method))
         {
-            $closest_method = 
+            $closestMethod = 
                 DevlessHelper::find_closest_word($method, get_class_methods($this));
-            Helper::interrupt(642, 'There is no such method `'.$method.
-                '` perharps you meant '.$closest_method. '?');
+            $failMessage = 'There is no such method `'.$method;
+            $failMessage .= (strlen($closestMethod) > 0)? '` perharps you meant '.$closestMethod. '?' : '';
+            Helper::interrupt(642, $failMessage);
         }
     }
 
@@ -100,7 +103,10 @@ class Rules
             || (($elseWhenever) && $this->called['whenever'] && $this->called['elseWhenever'])
             || ($otherwise && ($this->called['whenever'] || $this->called['elseWhenever']))
         ) {
+
             $evaluator();
+        } else {
+            dd("stop");
         }
 
         return $this;
