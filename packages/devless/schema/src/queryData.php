@@ -77,8 +77,7 @@ trait queryData
     {
         return Response::respond(625, null, [
             'results' => $results,
-            'count'   => $total_count,
-            'current_count' => count($results)
+            'properties' => ['count' => $total_count, 'current_count' => count($results)]
         ]);
     }
 
