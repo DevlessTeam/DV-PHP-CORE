@@ -119,4 +119,18 @@ trait service_activity
 
         return $output;
     }
+
+    /**
+     * operations to execute after resource processes order.
+     *
+     * @param string $resource
+     * @params array $payload
+     *
+     * @return array
+     */
+    public function after_resource_process_order($resource, $payload, $internalAccess = false)
+    {
+        $output = before_assigning_service_action($resource, $payload, $internalAccess = false);
+        return $output;
+    }
 }

@@ -38,7 +38,8 @@ trait service_assignment
             //check service access right
             $is_it_public = $current_service->public;
             $is_admin = Helper::is_admin_login();
-            $accessed_internally = $internal_access;
+            
+            $accessed_internally = ($is_admin)?:$internal_access;
             if ($is_it_public == 0 || $is_admin == true) {
                 $resource_access_right =
                   $this->_get_resource_access_right($current_service, $accessed_internally);
@@ -61,7 +62,7 @@ trait service_assignment
                         'params' => $parameters,
                     ];
                 // run script before assigning to method
-                if (!$internal_access && $resource != 'view' && $resource != 'rpc') {
+                if (!$accessed_internally && $resource != 'view' && $resource != 'rpc') {
                     $newServiceElements = $this->before_assigning_service_action($resource, $payload, $accessed_internally);
                     $resource = $newServiceElements['resource'];
                     $payload = $newServiceElements['payload'];
