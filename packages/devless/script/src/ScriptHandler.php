@@ -120,12 +120,13 @@ EOT;
             return $EVENT['params'];
         };
 
-        ob_start();
         $params = $exec();
         if (isset($payload['params'][0]['field'])) {
             $payload['params'][0]['field'][0] = $params;
         }
-        ob_end_clean();
+        if(error_get_last()) {
+            dd(); 
+        }
 
         if($EVENT['request_phase'] == 'after') {
             $results['status_code'] = $EVENT['status_code'];
