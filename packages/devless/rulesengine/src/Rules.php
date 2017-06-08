@@ -7,7 +7,7 @@ use App\Helpers\Helper;
 
 class Rules
 {
-    use fillers, tableAuth, tableActions, flowControl, actions, math, string, date, generators;
+    use fillers, tableAuth, tableActions, flowControl, actions, math, string, date, generators, mutateResponse;
 
     private $assertion = [
         'elseWhenever' => false,
@@ -20,6 +20,11 @@ class Rules
         'otherwise' => false,
     ];
     public $results = '';
+    
+    public $status_code = null;
+    public $message = null;
+    public $payload = null;
+
     private $answered = false;
     private $execOrNot = true;
     private $isCurrentDBAction = false;
@@ -72,7 +77,7 @@ class Rules
         {
             $closestMethod = 
                 DevlessHelper::find_closest_word($method, get_class_methods($this));
-            $failMessage = 'There is no such method `'.$method;
+            $failMessage = 'There is no such method `'.$method.'`';
             $failMessage .= (strlen($closestMethod) > 0)? '` perharps you meant '.$closestMethod. '?' : '';
             Helper::interrupt(642, $failMessage);
         }
