@@ -49,7 +49,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if table is being queried.
+     * Check if table is about to be queried.
      *
      * @return $this
      */
@@ -60,7 +60,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if data is being added to table.
+     * Check if data is about to be added.
      *
      * @return $this
      */
@@ -71,7 +71,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if data is being updated on table.
+     * Check if table data is about to be updated.
      *
      * @return $this
      */
@@ -82,7 +82,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if data is being deleted from table.
+     * Check if data is about to be deleted from table.
      *
      * @return $this
      */
@@ -94,7 +94,7 @@ trait tableActions
     }
 
      /**
-     * Check if table is already queried.
+     * Check if table has been queried.
      *
      * @return $this
      */
@@ -106,7 +106,7 @@ trait tableActions
         
     }
     /**
-     * Check if data is being added to table.
+     * Check if data has been added.
      *
      * @return $this
      */
@@ -117,7 +117,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if data is being updated on table.
+     * Check if table has been updated.
      *
      * @return $this
      */
@@ -128,7 +128,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if data is being deleted from table.
+     * Check if data has been deleted
      *
      * @return $this
      */
@@ -136,6 +136,17 @@ trait tableActions
     {
         $this->execOrNot = $this->isCurrentDBAction = ($this->request_phase == 'after' && $this->actionType == 'DELETE');
 
+        return $this;
+    }
+
+    /**
+     * Run irrespective of table action
+     *
+     * @return $this
+     */
+    public function onAnyRequest()
+    {
+        $this->execOrNot = $this->isCurrentDBAction = true;
         return $this;
     }
 

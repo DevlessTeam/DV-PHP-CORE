@@ -99,7 +99,8 @@ EOT;
             $rules->status_code = $EVENT['status_code'];
             $rules->message = $EVENT['message'];
             $rules->payload = $EVENT['results_payload'];
-
+            
+            
             $imports = "use App\Helpers\Assert as AssertIts;";
             $headers = $imports.' $rules';
             $footer  = '';
