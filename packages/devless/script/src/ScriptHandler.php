@@ -109,6 +109,9 @@ EOT;
             eval($finalCode);
 
             $EVENT['access_rights'] = $rules->accessRights;
+            $EVENT['status_code']  = $rules->status_code;
+            $EVENT['message']  =  $rules->message;
+            $EVENT['results_payload']  =  $rules->payload;
 
             foreach ($EVENT['params'] as $key => $value) {
                 $EVENT['params'][$key] = ${'input_'.$key};
