@@ -1,24 +1,19 @@
 <?php
-
 namespace Devless\Schema;
-
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ServiceController as Service;
-
 class DbHandler
 {
     use columns, connector, tableMeta, relation,
     schemaProperties, addData, updateData, destroyData,
     queryData, createTable;
-
     private $dbActionMethod = [
         'GET' => 'db_query',
         'POST' => 'add_data',
         'PATCH' => 'update',
         'DELETE' => 'destroy',
     ];
-
     
     public $dbActionAssoc = [
         'GET' => 'query',
@@ -27,7 +22,6 @@ class DbHandler
         'DELETE' => 'delete',
     ];
    
-
     /**
      * Access db functions based on request method type.
      *
@@ -44,7 +38,6 @@ class DbHandler
             : Helper::interrupt(607);
         $payload = $this->set_auth_id_if_required($db_action, $payload);
         $dbActionName = $this->dbActionMethod[$request];
-
         return $this->$dbActionName($payload);
     }
     /**
@@ -58,9 +51,7 @@ class DbHandler
     public function store(Request $request)
     {
         $this->create_schema($request['resource']);
-
     }
-
     /**
      * add user id to payload.
      *
@@ -76,20 +67,17 @@ class DbHandler
         $access_type = $payload['resource_access_right'];
         $access_state = $service
             ->check_resource_access_right_type($access_type[$db_action]);
-
         if ($access_state == true) {
             $user_cred = Helper::get_authenticated_user_cred($access_state);
             $user_id = $user_cred['id'];
         }
         $payload['user_id'] = $user_id;
-
         return $payload;
     }
 
     private function connect_to_db($payload)
     {
         $this->_connector($payload);
-
         return \DB::connection('DYNAMIC_DB_CONFIG');
     }
 
@@ -101,6 +89,15 @@ class DbHandler
         }
     }
 
+    public function db_response($response_type, $response_status, $response_message, $response_payload)
+    {
+        return [ 
+            'type' => $response_type, 
+            'status_code' => $response_status,
+            'message' => $response_message, 
+            'payload' => $response_payload
+        ];
+    }
     /**
      * Get DevLess table name.
      *

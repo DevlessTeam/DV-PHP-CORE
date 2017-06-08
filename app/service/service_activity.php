@@ -104,19 +104,60 @@ trait service_activity
      * operations to execute before assigning action to resource.
      *
      * @param string $resource
-     * @params array $payload
+     * @param array $payload
      *
      * @return array
      */
     public function before_assigning_service_action($resource, $payload, $internalAccess = false)
     {
+        $payload['request_phase'] = 'before';
         $output['resource'] = $resource;
         $output['payload'] = $payload;
-        if ($resource != 'schema' && !$internalAccess) {
+
+        $script_output = $this->script_executioner($resource, $payload, $internalAccess);
+        return ($script_output)?:$output;
+
+    }
+
+    /**
+     * operations to execute after resource processes order.
+     *
+     * @param string $resource
+     * @param array $payload
+     *
+     * @return array
+     */
+    public function after_resource_process_order($resource, $requestPayload, $status_code, $message, $payload, $internalAccess = false)
+    {
+        
+        $requestPayload['request_phase'] = 'after';
+        $requestPayload['response_status_code'] = $status_code;
+        $requestPayload['response_message'] = $message;
+        $requestPayload['response_payload'] = $payload;
+        $script_output = $this->script_executioner($resource, $requestPayload, $internalAccess = false);
+        
+        return ($script_output)?:['status_code' => $status_code, 'message'=> $message, 'payload' => $payload];
+    }
+
+
+    /**
+     * script execution engine 
+     *
+     * @param string $resource
+     * @param array $payload
+     * @param bol   $internalAccess
+     * @return array
+     */
+    public function script_executioner($resource, $payload, $internalAccess)
+    {
+         $output = false;
+
+         if ($resource != 'schema' && !$internalAccess) {
             $script = new script();
             $output = $script->run_script($resource, $payload);
         }
 
         return $output;
     }
+    
 }
