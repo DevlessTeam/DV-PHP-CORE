@@ -74,17 +74,29 @@ class DbHandler
         $payload['user_id'] = $user_id;
         return $payload;
     }
+
     private function connect_to_db($payload)
     {
         $this->_connector($payload);
         return \DB::connection('DYNAMIC_DB_CONFIG');
     }
+
     private function check_table_existence($service, $table)
     {
         if (!\Schema::connection('DYNAMIC_DB_CONFIG')->
             hasTable($service.'_'.$table)) {
             Helper::interrupt(634);
         }
+    }
+
+    public function db_response($response_type, $response_status, $response_message, $response_payload)
+    {
+        return [ 
+            'type' => $response_type, 
+            'status_code' => $response_status,
+            'message' => $response_message, 
+            'payload' => $response_payload
+        ];
     }
     /**
      * Get DevLess table name.

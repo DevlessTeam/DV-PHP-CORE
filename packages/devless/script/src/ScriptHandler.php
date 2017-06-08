@@ -48,16 +48,21 @@ class ScriptHandler
         $user_cred = (empty($user_cred)) ? ['id' => '', 'token' => ''] : $user_cred;
         $accessed_table = DevlessHelper::get_tablename_from_payload($payload);
         //available internal params
+
         $EVENT = [
             'method' => $payload['method'],
             'params' => [],
             'script' => $payload['script'],
             'user_id' => $user_cred['id'],
             'user_token' => $user_cred['token'],
-            'requestType' => $Dvresource,
+            'request_type' => $Dvresource,
+            'request_phase' =>$payload['request_phase'],
             'access_rights' => $payload['resource_access_right'],
+            'status_code'   => (isset($payload['response_status_code']))?$payload['response_status_code']:null,
+            'message'      => (isset($payload['response_message']))?$payload['response_message']:null,
+            'results_payload' => (isset($payload['response_payload']))?$payload['response_payload']:null,
         ];
-
+        
         if (isset($payload['params'][0]['field'])) {
             $EVENT['params'] = $payload['params'][0]['field'][0];
         } elseif (isset($payload['params'][0]['params'][0]['data'][0])) {
@@ -90,6 +95,10 @@ EOT;
 
             extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
             $rules->accessRights = $EVENT['access_rights'];
+            $rules->request_phase = ($EVENT['request_phase'] == 'after')?:'before';
+            $rules->status_code = $EVENT['status_code'];
+            $rules->message = $EVENT['message'];
+            $rules->payload = $EVENT['results_payload'];
 
             $imports = "use App\Helpers\Assert as AssertIts;";
             $headers = $imports.' $rules';
@@ -114,10 +123,17 @@ EOT;
         }
         ob_end_clean();
 
-        $payload['resource_access_right'] = $EVENT['access_rights'];
-        $results['payload'] = $payload;
-        $results['resource'] = $Dvresource;
-
+        if($EVENT['request_phase'] == 'after') {
+            $results['status_code'] = $EVENT['status_code'];
+            $results['message'] = $EVENT['message'];
+            $results['payload'] = $EVENT['results_payload'];
+        } else {
+            $payload['resource_access_right'] = $EVENT['access_rights'];
+            $results['payload'] = $payload;
+            $results['resource'] = $Dvresource;
+    
+        }
+        
         return $results;
     }
 }

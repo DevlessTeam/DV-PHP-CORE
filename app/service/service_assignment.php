@@ -67,13 +67,19 @@ trait service_assignment
                     $resource = $newServiceElements['resource'];
                     $payload = $newServiceElements['payload'];
                 }
-
+                
                 //keep names of resources in the singular
                 switch ($resource) {
                     case 'db':
                         $db = new Db();
 
-                        return $db->access_db($payload);
+                        $response = $db->access_db($payload);
+                        if (!$accessed_internally && $resource != 'view' && $resource != 'rpc') {
+                              return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload'], $accessed_internally);
+
+                        }
+                        return $response;
+                      
                         break;
                     case 'schema':
                         $db = new Db();
