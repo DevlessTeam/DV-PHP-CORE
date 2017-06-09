@@ -272,7 +272,7 @@
                 }
             }
         });
-    
+
         // Code snippet for converting form data into an object (key & value)
         function jQExtn() {
             $.fn.serializeObject = function()
@@ -296,7 +296,14 @@
         jQExtn();
 
         $('#delete-users').click(function() {
-            console.log(Datatable.$('input[type="checkbox"]').serialize());
+            console.log(Datatable);
+            // Iterate over all checkboxes in the table
+            Datatable.$('input[type="checkbox"]').each(function(){
+                // If checkbox is checked
+                if(this.checked){
+                    console.log(this);
+                }
+            });
         })
 
         $('#updateForm').submit(function(e) {
