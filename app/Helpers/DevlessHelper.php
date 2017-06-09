@@ -180,4 +180,24 @@ class DevlessHelper extends Helper
 
         return $closest_word;
     }
+    /**
+     * Script template generated for rules in each new service
+     * @return string
+     */
+    public static function script_template()
+    {
+        return 
+                '
+/**
+* All service db request pass through here before and after db actions are made
+* This makes it possible to modify  either the request or response to your satisfaction
+* Learn more about how to do this from the docs 
+**/
+ -> onQuery()
+ -> onUpdate()
+ -> onDelete()
+ -> onCreate()
+ ';
+ 
+    }
 }

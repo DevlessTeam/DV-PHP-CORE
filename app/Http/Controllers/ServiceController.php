@@ -78,12 +78,7 @@ class ServiceController extends Controller
         $service->resource_access_right =
             '{"query":1,"create":1,"update":1,"delete":1,"schema":0,"script":0, "view":0}';
         $service->active = 1;
-        $service->script = '
- -> onQuery()
- -> onUpdate()
- -> onDelete()
- -> onCreate()
- ';
+        $service->script = DLH::script_template();
         $db = new Db();
         if (!$db->check_db_connection($connection)) {
             DLH::flash('Sorry connection could not be made to Database', 'error');
