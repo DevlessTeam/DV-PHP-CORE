@@ -30,7 +30,7 @@
                 </div>
 
             </div>
-        @if($services->count())
+        {{-- @if($services->count()) --}}
              @foreach($services as $service)
              <a href="{{ route('services.edit', $service->id) }}">
             <div class="col-lg-3 col-sm-6 m-b-30">
@@ -62,7 +62,7 @@
              </a>
             @endforeach
         {!! $services->render() !!}
-    @else
+    {{-- @else
        <div class="modal fade" id="quick-guide" tabindex="-1" role="dialog" aria-labelledby="quickGuideLabel">
            <div class="modal-dialog" role="document">
                <div class="modal-content">
@@ -95,7 +95,7 @@
                $('#quick-guide').modal('show');
            }());
        </script>
-            @endif
+            @endif --}}
     </div>
 </div><!--body wrapper end-->
 
