@@ -3,7 +3,9 @@
     <script src="https://cdn.smooch.io/smooch.min.js"></script>
 <script>
 Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
-Smooch.open();
+@if($services->count() < 4)
+    Smooch.open();
+@endif
 </script>
     2016 &copy; Devless.
 
