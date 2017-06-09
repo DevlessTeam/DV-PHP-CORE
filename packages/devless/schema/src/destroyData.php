@@ -27,18 +27,18 @@ trait destroyData
         $table = $payload['params'][0]['name'];
         $param_list = $payload['params'][0]['params'][0];
         $task = $tasked = null;
-        //remove service appendage from service
+
+          //remove service appendage from service
         if (($pos = strpos($table, $service_name.'_')) !== false) {
             $tableWithoutService = substr($table, $pos + 1);
         } else {
             $tableWithoutService = $table;
         }
-
         $table_name = ($tableWithoutService == $payload['params'][0]['name'])
-            ? $service_name.'_'.$tableWithoutService :
+            ? $service_name.'_'.$tableWithoutService:
             $payload['params'][0]['name'];
-        
-        $this->check_table_existence($service_name, $table);
+
+        $this->check_table_existence('', $table_name);
         
 
         $destroy_base_query = '$db->table("'.$table_name.'")';
