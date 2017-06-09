@@ -207,6 +207,8 @@
                                         @endif
                                     </div>
                                 </div>
+                                <button class="btn btn-info pull-right" type=
+                                            "submit">Update</button>
                         </div>
                     </aside>
                     <aside class="p-aside">
