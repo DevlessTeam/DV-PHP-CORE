@@ -454,9 +454,11 @@
             } else {
                 data = response.payload.result;
                 data.firstname = data.first_name;
-                data.firstname = data.last_name;
+                data.lastname = data.last_name;
+                data.phonenumber = data.phone_number;
                 delete(data.first_name)
                 delete(data.last_name);
+                delete(data.phone_number);
                 devless_main.coreLib.render(component, [data])
             }
         })
@@ -472,9 +474,11 @@
             } else {
                 data = response.payload.result;
                 data.firstname = data.first_name;
-                data.firstname = data.last_name;
+                data.lastname = data.last_name;
+                data.phonenumber = data.phone_number;
                 delete(data.first_name)
                 delete(data.last_name);
+                delete(data.phone_number);
                 scriptEngine.populateForm(component,
                     data);
             }
