@@ -32,7 +32,7 @@
                     <th>Last Name</th>
                     <th>Phone Number</th>
                     <th>Email</th>
-                    <th>Active</th>
+                    <!-- <th>Active</th> -->
                 </tr>
             </thead>
         </table>
