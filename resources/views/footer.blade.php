@@ -7,7 +7,7 @@ Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
     Smooch.open();
 @endif
 </script>
-    2016 &copy; Devless.
+    <?php echo date('Y'); ?> &copy; Devless.
 
 </footer>
 <!--footer section end-->
