@@ -33,7 +33,7 @@
                     <th>Last Name</th>
                     <th>Phone Number</th>
                     <th>Email</th>
-                    <!-- <th>Active</th> -->
+                    <th>Active</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,7 +63,7 @@
             <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Add User</h4>
+                <h4 class="modal-title" id="myModalLabel"><b>Add User</b></h4>
             </div>
             <div class="modal-body">
                 <div class="alert alert-success alert-dismissible" role="alert" style="display: none;">
@@ -72,44 +72,44 @@
                 </div>
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label for="username" class="col-sm-2 control-label">Username</label>
-                        <div class="col-sm-10">
+                        <label for="username" class="col-sm-3 control-label"><b>Username</b></label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" id="username" placeholder="Username">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="first_name" class="col-sm-2 control-label">First Name</label>
-                        <div class="col-sm-10">
+                        <label for="first_name" class="col-sm-3 control-label"><b>First Name</b></label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" id="first_name" placeholder="First Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="last_name" class="col-sm-2 control-label">Last Name</label>
-                        <div class="col-sm-10">
+                        <label for="last_name" class="col-sm-3 control-label"><b>Last Name</b></label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" id="last_name" placeholder="Last Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="email" class="col-sm-2 control-label">Email</label>
-                        <div class="col-sm-10">
+                        <label for="email" class="col-sm-3 control-label"><b>Email</b></label>
+                        <div class="col-sm-9">
                         <input type="email" class="form-control" name="email" id="email" placeholder="Email">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="phone_number" class="col-sm-2 control-label">Phone Number</label>
-                        <div class="col-sm-10">
+                        <label for="phone_number" class="col-sm-3 control-label"><b>Phone Number</b></label>
+                        <div class="col-sm-9">
                         <input type="text" class="form-control" name="phone_number" id="phone_number" placeholder="+233245678192">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="password" class="col-sm-2 control-label">Password</label>
-                        <div class="col-sm-10">
+                        <label for="password" class="col-sm-3 control-label"><b>Password</b></label>
+                        <div class="col-sm-9">
                         <input type="password" class="form-control" name="password" id="password" placeholder="Password">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="confirm_password" class="col-sm-2 control-label">Confirm Password</label>
-                        <div class="col-sm-10">
+                        <label for="confirm_password" class="col-sm-3 control-label"><b>Confirm Password</b></label>
+                        <div class="col-sm-9">
                             <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
                         </div>
                     </div>
@@ -130,7 +130,7 @@
             <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Update User</h4>
+                <h4 class="modal-title" id="myModalLabel"><b>Update User</b></h4>
             </div>
             <div class="modal-body">
                 <div class="alert alert-success alert-dismissible" role="alert" style="display: none;">
@@ -139,50 +139,50 @@
                 </div>
                 <form class="form-horizontal" id="updateForm" action="">
                     <div class="form-group">
-                        <label for="username" class="col-sm-2 control-label">Username</label>
-                        <div class="col-sm-10">
+                        <label for="username" class="col-sm-3 control-label"><b>Username</b></label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" name="username" id="username" placeholder="Username">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="first_name" class="col-sm-2 control-label">First Name</label>
-                        <div class="col-sm-10">
+                        <label for="first_name" class="col-sm-3 control-label"><b>First Name</b></label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" name="first_name" id="first_name" placeholder="First Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="last_name" class="col-sm-2 control-label">Last Name</label>
-                        <div class="col-sm-10">
+                        <label for="last_name" class="col-sm-3 control-label"><b>Last Name</b></label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Last Name">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="email" class="col-sm-2 control-label">Email</label>
-                        <div class="col-sm-10">
+                        <label for="email" class="col-sm-3 control-label"><b>Email</b></label>
+                        <div class="col-sm-9">
                         <input type="email" class="form-control" name="email" id="email" placeholder="Email">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="phone_number" class="col-sm-2 control-label">Phone Number</label>
-                        <div class="col-sm-10">
+                        <label for="phone_number" class="col-sm-3 control-label"><b>Phone Number</b></label>
+                        <div class="col-sm-9">
                         <input type="text" class="form-control" name="phone_number" id="phone_number" placeholder="+233245678192">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="password" class="col-sm-2 control-label">Password</label>
-                        <div class="col-sm-10">
+                        <label for="password" class="col-sm-3 control-label"><b>Password</b></label>
+                        <div class="col-sm-9">
                         <input type="password" class="form-control" name="password" id="password" placeholder="Password">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="confirm_password" class="col-sm-2 control-label">Confirm Password</label>
-                        <div class="col-sm-10">
+                        <label for="confirm_password" class="col-sm-3 control-label"><b>Confirm Password</b></label>
+                        <div class="col-sm-9">
                             <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="confirm_password" class="col-sm-2 control-label">Active</label>
-                        <div class="col-sm-10">
+                        <label for="confirm_password" class="col-sm-3 control-label"><b>Active</b></label>
+                        <div class="col-sm-9">
                             <input type="checkbox" class="form-control" name="active" id="active">
                         </div>
                     </div>
@@ -202,13 +202,46 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Settings</h4>
+                        <h4 class="modal-title" id="myModalLabel"><b>Settings</b></h4>
                     </div>
                     <div class="modal-body">
                         <div class="alert alert-info">
                             <strong>Notice!</strong> Changing any requirement here affects how users interact with your backend.
                         </div>
+                        <form class="form-horizontal" action="">
+                            <div class="form-group">
+                                <label for="session" class="col-sm-5 control-label"><b>Session Timeout (sec)</b></label>
+                                <div class="col-sm-7">
+                                    <input type="number" class="form-control" min="0">
+                                </div>
+                            </div>
+                            <div class="form-group"><label for="Session Expiration" class="col-sm-5 control-label"><b>Session Expiration</b></label>
+                                <div class="col-sm-7">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="expiration" />Never
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group"><label class="col-sm-5 control-label" for="selfSignUp"><b>Self Sign Up</b></label>
+                                <div class="col-sm-7">
+                                    <div class="radio">
+                                        <label><input type="radio" name="ss_enable">Enable</label>
+                                        <label><input type="radio" name="ss_disable">Disable</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group"><label for="" class="col-sm-5 control-label"><b>Verify Accounts (Email Only)</b></label>
+                                <div class="col-sm-7">
+                                    <div class="radio"><label for="v_enable"><input type="radio" name="v_enable">Enable</label><label for="v_disable"><input type="radio" name="v_disable">Disable</label></div>
+                                </div>
+                            </div>
                     </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">Save Settings</button>
+                    </div>
+                        </form>
                 </div>
             </div>
         </div>
