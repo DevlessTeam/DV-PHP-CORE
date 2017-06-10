@@ -6,6 +6,7 @@
     <meta name="description" content="DevLess is a backend as a service framework that provide developers an easier way to rollout their web and mobile platform ">
     <meta name="author" content="DevLess">
     <meta name="keyword" content="DevLess, opensource, BAAS, Backend as a service, robust, php, laravel ">
+    
     <link rel="shortcut icon" href="favico.png" type="image/png">
 
     <title>DevLess {{config('devless')['version']}}</title>
@@ -21,6 +22,7 @@
 
     <!-- datatables css -->
     <link href="{{ Request::secure(Request::root()).'/css/jquery.dataTables.min.css'  }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.dataTables.min.css" rel="stylesheet">
 
     <!--common style-->
     <link href="{{ Request::secure(Request::root()).'/css/style.css' }}" rel="stylesheet">

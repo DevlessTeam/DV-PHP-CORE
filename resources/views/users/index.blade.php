@@ -9,6 +9,7 @@
     <h3>Users</h3>
     <div class="pull-right" style="position: relative; bottom: 23px;">
         <button type="button" id="addbtn" class="btn btn-primary"  data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i> Add User</button>
+        <button type="button" id="settingsbtn" class="btn btn-info"  data-toggle="modal" data-target="#settings"><i class="fa fa-cog"></i> Settings</button>
         <button type="button" class="btn btn-danger" id="delete-users"><i class="fa fa-ban"></i> Delete User(s)</button>
     </div>
     <span class="sub-title">Users/</span>
@@ -35,6 +36,26 @@
                     <th>Active</th>
                 </tr>
             </thead>
+            <tbody>
+                @foreach($users as $user)
+                    <tr>
+                        <td></td>
+                        <td>{{$user->id}}</td>
+                        <td>{{$user->username}}</td>
+                        <td>{{$user->first_name}}</td>
+                        <td>{{$user->last_name}}</td>
+                        <td>{{$user->phone_number}}</td>
+                        <td>{{$user->email}}</td>
+                        <td>
+                            @if($user->status == 0)
+                                true
+                            @else
+                                false
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
         </table>
         <!-- Modal -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -103,7 +124,7 @@
         </div>
         <!-- Modal end -->
 
-        <!-- Modal update&delete user -->
+        <!-- Modal update -->
         <div class="modal fade" id="udModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -159,15 +180,39 @@
                             <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="confirm_password" class="col-sm-2 control-label">Active</label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" class="form-control" name="active" id="active">
+                        </div>
+                    </div>
             </div>
-            <div class="modal-footer">
-                <button type="sumbit" class="btn btn-primary" id="update">Update User</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="sumbit" class="btn btn-primary" id="update">Update User</button>
+                </div>
             </form>
             </div>
         </div>
         </div>
-        <!-- Modal end update&delete -->
+        <!-- Modal end update-->
+
+        <!-- Modal begin settings -->
+        <div class="modal fade" id="settings" tabindex="-1" role="dialog" aria-labelledby="settingsLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Settings</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info">
+                            <strong>Notice!</strong> Changing any requirement here affects how users interact with your backend.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal end settings -->
     </section>
 </div>
 <!-- DevLess JS SDK -->
@@ -181,148 +226,5 @@
 ?>
 <script src="{{URL('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="<?= $app->token ?>"></script>
 
-<script>
-    $(document).ready(function() {
-        var dataSet = [];
-        var Datatable;
-        var user_id;
-        var rowData;
-        var element_id;
-        var status;
-        $.get('/retrieve_users', function(res) {
-            console.log(res);
-            for (i= 0; i < res.length; i++) {
-                arr = [
-                    "",
-                    res[i].id,
-                    res[i].username,
-                    res[i].first_name,
-                    res[i].last_name,
-                    res[i].phone_number,
-                    res[i].email,
-                    !res[i].status
-                ];
-                dataSet.push(arr);
-            }
-
-           Datatable = $('#users-table').DataTable({
-                data: dataSet,
-                'columnDefs': [{
-                    'targets': 0,
-                    'searchable': false,
-                    'orderable': false,
-                    'className': 'dt-body-center',
-                    'render': function (data, type, full, meta){
-                        return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
-                    }
-                }],
-                'order': [[1, 'asc']]
-            });
-
-            $('tbody tr td:not(:first-child)').click(function() {
-                $('#udModal').modal('show');
-                element_id = $(this).context._DT_CellIndex.row;
-                rowData = Datatable.row(this).data();
-                user_id = rowData[1];
-                status = rowData[7];
-                $('#udModal #username').val(rowData[2]);
-                $('#udModal #phone_number').val(rowData[5]);
-                $('#udModal #email').val(rowData[6]);
-                $('#udModal #first_name').val(rowData[3]);
-                $('#udModal #last_name').val(rowData[4]);
-
-            })
-        })
-
-        $('#save').click(function() {
-            var id = parseInt(Datatable.data()[0][0]) + 1;
-            var username = $('#username').val()
-            var phone_number = $('#phone_number').val();
-            var email = $('#email').val();
-            var fname = $('#first_name').val();
-            var lname = $('#last_name').val();
-            var password = $('#password').val();
-            var con_password = $('#confirm_password').val();
-
-            if (password === con_password) {
-                SDK.call('devless', 'signUp', [email, password, username, phone_number, fname, lname], function(res) {
-                    if(res.payload.result) {
-                        Datatable.row.add([id, username, fname, lname, phone_number, email, 'true']).draw();
-                        $('.alert').show();
-                    } else {
-                        alert('User creation failed');
-                    }
-                })
-            }
-        })
-
-        // Handle click on "Select all" control
-        $('#select-all').on('click', function(){
-            var rows = Datatable.rows({ 'search': 'applied' }).nodes();
-            $('input[type="checkbox"]', rows).prop('checked', this.checked);
-        });
-
-        // Handle click on checkbox to set state of "Select all" control
-        $('table tbody td').on('change', 'input[type="checkbox"]', function(){
-            // If checkbox is not checked
-            if(!this.checked){
-                var el = $('#select-all').get(0);
-                if(el && el.checked && ('indeterminate' in el)){
-                    el.indeterminate = true;
-                }
-            }
-        });
-
-        // Code snippet for converting form data into an object (key & value)
-        function jQExtn() {
-            $.fn.serializeObject = function()
-            {
-                var obj = {};
-                var arr = this.serializeArray();
-                $.each(arr, function() {
-                if (obj[this.name] !== undefined) {
-                    if (!obj[this.name].push) {
-                    obj[this.name] = [obj[this.name]];
-                    }
-                    obj[this.name].push(this.value || '');
-                } else {
-                    obj[this.name] = this.value || '';
-                }
-                });
-                return obj;
-            };
-        }
-
-        jQExtn();
-
-        $('#delete-users').click(function() {
-            console.log(Datatable);
-            // Iterate over all checkboxes in the table
-            Datatable.$('input[type="checkbox"]').each(function(){
-                // If checkbox is checked
-                if(this.checked){
-                    console.log(this);
-                }
-            });
-        })
-
-        $('#updateForm').submit(function(e) {
-            e.preventDefault();
-
-            var payload = $(this).serializeObject();
-
-            if(payload.password === payload.confirm_password) {
-                SDK.call('devless', 'updateProfile', [payload.email, payload.password, payload.username, payload.phone_number, payload.first_name, payload.last_name], function(res) {
-                    if(res.payload.result) {
-                        Datatable.row(element_id).data(["", user_id,  payload.username, payload.first_name, payload.last_name, payload.phone_number, payload.email, status]);
-                        $('.alert').show();
-                    } else {
-                        alert('Error updating user info');
-                    }
-                })
-            }
-
-        });
-    });
-</script>
+<script src="{{URL('/')}}/js/framework/users.js"></script>
 @endsection
