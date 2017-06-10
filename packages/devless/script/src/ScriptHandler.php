@@ -88,7 +88,7 @@ EOT;
 
             //get declared vars
             $declarationString = $_____init_vars;
-            eval($declarationString);
+            parse_str($declarationString);
             //restore script params
             $rules = $_____midRules;
             $EVENT = $_____mindEvent;

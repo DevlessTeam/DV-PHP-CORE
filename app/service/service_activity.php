@@ -67,14 +67,15 @@ trait service_activity
      */
     private function _get_resource_access_right($service, $master_access = false)
     {
+
         $master_resource_rights = ['query' => 1, 'update' => 1,
-             'delete' => 1, 'script' => 1, 'schema' => 1, 'script' => 1, 'create' => 1, ];
+             'delete' => 1, 'script' => 1, 'schema' => 1, 'script' => 1, 'create' => 1, 'view' => 1];
 
         $resource_access_right = $service->resource_access_right;
         $resource_access_right = json_decode($resource_access_right, true);
         $resource_access_right = ($master_access) ?
             $master_resource_rights : $resource_access_right;
-
+            
         return $resource_access_right;
     }
 
