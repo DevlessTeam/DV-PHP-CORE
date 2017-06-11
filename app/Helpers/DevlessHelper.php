@@ -193,10 +193,20 @@ class DevlessHelper extends Helper
 * This makes it possible to modify  either the request or response to your satisfaction
 * Learn more about how to do this from the docs 
 **/
+ -> beforeQuerying()
+ -> beforeUpdating()
+ -> beforeDeleting()
+ -> beforeCreating()
+
  -> onQuery()
  -> onUpdate()
  -> onDelete()
  -> onCreate()
+ 
+ -> afterQuerying()
+ -> afterUpdating()
+ -> afterDeleting()
+ -> afterCreating()
  ';
  
     }
