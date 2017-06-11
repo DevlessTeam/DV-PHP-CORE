@@ -53,8 +53,11 @@ trait mutateResponse
 		return $this;
 	}
 
+	/**
+     * execute common mutatation tasks.
+     */
 	private function commonMutationTask()
 	{
-		($this->request_phase == 'before')? Helper::interrupt(642, "Mutating Response prior to  a query is impossible. If you still wish to end with a custom response use  `->stopAndOutput('status_code', 'message', 'payload')`"): '';
+		($this->request_phase == 'before')? Helper::interrupt(642, "Mutating Response prior to a query is impossible. If you still wish to end with a custom response use  `->stopAndOutput('status_code', 'message', 'payload')`"): '';
 	}
 }

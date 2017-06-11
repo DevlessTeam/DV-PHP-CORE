@@ -82,6 +82,7 @@ class DevlessHelper extends Helper
         $docComment = $property->getDocComment();
 
         $access_type = function () use ($docComment) {
+            if(self::is_admin_login()){return true;}
             (strpos(($docComment), '@ACL private')) ? Helper::interrupt(627) :
                 (strpos($docComment, '@ACL protected')) ? Helper::get_authenticated_user_cred(2) :
                     (strpos($docComment, '@ACL public')) ? true : Helper::interrupt(638);
@@ -202,7 +203,7 @@ class DevlessHelper extends Helper
  -> onUpdate()
  -> onDelete()
  -> onCreate()
- 
+
  -> afterQuerying()
  -> afterUpdating()
  -> afterDeleting()

@@ -252,7 +252,6 @@
 <?php
 
     use App\Helpers\DataStore;
-    use App\Http\Controllers\ServiceController as service;
     $instance = DataStore::instanceInfo();
     $app  = $instance['app'];
 

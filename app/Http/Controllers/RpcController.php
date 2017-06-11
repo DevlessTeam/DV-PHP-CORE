@@ -29,7 +29,7 @@ class RpcController extends Controller
         if (file_exists($serviceMethodPath)) {
             include_once $serviceMethodPath;
         } else {
-            return Response::respond(604);
+            return Helper::interrupt(604);
         }
 
         $server = new Server();
