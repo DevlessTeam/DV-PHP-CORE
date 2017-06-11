@@ -41,7 +41,7 @@ trait mutateResponse
      */
 	public function mutateResponsePayload($newPayload)
 	{
-		$newPayload = (is_array($newPayload))?:[$newPayload];
+		$newPayload = (is_array($newPayload))?$newPayload:[$newPayload];
 		if (!$this->execOrNot) {
                 return $this;
         }
