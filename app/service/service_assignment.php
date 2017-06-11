@@ -66,6 +66,7 @@ trait service_assignment
                     $newServiceElements = $this->before_assigning_service_action($resource, $payload, $accessed_internally);
                     $resource = $newServiceElements['resource'];
                     $payload = $newServiceElements['payload'];
+                    
                 }
                 
                 //keep names of resources in the singular
@@ -77,7 +78,7 @@ trait service_assignment
                         if (!$accessed_internally && $resource != 'view' && $resource != 'rpc') {
                               return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload'], $accessed_internally);
 
-                        }
+                        } 
                         return $response;
                       
                         break;
@@ -93,6 +94,12 @@ trait service_assignment
                         $rpc = new Rpc();
 
                         return $rpc->index($payload);
+                    case 'endNow':
+                        return [
+                            'status_code' => $payload['status_code'],
+                            'message' => $payload['message'],
+                            'payload' => $payload['results'],
+                        ];
                     default:
                         Helper::interrupt(605);
                         break;

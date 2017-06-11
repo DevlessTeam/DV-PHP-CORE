@@ -95,10 +95,13 @@ EOT;
 
             extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
             $rules->accessRights = $EVENT['access_rights'];
-            $rules->request_phase = ($EVENT['request_phase'] == 'after')?:'before';
-            $rules->status_code = $EVENT['status_code'];
-            $rules->message = $EVENT['message'];
-            $rules->payload = $EVENT['results_payload'];
+            $rules->request_phase = ($EVENT['request_phase'] == 'after')?'after':'before';
+            if($rules->request_phase == 'after') {
+                $rules->status_code = $EVENT['status_code'];
+                $rules->message = $EVENT['message'];
+                $rules->payload = $EVENT['results_payload'];    
+            }
+            
             
             
             $imports = "use App\Helpers\Assert as AssertIts;";
@@ -112,6 +115,7 @@ EOT;
             $EVENT['status_code']  = $rules->status_code;
             $EVENT['message']  =  $rules->message;
             $EVENT['results_payload']  =  $rules->payload;
+            
 
             foreach ($EVENT['params'] as $key => $value) {
                 $EVENT['params'][$key] = ${'input_'.$key};
@@ -124,9 +128,8 @@ EOT;
         if (isset($payload['params'][0]['field'])) {
             $payload['params'][0]['field'][0] = $params;
         }
-        if(error_get_last()) {
-            dd(); 
-        }
+        
+        (error_get_last())?dd():'';
 
         if($EVENT['request_phase'] == 'after') {
             $results['status_code'] = $EVENT['status_code'];
@@ -136,6 +139,13 @@ EOT;
             $payload['resource_access_right'] = $EVENT['access_rights'];
             $results['payload'] = $payload;
             $results['resource'] = $Dvresource;
+            
+            if($rules->request_phase == 'endNow') {
+                $results['resource'] = 'endNow';
+                $results['payload']['status_code'] = $EVENT['status_code'];
+                $results['payload']['message'] = $EVENT['message'];
+                $results['payload']['results'] = $EVENT['results_payload'];
+            }
     
         }
         

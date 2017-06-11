@@ -21,9 +21,9 @@ class Rules
     ];
     public $results = '';
     
-    public $status_code = null;
-    public $message = null;
-    public $payload = null;
+    public $status_code = 1000;
+    public $message = '';
+    public $payload = [];
 
     private $answered = false;
     private $execOrNot = true;
@@ -110,9 +110,7 @@ class Rules
         ) {
 
             $evaluator();
-        } else {
-            dd("stop");
-        }
+        } 
 
         return $this;
     }

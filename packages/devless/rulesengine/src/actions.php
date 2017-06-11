@@ -216,5 +216,22 @@
             return $this;
         }
 
+        /**
+         * Stop execution and output results
+         *
+         * @param $status_code
+         * @param $message 
+         * @param $payload 
+         *
+         * @return $this
+         */
+        public function stopAndOutput($status_code, $message, $payload)
+        {
+            $this->request_phase = 'endNow';
+            $this->status_code = $status_code;
+            $this->message = $message;
+            $this->payload = $payload;
+            return $this;
+        }
 
     }
