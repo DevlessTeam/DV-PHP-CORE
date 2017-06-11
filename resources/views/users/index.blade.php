@@ -227,14 +227,14 @@
                             <div class="form-group"><label class="col-sm-5 control-label" for="selfSignUp"><b>Self Sign Up</b></label>
                                 <div class="col-sm-7">
                                     <div class="radio">
-                                        <label><input type="radio" name="ss_enable">Enable</label>
-                                        <label><input type="radio" name="ss_disable">Disable</label>
+                                        <label><input type="radio" name="s_signup">Enable</label>
+                                        <label><input type="radio" name="s_signup">Disable</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group"><label for="" class="col-sm-5 control-label"><b>Verify Accounts (Email Only)</b></label>
                                 <div class="col-sm-7">
-                                    <div class="radio"><label for="v_enable"><input type="radio" name="v_enable">Enable</label><label for="v_disable"><input type="radio" name="v_disable">Disable</label></div>
+                                    <div class="radio"><label for="v_enable"><input type="radio" name="v_account">Enable</label><label for="v_disable"><input type="radio" name="v_account">Disable</label></div>
                                 </div>
                             </div>
                     </div>
