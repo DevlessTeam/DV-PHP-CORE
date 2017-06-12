@@ -17,7 +17,7 @@ class dashboardController extends Controller
     {
         $app = App::first();
         $user = User::findOrFail(Session('user'));
-
+        $menuName = 'app';
         return view('dashboard.index', compact('app', 'user'));
     }
 
