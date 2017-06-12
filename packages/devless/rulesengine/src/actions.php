@@ -83,8 +83,7 @@
             } else {
                 $this->results = ActionClass::execute($service, $method, $params);
             }
-            $this->answered = true;
-
+            
             return $this;
 
         }

@@ -205,8 +205,8 @@
                         <h4 class="modal-title" id="myModalLabel"><b>Settings</b></h4>
                     </div>
                     <div class="modal-body">
-                        <div class="alert alert-info">
-                            <strong>Notice!</strong> Changing any requirement here affects how users interact with your backend.
+                        <div class="alert alert-warning">
+                            <strong>Notice!</strong> Settings you change here affect how users authenticate with your backend.
                         </div>
                         <form class="form-horizontal" action="">
                             <div class="form-group">

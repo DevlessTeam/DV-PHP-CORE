@@ -224,7 +224,9 @@ class devless
         } else {
             $id = $input;
         }
-        $profile = DB::table('users')->where('id', $id)->first();
+        $profile = DB::table('users')->where('id', $id)
+            ->select('first_name', 'last_name', 'username', 'email', 'status', 'role','phone_number', 'id', 'created_at', 'updated_at')
+            ->first();
         if ($profile) {
             return (array) $profile;
         }
