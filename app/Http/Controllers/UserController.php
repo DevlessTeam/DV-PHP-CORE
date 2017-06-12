@@ -27,8 +27,8 @@ class UserController extends Controller
     public function get_all_users()
     {
         $users = User::orderBy('id', 'desc')->where('role', '!=', 1)->get();
-
-        return view('users.index', compact('users'));
+        $menuName = 'devless_users';
+        return view('users.index', compact('users', 'menuName'));
     }
 
     public function update_user(Request $request) 

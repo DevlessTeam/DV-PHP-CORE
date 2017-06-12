@@ -16,8 +16,8 @@ class PrivacyController extends Controller
     public function index()
     {
         $services = Service::orderBy('created_at', 'desc')->get();
-
-        return view('privacy.index', compact('services'));
+        $menuName = 'privacy';
+        return view('privacy.index', compact('services', 'menuName'));
     }
 
     /**

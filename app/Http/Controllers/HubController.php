@@ -21,8 +21,8 @@ class HubController extends Controller
         $services = [];
         $majorVersion = explode('.', config('devless')['version'])[0];
         $services = json_decode(file_get_contents('https://raw.githubusercontent.com/DevlessTeam/service-hub/master/services-v'.$majorVersion.'.json'), true);
-
-        return view('hub.index', compact('services'));
+        $menuName = 'service_hub';
+        return view('hub.index', compact('services', 'menuName'));
     }
 
     public function get_service(Request $request)

@@ -28,8 +28,8 @@ class ServiceController extends Controller
     public function index()
     {
         $services = Service::orderBy('id', 'desc')->paginate(10);
-
-        return view('services.index', compact('services'));
+        $menuName = 'all_services';
+        return view('services.index', compact('services', 'menuName'));
     }
     /**
      * Show the form for creating a new resource.
@@ -38,6 +38,7 @@ class ServiceController extends Controller
      */
     public function create()
     {
+        $menuName = 'add_service';
         return view('services.create');
     }
     /**
@@ -125,8 +126,8 @@ class ServiceController extends Controller
             $table_meta[$count] = (json_decode($each_table_meta->schema, true));
             ++$count;
         }
-
-        return view('services.edit', compact('service', 'table_meta', 'id'));
+        $menuName = 'all_services';
+        return view('services.edit', compact('service', 'table_meta', 'id', 'menuName'));
     }
     /**
      * Update the specified resource in storage.
@@ -199,7 +200,7 @@ class ServiceController extends Controller
         } else {
             DLH::flash('Service could not be deleted', 'error');
         }
-
+        
         return redirect()->route('services.index');
     }
 

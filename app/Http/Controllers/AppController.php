@@ -22,7 +22,7 @@ class AppController extends Controller
         $app = App::first();
         $user = User::findOrFail(Session('user'));
         $menuName = 'app'; 
-        return view('app.edit', compact('app', 'user'));
+        return view('app.edit', compact('app', 'user', 'menuName'));
     }
 
     /**

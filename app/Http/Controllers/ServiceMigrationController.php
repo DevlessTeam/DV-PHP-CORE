@@ -20,8 +20,8 @@ class ServiceMigrationController extends Controller
     {
         $services = Service::orderBy('id', 'desc')->get();
         $app = App::first();
-
-        return view('service_migrations.index', compact('services'))->with('app', $app);
+        $menuName = 'migration';
+        return view('service_migrations.index', compact('services', 'menuName'))->with('app', $app);
     }
 
     /**
