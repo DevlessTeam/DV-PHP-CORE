@@ -3,8 +3,9 @@
  * Created by PhpStorm.
  * User: eddymens
  * Date: 01/09/2016
- * Time: 1:21 AM
+ * Time: 1:21 AM.
  */
+
 namespace App\Helpers;
 
 use App\Http\Controllers\ServiceController as Service;
@@ -15,26 +16,30 @@ class DataStore extends Helper
     public static $payload;
     private static $resourceType = 'db';
     /**
-     * Specify which service table to work with
+     * Specify which service table to work with.
+     *
      * @param $serviceName
      * @param $tableName
      * @param Service $service
+     *
      * @return DataStore
      */
     public static function service($serviceName, $tableName, Service $service = null)
     {
         $serviceInstance = new Service();
-        $service = ($service == null )? $serviceInstance : $service;
+        $service = ($service == null) ? $serviceInstance : $service;
         $serviceDetails = function () use ($serviceName, $tableName, $service) {
             self::$payload['service_name'] = $serviceName;
             self::$payload['params'] = ['table' => [$tableName]];
             self::$payload['service'] = $service;
         };
-        (isset(self::$payload['service_name'], self::$payload['params']['table']))? true : $serviceDetails();
-        return (is_null(self::$instance))? self::$instance = new self() : self::$instance;
+        (isset(self::$payload['service_name'], self::$payload['params']['table'])) ? true : $serviceDetails();
+
+        return (is_null(self::$instance)) ? self::$instance = new self() : self::$instance;
     }
     /**
-     * Query service tables
+     * Query service tables.
+     *
      * @return array
      */
     public static function queryData()
@@ -42,23 +47,27 @@ class DataStore extends Helper
         $service = self::$payload['service'];
         $payload = self::$payload;
         $method = 'GET';
-        $result  =
+        $result =
             $service->assign_to_service($payload['service_name'], self::$resourceType, $method, self::$payload['params'], true);
         self::cleanUp();
+
         return $result;
     }
 
     /**
-     * Query service tables
+     * Query service tables.
+     *
      * @return array
-    */
+     */
     public static function getData()
     {
         return self::queryData();
     }
     /**
-     * Add data to the service table
+     * Add data to the service table.
+     *
      * @param $data
+     *
      * @return array
      */
     public static function addData($data)
@@ -70,17 +79,21 @@ class DataStore extends Helper
         $pushToStore = function ($data) use ($tableName, $method, $service, $payload) {
             $dataToAdd = [['name' => $tableName, 'field' => [$data]]];
             self::cleanUp();
+
             return $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToAdd, true);
         };
         foreach ($data as $datum) {
-                $results = $pushToStore($datum);
+            $results = $pushToStore($datum);
         }
         self::cleanUp();
+
         return $results;
     }
     /**
-     * Update record at specific entry
+     * Update record at specific entry.
+     *
      * @param $data
+     *
      * @return array
      */
     public static function update($data)
@@ -90,13 +103,15 @@ class DataStore extends Helper
         $tableName = self::$payload['params']['table'][0];
         $method = 'PATCH';
         $dataToPatch =
-                [['name' => $tableName, 'params' => [['where'=>$payload['params']['where'][0], 'data'=>[$data]]] ]];
+                [['name' => $tableName, 'params' => [['where' => $payload['params']['where'][0], 'data' => [$data]]]]];
         $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToPatch, true);
         self::cleanUp();
+
         return $result;
     }
     /**
-     * Delete records from service table
+     * Delete records from service table.
+     *
      * @return array
      */
     public static function delete()
@@ -104,7 +119,8 @@ class DataStore extends Helper
         return self::destroyAction('delete');
     }
     /**
-     * Truncate service table
+     * Truncate service table.
+     *
      * @return array
      */
     public static function truncate()
@@ -112,7 +128,8 @@ class DataStore extends Helper
         return self::destroyAction('truncate');
     }
     /**
-     * Drop service table
+     * Drop service table.
+     *
      * @return array
      */
     public static function drop()
@@ -120,8 +137,10 @@ class DataStore extends Helper
         return self::destroyAction('drop');
     }
     /**
-     * select delete action
+     * select delete action.
+     *
      * @param $action
+     *
      * @return array
      */
     private static function destroyAction($action)
@@ -130,18 +149,21 @@ class DataStore extends Helper
         $payload = self::$payload;
         $tableName = self::$payload['params']['table'][0];
         $method = 'DELETE';
-        $parameters  = ($action == 'delete' && isset($payload['params']['where'][0]))?
-            [[$action=>"true", 'where'=>$payload['params']['where'][0]]] : [[$action=>"true"]];
+        $parameters = ($action == 'delete' && isset($payload['params']['where'][0])) ?
+            [[$action => 'true', 'where' => $payload['params']['where'][0]]] : [[$action => 'true']];
         $deletePayload =
-            [['name' => $tableName, 'params' => $parameters ]];
+            [['name' => $tableName, 'params' => $parameters]];
 
         $result = $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $deletePayload, true);
         self::cleanUp();
+
         return $result;
     }
     /**
-     * Skip $value number of results
+     * Skip $value number of results.
+     *
      * @param $value
+     *
      * @return DataStore
      */
     public function offset($value)
@@ -149,9 +171,11 @@ class DataStore extends Helper
         return self::bindToParams('offset', $value);
     }
     /**
-     * Carryout db action where $column equals $value
+     * Carryout db action where $column equals $value.
+     *
      * @param $column
      * @param $value
+     *
      * @return DataStore
      */
     public static function where($column, $value)
@@ -159,8 +183,22 @@ class DataStore extends Helper
         return self::bindToParams('where', $column.','.$value);
     }
     /**
-     * Order records by a given field
+     * orWhere to include data that match $value from $column.
+     *
+     * @param $column
      * @param $value
+     *
+     * @return DataStore
+     */
+    public static function orWhere($column, $value)
+    {
+        return self::bindToParams('orWhere', $column.','.$value);
+    }
+    /**
+     * Order records by a given field.
+     *
+     * @param $value
+     *
      * @return DataStore
      */
     public static function orderBy($value)
@@ -168,31 +206,48 @@ class DataStore extends Helper
         return self::bindToParams('orderBy', $value);
     }
     /**
-     * Get a given number of records
+     * Get a given number of records.
+     *
      * @param $value
-     * @return null
      */
     public static function size($value)
     {
         return self::bindToParams('size', $value);
     }
     /**
-     * add parameter to Global params
+     * Search for a data with $value from $column.
+     *
+     * @param $column
+     * @param $value
+     *
+     * @return DataStore
+     */
+    public static function search($column, $value)
+    {
+        return self::bindToParams('search', $column.','.$value);
+    }
+    /**
+     * add parameter to Global params.
+     *
      * @param $methodName
      * @param $args
+     *
      * @return DataStore
      */
     private static function bindToParams($methodName, $args)
     {
         self::$payload['params'][$methodName] =
-            (null == isset(self::$payload['params'][$methodName]))?  self::$payload['params'][$methodName] = [] :self::$payload['params'][$methodName] ;
+            (null == isset(self::$payload['params'][$methodName])) ? self::$payload['params'][$methodName] = [] : self::$payload['params'][$methodName];
         array_push(self::$payload['params'][$methodName], $args);
-        return (is_null(self::$instance))? self::$instance = new self() : self::$instance;
+
+        return (is_null(self::$instance)) ? self::$instance = new self() : self::$instance;
     }
 
     /**
-     * grab all related tables
+     * grab all related tables.
+     *
      * @param $value
+     *
      * @return mixed
      */
     public static function related($value)
@@ -205,67 +260,65 @@ class DataStore extends Helper
         self::$instance = null;
     }
     /**
-     * get instance information
+     * get instance information.
+     *
      * @return array
      */
     public static function instanceInfo()
     {
-
         $adminData = \DB::table('users')->where('role', 1)
                 ->select('username', 'email')->first();
-        $appData   =  \DB::table('apps')->select('name', 'description', 'token')->first();
+        $appData = \DB::table('apps')->select('name', 'description', 'token')->first();
         $instanceInfo['app'] = $appData;
         $instanceInfo['admin'] = $adminData;
+
         return $instanceInfo;
     }
 
     /**
-     * get data from Devless dump
-     * @return boolean
+     * get data from Devless dump.
+     *
+     * @return bool
      */
     public static function getDump($key)
     {
-        if ($dump = \DB::table('devless_dump')->where('key', $key)->first()) {
-            return $dump->value;
-        } else {
+        $output = \DB::table('devless_dump')->where('key', $key)->first();
+        if (!$output) {
             return null;
         }
 
-    }
-
-
-     /**
-     * add data to devless dump
-     * @return boolean
-     */
-    public static function setDump($key, $value)
-    {
-
-        $status = \DB::table('devless_dump')->insert(['key'=>$key, 'value'=>$value]);
-
-        return $status;
+        return $output->value;
     }
 
     /**
-     * get data from Devless dump
-     * @return boolean
+     * add data to devless dump.
+     *
+     * @return bool
+     */
+    public static function setDump($key, $value, $updateIfSet = false)
+    {
+        $status = \DB::table('devless_dump')->insert(['key' => $key, 'value' => $value]);
+
+        return (!$status && $updateIfSet) ? self::updateDump($key, $value) : $status;
+    }
+
+    /**
+     * get data from Devless dump.
+     *
+     * @return bool
      */
     public static function updateDump($key, $value)
     {
-        $status = \DB::table('devless_dump')->where('key', $key)->update(['value'=>$value]);
-
-        return $status;
+        return \DB::table('devless_dump')->where('key', $key)->update(['value' => $value]);
     }
 
-
     /**
-     * destroy devless dump
-     * @return boolean
+     * destroy devless dump.
+     *
+     * @return bool
      */
     public static function destroyDump($key)
     {
-        $status = \DB::table('devless_dump')->where('key', $key)->delete();
-
-        return $status;
+        return \DB::table('devless_dump')->where('key', $key)->delete();
     }
 }

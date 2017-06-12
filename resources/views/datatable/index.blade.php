@@ -13,13 +13,7 @@
 
 @section('content')
 <style media="screen">
-table {
-    table-layout: fixed;
-    width: 300px;
-}
-
 td {
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -27,6 +21,7 @@ td {
 #dtRow {
     cursor: pointer;
 }
+
 </style>
 
 <div class="wrapper">
@@ -59,7 +54,7 @@ td {
             </div>
         </div>
 
-        <div class="col-sm-12">
+        <div class="col-sm-12 tab" id="loader">
             <section class="panel"></section>
         </div>
     </div>
@@ -116,8 +111,8 @@ window.onload(function() {
     var module_table;
 
     $(window).load(function() {
-        
-        /* Handles Service and table name build when view data is click from the Service Panel */        
+
+        /* Handles Service and table name build when view data is click from the Service Panel */
         if ($('#service option:selected').val() != '' && $('#table_name option:selected').val() != '') {
             var tb_name = $('#service option:selected').text() + '_' + $('#table_name option:selected').text();
             module_name = $('#service option:selected').text();
@@ -126,28 +121,30 @@ window.onload(function() {
     });
 
     var entries;
-    var metas;
-    let Datatable;
+    var Datatable;
+    var metaForm;
 
     // Initiate table build
     function tableCall(table_entries) {
-        $.get('/datatable/'+table_entries+'/metas', function(response){
-            delete response[1];
-            metas = response;
-        });
+        var metas;
 
-        $.get('/datatable/'+table_entries+'/entries', function(resp) {
-            $('#addbtn').prop("disabled", false);
-            navOption(resp);
-
-        });
+        $.get('/datatable/'+table_entries+'/metas', function(res) {
+            metas = res;
+            metaForm = metas;
+            if (metas !== undefined) {
+                $.get('/datatable/'+table_entries+'/entries', function(resp) {
+                    $('#addbtn').prop("disabled", false);
+                    navOption(resp, metas);
+                })
+            }
+        })
     }
 
     // Ajax to retrieve table names and append it to the DOM on module name change
     $('#service').change(function() {
         module_id = $('#service').val();
         module_name = $('#service option:selected').text();
-        
+
         $('#table_name').find('option').remove().end().append('<option disabled selected value> -- select a table -- </option>');
         $.get('/datatable/'+module_id, function(data) {
             var tables = data;
@@ -172,36 +169,40 @@ window.onload(function() {
     });
 
     // Handle table creation with row & columns
-    function buildHtmlTable() {
-        const table = '<table id="dataOne" cellspacing="0" width="100%" class="display compact"><thead id="table_head"></thead><tbody id="table_body"></tbody></table>';
+    function buildHtmlTable(data, metaData) {
+        const table = '<div class="table-responsive"><table id="dataOne" cellspacing="0" width="100%" class="display compact cell-border"><thead id="table_head"></thead><tbody id="table_body"></tbody></table></div>';
         $('.panel').append(table);
-        var columns = addAllColumnHeaders(entries);
+        var columns = addAllColumnHeaders(metaData);
 
-        for(i = 0; i < entries.length; i++) {
+        for(i = 0; i < data.length; i++) {
             table_bd = '<tr id="dtRow">';
             for(j = 0; j < columns.length; j++) {
 
-                table_bd += '<td>'+entries[i][columns[j]]+'</td>';
+                table_bd += '<td>'+data[i][columns[j]]+'</td>';
             }
             table_bd += '</tr>';
             $('#table_body').append(table_bd);
         }
-
-        Datatable = $('table').DataTable();
+        $('.loader').remove();
+        Datatable = $('#dataOne').DataTable();
     }
 
     // Creation of table headers
-    function addAllColumnHeaders(entries) {
+    function addAllColumnHeaders(metas) {
         let table_head = '<tr>';
         let header = [];
 
-        metas.map((v, i) => {
-            if (v !== 'devless_user_id'){
-                header.push(v)
-                table_head += '<th>'+v.toUpperCase()+'</th>';
+        if ( metas === undefined) {
+            alert('Please refresh your page. Xhr failed');
+        }
+
+        for (i=0; i< metas.length; i++){
+            if( metas[i] !== 'devless_user_id'){
+                header.push(metas[i]);
+                table_head += '<th>'+metas[i].toUpperCase()+'</th>';
             }
-        });
-        
+        }
+
         table_head += '</tr>';
         $('#table_head').append(table_head);
 
@@ -209,9 +210,9 @@ window.onload(function() {
     }
 
     // Building of table
-    function navOption(data) {
-        entries = data;
-        buildHtmlTable();
+    function navOption(data, metas) {
+        var entries = data;
+        buildHtmlTable(entries, metas);
     }
 
     // Code snippet for converting form data into an object (key & value)
@@ -236,8 +237,8 @@ window.onload(function() {
 
     // Handles the form creation with data when a row is clicked
     $(document).on('click', '#dtRow', function () {
-        // grab row id 
-        element_id = $(this).find('tr').context._DT_RowIndex;  
+        // grab row id
+        element_id = $(this).find('tr').context._DT_RowIndex;
 
         c = $(this).find('td').map(function(){
             return $(this).html();
@@ -246,8 +247,8 @@ window.onload(function() {
       $(function modal() {
           $('#flash_msg').modal({show: true, backdrop: 'static'});
           $('#formData').html(" ");
-          for (var i = 2; i < metas.length; i++) {
-            $('#formData').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'" value="'+c[i-1]+'">');
+          for (var i = 2; i < metaForm.length; i++) {
+                $('#formData').append('<label for="'+metaForm[i]+'"><b>'+metaForm[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metaForm[i]+'" id="'+metaForm[i]+'" value="'+c[i-1]+'">');
           }
       });
       jQExtn();
@@ -258,8 +259,14 @@ window.onload(function() {
         $('form').submit(function(e) {
           e.preventDefault();
           payload = $(this).serializeObject();
+
           // Grabs the last id in the table & increases it
-          last_id = Datatable.data()[Datatable.data().length - 1][0];
+          if(Datatable.data().length === 0){
+                last_id = 0;
+          } else {
+                last_id = Datatable.data()[Datatable.data().length - 1][0];
+          }
+
           table_array = [parseInt(last_id)+1];
 
           // Grabs values from the payload (form data) and push them into an array for DataTable library
@@ -288,7 +295,7 @@ window.onload(function() {
                 break;
             case "Update":
                 var info = {resource:[{name:module_table, params: [{where: "id,"+c[0], data:[payload]}]}]};
-                
+
                 // Grab id from the row since it doesn't need to be changed during update
                 update_array = [Datatable.row(element_id).data()[0]];
                 // Push data into array for the row to be updated
@@ -340,8 +347,8 @@ window.onload(function() {
           $('#add_form').modal({show: true, backdrop: 'static'});
 
           $('#addform').html(" ");
-          for (var i = 2; i < metas.length; i++) {
-            $('#addform').append('<label for="'+metas[i]+'"><b>'+metas[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metas[i]+'" id="'+metas[i]+'">');
+          for (var i = 2; i < metaForm.length; i++) {
+            $('#addform').append('<label for="'+metaForm[i]+'"><b>'+metaForm[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metaForm[i]+'" id="'+metaForm[i]+'">');
           }
       });
       jQExtn();

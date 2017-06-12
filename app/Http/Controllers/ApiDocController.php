@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Service;
 use Illuminate\Http\Request;
-use Devless\Schema\DbHandler;
 
 class ApiDocController extends Controller
 {
@@ -20,11 +19,11 @@ class ApiDocController extends Controller
         return view('api_docs.index', compact('services'));
     }
 
-    /**
-     *Get schema to generate request payload.
-     *
-     * @return Response
-     */
+/**
+ *Get schema to generate request payload.
+ *
+ * @return Response
+ */
     // public function schema($table_name, $service_id)
     public function schema($service_id, $service_name, $table_name)
     {

@@ -3,8 +3,11 @@
     <script src="https://cdn.smooch.io/smooch.min.js"></script>
 <script>
 Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
+@if(count(DB::table('services')->get()) < 5)
+    Smooch.open();
+@endif
 </script>
-    2016 &copy; Devless.
+    <?php echo date('Y'); ?> &copy; Devless.
 
 </footer>
 <!--footer section end-->
@@ -24,6 +27,7 @@ Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
 
 <!-- datatable -->
 <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
 
 <!--Nice Scroll-->
 <script src="{{ Request::secure(Request::root()).'/js/jquery.nicescroll.js' }}" type="text/javascript"></script>
@@ -59,7 +63,18 @@ Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
 <script src="{{ Request::secure(Request::root()).'/js/ace/mode-php.js' }}" type="text/javascript" ></script>
 <script src="{{ Request::secure(Request::root()).'/js/ace/jquery-ace.min.js' }}" type="text/javascript" ></script>
 @endif
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+function copyToBoard(text){
+	prompt("Ctrl/CMD+c to copy", text);
+}
+</script>
+
 @include('notifier')
 </body>
 
 </html>
+	

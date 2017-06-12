@@ -49,14 +49,15 @@
     devless_main.singleCourier = '';
     devless_main.components = [];
     devless_main.coreLib = {};
+    devless_main.generalErrorState = 0; 
 
     devless_main.coreLib.notify = function(message, status) {
         _jql('.dv-notify').each(function() {
             this.textContent = message;
             this.style.display = 'block';
         })
-
-        if(status == 1) {
+        devless_main.generalErrorState = status;
+    	if(status == 1) {
             _jql('.dv-notify-success').each(function() {
                 this.style.display = 'block';
             })
@@ -163,7 +164,7 @@
                         numFields++;
                     }, false)
                     reader.onerror = function(e) {
-                        console.error(e);
+                        devless_main.coreLib.notify(e,0);
                     };
                     reader.readAsDataURL(element.files[0]);
                 }
@@ -171,24 +172,27 @@
                     data[element.name] = element.value;
                     numFields++;
                 }
-                element.value = '';
             });
-            console.log(numFields, inputs.length-1);
+            formCallback = function(){
+            	_jql.each(inputs, function(index, element){
+            		console.log(devless_main.generalErrorState);
+            		if(devless_main.generalErrorState == 1){
+            			element.value = '';	
+            		}
+            		
+            	})
+            }
             if(numFields == inputs.length-1){
-                callback(data);
-                console.log("callback from if:", callback)
+                callback(data, formCallback);
             } else {
                 var intvl = setInterval(function() {
                     if (numFields == inputs.length-1) {
                         clearInterval(intvl);
-                        callback(data);
-                        console.log("calllback from else",callback)
+                        callback(data, formCallback);
                     }
                 }, 1);
 
             }
-
-
         });
     }
 //get all tags
@@ -286,6 +290,9 @@
     scriptEngine.bindToDelete = function(template, id, service, table) {
         template.find('.dv-delete').each(function(){
             this.onclick = function(){
+            	if(!confirm("Are you sure you want to delete")){
+            		return false;
+            	}
                 SDK.deleteData(service, table, "id", id, function(response){
                     (response.status_code == 636)?devless_main.coreLib.notify(response.message,1):
                         devless_main.coreLib.notify(response.message,0);
@@ -312,6 +319,8 @@
             (response.status_code != 625)?devless_main.coreLib.notify(response.message,0):'';
 
         });
+        SDK.queryParams = {};
+        SDK.queryParams.related = '*';
         return this;
     }
 
@@ -321,11 +330,12 @@
         return this;
     }
     scriptEngine.oneto = function(service, table) {
-        persist = function(storeData) {
+        persist = function(storeData, callback) {
             SDK.addData(service, table, storeData, function(response){
                 (response.status_code == 609)?devless_main.coreLib.notify(response.message,1):
                     devless_main.coreLib.notify(response.message,0);
-                // devless_main.init();
+                    callback();
+                 //devless_main.init();
             })
 
         }
@@ -366,12 +376,12 @@
         })
     }
     scriptEngine.oneof = function( service, table ) {
-        update = function( data ) {
+        update = function( data, callback ) {
             if( data.id == undefined ) { throw ` id could not be found in the form. Try adding <input type="hidden" name="id" /> to the update form ` }
             SDK.updateData( service, table,"id", data.id, data, function( response ) {
                 (response.status_code == 619)?devless_main.coreLib.notify(response.message,1):
                     devless_main.coreLib.notify(response.message,0);
-
+                callback()   
                 devless_main.init();
             });
         }
@@ -382,20 +392,33 @@
         SDK.queryParams.where = [];
         SDK.queryParams.where.push(key+','+value);
         return this;
-    }
+    },
+    scriptEngine.random = function(){
+        SDK.queryParams.randomize = "1";
+        return this;
+    },
+    scriptEngine.param = function(key, value){
+        SDK.queryParams[key] = value;
+        return this;
+    },
     scriptEngine.signup = function() {
         var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
         actionUrl = (actionUrl != undefined)? actionUrl: '#';
-        register = function(record) {
+        register = function(record, callback) {
             SDK.call('devless', 'signUp', [ record['email'], record['password'], record['username'], record['phonenumber'],
                 record['firstname'], record['lastname'] ], function(response){
                 if( response.payload.result.message == undefined ) {
-                    SDK.setToken(response.payload.result);
+                    SDK.setToken(response.payload.result['token']);
                     devless_main.coreLib.notify("signup was successful");
-                    window.location.href = window.location.origin + '/' + actionUrl;
+                    devless_main.coreLib.notify(response.message,1);
+                    if(actionUrl != '#') {
+                    	window.location.href = window.location.origin + '/' + actionUrl;
+                    }
                 } else {
                     devless_main.coreLib.notify(response.payload.result.message)
+                    devless_main.coreLib.notify(response.message,0);
                 }
+                callback();
             });
         }
         devless_main.coreLib.form(devless_main.singleCourier, register);
@@ -404,16 +427,21 @@
     scriptEngine.signin = function(record) {
         var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
         actionUrl = (actionUrl != undefined)? actionUrl: '#';
-        login = function(record) {
+        login = function(record, callback) {
             SDK.call('devless', 'login', [record['username'], record['email'], record['phonenumber'],
                 record['password']], function(response){
                 if(response.payload.result !== false) {
-                    SDK.setToken(response.payload.result);
+                    SDK.setToken(response.payload.result['token']);
                     devless_main.coreLib.notify("Log in successfully");
-                    window.location.href = window.location.origin + '/' + actionUrl;
+                    devless_main.coreLib.notify(response.message,1);
+                    if(actionUrl != '#') {
+                    	window.location.href = window.location.origin + '/' + actionUrl;
+                    }
                 } else{
                     devless_main.coreLib.notify("Login failed");
+                    devless_main.coreLib.notify(response.message,0);
                 }
+                callback();
             });
         }
         devless_main.coreLib.form(devless_main.singleCourier, login);
@@ -426,7 +454,11 @@
             } else {
                 data = response.payload.result;
                 data.firstname = data.first_name;
-                data.firstname = data.last_name;
+                data.lastname = data.last_name;
+                data.phonenumber = data.phone_number;
+                delete(data.first_name)
+                delete(data.last_name);
+                delete(data.phone_number);
                 devless_main.coreLib.render(component, [data])
             }
         })
@@ -442,28 +474,32 @@
             } else {
                 data = response.payload.result;
                 data.firstname = data.first_name;
-                data.firstname = data.last_name;
+                data.lastname = data.last_name;
+                data.phonenumber = data.phone_number;
+                delete(data.first_name)
+                delete(data.last_name);
+                delete(data.phone_number);
                 scriptEngine.populateForm(component,
                     data);
             }
         })
 
-        var updateScript = function(record) {
+        var updateScript = function(record, callback) {
             SDK.call('devless', 'updateProfile', [ record['email'], record['password'], record['username'], record['phonenumber'],
                 record['firstname'], record['lastname'] ], function(response){
                 if(response.payload.result == true ) {
                     devless_main.coreLib.notify('Profile updated successfully');
-                    console.log("profile update went through")
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else {
                     devless_main.coreLib.notify('Profile could not be updated');
                 }
+                callback();
 
             });
         }
         devless_main.coreLib.form(component, updateScript);
 
-    }
+    }	
     scriptEngine.logout = function() {
         devless_main.singleCourier.element.onclick = function() {
             var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
@@ -471,9 +507,11 @@
             SDK.call('devless', 'logout', [], function(response){
                 if(response.payload.result == true) {
                     devless_main.coreLib.notify('Logout was successful')
+                    devless_main.coreLib.notify(response.message,1);
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else {
                     devless_main.coreLib.notify('Sorry could not log you out')
+                    devless_main.coreLib.notify(response.message,0);
                 }
             })
         }

@@ -12,8 +12,8 @@ class ViewController extends Controller
 {
     public $MIME_LIST =
     [
-        'js'      => 'text/javascript',
-        'css'     => 'text/css',
+        'js' => 'text/javascript',
+        'css' => 'text/css',
         'default' => 'text/plain',
     ];
 
@@ -33,7 +33,6 @@ class ViewController extends Controller
         $service = new Service();
         $payload = $service->assign_to_service($service_name, $resource, $method);
         $payload['params'] = $service->get_params($method, $request);
-
         $access_type = $payload['resource_access_right'];
         $access_state = $service->check_resource_access_right_type($access_type['view']);
         Helper::get_authenticated_user_cred($access_state);
@@ -102,20 +101,20 @@ class ViewController extends Controller
     {
         switch ($type) {
             case 'init':
-                $source_path =  base_path().'/resources/views/service_template';
+                $source_path = base_path().'/resources/views/service_template';
                 $destination_path = config('devless')['views_directory'].$service_name;
-                
+
                 if (file_exists($destination_path)) {
                     DevlessHelper::rmdir_recursive($destination_path);
                 }
-                
+
                 if (mkdir($destination_path)) {
-                    $copied_to_destination =  DevlessHelper::recurse_copy($source_path, $destination_path);
+                    $copied_to_destination = DevlessHelper::recurse_copy($source_path, $destination_path);
 
                     $payload['serviceName'] = $service_name;
                     $exec_success = DevlessHelper::execOnViewsCreation($payload);
 
-                    return ($exec_success && $copied_to_destination);
+                    return $exec_success && $copied_to_destination;
                 } else {
                     return false;
                 }

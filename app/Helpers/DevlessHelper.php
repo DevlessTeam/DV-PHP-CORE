@@ -2,17 +2,10 @@
 
 namespace App\Helpers;
 
-use App\Http\Controllers\ServiceController;
-use DB;
-use Hash;
 use Session;
-use Devless\SDK\SDK;
 use App\User as user;
-use Alchemy\Zippy\Zippy;
-use App\Helpers\DataStore;
-use Devless\Schema\DbHandler as DvSchema;
-use Symfony\Component\VarDumper\Cloner\Data;
-use App\Helpers\Jwt as jwt;
+
+use App\Http\Controllers\ServiceController;
 
 /*
 * @author Eddymens <eddymens@devless.io
@@ -20,14 +13,15 @@ use App\Helpers\Jwt as jwt;
 
 class DevlessHelper extends Helper
 {
+    use devlessAuth, directoryHelper, serviceHelper;
 
     /**
-     * set paramters for notification plate
+     * set paramters for notification plate.
      *
-     * @param type $message
+     * @param type        $message
      * @param type|string $message_color
      */
-    public static function flash($message, $message_color = "#736F6F")
+    public static function flash($message, $message_color = '#736F6F')
     {
         $custom_colors =
             [
@@ -36,7 +30,7 @@ class DevlessHelper extends Helper
                 'success' => '#7BE454',
                 'notification' => '#736F6F',
             ];
-        (isset($custom_colors[$message_color]))?$notification_color =
+        (isset($custom_colors[$message_color])) ? $notification_color =
             $custom_colors[$message_color]
             : $notification_color = $message_color;
 
@@ -45,827 +39,176 @@ class DevlessHelper extends Helper
     }
 
     /**
-     * get service_component from db
-     * @param $service_name
-     * @return service_object
-     */
-    public static function get_service_components($service_name)
-    {
-        $service = \DB::table('services')
-            ->where('name', $service_name)->first();
-
-        $tables = \DB::table('table_metas')
-            ->where('service_id', $service->id)->get();
-
-        $views_folder =$service_name;
-
-        $service_components['service'] = $service;
-        $service_components['tables'] = $tables;
-        $service_components['views_folder'] = $views_folder;
-
-        $service_components = self::convert_to_json($service_components);
-
-        return $service_components;
-    }
-
-    /** Get all service attributes
-     * @return string
-     */
-    public static function get_all_services()
-    {
-        $services = \DB::table('services')->get();
-        $tables = \DB::table('table_metas')->get();
-
-        $services_components['service'] = $services;
-        $services_components['tables'] = $tables;
-
-        $services_components = self::convert_to_json($services_components);
-
-        return $services_components;
-
-    }
-
-
-    /**
-     * Delete table is exists
+     * Delete table is exists.
+     *
      * @param $serviceName
      * @param $tableName
+     *
      * @return bool
      */
     public static function purge_table($serviceName, $tableName)
     {
         $service = new ServiceController();
-        return DataStore::service($serviceName, $tableName, $service)->drop()? true: false;
 
+        return DataStore::service($serviceName, $tableName, $service)->drop() ? true : false;
     }
 
-
     /**
-     * convert string to json
+     * convert string to json.
+     *
      * @param $incomingArray
+     *
      * @return string
+     *
      * @internal param $incommingArray
      * @internal param $service_components
      */
     public static function convert_to_json($incomingArray)
     {
-
         $formatted_json = json_encode($incomingArray, true);
 
         return $formatted_json;
-
-    }
-
-
-    /**
-     * Zip a folder
-     * @param $service_folder_path
-     * @param $extension
-     * @return string
-     */
-    public static function zip_folder($service_folder_path, $extension, $delete = false)
-    {
-        $dvext = $extension;
-        // Load Zippy
-        $zippy = Zippy::load();
-        //Creates a service_folder_name.pkg
-        //that contains a directory "folder" that contains
-        //files contained in "service_folder_name" recursively
-
-        $folder_name = basename($service_folder_path);
-
-        $archive = $zippy->create($service_folder_path.'.zip', array(
-            $folder_name => $service_folder_path
-        ), true);
-
-
-        rename($service_folder_path.'.zip', $service_folder_path.$dvext);
-        ($delete)?self::deleteDirectory($service_folder_path): false;
-        return $folder_name.$dvext;
-
-    }
-
-
-    /**
-     * Extract package or services
-     * @param string $service_folder_path
-     * @param bool $delete_package
-     * @return bool|string
-     */
-    public static function expand_package($service_folder_path, $delete_package = true)
-    {
-        $zip = new \ZipArchive;
-
-        //convert from srv/pkg to zip
-        $new_service_folder_path = preg_replace('"\.srv$"', '.zip', $service_folder_path);
-        $new_service_folder_path = preg_replace('"\.pkg$"', '.zip', $service_folder_path);
-
-            (rename($service_folder_path, $new_service_folder_path))? $new_service_folder_path
-                :false;
-
-        $res = $zip->open($new_service_folder_path);
-        if ($res === true) {
-            $zip->extractTo(config('devless')['views_directory']);
-            $extract_name = config('devless')['views_directory'].$zip->getNameIndex(0);
-            $extract_name = str_replace('service.json', '', $extract_name);
-            $zip->close();
-            
-            self::deleteDirectory($new_service_folder_path);
-            ($delete_package)? self::deleteDirectory($service_folder_path):false;
-        } else {
-            return false;
-        }
-
-        return $extract_name;
-    }
-
-
-    /**
-     * Add services to folder
-     * @param $service_name
-     * @param $service_components
-     * @param null $package_name
-     * @return string
-     */
-    public static function add_service_to_folder(
-        $service_name,
-        $service_components,
-        $package_name = null
-    ) {
-
-        if ($package_name == null) {
-            $package_name  = $service_name;
-        }
-
-        $temporal_package_path = storage_path().'/'.$package_name;
-
-        $service_schema_path = $temporal_package_path.'/service.json';
-
-        $new_assets_path = storage_path().'/'.$package_name.'/view_assets/';
-
-        $service_view_path = $new_assets_path.'/'.$service_name;
-
-        $views_directory = config('devless')['views_directory'].$service_name;
-
-        if (!file_exists($temporal_package_path) && !file_exists($service_view_path)) {
-            mkdir($temporal_package_path);
-            mkdir($new_assets_path);
-        }
-
-        if (!file_exists($service_view_path)) {
-            mkdir($service_view_path);
-        }
-
-        //move asset files to temporal folder
-        self::recurse_copy($views_directory, $service_view_path);
-
-        if (!file_exists($service_schema_path)) {
-            $fb = fopen($service_schema_path, 'w');
-            $fb = fwrite($fb, $service_components);
-        }
-
-        //return folder_name
-        return $temporal_package_path;
-
     }
 
     /**
-     * Copy a whole folder
-     * @param $src
-     * @param $dst
-     * @return bool
-     */
-    public static function recurse_copy($src, $dst)
-    {
-        $dir = opendir($src);
-        @mkdir($dst);
-        while (false !== ( $file = readdir($dir))) {
-            if (( $file != '.' ) && ( $file != '..' )) {
-                if (is_dir($src . '/' . $file)) {
-                    self::recurse_copy($src . '/' . $file, $dst . '/' . $file);
-                } else {
-                    copy($src . '/' . $file, $dst . '/' . $file);
-                }
-            }
-        }
-        closedir($dir);
-        return file_exists($dst);
-    }
-
-    /**
-     * Delete given directory
-     * @param $dir
-     * @return bool
-     */
-    public static function deleteDirectory($dir)
-    {
-
-        if (!file_exists($dir)) {
-            return true;
-        }
-
-        if (!is_dir($dir)) {
-            return unlink($dir);
-        }
-
-        foreach (scandir($dir) as $item) {
-            if ($item == '.' || $item == '..') {
-                continue;
-            }
-
-            if (!self::deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
-                return false;
-            }
-        }
-
-        return rmdir($dir);
-    }
-
-    /**
-     * Get file path from storage
-     * @param $filename
-     * @return bool|string
-     */
-    public static function get_file($filename)
-    {
-
-        $file_path = storage_path().'/'.$filename;
-        if (!file_exists($file_path)) {
-            return false;
-        }
-
-        return $file_path;
-    }
-
-    /**
-     * Install service and or package given service path
-     * @param $service_path
-     * @return bool
-     */
-    public static function install_service($service_path)
-    {
-
-        $builder = new DvSchema();
-        $service_file_path = $service_path.'service.json';
-        $service_file_path = preg_replace('"\.srv"', '', $service_file_path);
-        $service_file_path = preg_replace('"\.pkg"', '', $service_file_path);
-        $fh = fopen($service_file_path, 'r');
-        $service_json = fread($fh, filesize($service_file_path));
-        fclose($fh);
-
-        $service_object = json_decode($service_json, true);
-        $service_id = [];
-        $service_name = [];
-        $service_id_map = [];
-        $install_services = function ($service) use (&$service_id, &$service_name, &$service_id_map) {
-            if (count(\DB::table('services')->where('name', $service['name'])->get()) != 0) {
-                return false;
-            }
-            $old_service_id = $service['id'];
-            $service_name[$old_service_id] = $service['name'];
-            unset($service['id']);
-            \DB::table('services')->insert($service);
-            $last_service = \DB::table('services')->orderBy('id', 'desc')->first();
-            $service_id_map[$old_service_id] = $last_service->id ;
-        };
-        if (!isset($service_object['service'][0])) {
-            $install_services($service_object['service']);
-        } else {
-            foreach ($service_object['service'] as $service) {
-                $install_services($service);
-            }
-        }
-        //get meta from service_table
-        $table_meta_install = function ($service_table) use (
-            &$service_id_map,
-            &$builder,
-            &$service_name
-        ) {
-
-            if (sizeof($service_table) !== 0) {
-                if (\Schema::hasTable($service_table['table_name'])) {
-                        return false;
-                }
-                $old_service_id = $service_table['service_id'];
-                $new_service_id = $service_id_map[$old_service_id];
-                $service_table['schema'] = json_decode($service_table['schema'], true);
-                $service_table['service_name'] = $service_name[$old_service_id];
-                $service_table['driver'] = "default";
-                $service_table['schema']['service_id'] = $new_service_id ;
-                $service_table['service_id'] = $new_service_id ;
-                $service_table['schema']['id'] = $new_service_id;
-                $service_table['id'] = $new_service_id;
-                $service_table['params'] = [0 =>$service_table['schema']];
-                $builder->create_schema($service_table);
-            }
-
-
-        };
-        if (!isset($service_object['tables'][0])) {
-            $table_meta_install($service_object['tables']);
-        } else {
-            foreach ($service_object['tables'] as $service_table) {
-                $table_meta_install($service_table);
-            }
-        }
-
-        unlink($service_file_path);
-
-        return true;
-    }
-
-
-    /**
-     * install views into service_views dir
-     * @param $service_name
-     * @return bool
-     */
-    public static function install_views($service_name)
-    {
-        $system_view_directory = config('devless')['views_directory'];
-        $service_view_directory = $service_name.'view_assets';
-        self::recurse_copy($service_view_directory, $system_view_directory);
-        self::deleteDirectory($service_view_directory);
-
-        return true;
-    }
-
-    /**
-     * signup new users onto devless
-     * @param type $payload
-     * @return alphanum
-     */
-    public function signup($payload)
-    {
-        $username = (isset($payload['username']))?$payload['username']:'';
-
-        $email = (isset($payload['email']))?$payload['email']:'';
-        $phone_number = (isset($payload['phone_number']))?$payload['phone_number']:'';
-        $existing_users =  \DB::table('users')->orWhere('username', $username)
-                ->orWhere('email', $email)
-                ->orWhere('phone_number', $phone_number)->get();
-
-        if ($existing_users != null) {
-            return Response::respond(1001, "Seems User already exists");
-        }
-
-        $user = new User;
-
-        $token = $this->auth_fields_handler($payload, $user);
-
-        if ($token == false) {
-            return $token;
-        }
-
-        $user->status = 1;
-        $user->session_token = $session_token = md5(uniqid(1, true));
-
-        //check if either username or email and password is set
-        if (!isset($user->password) || ! (isset($user->username) || isset($user->email))) {
-            return false;
-        }
-
-        if ($user->save()) {
-            $token_payload =
-                [
-                    'token' => $session_token,
-
-                ];
-
-            $prepared_token = $this->set_session_token($token_payload, $user->id);
-            $profile = \DB::table('users')->where('id', $user->id)
-                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email'])
-                ->first();
-            $user_obj = [
-                'profile' => $profile,
-                'token'   => $prepared_token
-            ];
-            return $user_obj;
-        } else {
-            return false;
-        }
-
-
-
-
-
-    }
-
-    /**
-     * get authenticated user details
-     * @return array
-     */
-    public function get_profile()
-    {
-        if ($token = Helper::get_authenticated_user_cred(true)) {
-            $db = new DB();
-            $user_data = $db::table('users')->where('id', $token['id'])
-                ->select(
-                    'id',
-                    'username',
-                    'email',
-                    'phone_number',
-                    'first_name',
-                    'last_name',
-                    'status',
-                    'created_at',
-                    'updated_at',
-                    'remember_token'
-                )
-                ->first();
-
-
-
-            return $user_data;
-        }
-
-        return false;
-    }
-
-    /**
-     * authenticate and login devless users
-     * @param $payload
-     * @return alphanum
-     * @internal param type $request
-     */
-    public function login($payload)
-    {
-
-        $user =  new user();
-        $fields = $payload;
-
-        foreach ($fields as $field => $value) {
-            $field = strtolower($field);
-            ${$field} = $value;
-        }
-
-        if (isset($email,$password)) {
-            $user_data = $user::where('email', $email)->first();
-        } elseif (isset($username,$password)) {
-            $user_data = $user::where('username', $username)->first();
-        } else {
-            return false;
-        }
-        if ($user_data !== null) {
-            $correct_password =
-                   (Helper::compare_hash($password, $user_data->password))?true: false ;
-            $user_data->session_token = $session_token = md5(uniqid(1, true));
-
-            if ($correct_password && $user_data->save()) {
-                $token_payload =
-                    [
-                        'token' => $session_token,
-
-                    ];
-
-                $prepared_token = $this->set_session_token($token_payload, $user_data->id);
-                $profile = \DB::table('users')->where('id', $user_data->id)
-                    ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email'])
-                    ->first();
-                $user_obj = [
-                    'profile' => $profile,
-                    'token'   => $prepared_token
-                ];
-                return $user_obj;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-
-
-    }
-
-    /**
-     * update devless user profile
-     * @param $payload
-     * @return bool
-     * @internal param type $request
-     */
-    public function update_profile($payload)
-    {
-        if ($token = Helper::get_authenticated_user_cred(true)) {
-            $user =  new user();
-
-            //unchangeable fields
-            $indices = [
-                'session_token',
-                'status',
-                'role'
-            ];
-
-            $unset = function ($payload, $index) {
-                unset($payload[$index]);
-            };
-
-            foreach ($indices as $index) {
-                (isset($payload[$index]))? $unset($payload, $index) : false;
-            }
-
-
-            if (isset($payload['password'])) {
-                $payload['password'] = Helper::password_hash($payload['password']);
-            }
-
-            if ($user::where('id', $token['id'])->update($payload)) {
-                return \DB::table('users')->where('id', $token['id'])
-                ->select(['username', 'first_name', 'last_name', 'phone_number','id', 'email'])
-                ->first();
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * delete a devless user
-     * @return bool
-     * @internal param type $request
-     */
-    public function delete()
-    {
-        if ($token = Helper::get_authenticated_user_cred(true)) {
-            $user =  new user();
-            if ($user::where('id', $token['id'])->delete()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    public function logout()
-    {
-        if ($token = Helper::get_authenticated_user_cred(true)) {
-            $user =  new user();
-            if ($user::where('id', $token['id'])->update(['session_token'=> ""])) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    /**
-     * set session token
-     * @param $payload
-     * @param $user_id
-     * @return bool
-     * @internal param type $request
-     */
-    public function set_session_token($payload, $user_id)
-    {
-
-        $jwt = new jwt();
-        $secret = config('app')['key'];
-
-        $payload = json_encode($payload);
-
-        if (DB::table('users')->where('id', $user_id)->update(['session_time'=>Helper::session_timestamp()])) {
-            return $jwt->encode($payload, $secret);
-        } else {
-            return false;
-        }
-
-
-    }
-
-    /**
-     * check if needed auth fields are satisfied
-     * @param $fields
-     * @param $user
-     * @return mixed
-     */
-    public function auth_fields_handler($fields, $user)
-    {
-
-        $expected_fields =
-            [
-                'email' => 'email',
-                'username' => 'text',
-                'password' => 'password',
-                'first_name' => 'text',
-                'last_name' => 'text',
-                'remember_token' => 'text',
-                'status'         => 'text',
-                'phone_number' =>  'text'
-
-            ];
-
-        foreach ($fields as $field => $value) {
-            $field = strtolower($field);
-
-
-            if (isset($expected_fields[$field])) {
-                $valid = Helper::field_check($value, $expected_fields[$field]);
-                if ($valid !== true) {
-                    Helper::interrupt(616, 'There is something wrong with your '.$field);
-                }
-                if ($field == 'password') {
-                    $user->$field = Helper::password_hash($value);
-                } else {
-                    $user->$field = $value ;
-                }
-            }
-        }
-        return $user;
-
-
-    }
-
-    /**
-     * Get assets directory for a service
+     * Check method access type.
      *
-     * @param type $serviceName
-     * @param type $assetsSubPath
-     * @return string
-     */
-    public static function assetsDirectory($serviceName, $assetsSubPath)
-    {
-        $viewsDirectory = config('devless')['views_directory'];
-        $assetsDirectoryName = config('devless')['assets_directory_name'];
-
-        return $viewsDirectory.'/'.$serviceName.'/'.$assetsDirectoryName.'/'.$assetsSubPath;
-    }
-
-    /**
-     * Check method access type
      * @param $method
      * @param $class
      */
     public static function rpcMethodAccessibility($class, $method)
     {
         $property = $class->getMethod($method);
-        $docComment  = $property->getDocComment();
+        $docComment = $property->getDocComment();
 
         $access_type = function () use ($docComment) {
-            (strpos(($docComment), '@ACL private'))? Helper::interrupt(627) :
-                (strpos($docComment, '@ACL protected'))? Helper::get_authenticated_user_cred(2) :
-                    (strpos($docComment, '@ACL public'))? true : Helper::interrupt(638) ;
-
+            if(self::is_admin_login()){return true;}
+            (strpos(($docComment), '@ACL private')) ? Helper::interrupt(627) :
+                (strpos($docComment, '@ACL protected')) ? Helper::get_authenticated_user_cred(2) :
+                    (strpos($docComment, '@ACL public')) ? true : Helper::interrupt(638);
         };
 
         $access_type();
-
     }
 
     /**
-     * Get and replace file content
-     * @param $filePath
-     * @param $oldText
-     * @param $replacement
-     * @return int
-     */
-    public static function modifyFileContent($filePath, $oldText, $replacement)
-    {
-
-        $fileContent = file_get_contents($filePath);
-
-        $fileContent = str_replace($oldText, $replacement, $fileContent);
-
-        return file_put_contents($filePath, $fileContent);
-
-    }
-
-
-    /**
-     * @param $serviceName
-     * @param $files
-     * @param $replacements
-     * @return bool
-     */
-    public static function modifyAssetContent($serviceName, array $files, array $replacements)
-    {
-
-        $forEachFile = function ($fileName) use ($serviceName, $replacements) {
-
-            $filePath = config('devless')['views_directory'].$serviceName.'/'.$fileName;
-
-            foreach ($replacements as $oldContent => $newContent) {
-                $state = self::modifyFileContent($filePath, $oldContent, $newContent);
-            }
-            return $state;
-        };
-
-        return array_filter($files, $forEachFile);
-
-    }
-
-    /**
-     * Execute on views creation
+     * Get table name from payload.
+     *
      * @param $payload
-     * @return bool
-     */
-    public static function execOnViewsCreation($payload)
-    {
-        $serviceName = $payload['serviceName'];
-
-        $instanceInfo = DataStore::instanceInfo();
-
-        $username = $instanceInfo['admin']->username;
-        $files = ['ActionClass.php'];
-        $time = date('jS \of F Y h:i:s A');
-        $version = config('devless')['version'];
-        $replacements = [
-            '{{ServiceName}}' => $serviceName,
-
-            '{{MAINDOC}}'=> '/**
- * Created by Devless.
- * Author: '.$username.'
- * Date Created: '.$time.'
- * Service: '.$serviceName.'
- * Version: '.$version.'
- */
-',
-        ];
-
-        return self::modifyAssetContent($serviceName, $files, $replacements);
-    }
-
-    /**
-     * execute scripts after installing and deleting services
-     * @param type $payload
-     * @return boolean
-     */
-    public static function execOnServiceStar($payload)
-    {
-        $service = $payload['serviceName'];
-        $serviceMethodPath = config('devless')['views_directory'].$service.'/ActionClass.php';
-
-        (file_exists($serviceMethodPath))?
-            require_once $serviceMethodPath : false;
-
-        if (class_exists($service)) {
-                $serviceInstance = new $service();
-            $results = (isset($payload['delete']) && !isset($payload['install']) && $payload['delete'] == '__onDelete')?
-                $serviceInstance->__onDelete() :
-                        (isset($payload['install']) && !isset($payload['delete']) && $payload['install'] == '__onImport')?
-                            $serviceInstance->__onImport() : false;
-            return $results;
-        } else {
-            return false;
-        }
-
-    }
-
-     /**
-      * remove stale service assets before installing new one
-      * @param type $dir
-      * @return boolean
-      */
-    public static function rmdir_recursive($dir)
-    {
-        foreach (scandir($dir) as $file) {
-            if ('.' === $file || '..' === $file) {
-                continue;
-            }
-            if (is_dir("$dir/$file")) {
-                self::rmdir_recursive("$dir/$file");
-            } else {
-                unlink("$dir/$file");
-            }
-        }
-        rmdir($dir);
-        return true;
-    }
-
-    public static function instance_log($url, $token, $purpose)
-    {
-        $sdk = new SDK($url, $token);
-        $instance = DataStore::instanceInfo();
-
-        $user = $instance['admin'];
-        $app  = $instance['app'];
-        $data = [
-          'username' => $user->username,
-          'email' => $user->email,
-          'token' => $app->token,
-          'connected_on' => Date(DATE_RFC2822),
-          'instance_url' => $_SERVER['HTTP_HOST'],
-          'purpose'      => $purpose
-        ];
-        $status = $sdk->addData('INSTANCE_LOG', 'instance', $data);
-        return ($status['status_code'] == 609)? true : false;
-
-    }
-
-    /**
-     * Get table name from payload
-     * @param $payload
+     *
      * @return string
      */
     public static function get_tablename_from_payload($payload)
     {
         if (strtoupper($payload['method']) == 'GET') {
-            $tableName = (isset($payload['params']['table']))?$payload['params']['table']
-                        :'';
+            $tableName = (isset($payload['params']['table'])) ? $payload['params']['table']
+                        : '';
         } else {
-            $tableName = (isset($payload['params'][0]['name']))?$payload['params'][0]['name']
-                :'';
+            $tableName = (isset($payload['params'][0]['name'])) ? $payload['params'][0]['name']
+                : '';
         }
+        if (is_array($tableName)) {
+            $tableName = $tableName[0];
+        }
+
         return $tableName;
+    }
+
+    /**
+     * Get table name from payload.
+     *
+     * @param string $service_name
+     * @param string $affected_tables
+     * @param array  $accessed_table
+     * @param string $token
+     *
+     * @return Exception
+     */
+    public static function serviceAuth($service_name, $auth_table, $affected_tables, $accessed_table)
+    {
+        $headers = [];
+        foreach (getallheaders() as $header_key => $header_value) {
+            $headers[strtolower($header_key)] = $header_value;
+        }
+        $token = (isset($headers['devless-user-token'])) ? $headers['devless-user-token'] : 'NA';
+
+        $token_reference = $service_name.'_'.$auth_table.'_'.$token;
+
+        if (in_array($accessed_table, $affected_tables)) {
+            self::did_custom_login($token_reference, $token) ?: Helper::interrupt(628);
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if user token is available.
+     *
+     * @param $payload
+     *
+     * @return string
+     */
+    public static function did_custom_login($toke_reference, $token)
+    {
+        $ds = new DataStore();
+
+        if ($ds->getDump($toke_reference) == $token) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check for closest word in an array.
+     *
+     * @param $word
+     * @param $options
+     *
+     * @return string
+     */
+    public static function find_closest_word($word, $options)
+    {
+        $best_closesness = 1;
+        $closest_word = null;
+        foreach ($options as $each_option) {
+            $levenshtein_count = levenshtein($word, $each_option);
+            if ($levenshtein_count <= $best_closesness) {
+                $closest_word = $each_option;
+                $levenshtein_count = $best_closesness;
+            }
+        }
+
+        return $closest_word;
+    }
+    /**
+     * Script template generated for rules in each new service
+     * @return string
+     */
+    public static function script_template()
+    {
+        return 
+                '
+/**
+* All service db request pass through here before and after db actions are made
+* This makes it possible to modify  either the request or response to your satisfaction
+* Learn more about how to do this from the docs 
+**/
+ -> beforeQuerying()
+ -> beforeUpdating()
+ -> beforeDeleting()
+ -> beforeCreating()
+
+ -> onQuery()
+ -> onUpdate()
+ -> onDelete()
+ -> onCreate()
+
+ -> afterQuerying()
+ -> afterUpdating()
+ -> afterDeleting()
+ -> afterCreating()
+ ';
+ 
     }
 }

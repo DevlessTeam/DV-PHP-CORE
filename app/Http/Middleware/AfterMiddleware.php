@@ -18,7 +18,6 @@ class AfterMiddleware
     {
         $response = $next($request);
 
-
         return $response;
     }
 }
