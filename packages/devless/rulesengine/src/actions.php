@@ -97,7 +97,7 @@
          *
          * @return $this
          */
-        public function makeRemoteRequest($method, $url, $data='{}', $headers=[])
+        public function makeExternalRequest($method, $url, $data='{}', $headers=[])
         {
             $curl = curl_init();
 
@@ -122,6 +122,7 @@
               $this->results = $err;
             } else {
                 $this->results =  json_decode($response, true);
+                
             }
             return $this;
         }

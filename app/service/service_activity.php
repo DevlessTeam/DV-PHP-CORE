@@ -109,13 +109,14 @@ trait service_activity
      *
      * @return array
      */
-    public function before_assigning_service_action($resource, $payload, $internalAccess = false)
+    public function before_assigning_service_action($resource, $payload)
     {
         $payload['request_phase'] = 'before';
         $output['resource'] = $resource;
         $output['payload'] = $payload;
 
-        $script_output = $this->script_executioner($resource, $payload, $internalAccess);
+        $script_output = $this->script_executioner($resource, $payload);
+
         return ($script_output)?:$output;
 
     }
@@ -128,7 +129,7 @@ trait service_activity
      *
      * @return array
      */
-    public function after_resource_process_order($resource, $requestPayload, $status_code, $message, $payload, $internalAccess = false)
+    public function after_resource_process_order($resource, $requestPayload, $status_code, $message, $payload)
     {
         
         $requestPayload['request_phase'] = 'after';
@@ -149,11 +150,11 @@ trait service_activity
      * @param bol   $internalAccess
      * @return array
      */
-    public function script_executioner($resource, $payload, $internalAccess)
+    public function script_executioner($resource, $payload)
     {
          $output = false;
 
-         if ($resource != 'schema' && !$internalAccess) {
+         if ($resource != 'schema' ) {
             $script = new script();
             $output = $script->run_script($resource, $payload);
         }

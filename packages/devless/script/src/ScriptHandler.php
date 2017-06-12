@@ -95,6 +95,7 @@ EOT;
 
             extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
             $rules->accessRights = $EVENT['access_rights'];
+            $rules->EVENT['user_id'] = $EVENT['user_id'];
             $rules->request_phase = ($EVENT['request_phase'] == 'after')?'after':'before';
             if($rules->request_phase == 'after') {
                 $rules->status_code = $EVENT['status_code'];
@@ -115,6 +116,7 @@ EOT;
             $EVENT['status_code']  = $rules->status_code;
             $EVENT['message']  =  $rules->message;
             $EVENT['results_payload']  =  $rules->payload;
+            $EVENT['user_id'] = $rules->EVENT['user_id'];;
             
 
             foreach ($EVENT['params'] as $key => $value) {
@@ -145,6 +147,7 @@ EOT;
                 $results['payload']['status_code'] = $EVENT['status_code'];
                 $results['payload']['message'] = $EVENT['message'];
                 $results['payload']['results'] = $EVENT['results_payload'];
+                
             }
     
         }

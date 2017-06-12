@@ -47,7 +47,7 @@ trait messageStack
         624 => 'Sorry this is not an open endpoint',
         625 => 'Got response successfully',
         626 => 'Saved script',
-        627 => 'Sorry no such resource exists or resource is set to private (You can change this from the Privacy Tab)',
+        627 => 'Sorry no such resource exists or resource is set to private (You can change this from the Privacy Tab or from the Rules section of that service)',
         628 => 'Sorry User is not authenticated, try logging in',
         629 => 'Sorry table could not be updated',
         630 => 'failed to push json to file',
