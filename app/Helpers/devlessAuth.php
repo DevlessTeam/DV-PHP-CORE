@@ -6,7 +6,7 @@ use DB;
 use Session;
 use App\User as user;
 use App\Helpers\Jwt as jwt;
-
+use App\Helpers\DataStore;
 trait devlessAuth
 {
     /**
@@ -289,10 +289,27 @@ trait devlessAuth
 
         $payload = json_encode($payload);
 
-        if (DB::table('users')->where('id', $user_id)->update(['session_time' => Helper::session_timestamp()])) {
+        if(DB::table('users')->where('id', $user_id)->update(['session_time' => Helper::session_timestamp()])) {
             return $jwt->encode($payload, $secret);
         } else {
             return false;
-        }
+        }   
     }
+
+    public static function set_user_auth_settings($settings)
+    {
+        return DataStore::setDump('devless_auth_settings', $settings);
+    }
+
+    public static function get_user_auth_settings()
+    {
+        return DataStore::getDump('devless_auth_settings');
+    }
+
+    public static function update_user_auth_settings($newSettings)
+    {
+        return DataStore::updateDump('devless_auth_settings', $newSettings);
+    }
+
+
 }

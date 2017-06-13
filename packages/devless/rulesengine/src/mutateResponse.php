@@ -54,7 +54,7 @@ trait mutateResponse
 	}
 
 	/**
-     * execute common mutatation tasks.
+     * execute common mutation tasks.
      */
 	private function commonMutationTask()
 	{
