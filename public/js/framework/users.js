@@ -95,18 +95,23 @@ $(document).ready(function() {
             selectedIds.map((v, i) => {
                 array_id.push(v[1]);
             });
-
-            $.ajax({
-                url: 'remove_user',
-                type: 'DELETE',
-                data: {data: array_id},
-            }).done(function(res) {
-                if(res) {
-                    Datatable.rows({ selected: true }).remove().draw(false);
-                } else {
-                    alert('Error occurred when deleting user(s)');
+            
+            if(array_id.length !== 0) {
+                var action = confirm('Are sure you want this action');
+                if (action) {
+                    $.ajax({
+                        url: 'remove_user',
+                        type: 'DELETE',
+                        data: {data: array_id},
+                    }).done(function(res) {
+                        if(res) {
+                            Datatable.rows({ selected: true }).remove().draw(false);
+                        } else {
+                            alert('Error occurred when deleting user(s)');
+                        }
+                    });
                 }
-            });
+            }
         });
 
         $('#updateForm').submit(function(e) {
