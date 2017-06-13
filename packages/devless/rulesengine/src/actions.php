@@ -83,8 +83,7 @@
             } else {
                 $this->results = ActionClass::execute($service, $method, $params);
             }
-            $this->answered = true;
-
+            
             return $this;
 
         }
@@ -98,7 +97,7 @@
          *
          * @return $this
          */
-        public function makeRemoteRequest($method, $url, $data='{}', $headers=[])
+        public function makeExternalRequest($method, $url, $data='{}', $headers=[])
         {
             $curl = curl_init();
 
@@ -123,6 +122,7 @@
               $this->results = $err;
             } else {
                 $this->results =  json_decode($response, true);
+
             }
             return $this;
         }
@@ -198,6 +198,10 @@
          */
         public function from($output)
         {
+            if (!$this->execOrNot) {
+                return $this;
+            }
+
             $this->assign($output);
             return $this;
         }
@@ -212,6 +216,10 @@
          */
         public function assignValues(&$input, &$output)
         {
+            if (!$this->execOrNot) {
+                return $this;
+            }
+
             $output = $input;    
             return $this;
         }
@@ -227,6 +235,10 @@
          */
         public function stopAndOutput($status_code, $message, $payload)
         {
+            if (!$this->execOrNot) {
+                return $this;
+            }
+            
             $this->request_phase = 'endNow';
             $this->status_code = $status_code;
             $this->message = $message;

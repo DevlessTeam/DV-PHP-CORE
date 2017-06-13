@@ -143,3 +143,47 @@ $(document).ready(function() {
             }
         });
     });
+
+var authSettings = {};
+authSettings.get = function(callback) {
+    $.getJSON('/open-api/AuthSettings/getAuthSettings/[]', function(resp){
+            callback(resp);       
+    });
+}
+
+authSettings.update = function(settings, callback) {
+     $.getJSON('/open-api/AuthSettings/updateAuthSettings/'+JSON.stringify(settings), function(resp){
+            callback(resp);       
+    });    
+}
+
+var authForm = {};
+
+authForm.populate = function() {
+    authSettings.get(function(resp){
+        console.log(resp);
+        $('#verify_email_true')[0].checked = (resp['verify_email'] != 0)|| false;
+        $('#self_signup_true')[0].checked = (resp['self_signup'] != 0)|| false;
+        $('#expire_session')[0].checked = (resp['expire_session'] != 0) || false;
+        $('#session_time')[0].value = resp['session_time'];
+    })
+}
+
+authForm.save = function() {
+    var session_time = $('#session_time')[0].value ;
+    var self_signup = ($('#self_signup_true')[0].checked)? 1 : 0; 
+    var verify_email = ($('#verify_email_true')[0].checked)? 1 : 0; 
+    var expire_session = ($('#expire_session')[0].checked)? 1 : 0; 
+    newSettings = [session_time, self_signup, verify_email, expire_session];
+    console.log(newSettings);
+    authSettings.update(newSettings, function(resp){
+        
+    $('#settings-notif')[0].textContent =(resp['ok'])? "Settings updated successfully" : "Settings could not be updated";
+    $('#settings-notif')[0].style.display = 'block';
+    setTimeout(function(){
+        $('#settings-notif')[0].style.display = 'none';
+    }, 2000);
+        
+    })
+}
+authForm.populate();

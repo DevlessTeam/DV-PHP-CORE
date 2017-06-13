@@ -133,7 +133,7 @@ class devless
         
        
     }
-    
+
     private static function getSetParams($payload)
     {
         foreach ($payload as $key => $value) {
@@ -225,5 +225,18 @@ class devless
             return (array)$profile[0];
         }
         return [];
+    }
+
+    /**
+     * Get all users within the system 
+     * @return array
+     * @ACL private
+     */
+    public function getAllUsers()
+    {
+        return DB::table('users')->select(
+            [
+                "id", "username", "email", "first_name", "last_name", "status"
+            ])->get();
     }
 }

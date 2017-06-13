@@ -26,6 +26,7 @@
 
     Route::get(config('devless')['assets_route_name'].'/{sublevels?}', 'ViewController@static_files')->where('sublevels', '.*');
 
+
 //routes for only endpoints
     Route::group(
         ['prefix' => 'api/v1', 'middleware' => 'cors'],
@@ -39,14 +40,7 @@
                 }
             );
 
-            //system logs
-            Route::get(
-                'log',
-                function () {
-                    return 'no log available';
-                }
-            );
-
+            
             //service end points
             Route::get('service/{service}/{resource}', 'ServiceController@service');
             Route::post('service/{service}/{resource}', 'ServiceController@service');
@@ -59,9 +53,6 @@
     Route::group(
         ['middleware' => 'user.auth'],
         function () {
-
-            //Dasboard
-            Route::get('/dashboard', 'DashboardController@index');
 
             //get list of users
             Route::get('devless_users', 'UserController@get_all_users');
@@ -114,5 +105,8 @@
 
             //Misc Route
             Route::get('edit-table/{action}/{service}/{table}/{params}', 'ServiceController@editTable');
+
+            Route::get('open-api/{file}/{method}/{params}', 'OpenApiController@gateway');
+
         }
     );

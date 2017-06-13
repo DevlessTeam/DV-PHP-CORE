@@ -16,18 +16,18 @@ class ActionClass
      */
     public static function execute($service, $method, $params = null)
     {
-        if (strtoupper($service) == 'DEVLESS') {
-            $serviceMethodPath = __DIR__.'/SystemClass.php';
-        } else {
-            $serviceMethodPath = config('devless')['views_directory'].$service.'/ActionClass.php';
-        }
+        $serviceMethodPath = (strtolower($service) == config('devless')['name']) ?
+                            config('devless')['system_class'] :
+                            config('devless')['views_directory'].$service.'/ActionClass.php';
 
+         
         /** @var TYPE_NAME $serviceMethodPath */
         (file_exists($serviceMethodPath))?
             require_once $serviceMethodPath : false;
-
+        
         $serviceInstance = new $service();
         $results = $serviceInstance->$method(...$params);
+
         return $results;
     }
 

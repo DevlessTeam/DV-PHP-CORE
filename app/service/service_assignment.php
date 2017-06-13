@@ -62,11 +62,11 @@ trait service_assignment
                         'params' => $parameters,
                     ];
                 // run script before assigning to method
-                if (!$accessed_internally && $resource != 'view' && $resource != 'rpc') {
-                    $newServiceElements = $this->before_assigning_service_action($resource, $payload, $accessed_internally);
+                if ( $resource != 'view' && $resource != 'rpc') {
+                    $newServiceElements = $this->before_assigning_service_action($resource, $payload);
                     $resource = $newServiceElements['resource'];
                     $payload = $newServiceElements['payload'];
-                    
+
                 }
                 
                 //keep names of resources in the singular
@@ -75,8 +75,8 @@ trait service_assignment
                         $db = new Db();
 
                         $response = $db->access_db($payload);
-                        if (!$accessed_internally && $resource != 'view' && $resource != 'rpc') {
-                              return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload'], $accessed_internally);
+                        if ( $resource != 'view' && $resource != 'rpc') {
+                              return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload']);
 
                         } 
                         return $response;

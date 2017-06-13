@@ -36,6 +36,9 @@ class Rules
         'PATCH' => 'update',
         'DELETE' => 'delete',
     ];
+
+    public $EVENT = [];
+
     public $accessRights = [
         'query' => 3,
         'create' => 3,
