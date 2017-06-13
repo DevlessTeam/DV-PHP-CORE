@@ -70,7 +70,7 @@ trait destroyData
             Helper::interrupt(614, 'could not '.$task.' '.$element);
         }
 
-        return Response::respond(636, 'The table or field has been '.$task);   
+        return Response::respond(636);   
     }
 
     private function check_userbased_destroy($payload, $base_query)
