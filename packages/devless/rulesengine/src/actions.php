@@ -122,7 +122,7 @@
               $this->results = $err;
             } else {
                 $this->results =  json_decode($response, true);
-                
+
             }
             return $this;
         }
@@ -198,6 +198,10 @@
          */
         public function from($output)
         {
+            if (!$this->execOrNot) {
+                return $this;
+            }
+
             $this->assign($output);
             return $this;
         }
@@ -212,6 +216,10 @@
          */
         public function assignValues(&$input, &$output)
         {
+            if (!$this->execOrNot) {
+                return $this;
+            }
+
             $output = $input;    
             return $this;
         }
@@ -227,6 +235,10 @@
          */
         public function stopAndOutput($status_code, $message, $payload)
         {
+            if (!$this->execOrNot) {
+                return $this;
+            }
+            
             $this->request_phase = 'endNow';
             $this->status_code = $status_code;
             $this->message = $message;
