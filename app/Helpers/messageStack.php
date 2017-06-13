@@ -56,13 +56,13 @@ trait messageStack
         633 => 'Token has expired please try logging in again',
         634 => 'Seems the table does not exist',
         635 => 'Sorry to use offset you need to set size',
-        636 => 'The table or field has been deleted',
+        636 => 'Data or table or field has been deleted',
         637 => 'Got RPC response successfully',
         638 => 'Sorry there is no such method or the method is set to private or protected',
         639 => 'Sorry RPC can only be processed over POST ',
         640 => 'Sorry there is no such related tables',
         641 => 'Something is wrong with your payload',
-        642 => 'No such rule k`eyword',
+        642 => 'No such rule keyword',
         700 => 'Internal system error',
     ];
 }
