@@ -58,7 +58,7 @@ class ServiceMigrationController extends Controller
 
                         $payload['serviceName'] = str_replace('.srv', '', str_replace('.pkg', '', $service_package_name));
                         $payload['install'] = '__onImport';
-                        $execOutput = ($import_state)?  DLH::execOnServiceStar($payload): false;
+                        $execOutput = ($import_state) ? DLH::execOnServiceStar($payload) : false;
 
                         ($import_state) ? DLH::flash('Service installed successfully '.$execOutput, 'success') :
                            DLH::flash('Sorry service could not be installed', 'error');
@@ -81,11 +81,6 @@ class ServiceMigrationController extends Controller
         } else {
             DLH::flash('No appropriate action found', 'error');
         }
-
-
-
-
-
 
         return redirect()->route('migrate.index')->with('package', $zipped_service_name);
     }

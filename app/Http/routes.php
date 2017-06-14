@@ -13,8 +13,6 @@
 
     Route::get('/', 'UserController@get_login');
 
-
-
     Route::get('/service_assets', 'ServiceController@service_views');
 
     Route::post('login', 'UserController@post_login');
@@ -25,7 +23,6 @@
 
 //lean views route
     Route::resource('service/{service}/{resource}/{template}/', 'ViewController@access_views');
-
 
     Route::get(config('devless')['assets_route_name'].'/{sublevels?}', 'ViewController@static_files')->where('sublevels', '.*');
 
@@ -50,7 +47,6 @@
                 }
             );
 
-
             //service end points
             Route::get('service/{service}/{resource}', 'ServiceController@service');
             Route::post('service/{service}/{resource}', 'ServiceController@service');
@@ -66,7 +62,7 @@
 
             //Dasboard
             Route::get('/dashboard', 'DashboardController@index');
-                
+
             //get list of users
             Route::get('devless_users', 'UserController@get_all_users');
             Route::get('retrieve_users', 'UserController@retrieve_all_users');
@@ -82,7 +78,6 @@
 
             //app views
             Route::resource('app', 'AppController');
-
 
             //destroy table
             //Route::delete('destroy_table', 'SystemApiController@delete_table');
@@ -103,7 +98,6 @@
             //Hub
             Route::resource('hub', 'HubController@index');
             Route::resource('get-service', 'HubController@getService');
-
 
             //Download Route
             Route::get('download/{filename}', 'ServiceController@download_service_package')

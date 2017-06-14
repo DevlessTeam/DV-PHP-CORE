@@ -27,7 +27,6 @@ class PrivacyController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -39,7 +38,6 @@ class PrivacyController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
@@ -65,7 +63,6 @@ class PrivacyController extends Controller
      */
     public function edit($id)
     {
-        //
     }
 
     /**
@@ -85,13 +82,13 @@ class PrivacyController extends Controller
         }
         $service = Service::findOrFail($id);
         $json = [
-        'query'  => $request->input('query'),
+        'query' => $request->input('query'),
         'create' => $request->input('create'),
         'update' => $request->input('update'),
         'delete' => $request->input('delete'),
         'schema' => $request->input('schema'),
         'script' => $request->input('script'),
-        'view'   => $request->input('view'),
+        'view' => $request->input('view'),
         ];
         $service->resource_access_right = json_encode($json);
         if ($service->save()) {
@@ -112,6 +109,5 @@ class PrivacyController extends Controller
      */
     public function destroy($id)
     {
-        //
     }
 }

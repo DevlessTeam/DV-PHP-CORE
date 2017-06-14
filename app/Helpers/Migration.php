@@ -22,11 +22,10 @@ class Migration extends Helper
                                     : //or
         $devlessfunc::flash('failed to create files(630)', 'error');
 
-
         return $zipped_service_name;
     }
 
-    public static function   export_app($app_name)
+    public static function export_app($app_name)
     {
         $package_name = $app_name;
         $devlessfunc = new DVHelper();
@@ -46,7 +45,6 @@ class Migration extends Helper
                                   : //or
         $devlessfunc::flash('failed to create files(630)', 'error');
 
-
         return $zipped_package_name;
     }
 
@@ -56,7 +54,8 @@ class Migration extends Helper
         $service_path = storage_path().'/'.$service_package_name;
         $folder_path = $devlessfunc::expand_package($service_path, true);
         $install_state = $devlessfunc::install_service($folder_path);
-        $install_state = ($install_state)? $devlessfunc::install_views($folder_path): $install_state;
+        $install_state = ($install_state) ? $devlessfunc::install_views($folder_path) : $install_state;
+
         return $install_state;
     }
 }

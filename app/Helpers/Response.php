@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use Response as output;
+
 /*
 *@author Eddymens <eddymens@devless.io>
  */
@@ -11,20 +13,17 @@ namespace App\Helpers;
  */
 class Response extends Helper
 {
-    //
-
     public static function respond($status_code, $message = null, $payload = [])
     {
-
         if ($message == null) {
-            $message =  (isset(self::$MESSAGE_HEAP[$status_code]))? self::$MESSAGE_HEAP[$status_code] :
+            $message = (isset(self::$MESSAGE_HEAP[$status_code])) ? self::$MESSAGE_HEAP[$status_code] :
             $message;
         }
 
         $response = [
             'status_code' => $status_code,
-            'message'     => $message,
-            'payload'     => $payload,
+            'message' => $message,
+            'payload' => $payload,
         ];
 
         return $response;

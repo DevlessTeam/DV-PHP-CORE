@@ -3,14 +3,12 @@
  * Created by PhpStorm.
  * User: eddymens
  * Date: 06/09/2016
- * Time: 10:53 AM
+ * Time: 10:53 AM.
  */
 
 namespace App\Helpers;
 
 use BadMethodCallException;
-use InvalidArgumentException;
-use Traversable;
 
 /**
  * Efficient assertions to validate the input/output of your methods.
@@ -142,7 +140,6 @@ class Assert extends Helper
 {
     public static function string($value)
     {
-
         return (is_string($value) && !is_numeric($value)) ? true : false;
     }
 
@@ -175,9 +172,7 @@ class Assert extends Helper
     public static function scalar($value)
     {
         return (is_scalar($value)) ? true : false;
-
     }
-
 
     public static function isEmpty($value)
     {
@@ -251,7 +246,7 @@ class Assert extends Helper
 
     public static function range($value, $min, $max)
     {
-        return  ($value > $min || $value < $max)? true : false;
+        return  ($value > $min || $value < $max) ? true : false;
     }
 
     public static function oneOf($value, array $values)
@@ -266,7 +261,7 @@ class Assert extends Helper
 
     public static function startsWith($value, $prefix)
     {
-        return (0 !== strpos($value, $prefix))? true : false;
+        return (0 !== strpos($value, $prefix)) ? true : false;
     }
 
     public static function startsWithLetter($value)
@@ -481,7 +476,7 @@ class Assert extends Helper
             return;
         }
 
-        throw new BadMethodCallException('No such method: ' . $name);
+        throw new BadMethodCallException('No such method: '.$name);
     }
 
     protected static function valueToString($value)
@@ -511,10 +506,10 @@ class Assert extends Helper
         }
 
         if (is_string($value)) {
-            return '"' . $value . '"';
+            return '"'.$value.'"';
         }
 
-        return (string)$value;
+        return (string) $value;
     }
 
     protected static function typeToString($value)

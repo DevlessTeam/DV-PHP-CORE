@@ -189,15 +189,13 @@ class Jwt extends Helper
      * Helper method to create a JSON error.
      *
      * @param int $errno An error number from json_last_error()
-     *
-     * @return void
      */
     private static function _handleJsonError($errno)
     {
         $messages = [
-            JSON_ERROR_DEPTH     => 'Maximum stack depth exceeded',
+            JSON_ERROR_DEPTH => 'Maximum stack depth exceeded',
             JSON_ERROR_CTRL_CHAR => 'Unexpected control character found',
-            JSON_ERROR_SYNTAX    => 'Syntax error, malformed JSON',
+            JSON_ERROR_SYNTAX => 'Syntax error, malformed JSON',
         ];
         throw new \DomainException(
             isset($messages[$errno])
