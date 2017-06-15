@@ -146,7 +146,7 @@ window.onload(function() {
           $('#flash_msg').modal({show: true, backdrop: 'static'});
           $('#formData').html(" ");
           for (var i = 2; i < metaForm.length; i++) {
-                $('#formData').append('<label for="'+metaForm[i]+'"><b>'+metaForm[i].toUpperCase()+'</b></label><input type="text" class="form-control" name="'+metaForm[i]+'" id="'+metaForm[i]+'" value="'+c[i-1]+'">');
+                $('#formData').append("<label for='"+metaForm[i]+"'><b>"+metaForm[i].toUpperCase()+"</b></label><input type='text' class='form-control' name='"+metaForm[i]+"' id='"+metaForm[i]+"' value='"+c[i-1]+"'>");
           }
       });
       jQExtn();
