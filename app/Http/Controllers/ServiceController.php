@@ -38,8 +38,8 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        $menuName = 'add_service';
-        return view('services.create');
+        $menuName = 'all_services';
+        return view('services.create', compact('menuName'));
     }
     /**
      * Store a newly created resource in storage.
