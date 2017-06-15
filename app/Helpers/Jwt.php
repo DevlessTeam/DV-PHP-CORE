@@ -37,8 +37,7 @@ class Jwt extends Helper
     {
         $tks = explode('.', $jwt);
         if (count($tks) != 3) {
-            //dd("you need access");
-            throw new \UnexpectedValueException('You are currently logged out');
+            return;
         }
         list($headb64, $bodyb64, $cryptob64) = $tks;
         if (null === ($header = self::jsonDecode(self::urlsafeB64Decode($headb64)))) {

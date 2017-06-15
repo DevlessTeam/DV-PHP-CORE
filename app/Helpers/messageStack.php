@@ -62,7 +62,9 @@ trait messageStack
         639 => 'Sorry RPC can only be processed over POST ',
         640 => 'Sorry there is no such related tables',
         641 => 'Something is wrong with your payload',
-        642 => 'No such rule keyword',
+        642 => 'There is no such method in Rules Engine',
+        643 => 'Sorry your account is not active',
+        644 => 'Seems user already exist',
         700 => 'Internal system error',
     ];
 }

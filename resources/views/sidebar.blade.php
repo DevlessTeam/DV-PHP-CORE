@@ -44,14 +44,9 @@
                     <li><a href="{{ route('services.create') }}">Add New</a></li>
                 </ul>
             </li>
-            <li class="menu-list <?=($menuName =='datatable')? 'active': ''?>">
-                <a href="#"><i class="fa fa-database"></i><span>Data Tables</span></a>
-                <ul class="child-list">
-                    <li><a href="{{ url('datatable') }}">Service Tables</a></li>
-                    <li><a href="{{ url('devless_users') }}">Users</a></li>
-                </ul>
-            </li>
-            <li class="<?=($menuName =='service_hub')? 'active': ''?>"><a href="{{ url('hub') }}"><i class="fa fa-cubes"></i><span>Service Hub</span></a></li>
+            <li class="<?=($menuName =='datatable')? 'active': ''?>"><a href="{{ url('datatable') }}"><i class="fa fa-database"></i>Data Tables</a></li>
+            <li class="<?=($menuName =='devless_users')? 'active': ''?>"><a href="{{ url('devless_users') }}"><i class="fa fa-users"></i>Users</a></li>
+            <!-- <li class="<?=($menuName =='service_hub')? 'active': ''?>"><a href="{{ url('hub') }}"><i class="fa fa-cubes"></i><span>Service Hub</span></a></li> -->
             <li class="<?=($menuName =='privacy')? 'active': ''?>"><a href="{{ url('privacy') }}"><i class="fa fa-lock"></i><span>Privacy</span></a></li>
             <li class="<?=($menuName =='api_docs')? 'active': ''?>"><a href="{{ url('console') }}"><i class="fa fa-terminal"></i><span>API Console</span></a></li>
             <li class="<?=($menuName =='migration')? 'active': ''?>"><a href="{{route('migrate.index')}}"><i class="fa fa-download"></i><span>Migration</span></a></li>

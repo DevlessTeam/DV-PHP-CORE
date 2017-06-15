@@ -213,7 +213,7 @@
                             <div class="form-group">
                                 <label for="session" class="col-sm-5 control-label"><b>Hours till User is logged out</b></label>
                                 <div class="col-sm-7">
-                                    <input type="number" id="session_time" class="form-control" min="0">
+                                    <input type="number" id="session_time" class="form-control" min="1" max="5">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -229,14 +229,14 @@
                             <div class="form-group"><label class="col-sm-5 control-label" for="selfSignUp"><b>Allow Users to signup automatically</b></label>
                                 <div class="col-sm-7">
                                     <div class="radio">
-                                        <label><input type="radio" id="self_signup_true" name="s_signup">Enable</label>
-                                        <label><input type="radio" checked id="self_signup_false" name="s_signup">Disable</label>
+                                        <label><input type="radio" id="self_signup_true" name="s_signup">Yes</label>
+                                        <label><input type="radio" checked id="self_signup_false" name="s_signup">No</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group"><label for="" class="col-sm-5 control-label"><b >Verify New Users via Email</b></label>
                                 <div class="col-sm-7">
-                                    <div class="radio"><label for="v_enable"><input type="radio" name="v_account" id="verify_email_true" >Enable</label><label for="v_disable"><input type="radio" checked id="verify_email_false"name="v_account">Disable</label></div>
+                                    <div class="radio"><label for="v_enable"><input type="radio" name="v_account" id="verify_email_true" >Yes</label><label for="v_disable"><input type="radio" checked id="verify_email_false" name="v_account">No</label></div>
                                 </div>
                             </div>
                         </form>
