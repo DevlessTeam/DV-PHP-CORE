@@ -18,8 +18,8 @@ class AuthSettings
 		if($output) {
 			return $output;
 		} 
-		$this->setAuthSettings(0, 1, 0, 1);
-		return ['session_time'=>0, 'self_signup'=>1, 'verify_email'=>0, 'expire_session'=>1]; 
+		$this->setAuthSettings(1, 1, 0, 1);
+		return ['session_time'=>1, 'self_signup'=>1, 'verify_email'=>0, 'expire_session'=>1]; 
 	}
 
 	public function updateAuthSettings($session_time, $self_signup, $verify_email, $expire_session)

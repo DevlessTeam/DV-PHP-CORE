@@ -6,6 +6,7 @@ use Hash;
 use Session;
 use App\User;
 use App\Helpers\Jwt as jwt;
+use App\Helpers\DevlessHelper;
 
 trait auth
 {
@@ -65,7 +66,7 @@ trait auth
             $user_cred['token'] = 'non for admin';
         } elseif ($user_token != null && $user_token != 'null' &&
                 ($force_auth == true || $force_auth == false)) {
-            $user_data = self::verify_user_token($user_token);
+            $user_data = self::verify_user_token($user_token, $force_auth);
 
             if (isset($user_data->id)) {
                 $user_cred =
@@ -91,14 +92,19 @@ trait auth
      *
      * @return mixed
      */
-    public static function verify_user_token($user_token)
+    public static function verify_user_token($user_token, $force_auth)
     {
+        $auth_settings = json_decode(DevlessHelper::get_user_auth_settings(), true);
+        $session_time = $auth_settings['session_time'];
+        $expire_session = $auth_settings['expire_session'];
         $secret = config('app')['key'];
 
         $jwt = new jwt();
 
         $jwt_payload = json_decode($jwt->decode($user_token, $secret, true));
-
+        if($jwt_payload == null && $force_auth == false) {
+            return (object)['id'=>'', 'session_token'=>''];
+        } elseif($force_auth == true && $jwt_payload == null){throw new \UnexpectedValueException('Passed in an invalid `devless-user-token`');}
         if ($user_token == 'null') {
             Self::interrupt(633, null, [], true);
         }
@@ -108,13 +114,13 @@ trait auth
             $d1 = new \DateTime($user_data->session_time);
             $d2 = new \DateTime();
             $interval = $d1->diff($d2);
-
-            if ($interval->h >= 1 || $interval->days > 0) {
-                $user_data->session_token = '';
-                $user_data->save();
-                Self::interrupt(633, null, [], true);
-            }
-
+            if($expire_session == 1){
+                if ($interval->h >= $session_time || $interval->days > 0) {
+                    $user_data->session_token = '';
+                    $user_data->save();
+                    Self::interrupt(633, null, [], true);
+                }
+            }   
             $user_data->session_time = self::session_timestamp();
             $user_data->save();
         }
