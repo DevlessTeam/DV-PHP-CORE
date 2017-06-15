@@ -27,18 +27,18 @@ trait destroyData
         $table = $payload['params'][0]['name'];
         $param_list = $payload['params'][0]['params'][0];
         $task = $tasked = null;
-        //remove service appendage from service
+
+          //remove service appendage from service
         if (($pos = strpos($table, $service_name.'_')) !== false) {
             $tableWithoutService = substr($table, $pos + 1);
         } else {
             $tableWithoutService = $table;
         }
-
         $table_name = ($tableWithoutService == $payload['params'][0]['name'])
-            ? $service_name.'_'.$tableWithoutService :
+            ? $service_name.'_'.$tableWithoutService:
             $payload['params'][0]['name'];
-        
-        $this->check_table_existence($service_name, $table);
+
+        $this->check_table_existence('', $table_name);
         
 
         $destroy_base_query = '$db->table("'.$table_name.'")';
@@ -70,7 +70,7 @@ trait destroyData
             Helper::interrupt(614, 'could not '.$task.' '.$element);
         }
 
-        return Response::respond(636, 'The table or field has been '.$task);   
+        return Response::respond(636);   
     }
 
     private function check_userbased_destroy($payload, $base_query)
@@ -78,4 +78,10 @@ trait destroyData
         if ($payload['user_id'] !== '') {
             $user_id = $payload['user_id'];
             return $base_query.'->where("devless_user_id",'.$user_id.')';    
-      
+        }
+        return $base_query;
+        
+    }
+
+
+}
