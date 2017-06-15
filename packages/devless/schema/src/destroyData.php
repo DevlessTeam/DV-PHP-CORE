@@ -78,10 +78,4 @@ trait destroyData
         if ($payload['user_id'] !== '') {
             $user_id = $payload['user_id'];
             return $base_query.'->where("devless_user_id",'.$user_id.')';    
-        }
-        return $base_query;
-        
-    }
-
-
-}
+      
