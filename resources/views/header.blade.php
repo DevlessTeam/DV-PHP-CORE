@@ -7,7 +7,7 @@
     <meta name="author" content="DevLess">
     <meta name="keyword" content="DevLess, opensource, BAAS, Backend as a service, robust, php, laravel ">
     
-    <link rel="shortcut icon" href="favico.png" type="image/png">
+    <link rel="shortcut icon" href="/favico.png" type="image/png">
 
     <title>DevLess {{config('devless')['version']}}</title>
 
