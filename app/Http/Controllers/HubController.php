@@ -9,8 +9,6 @@ use App\Helpers\DevlessHelper as DLH;
 
 class HubController extends Controller
 {
-    private $url = 'http://devless.herokuapp.com';
-    private $token = '10fa22f7466bafdad86dbde4cf451027';
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +30,6 @@ class HubController extends Controller
         $paths = explode('/', $parsed_url['path']);
         $service_name = end($paths);
         $service_name_only = explode('.', $service_name)[0];
-        DLH::instance_log($this->url, $this->token, 'Downloaded'.$service_name_only);
         $service = file_get_contents($url);
         $status = file_put_contents(storage_path().'/'.$service_name, $service);
 
