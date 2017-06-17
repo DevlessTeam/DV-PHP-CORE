@@ -131,7 +131,7 @@ EOT;
             $payload['params'][0]['field'][0] = $params;
         }
          
-         (strtolower(error_get_last()['file']) != 'unknown' )?dd():'';
+         //(strtolower(error_get_last()['file']) != 'unknown' )?dd():'';
 
         if($EVENT['request_phase'] == 'after') {
             $results['status_code'] = $EVENT['status_code'];
