@@ -156,7 +156,9 @@ trait service_activity
 
          if ($resource != 'schema' ) {
             $script = new script();
+
             $output = $script->run_script($resource, $payload);
+            
         }
 
         return $output;

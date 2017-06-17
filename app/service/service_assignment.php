@@ -33,6 +33,7 @@ trait service_assignment
         $parameters = null,
         $internal_access = false
     ) {
+
         $current_service = $this->service_exist($service_name);
         if (!$current_service == false) {
             //check service access right
@@ -61,9 +62,11 @@ trait service_assignment
                         'method' => $method,
                         'params' => $parameters,
                     ];
+
                 // run script before assigning to method
                 if ( $resource != 'view' && $resource != 'rpc') {
                     $newServiceElements = $this->before_assigning_service_action($resource, $payload);
+                    
                     $resource = $newServiceElements['resource'];
                     $payload = $newServiceElements['payload'];
 
@@ -105,6 +108,7 @@ trait service_assignment
                         break;
                 }
             } else {
+
                 Helper::interrupt(624);
             }
         }

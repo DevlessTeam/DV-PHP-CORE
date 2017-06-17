@@ -114,7 +114,8 @@ trait auth
             $d1 = new \DateTime($user_data->session_time);
             $d2 = new \DateTime();
             $interval = $d1->diff($d2);
-            if($expire_session == 1){
+            
+            if( (int)$expire_session == 0 ){
                 if ($interval->h >= $session_time || $interval->days > 0) {
                     $user_data->session_token = '';
                     $user_data->save();

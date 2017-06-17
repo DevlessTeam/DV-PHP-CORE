@@ -47,7 +47,7 @@
                         <td>{{$user->phone_number}}</td>
                         <td>{{$user->email}}</td>
                         <td>
-                            @if($user->status == 0)
+                            @if($user->status == 1)
                                 true
                             @else
                                 false
