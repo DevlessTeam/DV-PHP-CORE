@@ -24,12 +24,14 @@ class Config
         if (!$type) {
             return null;
         }
-
-        $smsConfig = \DB::table('notify_sms_config')->first();
-        $emailConfig = \DB::table('notify_email_config')->first();
-        $pushConfig = \DB::table('notify_push_config')->first();
-
         
+        $smsConfig = \DB::table('notify_sms_config')->get();
+        $emailConfig = \DB::table('notify_email_config')->get();
+        $pushConfig = \DB::table('notify_push_config')->get();
+        //dd($smsConfig, $emailConfig, $pushConfig);
+        $smsConfig = (!empty($smsConfig)) ? $smsConfig[0] : (object)[];      
+        $emailConfig = (!empty($emailConfig)) ? $emailConfig[0] : (object)[];      
+        $pushConfig = (!empty($pushConfig)) ? $pushConfig[0] : (object)[];      
         $configTree = 
 
         ['sms' => ['accountId' => (isset($smsConfig->account_id))?$smsConfig->account_id : '',
@@ -45,7 +47,7 @@ class Config
                 'app_secret' => (isset($pushConfig->app_secret)) ? $pushConfig->app_secret : '',
                 'app_general_broadcast_channel' =>  (isset($pushConfig->broadcast_channel)) ? $pushConfig->broadcast_channel : '' ,
                 'app_general_broadcast_event' => (isset($pushConfig->broadcast_event)) ? $pushConfig->broadcast_event : '',
-                'app_option' => ['encrypted' =>  true, 'cluster' => $pushConfig->app_options],
+                'app_option' => ['encrypted' =>  true, 'cluster' => (isset($pushConfig->app_options))?$pushConfig->app_options:''],
 
             ],
         ];
