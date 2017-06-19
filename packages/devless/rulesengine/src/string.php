@@ -63,6 +63,35 @@ trait string
 	}
 
 	/**
+	 * Get last character character
+	 * @param $string
+	 * @return $this
+	 * */
+	public function getLastCharacter($string)
+	{
+		if (!$this->execOrNot) {
+            return $this;
+        }
+
+        $this->results = $string[strlen($string)-1];
+        return $this;
+	}
+
+	/**
+	 * Get last but one character
+	 * @param $string
+	 * @return $this
+	 * */
+	public function getLastButOneCharacter($string)
+	{
+		if (!$this->execOrNot) {
+            return $this;
+        }
+        $this->results = $string[strlen($string)-2];
+        return $this;
+	}
+
+	/**
 	 * replace a string with another
 	 * @param $string
 	 * @return $this
