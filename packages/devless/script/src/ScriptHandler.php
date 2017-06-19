@@ -96,6 +96,7 @@ EOT;
             extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
             $rules->accessRights = $EVENT['access_rights'];
             $rules->EVENT['user_id'] = $EVENT['user_id'];
+            
             $rules->request_phase = ($EVENT['request_phase'] == 'after')?'after':'before';
             if($rules->request_phase == 'after') {
                 $rules->status_code = $EVENT['status_code'];

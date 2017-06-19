@@ -143,7 +143,7 @@
         }
 
         /**
-         * Get results variable and set to variable.
+         * Get results variable, and set to variable.
          *
          * @param $input_var
          *
@@ -244,6 +244,16 @@
             $this->message = $message;
             $this->payload = $payload;
             return $this;
+        }
+
+        public function help()
+        {
+            if (!$this->execOrNot) {
+                return $this;
+            }
+            $this->stopAndOutput(1000, 'List of all methods', get_class_methods($this));
+            return $this;
+
         }
 
     }

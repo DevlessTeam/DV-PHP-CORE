@@ -12,10 +12,10 @@ trait mutateResponse
      */
 	public function mutateStatusCode($newCode)
 	{
-		$this->commonMutationTask();
 		if (!$this->execOrNot) {
                 return $this;
         }
+		$this->commonMutationTask();
      	$this->status_code = $newCode;
 		return $this;
 	}
@@ -27,10 +27,10 @@ trait mutateResponse
      */
 	public function mutateResponseMessage($newMessage)
 	{
-		$this->commonMutationTask();
 		if (!$this->execOrNot) {
                 return $this;
         }
+		$this->commonMutationTask();
         $this->message = $newMessage;
 		return $this;
 	}
@@ -42,13 +42,13 @@ trait mutateResponse
      */
 	public function mutateResponsePayload($newPayload)
 	{
-		$this->commonMutationTask();
 		$newPayload = (is_array($newPayload))? $newPayload : [$newPayload];
 
 		if (!$this->execOrNot) {
                 return $this;
         }
         
+		$this->commonMutationTask();
         $this->payload = $newPayload;
 		return $this;
 	}
@@ -57,7 +57,8 @@ trait mutateResponse
      * execute common mutation tasks.
      */
 	private function commonMutationTask()
-	{
+	{	
+		
 		($this->request_phase == 'before')? Helper::interrupt(642, "Mutating Response prior to a query is impossible. If you still wish to end with a custom response use  `->stopAndOutput('status_code', 'message', 'payload')`"): '';
 	}
 }
