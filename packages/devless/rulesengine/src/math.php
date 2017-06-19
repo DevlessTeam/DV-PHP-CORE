@@ -81,6 +81,15 @@ trait math {
 		return $this;
 	}	
 
+    public function divideBy($number)
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        
+        $this->results = ($this->results)/$number;
+        return $this;
+    }
 	/**
      * find the sqaure of a number.
      *
@@ -88,7 +97,7 @@ trait math {
      *
      * @return $this
      */
-	public function FindSquareRootOf($number)
+	public function findSquareRootOf($number)
 	{
 		if(!$this->execOrNot) {
 			return $this;
@@ -97,6 +106,14 @@ trait math {
 		return $this;
 	}
 
+    public function getSquareRoot()
+    {
+        if(!$this->execOrNot) {
+            return $this;
+        }
+        $this->results = sqrt($this->results);
+        return $this;
+    }
 	/**
      * round up a number.
      *

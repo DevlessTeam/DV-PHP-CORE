@@ -86,6 +86,18 @@ class Rules
         }
     }
 
+     /**
+     * use result from previous method as a param 
+     * if argument is not provided
+     *
+     * @param  $args
+     *
+     * @return mix
+     */
+    public function useArgsOrPrevOutput($args)
+    {
+        return ($args == null)? $this->results : $args;
+    }
     /**
      * Execute callback functions with the chain.
      *

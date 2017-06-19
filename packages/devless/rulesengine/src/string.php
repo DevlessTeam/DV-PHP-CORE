@@ -25,11 +25,12 @@ trait string
 	 * @param $string
 	 * @return $this
 	 * */
-	public function getFirstCharacter($string)
+	public function getFirstCharacter($string=null)
 	{
 		if (!$this->execOrNot) {
             return $this;
         }
+        $string = $this->useArgsOrPrevOutput($string);
         $this->results = $string[0];
 		return $this;
 	}
@@ -39,11 +40,12 @@ trait string
 	 * @param $string
 	 * @return $this
 	 * */
-	public function getSecondCharacter($string)
+	public function getSecondCharacter($string=null)
 	{
 		if (!$this->execOrNot) {
             return $this;
         }
+        $string = $this->useArgsOrPrevOutput($string);
         $this->results = $string[1];
 		return $this;
 	}
@@ -53,11 +55,12 @@ trait string
 	 * @param $string
 	 * @return $this
 	 * */
-	public function getThirdCharacter($string)
+	public function getThirdCharacter($string=null)
 	{
 		if (!$this->execOrNot) {
             return $this;
         }
+        $string = $this->useArgsOrPrevOutput($string);
         $this->results = $string[2];
 		return $this;
 	}
@@ -67,12 +70,13 @@ trait string
 	 * @param $string
 	 * @return $this
 	 * */
-	public function getLastCharacter($string)
+	public function getLastCharacter($string=null)
 	{
 		if (!$this->execOrNot) {
             return $this;
         }
 
+		$string = $this->useArgsOrPrevOutput($string);
         $this->results = $string[strlen($string)-1];
         return $this;
 	}
@@ -82,12 +86,23 @@ trait string
 	 * @param $string
 	 * @return $this
 	 * */
-	public function getLastButOneCharacter($string)
+	public function getLastButOneCharacter($string=null)
 	{
 		if (!$this->execOrNot) {
             return $this;
         }
+        $string = $this->useArgsOrPrevOutput($string);
         $this->results = $string[strlen($string)-2];
+        return $this;
+	}
+
+	public function reverseString($string=null)
+	{
+		if (!$this->execOrNot) {
+            return $this;
+        }
+        $string = $this->useArgsOrPrevOutput($string);
+        $this->results = strrev($string);
         return $this;
 	}
 
@@ -110,13 +125,13 @@ trait string
 	 * @param $string
 	 * @return $this
 	 * */
-	public function convertToUpperCase($string)
+	public function convertToUpperCase($string=null)
 	{
 	
 		if (!$this->execOrNot) {
             return $this;
         }
-
+        $string = $this->useArgsOrPrevOutput($string);
         $this->results = strtoupper($string);
 		return $this;
 	}
@@ -126,11 +141,12 @@ trait string
 	 * @param $string
 	 * @return $this
 	 * */
-	public function convertToLowerCase($string)
+	public function convertToLowerCase($string=null)
 	{
 		if (!$this->execOrNot) {
             return $this;
         }
+        $string = $this->useArgsOrPrevOutput($string);
         $this->results = strtolower($string);
 		return $this;
 	}
