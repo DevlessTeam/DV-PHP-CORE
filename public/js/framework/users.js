@@ -151,13 +151,13 @@ $(document).ready(function() {
 
 var authSettings = {};
 authSettings.get = function(callback) {
-    $.getJSON('/open-api/AuthSettings/getAuthSettings/[]', function(resp){
+    $.getJSON('/open-api/authSettings/getAuthSettings/[]', function(resp){
             callback(resp);       
     });
 }
 
 authSettings.update = function(settings, callback) {
-     $.getJSON('/open-api/AuthSettings/updateAuthSettings/'+JSON.stringify(settings), function(resp){
+     $.getJSON('/open-api/authSettings/updateAuthSettings/'+JSON.stringify(settings), function(resp){
             callback(resp);       
     });    
 }

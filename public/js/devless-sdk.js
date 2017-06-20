@@ -410,13 +410,11 @@
                 if( response.payload.result.message == undefined ) {
                     SDK.setToken(response.payload.result['token']);
                     devless_main.coreLib.notify("signup was successful");
-                    devless_main.coreLib.notify(response.message,1);
                     if(actionUrl != '#') {
                     	window.location.href = window.location.origin + '/' + actionUrl;
                     }
                 } else {
                     devless_main.coreLib.notify(response.payload.result.message)
-                    devless_main.coreLib.notify(response.message,0);
                 }
                 callback();
             });
@@ -430,16 +428,16 @@
         login = function(record, callback) {
             SDK.call('devless', 'login', [record['username'], record['email'], record['phonenumber'],
                 record['password']], function(response){
-                if(response.payload.result !== false) {
+                if(response.payload.result !== undefined) {
                     SDK.setToken(response.payload.result['token']);
-                    devless_main.coreLib.notify("Log in successfully");
-                    devless_main.coreLib.notify(response.message,1);
+                    console.log(response.payload)
+                    devless_main.coreLib.notify("Log in successful");
                     if(actionUrl != '#') {
                     	window.location.href = window.location.origin + '/' + actionUrl;
                     }
                 } else{
-                    devless_main.coreLib.notify("Login failed");
-                    devless_main.coreLib.notify(response.message,0);
+                	devless_main.coreLib.notify("Login failed either your account is in active or does not exist yet");
+                    //devless_main.coreLib.notify(response.message,0);
                 }
                 callback();
             });
