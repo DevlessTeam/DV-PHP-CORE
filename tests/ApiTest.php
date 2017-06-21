@@ -125,7 +125,7 @@ class ApiTest extends TestCase
         $deleteObj = json_decode($deleteStruct, true);
 
         $this->json('DELETE', $url . $serviceName . '/' . $dbAction, $deleteObj)
-            ->seeJson(['message' => 'The table or field has been delete',
+            ->seeJson(['message' => 'The table or field has been deleted',
                 'payload' => [], 'status_code' => 636]);
 
         $deleteStruct = '{"resource":[{"name":"' . $this->serviceTable . '","params":[{"drop":true}]}]}';
