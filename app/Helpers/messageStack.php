@@ -65,6 +65,7 @@ trait messageStack
         642 => 'There is no such method in Rules Engine',
         643 => 'Sorry your account is not active',
         644 => 'Seems user already exist',
+        645 => 'Sorry but you are not logged in as Admin',
         700 => 'Internal system error',
     ];
 }

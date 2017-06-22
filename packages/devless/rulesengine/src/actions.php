@@ -63,7 +63,7 @@
             return $this;
         }
         /**
-         * Call on an ActionClass.
+         * Call on an ActionClass .
          *
          * @param  $service
          * @param  $method
@@ -169,6 +169,27 @@
             }
             $this->results = $input;    
             return $this;
+        }
+
+        /**
+         * This is similar to assign(), set() is used  together with to() to
+         * set variables to values eg set($name)->to("edmond").
+         *
+         * @param $input
+         *
+         * @return $this
+         */
+        public function set($input)
+        {
+            $this->assign($input);     
+            return $this;       
+        }
+
+        public function usingService($serviceName)
+        {
+            if (!$this->execOrNot) {
+                return $this;
+            }
         }
 
 
