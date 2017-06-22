@@ -248,10 +248,22 @@
 
         public function help()
         {
-            if (!$this->execOrNot) {
-                return $this;
+            
+            $output = get_class_methods($this);
+            unset($output[0], $output[1], $output[2], $output[3], $output[count($output)-1]);
+            $output = array_values($output);
+            $count = 0;
+            $rules = new Rules();
+            foreach ($output as $methodName) {
+                $method = new \ReflectionMethod($rules, $methodName); 
+                $methodDocs = str_replace("*/","",$method->getDocComment());
+                $methodDocs = str_replace("/**","",$methodDocs);
+                $methodDocs = str_replace("* *","||",$methodDocs);
+                $output[$count] = $methodName.' :  '.$methodDocs;
+            $count++;
             }
-            $this->stopAndOutput(1000, 'List of all methods', get_class_methods($this));
+            
+            $this->stopAndOutput(1000, 'List of all callable methods', $output);
             return $this;
 
         }

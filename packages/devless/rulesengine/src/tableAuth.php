@@ -4,6 +4,7 @@ namespace Devless\RulesEngine;
 
 use App\Helpers\Helper;
 
+
 trait tableAuth
 {
     /**
@@ -47,7 +48,7 @@ trait tableAuth
      *
      * @return instance
      */
-    public function allowEnternalAcess()
+    public function allowEnternalAccess()
     {
         if (!$this->execOrNot) {
             return $this;
@@ -56,5 +57,17 @@ trait tableAuth
         $this->accessRights[$action] = 1;
 
         return $this;
+    }
+
+    public function grantOnlyAdminAccess()
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+
+         (!\DB::table('users')->where('id', $this->EVENT['user_id'])->where('role',1)->first() && !Helper::is_admin_login() )?Helper::interrupt(628) : '';
+
+        return $this;
+
     }
 }
