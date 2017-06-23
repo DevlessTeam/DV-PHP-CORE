@@ -21,7 +21,7 @@ trait messageStack
         500 => 'first schema error',
         // error code for custom messages
         600 => 'Data type does not exist',
-        601 => 'Reference column column name does not exist',
+        601 => 'Reference column name does not exist',
         602 => 'Database schema could not be created',
         603 => 'Table could not be created',
         604 => 'Service  does not exist or is not active',

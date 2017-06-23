@@ -169,6 +169,36 @@ trait string
         return $this;
 
 	}
+
+	/**
+	 * Count the number of words in a sentence eg: ->countWords("Hello There")
+	 * @param $sentence
+	 * @return $this
+	 */
+	public function countWords($sentence)
+	{
+		if (!$this->execOrNot) {
+            return $this;
+        }
+        $sentence = $this->useArgsOrPrevOutput($sentence);
+        $this->results = str_word_count($sentence);
+        return $this;
+	}
+
+	/**
+	 * Find the number of characters in a word or sentence eg: ->countCharacters($word)
+	 * @param word 
+	 * @return $this
+	 */
+	public function countCharacters($word)
+	{
+		if (!$this->execOrNot) {
+            return $this;
+        }
+        $word = $this->useArgsOrPrevOutput($word);
+        $this->results = strlen($word);
+        return $this;
+	}
 }
 
 

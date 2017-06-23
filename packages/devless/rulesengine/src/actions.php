@@ -222,20 +222,27 @@
          * @param as many as possible
          * @return $this
          */
-        public function withParams()
+        public function withParams($internalCall=false)
         {
             if (!$this->execOrNot) {
                 return $this;
             }
             $this->checkRunConstructs($this->selectedService, $this->selectedMethod);
-            
+            (!$internalCall && empty(func_get_args()))?$this->stopAndOutput(1111,'Rule Error',['suggestion'=>'You will have to provide parameters eg: ->withParams("a","b")']):'';
+
             $this->run($this->selectedService, $this->selectedMethod, func_get_args());
             return $this;
         }
 
+        public function withoutParams()
+        {
+            $this->withParams(true);
+            return $this;   
+        }
         public function checkRunConstructs($service, $method)
         {
-            (!$service && !$method)?$this->stopAndOutput(1111, 'Rule Error',['suggestion'=>'To call on a method within a Service try `WithService("serviceName")->callMethod("methodName")->usingParams("a", "b")']):'';
+            
+            (!$service || !$method)?$this->stopAndOutput(1111, 'Rule Error',['suggestion'=>'To call on a method within a Service try `usingService("serviceName")->callMethod("methodName")->withParams("a", "b")']):'';
             return $this;
         }
 
@@ -322,29 +329,55 @@
             $this->status_code = $status_code;
             $this->message = $message;
             $this->payload = $payload;
+            $this->execOrNot = false;
+            $this->stopAndOutputCalled = true;
             return $this;
         }
 
-        public function help()
+        /**
+         * List out all possible callbale methods as well as get docs on specific method eg: ->help('stopAndOutput')
+         * @param $methodToGetDocsFor
+         * @return $this;
+         */
+        public function help($methodToGetDocsFor=null)
         {
             
-            $output = get_class_methods($this);
-            unset($output[0], $output[1], $output[2], $output[3], $output[count($output)-1]);
-            $output = array_values($output);
-            $count = 0;
+            $methods = get_class_methods($this);
+            
+            $exemptedMethods = ['__construct','requestType','__call','useArgsOrPrevOutput','read','commonMutationTask'];
+            $methodList = [];
             $rules = new Rules();
-            foreach ($output as $methodName) {
-                $method = new \ReflectionMethod($rules, $methodName); 
-                $methodDocs = str_replace("*/","",$method->getDocComment());
-                $methodDocs = str_replace("/**","",$methodDocs);
-                $methodDocs = str_replace("* *","||",$methodDocs);
-                $output[$count] = $methodName.' :  '.$methodDocs;
-            $count++;
+            $getMethodDocs = function($methodName) use($exemptedMethods, $rules) {
+                if(!in_array($methodName, $exemptedMethods)){
+                    $method = new \ReflectionMethod($rules, $methodName); 
+                    $methodDocs = str_replace("*/","",$method->getDocComment());
+                    $methodDocs = str_replace("/**","",$methodDocs);
+                    return $methodDocs = str_replace("* *","||",$methodDocs);
+                } else { return false;}
+            };
+            if($methodToGetDocsFor) {
+                $docs = $getMethodDocs($methodToGetDocsFor);
+                if($docs) {
+                     $methodList[$methodToGetDocsFor] = $docs;
+                }
+            } else {
+                foreach ($methods as $methodName) {
+                  $methodDocs = $getMethodDocs($methodName);
+                  if($methodDocs) {
+                    $methodList[$methodName] = $methodDocs;  
+                  }
+                }
             }
             
-            $this->stopAndOutput(1000, 'List of all callable methods', $output);
+            
+            $this->stopAndOutput(1000, 'List of callable methods', $methodList);
             return $this;
 
+        }
+
+        public function read()
+        {
+            return $this;
         }
 
     }

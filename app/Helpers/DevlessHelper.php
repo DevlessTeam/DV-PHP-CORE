@@ -190,9 +190,13 @@ class DevlessHelper extends Helper
         return 
                 '
 /**
-* All service db request pass through here before and after db actions are made
-* This makes it possible to modify  either the request or response to your satisfaction
-* Learn more about how to do this from the docs 
+* Rules allow you to establish control over the flow of 
+* your data in and out of the database.
+* For example if you will like to change the output message 
+* your users receive after quering for data,
+* its as easy as `afterQuerying()->mutateResponseMessage("to something else")`. 
+* To view the list of callable method append ->help() to a 
+* flow statement ie ->beforeQuering()->help() and view from your app.
 **/
  -> beforeQuerying()
  -> beforeUpdating()

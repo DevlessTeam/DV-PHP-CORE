@@ -16,6 +16,7 @@ trait flowControl
         if (!$this->isCurrentDBAction) {
             return $this;
         }
+        if($this->stopAndOutputCalled){return $this;}
         $this->assertion['whenever'] = $assert;
         $this->called['whenever'] = true;
         $this->execOrNot = ($assert);
