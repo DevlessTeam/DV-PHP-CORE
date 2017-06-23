@@ -91,7 +91,7 @@ trait math {
         return $this;
     }
 	/**
-     * find the sqaure of a number.
+     * Find the square root of a number. eg:findSquareRoot($number)
      *
      * @param integer $num
      *
@@ -106,6 +106,10 @@ trait math {
 		return $this;
 	}
 
+    /**
+     * Get the squareRoot of the result of the previous method eg: ->divide(20, 40)->getSquareRoot()->storeAs($output)->succeedWith($output)
+     * return $this
+     */
     public function getSquareRoot()
     {
         if(!$this->execOrNot) {
@@ -129,4 +133,19 @@ trait math {
 		$this->results = round($number, $precision);
 		return $this;
 	}
+
+    /**
+     * Find the percent of a number example usage: find(10)->percentOf(200)
+     * @param $number
+     * @return $this
+     */
+    public function percentOf($number)
+    {
+        if(!$this->execOrNot) {
+            return $this;
+        }
+        $percentage = ($this->results/100);
+        $this->results = $percentage*($number);
+        return $this;
+    }
 }

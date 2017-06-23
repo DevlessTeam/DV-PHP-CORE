@@ -150,6 +150,25 @@ trait string
         $this->results = strtolower($string);
 		return $this;
 	}
+
+	/**
+	 * Truncate a string to some length eg ->truncateString(4, "my name is edmond")->getResults($trucatedString)->succeedWith($truncatedString)
+	 * @param $len
+	 * @param $string
+	 * @param $trimMaker
+	 * @return $this
+	 * */
+	public function truncateString($len, $string=null, $trimMaker=null)
+	{
+		if (!$this->execOrNot) {
+            return $this;
+        }
+        $string = $this->useArgsOrPrevOutput($string);
+        $trimMaker = ($trimMaker != null)?$trimMaker:'...';
+        $this->results = mb_strimwidth($string, 0, $len, $trimMaker);
+        return $this;
+
+	}
 }
 
 

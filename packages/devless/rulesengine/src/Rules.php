@@ -30,6 +30,8 @@ class Rules
     private $isCurrentDBAction = false;
     private $actionType = '';
     private $tableName = '';
+    private $selectedService = null;
+    private $selctedMethod = null;
     private $methodAction = [
         'GET' => 'query',
         'POST' => 'create',

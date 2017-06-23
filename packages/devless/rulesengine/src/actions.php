@@ -78,6 +78,7 @@
             }
             
             $params = ($params) ? $params : [];
+
             if ($remoteUrl && $token) {
                 $this->results = ActionClass::remoteExecute($service, $method, $params, $remoteUrl, $token);
             } else {
@@ -133,7 +134,7 @@
          *
          * @return $this
          */
-        public function getRunResult(&$input_var)
+        public function getResults(&$input_var)
         {
             if (!$this->execOrNot) {
                 return $this;
@@ -151,7 +152,7 @@
          */
         public function storeAs(&$input_var)
         {
-            $this->getRunResult($input_var);
+            $this->getResults($input_var);
             return $this;
         }
 
@@ -185,13 +186,58 @@
             return $this;       
         }
 
+        /**
+         * Set the name of service from which you want to use method from.
+         * Complete eg: usingService('devless')->callMethod('hello')->  withParams()->getResults($output)->succeedWith($output)
+         * @param $serviceName
+         * @return $this
+         */
         public function usingService($serviceName)
         {
             if (!$this->execOrNot) {
                 return $this;
             }
+            $this->selectedService = $serviceName;
+            return $this;
         }
 
+        /**
+         * set the name of the method after setting the service from which you will like to run. complete eg:usingService('devless')->callMethod('hello')->  withParams()->getResults($output)->succeedWith($output)
+         * @param $methodName
+         * @return $this
+         */
+        public function callMethod($methodName)
+        {
+            if (!$this->execOrNot) {
+                return $this;
+            }
+            $this->selectedMethod = $methodName;
+            $this->checkRunConstructs($this->selectedService, $this->selectedMethod);
+            return $this;
+        }
+
+        /**
+         * Set parameters for method from which you will like to run
+         * complete eg: usingService('devless')->callMethod('hello')->  withParams()->getResults($output)->succeedWith($output)
+         * @param as many as possible
+         * @return $this
+         */
+        public function withParams()
+        {
+            if (!$this->execOrNot) {
+                return $this;
+            }
+            $this->checkRunConstructs($this->selectedService, $this->selectedMethod);
+            
+            $this->run($this->selectedService, $this->selectedMethod, func_get_args());
+            return $this;
+        }
+
+        public function checkRunConstructs($service, $method)
+        {
+            (!$service && !$method)?$this->stopAndOutput(1111, 'Rule Error',['suggestion'=>'To call on a method within a Service try `WithService("serviceName")->callMethod("methodName")->usingParams("a", "b")']):'';
+            return $this;
+        }
 
         /**
          * Get results variable and set to variable.
@@ -242,6 +288,18 @@
             }
 
             $output = $input;    
+            return $this;
+        }
+
+        public function find($value)
+        {
+            if (!$this->execOrNot) {
+                return $this;
+            }
+
+            if($value != null){
+                $this->results = $value;
+            }
             return $this;
         }
 
