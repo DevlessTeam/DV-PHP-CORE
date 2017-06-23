@@ -1,5 +1,7 @@
 <?php
 
+use App\Helpers\DataStore;
+
 /**
  * Include a php file.
  *
@@ -67,4 +69,32 @@ function DvNavigate($payload, $pageName)
 function DvRedirect($url, $time)
 {
     header('refresh:'.$time.';url='.$url);
+}
+
+/**
+ * Get Instance Token
+ * 
+ */
+function DvAppToken()
+{
+    $instance = DataStore::instanceInfo();
+    return $instance['app']->token;
+}
+
+/**
+ * Get Instance SDK
+ * 
+ */
+function DvJSSDK()
+{
+    return '<script src="'.URL('/').'/js/devless-sdk.js" class="devless-connection" devless-con-token="'. DataStore::instanceInfo()['app']->token .'"></script>';
+}
+
+/**
+ * Get JS SDK URL
+ * 
+ */
+function DvSDKURL()
+{
+    return URL('/').'/js/devless-sdk.js';
 }
