@@ -55,6 +55,8 @@ class ServiceController extends Controller
         $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
         $service_name_from_form = str_replace('-', '_', $service_name_from_form);
         $service_name = $service_name_from_form;
+        $is_keyword = $this->is_service_name_php_keyword($service_name);
+
         $validator = Validator::make(
 
             ['Service Name' => $service_name, 'Devless' => 'devless'],
@@ -62,9 +64,11 @@ class ServiceController extends Controller
                 'Service Name' => 'required|unique:services,name|min:3|max:15|different:Devless',
             ]
         );
-        if ($validator->fails()) {
+
+        if ($validator->fails() || $is_keyword) {
             $errors = $validator->messages();
-            DLH::flash('Sorry but service could not be created', 'error');
+            $message = ($validator->fails())?"Sorry but service could not be created":"Sorry but $service_name is a keyword and can't be used as a `service name`";
+            DLH::flash($message, 'error');
 
             return redirect()->route('services.create')->with('errors', $errors)->withInput();
         }

@@ -47,7 +47,7 @@ $(document).ready(function() {
             if (password === con_password) {
                 SDK.call('devless', 'signUp', [email, password, username, phone_number, fname, lname], function(res) {
                     if(res.payload.result) {
-                        Datatable.row.add(["", id, username, fname, lname, phone_number, email, 'false']).draw();
+                        Datatable.row.add(["", id, username, fname, lname, phone_number, email, 'true']).draw();
                         $('.alert').show();
                     } else {
                         alert('User creation failed');

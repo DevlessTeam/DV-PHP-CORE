@@ -62,7 +62,7 @@ trait devlessAuth
 
             $prepared_token = $this->set_session_token($token_payload, $user->id);
             $profile = \DB::table('users')->where('id', $user->id)
-                ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'role'])
+                ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'status'])
                 ->first();
             $user_obj = [
                 'profile' => $profile,
@@ -96,7 +96,7 @@ trait devlessAuth
                     'created_at',
                     'updated_at',
                     'remember_token',
-                    'role'
+                    'status'
                 )
                 ->first();
 
@@ -129,6 +129,8 @@ trait devlessAuth
             $user_data = $user::where('email', $email)->first();
         } elseif (isset($username, $password)) {
             $user_data = $user::where('username', $username)->first();
+        } elseif (isset($phone_number, $password)) {
+            $user_data = $user::where('phone_number', $phone_number)->first();
         } else {
             return false;
         }
@@ -180,7 +182,6 @@ trait devlessAuth
             //unchangeable fields
             $indices = [
                 'session_token',
-                'status',
                 'role',
             ];
 
@@ -198,7 +199,7 @@ trait devlessAuth
 
             if ($user::where('id', $token['id'])->update($payload)) {
                 return \DB::table('users')->where('id', $token['id'])
-                ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'role'])
+                ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'status'])
                 ->first();
             }
         }

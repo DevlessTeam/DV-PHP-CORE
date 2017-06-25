@@ -106,7 +106,7 @@ EOT;
             
             
             
-            $imports = "use App\Helpers\Assert as AssertIts;";
+            $imports = "use App\Helpers\Assert as assertIts;use App\Helpers\Assert as  assertIt;";
             $headers = $imports.' $rules';
             $footer  = '';
             $finalCode = (strpos($code, 'use App\Helpers\Assert')!==false)? $code : $headers.$code.$footer;
