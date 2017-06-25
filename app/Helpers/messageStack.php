@@ -18,13 +18,12 @@ trait messageStack
         //JSON HEAP
         400 => 'Sorry something went wrong with payload(check json format)',
         //SCHEMA HEAP
-        500 => 'first schema error',
         // error code for custom messages
         600 => 'Data type does not exist',
         601 => 'Reference column name does not exist',
         602 => 'Database schema could not be created',
         603 => 'Table could not be created',
-        604 => 'Service  does not exist or is not active',
+        604 => 'Service does not exist or you just mispelt it. Also be sure the service is set to active',
         605 => 'No such resource try (rpc db view or schema)',
         606 => 'Created table successfully',
         607 => 'Could not find the right DB method',

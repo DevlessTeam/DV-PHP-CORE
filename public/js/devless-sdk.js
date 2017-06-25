@@ -10,32 +10,8 @@
     $.noConflict();
     function assignLable(){num=Math.round(100*Math.random())+1;var a=window.adjs,b=window.nouns;return adj=a[Math.floor(Math.random()*a.length)],noun=b[Math.floor(Math.random()*b.length)],separator="-",adj+separator+noun+separator+num}adjs="autumn hidden bitter misty silent empty dry dark summer icy delicate quiet white cool spring winter patient twilight dawn crimson wispy weathered blue billowing broken cold damp falling frosty green long late lingering bold little morning muddy old red rough still small sparkling throbbing shy wandering withered wild black young holy solitary fragrant aged snowy proud floral restless divine polished ancient purple lively nameless".split(" "),nouns="waterfall river breeze moon rain wind sea morning snow lake sunset pine shadow leaf dawn glitter forest hill cloud meadow sun glade bird brook butterfly bush dew dust field fire flower firefly feather grass haze mountain night pond darkness snowflake silence sound sky shape surf thunder violet water wildflower wave water resonance sun wood dream cherry tree fog frost voice paper frog smoke star".split(" ");
 
-    /**
-     @author Devless
-     @version 0.01
-     @description Devless sdk for Javascript
-     */
-    !function(e){"use strict"
-        function s(e,s,t,n){t=t||{}
-            var o="",r=function(e,s){for(var t in s)o="&"+e+"="+s[t]+o}
-            for(var a in t)!t.hasOwnProperty(a),t[a]instanceof Array?r(a,t[a]):o="&"+a+"="+t[a]+o
-            var i=u+e+"/db?table="+s+o
-            return l.call(this,"",i,"GET",function(e){n(e)}),this}function t(e,s,t,n){var o=JSON.stringify({resource:[{name:s,field:[t]}]}),r=u+e+"/db"
-            return l.call(this,o,r,"POST",function(e){n(e)}),this}function n(e,s,t,n,o,r){var a=JSON.stringify({resource:[{name:s,params:[{where:t+","+n,data:[o]}]}]}),i=u+e+"/db"
-            return l.call(this,a,i,"PATCH",function(e){r(e)}),this}function o(e,s,t,n,o){var r={resource:[{name:s,params:[{where:t+",=,"+n}]}]}
-            r.resource[0].params[0].delete="true"
-            var a=JSON.stringify(r),i=u+e+"/db"
-            return l.call(this,a,i,"DELETE",function(e){o(e)}),this}function r(e){var s=e||!1
-            return s?void e(sessionStorage.getItem("devless_user_token"+this.devless_instance_url+this.devless_token)):sessionStorage.getItem("devless_user_token"+this.devless_instance_url+this.devless_token)}function a(e){return sessionStorage.setItem("devless_user_token"+this.devless_instance_url+this.devless_token,e),!0}function i(e,s,t,n){var o=JSON.stringify({jsonrpc:"2.0",method:e,id:c(1,1e7),params:t}),r=u+e+"/rpc?action="+s
-            l.call(this,o,r,"POST",function(e){n(e)})}function c(e,s){return Math.floor(Math.random()*(s-e+1))+e}function l(e,s,t,n,o){o=o||!1
-            var r=new XMLHttpRequest
-            r.addEventListener("readystatechange",function(){var e=""
-                4===this.readyState&&0==o?200==this.status?(e=JSON.parse(this.responseText),n(e)):(n(e),console.error("Devless cannot be found at "+this.devless_instance_url+" Please copy the url from the `App tab`  on you Devless instance by clicking on  `connect to my app`")):4===this.readyState&&1==o&&(200==this.status?(e=this.responseText,n(e)):(n(e),console.error("Devless cannot be found at "+this.devless_instance_url+" Please copy the url from the `App tab`  on you Devless instance by clicking on  `connect to my app`")))}),r.open(t.toUpperCase(),this.devless_instance_url+s),r.setRequestHeader("content-type","application/json"),r.setRequestHeader("devless-token",this.devless_token),""!=sessionStorage.getItem("devless_user_token"+this.devless_instance_url+this.devless_token)&&r.setRequestHeader("devless-user-token",sessionStorage.getItem("devless_user_token"+this.devless_instance_url+this.devless_token)),r.send(e)}var u="/api/v1/service/",d=function(s){if(!s)return void console.error("Your app failed to  connect to Devless ): Please make sure token and key is set properly ")
-            console.info("App is trying to connect to Devless ...")
-            var t=u+"/dvauth/script",n={},o=new d.init(s)
-            return e.returnedInstance="",l.call(o,n,t,"POST",function(e){e=JSON.parse(e),631==e.status_code?console.error("Your app failed to  connect to Devless ): Please make sure token and key is set properly "):1e3==e.status_code?(console.debug("Your app connected to Devless successfully and you have auth service installed"),returnedInstance=o):(console.debug("your app connected to Devless successfully. you can get services from store.devless.io "),returnedInstance=o)},!0),o}
-        d.prototype={queryData:s,addData:t,updateData:n,deleteData:o,getToken:r,setToken:a,call:i},d.init=function(e){var s=this
-            s.devless_token=e.token,s.devless_instance_url=e.domain},d.init.prototype=d.prototype,e.Devless=e.DV=d}(window);
+
+!function(e){"use strict";function t(e,t,s,n){s=s||{};var r="",o=function(e,t){for(var s in t)r="&"+e+"="+t[s]+r};for(var i in s)!s.hasOwnProperty(i),s[i]instanceof Array?o(i,s[i]):r="&"+i+"="+s[i]+r;var a=u+e+"/db?table="+t+r;return l.call(this,"",a,"GET",function(e){n(e)}),this}function s(e,t,s,n){var r=JSON.stringify({resource:[{name:t,field:[s]}]}),o=u+e+"/db";return l.call(this,r,o,"POST",function(e){n(e)}),this}function n(e,t,s,n,r,o){var i=JSON.stringify({resource:[{name:t,params:[{where:s+","+n,data:[r]}]}]}),a=u+e+"/db";return l.call(this,i,a,"PATCH",function(e){o(e)}),this}function r(e,t,s,n,r){var o={resource:[{name:t,params:[{where:s+",=,"+n}]}]};o.resource[0].params[0]["delete"]="true";var i=JSON.stringify(o),a=u+e+"/db";return l.call(this,i,a,"DELETE",function(e){r(e)}),this}function o(e){var t=e||!1;return t?void e(sessionStorage.getItem("devless_user_token"+this.devless_instance_url+this.devless_token)):sessionStorage.getItem("devless_user_token"+this.devless_instance_url+this.devless_token)}function i(e){return sessionStorage.setItem("devless_user_token"+this.devless_instance_url+this.devless_token,e),!0}function a(e,t,s,n){var r=JSON.stringify({jsonrpc:"2.0",method:e,id:c(1,1e7),params:s}),o=u+e+"/rpc?action="+t;l.call(this,r,o,"POST",function(e){n(e)})}function c(e,t){return Math.floor(Math.random()*(t-e+1))+e}function l(e,t,s,n,r){r=r||!1;var o=new XMLHttpRequest;o.addEventListener("readystatechange",function(){var e="";4===this.readyState&&0==r?200==this.status?(e=JSON.parse(this.responseText),n(e)):(n(e),console.error("Devless cannot be found at "+this.devless_instance_url+" Please copy the url from the `App tab`  on you Devless instance by clicking on  `connect to my app`")):4===this.readyState&&1==r&&(200==this.status?(e=this.responseText,n(e)):(n(e),console.error("Devless cannot be found at "+this.devless_instance_url+" Please copy the url from the `App tab`  on you Devless instance by clicking on  `connect to my app`")))}),o.open(s.toUpperCase(),this.devless_instance_url+t),o.setRequestHeader("content-type","application/json"),o.setRequestHeader("devless-token",this.devless_token),""!=sessionStorage.getItem("devless_user_token"+this.devless_instance_url+this.devless_token)&&o.setRequestHeader("devless-user-token",sessionStorage.getItem("devless_user_token"+this.devless_instance_url+this.devless_token)),o.send(e)}var u="/api/v1/service/",d=function(t){if(!t)return void console.error("Your app failed to  connect to Devless ): Please make sure token and key is set properly ");console.info("App is trying to connect to DevLess ...");var s=new d.init(t);return e.returnedInstance="",s};d.prototype={queryData:t,addData:s,updateData:n,deleteData:r,getToken:o,setToken:i,call:a},d.init=function(e){var t=this;t.devless_token=e.token,t.devless_instance_url=e.domain},d.init.prototype=d.prototype,e.Devless=e.DV=d}(window);
 
     var connection = _jql('.devless-connection')[0];
     var devless_token = connection.attributes['devless-con-token'].value;
@@ -43,7 +19,11 @@
 //Devless init
     var constants = { "token":devless_token, "domain":devless_url };
     SDK = new Devless(constants);
-
+    SDK.call('devless', 'hello', [], function(resp){
+    	if(resp.payload.result == "Hello World!") {
+    		console.info("App connected to DevLess successfully :)");
+    	}
+    })
 
     var devless_main = {}
     devless_main.singleCourier = '';
@@ -315,7 +295,9 @@
     scriptEngine.all = function(service, table) {
         var reference = devless_main.singleCourier;
         SDK.queryData(service, table, SDK.queryParams, function(response) {
-            devless_main.coreLib.render(reference, response.payload.results, service, table);
+        	if(response.payload.results){
+            	devless_main.coreLib.render(reference, response.payload.results, service, table);
+        	}
             (response.status_code != 625)?devless_main.coreLib.notify(response.message,0):'';
 
         });
@@ -377,7 +359,7 @@
     }
     scriptEngine.oneof = function( service, table ) {
         update = function( data, callback ) {
-            if( data.id == undefined ) { throw ` id could not be found in the form. Try adding <input type="hidden" name="id" /> to the update form ` }
+            if( data.id == undefined ) { throw " id could not be found in the form. Try adding <input type=\"hidden\" name=\"id\" /> to the update form " }
             SDK.updateData( service, table,"id", data.id, data, function( response ) {
                 (response.status_code == 619)?devless_main.coreLib.notify(response.message,1):
                     devless_main.coreLib.notify(response.message,0);
@@ -410,11 +392,13 @@
                 if( response.payload.result.message == undefined ) {
                     SDK.setToken(response.payload.result['token']);
                     devless_main.coreLib.notify("signup was successful");
+                    devless_main.coreLib.notify(response.message,1);
                     if(actionUrl != '#') {
                     	window.location.href = window.location.origin + '/' + actionUrl;
                     }
                 } else {
                     devless_main.coreLib.notify(response.payload.result.message)
+                    devless_main.coreLib.notify(response.message,0);
                 }
                 callback();
             });
@@ -428,16 +412,16 @@
         login = function(record, callback) {
             SDK.call('devless', 'login', [record['username'], record['email'], record['phonenumber'],
                 record['password']], function(response){
-                if(response.payload.result !== undefined) {
+                if(response.payload.result !== false) {
                     SDK.setToken(response.payload.result['token']);
-                    console.log(response.payload)
-                    devless_main.coreLib.notify("Log in successful");
+                    devless_main.coreLib.notify("Log in successfully");
+                    //devless_main.coreLib.notify(response.message,1);
                     if(actionUrl != '#') {
                     	window.location.href = window.location.origin + '/' + actionUrl;
                     }
                 } else{
-                	devless_main.coreLib.notify("Login failed either your account is in active or does not exist yet");
-                    //devless_main.coreLib.notify(response.message,0);
+                    devless_main.coreLib.notify("Login failed");
+                   //devless_main.coreLib.notify(response.message,0);
                 }
                 callback();
             });
@@ -552,7 +536,7 @@
             		eval('scriptEngine.'+script);	
                 }
                 catch (e) {
-                    console.error(node.queries[index]+` could not be resolved to an executable script `+ e);
+                    console.error(node.queries[index]+" could not be resolved to an executable script" + e);
                 }
             });
             

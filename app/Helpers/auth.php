@@ -75,7 +75,7 @@ trait auth
                         'token' => $user_data->session_token,
 
                     ];
-            } else {
+            } elseif($force_auth) {
                 self::interrupt(628, null, [], true);
             }
         } elseif ($force_auth == true) {

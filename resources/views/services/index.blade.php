@@ -35,7 +35,7 @@
              <a href="{{ route('services.edit', $service->id) }}">
             <div class="col-lg-3 col-sm-6 m-b-30">
                 <div class="panel panel-danger">
-                    <div class="panel-header"><br><h4><center>{{substr(strtoupper($service->name),0,10)}}</center></h4></div>
+                    <div class="panel-header"><br><h4><center>{{substr($service->name,0,10)}}</center></h4></div>
                     <div class="panel-body" >
                         <center><span title="{{$service->description}}"</span>{{substr($service->description, 0, 20)}}@if(strlen($service->description)>20)...@endif</center>
                         <br><br>
