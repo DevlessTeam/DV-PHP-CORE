@@ -59,6 +59,43 @@ trait queryParamList
         }
     }
 
+    private function between(&$complete_query, &$payload)
+    {
+        $params = explode(',',$payload['params']['between'][0]);
+         $complete_query = $complete_query
+                        .'->whereBetween("'.$params[0].'",['.$params[1].','.$params[2].' ])';  
+                         
+    }
+
+    private function greaterThan(&$complete_query, &$payload)
+    {
+         $params = explode(',',$payload['params']['greaterThan'][0]);
+         $complete_query = $complete_query
+                        .'->where("'.$params[0].'",">","'.$params[1].'")';     
+                        
+    }
+
+    private function greaterThanEqual(&$complete_query, &$payload)
+    {
+         $params = explode(',',$payload['params']['greaterThanEqual'][0]);
+         $complete_query = $complete_query
+                        .'->where("'.$params[0].'",">=","'.$params[1].'")';     
+                        
+    }
+    private function lessThan(&$complete_query, &$payload)
+    {
+         $params = explode(',',$payload['params']['lessThan'][0]);
+         $complete_query = $complete_query
+                        .'->where("'.$params[0].'","<","'.$params[1].'")';     
+    }
+
+    private function lessThanEqual(&$complete_query, &$payload)
+    {
+         $params = explode(',',$payload['params']['lessThanEqual'][0]);
+         $complete_query = $complete_query
+                        .'->where("'.$params[0].'","<=","'.$params[1].'")';     
+    }
+
     private function orderBy(&$complete_query, &$payload)
     {
         $complete_query = $complete_query
