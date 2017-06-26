@@ -68,7 +68,7 @@ window.onload(function() {
 
     // Handle table creation with row & columns
     function buildHtmlTable(data, metaData) {
-        const table = '<div class="table-responsive"><table id="dataOne" cellspacing="0" width="100%" class="display compact cell-border"><thead id="table_head"></thead><tbody id="table_body"></tbody></table></div>';
+        const table = '<div class="table-responsive"><table id="dataOne" cellspacing="0" width="100%" class="display compact cell-border no-wrap"><thead id="table_head"></thead><tbody id="table_body"></tbody></table></div>';
         $('.panel').append(table);
         var columns = addAllColumnHeaders(metaData);
 
@@ -82,7 +82,10 @@ window.onload(function() {
             $('#table_body').append(table_bd);
         }
         $('.loader').remove();
-        Datatable = $('#dataOne').DataTable();
+        Datatable = $('#dataOne').DataTable({
+            responsive: true,
+            "scrollX": true,
+        });
     }
 
     // Creation of table headers
