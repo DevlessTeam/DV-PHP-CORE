@@ -12,6 +12,11 @@ trait queryParamList
         'relation' => 'relation',
         'search' => 'search',
         'randomize' => 'randomize',
+        'between' => 'between',
+        'greaterThan' => 'greaterThan',
+        'lessThan' => 'lessThan',
+        'lessThanEqual' => 'lessThanEqual',
+        'greaterThanEqual' => 'greaterThanEqual',
     ];
 
     private function size(&$complete_query, &$payload, &$size_count)

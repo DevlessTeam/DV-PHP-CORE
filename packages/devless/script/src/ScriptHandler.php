@@ -131,8 +131,8 @@ EOT;
         if (isset($payload['params'][0]['field'])) {
             $payload['params'][0]['field'][0] = $params;
         }
-         
-         //(strtolower(error_get_last()['file']) != 'unknown' )?dd():'';
+        
+         (strpos(error_get_last()['file'], 'ScriptHandler.php') !=false)?dd():'';
 
         if($EVENT['request_phase'] == 'after') {
             $results['status_code'] = $EVENT['status_code'];

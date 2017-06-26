@@ -67,7 +67,8 @@ trait queryData
         unset($payload['params']['table']);
         foreach ($payload['params'] as $param_name => $param_value) {
             $query_args = ($param_name != 'related' && $param_name != 'size') ? [&$complete_query, &$payload] : $query_args_list[$param_name];
-            call_user_func_array([$this, $param_name], $query_args);
+            
+            (@call_user_func_array([$this, $param_name], $query_args))?'':Helper::interrupt(610,'Query parameter '.$param_name.' does not exist');
         }
 
         return $complete_query;

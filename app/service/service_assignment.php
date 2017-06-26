@@ -72,7 +72,11 @@ trait service_assignment
 
                 }
                 
-                //keep names of resources in the singular
+                //keep names of resources in the singular 
+                /**
+                * NB: all resource names from the frontend are converted to lower case meaning before case runs 
+                * meaning if you make a resource name uppercase within the case it will not be available outside but only useable within here . Looking @ you "endNow"
+                */
                 switch ($resource) {
                     case 'db':
                         $db = new Db();
