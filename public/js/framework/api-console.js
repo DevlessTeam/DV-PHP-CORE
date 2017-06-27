@@ -1,9 +1,4 @@
 window.onload(function () {
-    document.getElementById('query').style.display = 'none';
-    document.getElementById('body_params').style.display = 'none';
-    document.getElementById('request').style.display = 'none';
-    document.getElementById('response').style.display = 'none';
-    document.getElementById('scroll').style.display = 'none';
 
     //Handles URL generation
     var service_name;

@@ -76,7 +76,7 @@
                             </div>
                         </section>
 
-                        <section id="query" class="panel">
+                        <section id="query" class="panel" style="display: none;">
                             <header class="panel-heading">
                                 QUERY PARAMS
                             </header>
@@ -124,7 +124,7 @@
                             </div>
                         </section>
 
-                        <section id="body_params" class="panel">
+                        <section id="body_params" class="panel" style="display: none;">
                             <header class="panel-heading">
                                 BODY PARAMS
                             </header>
@@ -140,7 +140,7 @@
                             </div>
                         </section>
 
-                        <section id="request" class="panel">
+                        <section id="request" class="panel" style="display: none;">
                             <header class="panel-heading">
                                 REQUEST
                             </header>
@@ -155,7 +155,7 @@
                             </div>
                         </section>
 
-                        <section id="response" class="panel">
+                        <section id="response" class="panel" style="display: none;">
                             <header class="panel-heading">
                                 RESPONSE
                             </header>
@@ -174,7 +174,7 @@
 
                 </div>
             </div>
-            <button type="button" id="scroll" name="button" class="btn btn-warning pull-right">Scroll Up</button>
+            <button type="button" id="scroll" name="button" class="btn btn-warning pull-right" style="display: none;">Scroll Up</button>
         </div>
         <script src="{{ Request::secure(Request::root()).'/js/src-min-noconflict/ace.js' }}" type="text/javascript" charset="utf-8"></script>
         <script src="{{ Request::secure(Request::root()).'/js/ace/jquery-1.8.3.min.js' }}" type="text/javascript" charset="utf-8"></script>
