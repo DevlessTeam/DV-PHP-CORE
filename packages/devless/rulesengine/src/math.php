@@ -4,6 +4,22 @@ namespace Devless\RulesEngine;
 
 trait math {
 
+    /**
+     * Perform mathmatical functions 
+     *
+     * @param integer $num
+     *
+     * @return $this
+     */
+    public function calculate($expression)
+    {  
+        if (!$this->execOrNot) {
+                return $this;
+        }
+
+        $this->results = $expression;
+        return $this;
+    }
 	/**
      * find the sum of numbers.
      *

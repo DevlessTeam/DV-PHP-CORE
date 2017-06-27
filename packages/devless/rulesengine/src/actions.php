@@ -8,7 +8,7 @@
     trait actions
     {
         /**
-         * check if on intended table.
+         * Checks if the  db action to be conducted around one of the tables. Eg beforeQuerying()->onTable('register', 'subscription')->succeedWith("yes"). In the example above yes will be outputted incase data is being queried from either regiter or subscription table. 
          *
          * @param string $expectedTableName
          *
@@ -28,7 +28,7 @@
         }
 
         /**
-         * Stop execcution with an exception.
+         * Stop execution with an exception and output the message provided. Eg. afterQuering()->succeedWith("I will show up after quering")
          *
          * @param null $msg
          *
@@ -47,7 +47,7 @@
         }
 
         /**
-         * Stop execution with an exception.
+         *  Stop execution with an exception and output the message provided. Eg. afterQuering()->failWith("I will show up after quering"). Difference between this and succeedWith is the status code
          *
          * @param null $msg
          *
@@ -63,11 +63,11 @@
             return $this;
         }
         /**
-         * Call on an ActionClass .
+         * DevLess provides developers with ready to use code and one of the ways to access this is via the run statement. After installing an external service you may call it within the rules portion of your app using run eg: beforeCreating()->run('businessMath','discount',[10, $input_price])->getResults($input_price)
          *
          * @param  $service
          * @param  $method
-         * @param null $params
+         * @param array $params
          *
          * @return mixed|string
          */
@@ -90,11 +90,12 @@
         }
 
         /**
-         * Make remote requests
+         * In the event where you need to make say an api call the `makeExternalRequest` method becomes handy. eg beforeUpdating()->makeExternalRequest('GET', 'https://www.calcatraz.com/calculator/api?c=3%2A3')->storeAs($ans)
          *
          * @param  STRING $method
          * @param  STRING $url
-         * @param  JSON $data
+         * @param  JSON $data (opt)
+         * @param  JSON $headers (optional)
          *
          * @return $this
          */

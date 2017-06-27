@@ -68,7 +68,10 @@ trait queryData
         foreach ($payload['params'] as $param_name => $param_value) {
             $query_args = ($param_name != 'related' && $param_name != 'size') ? [&$complete_query, &$payload] : $query_args_list[$param_name];
             
-            (@call_user_func_array([$this, $param_name], $query_args))?'':Helper::interrupt(610,'Query parameter '.$param_name.' does not exist');
+            $prefixed_query_name = 'qp_'.$param_name;
+            // Query param lists are prefixed with `qp` so that method existance can be checked for only trait queryParamList and not the entire class
+            (!method_exists($this, $prefixed_query_name))?Helper::interrupt(610, "Query parameter $param_name does not exist"):'';
+             $this->$prefixed_query_name(...$query_args);
         }
 
         return $complete_query;

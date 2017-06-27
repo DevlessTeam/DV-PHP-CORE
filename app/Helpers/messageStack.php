@@ -35,7 +35,7 @@ trait messageStack
         613 => 'Database has been deleted successfully',
         614 => 'Parameters `where` or `data`  not set',
         615 => 'Delete action not set ',
-        616 => 'Caught unknown data type',
+        616 => 'There is something wrong with your field',
         617 => 'No such table belongs to the service',
         618 => 'Validator type does not exist',
         619 => 'Table was updated successfully',

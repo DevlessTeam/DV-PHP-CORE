@@ -4,6 +4,12 @@ namespace Devless\Schema;
 
 trait queryParamList
 {
+
+    /**
+     * Be sure to prefix all query param lists with `qp_` this identifies it as a member of the trait 
+     * and wont show up to users quering if not done such
+     */
+    
     public $query_params = [
         'order' => 'orderBy',
         'where' => 'where',
@@ -19,26 +25,26 @@ trait queryParamList
         'greaterThanEqual' => 'greaterThanEqual',
     ];
 
-    private function size(&$complete_query, &$payload, &$size_count)
+    private function qp_size(&$complete_query, &$payload, &$size_count)
     {
         $complete_query = $complete_query
                         .'->take('.$payload['params']['size'][0].')';
         $size_count = $payload['params']['size'][0];
     }
 
-    private function offset(&$complete_query, &$payload)
+    private function qp_offset(&$complete_query, &$payload)
     {
         $complete_query =
                         $complete_query.'->skip('.$payload['params']['offset'][0].')';
     }
 
-    private function randomize(&$complete_query, &$payload)
+    private function qp_randomize(&$complete_query, &$payload)
     {
         $complete_query = $complete_query
                         .'->orderByRaw("RAND()")';
     }
 
-    private function related(&$complete_query, &$payload, $table_name, &$related_fetch  )
+    private function qp_related(&$complete_query, &$payload, $table_name, &$related_fetch  )
     {
         $related_set = true;
         $service_name = $payload['service_name'];
@@ -54,7 +60,7 @@ trait queryParamList
                 };
     }
 
-    private function search(&$complete_query, &$payload)
+    private function qp_search(&$complete_query, &$payload)
     {
         $split_query = explode(',', $payload['params']['search'][0]);
         $search_key = $split_query[0];
@@ -64,7 +70,7 @@ trait queryParamList
         }
     }
 
-    private function between(&$complete_query, &$payload)
+    private function qp_between(&$complete_query, &$payload)
     {
         $params = explode(',',$payload['params']['between'][0]);
          $complete_query = $complete_query
@@ -72,7 +78,7 @@ trait queryParamList
                          
     }
 
-    private function greaterThan(&$complete_query, &$payload)
+    private function qp_greaterThan(&$complete_query, &$payload)
     {
          $params = explode(',',$payload['params']['greaterThan'][0]);
          $complete_query = $complete_query
@@ -80,39 +86,39 @@ trait queryParamList
                         
     }
 
-    private function greaterThanEqual(&$complete_query, &$payload)
+    private function qp_greaterThanEqual(&$complete_query, &$payload)
     {
          $params = explode(',',$payload['params']['greaterThanEqual'][0]);
          $complete_query = $complete_query
                         .'->where("'.$params[0].'",">=","'.$params[1].'")';     
                         
     }
-    private function lessThan(&$complete_query, &$payload)
+    private function qp_lessThan(&$complete_query, &$payload)
     {
          $params = explode(',',$payload['params']['lessThan'][0]);
          $complete_query = $complete_query
                         .'->where("'.$params[0].'","<","'.$params[1].'")';     
     }
 
-    private function lessThanEqual(&$complete_query, &$payload)
+    private function qp_lessThanEqual(&$complete_query, &$payload)
     {
          $params = explode(',',$payload['params']['lessThanEqual'][0]);
          $complete_query = $complete_query
                         .'->where("'.$params[0].'","<=","'.$params[1].'")';     
     }
 
-    private function orderBy(&$complete_query, &$payload)
+    private function oqp_rderBy(&$complete_query, &$payload)
     {
         $complete_query = $complete_query
                         .'->orderBy("'.$payload['params']['orderBy'][0].'" )';
     }
 
-    private function where(&$complete_query, $payload)
+    private function qp_where(&$complete_query, $payload)
     {
-        $this->where_and_orWhere_builder('where', $complete_query, $payload);   
+        $this->where_and_orWhere_builder('where', $complete_query, $payload); 
     }
 
-    private function orWhere(&$complete_query, $payload) {
+    private function qp_orWhere(&$complete_query, $payload) {
         $this->where_and_orWhere_builder('orWhere', $complete_query, $payload);
     }
 
