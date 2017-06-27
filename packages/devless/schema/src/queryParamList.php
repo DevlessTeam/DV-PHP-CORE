@@ -11,7 +11,7 @@ trait queryParamList
         'where' => 'where',
         'orWhere' => 'orWhere',
         'take' => 'take',
-        'relation' => 'relation',
+        'related' => 'related',
         'search' => 'search',
         'randomize' => 'randomize',
         'between' => 'between',
