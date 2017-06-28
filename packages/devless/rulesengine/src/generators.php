@@ -4,6 +4,11 @@ namespace Devless\RulesEngine;
 
 trait generators
 {
+    /**
+     * generates random integers. This may be used for invitation or promotional code generation. eg `->beforeCreating()->generateRandomInteger(10)->storeAs($promo_code)->assign($promo_code)->to($input_promo)`
+     * @param $length
+     * @return $this
+     */
 	public function generateRandomInteger($length=100000000000000000000)
 	{
 		if (!$this->execOrNot) {
@@ -13,6 +18,10 @@ trait generators
 		return $this;
 	}
 
+    /**
+     * generates random alphanumeric values. This may be used for generating order Ids. eg `->beforeCreating()->generateRandomAlphanums()->storeAs($order_id)->assign($order_id)->to($input_order_id)`
+     * @return $this
+     */
 	public function generateRandomAlphanums()
 	{
 		if (!$this->execOrNot) {
@@ -29,6 +38,11 @@ trait generators
 		return $this;
 	}
 
+    /**
+     * generates random string.This generates random string codes. eg `->beforeCreating()->generateRandomInteger(10)->storeAs($promo_code)->assign($promo_code)->to($input_promo)`
+     * @param $length
+     * @return $this
+     */
 	public function generateRandomString($length=10)
 	{
 		if (!$this->execOrNot) {
@@ -44,6 +58,11 @@ trait generators
 		return $this;
 	}
 
+    /**
+     * generates unqiue Id.This generates unqiue Id . eg `->beforeCreating()->generateUnqiueId()->storeAs($user_id)->assign($user_id)->to($input_id)`
+     * @param $length
+     * @return $this
+     */    
 	public function generateUnqiueId()
 	{
 		if (!$this->execOrNot) {

@@ -6,7 +6,7 @@ use App\Helpers\Helper;
 trait mutateResponse 
 {
 	/**
-     * mutate response status code.
+     * mutate response status code. This will change the status code that is being outputed eg: `->afterQuering()->mutateStatusCode(1111)`. NB: you should only change the status code if you know what you doing. CHanging it might cause some of the official SDKs to malfunction.
      * @param $newCode
      * @return $this
      */
@@ -21,7 +21,7 @@ trait mutateResponse
 	}
 
 	/**
-     * mutate response message.
+     * mutate response message. This will change the Message within the response body sent back to the client. eg `->afterQuering()->mutateResponseMessage("new response message")`
      * @param $newMessage
      * @return $this
      */
@@ -36,7 +36,7 @@ trait mutateResponse
 	}
 
 	/**
-     * mutate response payload.
+     * mutate response payload. This will Replace the Response payload being sent back to the client eg: `->afterQuering()->mutateResponsePayload(["name"=>"Edmond"])`
      * @param $newPayload
      * @return $this
      */

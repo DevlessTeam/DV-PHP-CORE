@@ -91,6 +91,7 @@
 
         /**
          * In the event where you need to make say an api call the `makeExternalRequest` method becomes handy. eg beforeUpdating()->makeExternalRequest('GET', 'https://www.calcatraz.com/calculator/api?c=3%2A3')->storeAs($ans)
+         * ->succeedWith($ans)
          *
          * @param  STRING $method
          * @param  STRING $url
@@ -129,7 +130,7 @@
             return $this;
         }
         /**
-         * Get results variable and set to variable.
+         * one of the ways to store results from a method with output is by using the `getResults` method. This will allow you to the output of a method 
          *
          * @param $input_var
          *
@@ -145,7 +146,7 @@
         }
 
         /**
-         * Get results variable, and set to variable.
+         * Get results from the last executed method and assign to a variable. eg: beforeQuerying()->sumUp(1.2,3,4,5)->storeAs($ans)->stopAndOutput(1001, 'summed up numbers successfully' $ans)
          *
          * @param $input_var
          *
@@ -158,7 +159,7 @@
         }
 
         /**
-         * Assign one input to another 
+         * Assigns one variable to another just like `$sum2 = $sum` . This method works together with `to` method to achive this. eg: afterQuering()->sumUp(1,2,3,4,5)->storeAs($sum)->assign($sum)->to($sum2)->succeedWith($sum2)
          *
          * @param $input_var
          *
@@ -174,22 +175,8 @@
         }
 
         /**
-         * This is similar to assign(), set() is used  together with to() to
-         * set variables to values eg set($name)->to("edmond").
-         *
-         * @param $input
-         *
-         * @return $this
-         */
-        public function set($input)
-        {
-            $this->assign($input);     
-            return $this;       
-        }
-
-        /**
          * Set the name of service from which you want to use method from.
-         * Complete eg: usingService('devless')->callMethod('hello')->  withParams()->getResults($output)->succeedWith($output)
+         * eg: usingService('devless')->callMethod('hello')->  withParams()->getResults($output)->succeedWith($output)
          * @param $serviceName
          * @return $this
          */
@@ -203,7 +190,7 @@
         }
 
         /**
-         * set the name of the method after setting the service from which you will like to run. complete eg:usingService('devless')->callMethod('hello')->  withParams()->getResults($output)->succeedWith($output)
+         * Set the name of the method after setting the service from which you will like to run.  eg:usingService('devless')->callMethod('hello')->  withParams()->getResults($output)->succeedWith($output)
          * @param $methodName
          * @return $this
          */
@@ -219,11 +206,11 @@
 
         /**
          * Set parameters for method from which you will like to run
-         * complete eg: usingService('devless')->callMethod('hello')->  withParams()->getResults($output)->succeedWith($output)
-         * @param as many as possible
+         * eg: usingService('devless')->callMethod('getUserProfile')->  withParams(1)->getResults($output)->succeedWith($output)
+         * @param can have n number of parameters 
          * @return $this
          */
-        public function withParams($internalCall=false)
+        public function withParams($withoutParams=false)
         {
             if (!$this->execOrNot) {
                 return $this;
@@ -235,6 +222,11 @@
             return $this;
         }
 
+        /**
+         * Use this in place of `params()` incase the service method you want to run has no parameters
+         * eg: usingService('devless')->callMethod('hello')->withoutParams()->getResults($output)->succeedWith($output)
+         * @return $this
+         */
         public function withoutParams()
         {
             $this->withParams(true);
@@ -248,8 +240,7 @@
         }
 
         /**
-         * Get results variable and set to variable.
-         *
+         * `to` keyword should be used together with `assign` to assign either variables or values to a new variable
          * @param $output
          *
          * @return $this
@@ -282,7 +273,7 @@
         }
 
         /**
-         * Assign $input to $output 
+         * Behaves just like the `assign` method but has a much shorter construct. where you will assign say the string "edmond" to variable $name using `assign`  `assign("edmond")->to($name)` , `assignValue("edmond", $name)` provides a much shorter construct but loses its redability.
          *
          * @param $input
          * @param $output  
@@ -299,20 +290,8 @@
             return $this;
         }
 
-        public function find($value)
-        {
-            if (!$this->execOrNot) {
-                return $this;
-            }
-
-            if($value != null){
-                $this->results = $value;
-            }
-            return $this;
-        }
-
         /**
-         * Stop execution and output results
+         * Should you perform some rules and based on that will like to exist earlier with a response before the actual db command completes you will want to use `stopAndOutput` eg: beforeQuerying()->usingService('devless')->callMethod('getUserProfile')->withParams(1)->storeAs($profile)->stopAndOutput(1000, 'got profile successfully', $profile).
          *
          * @param $status_code
          * @param $message 
@@ -336,7 +315,7 @@
         }
 
         /**
-         * List out all possible callbale methods as well as get docs on specific method eg: ->help('stopAndOutput')
+         * List out all callbale methods as well as get docs on specific method eg: ->help('stopAndOutput')
          * @param $methodToGetDocsFor
          * @return $this;
          */
@@ -345,7 +324,7 @@
             
             $methods = get_class_methods($this);
             
-            $exemptedMethods = ['__construct','requestType','__call','useArgsOrPrevOutput','read','commonMutationTask'];
+            $exemptedMethods = ['__construct','requestType','__call','useArgsOrPrevOutput','read','commonMutationTask', 'set', 'from'];
             $methodList = [];
             $rules = new Rules();
             $getMethodDocs = function($methodName) use($exemptedMethods, $rules) {
@@ -371,14 +350,46 @@
             }
             
             
-            $this->stopAndOutput(1000, 'List of callable methods', $methodList);
+            $this->stopAndOutput(1000, 'Help on methods', $methodList);
             return $this;
 
+        }
+        /**
+         * Evaluate PHP expressions eg:beforeQuering()->evaluate("\DB::table('users')->get()")->storeAs($output)->stopAndOutput(1001, 'got users successfully', $output)
+         * @param $expression 
+         * @return $this
+         */
+        public function evaluate($expression)
+        {
+            if (!$this->execOrNot) {
+                return $this;
+            }
+
+            $variable_pairs = func_get_args()[1];
+            extract($variable_pairs);
+
+            $this->results = eval('return '.$expression.';');
+            return $this;
+        }
+
+       
+
+        /**
+         * @param $input
+         *
+         * @return $this
+         */
+        public function set($input)
+        {
+            $this->assign($input);     
+            return $this;       
         }
 
         public function read()
         {
             return $this;
         }
+
+      
 
     }

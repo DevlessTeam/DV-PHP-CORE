@@ -131,7 +131,7 @@ EOT;
         if (isset($payload['params'][0]['field'])) {
             $payload['params'][0]['field'][0] = $params;
         }
-        
+    
          (strpos(error_get_last()['file'], 'ScriptHandler.php') !=false)?dd():'';
 
         if($EVENT['request_phase'] == 'after') {

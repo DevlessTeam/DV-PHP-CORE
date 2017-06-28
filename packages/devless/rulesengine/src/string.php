@@ -5,8 +5,8 @@ namespace Devless\RulesEngine;
 trait string
 {
 	/**
-	 * Concatenate string together
-	 * @param ..params
+	 * Concatenate strings together eg: `->beforeCreating()->concatenate("user_",$input_name)`
+	 * @param n number of params
 	 * @return $this
 	 * */
 	public function concatenate()
@@ -21,7 +21,7 @@ trait string
 	}
 
 	/**
-	 * Get first character
+	 * Get first character eg: `->beforeCreating()->getFirstCharacter("Hello")->storeAs($first_char)->succeedWith($first_char)`
 	 * @param $string
 	 * @return $this
 	 * */
@@ -36,7 +36,7 @@ trait string
 	}
 
 	/**
-	 * Get second character
+	 * Get second character eg: `->beforeCreating()->getSecondCharacter("Hello")->storeAs($seconf_char)->succeedWith($second_char)`
 	 * @param $string
 	 * @return $this
 	 * */
@@ -51,7 +51,7 @@ trait string
 	}
 
 	/**
-	 * Get third character
+	 * Get third character eg: `->beforeCreating()->getThirdCharacter("Hello")->storeAs($third_char)->succeedWith($third_char)`
 	 * @param $string
 	 * @return $this
 	 * */
@@ -66,7 +66,7 @@ trait string
 	}
 
 	/**
-	 * Get last character character
+	 * Get last character character eg: `->beforeCreating()->getLastCharacter("Hello")->storeAs($last_char)->succeedWith($last_char)`
 	 * @param $string
 	 * @return $this
 	 * */
@@ -82,7 +82,7 @@ trait string
 	}
 
 	/**
-	 * Get last but one character
+	 * Get last but one character eg: `->beforeCreating()->getLastButOneCharacter("Hello")->storeAs($last_but_one_char)->succeedWith($last_but_one_char)` 
 	 * @param $string
 	 * @return $this
 	 * */
@@ -95,7 +95,12 @@ trait string
         $this->results = $string[strlen($string)-2];
         return $this;
 	}
-
+	/**
+	 * Reverse a string eg: ->beforeQuerying()->assign("nan")->to($string)->reverseString()->storeAs($reverseString)
+ ->whenever(assertIts::equal($string, $reverseString))->succeedWith("Its a palindrome :)")
+ ->otherwise()->failWith("Its not a palindrom :(")
+ 
+	 */
 	public function reverseString($string=null)
 	{
 		if (!$this->execOrNot) {
@@ -107,8 +112,10 @@ trait string
 	}
 
 	/**
-	 * replace a string with another
+	 * replace a string with another eg `->beforeCreating()->findNReplace("{{name}}", $input_name, $input_message)->storeAs($input_message)`
 	 * @param $string
+	 * @param $replacement
+	 * @param $subject
 	 * @return $this
 	 * */
 	public function findNReplace($string, $replacement, $subject)
@@ -121,7 +128,7 @@ trait string
 	}
 
 	/**
-	 * change string to uppercase
+	 * change string to uppercase eg: `->beforeCreating()->convertToUpperCase($input_name)->storeAs($input_name)`
 	 * @param $string
 	 * @return $this
 	 * */
@@ -137,7 +144,7 @@ trait string
 	}
 
 	/**
-	 * change string to lowercase
+	 * change string to lowercase eg: `->beforeCreating()->convertToLowerCase($input_name)->storeAs($input_name)`
 	 * @param $string
 	 * @return $this
 	 * */
@@ -152,7 +159,7 @@ trait string
 	}
 
 	/**
-	 * Truncate a string to some length eg ->truncateString(4, "my name is edmond")->getResults($trucatedString)->succeedWith($truncatedString)
+	 * Truncate a string to some length eg `->beforeCreating()->truncateString(4, $input_desc)->getResults($trucatedString)->storeAs($stub)`
 	 * @param $len
 	 * @param $string
 	 * @param $trimMaker
@@ -171,7 +178,7 @@ trait string
 	}
 
 	/**
-	 * Count the number of words in a sentence eg: ->countWords("Hello There")
+	 * Count the number of words in a sentence eg: `->beforeCreating()->onTable('users')->countWords($input_description)->storeAs($desc_length)->whenever($desc_length <= 5)->failWith("Your product description is very short")`
 	 * @param $sentence
 	 * @return $this
 	 */
@@ -186,7 +193,7 @@ trait string
 	}
 
 	/**
-	 * Find the number of characters in a word or sentence eg: ->countCharacters($word)
+	 * Find the number of characters in a word or sentence eg: `->beforeCreating()->onTable('users')->countCharacters($input_name)->storeAs($name_length)->whenever($name_length <= 0)->failWith("name seems to be empty")`
 	 * @param word 
 	 * @return $this
 	 */

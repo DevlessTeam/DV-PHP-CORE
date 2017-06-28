@@ -5,7 +5,7 @@ namespace Devless\RulesEngine;
 trait tableActions
 {
     /**
-     * Check if table is being queried.
+     * Checks if a table is being queried for data then the code attached to it will run. This will run twice before and after the data is being queried.
      *
      * @return $this
      */
@@ -16,7 +16,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if data is being updated on table.
+     * Checks if data is being updated on a table then the code attached to it will run.This will run twice before and after the data is being updated.
      *
      * @return $this
      */
@@ -27,7 +27,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if data is being added to table.
+     * Checks if data is being added to table then the code attached to it will run. This will run twice before and after the data is being added
      *
      * @return $this
      */
@@ -38,7 +38,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if data is being deleted from table.
+     * Check if data is being deleted from a table. This will run code attached to it before and after its being run 
      *
      * @return $this
      */
@@ -49,7 +49,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if table is about to be queried.
+     * Checks if a table is about to be queried for data .The code attached to it will run before the data is queried
      *
      * @return $this
      */
@@ -60,7 +60,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if data is about to be added.
+     * Checks if  data is about to be added to a table and runs the code attached to it before this happens
      *
      * @return $this
      */
@@ -71,7 +71,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if table data is about to be updated.
+     * Checks if table data is about to be updated, and will run the code attached to it before the action is performed
      *
      * @return $this
      */
@@ -82,7 +82,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if data is about to be deleted from table.
+     * Check if data is about to be deleted from table. Then run the code attached to the action before its being performed. This allows you to perform actions such as `afterQuering()->mutateResponseMessage("the response message has been altered")
      *
      * @return $this
      */
@@ -94,7 +94,7 @@ trait tableActions
     }
 
      /**
-     * Check if table has been queried.
+     * Runs code attached to this method just before the response is being returned to the client. This allows you to perform actions such as `afterQuering()->whenever($rules->status_code == 625)->mutateResponseMessage("the response message has been altered")
      *
      * @return $this
      */
@@ -106,7 +106,7 @@ trait tableActions
         
     }
     /**
-     * Check if data has been added.
+     * Runs code attached to this method after the data has been added to the DB. This allows you to perform actions such as `afterCreating()->whenever($rules->status_code == 625)->mutateResponseMessage("the response message has been altered") 
      *
      * @return $this
      */
@@ -117,7 +117,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if table has been updated.
+     * Run code attached to this method after the data has been updated .  This allows you to perform actions such as `afterUpdating()->whenever($rules->status_code == 619)->mutateResponseMessage("the response message has been altered")
      *
      * @return $this
      */
@@ -128,7 +128,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if data has been deleted
+     * Runs code attached to thie `afterDeleting()` method. This allows you to perform actions such as `afterDeleting()->whenever($rules->status_code == 636)->mutateResponseMessage("the response message has been altered")
      *
      * @return $this
      */
@@ -140,7 +140,7 @@ trait tableActions
     }
 
     /**
-     * Run irrespective of table action
+     * Code attached to thie `onAmyRequest()` will run regardless of whether its a query, create delete or update action
      *
      * @return $this
      */

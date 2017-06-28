@@ -208,6 +208,8 @@ class DevlessHelper extends Helper
  -> onDelete()
  -> onCreate()
 
+ -> onAnyRequest()
+
  -> afterQuerying()
  -> afterUpdating()
  -> afterDeleting()
