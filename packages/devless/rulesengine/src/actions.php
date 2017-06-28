@@ -341,11 +341,17 @@
                      $methodList[$methodToGetDocsFor] = $docs;
                 }
             } else {
+                $count = 0;
                 foreach ($methods as $methodName) {
                   $methodDocs = $getMethodDocs($methodName);
                   if($methodDocs) {
+                    
+                    $methodList["*".$count."*"] = "**********************************************************************************************************";
+                    
                     $methodList[$methodName] = $methodDocs;  
+                    
                   }
+                  $count++;
                 }
             }
             
