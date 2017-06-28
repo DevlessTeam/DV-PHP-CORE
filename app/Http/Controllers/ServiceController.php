@@ -28,8 +28,8 @@ class ServiceController extends Controller
     public function index()
     {
         $services = Service::orderBy('id', 'desc')->paginate(10);
-
-        return view('services.index', compact('services'));
+        $menuName = 'all_services';
+        return view('services.index', compact('services', 'menuName'));
     }
     /**
      * Show the form for creating a new resource.
@@ -38,7 +38,8 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        return view('services.create');
+        $menuName = 'all_services';
+        return view('services.create', compact('menuName'));
     }
     /**
      * Store a newly created resource in storage.
@@ -54,6 +55,8 @@ class ServiceController extends Controller
         $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
         $service_name_from_form = str_replace('-', '_', $service_name_from_form);
         $service_name = $service_name_from_form;
+        $is_keyword = $this->is_service_name_php_keyword($service_name);
+
         $validator = Validator::make(
 
             ['Service Name' => $service_name, 'Devless' => 'devless'],
@@ -61,9 +64,11 @@ class ServiceController extends Controller
                 'Service Name' => 'required|unique:services,name|min:3|max:15|different:Devless',
             ]
         );
-        if ($validator->fails()) {
+
+        if ($validator->fails() || $is_keyword) {
             $errors = $validator->messages();
-            DLH::flash('Sorry but service could not be created', 'error');
+            $message = ($validator->fails())?"Sorry but service could not be created":"Sorry but $service_name is a keyword and can't be used as a `service name`";
+            DLH::flash($message, 'error');
 
             return redirect()->route('services.create')->with('errors', $errors)->withInput();
         }
@@ -78,12 +83,7 @@ class ServiceController extends Controller
         $service->resource_access_right =
             '{"query":1,"create":1,"update":1,"delete":1,"schema":0,"script":0, "view":0}';
         $service->active = 1;
-        $service->script = '
- -> onQuery()
- -> onUpdate()
- -> onDelete()
- -> onCreate()
- ';
+        $service->script = DLH::script_template();
         $db = new Db();
         if (!$db->check_db_connection($connection)) {
             DLH::flash('Sorry connection could not be made to Database', 'error');
@@ -130,8 +130,8 @@ class ServiceController extends Controller
             $table_meta[$count] = (json_decode($each_table_meta->schema, true));
             ++$count;
         }
-
-        return view('services.edit', compact('service', 'table_meta', 'id'));
+        $menuName = 'all_services';
+        return view('services.edit', compact('service', 'table_meta', 'id', 'menuName'));
     }
     /**
      * Update the specified resource in storage.
@@ -204,7 +204,7 @@ class ServiceController extends Controller
         } else {
             DLH::flash('Service could not be deleted', 'error');
         }
-
+        
         return redirect()->route('services.index');
     }
 

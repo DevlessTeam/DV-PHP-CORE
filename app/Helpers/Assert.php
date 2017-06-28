@@ -236,6 +236,18 @@ class Assert extends Helper
     }
 
     /**
+     * check if $value is not equal to $value1
+     *
+     * @param $value
+     * @param $value1
+     *
+     * @return $this
+     */
+    public static function notEqual($value, $value1)
+    {
+        return ($value =! $value1)?:false;
+    }
+    /**
      * check if $value is greater than $value1
      *
      * @param $value

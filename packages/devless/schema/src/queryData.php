@@ -59,6 +59,7 @@ trait queryData
 
     private function set_query_options(&$complete_query, &$payload, $table_name,  &$size_count, $db, &$related_fetch)
     {
+
         $query_args_list = [
                 'related' => [&$complete_query, &$payload, $table_name, &$related_fetch],
                 'size' => [&$complete_query, &$payload, &$size_count, &$related_fetch],
@@ -66,8 +67,14 @@ trait queryData
 
         unset($payload['params']['table']);
         foreach ($payload['params'] as $param_name => $param_value) {
+            
+           (!isset($this->query_params[$param_name]))?Helper::interrupt(610, "Query parameter $param_name does not exist"):'';
+            
+            $param_name = $this->query_params[$param_name];
+
             $query_args = ($param_name != 'related' && $param_name != 'size') ? [&$complete_query, &$payload] : $query_args_list[$param_name];
-            call_user_func_array([$this, $param_name], $query_args);
+            
+            $this->$param_name(...$query_args);
         }
 
         return $complete_query;

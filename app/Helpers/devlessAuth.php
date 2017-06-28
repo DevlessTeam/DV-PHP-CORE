@@ -6,7 +6,7 @@ use DB;
 use Session;
 use App\User as user;
 use App\Helpers\Jwt as jwt;
-
+use App\Helpers\DataStore;
 trait devlessAuth
 {
     /**
@@ -18,6 +18,9 @@ trait devlessAuth
      */
     public function signup($payload)
     {
+        $auth_settings = json_decode(DevlessHelper::get_user_auth_settings(), true);
+        $verify_email = $auth_settings['verify_email'];
+        
         $username = (isset($payload['username'])) ? $payload['username'] : '';
 
         $email = (isset($payload['email'])) ? $payload['email'] : '';
@@ -28,7 +31,7 @@ trait devlessAuth
                 ->orWhere('phone_number', $phone_number)->whereNotIn('phone_number', [''])
                 ->get();
         if ($existing_users != null) {
-            return Response::respond(1001, 'Seems User already exists');
+            return Helper::interrupt(644);
         }
 
         $user = new User();
@@ -39,7 +42,10 @@ trait devlessAuth
             return $token;
         }
 
-        $user->status = 1;
+        $user->status = ($verify_email)?0:1;
+        
+        ($verify_email)?$this->generate_email_verification_code($user->id):'';
+
         $user->session_token = $session_token = md5(uniqid(1, true));
 
         //check if either username or email and password is set
@@ -56,7 +62,7 @@ trait devlessAuth
 
             $prepared_token = $this->set_session_token($token_payload, $user->id);
             $profile = \DB::table('users')->where('id', $user->id)
-                ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'role'])
+                ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'status'])
                 ->first();
             $user_obj = [
                 'profile' => $profile,
@@ -90,7 +96,7 @@ trait devlessAuth
                     'created_at',
                     'updated_at',
                     'remember_token',
-                    'role'
+                    'status'
                 )
                 ->first();
 
@@ -123,10 +129,13 @@ trait devlessAuth
             $user_data = $user::where('email', $email)->first();
         } elseif (isset($username, $password)) {
             $user_data = $user::where('username', $username)->first();
+        } elseif (isset($phone_number, $password)) {
+            $user_data = $user::where('phone_number', $phone_number)->first();
         } else {
             return false;
         }
         if ($user_data !== null) {
+            if(!$user_data->status){Helper::interrupt(643);}
             $correct_password =
                    (Helper::compare_hash($password, $user_data->password)) ? true : false;
             $user_data->session_token = $session_token = md5(uniqid(1, true));
@@ -173,7 +182,6 @@ trait devlessAuth
             //unchangeable fields
             $indices = [
                 'session_token',
-                'status',
                 'role',
             ];
 
@@ -191,7 +199,7 @@ trait devlessAuth
 
             if ($user::where('id', $token['id'])->update($payload)) {
                 return \DB::table('users')->where('id', $token['id'])
-                ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'role'])
+                ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'status'])
                 ->first();
             }
         }
@@ -289,10 +297,31 @@ trait devlessAuth
 
         $payload = json_encode($payload);
 
-        if (DB::table('users')->where('id', $user_id)->update(['session_time' => Helper::session_timestamp()])) {
+        if(DB::table('users')->where('id', $user_id)->update(['session_time' => Helper::session_timestamp()])) {
             return $jwt->encode($payload, $secret);
         } else {
             return false;
-        }
+        }   
     }
+
+    public function generate_email_verification_code($user_id)
+    {
+        return DataStore::setDump(md5(uniqid(1, true).'_'.$user_id, $user_id));
+    }
+    public static function set_user_auth_settings($settings)
+    {
+        return DataStore::setDump('devless_auth_settings', $settings);
+    }
+
+    public static function get_user_auth_settings()
+    {
+        return DataStore::getDump('devless_auth_settings');
+    }
+
+    public static function update_user_auth_settings($newSettings)
+    {
+        return DataStore::updateDump('devless_auth_settings', $newSettings);
+    }
+
+
 }

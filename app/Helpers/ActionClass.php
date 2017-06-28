@@ -16,18 +16,20 @@ class ActionClass
      */
     public static function execute($service, $method, $params = null)
     {
-        if (strtoupper($service) == 'DEVLESS') {
-            $serviceMethodPath = __DIR__.'/SystemClass.php';
-        } else {
-            $serviceMethodPath = config('devless')['views_directory'].$service.'/ActionClass.php';
-        }
+        $serviceMethodPath = (strtolower($service) == config('devless')['name']) ?
+                            config('devless')['system_class'] :
+                            config('devless')['views_directory'].$service.'/ActionClass.php';
 
+         
         /** @var TYPE_NAME $serviceMethodPath */
         (file_exists($serviceMethodPath))?
             require_once $serviceMethodPath : false;
-
+        
         $serviceInstance = new $service();
+        
         $results = $serviceInstance->$method(...$params);
+
+
         return $results;
     }
 
@@ -44,6 +46,52 @@ class ActionClass
     {
         $devless = new SDK($url, $token);
         return $devless->call($service, $method, $params);
+
+    }
+
+
+    /**
+     * List out all possible callbale methods as well as get docs on specific method eg: ->help('stopAndOutput')
+     * @param $methodToGetDocsFor
+     * @return $this;
+     */
+    public function help($serviceInstance, $methodToGetDocsFor)
+    {
+
+        
+        $methods = get_class_methods($serviceInstance);
+        
+        $exemptedMethods = ['__construct','requestType','__call','useArgsOrPrevOutput','executor','commonMutationTask'];
+
+        $methodList = [];
+        
+        $getMethodDocs = function($methodName) use($exemptedMethods, $serviceInstance) {
+            if(!in_array($methodName, $exemptedMethods)){
+                $method = new \ReflectionMethod($serviceInstance, $methodName); 
+                $methodDocs = str_replace("*/","",$method->getDocComment());
+                $methodDocs = str_replace("/**","",$methodDocs);
+                return $methodDocs = str_replace("* *","||",$methodDocs);
+            } else { return false;}
+        };
+
+        if($methodToGetDocsFor) {
+
+            $docs = $getMethodDocs($methodToGetDocsFor);
+            if($docs) {
+                 $methodList[$methodToGetDocsFor] = $docs;
+            }
+        } else {
+            foreach ($methods as $methodName) {
+              $methodDocs = $getMethodDocs($methodName);
+              if($methodDocs) {
+                $methodList[$methodName] = $methodDocs;  
+              }
+            }
+        }
+        
+        
+        return [1000, 'List of callable methods', $methodList];
+        
 
     }
 }

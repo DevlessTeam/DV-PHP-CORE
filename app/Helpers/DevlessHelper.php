@@ -82,6 +82,7 @@ class DevlessHelper extends Helper
         $docComment = $property->getDocComment();
 
         $access_type = function () use ($docComment) {
+            if(self::is_admin_login()){return true;}
             (strpos(($docComment), '@ACL private')) ? Helper::interrupt(627) :
                 (strpos($docComment, '@ACL protected')) ? Helper::get_authenticated_user_cred(2) :
                     (strpos($docComment, '@ACL public')) ? true : Helper::interrupt(638);
@@ -179,5 +180,41 @@ class DevlessHelper extends Helper
         }
 
         return $closest_word;
+    }
+    /**
+     * Script template generated for rules in each new service
+     * @return string
+     */
+    public static function script_template()
+    {
+        return 
+                '
+/**
+* Rules allow you to establish control over the flow of 
+* your data in and out of the database.
+* For example if you will like to change the output message 
+* your users receive after quering for data,
+* its as easy as `afterQuerying()->mutateResponseMessage("to something else")`. 
+* To view the list of callable method append ->help() to a 
+* flow statement ie ->beforeQuering()->help() and view from your app.
+**/
+ -> beforeQuerying()
+ -> beforeUpdating()
+ -> beforeDeleting()
+ -> beforeCreating()
+
+ -> onQuery()
+ -> onUpdate()
+ -> onDelete()
+ -> onCreate()
+
+ -> onAnyRequest()
+
+ -> afterQuerying()
+ -> afterUpdating()
+ -> afterDeleting()
+ -> afterCreating()
+ ';
+ 
     }
 }

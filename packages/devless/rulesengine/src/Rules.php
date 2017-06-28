@@ -21,21 +21,27 @@ class Rules
     ];
     public $results = '';
     
-    public $status_code = null;
-    public $message = null;
-    public $payload = null;
+    public $status_code = 1000;
+    public $message = '';
+    public $payload = [];
 
+    private $stopAndOutputCalled = false;
     private $answered = false;
     private $execOrNot = true;
     private $isCurrentDBAction = false;
     private $actionType = '';
     private $tableName = '';
+    private $selectedService = null;
+    private $selectedMethod = null;
     private $methodAction = [
         'GET' => 'query',
         'POST' => 'create',
         'PATCH' => 'update',
         'DELETE' => 'delete',
     ];
+
+    public $EVENT = [];
+
     public $accessRights = [
         'query' => 3,
         'create' => 3,
@@ -83,37 +89,17 @@ class Rules
         }
     }
 
-    /**
-     * Execute callback functions with the chain.
+     /**
+     * use result from previous method as a param 
+     * if argument is not provided
      *
-     * @param  $evaluator
+     * @param  $args
      *
-     * @return Rules|string
+     * @return mix
      */
-    public function executor($evaluator)
+    public function useArgsOrPrevOutput($args)
     {
-        $whenever = $this->assertion['whenever'];
-        $elseWhenever = $this->assertion['elseWhenever'];
-        $otherwise = $this->assertion['otherwise'];
-        $error = function ($msg = 'you cannot call on elseWhenever without calling on whenever') {
-            $this->answered = true;
-            $this->results = $msg;
-        };
-        if ($this->called['elseWhenever'] && !$this->called['whenever']) {
-            $error();
-        } elseif ($otherwise && !$this->called['whenever']) {
-            $msg = 'You cannot call on otherwise without calling on whenever';
-            $error($msg);
-        } elseif ((($whenever) && $this->called['whenever'])
-            || (($elseWhenever) && $this->called['whenever'] && $this->called['elseWhenever'])
-            || ($otherwise && ($this->called['whenever'] || $this->called['elseWhenever']))
-        ) {
-
-            $evaluator();
-        } else {
-            dd("stop");
-        }
-
-        return $this;
+        return ($args == null)? $this->results : $args;
     }
+    
 }

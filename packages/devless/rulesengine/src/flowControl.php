@@ -5,9 +5,9 @@ namespace Devless\RulesEngine;
 trait flowControl
 {
     /**
-     * equivalence of if.
+     * This is the equivalence of if and is mostly used together with assertions to alter execution flows. eg beforeQuerying()->whenever(assertIts::equal($input_name, "edmond"))->then->succeedWith("yes the names are same")
      *
-     * @param  $assert
+     * @param  $assertion
      *
      * @return $this
      */
@@ -16,6 +16,7 @@ trait flowControl
         if (!$this->isCurrentDBAction) {
             return $this;
         }
+        if($this->stopAndOutputCalled){return $this;}
         $this->assertion['whenever'] = $assert;
         $this->called['whenever'] = true;
         $this->execOrNot = ($assert);
@@ -23,9 +24,9 @@ trait flowControl
         return $this;
     }
     /**
-     * equivalence of elseif.
+     * This is the equivalence of elseif and is mostly used together with assertions to alter execution flows eg.beforeQuerying()->whenever(assertIts::equal($input_name, "edmond"))->then->succeedWith("yes the names are same")->elseWhenever(assertIts::equal($input_name, "charles")))->then->succeedWith("yes the names are charles")
      *
-     * @param  $assert
+     * @param  $assertion
      *
      * @return $this
      */
@@ -44,7 +45,7 @@ trait flowControl
         return $this;
     }
     /**
-     * equivalence of else.
+     * This is the equivalence of else eg.beforeQuerying()->whenever(assertIts::equal($input_name, "edmond"))->then->succeedWith("yes the names are same")->elseWhenever(assertIts::equal($input_name, "charles")))->then->succeedWith("yes the names are charles")->otherwise()->succeedWith("Its some other name")
      *
      * @return $this
      */

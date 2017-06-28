@@ -1,37 +1,49 @@
 <?php
 {{MAINDOC}}
-
+use App\Helpers\ActionClass;
 //Action method for serviceName
 class {{ServiceName}}
 {
     public $serviceName = '{{ServiceName}}';
 
     /**
-     * Method cannnot be accessed via any SDK
+     * Sample Method showing how `@ACL private` prevents people from calling on the method from any of the DevLess SDKs.
      * @ACL private
      */
-    public function methodone()
+    public function samplePrivateMethod()
     {
-        return "Sample Private Method";
+        return "Private Hello";
     }
 
 
     /**
-     * Method accessible only by authenticated users
+     * Methods decorated with `@ACL protected` are only available to users who are logged in . You may access the method via any of the SDKs.
      * @ACL protected
      */
-    public function methodtwo()
+    public function sampleProtectedMethod()
     {
-        return "Sample Protected Method";
+        return "Protected Hello";
     }
 
     /**
-     * Method is accessible via any DevLess SDK
+     * Sample public method can be accessed by any user from any of the SDKs due to the `@ACL public decoration.
      * @ACL public
      */
-    public function methodthree()
+    public function samplePublicMethod()
     {
-        return "Sample Public Method";
+        return "Public Hello";
+    }
+
+    /**
+     * List out all possible callbale methods as well as get docs on specific method 
+     * @param $methodToGetDocsFor
+     * @return $this;
+     */
+    public function help($methodToGetDocsFor=null)
+    {
+        $serviceInstance = $this;
+        $actionClass = new ActionClass();
+        return $actionClass->help($serviceInstance, $methodToGetDocsFor=null);   
     }
 
     /**

@@ -26,18 +26,49 @@ class UserController extends Controller
     }
     public function get_all_users()
     {
-        return view('users.index');
+        $users = User::orderBy('id', 'desc')->where('role', '!=', 1)->get();
+        $menuName = 'devless_users';
+        return view('users.index', compact('users', 'menuName'));
     }
 
-    public function retrieve_all_users()
+    public function update_user(Request $request) 
     {
-        $users = User::orderBy('id', 'desc')->get();
-
-        return $users;
+        if($request->password == ''){
+            if(DB::table('users')->where('id', $request->id)
+            ->update([
+                'username'      => $request->username,
+                'first_name'    => $request->first_name,
+                'last_name'     => $request->last_name,
+                'phone_number'  => $request->phone_number,
+                'email'         => $request->email,
+                'status'        => ($request->active == 'on') ? 0 : 1
+            ])) {
+                return json_encode(true);
+            }
+        } else {
+            if(DB::table('users')->where('id', $request->id)
+            ->update([
+                'username'      => $request->username,
+                'first_name'    => $request->first_name,
+                'last_name'     => $request->last_name,
+                'phone_number'  => $request->phone_number,
+                'email'         => $request->email,
+                'password'      => bcrypt($request->password),
+                'status'        => ($request->active == 'on') ? 0 : 1
+            ])) {
+                return json_encode(true);
+            }
+        }
+        return json_encode(false);
     }
+
     public function remove_user(Request $request)
     {
-        return $request;
+        if(DB::table('users')->whereIn('id', $request->data)->delete()) {
+            return json_encode(true);
+        }
+
+        return json_encode(false);
     }
     public function post_login(Request $request)
     {
@@ -106,4 +137,5 @@ class UserController extends Controller
             return back()->withInput();
         }
     }
+
 }

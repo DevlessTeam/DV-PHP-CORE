@@ -67,14 +67,15 @@ trait service_activity
      */
     private function _get_resource_access_right($service, $master_access = false)
     {
+
         $master_resource_rights = ['query' => 1, 'update' => 1,
-             'delete' => 1, 'script' => 1, 'schema' => 1, 'script' => 1, 'create' => 1, ];
+             'delete' => 1, 'script' => 1, 'schema' => 1, 'script' => 1, 'create' => 1, 'view' => 1];
 
         $resource_access_right = $service->resource_access_right;
         $resource_access_right = json_decode($resource_access_right, true);
         $resource_access_right = ($master_access) ?
             $master_resource_rights : $resource_access_right;
-
+            
         return $resource_access_right;
     }
 
@@ -108,13 +109,14 @@ trait service_activity
      *
      * @return array
      */
-    public function before_assigning_service_action($resource, $payload, $internalAccess = false)
+    public function before_assigning_service_action($resource, $payload)
     {
         $payload['request_phase'] = 'before';
         $output['resource'] = $resource;
         $output['payload'] = $payload;
 
-        $script_output = $this->script_executioner($resource, $payload, $internalAccess);
+        $script_output = $this->script_executioner($resource, $payload);
+
         return ($script_output)?:$output;
 
     }
@@ -127,7 +129,7 @@ trait service_activity
      *
      * @return array
      */
-    public function after_resource_process_order($resource, $requestPayload, $status_code, $message, $payload, $internalAccess = false)
+    public function after_resource_process_order($resource, $requestPayload, $status_code, $message, $payload)
     {
         
         $requestPayload['request_phase'] = 'after';
@@ -148,16 +150,27 @@ trait service_activity
      * @param bol   $internalAccess
      * @return array
      */
-    public function script_executioner($resource, $payload, $internalAccess)
+    public function script_executioner($resource, $payload)
     {
          $output = false;
 
-         if ($resource != 'schema' && !$internalAccess) {
+         if ($resource != 'schema' ) {
             $script = new script();
+
             $output = $script->run_script($resource, $payload);
+            
         }
 
         return $output;
+    }
+
+    public function is_service_name_php_keyword($service_name)
+    {
+
+        $keywords = ['__halt_compiler', 'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected', 'public', 'require', 'require_once', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor','__CLASS__', '__DIR__', '__FILE__', '__FUNCTION__', '__LINE__', '__METHOD__', '__NAMESPACE__', '__TRAIT__'];
+
+        return in_array(strtolower($service_name), $keywords);
+
     }
     
 }

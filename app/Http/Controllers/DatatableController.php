@@ -22,8 +22,8 @@ class DatatableController extends Controller
         }
 
         $services = Service::orderBy('created_at', 'desc')->get();
-
-        return view('datatable.index', compact('services'));
+        $menuName = 'datatable';
+        return view('datatable.index', compact('services', 'menuName'));
     }
 
     /**

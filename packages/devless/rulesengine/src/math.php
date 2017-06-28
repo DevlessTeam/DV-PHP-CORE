@@ -4,8 +4,24 @@ namespace Devless\RulesEngine;
 
 trait math {
 
+    /**
+     * Perform mathmatical operations eg: `->beforeQuerying()->calculate(3*5)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
+     *
+     * @param mathmatical expression
+     *
+     * @return $this
+     */
+    public function calculate($expression)
+    {  
+        if (!$this->execOrNot) {
+                return $this;
+        }
+
+        $this->results = $expression;
+        return $this;
+    }
 	/**
-     * find the sum of numbers.
+     * find the sum of numbers. eg: `->beforeQuerying()->sumUp(3,4,5,6,7)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
      *
      * @param integer $num
      *
@@ -22,7 +38,7 @@ trait math {
 	}	
 
 	/**
-     * subtract a bunch of numbers.
+     * subtract a bunch of numbers. eg: `->beforeQuerying()->subtract(3,4,5,6,7)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)` also `->beforeQuerying()->from(5)->subtract(3)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
      *
      * @return $this
      */
@@ -44,7 +60,7 @@ trait math {
 	}
 
 	/**
-     * find the product of numbers.
+     * find the product of numbers.eg: `->beforeQuerying()->multiply(3,4,5,6,7)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
      *
      * @return $this
      */
@@ -59,7 +75,7 @@ trait math {
 	} 
 
 	/**
-     * divide a range of numbers.
+     * divide a range of numbers.eg: `->beforeQuerying()->divide(6,2)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
      *
      * @return $this
      */
@@ -81,14 +97,29 @@ trait math {
 		return $this;
 	}	
 
+    /**
+     * This picks results from your earlier computation and divides it by a given number. eg: `->beforeQuerying()->sumUp(3,4,5,6,7)->divdeBy(6)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
+     *
+     * @param $number 
+     * @return $this
+     */
+    public function divideBy($number)
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        
+        $this->results = ($this->results)/$number;
+        return $this;
+    }
 	/**
-     * find the sqaure of a number.
+     * Find the square root of a number. eg:`->beforeQuerying()->findSquareRoot($number)->storeAs($input_root)`
      *
      * @param integer $num
      *
      * @return $this
      */
-	public function FindSquareRootOf($number)
+	public function findSquareRootOf($number)
 	{
 		if(!$this->execOrNot) {
 			return $this;
@@ -97,11 +128,23 @@ trait math {
 		return $this;
 	}
 
+    /**
+     * Get the squareRoot of the result of the preceeding computation eg: `->beforeQuerying()->divide(20, 40)->getSquareRoot()->storeAs($output)->succeedWith($output)`
+     * return $this
+     */
+    public function getSquareRoot()
+    {
+        if(!$this->execOrNot) {
+            return $this;
+        }
+        $this->results = sqrt($this->results);
+        return $this;
+    }
 	/**
-     * round up a number.
+     * round up a number.eg: `->beforeCreating()->roundUp($input_milage, 1)->storeAs($input_milage)`
      *
-     * @param integer $num
-     *
+     * @param integer $number
+     * @param integer $precision
      * @return $this
      */
 	public function roundUp($number, $precision=1)
@@ -112,4 +155,19 @@ trait math {
 		$this->results = round($number, $precision);
 		return $this;
 	}
+
+    /**
+     * Find the percent of a number eg: `->beforeQuerying()->find(10)->percentOf(200)->storeAs($input_discount)`
+     * @param $number
+     * @return $this
+     */
+    public function percentOf($number)
+    {
+        if(!$this->execOrNot) {
+            return $this;
+        }
+        $percentage = ($this->results/100);
+        $this->results = $percentage*($number);
+        return $this;
+    }
 }

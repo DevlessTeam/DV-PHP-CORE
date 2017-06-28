@@ -33,7 +33,6 @@ class ViewController extends Controller
         $service = new Service();
         $payload = $service->assign_to_service($service_name, $resource, $method);
         $payload['params'] = $service->get_params($method, $request);
-
         $access_type = $payload['resource_access_right'];
         $access_state = $service->check_resource_access_right_type($access_type['view']);
         Helper::get_authenticated_user_cred($access_state);

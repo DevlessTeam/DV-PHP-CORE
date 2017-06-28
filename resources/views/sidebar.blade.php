@@ -1,3 +1,4 @@
+
 <!-- sidebar left start-->
 <div class="sidebar-left">
     <div class="header-section">
@@ -33,25 +34,22 @@
             <li>
                 <h3 class="navigation-title">Menu</h3>
             </li>
-            <li><a href="{{route('app.index')}}"><i class="fa fa-desktop"></i><span>App</span></a></li>
-            <li class="menu-list">
+            
+            <li class="<?=($menuName =='app')? 'active': ''?>"><a href="{{route('app.index')}}"><i class="fa fa-desktop "></i><span>App</span></a></li>
+            <li class="menu-list <?=($menuName =='all_services')? 'active': ''?>"  >
                 <a href="#"><i class="fa fa-gears"></i><span>Services</span></a>
+
                 <ul class="child-list">
-                    <li><a href="{{ route('services.index') }}">All Services</a></li>
-                    <li><a href="{{ route('services.create') }}">Add New</a></li>
+                    <li><a href="{{ route('services.index') }}" ><span class="fa fa-dot-circle-o">  All Services</span></a></li>
+                    <li><a href="{{ route('services.create') }}"><span class="fa fa-dot-circle-o">  Add New</span></a></li>
                 </ul>
             </li>
-            <li class="menu-list">
-                <a href="#"><i class="fa fa-database"></i><span>Data Tables</span></a>
-                <ul class="child-list">
-                    <li><a href="{{ url('datatable') }}">Service Tables</a></li>
-                    <li><a href="{{ url('devless_users') }}">Users</a></li>
-                </ul>
-            </li>
-            <li><a href="{{ url('hub') }}"><i class="fa fa-cubes"></i><span>Service Hub</span></a></li>
-            <li><a href="{{ url('privacy') }}"><i class="fa fa-lock"></i><span>Privacy</span></a></li>
-            <li><a href="{{ url('console') }}"><i class="fa fa-terminal"></i><span>API Console</span></a></li>
-            <li><a href="{{route('migrate.index')}}"><i class="fa fa-download"></i><span>Migration</span></a></li>
+            <li class="<?=($menuName =='datatable')? 'active': ''?>"><a href="{{ url('datatable') }}"><i class="fa fa-database"></i><span>Data Tables</span></a></li>
+            <li class="<?=($menuName =='devless_users')? 'active': ''?>"><a href="{{ url('devless_users') }}"><i class="fa fa-users"></i><span>Users</span></a></li>
+            <li class="<?=($menuName =='service_hub')? 'active': ''?>"><a href="{{ url('hub') }}"><i class="fa fa-cubes"></i><span>Service Hub</span></a></li>
+            <li class="<?=($menuName =='privacy')? 'active': ''?>"><a href="{{ url('privacy') }}"><i class="fa fa-lock"></i><span>Privacy</span></a></li>
+            <li class="<?=($menuName =='api_docs')? 'active': ''?>"><a href="{{ url('console') }}"><i class="fa fa-terminal"></i><span>API Console</span></a></li>
+            <li class="<?=($menuName =='migration')? 'active': ''?>"><a href="{{route('migrate.index')}}"><i class="fa fa-download"></i><span>Migration</span></a></li>
             <li><a href="{{url('logout')}}"><i class="fa fa-sign-out"></i><span>Logout </span></a></li>
         </ul>
     </div>

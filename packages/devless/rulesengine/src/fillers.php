@@ -6,9 +6,9 @@ trait fillers
 {
 
     /**
-     * also filler statement.
+     * `also` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes. eg: `->beforeCreating()->assign("hello")->to($text)->convertToUpperCase()->reverseString()->storeAs($text)->succeedWith($text)` this can be rewritten as `beforeCreating()->assign("hello")->to($text)->convertToUpperCase()->also->reverseString()->storeAs($text)->succeedWith($text)` notice the introduction of the `also` keyword, this does not change the end results but just makes it more readable.
      *
-     * @return instance
+     * @return $this
      */
     public function also()
     {
@@ -16,9 +16,9 @@ trait fillers
     }
 
     /**
-     * then filler statement.
+     * `then` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes. eg: `->beforeCreating()->assign("hello")->to($text)->convertToUpperCase()->reverseString()->storeAs($text)->succeedWith($text)` this can be rewritten as `beforeCreating()->assign("hello")->to($text)->convertToUpperCase()->then->reverseString()->storeAs($text)->succeedWith($text)` notice the introduction of the `then` keyword, this does not change the end results but just makes it more readable.
      *
-     * @return instance
+     * @return $this
      */
     public function then()
     {
@@ -26,9 +26,9 @@ trait fillers
     }
 
     /**
-     * firstly filler statement.
+     * `firstly` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->storeAs($text)->lastly->succeedWith($text)`.
      *
-     * @return instance
+     * @return $this
      */
     public function firstly()
     {
@@ -36,9 +36,9 @@ trait fillers
     }
 
     /**
-     * secondly filler statement.
+     * `secondly` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->storeAs($text)->lastly->succeedWith($text)`.
      *
-     * @return instance
+     * @return $this
      */
     public function secondly()
     {
@@ -46,18 +46,19 @@ trait fillers
     }
 
     /**
-     * thirdly filler statement.
+     * `thirdly` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->storeAs($text)->lastly->succeedWith($text)`.
      *
-     * @return instance
+     * @return $this
      */
     public function thirdly()
     {
         return $this;
     }
+
     /**
-     * finally filler statement.
+     * `lastly` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->storeAs($text)->lastly->succeedWith($text)`.
      *
-     * @return instance
+     * @return $this
      */
     public function lastly()
     {
@@ -65,19 +66,19 @@ trait fillers
     }
 
     /**
-     * beSureTO filler statement.
+     * `beSureTo` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->beSureTo->storeAs($text)->lastly->succeedWith($text)`.
      *
-     * @return instance
+     * @return $this
      */
-    public function beSureTO()
+    public function beSureTo()
     {
         return $this;
     }
 
     /**
-     * next filler statement.
+     * `next` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->next->storeAs($text)->lastly->succeedWith($text)`.
      *
-     * @return instance
+     * @return $this
      */
     public function next()
     {

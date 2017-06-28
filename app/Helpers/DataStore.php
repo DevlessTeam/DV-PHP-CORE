@@ -76,17 +76,16 @@ class DataStore extends Helper
         $payload = self::$payload;
         $tableName = self::$payload['params']['table'][0];
         $method = 'POST';
-        $pushToStore = function ($data) use ($tableName, $method, $service, $payload) {
+        $pushToSave = function ($data) use ($tableName, $method, $service, $payload) {
             $dataToAdd = [['name' => $tableName, 'field' => [$data]]];
             self::cleanUp();
 
             return $service->assign_to_service($payload['service_name'], self::$resourceType, $method, $dataToAdd, true);
         };
         foreach ($data as $datum) {
-            $results = $pushToStore($datum);
+            $results = $pushToSave($datum);
         }
         self::cleanUp();
-
         return $results;
     }
     /**

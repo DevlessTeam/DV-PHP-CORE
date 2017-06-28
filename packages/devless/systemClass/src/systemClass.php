@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\Helper;
+use App\Helpers\ActionClass;
 use App\Helpers\DataStore as DS;
 use App\Helpers\DevlessHelper as DVH;
 use App\Http\Controllers\ServiceController as service;
@@ -133,7 +134,28 @@ class devless
         
        
     }
-    
+
+    /**
+     * reset user account password
+     * @ACL public
+    */
+    public function reset_users_password($token)
+    {
+        $auth = $this->auth;
+        $state  = $auth->reset_users_password($token);
+        return $state;
+    }
+
+    /**
+     * verify newly registered emails
+     * @ACL public
+    */
+    public function verify_users_email($token)
+    {
+        $user_id = DS::getDump($token.'_'.$user_id);
+        $status  = (\DB::table('users')->where('id', $user_id)->update(['status'=>1]))?true:false;
+        return $status;
+    }
     private static function getSetParams($payload)
     {
         foreach ($payload as $key => $value) {
@@ -172,7 +194,7 @@ class devless
             ->where($whereKey, $whereValue): DS::service($serviceName, $table, $service);
 
         $output = $queryBuilder->related('*')->queryData();
-        return $output['payload']['results'];
+        return $output;
 
     }
 
@@ -208,7 +230,7 @@ class devless
      * @param $serviceName
      * @param $table
      * @param $id
-     * @return mixed
+     * @return array
      * @ACL private
      */
     public function getUserProfile($input)
@@ -225,5 +247,108 @@ class devless
             return (array)$profile[0];
         }
         return [];
+    }
+
+    /**
+     * Get all users within the system 
+     * @return array
+     * @ACL private
+     */
+    public function getAllUsers()
+    {
+        return DB::table('users')->select(
+            [
+                "id", "username", "email", "first_name", "last_name", "status"
+            ])->get();
+    }
+
+    /**
+     * Delete a users profile
+     * @return bool
+     * @ACL private
+     */
+    public function deleteUserProfile($id)
+    {
+        return (\DB::table('users')->where('id', $id)->delete())?true:false; 
+    }
+
+
+    /**
+     * Update a users profile
+     * @param $email
+     * @param $password
+     * @param $username
+     * @param $phone_number
+     * @param $first_name
+     * @param $last_name
+     * @param $remember_token
+     * @param $role
+     * @return bool
+     * @ACL private
+     */
+    public function updateUserProfile(
+        $id,
+        $email = null,
+        $password = null,
+        $username = null,
+        $phone_number = null,
+        $first_name = null,
+        $last_name = null,
+        $remember_token = null,
+        $status = null
+        )
+    {
+        $profileUpdate =array_filter(get_defined_vars(), function($value) { return $value !== ''; });
+        unset($profileUpdate['id']);
+        
+        return (DB::table('users')->where('id', $id)->update($profileUpdate))?true:false;
+    }
+
+    /**
+     * Login users with username and password
+     * @param $username
+     * @param $password
+     * @return array
+     * @ACL public
+     */
+    public function usernameLogin($username, $password)
+    {
+        return $this->login($username, null, null, $password);
+    }
+
+    /**
+     * Login users with email and password
+     * @param $email
+     * @param $password
+     * @return array
+     * @ACL public
+     */
+    public function emailLogin($email, $password)
+    {
+        return $this->login(null, $email, null, $password);
+    }
+
+    /**
+     * Login users with phone number and password
+     * @param $phone_number
+     * @param $password
+     * @return array
+     * @ACL public
+     */
+    public function phoneNumberLogin($phone_number, $password)
+    {
+        return $this->login(null, null, $phone_number, $password);
+    }
+
+    /**
+     * Lists and explains what each method is used for 
+     * @return array
+     * @ACL public
+     */
+    public function help()
+    {
+        $serviceInstance = $this;
+        $actionClass = new ActionClass();
+        return $actionClass->help($serviceInstance, $methodToGetDocsFor=null);   
     }
 }

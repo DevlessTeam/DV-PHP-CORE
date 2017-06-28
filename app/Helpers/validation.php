@@ -90,7 +90,9 @@ trait validation
             $params = [];
             foreach ($query as $param) {
                 if ($param !== '') {
-                    list($name, $value) = explode('=', $param, 2);
+                    $querySet =  explode('=', $param, 2);
+                    (count($querySet) != 2)?self::interrupt(646):'';
+                    list($name, $value) = $querySet;
                     $params[urldecode($name)][] = urldecode($value);
                 }
             }

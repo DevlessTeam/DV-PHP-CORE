@@ -33,6 +33,7 @@ trait service_assignment
         $parameters = null,
         $internal_access = false
     ) {
+
         $current_service = $this->service_exist($service_name);
         if (!$current_service == false) {
             //check service access right
@@ -61,23 +62,30 @@ trait service_assignment
                         'method' => $method,
                         'params' => $parameters,
                     ];
+
                 // run script before assigning to method
-                if (!$accessed_internally && $resource != 'view' && $resource != 'rpc') {
-                    $newServiceElements = $this->before_assigning_service_action($resource, $payload, $accessed_internally);
+                if ( $resource != 'view' && $resource != 'rpc') {
+                    $newServiceElements = $this->before_assigning_service_action($resource, $payload);
+                    
                     $resource = $newServiceElements['resource'];
                     $payload = $newServiceElements['payload'];
+
                 }
                 
-                //keep names of resources in the singular
+                //keep names of resources in the singular 
+                /**
+                * NB: all resource names from the frontend are converted to lower case meaning before case runs 
+                * meaning if you make a resource name uppercase within the case it will not be available outside but only useable within here . Looking @ you "endNow"
+                */
                 switch ($resource) {
                     case 'db':
                         $db = new Db();
 
                         $response = $db->access_db($payload);
-                        if (!$accessed_internally && $resource != 'view' && $resource != 'rpc') {
-                              return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload'], $accessed_internally);
+                        if ( $resource != 'view' && $resource != 'rpc') {
+                              return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload']);
 
-                        }
+                        } 
                         return $response;
                       
                         break;
@@ -93,11 +101,18 @@ trait service_assignment
                         $rpc = new Rpc();
 
                         return $rpc->index($payload);
+                    case 'endNow':
+                        return [
+                            'status_code' => $payload['status_code'],
+                            'message' => $payload['message'],
+                            'payload' => $payload['results'],
+                        ];
                     default:
                         Helper::interrupt(605);
                         break;
                 }
             } else {
+
                 Helper::interrupt(624);
             }
         }
