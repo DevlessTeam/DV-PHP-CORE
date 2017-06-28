@@ -8,7 +8,7 @@ use App\Helpers\Helper;
 trait tableAuth
 {
     /**
-     * Convert table access right to authenticated.
+     * Appending the authenticateUser method to any query action will force users to login to gain access to the system eg: ->beforeQuerying()->onTable('subscriptions')->autheticateUser()
      *
      * @return instance
      */
@@ -27,7 +27,7 @@ trait tableAuth
     }
 
     /**
-     * Lock down table access.
+     * In the event you do not what to grant external access to a table to any users you should use `denieExternalAccess` method . `->beforeQuerying()->onTable('subscriptions')->denieExternalAccess()` In this case no user will be able to access the `subscriptions` table
      *
      * @return instance
      */
@@ -44,11 +44,11 @@ trait tableAuth
     }
 
     /**
-     * Open Up table access to everyone.
+     * You may decide to set all your table access to either `authenticated` or `private` from within the `privacy tab` but then decide to make one or more tables public in this case use the `allowExternalAccess` method `->beforeQuerying()->onTable('news', 'tariffs')->allowExternalAccess()`
      *
      * @return instance
      */
-    public function allowEnternalAccess()
+    public function allowExternalAccess()
     {
         if (!$this->execOrNot) {
             return $this;
@@ -59,6 +59,9 @@ trait tableAuth
         return $this;
     }
 
+    /**
+     * You may decide to provide access of some tables to just the admin instead locking them up totally . To do this use the `grantOnlyAdminAccess` method.`->beforeQuerying()->onTable('news', 'tariffs')->grantOnlyAdminAccess()`
+     */ 
     public function grantOnlyAdminAccess()
     {
         if (!$this->execOrNot) {
