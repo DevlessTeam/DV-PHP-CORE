@@ -16,9 +16,10 @@ class DatatableController extends Controller
     {
         if ($request->service_name && $request->table_name) {
             $service = \DB::table('services')->where('name', $request->service_name)->first();
-            $tables = \DB::table('table_metas')->where('service_id', $service->id)->get();
+            $tables = \DB::table('table_metas')->where('table_name', $request->service_name.'_'.$request->table_name)->get();
+            $menuName = 'datatable';
 
-            return view('datatable.index', compact('service', 'tables'));
+            return view('datatable.index', compact('service', 'tables', 'menuName'));
         }
 
         $services = Service::orderBy('created_at', 'desc')->get();

@@ -1,12 +1,6 @@
 
 @extends('layout')
 
-<?php 
-    if(!isset($menuName)) {
-        $menuName = 'datatable';
-    }
-?>
-
 @section('header')
       <div class="page-head">
         <h3>
