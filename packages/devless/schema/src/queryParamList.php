@@ -6,11 +6,11 @@ trait queryParamList
 {
     //be sure to update this array when you add a new method else it wont be accessible to the user
     public $query_params = [
-        'order' => 'orderBy',
+        'orderBy' => 'orderBy',
         'size' => 'size',
         'where' => 'where',
         'orWhere' => 'orWhere',
-        'take' => 'take',
+        'offset' => 'offset',
         'related' => 'related',
         'search' => 'search',
         'randomize' => 'randomize',

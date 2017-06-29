@@ -48,6 +48,7 @@ trait queryData
         );
         
         $count = $db->table($table_name)->count();
+        
         ($related_fetch)? eval('return '.$complete_query.'
         ->chunk($count, function($results) use (&$queried_results, &$related_fetch) {
              return $queried_results = $related_fetch($results);

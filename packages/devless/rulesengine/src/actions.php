@@ -291,7 +291,7 @@
         }
 
         /**
-         * Should you perform some rules and based on that will like to exist earlier with a response before the actual db command completes you will want to use `stopAndOutput` eg: beforeQuerying()->usingService('devless')->callMethod('getUserProfile')->withParams(1)->storeAs($profile)->stopAndOutput(1000, 'got profile successfully', $profile).
+         * Should you perform some rules and based on that will like to exit earlier with a response before the actual db command completes you will want to use `stopAndOutput` eg: beforeQuerying()->usingService('devless')->callMethod('getUserProfile')->withParams(1)->storeAs($profile)->stopAndOutput(1000, 'got profile successfully', $profile).
          *
          * @param $status_code
          * @param $message 
@@ -315,9 +315,9 @@
         }
 
         /**
-         * List out all callbale methods as well as get docs on specific method eg: ->help('stopAndOutput')
+         * List out all methods as well as get docs on specific method eg: ->help('stopAndOutput')
          * @param $methodToGetDocsFor
-         * @return $this;
+         * @return $this
          */
         public function help($methodToGetDocsFor=null)
         {

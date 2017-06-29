@@ -5,7 +5,7 @@ namespace Devless\RulesEngine;
 trait math {
 
     /**
-     * Perform mathmatical operations eg: `->beforeQuerying()->calculate(3*5)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
+     * Perform mathematical operations eg: `->beforeQuerying()->calculate(3*5)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
      *
      * @param mathmatical expression
      *

@@ -59,11 +59,11 @@ trait generators
 	}
 
     /**
-     * generates unqiue Id.This generates unqiue Id . eg `->beforeCreating()->generateUnqiueId()->storeAs($user_id)->assign($user_id)->to($input_id)`
+     * generates unique Id.This generates unique Id . eg `->beforeCreating()->generateUniqueId()->storeAs($user_id)->assign($user_id)->to($input_id)`
      * @param $length
      * @return $this
      */    
-	public function generateUnqiueId()
+	public function generateUniqueId()
 	{
 		if (!$this->execOrNot) {
             return $this;

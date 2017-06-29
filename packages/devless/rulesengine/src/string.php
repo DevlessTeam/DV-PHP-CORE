@@ -36,7 +36,7 @@ trait string
 	}
 
 	/**
-	 * Get second character eg: `->beforeCreating()->getSecondCharacter("Hello")->storeAs($seconf_char)->succeedWith($second_char)`
+	 * Get second character eg: `->beforeCreating()->getSecondCharacter("Hello")->storeAs($second_char)->succeedWith($second_char)`
 	 * @param $string
 	 * @return $this
 	 * */
@@ -99,7 +99,8 @@ trait string
 	 * Reverse a string eg: ->beforeQuerying()->assign("nan")->to($string)->reverseString()->storeAs($reverseString)
  ->whenever(assertIts::equal($string, $reverseString))->succeedWith("Its a palindrome :)")
  ->otherwise()->failWith("Its not a palindrom :(")
- 
+    @param $string
+    @return $this
 	 */
 	public function reverseString($string=null)
 	{

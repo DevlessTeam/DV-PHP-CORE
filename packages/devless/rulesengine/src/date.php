@@ -102,11 +102,11 @@ trait date
 	}
 
 	/**
-     * Get the current second using the `getFormatedDate` method eg:beforeQuering()->getFormatedDate()->storeAs($formatedDate)->succeedWith($formatedDate)
+     * Get the current second using the `getFormattedDate` method eg:beforeQuering()->getFormattedDate()->storeAs($formattedDate)->succeedWith($formatedDate)
      *
      * @return $this
      */
-	public function getFormatedDate()
+	public function getFormattedDate()
 	{
 		if (!$this->execOrNot) {
                 return $this;
