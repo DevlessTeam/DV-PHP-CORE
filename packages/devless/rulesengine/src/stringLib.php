@@ -2,7 +2,7 @@
 
 namespace Devless\RulesEngine;
 
-trait string
+trait stringLib
 {
 	/**
 	 * Concatenate strings together eg: `->beforeCreating()->concatenate("user_",$input_name)`

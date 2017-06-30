@@ -2,7 +2,7 @@
 
 namespace Devless\RulesEngine;
 
-trait date 
+trait dateLib 
 {
 	/**
      * The `getTimestamp` method returns the current timestamp. eg: beforeQuerying()->getTimestamp()->storeAs($timestamp)->succeedWith($timestamp)

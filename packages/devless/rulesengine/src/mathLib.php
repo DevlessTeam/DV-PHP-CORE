@@ -2,7 +2,7 @@
 
 namespace Devless\RulesEngine;
 
-trait math {
+trait mathLib {
 
     /**
      * Perform mathematical operations eg: `->beforeQuerying()->calculate(3*5)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
