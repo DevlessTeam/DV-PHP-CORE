@@ -28,7 +28,7 @@ class RegisterUserJob extends Job implements SelfHandling
      * Create a new job instance.
      *
      * @param Request $request
-     * @param null $user
+     * @param null    $user
      */
     public function __construct(Request $request, $user = null)
     {
@@ -58,11 +58,15 @@ class RegisterUserJob extends Job implements SelfHandling
         }
 
         // Create app
-        $this->dispatch(new AddAppJob((object)[
-            'name' => $this->request->input('app_name'),
-            'description' => $this->request->input('app_description'),
-            'token' => App::get_token()
-        ]));
+        $this->dispatch(
+            new AddAppJob(
+                (object)[
+                'name' => $this->request->input('app_name'),
+                'description' => $this->request->input('app_description'),
+                'token' => App::get_token()
+                ]
+            )
+        );
 
         $this->user->save();
 

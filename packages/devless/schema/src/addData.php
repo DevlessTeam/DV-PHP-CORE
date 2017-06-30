@@ -24,7 +24,7 @@ trait addData
 
         $this->validate_payload($payload);
 
-        if ($this->add_data_to_db($payload, $service_name, $table_name, $db)){
+        if ($this->add_data_to_db($payload, $service_name, $table_name, $db)) {
             return $this->add_record_response($table_name);
         }
     }
@@ -50,8 +50,10 @@ trait addData
    
     private function add_record_response($table_name)
     {
-        return Response::respond(609, 'Data has been added to '.$table_name
-                .' table successfully');
+        return Response::respond(
+            609, 'Data has been added to '.$table_name
+            .' table successfully'
+        );
     }
 
     private function validate_payload($payload)

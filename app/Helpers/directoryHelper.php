@@ -93,7 +93,7 @@ trait directoryHelper
         $serviceMethodPath = config('devless')['views_directory'].$service.'/ActionClass.php';
 
         (file_exists($serviceMethodPath)) ?
-            require_once $serviceMethodPath : false;
+            include_once $serviceMethodPath : false;
 
         if (class_exists($service)) {
             $serviceInstance = new $service();
@@ -153,7 +153,7 @@ trait directoryHelper
      *
      * @param $service_name
      * @param $service_components
-     * @param null $package_name
+     * @param null               $package_name
      *
      * @return string
      */
@@ -289,9 +289,11 @@ trait directoryHelper
 
         $folder_name = basename($service_folder_path);
 
-        $archive = $zippy->create($service_folder_path.'.zip', array(
+        $archive = $zippy->create(
+            $service_folder_path.'.zip', array(
             $folder_name => $service_folder_path,
-        ), true);
+            ), true
+        );
 
         rename($service_folder_path.'.zip', $service_folder_path.$dvext);
         ($delete) ? self::deleteDirectory($service_folder_path) : false;

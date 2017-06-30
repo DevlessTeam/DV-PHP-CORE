@@ -69,7 +69,7 @@ trait tableAuth
             return $this;
         }
 
-         (!\DB::table('users')->where('id', $this->EVENT['user_id'])->where('role',1)->first() && !Helper::is_admin_login() )?Helper::interrupt(628) : '';
+         (!\DB::table('users')->where('id', $this->EVENT['user_id'])->where('role', 1)->first() && !Helper::is_admin_login() )?Helper::interrupt(628) : '';
 
         return $this;
 

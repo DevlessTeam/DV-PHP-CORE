@@ -10,7 +10,7 @@ trait service_downloader
     /**
      * Download service packages.
      *
-     * @param   $filename
+     * @param $filename
      *
      * @return
      *

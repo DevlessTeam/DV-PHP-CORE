@@ -60,16 +60,16 @@ trait devlessAuth
 
                 ];
 
-            $prepared_token = $this->set_session_token($token_payload, $user->id);
-            $profile = \DB::table('users')->where('id', $user->id)
+                $prepared_token = $this->set_session_token($token_payload, $user->id);
+                $profile = \DB::table('users')->where('id', $user->id)
                 ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'status'])
                 ->first();
-            $user_obj = [
+                $user_obj = [
                 'profile' => $profile,
                 'token' => $prepared_token,
-            ];
+                ];
 
-            return $user_obj;
+                return $user_obj;
         } else {
             return false;
         }
@@ -135,7 +135,8 @@ trait devlessAuth
             return false;
         }
         if ($user_data !== null) {
-            if(!$user_data->status){Helper::interrupt(643);}
+            if(!$user_data->status) {Helper::interrupt(643);
+            }
             $correct_password =
                    (Helper::compare_hash($password, $user_data->password)) ? true : false;
             $user_data->session_token = $session_token = md5(uniqid(1, true));
@@ -147,16 +148,16 @@ trait devlessAuth
 
                     ];
 
-                $prepared_token = $this->set_session_token($token_payload, $user_data->id);
-                $profile = \DB::table('users')->where('id', $user_data->id)
+                    $prepared_token = $this->set_session_token($token_payload, $user_data->id);
+                    $profile = \DB::table('users')->where('id', $user_data->id)
                     ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'role'])
                     ->first();
-                $user_obj = [
+                    $user_obj = [
                     'profile' => $profile,
                     'token' => $prepared_token,
-                ];
+                    ];
 
-                return $user_obj;
+                    return $user_obj;
             } else {
                 return false;
             }
@@ -261,23 +262,23 @@ trait devlessAuth
 
             ];
 
-        foreach ($fields as $field => $value) {
-            $field = strtolower($field);
+            foreach ($fields as $field => $value) {
+                $field = strtolower($field);
 
-            if (isset($expected_fields[$field])) {
-                $valid = Helper::field_check($value, $expected_fields[$field]);
-                if ($valid !== true) {
-                    Helper::interrupt(616, 'There is something wrong with your '.$field);
-                }
-                if ($field == 'password') {
-                    $user->$field = Helper::password_hash($value);
-                } else {
-                    $user->$field = $value;
+                if (isset($expected_fields[$field])) {
+                    $valid = Helper::field_check($value, $expected_fields[$field]);
+                    if ($valid !== true) {
+                        Helper::interrupt(616, 'There is something wrong with your '.$field);
+                    }
+                    if ($field == 'password') {
+                        $user->$field = Helper::password_hash($value);
+                    } else {
+                        $user->$field = $value;
+                    }
                 }
             }
-        }
 
-        return $user;
+            return $user;
     }
 
     /**

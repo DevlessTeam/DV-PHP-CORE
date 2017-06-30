@@ -144,7 +144,7 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value startwith $prefix eg: `->beforeCreating()->whenever(assertIts::startsWith("E23D", "E"))->then->stopAndOutput(1001,'message', 'its starts with E')`
+     * check if $value startswith $prefix eg: `->beforeCreating()->whenever(assertIts::startsWith("E23D", "E"))->then->stopAndOutput(1001,'message', 'its starts with E')`
      *
      * @param $value
      * @param $prefix
@@ -157,7 +157,7 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value ends with suffix eg: `->beforeCreating()->whenever(assertIts::endsWith("E23D", "D"))->then->stopAndOutput(1001,'message', 'its ends with D')`
+     * check if $value ends with $suffix eg: `->beforeCreating()->whenever(assertIts::endsWith("E23D", "D"))->then->stopAndOutput(1001,'message', 'its ends with D')`
      *
      * @param $value
      * @param $suffix
@@ -170,7 +170,7 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is matched regex eg: `->beforeCreating()->whenever(assertIt::matchesRegex("edmond@devless.io", "'/^(?!(?:(?:\\x22?\\x5C[\\x00-\\x7E]\\x22?)|(?:\\x22?[^\\x5C\\x22]\\x22?)){255,})(?!(?:(?:\\x22?\\x5C[\\x00-\\x7E]\\x22?)|(?:\\x22?[^\\x5C\\x22]\\x22?)){65,}@)(?:(?:[\\x21\\x23-\\x27\\x2A\\x2B\\x2D\\x2F-\\x39\\x3D\\x3F\\x5E-\\x7E]+)|(?:\\x22(?:[\\x01-\\x08\\x0B\\x0C\\x0E-\\x1F\\x21\\x23-\\x5B\\x5D-\\x7F]|(?:\\x5C[\\x00-\\x7F]))*\\x22))(?:\\.(?:(?:[\\x21\\x23-\\x27\\x2A\\x2B\\x2D\\x2F-\\x39\\x3D\\x3F\\x5E-\\x7E]+)|(?:\\x22(?:[\\x01-\\x08\\x0B\\x0C\\x0E-\\x1F\\x21\\x23-\\x5B\\x5D-\\x7F]|(?:\\x5C[\\x00-\\x7F]))*\\x22)))*@(?:(?:(?!.*[^.]{64,})(?:(?:(?:xn--)?[a-z0-9]+(?:-+[a-z0-9]+)*\\.){1,126}){1,}(?:(?:[a-z][a-z0-9]*)|(?:(?:xn--)[a-z0-9]+))(?:-+[a-z0-9]+)*)|(?:\\[(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){7})|(?:(?!(?:.*[a-f0-9][:\\]]){7,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?)))|(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){5}:)|(?:(?!(?:.*[a-f0-9]:){5,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3}:)?)))?(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))(?:\\.(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))){3}))\\]))$/iD';"))->then->stopAndOutput(1001,'message', 'its matches the email regex')`
+     * check if $value is matched regex eg: `->beforeCreating()->whenever(assertIt::matchesRegex("edmond@devless.io", "<email-regex-goes-here"))->then->stopAndOutput(1001,'message', 'its matches the email regex')`
      *
      * @param $value
      * @param $pattern
@@ -204,8 +204,10 @@ class Assert extends Helper
      */
     public static function notEmpty($value)
     {
-        if(is_array($value)){return (sizeof($value) != 0)?:false;}
-        if(is_string($value)){return (strlen($value) != 0)?:false;}
+        if(is_array($value)) {return (sizeof($value) != 0)?:false;
+        }
+        if(is_string($value)) {return (strlen($value) != 0)?:false;
+        }
         return false;
     }
 
@@ -260,7 +262,7 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is less than $value1 eg: `->beforeCreating()->whenever(assertIt::greaterThan(45, 12))->then->stopAndOutput(1001,'message', '45 is greater than 12')`
+     * check if $value is less than $value1 eg: `->beforeCreating()->whenever(assertIt::lessThan(12, 45))->then->stopAndOutput(1001,'message', '12 is less than 45')`
      *
      * @param $value
      * @param $value1
@@ -273,7 +275,7 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is greater than or equal to value1 eg: `->beforeCreating()->whenever(assertIt::greaterThanOrEqualTo(45, 45))->then->stopAndOutput(1001,'message', '45 is greater than or equal to 45')`
+     * check if $value is greater than or equal to $value1 eg: `->beforeCreating()->whenever(assertIt::greaterThanOrEqualTo(45, 45))->then->stopAndOutput(1001,'message', '45 is greater than or equal to 45')`
      *
      * @param $value
      * @param $value1
@@ -286,7 +288,7 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is less than or equal to value1  `->beforeCreating()->whenever(assertIt::lessThanOrEqualTo(45, 45))->then->stopAndOutput(1001,'message', '45 is less than or equal to 45')`
+     * check if $value is less than or equal to $value1  `->beforeCreating()->whenever(assertIt::lessThanOrEqualTo(45, 45))->then->stopAndOutput(1001,'message', '45 is less than or equal to 45')`
      *
      * @param $value
      * @param $value1
@@ -300,7 +302,7 @@ class Assert extends Helper
 
     public static function __callStatic($name, $arguments)
     {
-         if ($name == 'empty') {
+        if ($name == 'empty') {
             $method = '_empty';
             return call_user_func_array(array('static', $method), $args);
         }

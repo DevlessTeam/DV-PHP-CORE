@@ -16,8 +16,10 @@ trait tableMeta
      */
     public function set_table_meta($service_name, $schema)
     {
-        \DB::table('table_metas')->insert(['schema' => json_encode($schema),
-            'table_name' => $service_name.'_'.$schema['name'], 'service_id' => $schema['id'], ]);
+        \DB::table('table_metas')->insert(
+            ['schema' => json_encode($schema),
+            'table_name' => $service_name.'_'.$schema['name'], 'service_id' => $schema['id'], ]
+        );
 
         return true;
     }
@@ -32,8 +34,8 @@ trait tableMeta
      */
     public function update_table_meta($service_name, $tableName, $schema)
     {
-        if (\DB::table('table_metas')->where('table_name', $service_name.'_'.$tableName)
-            ->update(['schema' => json_encode($schema['schema']), 'table_name' => $schema['table_name']])) {
+        if (\DB::table('table_metas')->where('table_name', $service_name.'_'.$tableName)->update(['schema' => json_encode($schema['schema']), 'table_name' => $schema['table_name']])
+        ) {
             return true;
         }
 
@@ -73,10 +75,12 @@ trait tableMeta
             Helper::interrupt(600, $field['field_type'].' does not exist');
         }
         if (strtolower($field['field_type']) == 'reference') {
-            if (!\Schema::connection('DYNAMIC_DB_CONFIG')->
-            hasTable($field['ref_table'])) {
-                Helper::interrupt(601, 'referenced table '
-                    .$field['ref_table'].' does not exist');
+            if (!\Schema::connection('DYNAMIC_DB_CONFIG')->hasTable($field['ref_table'])
+            ) {
+                Helper::interrupt(
+                    601, 'referenced table '
+                    .$field['ref_table'].' does not exist'
+                );
             }
         }
     }
