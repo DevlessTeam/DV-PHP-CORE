@@ -33,21 +33,22 @@ class UserController extends Controller
 
     public function update_user(Request $request) 
     {
-        if($request->password == ''){
-            if(DB::table('users')->where('id', $request->id)
-            ->update([
+        if($request->password == '') {
+            if(DB::table('users')->where('id', $request->id)                ->update(
+                [
                 'username'      => $request->username,
                 'first_name'    => $request->first_name,
                 'last_name'     => $request->last_name,
                 'phone_number'  => $request->phone_number,
                 'email'         => $request->email,
                 'status'        => ($request->active == 'on') ? 0 : 1
-            ])) {
+                ]
+            )) {
                 return json_encode(true);
             }
         } else {
-            if(DB::table('users')->where('id', $request->id)
-            ->update([
+            if(DB::table('users')->where('id', $request->id)                ->update(
+                [
                 'username'      => $request->username,
                 'first_name'    => $request->first_name,
                 'last_name'     => $request->last_name,
@@ -55,7 +56,8 @@ class UserController extends Controller
                 'email'         => $request->email,
                 'password'      => bcrypt($request->password),
                 'status'        => ($request->active == 'on') ? 0 : 1
-            ])) {
+                ]
+            )) {
                 return json_encode(true);
             }
         }
@@ -98,9 +100,10 @@ class UserController extends Controller
         'app_token' => md5(uniqid(1, true)),
          ];
         if ($params = helper::query_string()) {
-            if (isset($params['url_install']) && isset($params['url_install']) &&
-                   isset($params['username']) && isset($params['password']) &&
-                   isset($params['app_name']) && isset($params['email']) && !(\DB::table('apps')->get())) {
+            if (isset($params['url_install']) && isset($params['url_install']) 
+                && isset($params['username']) && isset($params['password']) 
+                && isset($params['app_name']) && isset($params['email']) && !(\DB::table('apps')->get())
+            ) {
                 $username = $params['username'][0];
                 $email = $params['email'][0];
                 $password = $params['password'][0];

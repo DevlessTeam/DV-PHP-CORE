@@ -33,7 +33,8 @@ trait serviceHelper
         return $service_components;
     }
 
-    /** Get all service attributes
+    /**
+ * Get all service attributes
      * @return string
      */
     public static function get_all_services()

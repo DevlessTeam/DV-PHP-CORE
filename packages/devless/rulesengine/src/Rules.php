@@ -79,8 +79,7 @@ class Rules
 
     public function __call($method, $args)
     {
-        if(!method_exists($this, $method))
-        {
+        if(!method_exists($this, $method)) {
             $closestMethod = 
                 DevlessHelper::find_closest_word($method, get_class_methods($this));
             $failMessage = 'There is no such method `'.$method.'`';
@@ -93,7 +92,7 @@ class Rules
      * use result from previous method as a param 
      * if argument is not provided
      *
-     * @param  $args
+     * @param $args
      *
      * @return mix
      */

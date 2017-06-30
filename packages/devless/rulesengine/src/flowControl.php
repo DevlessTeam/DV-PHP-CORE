@@ -7,7 +7,7 @@ trait flowControl
     /**
      * This is the equivalence of if and is mostly used together with assertions to alter execution flows. eg beforeQuerying()->whenever(assertIts::equal($input_name, "edmond"))->then->succeedWith("yes the names are same")
      *
-     * @param  $assertion
+     * @param $assertion
      *
      * @return $this
      */
@@ -16,7 +16,8 @@ trait flowControl
         if (!$this->isCurrentDBAction) {
             return $this;
         }
-        if($this->stopAndOutputCalled){return $this;}
+        if($this->stopAndOutputCalled) {return $this;
+        }
         $this->assertion['whenever'] = $assert;
         $this->called['whenever'] = true;
         $this->execOrNot = ($assert);
@@ -26,13 +27,14 @@ trait flowControl
     /**
      * This is the equivalence of elseif and is mostly used together with assertions to alter execution flows eg.beforeQuerying()->whenever(assertIts::equal($input_name, "edmond"))->then->succeedWith("yes the names are same")->elseWhenever(assertIts::equal($input_name, "charles")))->then->succeedWith("yes the names are charles")
      *
-     * @param  $assertion
+     * @param $assertion
      *
      * @return $this
      */
     public function elseWhenever($assert)
     {
-        if(!$this->isCurrentDBAction){return $this;}   
+        if(!$this->isCurrentDBAction) {return $this;
+        }   
         if($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
             $this->execOrNot = false;
             return $this;
@@ -51,7 +53,8 @@ trait flowControl
      */
     public function otherwise()
     {
-        if(!$this->isCurrentDBAction){return $this;}   
+        if(!$this->isCurrentDBAction) {return $this;
+        }   
         if($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
             $this->execOrNot = false;
             return $this;

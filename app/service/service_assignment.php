@@ -14,11 +14,11 @@ trait service_assignment
     /**
      * assign request to a devless resource eg: db, view, script, schema, .
      *
-     * @param        $service_name
-     * @param string $resource
-     * @param array  $method          http verb
-     * @param null   $parameters
-     * @param bool   $internal_access
+     * @param $service_name
+     * @param string       $resource
+     * @param array        $method          http verb
+     * @param null         $parameters
+     * @param bool         $internal_access
      *
      * @return Response
      *
@@ -63,26 +63,26 @@ trait service_assignment
                         'params' => $parameters,
                     ];
 
-                // run script before assigning to method
-                if ( $resource != 'view' && $resource != 'rpc') {
-                    $newServiceElements = $this->before_assigning_service_action($resource, $payload);
+                    // run script before assigning to method
+                    if ($resource != 'view' && $resource != 'rpc') {
+                        $newServiceElements = $this->before_assigning_service_action($resource, $payload);
                     
-                    $resource = $newServiceElements['resource'];
-                    $payload = $newServiceElements['payload'];
+                        $resource = $newServiceElements['resource'];
+                        $payload = $newServiceElements['payload'];
 
-                }
+                    }
                 
-                //keep names of resources in the singular 
-                /**
+                    //keep names of resources in the singular 
+                    /**
                 * NB: all resource names from the frontend are converted to lower case meaning before case runs 
                 * meaning if you make a resource name uppercase within the case it will not be available outside but only useable within here . Looking @ you "endNow"
                 */
-                switch ($resource) {
+                    switch ($resource) {
                     case 'db':
                         $db = new Db();
 
                         $response = $db->access_db($payload);
-                        if ( $resource != 'view' && $resource != 'rpc') {
+                        if ($resource != 'view' && $resource != 'rpc') {
                               return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload']);
 
                         } 
@@ -110,7 +110,7 @@ trait service_assignment
                     default:
                         Helper::interrupt(605);
                         break;
-                }
+                    }
             } else {
 
                 Helper::interrupt(624);

@@ -73,7 +73,6 @@ function DvRedirect($url, $time)
 
 /**
  * Get Instance Token
- * 
  */
 function DvAppToken()
 {
@@ -83,7 +82,6 @@ function DvAppToken()
 
 /**
  * Get Instance SDK
- * 
  */
 function DvJSSDK()
 {
@@ -92,7 +90,6 @@ function DvJSSDK()
 
 /**
  * Get JS SDK URL
- * 
  */
 function DvSDKURL()
 {

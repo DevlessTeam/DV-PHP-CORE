@@ -63,17 +63,19 @@ class DatatableController extends Controller
     public function metas($table_name)
     {
         $database = \Session::get('DB_OTF');
-        $otf = new \App\Helpers\OTF([
+        $otf = new \App\Helpers\OTF(
+            [
                     'driver' => $database['driver'],
                     'host' => $database['host'],
                     'database' => $database['database'],
                     'username' => $database['username'],
                     'password' => $database['password'],
                     'port' => $database['port'],
-            ]);
+            ]
+        );
         if ($database['driver'] != null) {
             return $otf->getConnection()->getSchemaBuilder()
-                            ->getColumnListing($table_name);
+                ->getColumnListing($table_name);
         }
 
         return \DB::getSchemaBuilder()->getColumnListing($table_name);
@@ -95,14 +97,16 @@ class DatatableController extends Controller
         $database = \Session::get('DB_OTF');
 
         if ($database['driver'] != null) {
-            $otf = new \App\Helpers\OTF([
+            $otf = new \App\Helpers\OTF(
+                [
                 'driver' => $database['driver'],
                 'host' => $database['host'],
                 'database' => $database['database'],
                 'username' => $database['username'],
                 'password' => $database['password'],
                 'port' => $database['port'],
-            ]);
+                ]
+            );
 
             return $otf->getTable($name)->get();
         } elseif ($conn == 'database.sqlite3') {

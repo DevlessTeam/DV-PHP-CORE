@@ -204,8 +204,10 @@ class Assert extends Helper
      */
     public static function notEmpty($value)
     {
-        if(is_array($value)){return (sizeof($value) != 0)?:false;}
-        if(is_string($value)){return (strlen($value) != 0)?:false;}
+        if(is_array($value)) {return (sizeof($value) != 0)?:false;
+        }
+        if(is_string($value)) {return (strlen($value) != 0)?:false;
+        }
         return false;
     }
 
@@ -300,7 +302,7 @@ class Assert extends Helper
 
     public static function __callStatic($name, $arguments)
     {
-         if ($name == 'empty') {
+        if ($name == 'empty') {
             $method = '_empty';
             return call_user_func_array(array('static', $method), $args);
         }

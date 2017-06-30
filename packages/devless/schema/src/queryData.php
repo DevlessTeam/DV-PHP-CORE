@@ -27,7 +27,8 @@ trait queryData
         $related_fetch = null;
         $results = [];
         //check if table name is set
-        if (!isset($payload['params']['table'][0])){Helper::interrupt(611);}
+        if (!isset($payload['params']['table'][0])) {Helper::interrupt(611);
+        }
 
         $this->check_table_existence($service_name, $payload['params']['table'][0]);
 
@@ -49,10 +50,12 @@ trait queryData
         
         $count = $db->table($table_name)->count();
         
-        ($related_fetch)? eval('return '.$complete_query.'
+        ($related_fetch)? eval(
+            'return '.$complete_query.'
         ->chunk($count, function($results) use (&$queried_results, &$related_fetch) {
              return $queried_results = $related_fetch($results);
-        });'):eval('$queried_results = '.$complete_query.'->get();');
+        });'
+        ):eval('$queried_results = '.$complete_query.'->get();');
         
         return $this->respond_with_query_data($queried_results, $count);
         
@@ -69,7 +72,7 @@ trait queryData
         unset($payload['params']['table']);
         foreach ($payload['params'] as $param_name => $param_value) {
             
-           (!isset($this->query_params[$param_name]))?Helper::interrupt(610, "Query parameter $param_name does not exist"):'';
+            (!isset($this->query_params[$param_name]))?Helper::interrupt(610, "Query parameter $param_name does not exist"):'';
             
             $param_name = $this->query_params[$param_name];
 
@@ -83,10 +86,12 @@ trait queryData
 
     private function respond_with_query_data($results, $total_count)
     {
-        return Response::respond(625, null, [
+        return Response::respond(
+            625, null, [
             'results' => $results,
             'properties' => ['count' => $total_count, 'current_count' => count($results)]
-        ]);
+            ]
+        );
     }
 
 }

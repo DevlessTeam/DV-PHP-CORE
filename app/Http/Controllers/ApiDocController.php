@@ -19,7 +19,7 @@ class ApiDocController extends Controller
         return view('api_docs.index', compact('services', 'menuName'));
     }
 
-/**
+    /**
  *Get schema to generate request payload.
  *
  * @return Response

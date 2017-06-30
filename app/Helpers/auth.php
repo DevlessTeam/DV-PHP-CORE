@@ -64,8 +64,9 @@ trait auth
             $admin = User::where('role', 1)->first();
             $user_cred['id'] = $admin->id;
             $user_cred['token'] = 'non for admin';
-        } elseif ($user_token != null && $user_token != 'null' &&
-                ($force_auth == true || $force_auth == false)) {
+        } elseif ($user_token != null && $user_token != 'null' 
+            && ($force_auth == true || $force_auth == false)
+        ) {
             $user_data = self::verify_user_token($user_token, $force_auth);
             
             if (isset($user_data->id)) {
@@ -103,7 +104,8 @@ trait auth
         $jwt_payload = json_decode($jwt->decode($user_token, $secret, true));
         if($jwt_payload == null && $force_auth == false) {
             return (object)['id'=>'', 'session_token'=>''];
-        } elseif($force_auth == true && $jwt_payload == null){throw new \UnexpectedValueException('Passed in an invalid `devless-user-token`');}
+        } elseif($force_auth == true && $jwt_payload == null) {throw new \UnexpectedValueException('Passed in an invalid `devless-user-token`');
+        }
         if ($user_token == 'null') {
             Self::interrupt(633, null, [], true);
         }
@@ -114,7 +116,7 @@ trait auth
             $d2 = new \DateTime();
             $interval = $d1->diff($d2);
             
-            if( (int)$expire_session == 0 ){
+            if((int)$expire_session == 0 ) {
                 if ($interval->h >= $session_time || $interval->days > 0) {
                     $user_data->session_token = '';
                     $user_data->save();

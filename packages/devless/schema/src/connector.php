@@ -14,9 +14,9 @@ trait connector
      * @param $database
      * @param $username
      * @param $password
-     * @param string $charset
-     * @param string $prefix
-     * @param string $collation
+     * @param string   $charset
+     * @param string   $prefix
+     * @param string   $collation
      */
     public function db_socket(
         $driver,

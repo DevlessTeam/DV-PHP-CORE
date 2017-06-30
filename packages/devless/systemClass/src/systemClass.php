@@ -236,14 +236,13 @@ class devless
     public function getUserProfile($input)
     {
         (empty($input))? Helper::interrupt(628):false;
-        if(is_array($input)){
+        if(is_array($input)) {
             $id = $input['id'];
         } else {
             $id = $input;
         }
         $profile = DB::table('users')->where('id', $id)->get();
-        if($profile) 
-        {
+        if($profile) {
             return (array)$profile[0];
         }
         return [];
@@ -259,7 +258,8 @@ class devless
         return DB::table('users')->select(
             [
                 "id", "username", "email", "first_name", "last_name", "status"
-            ])->get();
+            ]
+        )->get();
     }
 
     /**
@@ -296,9 +296,12 @@ class devless
         $last_name = null,
         $remember_token = null,
         $status = null
-        )
-    {
-        $profileUpdate =array_filter(get_defined_vars(), function($value) { return $value !== ''; });
+    ) {
+        $profileUpdate =array_filter(
+            get_defined_vars(), function ($value) {
+                return $value !== ''; 
+            }
+        );
         unset($profileUpdate['id']);
         
         return (DB::table('users')->where('id', $id)->update($profileUpdate))?true:false;
@@ -349,6 +352,6 @@ class devless
     {
         $serviceInstance = $this;
         $actionClass = new ActionClass();
-        return $actionClass->help($serviceInstance, $methodToGetDocsFor=null);   
+        return $actionClass->help($serviceInstance, $methodToGetDocsFor = null);   
     }
 }
