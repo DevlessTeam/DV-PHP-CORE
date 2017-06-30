@@ -49,8 +49,10 @@ trait validation
             foreach ($rules as $rule) {
                 //convert each rule and re-combine
                 if (!isset(self::$validator_type[$rule])) {
-                    self::interrupt(618, 'validator type '.$rule.
-                            ' does not exist');
+                    self::interrupt(
+                        618, 'validator type '.$rule.
+                        ' does not exist'
+                    );
                 }
                 $check_against = self::$validator_type[$rule].'|';
             }
@@ -59,8 +61,10 @@ trait validation
             $check_against = strtolower($check_against);
 
             if (!isset(self::$validator_type[$check_against])) {
-                self::interrupt(618, 'validator type '.$check_against.
-                            ' does not exist');
+                self::interrupt(
+                    618, 'validator type '.$check_against.
+                    ' does not exist'
+                );
             }
             $check_against = self::$validator_type[$check_against];
         }

@@ -30,12 +30,12 @@ class DevlessHelper extends Helper
                 'success' => '#7BE454',
                 'notification' => '#736F6F',
             ];
-        (isset($custom_colors[$message_color])) ? $notification_color =
+            (isset($custom_colors[$message_color])) ? $notification_color =
             $custom_colors[$message_color]
             : $notification_color = $message_color;
 
-        session::flash('color', $notification_color);
-        session::flash('flash_message', $message);
+            session::flash('color', $notification_color);
+            session::flash('flash_message', $message);
     }
 
     /**
@@ -82,7 +82,8 @@ class DevlessHelper extends Helper
         $docComment = $property->getDocComment();
 
         $access_type = function () use ($docComment) {
-            if(self::is_admin_login()){return true;}
+            if(self::is_admin_login()) {return true;
+            }
             (strpos(($docComment), '@ACL private')) ? Helper::interrupt(627) :
                 (strpos($docComment, '@ACL protected')) ? Helper::get_authenticated_user_cred(2) :
                     (strpos($docComment, '@ACL public')) ? true : Helper::interrupt(638);

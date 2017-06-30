@@ -82,7 +82,7 @@ trait service_activity
     /**
      * check user resource  action access right eg: query db or write to table.
      *
-     * @param   $access_type
+     * @param $access_type
      *
      * @return bool
      *
@@ -105,7 +105,7 @@ trait service_activity
      * operations to execute before assigning action to resource.
      *
      * @param string $resource
-     * @param array $payload
+     * @param array  $payload
      *
      * @return array
      */
@@ -125,7 +125,7 @@ trait service_activity
      * operations to execute after resource processes order.
      *
      * @param string $resource
-     * @param array $payload
+     * @param array  $payload
      *
      * @return array
      */
@@ -145,16 +145,16 @@ trait service_activity
     /**
      * script execution engine 
      *
-     * @param string $resource
-     * @param array $payload
-     * @param bol   $internalAccess
+     * @param  string $resource
+     * @param  array  $payload
+     * @param  bol    $internalAccess
      * @return array
      */
     public function script_executioner($resource, $payload)
     {
          $output = false;
 
-         if ($resource != 'schema' ) {
+        if ($resource != 'schema' ) {
             $script = new script();
 
             $output = $script->run_script($resource, $payload);

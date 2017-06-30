@@ -12,7 +12,7 @@ class RpcController extends Controller
     /**
      * Relay rpc request to ActionClass.
      *
-     * @param  $payload
+     * @param $payload
      *
      * @return \Illuminate\Http\Response
      */

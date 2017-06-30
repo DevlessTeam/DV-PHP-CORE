@@ -85,10 +85,11 @@ class DbHandler
     {
         if(strlen($service) == 0 ) {
             $table_to_delete = $table;
-        } else { $table_to_delete = $service.'_'.$table; }
+        } else { $table_to_delete = $service.'_'.$table; 
+        }
         
-        if (!\Schema::connection('DYNAMIC_DB_CONFIG')->
-            hasTable($table_to_delete)) {
+        if (!\Schema::connection('DYNAMIC_DB_CONFIG')->hasTable($table_to_delete)
+        ) {
             Helper::interrupt(634);
         }
     }
@@ -107,10 +108,10 @@ class DbHandler
     /**
      * validate incoming  data against schema field type.
      *
-     * @param string $table_name
+     * @param string       $table_name
      * @param $service_name
      * @param $table_data
-     * @param bool $check_password
+     * @param bool         $check_password
      *
      * @return bool
      *
@@ -130,8 +131,9 @@ class DbHandler
             foreach ($field_unit as $field => $field_value) {
                 foreach ($schema['field'] as $fields) {
                     if ($fields['name'] == $field) {
-                        if ($check_password == true &&
-                            strtolower($fields['field_type']) == 'password') {
+                        if ($check_password == true 
+                            && strtolower($fields['field_type']) == 'password'
+                        ) {
                             $table_data[$count]['password'] =
                                 Helper::password_hash($table_data[$count]['password']);
                         }

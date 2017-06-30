@@ -58,7 +58,6 @@ class ServiceController extends Controller
         $is_keyword = $this->is_service_name_php_keyword($service_name);
 
         $validator = Validator::make(
-
             ['Service Name' => $service_name, 'Devless' => 'devless'],
             [
                 'Service Name' => 'required|unique:services,name|min:3|max:15|different:Devless',
@@ -228,10 +227,10 @@ class ServiceController extends Controller
     /**
      * Refer request to the right service and resource.
      *
-     * @param array  $request         request params
-     * @param        $service_name
-     * @param string $resource        resource to be accessed
-     * @param bool   $internal_access
+     * @param array        $request         request params
+     * @param $service_name
+     * @param string       $resource        resource to be accessed
+     * @param bool         $internal_access
      *
      * @return Response
      *

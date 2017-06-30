@@ -16,7 +16,7 @@ trait fillers
     }
 
     /**
-     * `then` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes. eg: `->beforeCreating()->assign("hello")->to($text)->convertToUpperCase()->reverseString()->storeAs($text)->succeedWith($text)` this can be rewritten as `beforeCreating()->assign("hello")->to($text)->convertToUpperCase()->then->reverseString()->storeAs($text)->succeedWith($text)` notice the introduction of the `then` keyword, this does not change the end results but just makes it more readable.
+     * `then` filler word like all other filler words does not come with any side effects but is used solely for readability purposes. eg: `->beforeCreating()->assign("hello")->to($text)->convertToUpperCase()->reverseString()->storeAs($text)->succeedWith($text)` this can be rewritten as `beforeCreating()->assign("hello")->to($text)->convertToUpperCase()->then->reverseString()->storeAs($text)->succeedWith($text)` notice the introduction of the `then` keyword, this does not change the end results but just makes it more readable.
      *
      * @return $this
      */
@@ -26,7 +26,7 @@ trait fillers
     }
 
     /**
-     * `firstly` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->storeAs($text)->lastly->succeedWith($text)`.
+     * `firstly` filler word like all other filler words does not come with any side effects but is used solely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->storeAs($text)->lastly->succeedWith($text)`.
      *
      * @return $this
      */
@@ -36,7 +36,7 @@ trait fillers
     }
 
     /**
-     * `secondly` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->storeAs($text)->lastly->succeedWith($text)`.
+     * `secondly` filler word like all other filler words does not come with any side effects but is used solely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->storeAs($text)->lastly->succeedWith($text)`.
      *
      * @return $this
      */
@@ -46,7 +46,7 @@ trait fillers
     }
 
     /**
-     * `thirdly` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->storeAs($text)->lastly->succeedWith($text)`.
+     * `thirdly` filler word like all other filler words does not come with any side effects but is used solely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->storeAs($text)->lastly->succeedWith($text)`.
      *
      * @return $this
      */
@@ -56,7 +56,7 @@ trait fillers
     }
 
     /**
-     * `lastly` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->storeAs($text)->lastly->succeedWith($text)`.
+     * `lastly` filler word like all other filler words does not come with any side effects but is used solely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->storeAs($text)->lastly->succeedWith($text)`.
      *
      * @return $this
      */
@@ -66,7 +66,7 @@ trait fillers
     }
 
     /**
-     * `beSureTo` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->beSureTo->storeAs($text)->lastly->succeedWith($text)`.
+     * `beSureTo` filler word like all other filler words does not come with any side effects but is used solely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->then->beSureTo->storeAs($text)->lastly->succeedWith($text)`.
      *
      * @return $this
      */
@@ -76,7 +76,7 @@ trait fillers
     }
 
     /**
-     * `next` filler word like all other filler words does not come with any side effects but is used sorely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->next->storeAs($text)->lastly->succeedWith($text)`.
+     * `next` filler word like all other filler words does not come with any side effects but is used solely for readability purposes eg: `->beforeCreating()->firstly->assign("hello")->to($text)->secondly->convertToUpperCase()->next->storeAs($text)->lastly->succeedWith($text)`.
      *
      * @return $this
      */

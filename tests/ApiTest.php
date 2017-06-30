@@ -22,19 +22,7 @@ class ApiTest extends TestCase
         $this->scriptUrl = '/script/';
     }
 
-    /**
-     * @test
-     * Temporal test for complete service creation cycle.
-     *
-     * @return void
-     */
-    public function it_should_check_Log()
-    {
-        $subUrl = $this->apiUrl;
-
-        $this->visit($subUrl . 'log')
-            ->see('no log available');
-    }
+   
     
     /**
      * @test
@@ -125,7 +113,7 @@ class ApiTest extends TestCase
         $deleteObj = json_decode($deleteStruct, true);
 
         $this->json('DELETE', $url . $serviceName . '/' . $dbAction, $deleteObj)
-            ->seeJson(['message' => 'The table or field has been delete',
+            ->seeJson(['message' => 'Data / table / field has been deleted',
                 'payload' => [], 'status_code' => 636]);
 
         $deleteStruct = '{"resource":[{"name":"' . $this->serviceTable . '","params":[{"drop":true}]}]}';

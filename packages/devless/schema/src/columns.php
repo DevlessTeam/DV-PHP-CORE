@@ -25,8 +25,8 @@ trait columns
     /**
      * generate column data query .
      *
-     * @param array  $field
-     * @param object $table
+     * @param array   $field
+     * @param object  $table
      * @param $db_type
      *
      * @return object

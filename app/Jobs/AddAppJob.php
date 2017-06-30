@@ -34,10 +34,12 @@ class AddAppJob extends Job implements SelfHandling
      */
     private function createApp()
     {
-        return App::create([
+        return App::create(
+            [
             'name' => $this->details->name,
             'description' => $this->details->description,
             'token' => $this->details->token
-        ]);
+            ]
+        );
     }
 }

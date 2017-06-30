@@ -11,7 +11,7 @@ class ActionClass
      * execute service action class
      * @param string $service
      * @param string $method
-     * @param mixed $params
+     * @param mixed  $params
      * @return mixed
      */
     public static function execute($service, $method, $params = null)
@@ -21,9 +21,11 @@ class ActionClass
                             config('devless')['views_directory'].$service.'/ActionClass.php';
 
          
-        /** @var TYPE_NAME $serviceMethodPath */
+        /**
+ * @var TYPE_NAME $serviceMethodPath 
+*/
         (file_exists($serviceMethodPath))?
-            require_once $serviceMethodPath : false;
+            include_once $serviceMethodPath : false;
         
         $serviceInstance = new $service();
         
@@ -37,7 +39,7 @@ class ActionClass
      * execute action methods from other DevLess instances
      * @param $service
      * @param $method
-     * @param null $params
+     * @param null    $params
      * @param $url
      * @param $token
      * @return mixed|string
@@ -65,13 +67,14 @@ class ActionClass
 
         $methodList = [];
         
-        $getMethodDocs = function($methodName) use($exemptedMethods, $serviceInstance) {
-            if(!in_array($methodName, $exemptedMethods)){
+        $getMethodDocs = function ($methodName) use ($exemptedMethods, $serviceInstance) {
+            if(!in_array($methodName, $exemptedMethods)) {
                 $method = new \ReflectionMethod($serviceInstance, $methodName); 
-                $methodDocs = str_replace("*/","",$method->getDocComment());
-                $methodDocs = str_replace("/**","",$methodDocs);
-                return $methodDocs = str_replace("* *","||",$methodDocs);
-            } else { return false;}
+                $methodDocs = str_replace("*/", "", $method->getDocComment());
+                $methodDocs = str_replace("/**", "", $methodDocs);
+                return $methodDocs = str_replace("* *", "||", $methodDocs);
+            } else { return false;
+            }
         };
 
         if($methodToGetDocsFor) {
@@ -82,10 +85,10 @@ class ActionClass
             }
         } else {
             foreach ($methods as $methodName) {
-              $methodDocs = $getMethodDocs($methodName);
-              if($methodDocs) {
-                $methodList[$methodName] = $methodDocs;  
-              }
+                $methodDocs = $getMethodDocs($methodName);
+                if($methodDocs) {
+                    $methodList[$methodName] = $methodDocs;  
+                }
             }
         }
         

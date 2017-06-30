@@ -128,7 +128,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Runs code attached to thie `afterDeleting()` method. This allows you to perform actions such as `afterDeleting()->whenever($rules->status_code == 636)->mutateResponseMessage("the response message has been altered")
+     * Runs code attached to the `afterDeleting()` method. This allows you to perform actions such as `afterDeleting()->whenever($rules->status_code == 636)->mutateResponseMessage("the response message has been altered")
      *
      * @return $this
      */
@@ -140,7 +140,7 @@ trait tableActions
     }
 
     /**
-     * Code attached to thie `onAmyRequest()` will run regardless of whether its a query, create delete or update action
+     * Code attached to the `onAnyRequest()` will run regardless of whether its a query, create delete or update action
      *
      * @return $this
      */

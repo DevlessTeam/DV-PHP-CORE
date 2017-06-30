@@ -32,8 +32,8 @@ class ScriptHandler
     /**
      * script execution sandbox.
      *
-     * @param       $Dvresource
-     * @param array $payload    request parameters
+     * @param $Dvresource
+     * @param array      $payload request parameters
      *
      * @return array
      *

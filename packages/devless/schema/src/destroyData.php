@@ -66,7 +66,7 @@ trait destroyData
     {
          $element = 'row';
          
-         if ($result == 0 && !$result == "null") {
+        if ($result == 0 && !$result == "null") {
             Helper::interrupt(614, 'could not '.$task.' '.$element);
         }
 

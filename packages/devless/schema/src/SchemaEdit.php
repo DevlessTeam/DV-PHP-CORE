@@ -75,24 +75,26 @@ class SchemaEdit
         $dbHandler = new DbHandler();
         $compTableName = $dbHandler->devlessTableName($serviceName, $tableName);
         $tableMeta = $dbHandler->get_tableMeta($compTableName);
-        \Schema::table($compTableName, function (Blueprint $table) use (
-            $oldName,
-            $newName,
-            $dbHandler,
-            $compTableName,
-            &$tableMeta
-) {
-            $count = 0;
-            $table->renameColumn($oldName, $newName);
-            foreach ($tableMeta['schema']['field'] as $field) {
-                if ($field['name'] == $oldName) {
-                    $tableMeta['schema']['field'][$count]['name'] = $newName;
+        \Schema::table(
+            $compTableName, function (Blueprint $table) use (
+                $oldName,
+                $newName,
+                $dbHandler,
+                $compTableName,
+                &$tableMeta
+            ) {
+                $count = 0;
+                $table->renameColumn($oldName, $newName);
+                foreach ($tableMeta['schema']['field'] as $field) {
+                    if ($field['name'] == $oldName) {
+                        $tableMeta['schema']['field'][$count]['name'] = $newName;
+                    }
+                    ++$count;
                 }
-                ++$count;
-            }
 
-            return true;
-        });
+                return true;
+            }
+        );
         $dbHandler->update_table_meta($serviceName, $tableName, $tableMeta);
 
         return false;
@@ -115,22 +117,26 @@ class SchemaEdit
         }
         $dbHandler = new DbHandler();
         $compTableName = $dbHandler->devlessTableName($serviceName, $tableName);
-        $newField = json_decode('{"name":"'.$fieldName.'","field_type":"'.$fieldType.'","ref_table":
+        $newField = json_decode(
+            '{"name":"'.$fieldName.'","field_type":"'.$fieldType.'","ref_table":
         "_devless_users","default":null,"required":false,"validation":false,
-        "is_unique":false}');
+        "is_unique":false}'
+        );
         $tableMeta = $dbHandler->get_tableMeta($compTableName);
-        \Schema::table($compTableName, function (Blueprint $table) use (
-            $fieldName,
-            $tableName,
-            $fieldType,
-            $dbHandler,
-            &$tableMeta,
-            $newField
-) {
-            $fieldType = $dbHandler->db_types[$fieldType];
-            array_push($tableMeta['schema']['field'], $newField);
-            $table->$fieldType($fieldName)->nullable();
-        });
+        \Schema::table(
+            $compTableName, function (Blueprint $table) use (
+                $fieldName,
+                $tableName,
+                $fieldType,
+                $dbHandler,
+                &$tableMeta,
+                $newField
+            ) {
+                $fieldType = $dbHandler->db_types[$fieldType];
+                array_push($tableMeta['schema']['field'], $newField);
+                $table->$fieldType($fieldName)->nullable();
+            }
+        );
         $dbHandler->update_table_meta($serviceName, $tableName, $tableMeta);
 
         return true;
@@ -153,16 +159,18 @@ class SchemaEdit
         if (!$tableMeta['schema']) {
             return false;
         }
-        \Schema::table($compTableName, function (Blueprint $table) use ($fieldName, &$tableMeta) {
-            $table->dropColumn($fieldName);
-            $count = 0;
-            foreach ($tableMeta['schema']['field'] as $field) {
-                if ($field['name'] == $fieldName) {
-                    unset($tableMeta['schema']['field'][$count]);
+        \Schema::table(
+            $compTableName, function (Blueprint $table) use ($fieldName, &$tableMeta) {
+                $table->dropColumn($fieldName);
+                $count = 0;
+                foreach ($tableMeta['schema']['field'] as $field) {
+                    if ($field['name'] == $fieldName) {
+                        unset($tableMeta['schema']['field'][$count]);
+                    }
+                    ++$count;
                 }
-                ++$count;
             }
-        });
+        );
         $dbHandler->update_table_meta($serviceName, $tableName, $tableMeta);
     }
 }
