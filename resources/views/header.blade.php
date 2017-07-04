@@ -1,3 +1,9 @@
+<?php
+use App\Helpers\DataStore;
+  $app = DataStore::instanceInfo()['app'];
+  
+ ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,25 +53,46 @@
         <a class="toggle-btn"><i class="fa fa-outdent"></i></a>
         <br>
         <button class="btn btn-sm btn-info pull-right" data-toggle="modal" data-target="#sdk-connect" style="margin-right: 20%"> <i class="fa fa-plug"></i> Connect to App</button>
-        <button class="btn btn-sm btn-warning pull-right" data-toggle="modal" data-target="#quick-guide" style="margin-right: 2%"><i class="fa fa-book"></i> Quick Guide</button>
+      <a class="btn btn-sm btn-warning pull-right" data-toggle="modal" href="https://devless.gitbooks.io/devless-docs-1-3-0/content/building-an-app-with-devless.html" target="blank" style="margin-right: 2%"><i class="fa fa-book"></i> Quick Guide</a>
         <!--toggle button end-->
       </div>
       <!-- header section end-->
-      <div class="modal fade" id="quick-guide" tabindex="-1" role="dialog" aria-labelledby="quickGuideLabel">
-       <div class="modal-dialog" role="document">
-         <div class="modal-content">
-           <div class="modal-header">
-             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-             <h4 class="modal-title" id="myModalLabel"><i class="fa fa-book"></i> Quick Guide</h4>
-           </div>
-           <div class="modal-body">
-            <ol>
-              <li><a href="{{URL('/services')}}"> Create a service</a> with the name <code>addressbook.</code><sub><a href="#"  data-toggle="tooltip" title="A Service is a lego peice that represents a part/feature. Many of these pieces come together to complete your app. EG: Image uploader, Payment Service etc." data-placement="bottom">what is a service?</a></sub></li><br>
-              <li>On the <code>addressbook</code> service page click on <button class="btn btn-info disabled"><i class="fa fa-table"> New Table</i> </button> to add a table with the <br><br>name <code>addresses</code> and fields <code>name, email, location. </code></li>
-              <br>
-              <li><a href="#" onclick="copyToBoard(document.getElementById('sample-frontend').innerHTML)">Click here </a>for sample frontend code, copy and paste in a <code>sample.html</code> file.</li>
-              <br>
-              <li><a href="{{URL('/app')}}">Head over to App Tab</a>, then click on <button class="btn btn-info disabled">Connect to my App</button> at the bottom to get the connection details.</li>
+      
+    <div class="modal fade" id="sdk-connect" tabindex="-1" role="dialog" aria-labelledby="quickGuideLabel">
+     <div class="modal-dialog" role="document">
+       <div class="modal-content">
+         <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+           <h4 class="modal-title" id="myModalLabel"><i class="fa fa-plug"></i> SDK Options</h4>
+         </div>
+         <div class="modal-body">
+
+          <ul class="nav nav-tabs" id="options-tab">
+            <li><a data-target="#web" data-toggle="tab">Web</a></li>
+            <li><a data-target="#android" data-toggle="tab">Android</a></li>
+            <li><a data-target="#raw" data-toggle="tab">Raw</a></li>
+          </ul>
+
+          <div class="tab-content">
+            <div class="tab-pane active" id="web">
+<pre><code class="language-markup"><xmp style="display: inline;">
+<script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="{{$app->token}}"></script></xmp></code>
+</pre>
+
+        </div>
+        <div class="tab-pane" id="android"><center>NA</center></div>
+        <div class="tab-pane" id="raw"><center>
+          Domain URL: {{URL::to('/')}}<br>
+          Token: {{$app->token}}
+        </center></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+@endif
+ disabled">Connect to my App</button> at the bottom to get the connection details.</li>
               <br>
               <li>Load <code>sample.html</code> in your browser of choice.</li>
             </ol>

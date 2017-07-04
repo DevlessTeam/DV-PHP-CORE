@@ -116,51 +116,6 @@ class DevlessHelper extends Helper
     }
 
     /**
-     * Get table name from payload.
-     *
-     * @param string $service_name
-     * @param string $affected_tables
-     * @param array  $accessed_table
-     * @param string $token
-     *
-     * @return Exception
-     */
-    public static function serviceAuth($service_name, $auth_table, $affected_tables, $accessed_table)
-    {
-        $headers = [];
-        foreach (getallheaders() as $header_key => $header_value) {
-            $headers[strtolower($header_key)] = $header_value;
-        }
-        $token = (isset($headers['devless-user-token'])) ? $headers['devless-user-token'] : 'NA';
-
-        $token_reference = $service_name.'_'.$auth_table.'_'.$token;
-
-        if (in_array($accessed_table, $affected_tables)) {
-            self::did_custom_login($token_reference, $token) ?: Helper::interrupt(628);
-        }
-
-        return true;
-    }
-
-    /**
-     * Check if user token is available.
-     *
-     * @param $payload
-     *
-     * @return string
-     */
-    public static function did_custom_login($toke_reference, $token)
-    {
-        $ds = new DataStore();
-
-        if ($ds->getDump($toke_reference) == $token) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Check for closest word in an array.
      *
      * @param $word
@@ -172,6 +127,53 @@ class DevlessHelper extends Helper
     {
         $best_closesness = 1;
         $closest_word = null;
+        foreach ($options as $each_option) {
+            $levenshtein_count = levenshtein($word, $each_option);
+            if ($levenshtein_count <= $best_closesness) {
+                $closest_word = $each_option;
+                $levenshtein_count = $best_closesness;
+            }
+        }
+
+        return $closest_word;
+    }
+    /**
+     * Script template generated for rules in each new service
+     * @return string
+     */
+    public static function script_template()
+    {
+        return 
+                '
+/**
+* Rules allow you to establish control over the flow of 
+* your data in and out of the database.
+* For example if you will like to change the output message 
+* your users receive after quering for data,
+* its as easy as `afterQuerying()->mutateResponseMessage("to something else")`. 
+* To view the list of callable method append ->help() to a 
+* flow statement ie ->beforeQuering()->help() and view from your app.
+**/
+ -> beforeQuerying()
+ -> beforeUpdating()
+ -> beforeDeleting()
+ -> beforeCreating()
+
+ -> onQuery()
+ -> onUpdate()
+ -> onDelete()
+ -> onCreate()
+
+ -> onAnyRequest()
+
+ -> afterQuerying()
+ -> afterUpdating()
+ -> afterDeleting()
+ -> afterCreating()
+ ';
+ 
+    }
+}
         foreach ($options as $each_option) {
             $levenshtein_count = levenshtein($word, $each_option);
             if ($levenshtein_count <= $best_closesness) {
