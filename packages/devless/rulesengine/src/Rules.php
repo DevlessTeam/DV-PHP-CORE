@@ -82,7 +82,7 @@ class Rules
         if(!method_exists($this, $method)) {
             $closestMethod = 
                 DevlessHelper::find_closest_word($method, get_class_methods($this));
-            $failMessage = 'There is no such method `'.$method.'`';
+            $failMessage = 'There is no such method `'.$method.'';
             $failMessage .= (strlen($closestMethod) > 0)? '` perharps you meant '.$closestMethod. '?' : '';
             Helper::interrupt(642, $failMessage);
         }

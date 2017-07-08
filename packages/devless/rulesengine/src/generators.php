@@ -22,7 +22,7 @@ trait generators
      * generates random alphanumeric values. This may be used for generating order Ids. eg `->beforeCreating()->generateRandomAlphanums()->storeAs($order_id)->assign($order_id)->to($input_order_id)`
      * @return $this
      */
-    public function generateRandomAlphanums()
+    public function generateRandomAlphanums($length=5)
     {
         if (!$this->execOrNot) {
             return $this;
