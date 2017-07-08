@@ -7,7 +7,7 @@ use App\Helpers\Helper;
 
 class Rules
 {
-    use fillers, tableAuth, tableActions, flowControl, actions, mathLib, stringLib, dateLib, generators, mutateResponse;
+    use fillers, tableAuth, tableActions, flowControl, actions, mathLib, stringLib, dateLib, generators, mutateResponse, getResponse;
 
     private $assertion = [
         'elseWhenever' => false,
