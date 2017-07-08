@@ -234,11 +234,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group"><label for="" class="col-sm-5 control-label"><b >Verify New Users via Email</b></label>
+                          <!--   <div class="form-group"><label for="" class="col-sm-5 control-label"><b >Verify New Users via Email</b></label>
                                 <div class="col-sm-7">
                                     <div class="radio"><label for="v_enable"><input type="radio" name="v_account" id="verify_email_true" >Yes</label><label for="v_disable"><input type="radio" checked id="verify_email_false" name="v_account">No</label></div>
                                 </div>
-                            </div>
+                            </div> -->
                         </form>
                     </div>
                     <div class="modal-footer">
