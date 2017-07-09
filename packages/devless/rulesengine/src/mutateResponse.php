@@ -1,6 +1,6 @@
 <?php
 
-namespace Devless\RUlesEngine;
+namespace Devless\RulesEngine;
 
 use App\Helpers\Helper;
 trait mutateResponse

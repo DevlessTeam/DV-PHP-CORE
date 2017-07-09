@@ -29,7 +29,8 @@ trait devlessAuth
         $existing_users = \DB::table('users')->orWhere('username', $username)->whereNotIn('username', [''])
                 ->orWhere('email', $email)->whereNotIn('email', [''])
                 ->orWhere('phone_number', $phone_number)->whereNotIn('phone_number', [''])
-                ->get();
+                ->first();
+        
         if ($existing_users != null) {
             return Helper::interrupt(644);
         }
@@ -47,11 +48,14 @@ trait devlessAuth
         ($verify_email)?$this->generate_email_verification_code($user->id):'';
 
         $user->session_token = $session_token = md5(uniqid(1, true));
-
+        
         //check if either username or email and password is set
-        if (!isset($user->password) || !(isset($user->username) || isset($user->email))) {
+        if(!(isset($user->password))){
+            if (!isset($user->username) || isset($user->email) || !isset($user->phone_number)) {
             return false;
+        }    
         }
+        
 
         if ($user->save()) {
             $token_payload =

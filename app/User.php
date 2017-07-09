@@ -30,7 +30,7 @@ class User extends Model implements
      *
      * @var array
      */
-    protected $fillable = [ 'first_name', 'last_name', 'email', 'password',
+    protected $fillable = [ 'first_name', 'last_name', 'email', 'password','phone_number',
         'role', 'status'];
 
     /**

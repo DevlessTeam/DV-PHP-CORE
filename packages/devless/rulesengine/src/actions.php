@@ -218,7 +218,7 @@ trait actions
             return $this;
         }
         $this->checkRunConstructs($this->selectedService, $this->selectedMethod);
-        (!$internalCall && empty(func_get_args()))?$this->stopAndOutput(1111, 'Rule Error', ['suggestion'=>'You will have to provide parameters eg: ->withParams("a","b")']):'';
+        (!$withoutParams && empty(func_get_args()))?$this->stopAndOutput(1111, 'Rule Error', ['suggestion'=>'You will have to provide parameters eg: ->withParams("a","b")']):'';
 
         $this->run($this->selectedService, $this->selectedMethod, func_get_args());
         return $this;

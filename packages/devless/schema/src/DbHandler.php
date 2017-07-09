@@ -90,7 +90,7 @@ class DbHandler
         
         if (!\Schema::connection('DYNAMIC_DB_CONFIG')->hasTable($table_to_delete)
         ) {
-            Helper::interrupt(634);
+            Helper::interrupt(634, 'Seems the table `'.$table.'` does not exist');
         }
     }
     /**

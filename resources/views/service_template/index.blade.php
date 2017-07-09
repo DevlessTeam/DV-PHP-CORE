@@ -1,3 +1,9 @@
+<?php 
+DvInclude($payload, 'ActionClass.php') ;
+$service = new $payload['service_name']();
+$methods = $service->help();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,62 +15,34 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
-            .full-height {
-                height: 100vh;
-            }
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-            .position-ref {
-                position: relative;
-            }
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-            .content {
-                text-align: center;
-            }
-            .title {
-                font-size: 84px;
-            }
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="<?=DvAssetPath($payload, 'css/style.css')?>">
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            <div class="content">
-                <div class="title m-b-md">
-                    DevLess
-                </div>
-                <i>An Admin Builder is coming soon ...</i>   
-                
-            </div>
-        </div>
+    <div class="center-title"><h1>{{$payload['service_name']}}  Docs</h1></div>
+    <div class="center-title"><b> The {{$payload['service_name']}} service  provides a list of methods you can call within the Rules section of each service or even try using them via the <a href="https://devless.gitbooks.io/devless-docs-1-3-0/content/sdks.html">SDKs</a></b><p>Example usage in Service Rules <code>->UsingService('{{$payload['service_name']}}')->callMethod('help')->withoutParams()->storeAs($output)->stopAndOutput(1000, 'list out help methods', $output)</code></p></div>
+    <div class="push-down"></div>
+     <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Callable methods</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+  <?php $count = 0; ?>
+  @foreach ($methods[2] as $method => $description)
+    
+    <tr>
+      <th scope="row">{{$count}}</th>
+      <td><b>{{$method}}</b></td>
+      <td><code>{{$description}}</code></td>
+    </tr>
+  <?php $count++; ?>
+  @endforeach
+    
+  </tbody>
+</table>
     </body>
 </html>

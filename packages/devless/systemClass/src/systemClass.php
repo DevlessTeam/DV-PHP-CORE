@@ -52,7 +52,7 @@ class devless
     ) {
     
         $payload = get_defined_vars();
-       
+        
         $payload = self::getSetParams($payload);
        
         $auth = $this->auth;
