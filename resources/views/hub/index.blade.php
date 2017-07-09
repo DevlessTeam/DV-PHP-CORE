@@ -5,9 +5,10 @@
 <div class="page-head">
     <h3>Hub</h3>
     <span class="sub-title">Hub/</span>
-   <!--  <form method="post" action="index.html" class="search-content">
+     <form method="post" action="index.html" class="search-content">
         <input type="text" placeholder="Search module or service..." name="keyword" class="form-control">
-     </form>-->
+     </form>
+
 </div>
 <!-- page head end-->
 
@@ -25,7 +26,7 @@
           <div class="plugin-card-top">
             <div class="name column-name">
               <h3>
-                <a href="#" data-toggle="modal" data-target="#service-desc">
+                <a href="{{$service['serviceRepo']}}" target="blank">
                     <!--src="{{$service['img']}}"--> 
                     {{$service['name']}}<img width="3" class="plugin-icon img-responsive" src="{{$service['img']}}" alt="N/A">
                 </a>
@@ -33,16 +34,16 @@
             </div>
             <div class="desc column-description">
               <p>{{$service['desc']}} </p>
-              <a href="#" data-toggle="modal" data-target="#service-desc">More Details</a>
+             <!--  <a href="#" data-toggle="modal" data-target="#service-desc">More Details</a>-->
             </div>
           </div>
           <div class="plugin-card-bottom">
             <div class="column-updated">
-                <button class="btn btn-primary"  onclick="install('{{$service['url']}}', '{{$service['name']}}')"><span id="{{$service['name']}}">Install</span></button>
-              <a class="btn btn-success" type="button" href="{{$service['url']}}">Download</a>
+                <button class="btn btn-primary"  onclick="install('{{$service['url']}}', '{{$service['name']}}', '<?=urlencode(implode(',',$service['dep']))?>')"><span id="{{$service['name']}}">Install::Update</span></button>
+              <a class="btn btn-success" type="button" href="{{$service['url']}}"><i class="fa fa-cloud-download"></i></a>
             </div>
             <div class="column-downloaded">
-              <p class="authors"><cite>By <a href="#">{{$service['author']}}</a></cite></p>
+              <p class="authors"><cite>By <a href="{{$service['authorLink']}}" target="blank">{{$service['author']}}</a></cite></p>
             </div>
           </div>
         </div>  
@@ -55,9 +56,9 @@
     </div>
 </div><!--body wrapper end-->
 <script>
-            function install(url, service_name) {
+            function install(url, service_name, dep) {
                    $('#'+service_name).html('...');
-                   httpGetAsync("{{url('/')}}"+'/install_service?url='+url, function(output){
+                   httpGetAsync("{{url('/')}}"+'/install_service?url='+url+'&dep='+dep, function(output){
                        console.log(output);
                    state = JSON.parse(output);
                    if(state.status == "true"){
@@ -71,7 +72,7 @@
                           $('#notif').modal('hide');
                       },3000)
                       
-                       $('#'+service_name).html('Installed').closest('button').attr('disabled', 'true');
+                       $('#'+service_name).html('Failed :(').closest('button')
                    }
                })
            }
@@ -90,15 +91,15 @@
 <div class="modal fade" id="notif" tabindex="-1" role="dialog" 
    aria-labelledby="myModalLabel" aria-hidden="true" >
    <div class="modal-dialog" style="width:250px;height:3%;">
-      <div class="modal-content" style="background-color:#7BE454;">
+      <div class="modal-content" style="background-color:#EA7878">
         
          <div class="modal-body">
             <div id="left">
       <div>
           <center><p style="font-weight:bold;"><font color="white">
-           <i class="fa fa-bell-o fa-2x"></i> <br>Service already installed. <br>
-            Check services menu <br>
-           If service not installed, Please Try again.</font></p>
+           <i class="fa fa-bell-o fa-2x"></i> <br>Service could not be installed. <br>
+           Make sure you have internet connection
+            </font></p>
     </center>
    
          </div>

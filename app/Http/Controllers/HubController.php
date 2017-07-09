@@ -23,7 +23,19 @@ class HubController extends Controller
 
     public function get_service(Request $request)
     {
-        $url = $request['url'];
+        $main_url  = $request['url'];
+        $urls = explode(',',$request['dep']);
+        array_push($urls, $main_url);
+        foreach( $urls as $url ){
+            if(strlen($url)>0){
+               $status = $this->install_service($url);           
+            }
+        }
+        return ($status) ? ['status' => 'true'] : ['status' => 'false'];
+    }
+
+    public function install_service($url)
+    {
         $parsed_url = parse_url($url);
         $paths = explode('/', $parsed_url['path']);
         $service_name = end($paths);
@@ -37,9 +49,9 @@ class HubController extends Controller
             $payload['serviceName'] = $service_name_only;
             DLH::execOnServiceStar($payload);
 
-            return ($status) ? ['status' => 'true'] : ['status' => 'false'];
+            return $status;
         } else {
-            return ['status' => 'false'];
+            return false;
         }
     }
 }
