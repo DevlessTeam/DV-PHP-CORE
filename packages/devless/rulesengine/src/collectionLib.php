@@ -22,12 +22,19 @@ trait collectionLib
             return $this;
         }
 
-        
-		 $this->results = collect($this->results)->where($key, $value)->all();
-
-
-       
-
+        if($this->isAssoc($this->results)){
+        	$this->results = collect($this->results)->where($key, $value)->all();
+		} else {
+			$newArray = [];
+			foreach($this->results as $singleObj){
+				if($singleObj->$key == $value)
+				{
+					$newArray[] = (array)$singleObj;
+				}
+			
+			}
+			$this->results = $newArray;
+		}
         return $this;
 
 	}
@@ -50,6 +57,7 @@ trait collectionLib
         return $this;
 
 	}
+
 
 	public function isAssoc(array $arr)
 	{
