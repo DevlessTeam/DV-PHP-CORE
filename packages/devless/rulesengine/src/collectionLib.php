@@ -27,7 +27,7 @@ trait collectionLib
 		} else {
 			$newArray = [];
 			foreach($this->results as $singleObj){
-				if($singleObj->$key == $value)
+				if($singleObj->$key == $key)
 				{
 					$newArray[] = (array)$singleObj;
 				}
