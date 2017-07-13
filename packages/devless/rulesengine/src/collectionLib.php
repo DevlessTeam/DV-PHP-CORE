@@ -11,8 +11,9 @@ trait collectionLib
 		if (!$this->execOrNot) {
             return $this;
         }
-
-        $this->results = $collection;
+        $arr = [];
+        $arr = $this->objToArray($collection, $arr);
+        $this->results = $arr;
         return $this;
 	}
 
@@ -21,20 +22,9 @@ trait collectionLib
 		if (!$this->execOrNot) {
             return $this;
         }
-
-        if($this->isAssoc($this->results)){
-        	$this->results = collect($this->results)->where($key, $value)->all();
-		} else {
-			$newArray = [];
-			foreach($this->results as $singleObj){
-				if($singleObj->$key == $key)
-				{
-					$newArray[] = (array)$singleObj;
-				}
-			
-			}
-			$this->results = $newArray;
-		}
+    
+   		$this->results = collect($this->results)->where($key, $value)->all();
+		
         return $this;
 
 	}
@@ -44,16 +34,8 @@ trait collectionLib
 		if (!$this->execOrNot) {
             return $this;
         }
-        if($this->isAssoc($this->results)){
-        	$this->results = collect($this->results)->only($keys)->all();
-		} else {
-			$newArray = [];
-			foreach($this->results as $singleObj){
-				$newArray[] = collect( (array)$singleObj )
-				->only($keys)->all();
-			}
-			$this->results = $newArray;
-		}
+        $this->results = array_column($this->results, 'email');
+	
         return $this;
 
 	}
@@ -69,6 +51,27 @@ trait collectionLib
 	    return array_keys($arr) !== range(0, count($arr) - 1);
 	}
 
+	public function objToArray($obj, &$arr){
+
+	    if(!is_object($obj) && !is_array($obj)){
+	        $arr = $obj;
+	        return $arr;
+	    }
+
+	    foreach ($obj as $key => $value)
+	    {
+	        if (!empty($value))
+	        {
+	            $arr[$key] = array();
+	            $this->objToArray($value, $arr[$key]);
+	        }
+	        else
+	        {
+	            $arr[$key] = $value;
+	        }
+	    }
+	    return $arr;
+	}
 		
 }
 
