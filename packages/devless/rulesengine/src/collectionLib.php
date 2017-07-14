@@ -76,5 +76,36 @@ trait collectionLib
 }
 
 
+//withTheCollection()
 
-
+//removeAllcollectionKeys =>flatten
+//removeAllCollectionValues
+//getElementWithPair() =>
+//countElementsInCollection
+//findTheDifferenceBetweenCollections()
+//removeTheKeys()
+//first, second , last, third nth()
+//forEachValue('ConvertTOUpperCase')
+//forEachValueWithKey('ConvertTOUpperCase', 'names')
+//SwitchKeyValuePosition()
+//groupBy
+//joinAll('products', '-')
+//isEmpty
+//isNotEmpty 
+//findTheMax()
+//findTheMin()
+//findTheMode()
+//appendTheCollection()
+//prependTheCollection()
+//removeTheLastElement()
+//randomizeTheCollection()
+//reverseCollection()
+//mergeValuesWithTheMatchingKey('name', 'edmond')
+//sortBy
+//offsetCollection
+//getAnNmberOfThe()
+//partitionCollection
+//SumUpCollectionAtKey()/
+//returnUnqiueValueBasedonTheKey()
+//whereIn()
+//WhereNotIn

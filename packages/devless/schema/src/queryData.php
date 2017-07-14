@@ -35,12 +35,12 @@ trait queryData
         $table_name = $this->devlessTableName($service_name, $payload['params']['table'][0]);
 
         $base_query = '$db->table("'.$table_name.'")';
-
+        $complete_query = $base_query;
          ($payload['user_id'] !== '') ?
         $complete_query = $base_query.'->where("devless_user_id",'.$payload['user_id'].')' : ''; 
 
         $complete_query = $this->set_query_options(
-            $base_query,
+            $complete_query,
             $payload,
             $table_name,
             $size_count,
@@ -56,7 +56,7 @@ trait queryData
              return $queried_results = $related_fetch($results);
         });'
         ):eval('$queried_results = '.$complete_query.'->get();');
-        
+        $queried_results = (is_null($queried_results))?[]:$queried_results;
         return $this->respond_with_query_data($queried_results, $count);
         
     }
