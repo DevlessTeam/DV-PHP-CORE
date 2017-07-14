@@ -11,8 +11,9 @@ trait collectionLib
 		if (!$this->execOrNot) {
             return $this;
         }
-
-        $this->results = $collection;
+        $arr = [];
+        $arr = $this->objToArray($collection, $arr);
+        $this->results = $arr;
         return $this;
 	}
 
@@ -21,13 +22,9 @@ trait collectionLib
 		if (!$this->execOrNot) {
             return $this;
         }
-
-        
-		 $this->results = collect($this->results)->where($key, $value)->all();
-
-
-       
-
+    
+   		$this->results = collect($this->results)->where($key, $value)->all();
+		
         return $this;
 
 	}
@@ -37,19 +34,12 @@ trait collectionLib
 		if (!$this->execOrNot) {
             return $this;
         }
-        if($this->isAssoc($this->results)){
-        	$this->results = collect($this->results)->only($keys)->all();
-		} else {
-			$newArray = [];
-			foreach($this->results as $singleObj){
-				$newArray[] = collect( (array)$singleObj )
-				->only($keys)->all();
-			}
-			$this->results = $newArray;
-		}
+        $this->results = array_column($this->results, 'email');
+	
         return $this;
 
 	}
+
 
 	public function isAssoc(array $arr)
 	{
@@ -61,9 +51,61 @@ trait collectionLib
 	    return array_keys($arr) !== range(0, count($arr) - 1);
 	}
 
+	public function objToArray($obj, &$arr){
+
+	    if(!is_object($obj) && !is_array($obj)){
+	        $arr = $obj;
+	        return $arr;
+	    }
+
+	    foreach ($obj as $key => $value)
+	    {
+	        if (!empty($value))
+	        {
+	            $arr[$key] = array();
+	            $this->objToArray($value, $arr[$key]);
+	        }
+	        else
+	        {
+	            $arr[$key] = $value;
+	        }
+	    }
+	    return $arr;
+	}
 		
 }
 
 
+//withTheCollection()
 
-
+//removeAllcollectionKeys =>flatten
+//removeAllCollectionValues
+//getElementWithPair() =>
+//countElementsInCollection
+//findTheDifferenceBetweenCollections()
+//removeTheKeys()
+//first, second , last, third nth()
+//forEachValue('ConvertTOUpperCase')
+//forEachValueWithKey('ConvertTOUpperCase', 'names')
+//SwitchKeyValuePosition()
+//groupBy
+//joinAll('products', '-')
+//isEmpty
+//isNotEmpty 
+//findTheMax()
+//findTheMin()
+//findTheMode()
+//appendTheCollection()
+//prependTheCollection()
+//removeTheLastElement()
+//randomizeTheCollection()
+//reverseCollection()
+//mergeValuesWithTheMatchingKey('name', 'edmond')
+//sortBy
+//offsetCollection
+//getAnNmberOfThe()
+//partitionCollection
+//SumUpCollectionAtKey()/
+//returnUnqiueValueBasedonTheKey()
+//whereIn()
+//WhereNotIn
