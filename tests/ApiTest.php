@@ -99,7 +99,7 @@ class ApiTest extends TestCase
         $schemaObj = json_decode($schemaStruct, true);
         $this->json('POST', $url . $serviceName . '/' . $dbAction, $schemaObj)
             ->seeJson(['message' => 'Data has been added to serviceTable table successfully',
-                'payload' => [], 'status_code' => 609,]);
+                'payload'=>['entry_id' => 1], 'status_code' => 609,]);
 
 
         $url = $this->subUrl;
