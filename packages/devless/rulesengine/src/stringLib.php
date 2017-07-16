@@ -65,6 +65,16 @@ trait stringLib
         return $this;
     }
 
+    public function getCharacter($nth, $string=null)
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        $string = $this->useArgsOrPrevOutput($string);
+        $this->results = $string[$nth];
+        return $this;
+    }
+
     /**
      * Get last character character eg: `->beforeCreating()->getLastCharacter("Hello")->storeAs($last_char)->succeedWith($last_char)`
      * @param $string
