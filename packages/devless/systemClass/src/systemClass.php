@@ -194,6 +194,9 @@ class devless
             ->where($whereKey, $whereValue): DS::service($serviceName, $table, $service);
 
         $output = $queryBuilder->related('*')->queryData();
+        if(isset($output['payload']['results'])){
+            return $output['payload']['results'];
+        }
         return $output;
 
     }

@@ -302,7 +302,7 @@
                                     <th>#</th>
                                     <th>Table Name</th>
                                     <th>Description</th>
-                                    <th>Fields</th>
+                                    <th>Fields</th>`
 
                                     <th class="text-center">Options</th>
                                 </tr>

@@ -35,6 +35,7 @@ trait collectionLib
             return $this;
         }
 		$this->results = (is_array($this->results[0]))?$this->results[0]:$this->results;
+		
 		$this->results = collect($this->results)->flip()->flatten()->toArray();
 		return $this;	
 	}
@@ -90,14 +91,25 @@ trait collectionLib
 	
         return $this;
 	}
-	// public function forEachElement($key, $method, [])
-	// {
-	// 	if (!$this->execOrNot) {
- //            return $this;
- //        }
-        
-	// 	return $this;
-	// }
+
+	public function onTheCollectionApplyMethod($method, $key=null)
+	{
+		if (!$this->execOrNot) {
+            return $this;
+        }
+        $params = func_get_args();
+        unset($params[0], $params[1]);
+        dd($params);
+        $input = $this->results;
+        for($i=0; $i < count($input); $i++){
+     		$this->$method($input[$i]->$key);
+     		$mutatedValue = $this->results;
+     		$input[$i]->$key = $mutatedValue;
+     	}
+     	$this->results = $input;
+		return $this;
+	}
+
 	public function isAssoc(array $arr)
 	{
 		if (!$this->execOrNot) {
