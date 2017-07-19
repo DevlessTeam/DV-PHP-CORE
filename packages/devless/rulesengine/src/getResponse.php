@@ -78,7 +78,12 @@ trait getResponse {
             $payload = $this->payload;
             return $this;
         }
-        $this->results = $this->payload;
+        if(isset($this->payload['results'])){
+            $this->results = $this->payload['results'];
+        } else{
+            $this->results = $this->payload;
+        }
+        
         return $this;
     }
 

@@ -41,13 +41,39 @@
             _jql('.dv-notify-success').each(function() {
                 this.style.display = 'block';
             })
+            _jql('.dv-notify-failed').each(function() {
+                this.style.display = 'none';
+            })
         } else if(status == 0 ) {
             _jql('.dv-notify-failed').each(function() {
                 this.style.display = 'block';
             })
+
+            _jql('.dv-notify-success').each(function() {
+                this.style.display = 'none';
+            })
         }
     }
+    devless_main.processing = function() {
+    	_jql('.dv-processing').each(function() {
+    		this.style.display = 'block';
+    	})
 
+    	_jql('.dv-doneProcessing').each(function() {
+    		this.style.display = 'none';
+    	})
+    	
+    }
+
+    devless_main.doneProcessing = function() {
+    	_jql('.dv-processing').each(function() {
+    		this.style.display = 'none';
+    	})
+
+    	_jql('.dv-doneProcessing').each(function() {
+    		this.style.display = 'block';
+    	})
+    }
     devless_main.coreLib.getParams = function(sParam) {
         var sPageURL = decodeURIComponent(window.location.search.substring(1)),
             sURLVariables = sPageURL.split('&'),
@@ -132,6 +158,7 @@
         var numFields = 0;
         _jql( reference ).submit(function( event ) {
             event.preventDefault();
+            devless_main.processing();
             var inputs = this.elements;
             var numFields = '';
             _jql.each(inputs, function(index, element){
@@ -144,6 +171,7 @@
                         numFields++;
                     }, false)
                     reader.onerror = function(e) {
+                    	devless_main.doneProcessing();
                         devless_main.coreLib.notify(e,0);
                     };
                     reader.readAsDataURL(element.files[0]);
@@ -155,7 +183,6 @@
             });
             formCallback = function(){
             	_jql.each(inputs, function(index, element){
-            		console.log(devless_main.generalErrorState);
             		if(devless_main.generalErrorState == 1){
             			element.value = '';	
             		}
@@ -163,11 +190,13 @@
             	})
             }
             if(numFields == inputs.length-1){
+            	devless_main.doneProcessing();
                 callback(data, formCallback);
             } else {
                 var intvl = setInterval(function() {
                     if (numFields == inputs.length-1) {
                         clearInterval(intvl);
+                        devless_main.doneProcessing();
                         callback(data, formCallback);
                     }
                 }, 1);
@@ -265,6 +294,8 @@
     scriptEngine.notify = function(message) {
         return this;
     }
+    scriptEngine.processing = function() {return this;}
+    scriptEngine.doneProcessing = function() {return this;}
     scriptEngine.success = function() { return this;}
     scriptEngine.failed = function() { return this;}
     scriptEngine.bindToDelete = function(template, id, service, table) {
@@ -313,9 +344,11 @@
     }
     scriptEngine.oneto = function(service, table) {
         persist = function(storeData, callback) {
+        	devless_main.processing();
             SDK.addData(service, table, storeData, function(response){
                 (response.status_code == 609)?devless_main.coreLib.notify(response.message,1):
                     devless_main.coreLib.notify(response.message,0);
+                    devless_main.doneProcessing();
                     callback();
                  //devless_main.init();
             })
@@ -360,8 +393,10 @@
     scriptEngine.oneof = function( service, table ) {
         update = function( data, callback ) {
             if( data.id == undefined ) { throw " id could not be found in the form. Try adding <input type=\"hidden\" name=\"id\" /> to the update form " }
+            devless_main.processing();
             SDK.updateData( service, table,"id", data.id, data, function( response ) {
                 (response.status_code == 619)?devless_main.coreLib.notify(response.message,1):
+                    devless_main.doneProcessing();
                     devless_main.coreLib.notify(response.message,0);
                 callback()   
                 devless_main.init();
@@ -387,18 +422,19 @@
         var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
         actionUrl = (actionUrl != undefined)? actionUrl: '#';
         register = function(record, callback) {
+        	devless_main.processing();
             SDK.call('devless', 'signUp', [ record['email'], record['password'], record['username'], record['phonenumber'],
                 record['firstname'], record['lastname'] ], function(response){
-                if( response.payload.result.message == undefined ) {
+                if( response.payload.result['token'] != undefined ) {
                     SDK.setToken(response.payload.result['token']);
-                    devless_main.coreLib.notify("signup was successful");
-                    devless_main.coreLib.notify(response.message,1);
+                    devless_main.doneProcessing();
+                    devless_main.coreLib.notify("Sign up successfully",1);
                     if(actionUrl != '#') {
                     	window.location.href = window.location.origin + '/' + actionUrl;
                     }
                 } else {
-                    devless_main.coreLib.notify(response.payload.result.message)
-                    devless_main.coreLib.notify(response.message,0);
+                	devless_main.doneProcessing();
+                    devless_main.coreLib.notify("Signup Failed",0);
                 }
                 callback();
             });
@@ -410,18 +446,19 @@
         var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
         actionUrl = (actionUrl != undefined)? actionUrl: '#';
         login = function(record, callback) {
+        	devless_main.processing();
             SDK.call('devless', 'login', [record['username'], record['email'], record['phonenumber'],
                 record['password']], function(response){
                 if(response.payload.result !== false) {
                     SDK.setToken(response.payload.result['token']);
-                    devless_main.coreLib.notify("Log in successfully");
-                    //devless_main.coreLib.notify(response.message,1);
+                    devless_main.doneProcessing();
+                    devless_main.coreLib.notify("Log in successfully",1);
                     if(actionUrl != '#') {
                     	window.location.href = window.location.origin + '/' + actionUrl;
                     }
                 } else{
-                    devless_main.coreLib.notify("Login failed");
-                   //devless_main.coreLib.notify(response.message,0);
+                	devless_main.doneProcessing();
+                    devless_main.coreLib.notify("Login failed",0);
                 }
                 callback();
             });
@@ -430,8 +467,10 @@
     }
     scriptEngine.profile = function() {
         var component = devless_main.singleCourier;
+        devless_main.processing();
         SDK.call('devless', 'profile', [], function(response){
             if(response.payload.error) {
+            	devless_main.doneProcessing();
                 devless_main.coreLib.notify(response.payload.error.message);
             } else {
                 data = response.payload.result;
@@ -442,6 +481,7 @@
                 delete(data.last_name);
                 delete(data.phone_number);
                 devless_main.coreLib.render(component, [data])
+                devless_main.doneProcessing();
             }
         })
     }
@@ -450,6 +490,7 @@
         var component = devless_main.singleCourier;
         var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
         actionUrl = (actionUrl != undefined)? actionUrl: '#';
+        devless_main.processing();
         SDK.call('devless', 'profile', [], function(response){
             if(response.payload.error) {
                 devless_main.coreLib.notify(response.payload.error.message);
@@ -463,16 +504,20 @@
                 delete(data.phone_number);
                 scriptEngine.populateForm(component,
                     data);
+                devless_main.doneProcessing();
             }
         })
 
         var updateScript = function(record, callback) {
+        	devless_main.processing();
             SDK.call('devless', 'updateProfile', [ record['email'], record['password'], record['username'], record['phonenumber'],
                 record['firstname'], record['lastname'] ], function(response){
                 if(response.payload.result == true ) {
+                	devless_main.doneProcessing();
                     devless_main.coreLib.notify('Profile updated successfully');
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else {
+                	devless_main.doneProcessing();
                     devless_main.coreLib.notify('Profile could not be updated');
                 }
                 callback();
@@ -488,12 +533,10 @@
             actionUrl = (actionUrl != undefined)? actionUrl: '#';
             SDK.call('devless', 'logout', [], function(response){
                 if(response.payload.result == true) {
-                    devless_main.coreLib.notify('Logout was successful')
-                    devless_main.coreLib.notify(response.message,1);
+                    devless_main.coreLib.notify('Logout successfully',1)
                     window.location.href = window.location.origin + '/' + actionUrl;
                 } else {
-                    devless_main.coreLib.notify('Sorry could not log you out')
-                    devless_main.coreLib.notify(response.message,0);
+                    devless_main.coreLib.notify('Could not log you out',0);
                 }
             })
         }
@@ -544,15 +587,14 @@
     	window.initialRender = false;
 
     }
-    _jql('.dv-notify-success').each(function() {
-        this.style.display = 'none';
-    })
-    _jql('.dv-notify-failed').each(function() {
-        this.style.display = 'none';
-    })
-    _jql('.dv-notify').each(function() {
-        this.style.display = 'none';
-    })
+
+    var notifClasses = ['.dv-notify-success', '.dv-notify-failed', '.dv-notify', 
+    '.dv-processing', '.dv-doneProcessing'];    
+    for(var i =0; i< notifClasses.length; i++){
+    	_jql(notifClasses[i]).each(function() {
+        	this.style.display = 'none';
+    	})	
+    }
     window.initialRender = true;
     devless_main.init();
     
