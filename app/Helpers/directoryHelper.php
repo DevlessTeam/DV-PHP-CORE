@@ -3,7 +3,7 @@
 namespace App\Helpers;
 
 use Alchemy\Zippy\Zippy;
-
+use App\Http\Controllers\ViewController as views;
 
 trait directoryHelper
 {
@@ -207,7 +207,15 @@ trait directoryHelper
      */
     public static function recurse_copy($src, $dst)
     {
-        $dir = opendir($src);
+        if(!file_exists($src)){
+             $views = new views();
+             $split_string = explode("/", $src);
+             $service_name = $split_string[count($split_string)-1];
+             $views->create_views($service_name, 'init');
+             $dir = opendir($src);
+        } else {
+            $dir = opendir($src);
+        }
         @mkdir($dst);
         while (false !== ($file = readdir($dir))) {
             if (($file != '.') && ($file != '..')) {

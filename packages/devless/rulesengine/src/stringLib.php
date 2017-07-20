@@ -76,7 +76,7 @@ trait stringLib
     }
 
     /**
-     * Get last character character eg: `->beforeCreating()->getLastCharacter("Hello")->storeAs($last_char)->succeedWith($last_char)`
+     * Get last character eg: `->beforeCreating()->getLastCharacter("Hello")->storeAs($last_char)->succeedWith($last_char)`
      * @param $string
      * @return $this
      * */
