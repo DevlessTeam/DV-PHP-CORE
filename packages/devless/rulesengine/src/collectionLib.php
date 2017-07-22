@@ -118,7 +118,7 @@ trait collectionLib
 		
 		foreach ($items as $key => $value) {
 			extract($variables);
-			eval('$this->'.$script.';return $this->results;');
+			eval('$this->'.$script.';');
 
 		}
 		$this->results = $items;
