@@ -369,16 +369,16 @@ trait actions
          * @param $expression 
          * @return $this
          */
-    public function evaluate($expression)
+    public function evaluate($expression, $variables=[])
     {
         if (!$this->execOrNot) {
             return $this;
         }
-
-        $variable_pairs = func_get_args()[1];
-        extract($variable_pairs);
-
-        $this->results = eval('return '.$expression.';');
+        extract($variables);
+        $code = <<<EOT
+$expression
+EOT;
+        $this->results = eval('return '.$code.';');
         return $this;
     }
 

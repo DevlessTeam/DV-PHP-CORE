@@ -99,15 +99,32 @@ trait collectionLib
         }
         $params = func_get_args();
         unset($params[0], $params[1]);
-        dd($params);
         $input = $this->results;
         for($i=0; $i < count($input); $i++){
-     		$this->$method($input[$i]->$key);
+        	$this->$method($input[$i][$key]);
      		$mutatedValue = $this->results;
-     		$input[$i]->$key = $mutatedValue;
+     		$input[$i][$key] = $mutatedValue;
      	}
      	$this->results = $input;
 		return $this;
+	}
+
+	public function forEachOneIn($items, $script, $variables=[])
+	{
+
+		if (!$this->execOrNot) {
+            return $this;
+        }
+		
+		foreach ($items as $key => $value) {
+			extract($variables);
+			eval('$this->'.$script.';return $this->results;');
+
+		}
+		$this->results = $items;
+		$this->execOrNot = true;
+		return $this;
+
 	}
 
 	public function isAssoc(array $arr)
