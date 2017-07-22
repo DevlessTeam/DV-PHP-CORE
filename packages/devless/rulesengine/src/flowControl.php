@@ -25,7 +25,7 @@ trait flowControl
         return $this;
     }
     /**
-     * This is the equivalence of elseif and is mostly used together with assertions to alter execution flows eg.beforeQuerying()->whenever(assertIts::equal($input_name, "edmond"))->then->succeedWith("yes the names are same")->elseWhenever(assertIts::equal($input_name, "charles")))->then->succeedWith("yes the names are charles")
+     * This is the equivalence of elseif and is mostly used together with assertions to alter execution flows eg.beforeQuerying()->whenever(assertIts::equal($input_name, "edmond"))->then->succeedWith("yes the names are same")->elseWhenever(assertIts::equal($input_name, "charles")))->then->succeedWith("yes the name is charles")
      *
      * @param $assertion
      *

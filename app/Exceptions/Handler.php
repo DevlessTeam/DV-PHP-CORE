@@ -2,11 +2,12 @@
 
 namespace App\Exceptions;
 
-use App\Helpers\Response as Response;
 use Exception;
+use App\Helpers\Response as Response;
+use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
@@ -52,6 +53,9 @@ class Handler extends ExceptionHandler
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         } elseif ($e instanceof HttpException) {
+            if($e->getStatusCode() == 404){
+                Helper::interrupt(647);
+            }
             if ($e->getTrace()[0]['function'] == 'interrupt') {
                 $statusCode = $e->getTrace()[0]['args'][0];
             }
@@ -65,3 +69,4 @@ class Handler extends ExceptionHandler
         return response()->json($response);
     }
 }
+

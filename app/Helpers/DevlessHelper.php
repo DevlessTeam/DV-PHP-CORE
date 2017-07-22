@@ -146,6 +146,7 @@ class DevlessHelper extends Helper
         return 
                 '
 /**
+* <?
 * Rules allow you to establish control over the flow of 
 * your data in and out of the database.
 * For example if you will like to change the output message 

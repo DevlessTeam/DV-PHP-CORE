@@ -66,6 +66,7 @@ trait messageStack
         644 => 'Seems user already exist',
         645 => 'Sorry but you are not logged in as Admin',
         646 => 'Seems your query params is malformed',
+        647 => 'Seems there is no such route/endpoint. Please check your urls',
         700 => 'Internal system error',
     ];
 }
