@@ -65,6 +65,12 @@ trait stringLib
         return $this;
     }
 
+    /**
+     * Get nth character eg: `->beforeCreating()->getCharacter(5, "Hello")->storeAs($nth_char)->succeedWith($nth_char)`
+     * @param $nth integer
+     * @param $string
+     * @return $this
+     * */
     public function getCharacter($nth, $string=null)
     {
         if (!$this->execOrNot) {
