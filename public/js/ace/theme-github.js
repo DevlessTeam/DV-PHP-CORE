@@ -23,10 +23,10 @@ color: black;\
 color: rgb(191, 191, 191);\
 }\
 .ace-chrome .ace_constant.ace_buildin {\
-color: rgb(88, 72, 246);\
+color: red;\
 }\
 .ace-chrome .ace_constant.ace_language {\
-color: rgb(88, 92, 246);\
+color: #1b20ce;\
 }\
 .ace-chrome .ace_constant.ace_library {\
 color: rgb(6, 150, 14);\
@@ -50,31 +50,33 @@ color: rgb(109, 121, 222);\
 }\
 .ace-chrome .ace_variable.ace_parameter {\
 font-style:italic;\
-color:#FD971F;\
+color:#494db9;\
 }\
 .ace-chrome .ace_keyword.ace_operator {\
-color: rgb(104, 118, 135);\
+color: rgb(164, 165, 177);\
 }\
 .ace-chrome .ace_comment {\
-color: #236e24;\
+color: #dfdfdf;\
 }\
 .ace-chrome .ace_comment.ace_doc {\
-color: #236e24;\
+color: #dfdfdf;\
 }\
 .ace-chrome .ace_comment.ace_doc.ace_tag {\
 color: #236e24;\
 }\
 .ace-chrome .ace_constant.ace_numeric {\
-color: rgb(0, 0, 205);\
+color: #f10994;\
 }\
 .ace-chrome .ace_variable {\
-color: rgb(49, 132, 149);\
+font-style:italic;\
+color: #494db9;\
 }\
 .ace-chrome .ace_xml-pe {\
 color: rgb(104, 104, 91);\
 }\
 .ace-chrome .ace_entity.ace_name.ace_function {\
-color: #0000A2;\
+font-weight:900;\
+color: red;\
 }\
 .ace-chrome .ace_heading {\
 color: rgb(12, 7, 255);\
@@ -108,13 +110,14 @@ border: 1px solid rgb(200, 200, 250);\
 .ace-chrome .ace_storage,\
 .ace-chrome .ace_keyword,\
 .ace-chrome .ace_meta.ace_tag {\
-color: rgb(147, 15, 128);\
+color: red;\
 }\
 .ace-chrome .ace_string.ace_regex {\
 color: rgb(255, 0, 0)\
 }\
 .ace-chrome .ace_string {\
-color: #1A1AA6;\
+font-weight:300;\
+color: #63ce49;\
 }\
 .ace-chrome .ace_entity.ace_other.ace_attribute-name {\
 color: #994409;\
