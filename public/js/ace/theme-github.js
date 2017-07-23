@@ -119,7 +119,7 @@ color: rgb(255, 0, 0)\
 font-weight:300;\
 color: #e4ba00;\
 }\
-.ace-chrome .ace_entity.ace_other.ace_attribute-name {\
+.ace-chrome .ace_entity.ace_other.ace_attribute-name{\
 color: #994409;\
 }\
 .ace-chrome .ace_indent-guide {\
