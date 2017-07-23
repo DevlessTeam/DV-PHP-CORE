@@ -242,6 +242,11 @@ class DataStore extends Helper
         return (is_null(self::$instance)) ? self::$instance = new self() : self::$instance;
     }
 
+    public static function paramsBuilder($methodName, $args)
+    {
+        return self::bindToParams($methodName, $args);
+    }
+
     /**
      * grab all related tables.
      *

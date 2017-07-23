@@ -40,6 +40,7 @@ trait getResponse {
             return $this;
         }
         $this->results = $this->status_code;
+        $this->cleanOutput();
         return $this;
     }
 
@@ -59,6 +60,7 @@ trait getResponse {
             return $this;
         }
         $this->results = $this->message;
+        $this->cleanOutput();
         return $this;
     }
 
@@ -83,7 +85,7 @@ trait getResponse {
         } else{
             $this->results = $this->payload;
         }
-        
+        $this->cleanOutput();
         return $this;
     }
 

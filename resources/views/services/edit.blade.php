@@ -341,7 +341,7 @@
                                                                    <div class="tab-pane" id="jtab">
 
 
-<textarea  class="code-box" name="script" rows="20" style="width: 100%">
+<textarea  class="code-box" id="code-box" name="script" rows="20" style="width: 100%">
 {{$service->script}}
 </textarea>
                                                                        <br>
@@ -361,5 +361,6 @@
 <script type="text/javascript">
     window.devless_edit_url = window.location.origin+'/services/'+{{$id}}+'/edit';
 </script>
+
 <script src="{{ Request::secure(Request::root()).'/js/service_edit.js' }}"></script>
 @endsection

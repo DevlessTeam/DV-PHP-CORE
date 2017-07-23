@@ -95,6 +95,7 @@ trait mathLib
             }
             $this->results = $total;
         }
+        $this->cleanOutput();
         return $this;
     }    
 
@@ -111,6 +112,7 @@ trait mathLib
         }
         
         $this->results = ($this->results)/$number;
+        $this->cleanOutput();
         return $this;
     }
     /**
@@ -126,6 +128,7 @@ trait mathLib
             return $this;
         }
         $this->results = sqrt($number);
+        $this->cleanOutput();
         return $this;
     }
 
@@ -139,6 +142,7 @@ trait mathLib
             return $this;
         }
         $this->results = sqrt($this->results);
+        $this->cleanOutput();
         return $this;
     }
     /**
@@ -152,8 +156,9 @@ trait mathLib
     {
         if(!$this->execOrNot) {
             return $this;
-        }
+        } 
         $this->results = round($number, $precision);
+        $this->cleanOutput();
         return $this;
     }
 
@@ -169,6 +174,7 @@ trait mathLib
         }
         $percentage = ($this->results/100);
         $this->results = $percentage*($number);
+        $this->cleanOutput();
         return $this;
     }
 }

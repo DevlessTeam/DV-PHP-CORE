@@ -1,26 +1,26 @@
 <?php
 
-    namespace Devless\RulesEngine;
+namespace Devless\RulesEngine;
 
-    use App\Helpers\Helper;
-    use App\Helpers\ActionClass;
+use App\Helpers\Helper;
+use App\Helpers\ActionClass;
 
 trait actions
 {
     /**
-         * Checks if the  db action to be conducted around one of the tables. Eg beforeQuerying()->onTable('register', 'subscription')->succeedWith("yes"). In the example above yes will be outputted incase data is being queried from either regiter or subscription table. 
-         *
-         * @param string $expectedTableName
-         *
-         * @return mixed|string
-         */
+     * Checks if the  db action to be conducted around one of the tables. Eg beforeQuerying()->onTable('register', 'subscription')->succeedWith("yes"). In the example above yes will be outputted incase data is being queried from either regiter or subscription table. 
+     *
+     * @param string $expectedTableName
+     *
+     * @return mixed|string
+     */
     public function onTable()
     {
         $expectedTableNames = func_get_args();
         if (!$this->execOrNot) {
             return $this;
         }
-           
+
         $this->tableName = (is_array($this->tableName)) ? $this->tableName[0] : $this->tableName;
         $this->execOrNot = (in_array($this->tableName, $expectedTableNames));
 
@@ -43,7 +43,7 @@ trait actions
         $msg  = (is_array($msg))? json_encode($msg):$msg;
         Helper::interrupt(1000, $msg);
         return $this;
-            
+
     }
 
     /**
@@ -76,7 +76,7 @@ trait actions
         if (!$this->execOrNot) {
             return $this;
         }
-            
+
         $params = ($params) ? $params : [];
 
         if ($remoteUrl && $token) {
@@ -84,7 +84,7 @@ trait actions
         } else {
             $this->results = ActionClass::execute($service, $method, $params);
         }
-            
+        $this->cleanOutput();
         return $this;
 
     }
@@ -106,17 +106,17 @@ trait actions
 
         curl_setopt_array(
             $curl, array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => strtoupper($method),
-            CURLOPT_POSTFIELDS => $data,
-            CURLOPT_HTTPHEADER => $headers,
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => strtoupper($method),
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => $headers,
                 )
-        );
+            );
 
         $response = curl_exec($curl);
         $err = curl_error($curl);
@@ -129,6 +129,7 @@ trait actions
             $this->results =  json_decode($response, true);
 
         }
+        $this->cleanOutput();
         return $this;
     }
     /**
@@ -173,6 +174,7 @@ trait actions
             return $this;
         }
         $this->results = $input;    
+        $this->cleanOutput();
         return $this;
     }
 
@@ -236,7 +238,7 @@ trait actions
     }
     public function checkRunConstructs($service, $method)
     {
-            
+
         (!$service || !$method)?$this->stopAndOutput(1111, 'Rule Error', ['suggestion'=>'To call on a method within a Service try `usingService("serviceName")->callMethod("methodName")->withParams("a", "b")']):'';
         return $this;
     }
@@ -307,7 +309,7 @@ trait actions
         if (!$this->execOrNot) {
             return $this;
         }
-            
+
         $this->request_phase = 'endNow';
         $this->status_code = $status_code;
         $this->message = $message;
@@ -324,9 +326,9 @@ trait actions
          */
     public function help($methodToGetDocsFor=null)
     {
-            
+
         $methods = get_class_methods($this);
-            
+
         $exemptedMethods = ['__construct','requestType','__call','useArgsOrPrevOutput','read','commonMutationTask', 'set', 'from'];
         $methodList = [];
         $rules = new Rules();
@@ -342,28 +344,28 @@ trait actions
         if($methodToGetDocsFor) {
             $docs = $getMethodDocs($methodToGetDocsFor);
             if($docs) {
-                 $methodList[$methodToGetDocsFor] = $docs;
-            }
-        } else {
-            $count = 0;
-            foreach ($methods as $methodName) {
-                $methodDocs = $getMethodDocs($methodName);
-                if($methodDocs) {
-                    
-                    $methodList["*".$count."*"] = "**********************************************************************************************************";
-                    
-                    $methodList[$methodName] = $methodDocs;  
-                    
-                }
-                $count++;
-            }
-        }
-            
-            
-            $this->stopAndOutput(1000, 'Help on methods', $methodList);
-            return $this;
+               $methodList[$methodToGetDocsFor] = $docs;
+           }
+       } else {
+        $count = 0;
+        foreach ($methods as $methodName) {
+            $methodDocs = $getMethodDocs($methodName);
+            if($methodDocs) {
 
+                $methodList["*".$count."*"] = "**********************************************************************************************************";
+
+                $methodList[$methodName] = $methodDocs;  
+
+            }
+            $count++;
+        }
     }
+
+
+    $this->stopAndOutput(1000, 'Help on methods', $methodList);
+    return $this;
+
+}
     /**
          * Evaluate PHP expressions eg:beforeQuering()->evaluate("\DB::table('users')->get()")->storeAs($output)->stopAndOutput(1001, 'got users successfully', $output)
          * @param $expression 
@@ -376,13 +378,14 @@ trait actions
         }
         extract($variables);
         $code = <<<EOT
-$expression
+        $expression
 EOT;
         $this->results = eval('return '.$code.';');
+        $this->cleanOutput();
         return $this;
     }
 
-       
+
 
     /**
          * @param $input
@@ -400,6 +403,6 @@ EOT;
         return $this;
     }
 
-      
+
 
 }

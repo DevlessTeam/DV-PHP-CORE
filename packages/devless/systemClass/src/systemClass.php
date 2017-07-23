@@ -181,18 +181,25 @@ class devless
     }
 
     /**
+     * Get data from a table belonging to a service 
      * @param $serviceName
      * @param $table
      * @return mixed
      * @ACL private
      */
-    public function queryData($serviceName, $table, $whereKey=null, $whereValue=null)
+    public function queryData($serviceName, $table, $queryParams = null)
     {
         $service = new service();
-        
-        $queryBuilder = ($whereKey && $whereValue)? DS::service($serviceName, $table, $service)
-            ->where($whereKey, $whereValue): DS::service($serviceName, $table, $service);
 
+        $queryBuilder =  DS::service($serviceName, $table, $service);
+
+        if($queryParams) {
+            foreach($queryParams as $eachParamName => $eachParamArgs) {
+                // dd($eachParamArgs);
+                $queryBuilder->paramsBuilder($eachParamName, $eachParamArgs[0]);
+            }    
+        }
+        
         $output = $queryBuilder->related('*')->queryData();
         if(isset($output['payload']['results'])){
             return $output['payload']['results'];

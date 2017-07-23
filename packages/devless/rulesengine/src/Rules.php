@@ -100,5 +100,32 @@ class Rules
     {
         return ($args == null)? $this->results : $args;
     }
+
+
+    public function validateInputType($input)
+    {
+        if( !is_scalar($input) && !is_iterable($input) ){
+            Helper::interrupt(1111, 'sorry but your data is not a string, boolean, decimals, integer or a collection ');
+        }
+    }
+
+    public function cleanOutput()
+    {
+        if(is_array($this->results)){
+            $collection = $this->results;
+            $newCollection = [];
+            $this->objToArray($collection, $newCollection);
+            $this->results = $newCollection;
+        }
+        
+    }
+
+
+    public function destroyVariable(&$input_var)
+    {
+        unset($input_var);
+        return $this;
+    }
+
     
 }

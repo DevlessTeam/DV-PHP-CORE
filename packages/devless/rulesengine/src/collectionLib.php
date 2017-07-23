@@ -11,6 +11,7 @@ trait collectionLib
         $collection = (is_null($collection))?[]:$collection;
         $arr = $this->objToArray($collection, $arr);
         $this->results = $arr;
+
         return $this;
 	}
 	public function collect($collection)
@@ -27,6 +28,7 @@ trait collectionLib
             return $this;
         }
 		$this->results = collect($this->results)->flatten()->toArray();
+		$this->cleanOutput();
 		return $this;
 	}
 	public function getAllKeys()
@@ -37,6 +39,7 @@ trait collectionLib
 		$this->results = (is_array($this->results[0]))?$this->results[0]:$this->results;
 		
 		$this->results = collect($this->results)->flip()->flatten()->toArray();
+		$this->cleanOutput();
 		return $this;	
 	}
 	public function getFirstElement()
@@ -45,6 +48,7 @@ trait collectionLib
             return $this;
         }
 		$this->results = collect($this->results)->first();
+		$this->cleanOutput();
 		return $this;
 	}
 	public function getElement($nth)
@@ -54,6 +58,7 @@ trait collectionLib
         }
 		$this->results = (isset($this->results[$nth-1]))
 			?$this->results[$nth-1]:[];
+		$this->cleanOutput();
 		return $this;
 	}
 	public function getLastElement()
@@ -62,6 +67,7 @@ trait collectionLib
             return $this;
         }
 		$this->results = collect($this->results)->last();
+		$this->cleanOutput();
 		return $this;
 	}
 	public function countTheNumberOfElements()
@@ -70,6 +76,7 @@ trait collectionLib
             return $this;
         }
 		$this->results = collect($this->results)->count();
+		$this->cleanOutput();
 		return $this;
 	}
 	public function fetchAllWith($key, $value)
@@ -77,9 +84,9 @@ trait collectionLib
 		if (!$this->execOrNot) {
             return $this;
         }
-    
+    	
    		$this->results = collect($this->results)->where($key, $value)->all();
-		
+		$this->cleanOutput();
         return $this;
 	}
 	public function fetchOnly($keys)
@@ -88,7 +95,7 @@ trait collectionLib
             return $this;
         }
         $this->results = array_column($this->results, $keys);
-	
+		$this->cleanOutput();
         return $this;
 	}
 
@@ -106,6 +113,7 @@ trait collectionLib
      		$input[$i][$key] = $mutatedValue;
      	}
      	$this->results = $input;
+     	$this->cleanOutput();
 		return $this;
 	}
 
@@ -115,16 +123,81 @@ trait collectionLib
 		if (!$this->execOrNot) {
             return $this;
         }
-		
-		foreach ($items as $key => $value) {
+		$eachOne = $items;
+		foreach ($eachOne as $key => $value) {
 			extract($variables);
 			eval('$this->'.$script.';');
 
 		}
-		$this->results = $items;
+		$this->results = $eachOne;
+		$this->cleanOutput();
 		$this->execOrNot = true;
 		return $this;
 
+	}
+
+	public function countElementsInCollection($collection=null)
+	{
+		if (!$this->execOrNot) {
+            return $this;
+        }
+        $this->results = count($this->useArgsOrPrevOutput($collection));
+        return $this;
+	}
+
+	public function reverseTheCollection($collection=null)
+	{
+		if(!$this->execOrNot) {
+			return $this;
+		}
+		$this->results = array_reverse($this->useArgsOrPrevOutput($collection));
+		return $this;
+	}
+	public function sortCollectionBy($key)
+	{
+		if(!$this->execOrNot) {
+			return $this;
+		}
+
+		$this->results = collect($this->results)->sortBy($key);
+		return $this;
+	}
+
+	public function offsetCollectionBy($offset)
+	{
+		if(!$this->execOrNot) {
+			return $this;
+		}
+		$this->results = array_splice($this->results, $offset);
+		return $this;
+	}
+
+	public function reduceNumberOfElementsTo($size)
+	{
+		if(!$this->execOrNot) {
+			return $this;
+		}
+		$this->results = array_splice($this->results, 0, $size);
+		return $this;
+	}
+
+	public function paginateCollection($offset, $size)
+	{
+		if(!$this->execOrNot) {
+			return $this;
+		}
+		$this->results = array_splice($this->results, $offset, $size);
+		return $this;
+	}
+
+	public function addAnElementToCollection($element)
+	{
+		//
+	}
+
+	public function removeElementFromCollection($key)
+	{
+		//
 	}
 
 	public function isAssoc(array $arr)
@@ -160,36 +233,4 @@ trait collectionLib
 	}
 		
 }
-//withTheCollection()
-//collapse array
-//removeAllcollectionKeys =>flatten
-//removeAllCollectionValues
-//getElementWithPair() =>
-//countElementsInCollection
-//findTheDifferenceBetweenCollections()
-//removeTheKeys()
-//first, second , last, third nth()
-//forEachValue('ConvertTOUpperCase')
-//forEachValueWithKey('ConvertToUpperCase', 'names')
-//SwitchKeyValuePosition()
-//groupBy
-//joinAll('products', '-')
-//isEmpty
-//isNotEmpty 
-//findTheMax()
-//findTheMin()
-//findTheMode()
-//appendTheCollection()
-//prependTheCollection()
-//removeTheLastElement()
-//randomizeTheCollection()
-//reverseCollection()
-//mergeValuesWithTheMatchingKey('name', 'edmond')
-//sortBy
-//offsetCollection
-//getAnNmberOfThe()
-//partitionCollection
-//SumUpCollectionAtKey()/
-//returnUnqiueValueBasedonTheKey()
-//whereIn()
-//WhereNotIn
+
