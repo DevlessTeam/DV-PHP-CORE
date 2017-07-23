@@ -15,6 +15,7 @@ trait generators
             return $this;
         }
         $this->results = rand(0, $length);
+        $this->cleanOutput();
         return $this;
     }
 
@@ -34,7 +35,7 @@ trait generators
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         $this->results = $randomString;
-        $this->results ;
+        $this->cleanOutput();
         return $this;
     }
 
@@ -55,6 +56,7 @@ trait generators
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         $this->results = $randomString;
+        $this->cleanOutput();
         return $this;
     }
 
@@ -69,6 +71,7 @@ trait generators
             return $this;
         }
         $this->results = uniqid();
+        $this->cleanOutput();
         return $this;    
     }
 }

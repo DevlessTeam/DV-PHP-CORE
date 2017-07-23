@@ -135,6 +135,7 @@ trait stringLib
             return $this;
         }
         $this->results = str_replace($string, $replacement, $subject);
+        $this->cleanOutput();
         return $this;
     }
 
@@ -151,6 +152,7 @@ trait stringLib
         }
         $string = $this->useArgsOrPrevOutput($string);
         $this->results = strtoupper($string);
+        $this->cleanOutput();
         return $this;
     }
 
@@ -166,6 +168,7 @@ trait stringLib
         }
         $string = $this->useArgsOrPrevOutput($string);
         $this->results = strtolower($string);
+        $this->cleanOutput();
         return $this;
     }
 
@@ -184,6 +187,7 @@ trait stringLib
         $string = $this->useArgsOrPrevOutput($string);
         $trimMaker = ($trimMaker != null)?$trimMaker:'...';
         $this->results = mb_strimwidth($string, 0, $len, $trimMaker);
+        $this->cleanOutput();
         return $this;
 
     }
@@ -200,6 +204,7 @@ trait stringLib
         }
         $sentence = $this->useArgsOrPrevOutput($sentence);
         $this->results = str_word_count($sentence);
+        $this->cleanOutput();
         return $this;
     }
 
@@ -215,6 +220,7 @@ trait stringLib
         }
         $word = $this->useArgsOrPrevOutput($word);
         $this->results = strlen($word);
+        $this->cleanOutput();
         return $this;
     }
 }

@@ -14,6 +14,7 @@ trait dateLib
                 return $this;
         }
         $this->results = time();
+        $this->cleanOutput();
         return $this;
     }
 
@@ -28,6 +29,7 @@ trait dateLib
                 return $this;
         }
         $this->results = date('Y');
+        $this->cleanOutput();
         return $this;
     }
 
@@ -42,6 +44,7 @@ trait dateLib
                 return $this;
         }
         $this->results = date('M');
+        $this->cleanOutput();
         return $this;
     }
 
@@ -56,6 +59,7 @@ trait dateLib
                 return $this;
         }
         $this->results = date('D');
+        $this->cleanOutput();
         return $this;
     }
 
@@ -70,6 +74,7 @@ trait dateLib
                 return $this;
         }
         $this->results = date('h');
+        $this->cleanOutput();
         return $this;
     }
 
@@ -84,6 +89,7 @@ trait dateLib
                 return $this;
         }
         $this->results = date('i');
+        $this->cleanOutput();
         return $this;
     }
 
@@ -98,11 +104,12 @@ trait dateLib
                 return $this;
         }
         $this->results = date('s');
+        $this->cleanOutput();
         return $this;
     }
 
     /**
-     * Get the current second using the `getFormattedDate` method eg:beforeQuering()->getFormattedDate()->storeAs($formattedDate)->succeedWith($formatedDate)
+     * Get the human readable date using `getFormattedDate` method eg:beforeQuering()->getFormattedDate()->storeAs($formattedDate)->succeedWith($formatedDate)
      *
      * @return $this
      */
@@ -112,6 +119,7 @@ trait dateLib
                 return $this;
         }
         $this->results = date('l jS \of F Y h:i:s A');
+        $this->cleanOutput();
         return $this;
     }
 }

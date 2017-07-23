@@ -192,7 +192,15 @@
        $('.'+field_id).remove();
    }
    function set_script(){
-       setTimeout(function(){ $('.code-box').ace({ theme: 'github', lang: 'php'}); }, 1);
+       setTimeout(function(){ 
+          $('.code-box').ace({ theme: 'github', lang: 'php', 
+         
+        });
+        var editor = $('.code-box').data('ace');
+        // var aceInstance = editor.editor.ace;
+        // console.log(aceInstance);
+
+       }, 1);
    }
    function run_script(){
        var form = new FormData();
