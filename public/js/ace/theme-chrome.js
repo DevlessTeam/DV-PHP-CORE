@@ -1,5 +1,5 @@
 
-ace.define('ace/theme/github', ['require', 'exports', 'module' , 'ace/lib/dom'], function(require, exports, module) {
+ace.define('ace/theme/chrome', ['require', 'exports', 'module' , 'ace/lib/dom'], function(require, exports, module) {
 
 exports.isDark = false;
 exports.cssClass = "ace-chrome";
@@ -50,7 +50,7 @@ color: rgb(109, 121, 222);\
 }\
 .ace-chrome .ace_variable.ace_parameter {\
 font-style:italic;\
-color:#494db9;\
+color:#e4ba00;\
 }\
 .ace-chrome .ace_keyword.ace_operator {\
 color: rgb(164, 165, 177);\
@@ -69,7 +69,7 @@ color: #f10994;\
 }\
 .ace-chrome .ace_variable {\
 font-style:italic;\
-color: #494db9;\
+color: #e4ba00;\
 }\
 .ace-chrome .ace_xml-pe {\
 color: rgb(104, 104, 91);\
@@ -117,9 +117,9 @@ color: rgb(255, 0, 0)\
 }\
 .ace-chrome .ace_string {\
 font-weight:300;\
-color: #e4ba00;\
+color: #63ce49;\
 }\
-.ace-chrome .ace_entity.ace_other.ace_attribute-name{\
+.ace-chrome .ace_entity.ace_other.ace_attribute-name {\
 color: #994409;\
 }\
 .ace-chrome .ace_indent-guide {\

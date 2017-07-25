@@ -239,6 +239,7 @@
                     methods = methods.replace('(', '("');
                     methods = methods.replace(')', '")');
                     methods = methods.replace(/,/g, '","');
+                    methods = methods.replace("^", ',');
                 }
                 executableMethod = executableMethod + methods + '.';
             });
@@ -415,7 +416,7 @@
         return this;
     },
     scriptEngine.param = function(key, value){
-        SDK.queryParams[key] = value;
+    	SDK.queryParams[key] = value;
         return this;
     },
     scriptEngine.signup = function() {
@@ -576,7 +577,7 @@
             devless_main.singleCourier = node;
             _jql.each(node.scripts, function(index, script) {
                 try{
-            		eval('scriptEngine.'+script);	
+                	eval('scriptEngine.'+script);	
                 }
                 catch (e) {
                     console.error(node.queries[index]+" could not be resolved to an executable script" + e);
