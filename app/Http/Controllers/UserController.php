@@ -41,7 +41,7 @@ class UserController extends Controller
                 'last_name'     => $request->last_name,
                 'phone_number'  => $request->phone_number,
                 'email'         => $request->email,
-                'status'        => ($request->active == 'on') ? 0 : 1
+                'status'        => ($request->active == 'on') ? 1 : 0
                 ]
             )) {
                 return json_encode(true);
@@ -55,7 +55,7 @@ class UserController extends Controller
                 'phone_number'  => $request->phone_number,
                 'email'         => $request->email,
                 'password'      => bcrypt($request->password),
-                'status'        => ($request->active == 'on') ? 0 : 1
+                'status'        => ($request->active == 'on') ? 1 : 0
                 ]
             )) {
                 return json_encode(true);
