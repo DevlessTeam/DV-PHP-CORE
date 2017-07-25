@@ -159,7 +159,7 @@ $(document).ready(function () {
                 }
             }).done(function (res) {
                 if (res) {
-                    active = payload.active === "on" ? 1 : 0;
+                    active = (payload.active === "on") ? true : false;
 
                     Datatable.row(element_id).data([
                         "",
