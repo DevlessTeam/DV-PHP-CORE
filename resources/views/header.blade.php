@@ -76,7 +76,7 @@ use App\Helpers\DataStore;
           <div class="tab-content">
             <div class="tab-pane active" id="web">
 <pre><code class="language-markup"><xmp style="display: inline;">
-<script src="{{URL::to('/')}}/js/devless-minified-sdk.js" class="devless-connection" devless-con-token="{{$app->token}}"></script></xmp></code>
+<script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="{{$app->token}}"></script></xmp></code>
 </pre>
 
         </div>
