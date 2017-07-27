@@ -91,8 +91,9 @@ devless_main.coreLib.getParams = function(sParam) {
 
 devless_main.coreLib.render = function(component, data, service, table) {
 	reference = component.element;
-	var uniqueId = Math.round(Math.random()*200000000000000)
+	var uniqueId = Math.round(Math.random()*200000000000000);
 	if( _jql( reference ).find('[class="devless-wrapper-template"]').length == 0 ) {
+		
 		_jql( reference ).wrapInner( "<span class='devless-wrapper-template'></span>" );
 		var template = _jql( reference ).find('[class="devless-wrapper-template"]')[0]
 		_jql( template )[0].className = 'devless-wrapper-template';
@@ -101,6 +102,7 @@ devless_main.coreLib.render = function(component, data, service, table) {
 	} else {
 		_jql( reference ).children(":not(.devless-wrapper-template)").remove();
 	}
+
 	_jql.each(data, function(key, record){
 		var template = _jql( reference ).find('.devless-wrapper-template')[0].cloneNode(true, true);
 		_jql( template )[0].className = 'devless-wrapper-'+uniqueId;
@@ -145,10 +147,10 @@ devless_main.coreLib.render = function(component, data, service, table) {
 		template = scriptEngine.bindToDelete(template, record.id, service, table);
 		template = scriptEngine.bindToUpdate(template, record.id, service, table, record);
             //append to screen
-            _jql( reference ).prepend(template);
+            _jql( reference ).prepend(template[0].innerHTML);
+
         })
 	if(data == 'undefined') { _jql(reference).find('[class="devless-wrapper-'+uniqueId+'"]')[0].remove()}
-
 }
 
 
@@ -242,6 +244,7 @@ devless_main.scriptBuilder = function(queries) {
 				methods = methods.replace("^", ',');
 			}
 			executableMethod = executableMethod + methods + '.';
+			console.log(executableMethod);
 		});
 		executableScript.push(executableMethod.slice(0, -1));
 		executableMethod = '';
