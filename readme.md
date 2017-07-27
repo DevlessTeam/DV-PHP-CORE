@@ -58,7 +58,7 @@ Alternatively, you can deploy your own copy unto Heroku😎
 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/DevlessTeam/DV-PHP-CORE/tree/heroku2)
 
-Checkout out the [docs](https://docs.devless.io)
+Checkout out the [docs](https://devless.gitbooks.io/devless-docs-1-3-0/content/why-devless.html)
 
 ## Questions and Support
 Follow or join these channels for questions and support, and to keep updated on latest releases and announcements.
