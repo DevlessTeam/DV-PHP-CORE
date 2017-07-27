@@ -60,7 +60,7 @@ Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
 @if(\Request::path() != 'console')
 <script src="{{ Request::secure(Request::root()).'/js/ace/ace.js' }}" type="text/javascript" ></script>
 <script src="{{ Request::secure(Request::root()).'/js/ace/theme-github.js' }}" type="text/javascript" ></script>
-<script src="{{ Request::secure(Request::root()).'/js/ace/ext-language_tools.js' }}" type="text/javascript" ></script>
+
 <script src="{{ Request::secure(Request::root()).'/js/ace/mode-php.js' }}" type="text/javascript" ></script>
 <script src="{{ Request::secure(Request::root()).'/js/ace/jquery-ace.min.js' }}" type="text/javascript" ></script>
 @endif
