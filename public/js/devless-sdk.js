@@ -142,12 +142,14 @@ devless_main.coreLib.render = function(component, data, service, table) {
 			})
 		})
 		innerTemplate = template.innerHTML
-		template = (_jql(innerTemplate)[0].nodeName == 'TR')? innerTemplate :template
+		template = (_jql(innerTemplate)[0].nodeName == 'TR')? innerTemplate :template;
+		template = _jql(template)[0].innerHTML;
 		template = _jql(template);
 		template = scriptEngine.bindToDelete(template, record.id, service, table);
 		template = scriptEngine.bindToUpdate(template, record.id, service, table, record);
             //append to screen
-            _jql( reference ).prepend(template[0].innerHTML);
+            
+            _jql( reference ).prepend(template);
 
         })
 	if(data == 'undefined') { _jql(reference).find('[class="devless-wrapper-'+uniqueId+'"]')[0].remove()}
@@ -244,7 +246,6 @@ devless_main.scriptBuilder = function(queries) {
 				methods = methods.replace("^", ',');
 			}
 			executableMethod = executableMethod + methods + '.';
-			console.log(executableMethod);
 		});
 		executableScript.push(executableMethod.slice(0, -1));
 		executableMethod = '';

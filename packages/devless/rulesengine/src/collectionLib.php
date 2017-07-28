@@ -129,7 +129,7 @@ trait collectionLib
 			eval('$this->'.$script.';');
 
 		}
-		$this->results = $eachOne;
+		$this->results = $resuslt;
 		$this->cleanOutput();
 		$this->execOrNot = true;
 		return $this;
