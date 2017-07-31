@@ -20,4 +20,14 @@ trait preprocessor
 		}
 		return $node;
 	}
+
+	private function checkIfRuleExists($node) {
+		// dd($node->var->var->var->var->var->var);
+		for($i=0; $i< count($node->args); $i++) {
+			// dd($node);
+		}
+		if( $node instanceof Node\Expr\MethodCall ) {
+			// dd($node);
+		}
+	}
 }

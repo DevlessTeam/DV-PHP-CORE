@@ -133,7 +133,7 @@ trait collectionLib
 			eval('$this->'.$script.';');
 
 		}
-		$this->results = $resuslt;
+		$this->results = $result;
 		$this->cleanOutput();
 		$this->execOrNot = true;
 		return $this;
