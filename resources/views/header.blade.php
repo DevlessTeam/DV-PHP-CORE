@@ -47,7 +47,7 @@ use App\Helpers\DataStore;
   </head>
   <body onload="init()" class="sticky-header">
     <section>
-      @if(\Request::path() != '/' && \Request::path() != 'setup')
+      @if(\Request::path() != '/' && \Request::path() != 'setup' && \Request::path() != 'recover_password')
       <div class="header-section">
         <!--toggle button start-->
         <a class="toggle-btn"><i class="fa fa-outdent"></i></a>

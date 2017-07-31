@@ -228,10 +228,12 @@ $.ajax(settings).done(function (response) {
    (result.status_code == 626)?$('.code-console').css('color','green')
  : $('.code-console').css('color','red');
   $('.code-console').html('<font size="3">'+result.message+'</font>');
-
-  setTimeout(function(){
-      $('.code-console').html('');
-  }, 930)
+  if(result.status_code == 626){
+      setTimeout(function(){
+        $('.code-console').html('');
+    }, 950);
+  }
+  
 });
    }
 

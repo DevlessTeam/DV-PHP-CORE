@@ -108,8 +108,12 @@ trait collectionLib
         unset($params[0], $params[1]);
         $input = $this->results;
         for($i=0; $i < count($input); $i++){
-        	$this->$method($input[$i][$key]);
-     		$mutatedValue = $this->results;
+        	if($key) {
+    			$this->$method($input[$i][$key]);
+        	} else {
+        		$this->$method($input[$i]);
+        	}
+        	$mutatedValue = $this->results;
      		$input[$i][$key] = $mutatedValue;
      	}
      	$this->results = $input;

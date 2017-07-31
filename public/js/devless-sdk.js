@@ -12,279 +12,290 @@ function assignLable(){num=Math.round(100*Math.random())+1;var a=window.adjs,b=w
 
 
 !function(e){"use strict";function t(e,t,s,n){s=s||{};var r="",o=function(e,t){for(var s in t)r="&"+e+"="+t[s]+r};for(var i in s)!s.hasOwnProperty(i),s[i]instanceof Array?o(i,s[i]):r="&"+i+"="+s[i]+r;var a=u+e+"/db?table="+t+r;return l.call(this,"",a,"GET",function(e){n(e)}),this}function s(e,t,s,n){var r=JSON.stringify({resource:[{name:t,field:[s]}]}),o=u+e+"/db";return l.call(this,r,o,"POST",function(e){n(e)}),this}function n(e,t,s,n,r,o){var i=JSON.stringify({resource:[{name:t,params:[{where:s+","+n,data:[r]}]}]}),a=u+e+"/db";return l.call(this,i,a,"PATCH",function(e){o(e)}),this}function r(e,t,s,n,r){var o={resource:[{name:t,params:[{where:s+",=,"+n}]}]};o.resource[0].params[0]["delete"]="true";var i=JSON.stringify(o),a=u+e+"/db";return l.call(this,i,a,"DELETE",function(e){r(e)}),this}function o(e){var t=e||!1;return t?void e(sessionStorage.getItem("devless_user_token"+this.devless_instance_url+this.devless_token)):sessionStorage.getItem("devless_user_token"+this.devless_instance_url+this.devless_token)}function i(e){return sessionStorage.setItem("devless_user_token"+this.devless_instance_url+this.devless_token,e),!0}function a(e,t,s,n){var r=JSON.stringify({jsonrpc:"2.0",method:e,id:c(1,1e7),params:s}),o=u+e+"/rpc?action="+t;l.call(this,r,o,"POST",function(e){n(e)})}function c(e,t){return Math.floor(Math.random()*(t-e+1))+e}function l(e,t,s,n,r){r=r||!1;var o=new XMLHttpRequest;o.addEventListener("readystatechange",function(){var e="";4===this.readyState&&0==r?200==this.status?(e=JSON.parse(this.responseText),n(e)):(n(e),console.error("Devless cannot be found at "+this.devless_instance_url+" Please copy the url from the `App tab`  on you Devless instance by clicking on  `connect to my app`")):4===this.readyState&&1==r&&(200==this.status?(e=this.responseText,n(e)):(n(e),console.error("Devless cannot be found at "+this.devless_instance_url+" Please copy the url from the `App tab`  on you Devless instance by clicking on  `connect to my app`")))}),o.open(s.toUpperCase(),this.devless_instance_url+t),o.setRequestHeader("content-type","application/json"),o.setRequestHeader("devless-token",this.devless_token),""!=sessionStorage.getItem("devless_user_token"+this.devless_instance_url+this.devless_token)&&o.setRequestHeader("devless-user-token",sessionStorage.getItem("devless_user_token"+this.devless_instance_url+this.devless_token)),o.send(e)}var u="/api/v1/service/",d=function(t){if(!t)return void console.error("Your app failed to  connect to Devless ): Please make sure token and key is set properly ");console.info("App is trying to connect to DevLess ...");var s=new d.init(t);return e.returnedInstance="",s};d.prototype={queryData:t,addData:s,updateData:n,deleteData:r,getToken:o,setToken:i,call:a},d.init=function(e){var t=this;t.devless_token=e.token,t.devless_instance_url=e.domain},d.init.prototype=d.prototype,e.Devless=e.DV=d}(window);
-
 var connection = _jql('.devless-connection')[0];
 var devless_token = connection.attributes['devless-con-token'].value;
-var devless_url   = connection.attributes['src'].value.split('/js/')[0];
+var devless_url = connection.attributes['src'].value.split('/js/')[0];
 //Devless init
-var constants = { "token":devless_token, "domain":devless_url };
+var constants = {
+    "token": devless_token,
+    "domain": devless_url
+};
 SDK = new Devless(constants);
-SDK.call('devless', 'hello', [], function(resp){
-	if(resp.payload.result == "Hello World!") {
-		console.info("App connected to DevLess successfully :)");
-	}
+SDK.call('devless', 'hello', [], function(resp) {
+    if (resp.payload.result == "Hello World!") {
+        console.info("App connected to DevLess successfully :)");
+    }
 })
 
 var devless_main = {}
 devless_main.singleCourier = '';
 devless_main.components = [];
 devless_main.coreLib = {};
-devless_main.generalErrorState = 0; 
+devless_main.generalErrorState = 0;
 
 devless_main.coreLib.notify = function(message, status) {
-	_jql('.dv-notify').each(function() {
-		this.textContent = message;
-		this.style.display = 'block';
-	})
-	devless_main.generalErrorState = status;
-	if(status == 1) {
-		_jql('.dv-notify-success').each(function() {
-			this.style.display = 'block';
-		})
-		_jql('.dv-notify-failed').each(function() {
-			this.style.display = 'none';
-		})
-	} else if(status == 0 ) {
-		_jql('.dv-notify-failed').each(function() {
-			this.style.display = 'block';
-		})
+    _jql('.dv-notify').each(function() {
+        this.textContent = message;
+        this.style.display = 'block';
+    })
+    devless_main.generalErrorState = status;
+    if (status == 1) {
+        _jql('.dv-notify-success').each(function() {
+            this.style.display = 'block';
+        })
+        _jql('.dv-notify-failed').each(function() {
+            this.style.display = 'none';
+        })
+    } else if (status == 0) {
+        _jql('.dv-notify-failed').each(function() {
+            this.style.display = 'block';
+        })
 
-		_jql('.dv-notify-success').each(function() {
-			this.style.display = 'none';
-		})
-	}
+        _jql('.dv-notify-success').each(function() {
+            this.style.display = 'none';
+        })
+    }
 }
 devless_main.processing = function() {
-	_jql('.dv-processing').each(function() {
-		this.style.display = 'block';
-	})
+    _jql('.dv-processing').each(function() {
+        this.style.display = 'block';
+    })
 
-	_jql('.dv-doneProcessing').each(function() {
-		this.style.display = 'none';
-	})
+    _jql('.dv-doneProcessing').each(function() {
+        this.style.display = 'none';
+    })
 
 }
 
 devless_main.doneProcessing = function() {
-	_jql('.dv-processing').each(function() {
-		this.style.display = 'none';
-	})
+    _jql('.dv-processing').each(function() {
+        this.style.display = 'none';
+    })
 
-	_jql('.dv-doneProcessing').each(function() {
-		this.style.display = 'block';
-	})
+    _jql('.dv-doneProcessing').each(function() {
+        this.style.display = 'block';
+    })
 }
 devless_main.coreLib.getParams = function(sParam) {
-	var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-	sURLVariables = sPageURL.split('&'),
-	sParameterName,
-	i;
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
 
-	for (i = 0; i < sURLVariables.length; i++) {
-		sParameterName = sURLVariables[i].split('=');
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
 
-		if (sParameterName[0] === sParam) {
-			return sParameterName[1] === undefined ? true : sParameterName[1];
-		}
-	}
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
 };
 
 devless_main.coreLib.render = function(component, data, service, table) {
-	reference = component.element;
-	var uniqueId = Math.round(Math.random()*200000000000000);
-	if( _jql( reference ).find('[class="devless-wrapper-template"]').length == 0 ) {
-		
-		_jql( reference ).wrapInner( "<span class='devless-wrapper-template'></span>" );
-		var template = _jql( reference ).find('[class="devless-wrapper-template"]')[0]
-		_jql( template )[0].className = 'devless-wrapper-template';
-		_jql( template )[0].style.display = 'none';
-		_jql( reference ).append(_jql( template )[0]);
-	} else {
-		_jql( reference ).children(":not(.devless-wrapper-template)").remove();
-	}
+    reference = component.element;
+    var uniqueId = Math.round(Math.random() * 200000000000000);
+    if (_jql(reference).find('[class="devless-wrapper-template"]').length == 0) {
 
-	_jql.each(data, function(key, record){
-		var template = _jql( reference ).find('.devless-wrapper-template')[0].cloneNode(true, true);
-		_jql( template )[0].className = 'devless-wrapper-'+uniqueId;
-		_jql( template )[0].style.display = 'block';
+        _jql(reference).wrapInner("<span class='devless-wrapper-template'></span>");
+        var template = _jql(reference).find('[class="devless-wrapper-template"]')[0]
+        _jql(template)[0].className = 'devless-wrapper-template';
+        _jql(template)[0].style.display = 'none';
+        _jql(reference).append(_jql(template)[0]);
+    } else {
+        _jql(reference).children(":not(.devless-wrapper-template)").remove();
+    }
 
-		var screenPainter = function(field, value){
-			if(field !== 'devless_user_id') {
-				_jql( template ).find('.var-' + field).each(function(){
-					if(_jql(this)[0].tagName != 'IMG' && _jql(this)[0].tagName != 'A') {
-						_jql(this).text(value)
-					}
+    _jql.each(data, function(key, record) {
+        var template = _jql(reference).find('.devless-wrapper-template')[0].cloneNode(true, true);
+        _jql(template)[0].className = 'devless-wrapper-' + uniqueId;
+        _jql(template)[0].style.display = 'block';
 
-					var attri = ['src', 'href'];
-					for(var i=0; i< attri.length; i++){
-						if(_jql(this)[0][attri[i]] != undefined ){
-							if(_jql(this)[0][attri[i]] == window.location.href.replace('#', '') ){
-								_jql(this)[0][attri[i]] = value;
-							} else{
-								_jql(this)[0][attri[i]] = _jql(this)[0][attri[i]].replace('var-'+field, value);
-							}
-						}
-					}
-				});
+        var screenPainter = function(field, value) {
+            if (field !== 'devless_user_id') {
+                _jql(template).find('.var-' + field).each(function() {
+                    if (_jql(this)[0].tagName != 'IMG' && _jql(this)[0].tagName != 'A') {
+                        _jql(this).text(value)
+                    }
 
-
-			}
-		}
+                    var attri = ['src', 'href'];
+                    for (var i = 0; i < attri.length; i++) {
+                        if (_jql(this)[0][attri[i]] != undefined) {
+                            if (_jql(this)[0][attri[i]] == window.location.href.replace('#', '')) {
+                                _jql(this)[0][attri[i]] = value;
+                            } else {
+                                _jql(this)[0][attri[i]] = _jql(this)[0][attri[i]].replace('var-' + field, value);
+                            }
+                        }
+                    }
+                });
 
 
-		_jql.each(record, function(field, value) {
-			screenPainter(field, value)
-		});
+            }
+        }
 
-		_jql.each(record.related, function(prefix, data){
-			_jql.each(data[0], function(field, value){
-				screenPainter(prefix+'-'+field, value);
-			})
-		})
-		innerTemplate = template.innerHTML
-		template = (_jql(innerTemplate)[0].nodeName == 'TR')? innerTemplate :template;
-		template = _jql(template)[0].innerHTML;
-		template = _jql(template);
-		template = scriptEngine.bindToDelete(template, record.id, service, table);
-		template = scriptEngine.bindToUpdate(template, record.id, service, table, record);
-            //append to screen
-            
-            _jql( reference ).prepend(template);
 
+        _jql.each(record, function(field, value) {
+            screenPainter(field, value)
+        });
+
+        _jql.each(record.related, function(prefix, data) {
+            _jql.each(data[0], function(field, value) {
+                screenPainter(prefix + '-' + field, value);
+            })
         })
-	if(data == 'undefined') { _jql(reference).find('[class="devless-wrapper-'+uniqueId+'"]')[0].remove()}
+        innerTemplate = template.innerHTML
+        template = (_jql(innerTemplate)[0].nodeName == 'TR') ? innerTemplate : template;
+        template = _jql(template)[0].innerHTML;
+        template = _jql(template);
+        template = scriptEngine.bindToDelete(template, record.id, service, table);
+        template = scriptEngine.bindToUpdate(template, record.id, service, table, record);
+        //append to screen   
+        _jql(reference).prepend(template);
+
+    })
+    if (data == 'undefined') {
+        _jql(reference).find('[class="devless-wrapper-' + uniqueId + '"]')[0].remove()
+    }
 }
 
 
 devless_main.coreLib.form = function(component, callback) {
-	var reference = component.element;
-	var data = {};
-	var numFields = 0;
-	_jql( reference ).submit(function( event ) {
-		event.preventDefault();
-		devless_main.processing();
-		var inputs = this.elements;
-		var numFields = '';
-		_jql.each(inputs, function(index, element){
-			if(element.name == ""){return;}
-			if((element.type == "radio"||element.type == "checkbox") && !element.checked){return;}
-			if(element.type == 'file' && element.files[0] != undefined){
-				var reader = new FileReader();
-				reader.addEventListener('load', function(){
-					data[element.name] = reader.result;
-					numFields++;
-				}, false)
-				reader.onerror = function(e) {
-					devless_main.doneProcessing();
-					devless_main.coreLib.notify(e,0);
-				};
-				reader.readAsDataURL(element.files[0]);
-			}
-			if(element.type !== 'file') {
-				data[element.name] = element.value;
-				numFields++;
-			}
-		});
-		formCallback = function(){
-			_jql.each(inputs, function(index, element){
-				if(devless_main.generalErrorState == 1){
-					element.value = '';	
-				}
+        var reference = component.element;
+        var data = {};
+        var numFields = 0;
+        _jql(reference).submit(function(event) {
+            event.preventDefault();
+            devless_main.processing();
+            var inputs = this.elements;
+            var numFields = '';
+            _jql.each(inputs, function(index, element) {
+                if (element.name == "") {
+                    return;
+                }
+                if ((element.type == "radio" || element.type == "checkbox") && !element.checked) {
+                    return;
+                }
+                if (element.type == 'file' && element.files[0] != undefined) {
+                    var reader = new FileReader();
+                    reader.addEventListener('load', function() {
+                        data[element.name] = reader.result;
+                        numFields++;
+                    }, false)
+                    reader.onerror = function(e) {
+                        devless_main.doneProcessing();
+                        devless_main.coreLib.notify(e, 0);
+                    };
+                    reader.readAsDataURL(element.files[0]);
+                }
+                if (element.type !== 'file') {
+                    data[element.name] = element.value;
+                    numFields++;
+                }
+            });
+            formCallback = function() {
+                _jql.each(inputs, function(index, element) {
+                    if (devless_main.generalErrorState == 1) {
+                        element.value = '';
+                    }
 
-			})
-		}
-		if(numFields == inputs.length-1){
-			devless_main.doneProcessing();
-			callback(data, formCallback);
-		} else {
-			var intvl = setInterval(function() {
-				if (numFields == inputs.length-1) {
-					clearInterval(intvl);
-					devless_main.doneProcessing();
-					callback(data, formCallback);
-				}
-			}, 1);
+                })
+            }
+            if (numFields == inputs.length - 1) {
+                devless_main.doneProcessing();
+                callback(data, formCallback);
+            } else {
+                var intvl = setInterval(function() {
+                    if (numFields == inputs.length - 1) {
+                        clearInterval(intvl);
+                        devless_main.doneProcessing();
+                        callback(data, formCallback);
+                    }
+                }, 1);
 
-		}
-	});
-}
-//get all tags
+            }
+        });
+    }
+    //get all tags
 devless_main.tags = function() {
-	return _jql('html').find('[class*= dv]');
+    return _jql('html').find('[class*= dv]');
 }
 
 //get all queries from tags
 devless_main.getQueries = function(node) {
-	var queries = [];
-	_jql.each(node.className.split(' '), function(index, value) {
-		(value.startsWith('dv-'))? queries.push(value): '';
-	});
-	return queries;
+    var queries = [];
+    _jql.each(node.className.split(' '), function(index, value) {
+        (value.startsWith('dv-')) ? queries.push(value): '';
+    });
+    return queries;
 }
 
 //get all component scripts
 devless_main.scriptBuilder = function(queries) {
-	var executableMethod = '';
-	var executableScript = [];
-	_jql.each(queries, function(index, query){
-		query = query.split(':');
-		for(var i=1; i< query.length; i++) {
-			query[i] = devless_main.coreLib.getParams(query[i])||query[i]
-		}
-		query = query.join(':');
-		script = query.replace(/-/g, "().")+"()";
-		_jql.each(script.split('.'), function(index, methods){
-			methods = methods.replace(':', '(');
-			methods = methods.replace(/:/g, ",");
-			numofLparen = (methods.match(/\(/g) || []).length;
-			numofRparen = (methods.match(/\)/g) || []).length;
-			if(numofLparen != numofRparen) {
-				methods = methods.replace('()', ')');
-				methods = methods.replace('(', '("');
-				methods = methods.replace(')', '")');
-				methods = methods.replace(/,/g, '","');
-				methods = methods.replace("^", ',');
-			}
-			executableMethod = executableMethod + methods + '.';
-		});
-		executableScript.push(executableMethod.slice(0, -1));
-		executableMethod = '';
-	});
+    var executableMethod = '';
+    var executableScript = [];
+    _jql.each(queries, function(index, query) {
+        query = query.split(':');
+        for (var i = 1; i < query.length; i++) {
+            query[i] = devless_main.coreLib.getParams(query[i]) || query[i]
+        }
+        query = query.join(':');
+        script = query.replace(/-/g, "().") + "()";
+        _jql.each(script.split('.'), function(index, methods) {
+            methods = methods.replace(':', '(');
+            methods = methods.replace(/:/g, ",");
+            numofLparen = (methods.match(/\(/g) || []).length;
+            numofRparen = (methods.match(/\)/g) || []).length;
+            if (numofLparen != numofRparen) {
+                methods = methods.replace('()', ')');
+                methods = methods.replace('(', '("');
+                methods = methods.replace(')', '")');
+                methods = methods.replace(/,/g, '","');
+                methods = methods.replace("^", ',');
+            }
+            executableMethod = executableMethod + methods + '.';
+        });
+        executableScript.push(executableMethod.slice(0, -1));
+        executableMethod = '';
+    });
 
-	return executableScript;
+    return executableScript;
 
 }
 
 
 devless_main.getComponents = function(tags) {
-	var tempComponents = []
-	_jql.each(tags, function(index, node){
-		var queries = devless_main.getQueries(node);
-		var script = devless_main.scriptBuilder(queries);
-		var label = assignLable();
-		var element = node;
-		var component = {'element':element, 'label':label,
-		'queries': queries, 'scripts':script}
-		tempComponents.push(component)
-	})
-	return tempComponents;
+    var tempComponents = []
+    _jql.each(tags, function(index, node) {
+        var queries = devless_main.getQueries(node);
+        var script = devless_main.scriptBuilder(queries);
+        var label = assignLable();
+        var element = node;
+        var component = {
+            'element': element,
+            'label': label,
+            'queries': queries,
+            'scripts': script
+        }
+        tempComponents.push(component)
+    })
+    return tempComponents;
 }
 
-devless_main.findComponent = function( key, searchValue ) {
-	returnComponent = false;
-	_jql.each( devless_main.components, function( index, component ) {
-		_jql.each( component, function( index, value ){
-			if( index == key) {
-				_jql.each(value, function(index, eachValue){
-					if(searchValue == eachValue) {
-						returnComponent = component;
-						return;
-					}
-				})
-			}
-		})
-	});
-	return returnComponent;
+devless_main.findComponent = function(key, searchValue) {
+    returnComponent = false;
+    _jql.each(devless_main.components, function(index, component) {
+        _jql.each(component, function(index, value) {
+            if (index == key) {
+                _jql.each(value, function(index, eachValue) {
+                    if (searchValue == eachValue) {
+                        returnComponent = component;
+                        return;
+                    }
+                })
+            }
+        })
+    });
+    return returnComponent;
 }
 
 //components
@@ -294,322 +305,339 @@ scriptEngine = {}
 SDK.queryParams = {};
 SDK.queryParams.related = '*';
 scriptEngine.dv = function() {
-	return this;
+    return this;
 }
 scriptEngine.notify = function(message) {
-	return this;
+    return this;
 }
-scriptEngine.processing = function() {return this;}
-scriptEngine.doneProcessing = function() {return this;}
-scriptEngine.success = function() { return this;}
-scriptEngine.failed = function() { return this;}
+scriptEngine.processing = function() {
+    return this;
+}
+scriptEngine.doneProcessing = function() {
+    return this;
+}
+scriptEngine.success = function() {
+    return this;
+}
+scriptEngine.failed = function() {
+    return this;
+}
 scriptEngine.bindToDelete = function(template, id, service, table) {
-	template.find('.dv-delete').each(function(){
-		this.onclick = function(){
-			if(!confirm("Are you sure you want to delete")){
-				return false;
-			}
-			SDK.deleteData(service, table, "id", id, function(response){
-				(response.status_code == 636)?devless_main.coreLib.notify(response.message,1):
-				devless_main.coreLib.notify(response.message,0);
-				devless_main.init();
+    template.find('.dv-delete').each(function() {
+        this.onclick = function() {
+            if (!confirm("Are you sure you want to delete")) {
+                return false;
+            }
+            SDK.deleteData(service, table, "id", id, function(response) {
+                (response.status_code == 636) ? devless_main.coreLib.notify(response.message, 1):
+                    devless_main.coreLib.notify(response.message, 0);
+                devless_main.init();
 
-			})
-		};
-	})
-	return template;
+            })
+        };
+    })
+    return template;
 }
 scriptEngine.delete = function() {
-	return this;
+    return this;
 }
 
 scriptEngine.get = function() {
 
-	return this;
+    return this;
 }
 
 scriptEngine.all = function(service, table) {
-	var reference = devless_main.singleCourier;
-	SDK.queryData(service, table, SDK.queryParams, function(response) {
-		if(response.payload.results){
-			response = response.payload.results;
-			mutatedResponse = dvInterceptQueryResponse(response);
-			devless_main.coreLib.render(reference, mutatedResponse, service, table);
-		}
-		(response.status_code != 625)?devless_main.coreLib.notify(response.message,0):'';
+    var reference = devless_main.singleCourier;
+    SDK.queryData(service, table, SDK.queryParams, function(response) {
+        if (response.payload.results) {
+            response = response.payload.results;
+            mutatedResponse = dvInterceptQueryResponse(response);
+            devless_main.coreLib.render(reference, mutatedResponse, service, table);
+        }
+        (response.status_code != 625) ? devless_main.coreLib.notify(response.message, 0): '';
 
-	});
-	SDK.queryParams = {};
-	SDK.queryParams.related = '*';
-	return this;
+    });
+    SDK.queryParams = {};
+    SDK.queryParams.related = '*';
+    return this;
 }
 
 
 
 scriptEngine.add = function() {
-	return this;
+    return this;
 }
 scriptEngine.oneto = function(service, table) {
-	persist = function(storeData, callback) {
-		devless_main.processing();
-		StoreData = dvInterceptSubmission(storeData);
-		SDK.addData(service, table, storeData, function(response){
-			(response.status_code == 609)?devless_main.coreLib.notify(response.message,1):
-			devless_main.coreLib.notify(response.message,0);
-			devless_main.doneProcessing();
-			callback();
-                 //devless_main.init();
-             })
+    persist = function(storeData, callback) {
+        devless_main.processing();
+        StoreData = dvInterceptSubmission(storeData);
+        SDK.addData(service, table, storeData, function(response) {
+            (response.status_code == 609) ? devless_main.coreLib.notify(response.message, 1):
+                devless_main.coreLib.notify(response.message, 0);
+            devless_main.doneProcessing();
+            callback();
+            //devless_main.init();
+        })
 
-	}
+    }
 
-	devless_main.coreLib.form(devless_main.singleCourier, persist);
-	return this;
+    devless_main.coreLib.form(devless_main.singleCourier, persist);
+    return this;
 }
 
 scriptEngine.update = function() {
-	_jql('<input>').attr({
-		type: 'hidden',
-		name: 'id'
-	}).appendTo(devless_main.singleCourier.element);
-	return this;
+    _jql('<input>').attr({
+        type: 'hidden',
+        name: 'id'
+    }).appendTo(devless_main.singleCourier.element);
+    return this;
 }
 scriptEngine.bindToUpdate = function(template, id, service, table, data) {
-	var className = 'dv-update-oneof:'+service+':'+table;
-	component = devless_main.findComponent('queries', className);
-	_jql( template ).find('.dv-update').each(function(){
-		this.onclick = function(){
-			scriptEngine.populateForm(component, data);
+    var className = 'dv-update-oneof:' + service + ':' + table;
+    component = devless_main.findComponent('queries', className);
+    _jql(template).find('.dv-update').each(function() {
+        this.onclick = function() {
+            scriptEngine.populateForm(component, data);
 
-		}
-	});
-	return template;
+        }
+    });
+    return template;
 }
 scriptEngine.populateForm = function(formReference, data) {
-	_jql(formReference.element).each(function(){
-		_jql.each(this.elements, function(index, element){
-			if(element.type != 'file' && element.type != 'submit') {
-				if(element.type == 'radio' || element.type == 'checkbox') {
-					(element.value == data[element.name])? element.checked = true:false;
-				}
-				element.value = (data[element.name])? data[element.name] :'';
-			}
+    _jql(formReference.element).each(function() {
+        _jql.each(this.elements, function(index, element) {
+            if (element.type != 'file' && element.type != 'submit') {
+                if (element.type == 'radio' || element.type == 'checkbox') {
+                    (element.value == data[element.name]) ? element.checked = true: false;
+                }
+                element.value = (data[element.name]) ? data[element.name] : '';
+            }
 
-		})
-	})
+        })
+    })
 }
-scriptEngine.oneof = function( service, table ) {
-	update = function( data, callback ) {
-		if( data.id == undefined ) { throw " id could not be found in the form. Try adding <input type=\"hidden\" name=\"id\" /> to the update form " }
-			devless_main.processing();
-			data = dvInterceptSubmission(data);
-		SDK.updateData( service, table,"id", data.id, data, function( response ) {
-			(response.status_code == 619)?devless_main.coreLib.notify(response.message,1):
-			devless_main.doneProcessing();
-			devless_main.coreLib.notify(response.message,0);
-			callback()   
-			devless_main.init();
-		});
-	}
-	devless_main.coreLib.form(devless_main.singleCourier, update);
-	return this;
+scriptEngine.oneof = function(service, table) {
+    update = function(data, callback) {
+        if (data.id == undefined) {
+            throw " id could not be found in the form. Try adding <input type=\"hidden\" name=\"id\" /> to the update form "
+        }
+        devless_main.processing();
+        data = dvInterceptSubmission(data);
+        SDK.updateData(service, table, "id", data.id, data, function(response) {
+            (response.status_code == 619) ? devless_main.coreLib.notify(response.message, 1):
+                devless_main.doneProcessing();
+            devless_main.coreLib.notify(response.message, 0);
+            callback()
+            devless_main.init();
+        });
+    }
+    devless_main.coreLib.form(devless_main.singleCourier, update);
+    return this;
 }
-scriptEngine.where = function(key, value){
-	SDK.queryParams.where = [];
-	SDK.queryParams.where.push(key+','+value);
-	return this;
-},
-scriptEngine.random = function(){
-	SDK.queryParams.randomize = "1";
-	return this;
-},
-scriptEngine.param = function(key, value){
-	SDK.queryParams[key] = value;
-	return this;
-},
-scriptEngine.signup = function() {
-	var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
-	actionUrl = (actionUrl != undefined)? actionUrl: '#';
-	register = function(record, callback) {
-		devless_main.processing();
-		SDK.call('devless', 'signUp', [ record['email'], record['password'], record['username'], record['phonenumber'],
-			record['firstname'], record['lastname'] ], function(response){
-				if( response.payload.result['token'] != undefined ) {
-					SDK.setToken(response.payload.result['token']);
-					devless_main.doneProcessing();
-					devless_main.coreLib.notify("Sign up successfully",1);
-					if(actionUrl != '#') {
-						window.location.href = window.location.origin + '/' + actionUrl;
-					}
-				} else {
-					devless_main.doneProcessing();
-					devless_main.coreLib.notify("Signup Failed",0);
-				}
-				callback();
-			});
-	}
-	devless_main.coreLib.form(devless_main.singleCourier, register);
-}
+scriptEngine.where = function(key, value) {
+        SDK.queryParams.where = [];
+        SDK.queryParams.where.push(key + ',' + value);
+        return this;
+    },
+    scriptEngine.random = function() {
+        SDK.queryParams.randomize = "1";
+        return this;
+    },
+    scriptEngine.param = function(key, value) {
+        SDK.queryParams[key] = value;
+        return this;
+    },
+    scriptEngine.signup = function() {
+        var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
+        actionUrl = (actionUrl != undefined) ? actionUrl : '#';
+        register = function(record, callback) {
+            devless_main.processing();
+            SDK.call('devless', 'signUp', [record['email'], record['password'], record['username'], record['phonenumber'],
+                record['firstname'], record['lastname']
+            ], function(response) {
+                if (response.payload.result['token'] != undefined) {
+                    SDK.setToken(response.payload.result['token']);
+                    devless_main.doneProcessing();
+                    devless_main.coreLib.notify("Sign up successfully", 1);
+                    if (actionUrl != '#') {
+                        window.location.href = window.location.origin + '/' + actionUrl;
+                    }
+                } else {
+                    devless_main.doneProcessing();
+                    devless_main.coreLib.notify("Signup Failed", 0);
+                }
+                callback();
+            });
+        }
+        devless_main.coreLib.form(devless_main.singleCourier, register);
+    }
 
 scriptEngine.signin = function(record) {
-	var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
-	actionUrl = (actionUrl != undefined)? actionUrl: '#';
-	login = function(record, callback) {
-		devless_main.processing();
-		SDK.call('devless', 'login', [record['username'], record['email'], record['phonenumber'],
-			record['password']], function(response){
-				if(response.payload.result !== false) {
-					SDK.setToken(response.payload.result['token']);
-					devless_main.doneProcessing();
-					devless_main.coreLib.notify("Log in successfully",1);
-					if(actionUrl != '#') {
-						window.location.href = window.location.origin + '/' + actionUrl;
-					}
-				} else{
-					devless_main.doneProcessing();
-					devless_main.coreLib.notify("Login failed",0);
-				}
-				callback();
-			});
-	}
-	devless_main.coreLib.form(devless_main.singleCourier, login);
+    var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
+    actionUrl = (actionUrl != undefined) ? actionUrl : '#';
+    login = function(record, callback) {
+        devless_main.processing();
+        SDK.call('devless', 'login', [record['username'], record['email'], record['phonenumber'],
+            record['password']
+        ], function(response) {
+            if (response.payload.result !== false) {
+                SDK.setToken(response.payload.result['token']);
+                devless_main.doneProcessing();
+                devless_main.coreLib.notify("Log in successfully", 1);
+                if (actionUrl != '#') {
+                    window.location.href = window.location.origin + '/' + actionUrl;
+                }
+            } else {
+                devless_main.doneProcessing();
+                devless_main.coreLib.notify("Login failed", 0);
+            }
+            callback();
+        });
+    }
+    devless_main.coreLib.form(devless_main.singleCourier, login);
 }
 scriptEngine.profile = function() {
-	var component = devless_main.singleCourier;
-	devless_main.processing();
-	SDK.call('devless', 'profile', [], function(response){
-		if(response.payload.error) {
-			devless_main.doneProcessing();
-			devless_main.coreLib.notify(response.payload.error.message);
-		} else {
-			data = response.payload.result;
-			data.firstname = data.first_name;
-			data.lastname = data.last_name;
-			data.phonenumber = data.phone_number;
-			delete(data.first_name)
-			delete(data.last_name);
-			delete(data.phone_number);
-			devless_main.coreLib.render(component, [data])
-			devless_main.doneProcessing();
-		}
-	})
+    var component = devless_main.singleCourier;
+    devless_main.processing();
+    SDK.call('devless', 'profile', [], function(response) {
+        if (response.payload.error) {
+            devless_main.doneProcessing();
+            devless_main.coreLib.notify(response.payload.error.message);
+        } else {
+            data = response.payload.result;
+            data.firstname = data.first_name;
+            data.lastname = data.last_name;
+            data.phonenumber = data.phone_number;
+            delete(data.first_name)
+            delete(data.last_name);
+            delete(data.phone_number);
+            devless_main.coreLib.render(component, [data])
+            devless_main.doneProcessing();
+        }
+    })
 }
 
 scriptEngine.updateProfile = function() {
-	var component = devless_main.singleCourier;
-	var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
-	actionUrl = (actionUrl != undefined)? actionUrl: '#';
-	devless_main.processing();
-	SDK.call('devless', 'profile', [], function(response){
-		if(response.payload.error) {
-			devless_main.coreLib.notify(response.payload.error.message);
-		} else {
-			data = response.payload.result;
-			data.firstname = data.first_name;
-			data.lastname = data.last_name;
-			data.phonenumber = data.phone_number;
-			delete(data.first_name)
-			delete(data.last_name);
-			delete(data.phone_number);
-			scriptEngine.populateForm(component,
-				data);
-			devless_main.doneProcessing();
-		}
-	})
+    var component = devless_main.singleCourier;
+    var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
+    actionUrl = (actionUrl != undefined) ? actionUrl : '#';
+    devless_main.processing();
+    SDK.call('devless', 'profile', [], function(response) {
+        if (response.payload.error) {
+            devless_main.coreLib.notify(response.payload.error.message);
+        } else {
+            data = response.payload.result;
+            data.firstname = data.first_name;
+            data.lastname = data.last_name;
+            data.phonenumber = data.phone_number;
+            delete(data.first_name)
+            delete(data.last_name);
+            delete(data.phone_number);
+            scriptEngine.populateForm(component,
+                data);
+            devless_main.doneProcessing();
+        }
+    })
 
-	var updateScript = function(record, callback) {
-		devless_main.processing();
-		SDK.call('devless', 'updateProfile', [ record['email'], record['password'], record['username'], record['phonenumber'],
-			record['firstname'], record['lastname'] ], function(response){
-				if(response.payload.result == true ) {
-					devless_main.doneProcessing();
-					devless_main.coreLib.notify('Profile updated successfully');
-					window.location.href = window.location.origin + '/' + actionUrl;
-				} else {
-					devless_main.doneProcessing();
-					devless_main.coreLib.notify('Profile could not be updated');
-				}
-				callback();
+    var updateScript = function(record, callback) {
+        devless_main.processing();
+        SDK.call('devless', 'updateProfile', [record['email'], record['password'], record['username'], record['phonenumber'],
+            record['firstname'], record['lastname']
+        ], function(response) {
+            if (response.payload.result == true) {
+                devless_main.doneProcessing();
+                devless_main.coreLib.notify('Profile updated successfully');
+                window.location.href = window.location.origin + '/' + actionUrl;
+            } else {
+                devless_main.doneProcessing();
+                devless_main.coreLib.notify('Profile could not be updated');
+            }
+            callback();
 
-			});
-	}
-	devless_main.coreLib.form(component, updateScript);
+        });
+    }
+    devless_main.coreLib.form(component, updateScript);
 
-}	
+}
 scriptEngine.logout = function() {
-	devless_main.singleCourier.element.onclick = function() {
-		var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
-		actionUrl = (actionUrl != undefined)? actionUrl: '#';
-		SDK.call('devless', 'logout', [], function(response){
-			if(response.payload.result == true) {
-				devless_main.coreLib.notify('Logout successfully',1)
-				window.location.href = window.location.origin + '/' + actionUrl;
-			} else {
-				devless_main.coreLib.notify('Could not log you out',0);
-			}
-		})
-	}
+    devless_main.singleCourier.element.onclick = function() {
+        var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
+        actionUrl = (actionUrl != undefined) ? actionUrl : '#';
+        SDK.call('devless', 'logout', [], function(response) {
+            if (response.payload.result == true) {
+                devless_main.coreLib.notify('Logout successfully', 1)
+                window.location.href = window.location.origin + '/' + actionUrl;
+            } else {
+                devless_main.coreLib.notify('Could not log you out', 0);
+            }
+        })
+    }
 }
 
-scriptEngine.addXMLRequestCallback = function(callback){
-	var oldSend, i;
-	if( XMLHttpRequest.callbacks ) {
-		XMLHttpRequest.callbacks.push( callback );
-	} else {
-		XMLHttpRequest.callbacks = [callback];
-		oldSend = XMLHttpRequest.prototype.send;
-		XMLHttpRequest.prototype.send = function(){
-			for( i = 0; i < XMLHttpRequest.callbacks.length; i++ ) {
-				XMLHttpRequest.callbacks[i]( this );
-			}
-			oldSend.apply(this, arguments);
-		}
-	}
+scriptEngine.addXMLRequestCallback = function(callback) {
+    var oldSend, i;
+    if (XMLHttpRequest.callbacks) {
+        XMLHttpRequest.callbacks.push(callback);
+    } else {
+        XMLHttpRequest.callbacks = [callback];
+        oldSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.send = function() {
+            for (i = 0; i < XMLHttpRequest.callbacks.length; i++) {
+                XMLHttpRequest.callbacks[i](this);
+            }
+            oldSend.apply(this, arguments);
+        }
+    }
 }
 
 devlessCallbacks = function(callback) {
-	scriptEngine.addXMLRequestCallback(function( xhr ) {
-		xhr.onreadystatechange=function(){
-			if ( xhr.readyState == 4 && xhr.status == 200 ) {
-				var respObj = JSON.parse(xhr.responseText);
-				console.log(respObj.status_code, xhr);
-				callback(respObj);	
-			}
-		}
+    scriptEngine.addXMLRequestCallback(function(xhr) {
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var respObj = JSON.parse(xhr.responseText);
+                console.log(respObj.status_code, xhr);
+                callback(respObj);
+            }
+        }
 
-	});
+    });
 }
 
 
-dvInterceptSubmission = function(formValues){return formValues;}
-dvInterceptQueryResponse = function(response){return response;}
+dvInterceptSubmission = function(formValues) {
+    return formValues;
+}
+dvInterceptQueryResponse = function(response) {
+    return response;
+}
 
 
 dvOnResponse = devlessCallbacks;
 
 devless_main.init = function() {
-	_jql.each(devless_main.components, function(index, node) {
-		devless_main.singleCourier = node;
-		_jql.each(node.scripts, function(index, script) {
-			try{
-				eval('scriptEngine.'+script);	
-			}
-			catch (e) {
-				console.error(node.queries[index]+" could not be resolved to an executable script" + e);
-			}
-		});
+    _jql.each(devless_main.components, function(index, node) {
+        devless_main.singleCourier = node;
+        _jql.each(node.scripts, function(index, script) {
+            try {
+                eval('scriptEngine.' + script);
+            } catch (e) {
+                console.error(node.queries[index] + " could not be resolved to an executable script" + e);
+            }
+        });
 
-	});
-	window.initialRender = false;
+    });
+    window.initialRender = false;
 
 }
 
-var notifClasses = ['.dv-notify-success', '.dv-notify-failed', '.dv-notify', 
-'.dv-processing', '.dv-doneProcessing'];    
-for(var i =0; i< notifClasses.length; i++){
-	_jql(notifClasses[i]).each(function() {
-		this.style.display = 'none';
-	})	
+var notifClasses = ['.dv-notify-success', '.dv-notify-failed', '.dv-notify',
+    '.dv-processing', '.dv-doneProcessing'
+];
+for (var i = 0; i < notifClasses.length; i++) {
+    _jql(notifClasses[i]).each(function() {
+        this.style.display = 'none';
+    })
 }
 window.initialRender = true;
 devless_main.init();

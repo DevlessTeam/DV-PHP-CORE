@@ -5,6 +5,7 @@
             <div class="page-head">
                 <h3>Service</h3><span class="sub-title">{{ucwords($service->name)}}</span>
            </div><!-- page head end-->
+           <div class="code-console center" style="margin-left: 50%;">dsfadsf</div>
 @endsection
 
 @section('content')
@@ -342,7 +343,11 @@
 
 
 <textarea  class="code-box" id="code-box" name="script" rows="20" style="width: 100%">
-{{$service->script}}
+@if(strlen($service->raw_script) < 1)
+  {{$service->script}}
+@else
+  {{$service->raw_script}}
+@endif
 </textarea>
                                                                        <br>
 

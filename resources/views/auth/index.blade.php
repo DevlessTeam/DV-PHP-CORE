@@ -64,6 +64,7 @@
                 </div>
 
                 <div class="form-group">
+                  <!-- <a href="{{url('recover_password')}}">Recover your password</a> -->
                   <div class="col-lg-offset-2 col-lg-10">
                     <button type="submit" class="btn btn-info pull-right">Login</button>
                   </div>
