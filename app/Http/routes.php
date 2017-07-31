@@ -12,7 +12,7 @@
 */
 
     Route::get('/', 'UserController@get_login');
-
+    
     Route::get('/service_assets', 'ServiceController@service_views');
 
     Route::post('login', 'UserController@post_login');
@@ -106,7 +106,9 @@
             //Misc Route
             Route::get('edit-table/{action}/{service}/{table}/{params}', 'ServiceController@editTable');
 
+            //run methods from classes directly using the open-api (this is to control the increasing number of routes)
             Route::get('open-api/{file}/{method}/{params}', 'OpenApiController@gateway');
+
 
         }
     );

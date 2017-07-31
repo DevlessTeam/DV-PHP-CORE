@@ -23,6 +23,7 @@ class CreateServicesTable extends Migration
             $table->text('database')->nullable();
             $table->text('port')->nullable();
             $table->text('script');
+            $table->text('raw_script');
             $table->text('script_init_vars');
             $table->text('resource_access_right');
                  // ->default('{"query":1,"create":2,"read":0,"update":1,"delete":1,"schema":0}');

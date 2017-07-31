@@ -8,32 +8,16 @@ use App\Helpers\DevlessHelper;
 use App\Helpers\Assert as Assert;
 use App\Http\Controllers\ServiceController as Service;
 
+
 class ScriptHandler
 {
-
-    public function compile_script($code)
-    {
-        $declarationString = '';
-        $tokens = token_get_all('<?php '.$code);
-        foreach ($tokens as $token) {
-            if (is_array($token)) {
-                $start = 1;
-                if ($token[0] == 312) {
-                    $variable = substr($token[1], $start);
-                    $declarationString .= "$$variable = null;";
-                }
-            }
-        }
-        $compiled_script['var_init'] = $declarationString;
-        $compiled_script['script'] = $code;
-        return $compiled_script;
-    }
+    use compiler;
 
     /**
      * script execution sandbox.
      *
      * @param $Dvresource
-     * @param array      $payload request parameters
+     * @param array   $payload request parameters
      *
      * @return array
      *
@@ -84,14 +68,14 @@ EOT;
 
             //store script params temporally
             $_____midRules = $rules;
-            $_____mindEvent = $EVENT;
+            $_____midEvent = $EVENT;
 
             //get declared vars
             $declarationString = $_____init_vars;
             eval($declarationString);
             //restore script params
             $rules = $_____midRules;
-            $EVENT = $_____mindEvent;
+            $EVENT = $_____midEvent;
 
             extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
             $rules->accessRights = $EVENT['access_rights'];
@@ -107,10 +91,9 @@ EOT;
             
             
             $imports = "use App\Helpers\Assert as assertIts;use App\Helpers\Assert as  assertIt;";
-            $headers = $imports.' $rules';
+            $headers = $imports;
             $footer  = '';
             $finalCode = (strpos($code, 'use App\Helpers\Assert')!==false)? $code : $headers.$code.$footer;
-          
             eval($finalCode);
 
             $EVENT['access_rights'] = $rules->accessRights;

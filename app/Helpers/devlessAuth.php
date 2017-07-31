@@ -328,5 +328,10 @@ trait devlessAuth
         return DataStore::updateDump('devless_auth_settings', $newSettings);
     }
 
+    public static function recover_password($recover_email)
+    {
+        return true;//file_get_contents('http://localhost:6060/status');
+    }
+
 
 }

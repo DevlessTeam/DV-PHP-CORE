@@ -152,15 +152,10 @@ trait service_activity
      */
     public function script_executioner($resource, $payload)
     {
-         $output = false;
-
+        $output = false;
         if ($resource != 'schema' ) {
-            $script = new script();
-
-            $output = $script->run_script($resource, $payload);
-            
-        }
-
+            $output = ( new script() )->run_script($resource, $payload);
+        }   
         return $output;
     }
 

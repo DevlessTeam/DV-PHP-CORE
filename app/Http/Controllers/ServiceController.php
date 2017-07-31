@@ -82,7 +82,7 @@ class ServiceController extends Controller
         $service->resource_access_right =
             '{"query":1,"create":1,"update":1,"delete":1,"schema":0,"script":0, "view":0}';
         $service->active = 1;
-        $service->script = DLH::script_template();
+        $service->raw_script = DLH::script_template();
         $db = new Db();
         if (!$db->check_db_connection($connection)) {
             DLH::flash('Sorry connection could not be made to Database', 'error');
@@ -148,14 +148,16 @@ class ServiceController extends Controller
                 $service_name = $service->name;
                 $db = new DataStore();
                 $scriptHandler = new script();
+                $service->raw_script = $script;
                 $compiled_script  = $scriptHandler->compile_script($script);
+                if(!$compiled_script['successful']) {
+                    return Response::respond(1001, $compiled_script['error_message']);
+                }
                 $service->script_init_vars = $compiled_script['var_init'];
                 $service->script = $compiled_script['script'];
-                //create special field for uncompiled scripts 
-
                 $service->save();
-
-                return Response::respond(626);
+                return Response::respond(626);    
+                
             }
             $connection = [];
             $serviceFields = ['description', 'username', 'password',
