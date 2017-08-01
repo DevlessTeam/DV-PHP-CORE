@@ -21,7 +21,7 @@ trait compiler
         try {
             $stmts = $parser->parse($code);
             $stmts = $traverser->traverse($stmts);
-            $code = $prettyPrinter->prettyPrint($stmts);
+            $code = substr($prettyPrinter->prettyPrint($stmts), 6);
          
         } catch (Error $e) {
         	$compiled_script['error_message'] = $e->getMessage();

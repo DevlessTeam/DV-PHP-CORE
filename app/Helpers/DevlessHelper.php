@@ -125,16 +125,21 @@ class DevlessHelper extends Helper
      */
     public static function find_closest_word($word, $options)
     {
-        $best_closesness = 1;
-        $closest_word = null;
+        $best_closesness = -1;
+        $closest_word = null;        
+        
         foreach ($options as $each_option) {
-            $levenshtein_count = levenshtein($word, $each_option);
-            if ($levenshtein_count <= $best_closesness) {
+            $lev = levenshtein($word, $each_option);
+            if ($lev == 0) {
                 $closest_word = $each_option;
-                $levenshtein_count = $best_closesness;
+                $best_closesness = 0;
+                break;
+            }
+            if ($lev <= $best_closesness || $best_closesness < 0) {
+                $closest_word  = $each_option;
+                $best_closesness = $lev;
             }
         }
-
         return $closest_word;
     }
     /**
