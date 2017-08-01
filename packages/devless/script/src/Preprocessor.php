@@ -3,6 +3,9 @@
 namespace Devless\Script;
 
 use PhpParser\Node;
+use App\Helpers\Helper;
+use App\Helpers\DevlessHelper as DLH;
+use Devless\RulesEngine\Rules;
 use PhpParser\NodeVisitorAbstract;
 
 trait preprocessor 
@@ -22,12 +25,16 @@ trait preprocessor
 	}
 
 	private function checkIfRuleExists($node) {
-		// dd($node->var->var->var->var->var->var);
-		for($i=0; $i< count($node->args); $i++) {
-			// dd($node);
+		
+		if( $node instanceof Node\Expr\MethodCall && isset($node->name)) {
+			$methodName = $node->name;
+			$ruleMethods = get_class_methods(new Rules());
+			if(! in_array($methodName, $ruleMethods)){
+				$closestWord = DLH::find_closest_word($methodName, $ruleMethods);
+				$message = ( strlen($closestWord)> 0 )?"The method `$methodName` does not exist maybe you meant ".$closestWord. ' ?' :"The method `$methodName` does not exist";
+				Helper::interrupt(1001, $message);
+			}
 		}
-		if( $node instanceof Node\Expr\MethodCall ) {
-			// dd($node);
-		}
+		return $node;
 	}
 }
