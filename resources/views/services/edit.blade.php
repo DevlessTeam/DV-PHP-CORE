@@ -5,7 +5,7 @@
             <div class="page-head">
                 <h3>Service</h3><span class="sub-title">{{ucwords($service->name)}}</span>
            </div><!-- page head end-->
-           <div class="code-console center" style="margin-left: 50%;">dsfadsf</div>
+           <div class="code-console center" style="margin-left: 50%;"></div>
 @endsection
 
 @section('content')

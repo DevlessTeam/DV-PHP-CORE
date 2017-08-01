@@ -31,7 +31,7 @@ trait preprocessor
 			$ruleMethods = get_class_methods(new Rules());
 			if(! in_array($methodName, $ruleMethods)){
 				$closestWord = DLH::find_closest_word($methodName, $ruleMethods);
-				$message = ( strlen($closestWord)> 0 )?"The method `$methodName` does not exist maybe you meant ".$closestWord. ' ?' :"The method `$methodName` does not exist";
+				$message = ( strlen($closestWord)> 0 )?"The method `$methodName` does not exist maybe you meant `".$closestWord. "` ?" :"The method `$methodName` does not exist";
 				Helper::interrupt(1001, $message);
 			}
 		}
