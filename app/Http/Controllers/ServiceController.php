@@ -83,8 +83,9 @@ class ServiceController extends Controller
             '{"query":1,"create":1,"update":1,"delete":1,"schema":0,"script":0, "view":0}';
         $service->active = 1;
         $service->raw_script = DLH::script_template();
+        
         $db = new Db();
-        if (!$db->check_db_connection($connection)) {
+        if ( !$db->check_db_connection($connection) ) {
             DLH::flash('Sorry connection could not be made to Database', 'error');
         } else {
             //create initial views for service
