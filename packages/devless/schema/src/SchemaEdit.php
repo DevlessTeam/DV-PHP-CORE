@@ -159,16 +159,18 @@ class SchemaEdit
         if (!$tableMeta['schema']) {
             return false;
         }
+
         \Schema::table(
             $compTableName, function (Blueprint $table) use ($fieldName, &$tableMeta) {
-                $table->dropColumn($fieldName);
-                $count = 0;
-                foreach ($tableMeta['schema']['field'] as $field) {
-                    if ($field['name'] == $fieldName) {
-                        unset($tableMeta['schema']['field'][$count]);
+                    $table->dropColumn($fieldName);
+                    $count = 0;
+                    foreach ($tableMeta['schema']['field'] as $field) {
+                        if ($field['name'] == $fieldName) {
+                            unset($tableMeta['schema']['field'][$count]);
+                            $tableMeta['schema']['field'] = array_values($tableMeta['schema']['field']);
+                        }
+                        ++$count;
                     }
-                    ++$count;
-                }
             }
         );
         $dbHandler->update_table_meta($serviceName, $tableName, $tableMeta);

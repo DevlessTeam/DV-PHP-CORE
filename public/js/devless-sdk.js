@@ -39,6 +39,7 @@ devless_main.coreLib.notify = function(message, status) {
         this.style.display = 'block';
     })
     devless_main.generalErrorState = status;
+
     if (status == 1) {
         _jql('.dv-notify-success').each(function() {
             this.style.display = 'block';
@@ -194,7 +195,7 @@ devless_main.coreLib.form = function(component, callback) {
             });
             formCallback = function() {
                 _jql.each(inputs, function(index, element) {
-                    if (devless_main.generalErrorState == 1) {
+                	if (devless_main.generalErrorState == 1) {
                         element.value = '';
                     }
 
@@ -323,18 +324,21 @@ scriptEngine.failed = function() {
     return this;
 }
 scriptEngine.bindToDelete = function(template, id, service, table) {
-    template.find('.dv-delete').each(function() {
-        this.onclick = function() {
-            if (!confirm("Are you sure you want to delete")) {
-                return false;
-            }
-            SDK.deleteData(service, table, "id", id, function(response) {
-                (response.status_code == 636) ? devless_main.coreLib.notify(response.message, 1):
-                    devless_main.coreLib.notify(response.message, 0);
-                devless_main.init();
+	template.each(function(index, value) {
+		if(value.className == "dv-delete"){
+				this.onclick = function() {
+	            if (!confirm("Are you sure you want to delete")) {
+	                return false;
+	            }
+	            SDK.deleteData(service, table, "id", id, function(response) {
+	                (response.status_code == 636) ? devless_main.coreLib.notify(response.message, 1):
+	                    devless_main.coreLib.notify(response.message, 0);
+	                devless_main.init();
 
-            })
-        };
+	            })
+   		    };
+		}
+        
     })
     return template;
 }
@@ -396,11 +400,13 @@ scriptEngine.update = function() {
 scriptEngine.bindToUpdate = function(template, id, service, table, data) {
     var className = 'dv-update-oneof:' + service + ':' + table;
     component = devless_main.findComponent('queries', className);
-    _jql(template).find('.dv-update').each(function() {
-        this.onclick = function() {
+    template.each(function(index, value) {
+    	if(value.className == "dv-update"){
+    		this.onclick = function() {
             scriptEngine.populateForm(component, data);
-
-        }
+        	}	
+    	}
+        
     });
     return template;
 }
@@ -426,8 +432,8 @@ scriptEngine.oneof = function(service, table) {
         data = dvInterceptSubmission(data);
         SDK.updateData(service, table, "id", data.id, data, function(response) {
             (response.status_code == 619) ? devless_main.coreLib.notify(response.message, 1):
-                devless_main.doneProcessing();
             devless_main.coreLib.notify(response.message, 0);
+            devless_main.doneProcessing();
             callback()
             devless_main.init();
         });
