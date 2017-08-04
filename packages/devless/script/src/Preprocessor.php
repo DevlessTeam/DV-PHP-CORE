@@ -18,6 +18,18 @@ trait preprocessor
 					$nodeName = $node->args[$i]->value->name->parts[0];
 					$newVariable = (new Node\Expr\Variable($nodeName, ["startLine" => 200, "endLine" => 200]));
 					$node->args[$i]->value = $newVariable;
+				} else if ($node->args[$i]->value instanceof Node\Expr\Array_) {
+					$numOFArgs = count($node->args[$i]->value->items);
+					for($j=0; $j< $numOFArgs; $j++) {
+						if($node->args[$i]->value->items[$j]->key instanceof Node\Expr\ConstFetch){
+							$keyName = $node->args[$i]->value->items[$j]->key->name->parts[0];
+							$node->args[$i]->value->items[$j]->key = (new Node\Expr\Variable($keyName, ["startLine" => 200, "endLine" => 200]));
+						}
+						if($node->args[$i]->value->items[$j]->value instanceof Node\Expr\ConstFetch){
+							$valueName = $node->args[$i]->value->items[$j]->value->name->parts[0];
+							$node->args[$i]->value->items[$j]->value = (new Node\Expr\Variable($valueName, ["startLine" => 200, "endLine" => 200]));
+						}
+					}
 				}
 			}
 		}

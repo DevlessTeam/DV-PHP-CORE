@@ -51,6 +51,7 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $service = new Service();
+        $scriptHandler = new script();
         $service_name_from_form = $request->input('name');
         $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
         $service_name_from_form = str_replace('-', '_', $service_name_from_form);
@@ -83,7 +84,8 @@ class ServiceController extends Controller
             '{"query":1,"create":1,"update":1,"delete":1,"schema":0,"script":0, "view":0}';
         $service->active = 1;
         $service->raw_script = DLH::script_template();
-        
+        $compiled_script  = $scriptHandler->compile_script(DLH::script_template());
+        $service->script = $compiled_script['script'];        
         $db = new Db();
         if ( !$db->check_db_connection($connection) ) {
             DLH::flash('Sorry connection could not be made to Database', 'error');
