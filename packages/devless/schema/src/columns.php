@@ -34,16 +34,19 @@ trait columns
     private function column_generator($field, $table, $db_type)
     {
         $column_type = $this->check_column_constraints($field);
-        $unique = '';
-        if ($field['is_unique'] == 'true') {
-            $unique = 'unique';
-        }
+        
+        $unique  = ($field['is_unique'] == 'true')?'unique':'';
+        $nullable  = ($field['required'] == 'true')?'':'nullable';
+
+        //for relationships 
         if ($column_type == 4) {
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
                 ->unsigned()->$unique();
 
             $table->foreign($field['ref_table'].'_id')->references('id')
                 ->on($field['ref_table'])->onDelete('cascade');
+
+        //relationship with a default        
         } elseif ($column_type == 3) {
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
                 ->unsigned()->$unique();
@@ -51,10 +54,13 @@ trait columns
             $table->foreign($field['ref_table'].'_id')->references('id')
                 ->on($field['ref_table'])->default($field['default'])
                 ->onDelete('cascade');
+
+        //field with a default        
         } elseif ($column_type == 2) {
             $table->$db_type[$field['field_type']]
-            ($field['name'])->default($field['default'])->onDelete('cascade')
-                ->$unique();
+            ($field['name'])->default($field['default'])->onDelete('cascade');
+
+        //field without a default        
         } elseif ($column_type == 1) {
             $table->{$db_type[$field['field_type']]}
             ($field['name'])->onDelete('cascade')->$unique();
