@@ -435,7 +435,7 @@ scriptEngine.oneof = function(service, table) {
             devless_main.coreLib.notify(response.message, 0);
             devless_main.doneProcessing();
             callback()
-            devless_main.init();
+            // devless_main.init();
         });
     }
     devless_main.coreLib.form(devless_main.singleCourier, update);
@@ -602,6 +602,7 @@ devlessCallbacks = function(callback) {
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 var respObj = JSON.parse(xhr.responseText);
+                console.log(respObj);                                                                                                                                                           
                 callback(respObj);
             }
         }

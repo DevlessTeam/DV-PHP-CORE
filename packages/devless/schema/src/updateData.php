@@ -21,6 +21,7 @@ trait updateData
         $db = $this->connect_to_db($payload);
         $service_name = $payload['service_name'];
         $params = $payload['params'][0];
+        $update_ACL = $payload['resource_access_right']['update'];
         if (!isset(
             $params['name'],
             $params['params'][0]['where'],
@@ -34,11 +35,16 @@ trait updateData
             $data = $params['params'][0]['data'];
             $where_clause = $this->get_update_where_clause($payload);
 
-            $checkUserOrNot = ($payload['user_id'] !== '')? ['where', $payload['user_id']]: ['whereNotIn',['']];
-            
-            $outcome_state = $db->table($table_name)->where($where_clause[0],'=',$where_clause[1])->{$checkUserOrNot[0]}('devless_user_id', $checkUserOrNot[1])->update($data[0]);
+            if(isset($data[0]['id'])){unset($data[0]['id']);}
 
-            return $this->update_record_response($outcome_state, $params['name']);
+            if($update_ACL == 1){
+                $outcome = $db->table($table_name)->where($where_clause[0],'=',$where_clause[1])->update($data[0]);
+            } 
+            else {
+                $outcome = $db->table($table_name)->where($where_clause[0],'=',$where_clause[1])->where('devless_user_id', $payload['user_id'])->update($data[0]);
+            };
+            
+            return $this->update_record_response($outcome, $params['name']);
             
         }     
 
@@ -49,9 +55,9 @@ trait updateData
             return $explosion;
         }
 
-        private function update_record_response($outcome_state, $table_name)
+        private function update_record_response($outcome, $table_name)
         {
-            if ($outcome_state) {
+            if ($outcome) {
                 return Response::respond(
                     619,
                     'table '.$table_name.' updated successfuly'
