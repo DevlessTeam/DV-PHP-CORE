@@ -602,8 +602,10 @@ devlessCallbacks = function(callback) {
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 var respObj = JSON.parse(xhr.responseText);
-                console.log(respObj);                                                                                                                                                           
-                callback(respObj);
+                console.log(respObj);   
+                if(respObj.status_code && respObj.message){
+                	callback(respObj);	
+                }
             }
         }
 
