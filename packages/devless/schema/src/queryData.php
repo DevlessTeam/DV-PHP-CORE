@@ -44,24 +44,22 @@ trait queryData
             $payload,
             $table_name,
             $size_count,
-            $related_fetch,
             $related_fetch
         );
         
         $count = $db->table($table_name)->count();
         
-        ($related_fetch)? eval(
-            'return '.$complete_query.'
-        ->chunk($count, function($results) use (&$queried_results, &$related_fetch) {
-             return $queried_results = $related_fetch($results);
-        });'
-        ):eval('$queried_results = '.$complete_query.'->get();');
+        $queried_results = eval('return $queried_results = '.$complete_query.'->get();');
+    
+        $queried_results = ($related_fetch)? $related_fetch($queried_results):$queried_results;
+    
+        
         $queried_results = (is_null($queried_results))?[]:$queried_results;
         return $this->respond_with_query_data($queried_results, $count);
         
     }
 
-    private function set_query_options(&$complete_query, &$payload, $table_name,  &$size_count, $db, &$related_fetch)
+    private function set_query_options(&$complete_query, &$payload, $table_name,  &$size_count, &$related_fetch)
     {
 
         $query_args_list = [

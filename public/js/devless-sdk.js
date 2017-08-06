@@ -354,7 +354,8 @@ scriptEngine.get = function() {
 scriptEngine.all = function(service, table) {
     var reference = devless_main.singleCourier;
     SDK.queryData(service, table, SDK.queryParams, function(response) {
-        if (response.payload.results) {
+        if (response.payload) {
+        	if(!response.payload.results){return false;}
             response = response.payload.results;
             mutatedResponse = dvInterceptQueryResponse(response);
             devless_main.coreLib.render(reference, mutatedResponse, service, table);
@@ -451,7 +452,7 @@ scriptEngine.where = function(key, value) {
         return this;
     },
     scriptEngine.param = function(key, value) {
-        SDK.queryParams[key] = value;
+    	SDK.queryParams[key] = value;
         return this;
     },
     scriptEngine.signup = function() {
@@ -619,7 +620,6 @@ dvInterceptSubmission = function(formValues) {
 dvInterceptQueryResponse = function(response) {
     return response;
 }
-
 
 dvOnResponse = devlessCallbacks;
 
