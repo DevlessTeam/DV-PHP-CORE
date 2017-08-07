@@ -1,6 +1,6 @@
 <h1 align="center">
     <a href="https://www.devless.io">
-        <img src="https://yt3.ggpht.com/-SvkcOdOEEDo/AAAAAAAAAAI/AAAAAAAAAAA/CedYh8eMkFU/s100-c-k-no-mo-rj-c0xffffff/photo.jpg" alt="devless" height="300">
+        <img src="https://yt3.ggpht.com/-SvkcOdOEEDo/AAAAAAAAAAI/AAAAAAAAAAA/CedYh8eMkFU/s100-c-k-no-mo-rj-c0xffffff/photo.jpg" alt="devless" height="150">
     </a>
 </h1>
 <p align="center">
@@ -18,14 +18,14 @@
 
 
 ## Table of Content
-* Key Features
-* Installation
-  * Heroku
-  * Using Docker
-  * Local
-* How It Works
-* Question and Support
-* How to Contribute
+* [Key Features](#key-features)
+* [Installation](#installation)
+  * [Heroku](#deploy-to-heroku)
+  * [Using Docker](#using-docker)
+  * [Local](#local-installation)
+* [How It Works](#how-it-works)
+* [Questions and Support](#questions-and-contribute)
+* [How to Contribute](#how-to-contribute)
 
 ## Key Features
 
