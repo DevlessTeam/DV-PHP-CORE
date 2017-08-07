@@ -24,9 +24,6 @@
   * Using Docker
   * Local
 * How It Works
-   * Creating Tables
-   * Setting Privacy for Users
-   * Services
 * Question and Support
 * How to Contribute
 
@@ -97,13 +94,17 @@ cp .env-example .env
 When you are done you can log onto localhost:8080 to access the setup screen
 
 ## How It Works
+**Devless Api Engine** is the heart of devless. The **DAE** allows for _CRUD_ access to databases well as execute PHP scripts and rules.
+Current implementation of the **DAE** is in PHP and built on top of the laravel framework.
+It was build to have the ease **PARSE** (RIP) had.
 
+To learn more on how you can build your next project with devless. You can either read the [docs]() or watch our comprehensive [videos]().
 
 ## Questions and Support
 Follow or join these channels for questions and support, and to keep updated on latest releases and announcements.
 
-<div style="display: flex;">
-    <div style="flex:1;margin-right: 10px;">
+<div style="display: flex;flex-flow: row nowrap;">
+    <div style="flex:1;">
         <a href='https://slack.devless.io' target="_blank">
             <img src='https://raw.githubusercontent.com/gliechtenstein/images/master/slack_smaller.png'>
         </a>
