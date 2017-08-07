@@ -6,7 +6,6 @@
 </p>
 <br>
 
-![devless](http://devless.io/img/hero_coding_b2.png)
 
 ## Devless BAAS Service
 [Devless](https://www.devless.io) provides the perfect starting point for your next big idea. Don't worry about configuring your backend and focus on what really matters **getting your product out there** while focusing on your **users**
@@ -40,8 +39,6 @@ Devless was built to make life easier for developers to build their backend with
 Deploying Devless to heroku is click away.
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/DevlessTeam/DV-PHP-CORE/tree/heroku2)
 We have done all the heavy lifting for you.
-
-![heroku-deploy](https://user-images.githubusercontent.com/28383750/29027985-5d8aecae-7b72-11e7-8351-f52787e634ea.gif)
 
 ### Using Docker
 
