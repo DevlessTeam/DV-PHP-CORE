@@ -1,8 +1,3 @@
-<h1 align="center">
-    <a href="https://www.devless.io">
-        <img src="https://yt3.ggpht.com/-SvkcOdOEEDo/AAAAAAAAAAI/AAAAAAAAAAA/CedYh8eMkFU/s100-c-k-no-mo-rj-c0xffffff/photo.jpg" alt="devless" height="150">
-    </a>
-</h1>
 <p align="center">
   <a href="https://travis-ci.org/DevlessTeam/DV-PHP-CORE">
     <img src="https://api.travis-ci.org/DevlessTeam/DV-PHP-CORE.svg?branch=master"
@@ -10,6 +5,8 @@
   </a>
 </p>
 <br>
+
+![devless](http://devless.io/img/hero_coding_b2.png)
 
 ## Devless BAAS Service
 [Devless](https://www.devless.io) provides the perfect starting point for your next big idea. Don't worry about configuring your backend and focus on what really matters **getting your product out there** while focusing on your **users**
