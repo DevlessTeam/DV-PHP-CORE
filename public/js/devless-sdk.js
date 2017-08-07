@@ -207,7 +207,7 @@ devless_main.coreLib.form = function(component, callback) {
                 }
             });
             formCallback = function() {
-                _jql.each(inputs, function(index, element) {
+            	_jql.each(inputs, function(index, element) {
                 	if (devless_main.generalErrorState == 1) {
                         element.value = '';
                     }
@@ -369,9 +369,9 @@ scriptEngine.pager = function(direction) {return this;}
 scriptEngine.previousPage = function() {return this;}
 scriptEngine.nextPage = function() {return this;}
 scriptEngine.label = function(labelName) {
-	var element = devless_main.singleCourier;
-	var allComponets = devless_main.getComponents();
-	element.label = labelName
+	devless_main.singleCourier.label = labelName;
+	devless_main.singleCourier.element.label = labelName;
+	console.log(devless_main.singleCourier)
 	return this;
 }
 scriptEngine.all = function(service, table) {
@@ -383,15 +383,19 @@ scriptEngine.all = function(service, table) {
         	var properties = response.payload.properties;
         	properties['queryParams'] = queryParams;
         	response = response.payload.results;
-        	if(typeof dvInterceptQueryResponse != "undefined"){
-        		mutatedResponse = dvInterceptQueryResponse(response);
-        	} else {
-        		mutatedResponse = response;
-        	}
-            
-            devless_main.coreLib.render(reference, mutatedResponse, service, 
+    		var responseObj = {};
+    		responseObj.label = reference.label;
+    		responseObj.data = response;
+    		mutatedResponse = (typeof dvInterceptQueryResponse != "undefined")?
+    			 dvInterceptQueryResponse(responseObj):responseObj;
+		 	if(typeof mutatedResponse == "undefined"){
+		 		throw 'Hmmm seems you forgot to return the response in dvInterceptQueryResponse';
+		 	}
+		}
+        	
+        devless_main.coreLib.render(reference, mutatedResponse['data'], service, 
             	table, properties);
-        }
+        
         (response.status_code != 625) ? devless_main.coreLib.notify(response.message, 0): '';
 
     });
@@ -407,9 +411,14 @@ scriptEngine.add = function() {
 }
 scriptEngine.oneto = function(service, table) {
     persist = function(storeData, callback) {
+    	var submissionPayload = {};
+        submissionPayload['data'] = storeData;
+        console.log(event.target.label);
+        submissionPayload['label'] = event.target.label;
         devless_main.processing();
-        StoreData = dvInterceptSubmission(storeData);
-        SDK.addData(service, table, storeData, function(response) {
+
+        StoreData = dvInterceptSubmission(submissionPayload);
+        SDK.addData(service, table, submissionPayload['data'], function(response) {
             (response.status_code == 609) ? devless_main.coreLib.notify(response.message, 1):
                 devless_main.coreLib.notify(response.message, 0);
             devless_main.doneProcessing();
@@ -422,7 +431,7 @@ scriptEngine.oneto = function(service, table) {
     devless_main.coreLib.form(devless_main.singleCourier, persist);
     return this;
 }
-
+scriptEngine.oneTo = scriptEngine.oneto;
 scriptEngine.update = function() {
     _jql('<input>').attr({
         type: 'hidden',
@@ -457,13 +466,21 @@ scriptEngine.populateForm = function(formReference, data) {
     })
 }
 scriptEngine.oneof = function(service, table) {
-    update = function(data, callback) {
-        if (data.id == undefined) {
+	update = function(data, callback) {
+		if (data.id == undefined) {
             throw " id could not be found in the form. Try adding <input type=\"hidden\" name=\"id\" /> to the update form "
         }
         devless_main.processing();
-        data = dvInterceptSubmission(data);
-        SDK.updateData(service, table, "id", data.id, data, function(response) {
+        var submissionPayload = {};
+        submissionPayload['data'] = data;
+        submissionPayload['label'] = event.target.label;
+        data = (typeof dvInterceptSubmission != "undefined")?
+    			 dvInterceptSubmission(submissionPayload):data;
+	 	if(typeof data == "undefined"){
+	 		throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
+	 	}
+	 	
+        SDK.updateData(service, table, "id", data.id, data['data'], function(response) {
             (response.status_code == 619) ? devless_main.coreLib.notify(response.message, 1):
             devless_main.coreLib.notify(response.message, 0);
             devless_main.doneProcessing();
@@ -471,9 +488,11 @@ scriptEngine.oneof = function(service, table) {
             // devless_main.init();
         });
     }
+    
     devless_main.coreLib.form(devless_main.singleCourier, update);
     return this;
 }
+scriptEngine.oneOf = scriptEngine.oneof;
 scriptEngine.where = function(key, value) {
         SDK.queryParams.where = [];
         SDK.queryParams.where.push(key + ',' + value);
@@ -646,9 +665,7 @@ devlessCallbacks = function(callback) {
 }
 
 
-dvInterceptSubmission = function(formValues) {
-    return formValues;
-}
+
 
 dvOnResponse = devlessCallbacks;
 
@@ -657,7 +674,7 @@ devless_main.init = function() {
         devless_main.singleCourier = node;
         _jql.each(node.scripts, function(index, script) {
             try {
-                eval('scriptEngine.' + script);
+            	eval('scriptEngine.' + script);
             } catch (e) {
                 console.error(node.queries[index] + " could not be resolved to an executable script" + e);
             }
