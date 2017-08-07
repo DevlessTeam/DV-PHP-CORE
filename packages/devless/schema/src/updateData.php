@@ -36,7 +36,9 @@ trait updateData
             $where_clause = $this->get_update_where_clause($payload);
 
             if(isset($data[0]['id'])){unset($data[0]['id']);}
-
+            
+            $this->_validate_fields($payload['params'][0]['name'], $service_name, [$data[0]], true);    
+       
             if($update_ACL == 1){
                 $outcome = $db->table($table_name)->where($where_clause[0],'=',$where_clause[1])->update($data[0]);
             } 

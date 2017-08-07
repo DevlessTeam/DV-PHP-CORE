@@ -124,6 +124,7 @@ class DbHandler
         $table_data,
         $check_password = false
     ) {
+        
         $table_meta = $this->get_tableMeta($service_name.'_'.$table_name);
         $schema = $table_meta['schema'];
         $count = 0;
