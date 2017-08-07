@@ -1,92 +1,130 @@
-[![Build Status](https://api.travis-ci.org/DevlessTeam/DV-PHP-CORE.svg?branch=master)](https://travis-ci.org/DevlessTeam/DV-PHP-CORE)
- 
-## DevLess provides the perfect starting point for your next big idea. Forget all the boilerplate and focus on what matters: your APPLICATION and USERS its like Laravel Spark and also comes with the ease Parse(RIP) had. https://devless.io/
+<h1 align="center">
+    <a href="https://www.devless.io">
+        <img src="https://www.devless.io/img/logo.png" alt="devless" height="100">
+    </a>
+</h1>
+<p align="center">
+  <a href="https://travis-ci.org/DevlessTeam/DV-PHP-CORE">
+    <img src="https://api.travis-ci.org/DevlessTeam/DV-PHP-CORE.svg?branch=master"
+         alt="devless">
+  </a>
+</p>
+<br>
 
-**How?**
+## Devless BAAS Service
+[Devless](https://www.devless.io) provides the perfect starting point for your next big idea. Don't worry about configuring your backend and focus on what really matters **getting your product out there** while focusing on your **users**
 
-**Well first upto 93% of the things you do on DevLess is pure configuration via GUI**
-![Service Image](http://fs5.directupload.net/images/161228/8rrzj4ms.png)
+## Table of Content
+* Key Features
+* Installation
+  * Heroku
+  * Using Docker
+  * Local
+* How It Works
+   * Creating Tables
+   * Setting Privacy for Users
+   * Services
+* Question and Support
+* How to Contribute
 
-**For example this is how you create tables on DevLess (migration equivalence in frameworks)*
-![Tables Image](http://fs5.directupload.net/images/161228/6mzzjt8c.png)
+## Key Features
 
-**Deciding on which table to make  available to end users via automagically generated APIs is just a tab away**
-![Privacy Image](http://fs5.directupload.net/images/161228/7v3n3nzv.png)
- **Working with Data is a joy**
- ![data table](http://fs5.directupload.net/images/161228/8pzuahgt.png)
-**Deployment is a breeze all you have to do is export your app and import it into another DevLess instance on the cloud could be via our [docker image](https://hub.docker.com/r/eddymens/devless/)**
+* Easy configurable **GUI** to setup.
+* Console to query your data.
+* Privacy on which table to make available for users.
+* Get services that make workflow easy.
 
-## This part ensures that no shit 💩 is blown into the project
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
+## Installation
+Devless was built to make life easier for developers to build their backend without going through any form of stress.
 
-The project versioning is based on [Sermantic Versioning Specification](http://semver.org/)
+### Deploy to Heroku 
 
-Coding standards are also based on the [PSR-2-coding-style-guide](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
-
-## For those ready to take the 💊 or you could just ignore below and use docker 📦
-**Devless API Engine(DAE)** is an opensource API engine that allows CRUD access to databases as well as execute PHP scripts and rules. 
-
-Current implementation of the Devless API Engine is in PHP and built on top of the Laravel framework. 
-
-**DAE** can be used as a standalone (accessed solely via API calls) however a management console is provided to interact with the API engine.
-
-
-
-**Requirements**
-* Database (MySQL, PostgreSQL, SQLSRV etc..)
-* An HTTP server
-* PHP >= 5.5.9
-* OpenSSL PHP Extension
-* PDO PHP Extension
-* Mbstring PHP Extension
-* Tokenizer PHP Extension
-* Composer
-
-**Installation procedure**
-* Clone the repo `git clone https://github.com/DevlessTeam/DV-PHP-CORE.git` 
-* Change into directory `cd DV-PHP-CORE`
-* run `composer install` to grab dependecies
-* copy .env.example to .env `cp .env.example .env` and update the database options
-* run migrations with `./devless migrate`
-* `./devless serve`
-
-If everything goes on smoothly you should be able to access the setup screen at [localhost:8000](http://localhost:8000)
-
-If you will need help setting up you may check out the Laravel [installation](https://laravel.com/docs/5.1) guide as the Devless core is based off of Laravel.
-
-Alternatively, you can deploy your own copy unto Heroku😎 
-
+Deploying Devless to heroku is click away.
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/DevlessTeam/DV-PHP-CORE/tree/heroku2)
+We have done all the heavy lifting for you.
 
-Checkout out the [docs](https://docs.devless.io)
+![heroku-deploy](https://user-images.githubusercontent.com/28383750/29027985-5d8aecae-7b72-11e7-8351-f52787e634ea.gif)
+
+### Using Docker
+
+To install devless using docker <br>
+**Make** sure you have devless installed in your working environment
+Check [here]() on how to install docker.
+
+You can now install using devless docker [image]()
+
+### Local Installation
+
+<!-- **Requirement** -->
+
+* **Requirement**
+
+    * Database (MySQL, PostgreSQL, SQLSRV etc..)
+    * An HTTP server
+    * PHP >= 5.5.9
+    * OpenSSL PHP Extension
+    * PDO PHP Extension
+    * Mbstring PHP Extension
+    * Tokenizer PHP Extension
+    * Composer
+
+* **Installation Procedure**
+
+```bash
+
+// Git clone devless repository 
+git clone https://github.com/DevlessTeam/DV-PHP-CORE.git
+
+// Change into the directory
+cd ../DV-PHP-CORE
+
+// Grab dependencies run
+composer install
+
+// Copy .env-example to .env and Update the database options
+cp .env-example .env
+
+// Run migrations
+./devless migrate or 
+./devless serve
+
+```
+
+When you are done you can log onto localhost:8080 to access the setup screen
+
+## How It Works
+
 
 ## Questions and Support
 Follow or join these channels for questions and support, and to keep updated on latest releases and announcements.
 
 <table class='equalwidth follow'>
   <tr>
-		<td>
-			<a href='https://slack.devless.io' target="_blank">
+        <td>
+            <a href='https://slack.devless.io' target="_blank">
         <b>Slack</b><br><br>
         <img src='https://raw.githubusercontent.com/gliechtenstein/images/master/slack_smaller.png'>
         <br>
         Join Now >
       </a>
-		</td>
-		<td>
-			<a target="_blank" href='https://www.twitter.com/devlessio'>
+        </td>
+        <td>
+            <a target="_blank" href='https://www.twitter.com/devlessio'>
         <b>Twitter</b><br><br>
-				<img src='https://raw.githubusercontent.com/gliechtenstein/images/master/twitter_smaller.png'>
+                <img src='https://raw.githubusercontent.com/gliechtenstein/images/master/twitter_smaller.png'>
         <br>
         Follow >
-			</a>
-		</td>
-	</tr>
+            </a>
+        </td>
+    </tr>
 </table>
 
+If you want to go the **old fashioned** west you can shoot us an email
+**<info@devless.io>**
+
 ## How to contribute 
+
 **Please checkout the [Contribute](https://guides.github.com/activities/contributing-to-open-source/) guide on how to contribute**
 No contribution is too small 
 
-* We would love to hear from  you email us ⇒ <info@devless.io>
-* Also don't forget to visit our landing page ⇒ [devless.io](https://devless.io)
+Also don't forget to visit our landing page ⇒ [devless.io](https://devless.io)
