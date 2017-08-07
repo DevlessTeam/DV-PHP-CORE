@@ -1,6 +1,6 @@
 <h1 align="center">
     <a href="https://www.devless.io">
-        <img src="https://www.devless.io/img/logo.png" alt="devless" height="100">
+        <img src="https://yt3.ggpht.com/-SvkcOdOEEDo/AAAAAAAAAAI/AAAAAAAAAAA/CedYh8eMkFU/s100-c-k-no-mo-rj-c0xffffff/photo.jpg" alt="devless" height="300">
     </a>
 </h1>
 <p align="center">
@@ -98,28 +98,37 @@ When you are done you can log onto localhost:8080 to access the setup screen
 Current implementation of the **DAE** is in PHP and built on top of the laravel framework.
 It was build to have the ease **PARSE** (RIP) had.
 
-To learn more on how you can build your next project with devless. You can either read the [docs]() or watch our comprehensive [videos]().
+To learn more on how you can build your next project with devless. You can either read the [docs](https://devless.gitbooks.io/devless-docs-1-3-0/content/why-devless.html) or watch our comprehensive [videos](https://www.youtube.com/channel/UCRNPvrhMwFczppgthkzv44A).
 
 ## Questions and Support
 Follow or join these channels for questions and support, and to keep updated on latest releases and announcements.
 
-<div style="display: flex;flex-flow: row nowrap;">
-    <div style="flex:1;">
-        <a href='https://slack.devless.io' target="_blank">
-            <img src='https://raw.githubusercontent.com/gliechtenstein/images/master/slack_smaller.png'>
-        </a>
-    </div>
-    <div style="flex:1">
-        <a href='https://www.twitter.com/devlessio' target="_blank">
-            <img src='https://raw.githubusercontent.com/gliechtenstein/images/master/twitter_smaller.png'>
-        </a>
-    </div>
-</div>
 
 If you want to go the **old fashioned** west you can shoot us an email
 **<info@devless.io>**
 
 ## How to contribute 
+
+<table class='equalwidth follow' border="0">
+  <tr>
+        <td>
+            <a href='https://slack.devless.io' target="_blank">
+        <b>Slack</b><br><br>
+        <img src='https://raw.githubusercontent.com/gliechtenstein/images/master/slack_smaller.png'>
+        <br>
+        Join Now >
+      </a>
+        </td>
+        <td>
+            <a target="_blank" href='https://www.twitter.com/devlessio'>
+        <b>Twitter</b><br><br>
+                <img src='https://raw.githubusercontent.com/gliechtenstein/images/master/twitter_smaller.png'>
+        <br>
+        Follow >
+            </a>
+        </td>
+    </tr>
+</table>
 
 **Please checkout the [Contribute](https://guides.github.com/activities/contributing-to-open-source/) guide on how to contribute**
 No contribution is too small 
