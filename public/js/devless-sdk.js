@@ -101,8 +101,6 @@ devless_main.coreLib.paginate = function(component, properties) {
 	_jql(reference).find('.dv-pager').each(function(){
 		this.remove();
 	})
-	console.log(paginateTemplate, properties);
-	
 	return reference;
 }
 devless_main.coreLib.render = function(component, data, service, table, properties) {
@@ -371,7 +369,6 @@ scriptEngine.nextPage = function() {return this;}
 scriptEngine.label = function(labelName) {
 	devless_main.singleCourier.label = labelName;
 	devless_main.singleCourier.element.label = labelName;
-	console.log(devless_main.singleCourier)
 	return this;
 }
 scriptEngine.all = function(service, table) {
@@ -413,11 +410,13 @@ scriptEngine.oneto = function(service, table) {
     persist = function(storeData, callback) {
     	var submissionPayload = {};
         submissionPayload['data'] = storeData;
-        console.log(event.target.label);
         submissionPayload['label'] = event.target.label;
         devless_main.processing();
-
-        StoreData = dvInterceptSubmission(submissionPayload);
+        submissionPayload = (typeof dvInterceptSubmission != "undefined")?
+    			 dvInterceptSubmission(submissionPayload):submissionPayload;
+	 	if(typeof submissionPayload == "undefined"){
+	 		throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
+	 	}
         SDK.addData(service, table, submissionPayload['data'], function(response) {
             (response.status_code == 609) ? devless_main.coreLib.notify(response.message, 1):
                 devless_main.coreLib.notify(response.message, 0);
@@ -475,12 +474,12 @@ scriptEngine.oneof = function(service, table) {
         submissionPayload['data'] = data;
         submissionPayload['label'] = event.target.label;
         data = (typeof dvInterceptSubmission != "undefined")?
-    			 dvInterceptSubmission(submissionPayload):data;
+    			 dvInterceptSubmission(submissionPayload):submissionPayload;
 	 	if(typeof data == "undefined"){
 	 		throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
 	 	}
 	 	
-        SDK.updateData(service, table, "id", data.id, data['data'], function(response) {
+        SDK.updateData(service, table, "id", data['data'].id, data['data'], function(response) {
             (response.status_code == 619) ? devless_main.coreLib.notify(response.message, 1):
             devless_main.coreLib.notify(response.message, 0);
             devless_main.doneProcessing();
@@ -654,7 +653,6 @@ devlessCallbacks = function(callback) {
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 var respObj = JSON.parse(xhr.responseText);
-                console.log(respObj);   
                 if(respObj.status_code && respObj.message){
                 	callback(respObj);	
                 }
