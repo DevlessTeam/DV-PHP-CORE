@@ -17,7 +17,7 @@ trait validation
         'decimals' => 'numeric',
         'email' => 'email',
         'integer' => 'integer',
-        'password' => 'alphanum',
+        'password' => 'string',
         'percentage' => 'integer',
         'reference' => 'integer',
         'text' => 'string',
