@@ -381,16 +381,16 @@ scriptEngine.all = function(service, table) {
         	properties['queryParams'] = queryParams;
         	response = response.payload.results;
     		var responseObj = {};
-    		responseObj.label = reference.label;
-    		responseObj.data = response;
-    		mutatedResponse = (typeof dvInterceptQueryResponse != "undefined")?
+    		responseObj[reference.label] = response;
+    		
+    		responseObj = (typeof dvInterceptQueryResponse != "undefined")?
     			 dvInterceptQueryResponse(responseObj):responseObj;
-		 	if(typeof mutatedResponse == "undefined"){
+		 	if(typeof responseObj == "undefined"){
 		 		throw 'Hmmm seems you forgot to return the response in dvInterceptQueryResponse';
 		 	}
 		}
         	
-        devless_main.coreLib.render(reference, mutatedResponse['data'], service, 
+        devless_main.coreLib.render(reference, responseObj[reference.label], service, 
             	table, properties);
         
         (response.status_code != 625) ? devless_main.coreLib.notify(response.message, 0): '';
@@ -409,15 +409,14 @@ scriptEngine.add = function() {
 scriptEngine.oneto = function(service, table) {
     persist = function(storeData, callback) {
     	var submissionPayload = {};
-        submissionPayload['data'] = storeData;
-        submissionPayload['label'] = event.target.label;
+        submissionPayload[event.target.label] = storeData;
         devless_main.processing();
         submissionPayload = (typeof dvInterceptSubmission != "undefined")?
     			 dvInterceptSubmission(submissionPayload):submissionPayload;
 	 	if(typeof submissionPayload == "undefined"){
 	 		throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
 	 	}
-        SDK.addData(service, table, submissionPayload['data'], function(response) {
+        SDK.addData(service, table, submissionPayload[event.target.label], function(response) {
             (response.status_code == 609) ? devless_main.coreLib.notify(response.message, 1):
                 devless_main.coreLib.notify(response.message, 0);
             devless_main.doneProcessing();
@@ -471,15 +470,14 @@ scriptEngine.oneof = function(service, table) {
         }
         devless_main.processing();
         var submissionPayload = {};
-        submissionPayload['data'] = data;
-        submissionPayload['label'] = event.target.label;
+        submissionPayload[event.target.label] = data;
         data = (typeof dvInterceptSubmission != "undefined")?
     			 dvInterceptSubmission(submissionPayload):submissionPayload;
 	 	if(typeof data == "undefined"){
 	 		throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
 	 	}
 	 	
-        SDK.updateData(service, table, "id", data['data'].id, data['data'], function(response) {
+        SDK.updateData(service, table, "id", data[event.target.label].id, data[event.target.label], function(response) {
             (response.status_code == 619) ? devless_main.coreLib.notify(response.message, 1):
             devless_main.coreLib.notify(response.message, 0);
             devless_main.doneProcessing();
