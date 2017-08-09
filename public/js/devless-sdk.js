@@ -129,6 +129,8 @@ devless_main.coreLib.render = function(component, data, service, table, properti
                         _jql(this).text(value)
                     }
 
+
+
                     var attri = ['src', 'href'];
                     for (var i = 0; i < attri.length; i++) {
                         if (_jql(this)[0][attri[i]] != undefined) {
@@ -140,7 +142,13 @@ devless_main.coreLib.render = function(component, data, service, table, properti
                         }
                     }
                 });
+               _jql(template).find('.var-html-' + field).each(function() {
+                    if (_jql(this)[0].tagName != 'IMG' && _jql(this)[0].tagName != 'A') {
+                    	_jql(this)[0].innerHTML = value;
+                        
+                    }
 
+                }); 	
 
             }
         }
