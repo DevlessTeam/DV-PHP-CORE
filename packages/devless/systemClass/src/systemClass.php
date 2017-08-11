@@ -267,7 +267,7 @@ class devless
     {
         return DB::table('users')->select(
             [
-                "id", "username", "email", "first_name", "last_name", "status"
+                "id", "username", "email", "first_name", "last_name", "phone_number", "status"
             ]
         )->get();
     }
