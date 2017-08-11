@@ -318,10 +318,15 @@
                                     <td><button onclick="displayAllFields('{{$service->name}}','{{$table_data['name']}}')" class="btn btn-default" data-target="#editFields" data-toggle="modal" >{{sizeOf($table_data['field'])}} field(s) <i class="fa fa-edit"></i></button> </td>
                                     <td>
                                         <div class="row">
-                                            <div class="col-lg-4 col-md-4 col-sm-4"><a class="btn btn-default" data-toggle="modal" data-target="#addFieldToTable" onclick="tableFieldPopulation([{'name':'add-serviceName', 'value':'{{$service->name}}'},{'name':'add-tableName', 'value':'{{$table_data['name']}}'}])"><i class="fa fa-plus"></i></a> </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                            <div class="col-lg-3 col-md-3 col-sm-12"><a class="btn btn-default" data-toggle="modal" data-target="#addFieldToTable" onclick="tableFieldPopulation([{'name':'add-serviceName', 'value':'{{$service->name}}'},{'name':'add-tableName', 'value':'{{$table_data['name']}}'}])"><i class="fa fa-plus"></i></a> </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-12">
                                         <a href="/datatable?service_name={{$service->name}}&table_name={{$table_data['name']}}" class="btn btn-default"><i class="fa fa-table"></i></a>
-                                            </div><div class="col-lg-4 col-md-4 col-sm-4">
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                                <a target="blank" href='/open-render/TableActivities/CRUDView/services.crud/["{{$service->name}}","{{$table_data['name']}}"]' class="btn btn-default "><i class="fa fa-code" aria-hidden="true"></i>
+</a>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-12">
                                                 <a href="#" onclick="destroy_table('{{$table_data['name']}}','{{$service->name}}')" class="btn btn-danger delete-{{$table_data['name']}}"><i class="fa fa-trash"></i> </a>
                                             </div>
                                             </div>

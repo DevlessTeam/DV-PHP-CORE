@@ -107,7 +107,8 @@
             Route::get('edit-table/{action}/{service}/{table}/{params}', 'ServiceController@editTable');
 
             //run methods from classes directly using the open-api (this is to control the increasing number of routes)
-            Route::get('open-api/{file}/{method}/{params}', 'OpenApiController@gateway');
+            Route::get('open-render/{page}/{file}/{method}/{params}', 'OpenController@render');
+            Route::get('open-api/{file}/{method}/{params}', 'OpenController@gateway');
 
 
         }
