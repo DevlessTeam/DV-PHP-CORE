@@ -80,7 +80,7 @@ trait serviceHelper
             unset($service['id']);
             if(!isset($service['raw_script']))
             {
-                $service['raw_script'] = $service['script']
+                $service['raw_script'] = $service['script'];
             }
             \DB::table('services')->insert($service);
             $last_service = \DB::table('services')->orderBy('id', 'desc')->first();
