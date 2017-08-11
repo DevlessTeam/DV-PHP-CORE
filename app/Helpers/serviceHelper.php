@@ -78,6 +78,10 @@ trait serviceHelper
             $old_service_id = $service['id'];
             $service_name[$old_service_id] = $service['name'];
             unset($service['id']);
+            if(!isset($service['raw_script']))
+            {
+                $service['raw_script'] = $service['script']
+            }
             \DB::table('services')->insert($service);
             $last_service = \DB::table('services')->orderBy('id', 'desc')->first();
             $service_id_map[$old_service_id] = $last_service->id;
