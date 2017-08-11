@@ -7,7 +7,7 @@ use PhpParser\NodeVisitorAbstract;
 
 class Transverser extends NodeVisitorAbstract
 {
-	use preprocessor;
+	use Preprocessor;
 
 	public function enterNode( Node $node) {
 		$node = $this->checkIfRuleExists($node);
