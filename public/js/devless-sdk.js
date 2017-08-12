@@ -344,10 +344,10 @@ scriptEngine.failed = function() {
 }
 scriptEngine.bindToDelete = function(template, id, service, table) {
 	template.each(function(index, value) {
-		if(value.className == "dv-delete"){
+		_jql(this).find('.dv-delete').each(function(key, element){
 				this.onclick = function() {
-	            if (!confirm("Are you sure you want to delete")) {
-	                return false;
+		            if (!confirm("Are you sure you want to delete")) {
+		                return false;
 	            }
 	            SDK.deleteData(service, table, "id", id, function(response) {
 	                (response.status_code == 636) ? devless_main.coreLib.notify(response.message, 1):
@@ -356,7 +356,8 @@ scriptEngine.bindToDelete = function(template, id, service, table) {
 
 	            })
    		    };
-		}
+		});
+			
         
     })
     return template;
@@ -449,11 +450,12 @@ scriptEngine.bindToUpdate = function(template, id, service, table, data) {
     var className = 'dv-update-oneof:' + service + ':' + table;
     component = devless_main.findComponent('queries', className);
     template.each(function(index, value) {
-    	if(value.className == "dv-update"){
-    		this.onclick = function() {
-            scriptEngine.populateForm(component, data);
-        	}	
-    	}
+    	_jql(value).find('.dv-delete').each(function(key, element){
+				element.onclick = function() {
+        			scriptEngine.populateForm(component, data);
+        		}	
+		});
+    	
         
     });
     return template;
