@@ -342,9 +342,8 @@ scriptEngine.failed = function() {
     return this;
 }
 scriptEngine.bindToDelete = function(template, id, service, table) {
-	console.log(template) 
-	deleteAction = function() {
-			this.onclick = function() {
+	var deleteAction = function() {
+			
 	            if (!confirm("Are you sure you want to delete")) {
 	                return false;
 	            }
@@ -354,16 +353,14 @@ scriptEngine.bindToDelete = function(template, id, service, table) {
 	                devless_main.init();
 
 	            })
-   		    };
-	}
+    };
 	template.each(function(index, value) {
 		if(_jql(this).find('.dv-delete').length > 0){
-			_jql(this).find('.dv-delete')[0].onclick = function(){
-				deleteAction();
-			}
+			_jql(this).find('.dv-delete')[0].onclick = deleteAction;
 		}
 		if(value.className == "dv-delete"){
-			deleteAction();
+			this.onclick = deleteAction;
+			
 		}
         
     })
@@ -456,13 +453,12 @@ scriptEngine.update = function() {
 scriptEngine.bindToUpdate = function(template, id, service, table, data) {
     var className = 'dv-update-oneof:' + service + ':' + table;
     component = devless_main.findComponent('queries', className);
+    console.log(className)
     template.each(function(index, value) {
-		if(_jql(this).find('.dv-delete').length > 0){
-			_jql(this).find('.dv-delete')[0].onclick = function(){
-					this.onclick = function() {
+		if(_jql(this).find('.dv-update').length > 0){
+			_jql(this).find('.dv-update')[0].onclick = function() {
 	            scriptEngine.populateForm(component, data);
 	        	}
-			}
 		}    
     	if(value.className == "dv-update"){
     		this.onclick = function() {

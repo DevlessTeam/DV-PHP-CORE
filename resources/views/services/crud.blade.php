@@ -47,9 +47,21 @@ Explain what this Scaffold is for
 	</tr>
 </table>
 
-<div class="dv-get-all:{{$service_name}}:{{$table_name}}"><button class="dv-delete">sdfs</button><span class="var-name"></span></div>
+<h3>updating Data in the {{$table_name}} table<h3>
+<form class="dv-update-oneof:{{$service_name}}:{{$table_name}}">
+	@foreach($fields as $field)<br>
+		@if($field != 'id' && $field != 'devless_user_id')
+			<input type="text" class="form-control" name="{{$field}}", placeholder="please enter value for {{$field}}"><br>
+		@endif
+	@endForeach
+	<br>
+	<button type="submit" class="btn btn-info">Update {{$table_name}}</button>
+</form>
+
+<div class="dv-get-all:{{$service_name}}:{{$table_name}}"><button class="dv-update">sdfs</button><span class="var-name"></span></div>
 	</tbody>
 </table>
+
 
 <script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="{{$app->token}}"></script>
 
