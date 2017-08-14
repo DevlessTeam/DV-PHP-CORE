@@ -164,7 +164,6 @@ devless_main.coreLib.render = function(component, data, service, table, properti
             })
         })
         innerTemplate = template.innerHTML
-        template = (_jql(innerTemplate)[0].nodeName == 'TR') ? innerTemplate : template;
         template = _jql(template)[0].innerHTML;
         template = _jql(template);
         template = scriptEngine.bindToDelete(template, record.id, service, table);
