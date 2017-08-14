@@ -1,6 +1,7 @@
 <?php
 use App\Helpers\DataStore;
   $app = DataStore::instanceInfo()['app'];
+  // dd(scandir('.'));
  ?>
 
 <html>
@@ -57,8 +58,7 @@ Explain what this Scaffold is for
 	<br>
 	<button type="submit" class="btn btn-info">Update {{$table_name}}</button>
 </form>
-
-<div class="dv-get-all:{{$service_name}}:{{$table_name}}"><button class="dv-update">sdfs</button><span class="var-name"></span></div>
+	
 	</tbody>
 </table>
 
@@ -69,6 +69,7 @@ Explain what this Scaffold is for
 <button onclick="download()">Download</button>
 <script>
 	function download() {
+
 		var aTag = document.body.appendChild(document.createElement("a"));
 		aTag.href = 'data:text/html'+document.getElementById('CRUD').innerHTML;
 		aTag.download = "{{$service_name}}_{{$table_name}}.html";

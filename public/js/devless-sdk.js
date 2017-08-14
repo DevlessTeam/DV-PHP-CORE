@@ -453,7 +453,6 @@ scriptEngine.update = function() {
 scriptEngine.bindToUpdate = function(template, id, service, table, data) {
     var className = 'dv-update-oneof:' + service + ':' + table;
     component = devless_main.findComponent('queries', className);
-    console.log(className)
     template.each(function(index, value) {
 		if(_jql(this).find('.dv-update').length > 0){
 			_jql(this).find('.dv-update')[0].onclick = function() {
