@@ -54,7 +54,7 @@ class RegisterUserJob extends Job implements SelfHandling
             $this->user->email = $this->request->input('email');
             $this->user->password = $this->request->input('password');
             $this->user->role = 1;
-            $this->user->status = 0;
+            $this->user->status = 1;
         }
 
         // Create app

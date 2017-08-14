@@ -35,7 +35,12 @@ Explain what this Scaffold is for
 		@endif
 	@endforeach
 	</tr>
+<<<<<<< HEAD
 	<tr class="dv-get-all:{{$service_name}}:{{$table_name}}">
+=======
+	<tbody class="dv-get-all:{{$service_name}}:{{$table_name}}">
+	<tr>
+>>>>>>> develop
 		@foreach($fields as $field)
 			@if($field != 'devless_user_id')
 				<td class="var-{{$field}}"></td>
@@ -45,10 +50,16 @@ Explain what this Scaffold is for
 		<td><button class="dv-delete">Delete</button></td>
 		<td><button class="dv-update">update</button></td>
 	</tr>
+<<<<<<< HEAD
 </table>
 
 <div class="dv-get-all:{{$service_name}}:{{$table_name}}"><button class="dv-delete">sdfs</button><span class="var-name"></span></div>
 
+=======
+	</tbody>
+</table>
+
+>>>>>>> develop
 <script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="{{$app->token}}"></script>
 
 </div>
