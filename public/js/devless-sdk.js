@@ -342,9 +342,8 @@ scriptEngine.failed = function() {
     return this;
 }
 scriptEngine.bindToDelete = function(template, id, service, table) {
-	template.each(function(index, value) {
-		if(value.className == "dv-delete"){
-				this.onclick = function() {
+	var deleteAction = function() {
+			
 	            if (!confirm("Are you sure you want to delete")) {
 	                return false;
 	            }
@@ -354,7 +353,14 @@ scriptEngine.bindToDelete = function(template, id, service, table) {
 	                devless_main.init();
 
 	            })
-   		    };
+    };
+	template.each(function(index, value) {
+		if(_jql(this).find('.dv-delete').length > 0){
+			_jql(this).find('.dv-delete')[0].onclick = deleteAction;
+		}
+		if(value.className == "dv-delete"){
+			this.onclick = deleteAction;
+			
 		}
         
     })
@@ -448,6 +454,11 @@ scriptEngine.bindToUpdate = function(template, id, service, table, data) {
     var className = 'dv-update-oneof:' + service + ':' + table;
     component = devless_main.findComponent('queries', className);
     template.each(function(index, value) {
+		if(_jql(this).find('.dv-update').length > 0){
+			_jql(this).find('.dv-update')[0].onclick = function() {
+	            scriptEngine.populateForm(component, data);
+	        	}
+		}    
     	if(value.className == "dv-update"){
     		this.onclick = function() {
             scriptEngine.populateForm(component, data);
@@ -598,8 +609,9 @@ scriptEngine.updateProfile = function() {
             delete(data.phone_number);
             scriptEngine.populateForm(component,
                 data);
-            devless_main.doneProcessing();
         }
+        devless_main.doneProcessing();
+
     })
 
     var updateScript = function(record, callback) {
@@ -607,10 +619,10 @@ scriptEngine.updateProfile = function() {
         SDK.call('devless', 'updateProfile', [record['email'], record['password'], record['username'], record['phonenumber'],
             record['firstname'], record['lastname']
         ], function(response) {
-            if (response.payload.result == true) {
+            if (response.payload.result != undefined ) {
                 devless_main.doneProcessing();
                 devless_main.coreLib.notify('Profile updated successfully');
-                window.location.href = window.location.origin + '/' + actionUrl;
+                // window.location.href = window.location.origin + '/' + actionUrl;
             } else {
                 devless_main.doneProcessing();
                 devless_main.coreLib.notify('Profile could not be updated');
