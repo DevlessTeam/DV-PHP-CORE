@@ -94,7 +94,7 @@ Explain what this Scaffold is for
 <h3>Edit Profile</h3>
 <form class="dv-updateProfile">
 	<input type="text" name="username" placeholder="please enter username here" class="form-control"><br>
-	<input type="email" name="email" class="form-control" placeholder="enter email here to update"><br>
+	<input type="text" name="email" class="form-control" placeholder="enter email here to update"><br>
 	<input type="number" name="phonenumber" placeholder="enter phonenumber to update" class="form-control"><br>
 	<input type="text" name="firstname" placeholder="enter firstname to update" class="form-control"><br>
 	<input type="text" name="lastname" class="form-control" placeholder="please enter last name to update "><br>
