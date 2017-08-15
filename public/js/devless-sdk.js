@@ -609,8 +609,9 @@ scriptEngine.updateProfile = function() {
             delete(data.phone_number);
             scriptEngine.populateForm(component,
                 data);
-            devless_main.doneProcessing();
         }
+        devless_main.doneProcessing();
+
     })
 
     var updateScript = function(record, callback) {
@@ -618,10 +619,10 @@ scriptEngine.updateProfile = function() {
         SDK.call('devless', 'updateProfile', [record['email'], record['password'], record['username'], record['phonenumber'],
             record['firstname'], record['lastname']
         ], function(response) {
-            if (response.payload.result == true) {
+            if (response.payload.result != undefined ) {
                 devless_main.doneProcessing();
                 devless_main.coreLib.notify('Profile updated successfully');
-                window.location.href = window.location.origin + '/' + actionUrl;
+                // window.location.href = window.location.origin + '/' + actionUrl;
             } else {
                 devless_main.doneProcessing();
                 devless_main.coreLib.notify('Profile could not be updated');
