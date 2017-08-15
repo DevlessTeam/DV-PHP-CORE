@@ -456,7 +456,6 @@ scriptEngine.bindToUpdate = function(template, id, service, table, data) {
 	template.each(function(index, value) {
 		if(_jql(this).find('.dv-update').length > 0){
 			_jql(this).find('.dv-update')[0].onclick = function() {
-				console.log(component, data)
 				scriptEngine.populateForm(component, data);
 			}
 		}    
