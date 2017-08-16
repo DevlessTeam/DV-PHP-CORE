@@ -18,27 +18,32 @@ $app = DataStore::instanceInfo()['app'];
 		<div id="CRUD">
 
 
-			<div class="dv-notify-success">
-				<div class="alert alert-success alert-dismissable">
+			<div class="dv-notify">
+				<div class="alert alert-warning alert-dismissable">
 					<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-					<strong>Data has been added to devless table successfully</strong>    </div>
+					<strong></strong>    </div>
 				</div>
+			<div class="dv-notify-success">
+							<div class="alert alert-success alert-dismissable">
+								<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+								<strong>Put your success message here</strong>    </div>
+							</div>
+<div class="dv-notify-failed">
+							<div class="alert alert-success alert-dismissable">
+								<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+								<strong>Put your success message here</strong>    </div>
+							</div>
 
-				<div class="dv-notify-failed">
-					<div class="alert alert-danger alert-dismissable">
-						<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-						<strong>Data has been added to devless table successfully</strong>    </div>
-					</div>
-
+				
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2">
 							<div class="panel panel-primary">
-								<div class="panel-heading" style="text-align: center;">SignIn Using DevLess</div>
+								<div class="panel-heading" style="text-align: center;">Add data to {{$table_name}} table</div>
 								<div class="panel-body" style="text-align: center;">
-								<h3>Adding Data to the test_table table<h3>
+								<h3>Adding Data to the {{$table_name}} table<h3>
 										<form class="dv-add-oneto:{{$service_name}}:{{$table_name}}">
 											@foreach($fields as $field)
-												@if($field != "devless_user_id")
+												@if($field != "devless_user_id" && $field != "id")
 													<input type="text" class="form-control" name="{{$field}}", placeholder="please enter value for {{$field}}"><br>
 												@endif
 											@endforeach
