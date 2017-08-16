@@ -372,5 +372,5 @@
     window.devless_edit_url = window.location.origin+'/services/'+{{$id}}+'/edit';
 </script>
 
-<script src="{{ Request::secure(Request::root()).'/js/service_edit.js' }}"></script>
+<script src="{{ asset('/js/service_edit.js') }}"></script>
 @endsection

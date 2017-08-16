@@ -99,6 +99,6 @@ td {
   </div>
 </div>
 
-<script src="{{ Request::secure(Request::root()).'/js/framework/datatable.js' }}"></script>
+<script src="{{ asset('/js/framework/datatable.js') }}"></script>
 
 @endsection
