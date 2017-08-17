@@ -64,9 +64,8 @@ trait destroyData
 
     private function response_from_delete_action($result, $task)
     {
-         $element = 'row';
-         
-        if ($result == 0 && !$result == "null") {
+       $element = 'row';
+        if (($result === 0 && !$result === "null") || $task != "truncate") {
             Helper::interrupt(614, 'could not '.$task.' '.$element);
         }
 
