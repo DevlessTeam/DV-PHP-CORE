@@ -11,33 +11,33 @@ use App\Helpers\DataStore;
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <meta name="description" content="DevLess is a backend as a service framework that provide developers an easier way to rollout their web and mobile platform ">
   <meta name="author" content="DevLess">
-  <meta name="keyword" content="DevLess, opensource, BAAS, Backend as a service, robust, php, laravel ">
+  <meta name="keyword" content="DevLess, opensource, BAAS, Backend as a service, robust, php, laravel, postgresql, mysql">
 
-  <link rel="shortcut icon" href="/favico.png" type="image/png">
+  <link rel="shortcut icon" href="{{ asset('favico.png') }}" type="image/png">
 
   <title>DevLess {{config('devless')['version']}}</title>
 
   <!--right slidebar-->
-  <link href="{{ Request::secure(Request::root()).'/css/slidebars.css' }}" rel="stylesheet">
+  <link href="{{ asset('/css/slidebars.css') }}" rel="stylesheet">
 
   <!--switchery-->
-  <link href="{{ Request::secure(Request::root()).'/js/switchery/switchery.min.css'}}" rel="stylesheet" type="text/css" media="screen" />
+  <link href="{{ asset('/js/switchery/switchery.min.css')}}" rel="stylesheet" type="text/css" media="screen" />
 
   <!--Form Wizard-->
-  <link rel="stylesheet" type="text/css" href="{{ Request::secure(Request::root()).'/css/jquery.steps.css' }}" />
+  <link rel="stylesheet" type="text/css" href="{{ asset('/css/jquery.steps.css') }}" />
 
   <!-- datatables css -->
-  <link href="{{ Request::secure(Request::root()).'/css/jquery.dataTables.min.css'  }}" rel="stylesheet">
+  <link href="{{ asset('/css/jquery.dataTables.min.css') }}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.dataTables.min.css" rel="stylesheet">
 
   <!--common style-->
-  <link href="{{ Request::secure(Request::root()).'/css/style.css' }}" rel="stylesheet">
-  <link href="{{ Request::secure(Request::root()).'/css/style-responsive.css' }}" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="{{ Request::secure(Request::root()).'/css/custom.css'}}">
+  <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
+  <link href="{{ asset('/css/style-responsive.css') }}" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{{ asset('/css/custom.css') }}">
   @if( \Request::path() == 'privacy' || \Request::path() == 'datatable' || \Request::path() == 'services')
-  <link rel="stylesheet" href="{{ Request::secure(Request::root()).'/css/helper.css' }}" media="screen" title="no title" charset="utf-8">
-  <script src="{{ Request::secure(Request::root()).'/js/jquery-1.10.2.min.js' }}"></script>
-  <script src="{{ Request::secure(Request::root()).'/js/bootstrap.min.js' }}"></script>
+  <link rel="stylesheet" href="{{ asset('/css/helper.css') }}" media="screen" title="no title" charset="utf-8">
+  <script src="{{ asset('/js/jquery-1.10.2.min.js') }}"></script>
+  <script src="{{ asset('/js/bootstrap.min.js') }}"></script>
   @endif
   <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -53,7 +53,7 @@ use App\Helpers\DataStore;
         <a class="toggle-btn"><i class="fa fa-outdent"></i></a>
         <br>
         <button class="btn btn-sm btn-info pull-right" data-toggle="modal" data-target="#sdk-connect" style="margin-right: 20%"> <i class="fa fa-plug"></i> Connect to App</button>
-        <a class="btn btn-sm btn-warning pull-right" data-toggle="modal" href="https://devless.gitbooks.io/devless-docs-1-3-0/content/building-an-app-with-devless.html" target="blank" style="margin-right: 2%"><i class="fa fa-book"></i> Quick Guide</a>
+        <a class="btn btn-sm btn-warning pull-right" data-toggle="modal" href="https://devless.gitbooks.io/devless-docs-1-3-0/content/building-an-app-with-devless.html" target="blank" rel="noopener" style="margin-right: 2%"><i class="fa fa-book"></i> Quick Guide</a>
         <!--toggle button end-->
       </div>
       <!-- header section end-->
@@ -76,7 +76,7 @@ use App\Helpers\DataStore;
           <div class="tab-content">
             <div class="tab-pane active" id="web">
 <pre><code class="language-markup"><xmp style="display: inline;">
-<script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="{{$app->token}}"></script></xmp></code>
+<script src="{{ asset('/js/devless-sdk.js') }}" class="devless-connection" devless-con-token="{{$app->token}}"></script></xmp></code>
 </pre>
 
         </div>

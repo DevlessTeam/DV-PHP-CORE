@@ -2,7 +2,7 @@
 
 @section('header')
 
-<script src="{{ Request::secure(Request::root())."/js/jquery-1.10.2.min.js" }}"></script>
+<script src="{{ asset('/js/jquery-1.10.2.min.js') }}"></script>
 
 <!-- page head start-->
 <div class="page-head">

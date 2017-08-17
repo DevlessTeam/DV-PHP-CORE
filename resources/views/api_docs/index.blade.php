@@ -176,7 +176,7 @@
             </div>
             <button type="button" id="scroll" name="button" class="btn btn-warning pull-right" style="display: none;">Scroll Up</button>
         </div>
-        <script src="{{ Request::secure(Request::root()).'/js/src-min-noconflict/ace.js' }}" type="text/javascript" charset="utf-8"></script>
-        <script src="{{ Request::secure(Request::root()).'/js/ace/jquery-1.8.3.min.js' }}" type="text/javascript" charset="utf-8"></script>
-        <script src="{{ Request::secure(Request::root()).'/js/framework/api-console.js'}}" type="text/javascript" charset="utf-8"></script>
+        <script src="{{ asset('/js/src-min-noconflict/ace.js') }}" type="text/javascript" charset="utf-8"></script>
+        <script src="{{ asset('/js/ace/jquery-1.8.3.min.js') }}" type="text/javascript" charset="utf-8"></script>
+        <script src="{{ asset('/js/framework/api-console.js') }}" type="text/javascript" charset="utf-8"></script>
     @endsection
