@@ -154,18 +154,6 @@ devless_main.coreLib.render = function(component, data, service, table, properti
 		}
 
 
-<<<<<<< HEAD
-        _jql.each(record.related, function(prefix, data) {
-            _jql.each(data[0], function(field, value) {
-                screenPainter(prefix + '-' + field, value);
-            })
-        })
-        innerTemplate = template.innerHTML
-        template = _jql(template)[0].innerHTML;
-        template = _jql(template);
-        template = scriptEngine.bindToDelete(template, record.id, service, table);
-        template = scriptEngine.bindToUpdate(template, record.id, service, table, record);
-=======
 		_jql.each(record, function(field, value) {
 			screenPainter(field, value)
 		});
@@ -180,7 +168,6 @@ devless_main.coreLib.render = function(component, data, service, table, properti
 		template = _jql(template);
 		template = scriptEngine.bindToDelete(template, record.id, service, table);
 		template = scriptEngine.bindToUpdate(template, record.id, service, table, record);
->>>>>>> scaffold
         //append to screen   
         _jql(reference).prepend(template);
 
@@ -356,19 +343,6 @@ scriptEngine.failed = function() {
 }
 scriptEngine.bindToDelete = function(template, id, service, table) {
 	var deleteAction = function() {
-<<<<<<< HEAD
-			
-	            if (!confirm("Are you sure you want to delete")) {
-	                return false;
-	            }
-	            SDK.deleteData(service, table, "id", id, function(response) {
-	                (response.status_code == 636) ? devless_main.coreLib.notify(response.message, 1):
-	                    devless_main.coreLib.notify(response.message, 0);
-	                devless_main.init();
-
-	            })
-    };
-=======
 
 		if (!confirm("Are you sure you want to delete")) {
 			return false;
@@ -380,7 +354,6 @@ scriptEngine.bindToDelete = function(template, id, service, table) {
 
 		})
 	};
->>>>>>> scaffold
 	template.each(function(index, value) {
 		if(_jql(this).find('.dv-delete').length > 0){
 			_jql(this).find('.dv-delete')[0].onclick = deleteAction;
@@ -478,24 +451,6 @@ scriptEngine.update = function() {
 	return this;
 }
 scriptEngine.bindToUpdate = function(template, id, service, table, data) {
-<<<<<<< HEAD
-    var className = 'dv-update-oneof:' + service + ':' + table;
-    component = devless_main.findComponent('queries', className);
-    template.each(function(index, value) {
-		if(_jql(this).find('.dv-update').length > 0){
-			_jql(this).find('.dv-update')[0].onclick = function() {
-	            scriptEngine.populateForm(component, data);
-	        	}
-		}    
-    	if(value.className == "dv-update"){
-    		this.onclick = function() {
-            scriptEngine.populateForm(component, data);
-        	}	
-    	}
-        
-    });
-    return template;
-=======
 	var className = 'dv-update-oneof:' + service + ':' + table;
 	var component = devless_main.findComponent('queries', className);
 	template.each(function(index, value) {
@@ -512,7 +467,6 @@ scriptEngine.bindToUpdate = function(template, id, service, table, data) {
 
 	});
 	return template;
->>>>>>> scaffold
 }
 scriptEngine.populateForm = function(formReference, data) {
 	_jql(formReference.element).each(function() {
@@ -638,38 +592,6 @@ scriptEngine.profile = function() {
 }
 
 scriptEngine.updateProfile = function() {
-<<<<<<< HEAD
-    var component = devless_main.singleCourier;
-    var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
-    actionUrl = (actionUrl != undefined) ? actionUrl : '#';
-    devless_main.processing();
-    SDK.call('devless', 'profile', [], function(response) {
-        if (response.payload.error) {
-            devless_main.coreLib.notify(response.payload.error.message);
-        } else {
-            data = response.payload.result;
-            data.firstname = data.first_name;
-            data.lastname = data.last_name;
-            data.phonenumber = data.phone_number;
-            delete(data.first_name)
-            delete(data.last_name);
-            delete(data.phone_number);
-            scriptEngine.populateForm(component,
-                data);
-        }
-        devless_main.doneProcessing();
-
-    })
-
-    var updateScript = function(record, callback) {
-        devless_main.processing();
-        SDK.call('devless', 'updateProfile', [record['email'], record['password'], record['username'], record['phonenumber'],
-            record['firstname'], record['lastname']
-        ], function(response) {
-            if (response.payload.result != undefined ) {
-                devless_main.doneProcessing();
-                devless_main.coreLib.notify('Profile updated successfully');
-=======
 	var component = devless_main.singleCourier;
 	var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
 	actionUrl = (actionUrl != undefined) ? actionUrl : '#';
@@ -700,7 +622,6 @@ scriptEngine.updateProfile = function() {
 				if (response.payload.result != undefined ) {
 					devless_main.doneProcessing();
 					devless_main.coreLib.notify('Profile updated successfully');
->>>>>>> scaffold
                 // window.location.href = window.location.origin + '/' + actionUrl;
             } else {
             	devless_main.doneProcessing();
