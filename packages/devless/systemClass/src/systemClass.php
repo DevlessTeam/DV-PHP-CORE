@@ -226,4 +226,50 @@ class devless
         }
         return [];
     }
+
+    /**
+     * Delete a users profile
+     * @return bool
+     * @ACL private
+     */
+    public function deleteUserProfile($id)
+    {
+        return (\DB::table('users')->where('id', $id)->delete())?true:false; 
+    }
+
+
+    /**
+     * Update a users profile
+     * @param $email
+     * @param $password
+     * @param $username
+     * @param $phone_number
+     * @param $first_name
+     * @param $last_name
+     * @param $remember_token
+     * @param $role
+     * @return bool
+     * @ACL private
+     */
+    public function updateUserProfile(
+        $id,
+        $email = null,
+        $password = null,
+        $username = null,
+        $phone_number = null,
+        $first_name = null,
+        $last_name = null,
+        $remember_token = null,
+        $status = null
+    ) {
+        $profileUpdate =array_filter(
+            get_defined_vars(), function ($value) {
+                return $value !== ''; 
+            }
+        );
+        unset($profileUpdate['id']);
+        
+        return (DB::table('users')->where('id', $id)->update($profileUpdate))?true:false;
+    }
+
 }
