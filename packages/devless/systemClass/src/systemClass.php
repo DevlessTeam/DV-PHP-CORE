@@ -296,9 +296,15 @@ class devless
         $last_name = null,
         $remember_token = null,
         $status = null
+
         )
-    {
-        $profileUpdate =array_filter(get_defined_vars(), function($value) { return $value !== ''; });
+     {
+        $profileUpdate =array_filter(
+            get_defined_vars(), function ($value) {
+                return $value !== ''; 
+            }
+        );
+
         unset($profileUpdate['id']);
         
         return (DB::table('users')->where('id', $id)->update($profileUpdate))?true:false;
@@ -340,4 +346,6 @@ class devless
         return $this->login(null, null, $phone_number, $password);
     }
 
+=======
+>>>>>>> v1.2.7
 }
