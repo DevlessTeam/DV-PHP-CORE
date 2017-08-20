@@ -277,7 +277,6 @@ class devless
 
         return [];
     }
-
     /**
      * Get all users within the system 
      * @return array
