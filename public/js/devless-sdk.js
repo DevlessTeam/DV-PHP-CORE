@@ -186,6 +186,8 @@ devless_main.coreLib.form = function(component, callback) {
 		event.preventDefault();
 		devless_main.processing();
 		var inputs = this.elements;
+		var yesFile = 0;
+		
 		var numFields = '';
 		_jql.each(inputs, function(index, element) {
 			if (element.name == "") {
@@ -195,9 +197,11 @@ devless_main.coreLib.form = function(component, callback) {
 				return;
 			}
 			if (element.type == 'file' && element.files[0] != undefined) {
+				yesFile = 1;
 				var reader = new FileReader();
 				reader.addEventListener('load', function() {
 					data[element.name] = reader.result;
+					yesFile = 0;
 					numFields++;
 				}, false)
 				reader.onerror = function(e) {
@@ -219,12 +223,13 @@ devless_main.coreLib.form = function(component, callback) {
 
 			})
 		}
-		if (numFields == inputs.length - 1) {
+		if (yesFile  == 0) {
 			devless_main.doneProcessing();
 			callback(data, formCallback);
 		} else {
 			var intvl = setInterval(function() {
-				if (numFields == inputs.length - 1) {
+				console.log(yesFile)
+				if (yesFile  == 0) {
 					clearInterval(intvl);
 					devless_main.doneProcessing();
 					callback(data, formCallback);
@@ -488,14 +493,19 @@ scriptEngine.oneof = function(service, table) {
 		}
 		devless_main.processing();
 		var submissionPayload = {};
-		submissionPayload[event.target.label] = data;
+		
+		if(event != undefined){
+			var label = (typeof event.target.label != "undefined")? event.target.label : "nameless";
+		} else{ var label = "nameless";}
+
+		submissionPayload[label] = data;
 		data = (typeof dvInterceptSubmission != "undefined")?
 		dvInterceptSubmission(submissionPayload):submissionPayload;
 		if(typeof data == "undefined"){
 			throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
 		}
 
-		SDK.updateData(service, table, "id", data[event.target.label].id, data[event.target.label], function(response) {
+		SDK.updateData(service, table, "id", data[label].id, data[label], function(response) {
 			(response.status_code == 619) ? devless_main.coreLib.notify(response.message, 1):
 			devless_main.coreLib.notify(response.message, 0);
 			devless_main.doneProcessing();
