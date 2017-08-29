@@ -9,6 +9,19 @@ use App\Helpers\Jwt as jwt;
 use App\Helpers\DataStore;
 trait devlessAuth
 {
+
+    public $expected_fields =
+    [
+        'email' => 'email',
+        'username' => 'text',
+        'password' => 'password',
+        'first_name' => 'text',
+        'last_name' => 'text',
+        'remember_token' => 'text',
+        'status' => 'text',
+        'phone_number' => 'text',
+
+    ];
     /**
      * signup new users onto devless.
      *
@@ -201,7 +214,11 @@ trait devlessAuth
             if (isset($payload['password'])) {
                 $payload['password'] = Helper::password_hash($payload['password']);
             }
-
+            foreach($payload as $field_name => $value) {
+                $expected_field = $this->expected_fields[$field_name];
+                $valid = Helper::field_check($value, $expected_field);
+                ($valid !== true)?Helper::interrupt(616, 'There is something wrong with your '.$field_name):false;
+            }
             if ($user::where('id', $token['id'])->update($payload)) {
                 return \DB::table('users')->where('id', $token['id'])
                 ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'status'])
@@ -253,36 +270,24 @@ trait devlessAuth
      */
     public function auth_fields_handler($fields, $user)
     {
-        $expected_fields =
-            [
-                'email' => 'email',
-                'username' => 'text',
-                'password' => 'password',
-                'first_name' => 'text',
-                'last_name' => 'text',
-                'remember_token' => 'text',
-                'status' => 'text',
-                'phone_number' => 'text',
+    
+        foreach ($fields as $field => $value) {
+            $field = strtolower($field);
 
-            ];
-
-            foreach ($fields as $field => $value) {
-                $field = strtolower($field);
-
-                if (isset($expected_fields[$field])) {
-                    $valid = Helper::field_check($value, $expected_fields[$field]);
-                    if ($valid !== true) {
-                        Helper::interrupt(616, 'There is something wrong with your '.$field);
-                    }
-                    if ($field == 'password') {
-                        $user->$field = Helper::password_hash($value);
-                    } else {
-                        $user->$field = $value;
-                    }
+            if (isset($this->expected_fields[$field])) {
+                $valid = Helper::field_check($value, $this->expected_fields[$field]);
+                if ($valid !== true) {
+                    Helper::interrupt(616, 'There is something wrong with your '.$field);
+                }
+                if ($field == 'password') {
+                    $user->$field = Helper::password_hash($value);
+                } else {
+                    $user->$field = $value;
                 }
             }
+        }
 
-            return $user;
+        return $user;
     }
 
     /**
