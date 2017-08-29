@@ -539,7 +539,7 @@ scriptEngine.signup = function() {
 		SDK.call('devless', 'signUp', [record['email'], record['password'], record['username'], record['phonenumber'],
 			record['firstname'], record['lastname']
 			], function(response) {
-				if (response.payload.result['token'] != undefined) {
+				if (! ('error' in response.payload) ) {
 					SDK.setToken(response.payload.result['token']);
 					devless_main.doneProcessing();
 					devless_main.coreLib.notify("Sign up successfully", 1);
