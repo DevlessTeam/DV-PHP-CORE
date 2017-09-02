@@ -427,14 +427,19 @@ scriptEngine.add = function() {
 scriptEngine.oneto = function(service, table) {
 	persist = function(storeData, callback) {
 		var submissionPayload = {};
-		submissionPayload[event.target.label] = storeData;
+		if(event != undefined){
+			label = event.target.label
+		 }else {
+		 	label = "temp name"; 
+		 }
+		submissionPayload[label] = storeData;
 		devless_main.processing();
 		submissionPayload = (typeof dvInterceptSubmission != "undefined")?
 		dvInterceptSubmission(submissionPayload):submissionPayload;
 		if(typeof submissionPayload == "undefined"){
 			throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
 		}
-		SDK.addData(service, table, submissionPayload[event.target.label], function(response) {
+		SDK.addData(service, table, submissionPayload[label], function(response) {
 			(response.status_code == 609) ? devless_main.coreLib.notify(response.message, 1):
 			devless_main.coreLib.notify(response.message, 0);
 			devless_main.doneProcessing();
