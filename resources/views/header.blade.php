@@ -61,7 +61,7 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
         <a class="toggle-btn"><i class="fa fa-outdent"></i></a>
         <br>
         <button class="btn btn-sm btn-info pull-right" data-toggle="modal" data-target="#sdk-connect" style="margin-right: 20%"> <i class="fa fa-plug"></i> Connect to App</button>
-        <a class="btn btn-sm btn-warning pull-right" data-toggle="modal" href="https://devless.gitbooks.io/devless-docs-1-3-0/content/building-an-app-with-devless.html" target="blank" style="margin-right: 2%"><i class="fa fa-book"></i> Quick Guide</a>
+        <a class="btn btn-sm btn-warning pull-right" data-toggle="modal" href="https://devless.gitbooks.io/devless-docs-1-3-0/quick-start.html" target="blank" style="margin-right: 2%"><i class="fa fa-book"></i> Quick Guide</a>
         <!--toggle button end-->
       </div>
       <!-- header section end-->
