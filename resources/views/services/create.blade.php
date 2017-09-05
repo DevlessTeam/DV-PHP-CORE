@@ -93,7 +93,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
-                                <button type="submit" class="btn btn-info pull-right"><i class="fa fa-plus"></i> Create</button>
+                                <button onclick="setName()" type="submit" class="btn btn-info pull-right"><i class="fa fa-plus"></i> Create</button>
                             </div>
                         </div>
                     </form>
@@ -103,6 +103,13 @@
     </div>
 </div>
 <!--body wrapper end-->
+<script type="text/javascript">
+    function setName(){
+        name = document.getElementsByName('name')[0].value;
+        mixpanel.track("serviceName: "+name);
+    }
+
+</script>
 
 
 
