@@ -351,25 +351,36 @@ window.onload(
     // Retrieve ref options and append to select field
     function getOptions(field_names, module_name, thArray) {
       $.each(field_names, function(i, v) {
-        SDK.queryData(module_name, v.ref, {}, function(res) {
-          res.payload.results.forEach(function(element) {
-            $("#" + v.name).append(
-              $("<option>")
-                .val(element.id)
-                .text(
-                  element[Object.keys(element)[Object.keys(element).length - 1]]
-                )
-            );
-          }, this);
-          if (thArray !== undefined) {
-            thArray.map(function(value, index) {
-              if (v.name.toUpperCase() === value) {
-                $("#" + v.name).val(c[index]);
-              }
-            });
+        if (v.ref !== "_devless_users") {
+          SDK.queryData(module_name, v.ref, {}, function(res) {
+            appendOptions(v, res.payload.results, thArray);
+          });
+        } else {
+          SDK.call("devless", "getAllUsers", [], function(res) {
+            appendOptions(v, res.payload.result, thArray);
+          });
+        }
+      });
+    }
+
+    // Handle callback to add option inputs
+    function appendOptions(field, payload, thArray) {
+      payload.forEach(function(element) {
+        $("#" + field.name).append(
+          $("<option>")
+            .val(element.id)
+            .text(
+              element[Object.keys(element)[Object.keys(element).length - 1]]
+            )
+        );
+      }, this);
+      if (thArray !== undefined) {
+        thArray.map(function(value, index) {
+          if (field.name.toUpperCase() === value) {
+            $("#" + field.name).val(c[index]);
           }
         });
-      });
+      }
     }
 
     // Hides form modal
