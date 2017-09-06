@@ -174,24 +174,75 @@ window.onload(
         .get();
 
       $(function modal() {
-        $("#flash_msg").modal({ show: true, backdrop: "static" });
+        fieldType();
         $("#formData").html(" ");
-        for (var i = 2; i < metaForm.length; i++) {
-          $("#formData").append(
-            "<label for='" +
-              metaForm[i] +
-              "'><b>" +
-              metaForm[i].toUpperCase() +
-              "</b></label><input type='text' class='form-control' name='" +
-              metaForm[i] +
-              "' id='" +
-              metaForm[i] +
-              "' value='" +
-              c[i - 1] +
-              "'>"
-          );
+
+        // Get title of headers into array to identity ref type on update
+        var thArray = [];
+        var refPosition;
+
+        var nRow = $("table thead tr")[0];
+        $.each(nRow.cells, function(i, v) {
+          thArray.push(v.innerText);
+        });
+
+        for (var i = 0; i < metaForm.length; i++) {
+          if (metaForm[i].field_type === "reference") {
+            var field_name = metaForm[i].name;
+
+            thArray.map((v, i) => {
+              if (field_name.toUpperCase() === v) {
+                refPosition = i;
+              }
+            });
+
+            $("#formData").append(
+              "<label for='" +
+                metaForm[i].name +
+                "'><b>" +
+                metaForm[i].name.toUpperCase() +
+                "</b></label><select class='form-control' name='" +
+                metaForm[i].name +
+                "' id='" +
+                metaForm[i].name +
+                "'></select>"
+            );
+
+            SDK.queryData(module_name, metaForm[i].ref_table, {}, function(
+              res
+            ) {
+              res.payload.results.forEach(function(element) {
+                console.log(field_name);
+                $("#" + field_name).append(
+                  '<option value="' +
+                    element.id +
+                    '">' +
+                    element[
+                      Object.keys(element)[Object.keys(element).length - 1]
+                    ] +
+                    "</option>"
+                );
+              }, this);
+              $("#" + field_name).val(c[refPosition]);
+            });
+          } else {
+            $("#formData").append(
+              "<label for='" +
+                metaForm[i].name +
+                "'><b>" +
+                metaForm[i].name.toUpperCase() +
+                "</b></label><input type='text' class='form-control' name='" +
+                metaForm[i].name +
+                "' id='" +
+                metaForm[i].name +
+                "' value='" +
+                c[i + 1] +
+                "'>"
+            );
+          }
         }
       });
+      $("#flash_msg").modal({ show: true, backdrop: "static" });
       jQExtn();
     });
 
@@ -271,20 +322,10 @@ window.onload(
               }
             });
             break;
-          case "Devare":
-            info = {
-              resource: [
-                {
-                  name: module_table,
-                  params: [{ devare: true, where: "id," + c[0] }]
-                }
-              ]
-            };
-            $.ajax({
-              url: "api/v1/service/" + module_name + "/db",
-              type: "DELETE",
-              data: info
-            }).done(function(data) {
+          case "Delete":
+            SDK.deleteData(module_name, module_table, "id", c[0], function(
+              data
+            ) {
               alertHandle();
               if (data.status_code === 636) {
                 Datatable.row(element_id)
@@ -304,25 +345,52 @@ window.onload(
 
     // Handles form creation when the add btn is clicked
     $("#addbtn").click(function() {
+      var i = 0;
       fieldType();
-      $(function modal() {
-        $("#add_form").modal({ show: true, backdrop: "static" });
-
-        $("#addform").html(" ");
-        for (var i = 2; i < metaForm.length; i++) {
+      $("#addform").html(" ");
+      for (i; i < metaForm.length; i++) {
+        if (metaForm[i].field_type === "reference") {
+          var field_name = metaForm[i].name;
           $("#addform").append(
             '<label for="' +
-              metaForm[i] +
+              metaForm[i].name +
               '"><b>' +
-              metaForm[i].toUpperCase() +
-              '</b></label><input type="text" class="form-control" name="' +
-              metaForm[i] +
+              metaForm[i].name.toUpperCase() +
+              '</b></label><select class="form-control" name="' +
+              metaForm[i].name +
               '" id="' +
-              metaForm[i] +
+              metaForm[i].name +
+              '"></select>'
+          );
+
+          SDK.queryData(module_name, metaForm[i].ref_table, {}, function(res) {
+            res.payload.results.forEach(function(element) {
+              $("#" + field_name).append(
+                '<option value="' +
+                  element.id +
+                  '">' +
+                  element[
+                    Object.keys(element)[Object.keys(element).length - 1]
+                  ] +
+                  "</option>"
+              );
+            }, this);
+          });
+        } else {
+          $("#addform").append(
+            '<label for="' +
+              metaForm[i].name +
+              '"><b>' +
+              metaForm[i].name.toUpperCase() +
+              '</b></label><input type="text" class="form-control" name="' +
+              metaForm[i].name +
+              '" id="' +
+              metaForm[i].name +
               '">'
           );
         }
-      });
+      }
+      $("#add_form").modal({ show: true, backdrop: "static" });
       jQExtn();
     });
 
@@ -337,10 +405,7 @@ window.onload(
     function fieldType() {
       meta_data.forEach(function(element) {
         if (element.table_name === table_entries) {
-          console.log(metaForm);
-          JSON.parse(element.schema).field.forEach(function(el) {
-            console.log(el);
-          }, this);
+          metaForm = JSON.parse(element.schema).field.reverse();
         }
       }, this);
     }
