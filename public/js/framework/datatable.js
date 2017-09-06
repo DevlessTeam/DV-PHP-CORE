@@ -61,11 +61,9 @@ window.onload(
         var tables = data;
         for (var i = 0; i < tables.length; i++) {
           $("#table_name").append(
-            '<option value="' +
-              JSON.parse(tables[i].id) +
-              '">' +
-              JSON.parse(tables[i].schema).name +
-              "</option>"
+            $("<option>")
+              .val(JSON.parse(tables[i].id))
+              .text(JSON.parse(tables[i].schema).name)
           );
         }
       });
@@ -179,7 +177,7 @@ window.onload(
 
         // Get title of headers into array to identity ref type on update
         var thArray = [];
-        var refPosition;
+        var field_names = [];
 
         var nRow = $("table thead tr")[0];
         $.each(nRow.cells, function(i, v) {
@@ -188,59 +186,18 @@ window.onload(
 
         for (var i = 0; i < metaForm.length; i++) {
           if (metaForm[i].field_type === "reference") {
-            var field_name = metaForm[i].name;
-
-            thArray.map((v, i) => {
-              if (field_name.toUpperCase() === v) {
-                refPosition = i;
-              }
+            field_names.push({
+              name: metaForm[i].name,
+              ref: metaForm[i].ref_table
             });
 
-            $("#formData").append(
-              "<label for='" +
-                metaForm[i].name +
-                "'><b>" +
-                metaForm[i].name.toUpperCase() +
-                "</b></label><select class='form-control' name='" +
-                metaForm[i].name +
-                "' id='" +
-                metaForm[i].name +
-                "'></select>"
-            );
-
-            SDK.queryData(module_name, metaForm[i].ref_table, {}, function(
-              res
-            ) {
-              res.payload.results.forEach(function(element) {
-                console.log(field_name);
-                $("#" + field_name).append(
-                  '<option value="' +
-                    element.id +
-                    '">' +
-                    element[
-                      Object.keys(element)[Object.keys(element).length - 1]
-                    ] +
-                    "</option>"
-                );
-              }, this);
-              $("#" + field_name).val(c[refPosition]);
-            });
+            formBuild("formData", "select", metaForm[i]);
           } else {
-            $("#formData").append(
-              "<label for='" +
-                metaForm[i].name +
-                "'><b>" +
-                metaForm[i].name.toUpperCase() +
-                "</b></label><input type='text' class='form-control' name='" +
-                metaForm[i].name +
-                "' id='" +
-                metaForm[i].name +
-                "' value='" +
-                c[i + 1] +
-                "'>"
-            );
+            formBuild("formData", "input", metaForm[i]);
+            $("#" + metaForm[i].name).val(c[i + 1]);
           }
         }
+        getOptions(field_names, module_name, thArray);
       });
       $("#flash_msg").modal({ show: true, backdrop: "static" });
       jQExtn();
@@ -345,54 +302,75 @@ window.onload(
 
     // Handles form creation when the add btn is clicked
     $("#addbtn").click(function() {
-      var i = 0;
+      var field_names = [];
       fieldType();
       $("#addform").html(" ");
-      for (i; i < metaForm.length; i++) {
+      for (i = 0; i < metaForm.length; i++) {
         if (metaForm[i].field_type === "reference") {
-          var field_name = metaForm[i].name;
-          $("#addform").append(
-            '<label for="' +
-              metaForm[i].name +
-              '"><b>' +
-              metaForm[i].name.toUpperCase() +
-              '</b></label><select class="form-control" name="' +
-              metaForm[i].name +
-              '" id="' +
-              metaForm[i].name +
-              '"></select>'
-          );
-
-          SDK.queryData(module_name, metaForm[i].ref_table, {}, function(res) {
-            res.payload.results.forEach(function(element) {
-              $("#" + field_name).append(
-                '<option value="' +
-                  element.id +
-                  '">' +
-                  element[
-                    Object.keys(element)[Object.keys(element).length - 1]
-                  ] +
-                  "</option>"
-              );
-            }, this);
+          field_names.push({
+            name: metaForm[i].name,
+            ref: metaForm[i].ref_table
           });
+          formBuild("addform", "select", metaForm[i]);
         } else {
-          $("#addform").append(
-            '<label for="' +
-              metaForm[i].name +
-              '"><b>' +
-              metaForm[i].name.toUpperCase() +
-              '</b></label><input type="text" class="form-control" name="' +
-              metaForm[i].name +
-              '" id="' +
-              metaForm[i].name +
-              '">'
-          );
+          formBuild("addform", "input", metaForm[i]);
         }
       }
+
+      getOptions(field_names, module_name);
+
       $("#add_form").modal({ show: true, backdrop: "static" });
       jQExtn();
     });
+
+    // Append label and input types to modal
+    function formBuild(identifier, type, meta) {
+      var option;
+      var label = $("<label>")
+        .attr("for", meta.name)
+        .css("font-weight", "bold")
+        .text(meta.name.toUpperCase());
+      if (type === "input") {
+        option = $('<input type="text">')
+          .attr({
+            id: meta.name,
+            name: meta.name
+          })
+          .addClass("form-control");
+      } else {
+        option = $("<select>")
+          .attr({
+            id: meta.name,
+            name: meta.name
+          })
+          .addClass("form-control");
+      }
+      $("#" + identifier).append([label, option]);
+    }
+
+    // Retrieve ref options and append to select field
+    function getOptions(field_names, module_name, thArray) {
+      $.each(field_names, function(i, v) {
+        SDK.queryData(module_name, v.ref, {}, function(res) {
+          res.payload.results.forEach(function(element) {
+            $("#" + v.name).append(
+              $("<option>")
+                .val(element.id)
+                .text(
+                  element[Object.keys(element)[Object.keys(element).length - 1]]
+                )
+            );
+          }, this);
+          if (thArray !== undefined) {
+            thArray.map(function(value, index) {
+              if (v.name.toUpperCase() === value) {
+                $("#" + v.name).val(c[index]);
+              }
+            });
+          }
+        });
+      });
+    }
 
     // Hides form modal
     function alertHandle() {
