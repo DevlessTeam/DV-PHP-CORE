@@ -52,12 +52,9 @@ class ViewController extends Controller
     private function _fetch_view($service, $template, $payload)
     {
 
-        if(!file_exists(config('devless')['views_directory'].$service)){
-            $this->create_views($service, 'init');
-        }
-
         if(!view()->exists('service_views.'.$service.'.'.$template)){
-           Helper::interrupt(621);
+           $this->create_views($service, 'init');
+           // Helper::interrupt(621);
         }
 
         
