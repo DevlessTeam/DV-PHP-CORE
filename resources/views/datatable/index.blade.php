@@ -99,6 +99,14 @@ td {
   </div>
 </div>
 
+<?php
+
+    use App\Helpers\DataStore;
+    $instance = DataStore::instanceInfo();
+    $app  = $instance['app'];
+
+?>
+<script src="{{URL('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="<?= $app->token ?>"></script>
 <script src="{{ Request::secure(Request::root()).'/js/framework/datatable.js' }}"></script>
 
 @endsection
