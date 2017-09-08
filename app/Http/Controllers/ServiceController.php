@@ -253,7 +253,6 @@ class ServiceController extends Controller
         } else {
             $parameters = $this->get_params($method, $request);
         }
-
         return $this->assign_to_service(
             $service_name,
             $resource,

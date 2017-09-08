@@ -53,7 +53,6 @@ trait service_activity
                 ' is not supported'
             );
         }
-
         return $parameters;
     }
 
