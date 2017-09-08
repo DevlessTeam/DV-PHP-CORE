@@ -20,14 +20,13 @@ trait destroyData
      * @internal param string $resource
      */
     public function destroy($payload)
-    {
+    {  
         $db = $this->connect_to_db($payload);
         //check if table name is set
         $service_name = $payload['service_name'];
         $table = $payload['params'][0]['name'];
         $param_list = $payload['params'][0]['params'][0];
         $task = $tasked = null;
-
           //remove service appendage from service
         if (($pos = strpos($table, $service_name.'_')) !== false) {
             $tableWithoutService = substr($table, $pos + 1);

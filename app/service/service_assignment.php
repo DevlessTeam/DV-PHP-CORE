@@ -33,7 +33,6 @@ trait service_assignment
         $parameters = null,
         $internal_access = false
     ) {
-
         $current_service = $this->service_exist($service_name);
         if (!$current_service == false) {
             //check service access right
