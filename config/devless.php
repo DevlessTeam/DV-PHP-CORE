@@ -32,7 +32,6 @@ foreach ($devless_object_keys as $key => $value)
     $devless_payload->$key = $value;
 } 
 
-
 return[
   'assets_route_name'     => 'service_views',
   'assets_directory_name' => 'assets',  
