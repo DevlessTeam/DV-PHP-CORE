@@ -307,8 +307,8 @@ function displayAllFields(service, table) {
   $.get(url+'/datatable/'+service+'_'+table+'/metas', 
 		function(response){
       $('#fieldList')[0].textContent = '';
+      response = response.reverse();
 			for(var i = 0; response.length > i; i++) {
-				console.log(response[i])
 				if(response[i] !== 'devless_user_id' && response[i] !== 'id') {
 					var field = $('#fieldTemplate')[0].cloneNode(true, true);
 					field.id = Math.random();
