@@ -187,7 +187,7 @@ class devless
      * @return mixed
      * @ACL private
      */
-    public function queryData($serviceName, $table, $queryParams = null)
+    public function queryData($serviceName, $table, $queryParams = null, $getRelated=true)
     {
         $service = new service();
 
@@ -199,8 +199,12 @@ class devless
                 $queryBuilder->paramsBuilder($eachParamName, $eachParamArgs[0]);
             }    
         }
-        
-        $output = $queryBuilder->related('*')->queryData();
+        if($getRelated){
+            $output = $queryBuilder->related('*')->queryData();
+            
+        } else {
+            $output = $queryBuilder->queryData();
+        }
         if(isset($output['payload']['results'])){
             return $output['payload']['results'];
         }
