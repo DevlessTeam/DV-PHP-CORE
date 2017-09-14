@@ -51,6 +51,25 @@ trait collectionLib
 		$this->cleanOutput();
 		return $this;
 	}
+
+	public function appendCollectionTo($superArray, $subArray, $superKey, $subKey)
+	{	
+		if (!$this->execOrNot) {
+            return $this;
+        }
+        
+        for ($count=0; $count < count($superArray) ; $count++) { 
+        	foreach ($subArray as $singleObj) {
+        		if($superArray[$count][$superKey] == $singleObj[$subKey]){
+        			$superArray[$count]["merged_results"] = $singleObj;
+        		}
+        	}
+        }
+		$this->results = collect($superArray);;
+		$this->cleanOutput();
+		return $this;
+	}
+
 	public function getElement($nth)
 	{
 		if (!$this->execOrNot) {

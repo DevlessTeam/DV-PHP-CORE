@@ -13,7 +13,7 @@ $devless_object_keys = [
     'database'     =>  'default', 
     'resource_access_right' =>
     '{"query":"0","create":"0","update":"0","delete":"0","schema":"0","script":"0","view":"0"}',
-    'script'       => 'echo "Surely silence can sometimes be the most eloquent reply.";',
+    'script'       => '',
     'method'       => 'POST',
     'params'       =>  '', 
     'public'       =>  '',
