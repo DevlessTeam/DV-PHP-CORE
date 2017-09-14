@@ -52,7 +52,8 @@ trait collectionLib
 		return $this;
 	}
 
-	public function appendCollectionTo($superArray, $subArray, $superKey, $subKey)
+	public function appendCollectionTo($superArray, $subArray, $superKey, $subKey, 
+		$resultingKey="merged_result")
 	{	
 		if (!$this->execOrNot) {
             return $this;
@@ -61,7 +62,7 @@ trait collectionLib
         for ($count=0; $count < count($superArray) ; $count++) { 
         	foreach ($subArray as $singleObj) {
         		if($superArray[$count][$superKey] == $singleObj[$subKey]){
-        			$superArray[$count]["merged_results"] = $singleObj;
+        			$superArray[$count][$resultingKey] = $singleObj;
         		}
         	}
         }
