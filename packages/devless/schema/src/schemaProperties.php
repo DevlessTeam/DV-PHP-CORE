@@ -7,6 +7,7 @@ trait schemaProperties
     public $db_types = [
         'text' => 'string',
         'textarea' => 'longText',
+        'image'=>'longText',
         'integer' => 'integer',
         'decimals' => 'double',
         'password' => 'string',

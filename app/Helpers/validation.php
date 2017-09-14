@@ -22,6 +22,7 @@ trait validation
         'reference' => 'integer',
         'text' => 'string',
         'textarea' => 'string',
+        'image'=> 'string',
         'timestamp' => 'integer',
         'url' => 'url',
         'base64' => 'alphanum',
