@@ -1,6 +1,7 @@
 <?php
 
 namespace Devless\Schema;
+use App\Helpers\Helper;
 
 trait queryParamList
 {
@@ -15,7 +16,7 @@ trait queryParamList
         'search' => 'search',
         'randomize' => 'randomize',
         'between' => 'between',
-        'greaterThan' => 'greaterThan',
+        ' greaterThan' => 'greaterThan',
         'lessThan' => 'lessThan',
         'lessThanEqual' => 'lessThanEqual',
         'greaterThanEqual' => 'greaterThanEqual',

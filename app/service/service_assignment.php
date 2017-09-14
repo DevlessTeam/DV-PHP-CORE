@@ -61,7 +61,6 @@ trait service_assignment
                         'method' => $method,
                         'params' => $parameters,
                     ];
-
                     // run script before assigning to method
                     if ($resource != 'view' && $resource != 'rpc') {
                         $newServiceElements = $this->before_assigning_service_action($resource, $payload);
