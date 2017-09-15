@@ -31,8 +31,7 @@
     Route::group(
         ['prefix' => 'api/v1', 'middleware' => 'cors'],
         function () {
-             Config::set('session.driver', 'array');
-             
+
             //check system status
             Route::get(
                 'status',
