@@ -59,6 +59,7 @@ class HelpersTest extends TestCase
                 'timestamp'  => 12345,
                 'url'        => 'https://devless.io/#!/main',
                 'base64'     => 'abcd1234',
+                'image'      =>  'https://devless.io/#!/main'
 
             ];
 
@@ -76,6 +77,7 @@ class HelpersTest extends TestCase
                 'timestamp'  => 'timestamp',
                 'url'        => 'devless.io/#!/main',
                 'base64'     => 'random string',
+                'image'      => 1
 
             ];
 
