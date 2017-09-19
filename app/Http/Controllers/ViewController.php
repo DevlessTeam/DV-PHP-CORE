@@ -103,7 +103,7 @@ class ViewController extends Controller
      * @param string $type
      *
      * @return bool
-     */
+ */
     public function create_views($service_name, $type)
     {
         switch ($type) {

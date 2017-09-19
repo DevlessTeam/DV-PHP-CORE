@@ -18,7 +18,7 @@ trait flowControl
         }
         if($this->stopAndOutputCalled) {return $this;
         }
-        $this->assertion['whenever'] = $assert;
+        $this->assertion['whenever'] = ($assert);
         $this->called['whenever'] = true;
         $this->execOrNot = ($assert);
 
@@ -40,7 +40,7 @@ trait flowControl
             return $this;
         }
         
-        $this->assertion['elseWhenever'] = $assert;
+        $this->assertion['elseWhenever'] = ($assert);
         $this->called['elseWhenever'] = true;
         $this->execOrNot = ($assert);
 
@@ -64,5 +64,20 @@ trait flowControl
         $this->execOrNot = true;
 
         return $this;
+    }
+
+    /**
+     * This is the equivalence of endIf eg.beforeQuerying()->whenever(assertIts::equal($input_name, "edmond"))->then->succeedWith("yes the names are same")->elseWhenever(assertIts::equal($input_name, "charles")))->then->succeedWith("yes the names are charles")->otherwise()->succeedWith("Its some other name")->done()
+     *
+     * @return $this
+     */
+    public function done()
+    {
+        if(!$this->isCurrentDBAction) {return $this;
+        }   
+
+        $this->execOrNot = true;
+
+        return $this;   
     }
 }

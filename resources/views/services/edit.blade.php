@@ -44,7 +44,7 @@
                         <div  class="form-group">
                             <label for="field-type">Field Type</label>
 
-                            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64'] ?>
+                            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'IMAGE'] ?>
                             <select class="form-control"  name="field-type" id="fieldType">
                                 @foreach($options as  $option)
                                     <option value="{{$option}}">{{$option}}</option>
@@ -121,7 +121,7 @@
            <div  class="form-group">
             <label for="field-type">Field Type</label>
 
-            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'REFERENCE'] ?>
+            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'IMAGE', 'REFERENCE'] ?>
             <select class="form-control"  name="field-type" id="field-type">
                 @foreach($options as  $option)
                 <option value="{{$option}}">{{$option}}</option>
@@ -323,7 +323,7 @@
                                         <a href="/datatable?service_name={{$service->name}}&table_name={{$table_data['name']}}" class="btn btn-default" title="View/add data"><i class="fa fa-table"></i></a>
                                             </div>
                                             <div class="col-lg-3 col-md-3 col-sm-12">
-                                                <a target="blank" title="sample HTML code" href='/open-download/TableActivities/CRUDView/services.crud/["{{$service->name}}","{{$table_data['name']}}"]' class="btn btn-default "><i class="fa fa-code" aria-hidden="true"></i>
+                                                <a target="blank" title="sample HTML code" href='/open-download/TableActivities/CRUDView/services.crud/b{{$service->name}}","{{$table_data['name']}}"]' class="btn btn-default "><i class="fa fa-code" aria-hidden="true"></i>
 </a>
                                             </div>
                                             <div class="col-lg-3 col-md-3 col-sm-12">
