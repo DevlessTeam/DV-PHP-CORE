@@ -54,7 +54,7 @@ class ViewController extends Controller
 
         if(!view()->exists('service_views.'.$service.'.'.$template)){
            //$this->create_views($service, 'init');
-           // Helper::interrupt(621);
+            Helper::interrupt(621);
         }
 
         
