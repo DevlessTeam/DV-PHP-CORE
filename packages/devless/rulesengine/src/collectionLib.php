@@ -61,14 +61,9 @@ trait collectionLib
         
         for ($count=0; $count < count($superArray) ; $count++) { 
         	foreach ($subArray as $singleObj) {
-<<<<<<< HEAD
-        		if($superArray[$count][$superKey] == $singleObj[$subKey]){
-        			$superArray[$count][$resultingKey] = $singleObj;
-=======
         		if( !isset($superArray[$count][$resultingKey]) ){$superArray[$count][$resultingKey] = [];}
         		if($superArray[$count][$superKey] == $singleObj[$subKey]){
         			array_push($superArray[$count][$resultingKey],$singleObj);
->>>>>>> v1.3
         		}
         	}
         }
