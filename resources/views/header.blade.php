@@ -84,7 +84,7 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
           <div class="tab-content">
             <div class="tab-pane active" id="web">
 <pre><code class="language-markup"><xmp style="display: inline;">
-<script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="{{$app->token}}"  defer ></script></xmp></code>
+<script src="{{URL::to('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="{{$app->token}}"  ></script></xmp></code>
 </pre>
 
         </div>
