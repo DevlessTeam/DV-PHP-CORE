@@ -57,7 +57,6 @@ window.onload(
           "<option disabled selected value> -- select a table -- </option>"
         );
       $.get("/datatable/" + module_id, function(data) {
-        console.log(data);
         meta_data = data;
         var tables = data;
         for (var i = 0; i < tables.length; i++) {
