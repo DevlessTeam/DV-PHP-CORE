@@ -1,6 +1,6 @@
 <!--footer section start-->
 <footer>
-    <script src="https://cdn.smooch.io/smooch.min.js"></script>
+    <script src="/3rd-Party/smooch.min.js"></script>
 <script>
 Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
 </script>
@@ -23,8 +23,8 @@ Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
 <script src="{{ asset('/js/modernizr.min.js') }}"></script>
 
 <!-- datatable -->
-<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
+<script src="/3rd-Party/jquery.dataTables.min.js"></script>
+<script src="/3rd-Party/dataTables.select.min.js"></script>
 
 <!--Nice Scroll-->
 <script src="{{ asset('/js/jquery.nicescroll.js') }}" type="text/javascript"></script>

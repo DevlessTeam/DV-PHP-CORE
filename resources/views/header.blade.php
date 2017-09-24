@@ -28,7 +28,7 @@ use App\Helpers\DataStore;
 
   <!-- datatables css -->
   <link href="{{ asset('/css/jquery.dataTables.min.css') }}" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.dataTables.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/3rd-Party/select.dataTables.min.css" rel="stylesheet">
 
   <!--common style-->
   <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
