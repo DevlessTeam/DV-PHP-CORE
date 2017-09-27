@@ -56,6 +56,7 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
      email =  document.getElementsByName('email')[0].value;
      userObj = {}
      userObj['email'] = email;
+     mixpanel.track(JSON.stringify(userObj));
    }
 </script>
   <body onload="init()" class="sticky-header">
