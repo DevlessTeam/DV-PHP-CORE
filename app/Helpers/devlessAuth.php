@@ -112,8 +112,7 @@ trait devlessAuth
                     'status',
                     'created_at',
                     'updated_at',
-                    'remember_token',
-                    'status'
+                    'remember_token'
                 )
                 ->first();
 
@@ -316,7 +315,7 @@ trait devlessAuth
 
     public function generate_email_verification_code($user_id)
     {
-        return DataStore::setDump(md5(uniqid(1, true).'_'.$user_id, $user_id));
+        // return DataStore::setDump(md5(uniqid(1, true).'_'.$user_id, $user_id));
     }
     public static function set_user_auth_settings($settings)
     {

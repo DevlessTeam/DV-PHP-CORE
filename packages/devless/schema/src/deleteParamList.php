@@ -31,11 +31,12 @@ trait deleteParamList
 
     private function truncate_table($param_list, &$destroy_query, &$task, &$tasked)
     {
-        if(!Helper::is_admin_login()) {
-            Helper::interrupt(645);
-        }
 
         if (isset($param_list['truncate']) && $param_list['truncate'] == true) {
+                if(!Helper::is_admin_login()) {
+                    Helper::interrupt(645);
+                }
+
                 $destroy_query = $destroy_query.'->truncate()';
                 $tasked = 'truncated';
                 $task = 'truncate';
