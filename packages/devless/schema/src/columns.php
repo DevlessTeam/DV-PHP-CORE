@@ -63,7 +63,7 @@ trait columns
         //field without a default        
         } elseif ($column_type == 1) {
             $table->{$db_type[$field['field_type']]}
-            ($field['name'])->onDelete('cascade')->$unique();
+            ($field['name'])->onDelete('cascade')->$unique()->$nullable();
         } else {
             Helper::interrupt(
                 602,
