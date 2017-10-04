@@ -121,7 +121,7 @@ window.onload(
       for (i = 0; i < metas.length; i++) {
         if (metas[i] !== "devless_user_id") {
           header.push(metas[i]);
-          table_head += "<th>" + metas[i].toUpperCase() + "</th>";
+          table_head += "<th>" + metas[i] + "</th>";
         }
       }
 
