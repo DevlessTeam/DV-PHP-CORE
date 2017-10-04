@@ -325,7 +325,7 @@ window.onload(
       var label = $("<label>")
         .attr("for", meta.name)
         .css("font-weight", "bold")
-        .text(meta.name.toUpperCase());
+        .text(meta.name);
       if (type === "input") {
         option = $('<input type="text">')
           .attr({
@@ -353,26 +353,34 @@ window.onload(
           });
         } else {
           SDK.call("devless", "getAllUsers", [], function(res) {
-            appendOptions(v, res.payload.result, thArray);
+            appendOptions(v, res.payload.result, thArray, "users");
           });
         }
       });
     }
 
     // Handle callback to add option inputs
-    function appendOptions(field, payload, thArray) {
+    function appendOptions(field, payload, thArray, options = null) {
       payload.forEach(function(element) {
-        $("#" + field.name).append(
-          $("<option>")
-            .val(element.id)
-            .text(
-              element[Object.keys(element)[Object.keys(element).length - 1]]
-            )
-        );
+        if (options !== "users") {
+          $("#" + field.name).append(
+            $("<option>")
+              .val(element.id)
+              .text(
+                element[Object.keys(element)[Object.keys(element).length - 1]]
+              )
+          );
+        } else {
+          $("#" + field.name).append(
+            $("<option>")
+              .val(element.id)
+              .text(element.id + " - " + element.email)
+          );
+        }
       }, this);
       if (thArray !== undefined) {
         thArray.map(function(value, index) {
-          if (field.name.toUpperCase() === value) {
+          if (field.name === value) {
             $("#" + field.name).val(c[index]);
           }
         });
