@@ -213,14 +213,7 @@ window.onload(
         e.preventDefault();
         payload = $(this).serializeObject();
 
-        // Grabs the last id in the table & increases it
-        if (Datatable.data().length === 0) {
-          last_id = 0;
-        } else {
-          last_id = Datatable.data()[Datatable.data().length - 1][0];
-        }
-
-        table_array = [parseInt(last_id) + 1];
+        var table_array = [0];
 
         // Grabs values from the payload (form data) and push them into an array for DataTable library
         $.map(payload, function(v, i) {
@@ -232,13 +225,12 @@ window.onload(
             alertHandle();
             break;
           case "Submit":
-            var info = { resource: [{ name: module_table, field: [payload] }] };
-            $.post(
-              "api/v1/service/" + module_name + "/db",
-              info
-            ).success(function(data) {
+            SDK.addData(module_name, module_table, payload, function(res) {
               alertHandle();
-              if (data.status_code === 609) {
+              if (res.status_code === 609) {
+                // ID received from the backend
+                table_array[0] = res.payload.entry_id;
+
                 Datatable.row.add(table_array).draw();
                 row_index = Datatable.row([Datatable.data().length - 1]);
                 new_row = $("#dataOne")
