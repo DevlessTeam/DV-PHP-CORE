@@ -16,12 +16,16 @@ window.onload(
         $("#service option:selected").val() != "" &&
         $("#table_name option:selected").val() != ""
       ) {
-        var tb_name =
+        table_entries =
           $("#service option:selected").text() +
           "_" +
           $("#table_name option:selected").text();
         module_name = $("#service option:selected").text();
-        tableCall(tb_name);
+        module_id = $("#service").val();
+        $.get("/datatable/" + module_id, function(data) {
+          meta_data = data;
+        });
+        tableCall(table_entries);
       }
     });
 
