@@ -16,12 +16,16 @@ window.onload(
         $("#service option:selected").val() != "" &&
         $("#table_name option:selected").val() != ""
       ) {
-        var tb_name =
+        table_entries =
           $("#service option:selected").text() +
           "_" +
           $("#table_name option:selected").text();
         module_name = $("#service option:selected").text();
-        tableCall(tb_name);
+        module_id = $("#service").val();
+        $.get("/datatable/" + module_id, function(data) {
+          meta_data = data;
+        });
+        tableCall(table_entries);
       }
     });
 
@@ -117,7 +121,7 @@ window.onload(
       for (i = 0; i < metas.length; i++) {
         if (metas[i] !== "devless_user_id") {
           header.push(metas[i]);
-          table_head += "<th>" + metas[i].toUpperCase() + "</th>";
+          table_head += "<th>" + metas[i] + "</th>";
         }
       }
 
@@ -209,14 +213,7 @@ window.onload(
         e.preventDefault();
         payload = $(this).serializeObject();
 
-        // Grabs the last id in the table & increases it
-        if (Datatable.data().length === 0) {
-          last_id = 0;
-        } else {
-          last_id = Datatable.data()[Datatable.data().length - 1][0];
-        }
-
-        table_array = [parseInt(last_id) + 1];
+        var table_array = [0];
 
         // Grabs values from the payload (form data) and push them into an array for DataTable library
         $.map(payload, function(v, i) {
@@ -228,13 +225,12 @@ window.onload(
             alertHandle();
             break;
           case "Submit":
-            var info = { resource: [{ name: module_table, field: [payload] }] };
-            $.post(
-              "api/v1/service/" + module_name + "/db",
-              info
-            ).success(function(data) {
+            SDK.addData(module_name, module_table, payload, function(res) {
               alertHandle();
-              if (data.status_code === 609) {
+              if (res.status_code === 609) {
+                // ID received from the backend
+                table_array[0] = res.payload.entry_id;
+
                 Datatable.row.add(table_array).draw();
                 row_index = Datatable.row([Datatable.data().length - 1]);
                 new_row = $("#dataOne")
@@ -329,7 +325,7 @@ window.onload(
       var label = $("<label>")
         .attr("for", meta.name)
         .css("font-weight", "bold")
-        .text(meta.name.toUpperCase());
+        .text(meta.name);
       if (type === "input") {
         option = $('<input type="text">')
           .attr({
@@ -357,26 +353,34 @@ window.onload(
           });
         } else {
           SDK.call("devless", "getAllUsers", [], function(res) {
-            appendOptions(v, res.payload.result, thArray);
+            appendOptions(v, res.payload.result, thArray, "users");
           });
         }
       });
     }
 
     // Handle callback to add option inputs
-    function appendOptions(field, payload, thArray) {
+    function appendOptions(field, payload, thArray, options = null) {
       payload.forEach(function(element) {
-        $("#" + field.name).append(
-          $("<option>")
-            .val(element.id)
-            .text(
-              element[Object.keys(element)[Object.keys(element).length - 1]]
-            )
-        );
+        if (options !== "users") {
+          $("#" + field.name).append(
+            $("<option>")
+              .val(element.id)
+              .text(
+                element[Object.keys(element)[Object.keys(element).length - 1]]
+              )
+          );
+        } else {
+          $("#" + field.name).append(
+            $("<option>")
+              .val(element.id)
+              .text(element.id + " - " + element.email)
+          );
+        }
       }, this);
       if (thArray !== undefined) {
         thArray.map(function(value, index) {
-          if (field.name.toUpperCase() === value) {
+          if (field.name === value) {
             $("#" + field.name).val(c[index]);
           }
         });
