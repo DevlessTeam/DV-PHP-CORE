@@ -44,7 +44,7 @@ trait addData
             //assigning autheticated user id
             $table_data[0]['devless_user_id'] = $payload['user_id'];
             
-            $output = $db->table($service_name.'_'.$table['name'])->insertGetId($table_data[0]);
+            $output = $db->table($service_name.'_'.$table['name'])->insertGetId($table_data);
             
         }
         return ['entry_id' => $output];
