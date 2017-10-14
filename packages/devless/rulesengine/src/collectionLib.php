@@ -129,7 +129,7 @@ trait collectionLib
 		return $this;
 	}
 
-	public function onTheCollectionApplyMethod($method, $key=null)
+	public function onTheCollectionApplyMethod($method, $key=null, $newKey=null)
 	{
 		if (!$this->execOrNot) {
 			return $this;
@@ -144,7 +144,11 @@ trait collectionLib
 				$this->$method($input[$i]);
 			}
 			$mutatedValue = $this->results;
-			$input[$i][$key] = $mutatedValue;
+			if($newKey) {
+		 		$input[$i][$newKey] = $mutatedValue;
+			} else {
+				$input[$i][$key] = $mutatedValue;
+			}
 		}
 		$this->results = $input;
 		$this->cleanOutput();
