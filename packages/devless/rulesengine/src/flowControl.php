@@ -13,9 +13,12 @@ trait flowControl
      */
     public function whenever($assert)
     {
+
         if (!$this->isCurrentDBAction) {
             return $this;
         }
+	if(!$this->onTableSet){return $this;}
+
         if($this->stopAndOutputCalled) {return $this;
         }
         $this->assertion['whenever'] = ($assert);
@@ -34,13 +37,16 @@ trait flowControl
     public function elseWhenever($assert)
     {
         if(!$this->isCurrentDBAction) {return $this;
-        }   
-        if($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
+        }
+
+	if(!$this->onTableSet){return $this;}
+        
+	if($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
             $this->execOrNot = false;
             return $this;
         }
         
-        $this->assertion['elseWhenever'] = ($assert);
+	$this->assertion['elseWhenever'] = ($assert);
         $this->called['elseWhenever'] = true;
         $this->execOrNot = ($assert);
 
@@ -55,7 +61,10 @@ trait flowControl
     {
         if(!$this->isCurrentDBAction) {return $this;
         }   
-        if($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
+        
+	if(!$this->onTableSet){return $this;}
+	
+	if($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
             $this->execOrNot = false;
             return $this;
         }  
@@ -75,8 +84,10 @@ trait flowControl
     {
         if(!$this->isCurrentDBAction) {return $this;
         }   
-
-        $this->execOrNot = true;
+	
+	if(!$this->onTableSet){return $this;}
+        
+	$this->execOrNot = true;
 
         return $this;   
     }

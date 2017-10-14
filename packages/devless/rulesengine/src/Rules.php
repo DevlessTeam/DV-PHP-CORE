@@ -28,6 +28,7 @@ class Rules
     private $stopAndOutputCalled = false;
     private $answered = false;
     private $execOrNot = true;
+    private $onTableSet = false;
     private $isCurrentDBAction = false;
     private $actionType = '';
     private $tableName = '';
