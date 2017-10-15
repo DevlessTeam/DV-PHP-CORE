@@ -11,7 +11,7 @@ trait collectionLib
 		$collection = (is_null($collection))?[]:$collection;
 		$arr = $this->objToArray($collection, $arr);
 		$this->results = $arr;
-
+		$this->cleanOutput();
 		return $this;
 	}
 	public function collect($collection)
@@ -129,7 +129,7 @@ trait collectionLib
 		return $this;
 	}
 
-	public function onTheCollectionApplyMethod($method, $key=null)
+	public function onTheCollectionApplyMethod($method, $key=null, $newKey=null)
 	{
 		if (!$this->execOrNot) {
 			return $this;
@@ -144,7 +144,11 @@ trait collectionLib
 				$this->$method($input[$i]);
 			}
 			$mutatedValue = $this->results;
-			$input[$i][$key] = $mutatedValue;
+			if($newKey) {
+		 		$input[$i][$newKey] = $mutatedValue;
+			} else {
+				$input[$i][$key] = $mutatedValue;
+			}
 		}
 		$this->results = $input;
 		$this->cleanOutput();
@@ -176,6 +180,7 @@ trait collectionLib
 			return $this;
 		}
 		$this->results = count($this->useArgsOrPrevOutput($collection));
+		$this->cleanOutput();
 		return $this;
 	}
 
@@ -185,6 +190,7 @@ trait collectionLib
 			return $this;
 		}
 		$this->results = array_reverse($this->useArgsOrPrevOutput($collection));
+		$this->cleanOutput();
 		return $this;
 	}
 	public function sortCollectionBy($key)
@@ -194,6 +200,7 @@ trait collectionLib
 		}
 
 		$this->results = collect($this->results)->sortBy($key);
+		$this->cleanOutput();
 		return $this;
 	}
 
@@ -203,6 +210,7 @@ trait collectionLib
 			return $this;
 		}
 		$this->results = array_splice($this->results, $offset);
+		$this->cleanOutput();
 		return $this;
 	}
 
@@ -212,6 +220,7 @@ trait collectionLib
 			return $this;
 		}
 		$this->results = array_splice($this->results, 0, $size);
+		$this->cleanOutput();
 		return $this;
 	}
 
@@ -221,7 +230,19 @@ trait collectionLib
 			return $this;
 		}
 		$this->results = array_splice($this->results, $offset, $size);
+		$this->cleanOutput();
 		return $this;
+	}
+
+	public function findCollectionDiffs($collectionOne, $collectionTwo) {
+		
+		if(!$this->execOrNot) {
+			return $this;
+		}
+		$this->results = collect($collectionOne)->diff(collect($collectionTwo));
+		$this->cleanOutput();
+		return $this;
+	
 	}
 
 	public function addAnElementToCollection($element)
