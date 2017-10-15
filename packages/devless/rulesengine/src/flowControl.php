@@ -17,7 +17,6 @@ trait flowControl
         if (!$this->isCurrentDBAction) {
             return $this;
         }
-	if(!$this->onTableSet){return $this;}
 
         if($this->stopAndOutputCalled) {return $this;
         }
@@ -39,7 +38,6 @@ trait flowControl
         if(!$this->isCurrentDBAction) {return $this;
         }
 
-	if(!$this->onTableSet){return $this;}
         
 	if($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
             $this->execOrNot = false;
@@ -62,8 +60,6 @@ trait flowControl
         if(!$this->isCurrentDBAction) {return $this;
         }   
         
-	if(!$this->onTableSet){return $this;}
-	
 	if($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
             $this->execOrNot = false;
             return $this;
@@ -85,10 +81,20 @@ trait flowControl
         if(!$this->isCurrentDBAction) {return $this;
         }   
 	
-	if(!$this->onTableSet){return $this;}
         
 	$this->execOrNot = true;
 
         return $this;   
     }
+
+
+
+  public function end()
+  { 
+	$this->done();
+	return $this;
+
+   }
+
+
 }

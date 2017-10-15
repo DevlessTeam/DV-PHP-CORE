@@ -11,7 +11,7 @@ trait collectionLib
 		$collection = (is_null($collection))?[]:$collection;
 		$arr = $this->objToArray($collection, $arr);
 		$this->results = $arr;
-
+		$this->cleanOutput();
 		return $this;
 	}
 	public function collect($collection)
@@ -180,6 +180,7 @@ trait collectionLib
 			return $this;
 		}
 		$this->results = count($this->useArgsOrPrevOutput($collection));
+		$this->cleanOutput();
 		return $this;
 	}
 
@@ -189,6 +190,7 @@ trait collectionLib
 			return $this;
 		}
 		$this->results = array_reverse($this->useArgsOrPrevOutput($collection));
+		$this->cleanOutput();
 		return $this;
 	}
 	public function sortCollectionBy($key)
@@ -198,6 +200,7 @@ trait collectionLib
 		}
 
 		$this->results = collect($this->results)->sortBy($key);
+		$this->cleanOutput();
 		return $this;
 	}
 
@@ -207,6 +210,7 @@ trait collectionLib
 			return $this;
 		}
 		$this->results = array_splice($this->results, $offset);
+		$this->cleanOutput();
 		return $this;
 	}
 
@@ -216,6 +220,7 @@ trait collectionLib
 			return $this;
 		}
 		$this->results = array_splice($this->results, 0, $size);
+		$this->cleanOutput();
 		return $this;
 	}
 
@@ -225,7 +230,19 @@ trait collectionLib
 			return $this;
 		}
 		$this->results = array_splice($this->results, $offset, $size);
+		$this->cleanOutput();
 		return $this;
+	}
+
+	public function findCollectionDiffs($collectionOne, $collectionTwo) {
+		
+		if(!$this->execOrNot) {
+			return $this;
+		}
+		$this->results = collect($collectionOne)->diff(collect($collectionTwo));
+		$this->cleanOutput();
+		return $this;
+	
 	}
 
 	public function addAnElementToCollection($element)

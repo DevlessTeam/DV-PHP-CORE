@@ -23,9 +23,17 @@ trait actions
 
         $this->tableName = (is_array($this->tableName)) ? $this->tableName[0] : $this->tableName;
         $this->execOrNot = (in_array($this->tableName, $expectedTableNames));
-	$this->onTableSet = $this->execOrNot;
-        return $this;
+	return $this;
     }
+
+   public function getCurrentTable()
+  {
+	if(!$this->execOrNot) {
+		return $this;
+	}
+	$this->results = $this->tableName;
+	return $this;
+  }
 
     /**
          * Stop execution with an exception and output the message provided. Eg. afterQuering()->succeedWith("I will show up after quering")
