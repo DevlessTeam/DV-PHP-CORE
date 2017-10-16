@@ -12,7 +12,7 @@ trait compiler
 
 	 public function compile_script($code)
     {
-        //check for syntax, methods and attributes exists 
+        //check for syntax, methods and also if attributes exists 
         $code = ('<?php $rules'.$code.';');
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $traverser = new NodeTraverser;
@@ -40,7 +40,7 @@ trait compiler
                     $declarationString .= "$$variable = null;";
                 }
             }
-        }
+        };
         $compiled_script['var_init'] = $declarationString;
         $compiled_script['script'] = $code;
         $compiled_script['successful'] = true;

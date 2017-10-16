@@ -29,11 +29,13 @@ trait preprocessor
 							$valueName = $node->args[$i]->value->items[$j]->value->name->parts[0];
 							$node->args[$i]->value->items[$j]->value = (new Node\Expr\Variable($valueName, ["startLine" => 200, "endLine" => 200]));
 						}
-					}
-				} else if ($node->args[$i]->value instanceof Node\Expr\ArrayDimFetch) {
+						}
+					} else if ($node->args[$i]->value instanceof Node\Expr\ArrayDimFetch  && $node->args[$i]->value->var instanceof Node\Expr\ConstFetch) {
 					$nodeName = $node->args[$i]->value->var->name->parts[0];
-					$newVariable = (new Node\Expr\Variable($nodeName, ["startLine" => 200, "endLine" => 200]));
-					$node->args[$i]->value = $newVariable;
+					$dim      = $node->args[$i]->value->dim;
+					$newVariable = (new Node\Expr\Variable($nodeName, ["startLine" => 200, "endLine" => 200]));	
+					$newArrayVariable = (new Node\Expr\ArrayDimFetch($newVariable, $dim, ["startLine" => 200, "endLine" => 200]));
+					$node->args[$i]->value = $newArrayVariable;					
 			}			
 			}
 		}
