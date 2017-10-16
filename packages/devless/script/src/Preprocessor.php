@@ -30,7 +30,11 @@ trait preprocessor
 							$node->args[$i]->value->items[$j]->value = (new Node\Expr\Variable($valueName, ["startLine" => 200, "endLine" => 200]));
 						}
 					}
-				}
+				} else if ($node->args[$i]->value instanceof Node\Expr\ArrayDimFetch) {
+					$nodeName = $node->args[$i]->value->var->name->parts[0];
+					$newVariable = (new Node\Expr\Variable($nodeName, ["startLine" => 200, "endLine" => 200]));
+					$node->args[$i]->value = $newVariable;
+			}			
 			}
 		}
 		return $node;
