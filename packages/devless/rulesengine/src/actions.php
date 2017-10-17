@@ -23,7 +23,9 @@ trait actions
 
         $this->tableName = (is_array($this->tableName)) ? $this->tableName[0] : $this->tableName;
         $this->execOrNot = (in_array($this->tableName, $expectedTableNames));
-	return $this;
+        $this->onCurrentTable = $this->execOrNot;
+        $this->onTableCalled = true;
+	    return $this;
     }
 
    public function getCurrentTable()

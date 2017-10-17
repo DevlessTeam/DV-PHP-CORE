@@ -30,10 +30,12 @@ class Rules
     private $execOrNot = true;
     private $onTableSet = false;
     private $isCurrentDBAction = false;
+    private $onCurrentTable = false;
     private $actionType = '';
     private $tableName = '';
     private $selectedService = null;
     private $selectedMethod = null;
+    private $onTableCalled = false;
     private $methodAction = [
         'GET' => 'query',
         'POST' => 'create',
