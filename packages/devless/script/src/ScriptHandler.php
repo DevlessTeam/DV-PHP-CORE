@@ -42,6 +42,7 @@ class ScriptHandler
             'request_type' => $Dvresource,
             'request_phase' =>$payload['request_phase'],
             'access_rights' => $payload['resource_access_right'],
+            'requestPayload' => (isset($payload['ex_params']))?$payload['ex_params']:null,
             'status_code'   => (isset($payload['response_status_code']))?$payload['response_status_code']:null,
             'message'      => (isset($payload['response_message']))?$payload['response_message']:null,
             'results_payload' => (isset($payload['response_payload']))?$payload['response_payload']:null,
@@ -94,6 +95,9 @@ EOT;
             $headers = $imports.'$rules';
             $footer  = '';
             $finalCode = (strpos($code, 'use App\Helpers\Assert')!==false)? $code : $headers.$code.$footer;
+        
+            if($EVENT['request_phase'] == 'after'){extract($payload['ex_params'], EXTR_PREFIX_ALL, 'input');}
+        
             eval($finalCode);
 
             $EVENT['access_rights'] = $rules->accessRights;
@@ -107,12 +111,29 @@ EOT;
                 $EVENT['params'][$key] = ${'input_'.$key};
             }
 
-            return $EVENT['params'];
+            $EVENT['ex_params'] = [];
+            foreach (get_defined_vars() as $key => $value) {
+                if( strpos($key,'input_') === 0 ){
+                    if(isset($EVENT['params'][$key])){
+                        $EVENT['params'][$key] = ${'input_'.$key};
+                    } else {
+                        $var_split = explode('_', $key);
+                        unset($var_split[0]);
+                        $key = implode($var_split, "_");
+                        $EVENT['ex_params'][$key] = $value;    
+                    }
+                    
+                }
+
+            }
+
+            return $EVENT;
         };
 
         $params = $exec();
         if (isset($payload['params'][0]['field'])) {
-            $payload['params'][0]['field'][0] = $params;
+            $payload['params'][0]['field'][0] = $params['params'];
+            $payload['ex_params'] = $params['ex_params'];
         }
     
          (strpos(error_get_last()['file'], 'ScriptHandler.php') !=false)?dd():'';

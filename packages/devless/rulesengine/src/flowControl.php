@@ -13,17 +13,19 @@ trait flowControl
      */
     public function whenever($assert)
     {
-
+        
         if (!$this->isCurrentDBAction) {
             return $this;
         }
 
-        if($this->stopAndOutputCalled) {return $this;
+        if( ($this->onTableCalled) && (!$this->onCurrentTable) ) {
+            return $this;
         }
+        if($this->stopAndOutputCalled) {return $this;}
+
         $this->assertion['whenever'] = ($assert);
         $this->called['whenever'] = true;
         $this->execOrNot = ($assert);
-
         return $this;
     }
     /**
@@ -82,7 +84,7 @@ trait flowControl
         }   
 	
         
-	$this->execOrNot = true;
+	    $this->execOrNot = true;
 
         return $this;   
     }

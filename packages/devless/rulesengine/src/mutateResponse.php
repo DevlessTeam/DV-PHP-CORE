@@ -42,16 +42,17 @@ trait mutateResponse
      */
     public function mutateResponsePayload($newPayload)
     {
-        $newPayload = (is_array($newPayload))? $newPayload : [$newPayload];
 
-        if (!$this->execOrNot) {
-                return $this;
-        }
+        $newPayload = (is_array($newPayload))? $newPayload : [$newPayload];
+        
+        if ( (!$this->execOrNot) ) {return $this;}
         
         $this->commonMutationTask();
         $this->payload = $newPayload;
         return $this;
+
     }
+    
 
     /**
      * execute common mutation tasks.
