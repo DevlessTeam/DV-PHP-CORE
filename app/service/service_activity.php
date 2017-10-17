@@ -115,7 +115,6 @@ trait service_activity
         $output['payload'] = $payload;
 
         $script_output = $this->script_executioner($resource, $payload);
-
         return ($script_output)?:$output;
 
     }
@@ -130,13 +129,12 @@ trait service_activity
      */
     public function after_resource_process_order($resource, $requestPayload, $status_code, $message, $payload)
     {
-        
         $requestPayload['request_phase'] = 'after';
         $requestPayload['response_status_code'] = $status_code;
         $requestPayload['response_message'] = $message;
         $requestPayload['response_payload'] = $payload;
+
         $script_output = $this->script_executioner($resource, $requestPayload, $internalAccess = false);
-        
         return ($script_output)?:['status_code' => $status_code, 'message'=> $message, 'payload' => $payload];
     }
 
