@@ -61,10 +61,9 @@ class ScriptHandler
 
         //NB: position matters here
         $code = <<<EOT
-$payload[script];
-EOT;
+$payload[script];   
         $_____service_name = $payload['service_name'];
-        $_____init_vars = $payload['script_init_vars'];:
+        $_____init_vars = $payload['script_init_vars'];
         $exec = function () use ($code, $rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {   
 
             //store script params temporally
