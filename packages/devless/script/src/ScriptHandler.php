@@ -62,6 +62,7 @@ class ScriptHandler
         //NB: position matters here
         $code = <<<EOT
 $payload[script];   
+EOT;
         $_____service_name = $payload['service_name'];
         $_____init_vars = $payload['script_init_vars'];
         $exec = function () use ($code, $rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {   
@@ -95,7 +96,7 @@ $payload[script];
             $footer  = '';
             $finalCode = (strpos($code, 'use App\Helpers\Assert')!==false)? $code : $headers.$code.$footer;
         
-            if($EVENT['request_phase'] == 'after' && $payload['ex_params'] != null){
+            if($EVENT['request_phase'] == 'after' && isset($payload['ex_params'])){
                 extract($payload['ex_params'], EXTR_PREFIX_ALL, 'input');
             }
         
