@@ -96,7 +96,9 @@ EOT;
             $footer  = '';
             $finalCode = (strpos($code, 'use App\Helpers\Assert')!==false)? $code : $headers.$code.$footer;
         
-            // if($EVENT['request_phase'] == 'after'){extract($payload['ex_params'], EXTR_PREFIX_ALL, 'input');}
+            if($EVENT['request_phase'] == 'after' && $payload['ex_params'] != null){
+                extract($payload['ex_params'], EXTR_PREFIX_ALL, 'input');
+            }
         
             eval($finalCode);
 
