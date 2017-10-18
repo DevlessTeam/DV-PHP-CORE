@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/cb7072312ffb482ebb57ca2b6e5cf3a9)](https://www.codacy.com/app/EDDYMENS/DV-PHP-CORE?utm_source=github.com&utm_medium=referral&utm_content=DevlessTeam/DV-PHP-CORE&utm_campaign=badger)
 [![Build Status](https://api.travis-ci.org/DevlessTeam/DV-PHP-CORE.svg?branch=master)](https://travis-ci.org/DevlessTeam/DV-PHP-CORE)
  
 [![Docker Pulls](https://img.shields.io/docker/pulls/eddymens/devless.svg)](https://hub.docker.com/r/eddymens/devless/) 
