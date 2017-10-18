@@ -64,7 +64,6 @@ class ScriptHandler
 $payload[script];
 EOT;
         $_____service_name = $payload['service_name'];
-        $_____init_vars = $payload['script_init_vars'];
         $exec = function () use ($code, $rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {   
 
             //store script params temporally
@@ -96,7 +95,7 @@ EOT;
             $footer  = '';
             $finalCode = (strpos($code, 'use App\Helpers\Assert')!==false)? $code : $headers.$code.$footer;
         
-            if($EVENT['request_phase'] == 'after'){extract($payload['ex_params'], EXTR_PREFIX_ALL, 'input');}
+        //    if($EVENT['request_phase'] == 'after'){extract($payload['ex_params'], EXTR_PREFIX_ALL, 'input');}
         
             eval($finalCode);
 
