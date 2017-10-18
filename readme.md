@@ -1,6 +1,9 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/cb7072312ffb482ebb57ca2b6e5cf3a9)](https://www.codacy.com/app/EDDYMENS/DV-PHP-CORE?utm_source=github.com&utm_medium=referral&utm_content=DevlessTeam/DV-PHP-CORE&utm_campaign=badger)
 [![Build Status](https://api.travis-ci.org/DevlessTeam/DV-PHP-CORE.svg?branch=master)](https://travis-ci.org/DevlessTeam/DV-PHP-CORE)
  
-## DevLess provides the perfect starting point for your next big idea. Forget all the boilerplate and focus on what matters: your APPLICATION and USERS its like Laravel Spark and also comes with the ease Parse(RIP) had. https://devless.io/
+[![Docker Pulls](https://img.shields.io/docker/pulls/eddymens/devless.svg)](https://hub.docker.com/r/eddymens/devless/) 
+
+## Devless is a tool for ready-made back-end for development of web or mobile applications. It is fully open source under the permissive Apache v2 license. This means that you can develop your front end without worrying about neither back-end code or the business risk of a propitiatory backend-as-a-service.
 
 **How?**
 
@@ -52,13 +55,41 @@ Current implementation of the Devless API Engine is in PHP and built on top of t
 
 If everything goes on smoothly you should be able to access the setup screen at [localhost:8000](http://localhost:8000)
 
-If you will need help setting up you may check out the Laravel [installation](https://laravel.com/docs/5.1) guide as the Devless core is based off of Laravel. 
+If you will need help setting up you may check out the Laravel [installation](https://laravel.com/docs/5.1) guide as the Devless core is based off of Laravel.
 
-Checkout out the [docs](https://docs.devless.io)
+Alternatively, you can deploy your own copy unto Heroku😎 
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/DevlessTeam/DV-PHP-CORE/tree/heroku2)
+
+Checkout out the [docs](https://devless.gitbooks.io/devless-docs-1-3-0/content/why-devless.html)
+
+## Questions and Support
+Follow or join these channels for questions and support, and to keep updated on latest releases and announcements.
+
+<table class='equalwidth follow'>
+  <tr>
+		<td>
+			<a href='https://slack.devless.io' target="_blank">
+        <b>Slack</b><br><br>
+        <img src='https://raw.githubusercontent.com/gliechtenstein/images/master/slack_smaller.png'>
+        <br>
+        Join Now >
+      </a>
+		</td>
+		<td>
+			<a target="_blank" href='https://www.twitter.com/devlessio'>
+        <b>Twitter</b><br><br>
+				<img src='https://raw.githubusercontent.com/gliechtenstein/images/master/twitter_smaller.png'>
+        <br>
+        Follow >
+			</a>
+		</td>
+	</tr>
+</table>
 
 ## How to contribute 
 **Please checkout the [Contribute](https://guides.github.com/activities/contributing-to-open-source/) guide on how to contribute**
 No contribution is too small 
 
-* We would love to hear from  you email us @ <info@devless.io>
-* Also don't forget to visit our landing page @ [devless.io](https://devless.io)
+* We would love to hear from  you email us ⇒ <info@devless.io>
+* Also don't forget to visit our landing page ⇒ [devless.io](https://devless.io)
