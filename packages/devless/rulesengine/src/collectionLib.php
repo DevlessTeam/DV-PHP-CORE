@@ -179,6 +179,7 @@ trait collectionLib
 		if (!$this->execOrNot) {
 			return $this;
 		}
+		$this->results = (is_string($this->results))? []:$this->results;
 		$this->results = count($this->useArgsOrPrevOutput($collection));
 		$this->cleanOutput();
 		return $this;

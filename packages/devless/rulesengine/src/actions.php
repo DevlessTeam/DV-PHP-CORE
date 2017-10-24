@@ -172,12 +172,13 @@ trait actions
     }
 
     /**
-         * Assigns one variable to another just like `$sum2 = $sum` . This method works together with `to` method to achive this. eg: afterQuering()->sumUp(1,2,3,4,5)->storeAs($sum)->assign($sum)->to($sum2)->succeedWith($sum2)
-         *
-         * @param $input_var
-         *
-         * @return $this
-         */
+     * Assigns one variable to another just like `$sum2 = $sum` . This method works together with `to` method to achive this. eg: afterQuering()->sumUp(1,2,3,4,5)->storeAs($sum)->assign($sum)->to($sum2)->succeedWith($sum2)
+     *
+     * @param $input
+     * @return $this
+     * @internal param $input_var
+     *
+     */
     public function assign($input)
     {
         if (!$this->execOrNot) {
@@ -265,7 +266,7 @@ trait actions
         if (!$this->execOrNot) {
             return $this;
         }
-	$this->cleanOutput();
+	    $this->cleanOutput();
         $output = $this->results;
 
         return $this;

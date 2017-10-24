@@ -118,7 +118,7 @@ class Rules
             $collection = $this->results;
             $newCollection = [];
             $this->objToArray($collection, $newCollection);
-            $this->results = $newCollection;
+            $this->results = collect($newCollection);
         }
         
     }
