@@ -59,6 +59,9 @@ trait collectionLib
 			return $this;
 		}
 
+		$superArray = collect($superArray)->all();
+		$subArray = collect($subArray)->all();
+		
 		for ($count=0; $count < count($superArray) ; $count++) { 
 			foreach ($subArray as $singleObj) {
 				if( !isset($superArray[$count][$resultingKey]) && !$addToRelated ){$superArray[$count][$resultingKey] = [];}
