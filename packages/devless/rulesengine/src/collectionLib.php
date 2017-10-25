@@ -103,13 +103,12 @@ trait collectionLib
 		$this->cleanOutput();
 		return $this;
 	}
-	public function countTheNumberOfElements()
+	public function countTheNumberOfElements($collection = null)
 	{
 		if (!$this->execOrNot) {
 			return $this;
 		}
-		$this->results = ( is_string($this->results) )? [] :$this->results;
-		$this->results = collect($this->results)->count();
+		$this->results = collect($this->useArgsOrPrevOutput())->count();
 		$this->cleanOutput();
 		return $this;
 	}
