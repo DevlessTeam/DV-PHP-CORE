@@ -59,7 +59,8 @@ class HelpersTest extends TestCase
                 'timestamp'  => 12345,
                 'url'        => 'https://devless.io/#!/main',
                 'base64'     => 'abcd1234',
-                'image'      =>  'https://devless.io/#!/main'
+                'image'      =>  'https://devless.io/#!/main',
+                'phone_number' => '0540659430239',
 
             ];
 
@@ -77,7 +78,8 @@ class HelpersTest extends TestCase
                 'timestamp'  => 'timestamp',
                 'url'        => 'devless.io/#!/main',
                 'base64'     => 'random string',
-                'image'      => 1
+                'image'      => 1,
+                'phone_number' => 'Silence is golden'
 
             ];
 

@@ -26,6 +26,7 @@ trait validation
         'timestamp' => 'integer',
         'url' => 'url',
         'base64' => 'alphanum',
+        'phone_number' => 'digits_between:9,15'
 
     ];
 

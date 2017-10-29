@@ -18,6 +18,7 @@ trait schemaProperties
         'email' => 'string',
         'reference' => 'integer',
         'base64' => 'binary',
+        'phone_number' => 'string'
     ];
 
 }
