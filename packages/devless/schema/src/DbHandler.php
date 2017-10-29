@@ -138,6 +138,7 @@ class DbHandler
                             $table_data[$count]['password'] =
                                 Helper::password_hash($table_data[$count]['password']);
                         }
+                        if( strtolower($fields['field_type']) == 'timestamp' ){$field_value = $table_data[$count][$fields['name']] = time();;}
                         if (!Helper::field_check($field_value, $fields['field_type'])) {
                             Helper::interrupt(616, 'The field '.$fields['name'].' cannot  be set to `'.$field_value.'`. It\'s '.$fields['field_type']);
                         }
