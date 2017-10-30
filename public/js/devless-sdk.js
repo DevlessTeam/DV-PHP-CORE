@@ -503,12 +503,7 @@ scriptEngine.oneof = function(service, table) {
 		devless_main.processing();
 		var submissionPayload = {};
 		
-		if(event != undefined){
-			var label = (typeof event.target.label != "undefined")? event.target.label : "nameless";
-		} else{ var label = "nameless";}
-
-		submissionPayload[label] = data;
-		data = (typeof dvInterceptSubmission != "undefined")?
+		 data = (typeof dvInterceptSubmission != "undefined")?
 		dvInterceptSubmission(submissionPayload):submissionPayload;
 		if(typeof data == "undefined"){
 			throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
@@ -543,10 +538,29 @@ scriptEngine.param = function(key, value) {
 scriptEngine.signup = function() {
 	var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
 	actionUrl = (actionUrl != undefined) ? actionUrl : '#';
+	var submissionPayload = {};
+	var label = 'nameless';
+	var classList = devless_main.singleCourier.element.classList;
+	for(var i= 0; classList.length>i; i++ ){
+		if(classList[i].startsWith('dv-label') ) {
+			 label = classList[i].split(':')[1]
+		}
+	}
+	
 	register = function(record, callback) {
 		devless_main.processing();
-		SDK.call('devless', 'signUp', [record['email'], record['password'], record['username'], record['phonenumber'],
-			record['firstname'], record['lastname']
+
+		submissionPayload[label] = record;
+		devless_main.processing();
+		submissionPayload = (typeof dvInterceptSubmission != "undefined")?
+		dvInterceptSubmission(submissionPayload):submissionPayload;
+
+		if(typeof submissionPayload == "undefined"){
+			throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
+		}
+
+		SDK.call('devless', 'signUp', [submissionPayload[label]['email'], submissionPayload[label]['password'], submissionPayload[label]['username'], submissionPayload[label]['phonenumber'],
+			submissionPayload[label]['firstname'], submissionPayload[label]['lastname']
 			], function(response) {
 				if (! ('error' in response.payload) ) {
 					SDK.setToken(response.payload.result['token']);
@@ -567,11 +581,28 @@ scriptEngine.signup = function() {
 
 scriptEngine.signin = function(record) {
 	var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
-	actionUrl = (actionUrl != undefined) ? actionUrl : '#';
+	var actionUrl = (actionUrl != undefined) ? actionUrl : '#';
+	var submissionPayload = {};
+	var label = 'nameless';
+	var classList = devless_main.singleCourier.element.classList;
+	for(var i= 0; classList.length>i; i++ ){
+		if(classList[i].startsWith('dv-label') ) {
+			 label = classList[i].split(':')[1]
+		}
+	}
+	
 	login = function(record, callback) {
 		devless_main.processing();
-		SDK.call('devless', 'login', [record['username'], record['email'], record['phonenumber'],
-			record['password']
+
+		submissionPayload[label] = record;
+		devless_main.processing();
+		submissionPayload = (typeof dvInterceptSubmission != "undefined")?
+		dvInterceptSubmission(submissionPayload):submissionPayload;
+		if(typeof submissionPayload == "undefined"){
+			throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
+		}
+		SDK.call('devless', 'login', [submissionPayload[label]['username'], submissionPayload[label]['email'], submissionPayload[label]['phonenumber'],
+			submissionPayload[label]['password']
 			], function(response) {
 				if (response.payload.result !== false) {
 					SDK.setToken(response.payload.result['token']);
@@ -592,6 +623,17 @@ scriptEngine.signin = function(record) {
 scriptEngine.profile = function() {
 	var component = devless_main.singleCourier;
 	devless_main.processing();
+
+	var submissionPayload = {};
+	var QueryPayload = {};
+	var label = 'nameless';
+	var classList = devless_main.singleCourier.element.classList;
+	for(var i= 0; classList.length>i; i++ ){
+		if(classList[i].startsWith('dv-label') ) {
+			 label = classList[i].split(':')[1]
+		}
+	}
+
 	SDK.call('devless', 'profile', [], function(response) {
 		if (response.payload.error) {
 			devless_main.doneProcessing();
@@ -604,7 +646,15 @@ scriptEngine.profile = function() {
 			delete(data.first_name)
 			delete(data.last_name);
 			delete(data.phone_number);
-			devless_main.coreLib.render(component, [data])
+			QueryPayload[label] = data;
+			devless_main.processing();
+			QueryPayload = (typeof dvInterceptQueryResponse != "undefined")?
+			dvInterceptSubmission(QueryPayload):QueryPayload;
+			if(typeof QueryPayload == "undefined"){
+				throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
+			}
+			
+			devless_main.coreLib.render(component, [QueryPayload[label]])
 			devless_main.doneProcessing();
 		}
 	})
@@ -615,6 +665,8 @@ scriptEngine.updateProfile = function() {
 	var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
 	actionUrl = (actionUrl != undefined) ? actionUrl : '#';
 	devless_main.processing();
+
+
 	SDK.call('devless', 'profile', [], function(response) {
 		if (response.payload.error) {
 			devless_main.coreLib.notify(response.payload.error.message);
@@ -635,8 +687,26 @@ scriptEngine.updateProfile = function() {
 
 	var updateScript = function(record, callback) {
 		devless_main.processing();
-		SDK.call('devless', 'updateProfile', [record['email'], record['password'], record['username'], record['phonenumber'],
-			record['firstname'], record['lastname']
+
+		var submissionPayload = {};
+		var label = 'nameless';
+		var classList = devless_main.singleCourier.element.classList;
+		for(var i= 0; classList.length>i; i++ ){
+			if(classList[i].startsWith('dv-label') ) {
+				 label = classList[i].split(':')[1]
+			}
+		}
+
+		submissionPayload[label] = record;
+		submissionPayload = (typeof dvInterceptSubmission != "undefined")?
+		dvInterceptSubmission(submissionPayload):submissionPayload;
+		if(typeof submissionPayload == "undefined"){
+			throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
+		}
+		
+
+		SDK.call('devless', 'updateProfile', [submissionPayload[label]['email'], submissionPayload[label]['password'], submissionPayload[label]['username'], submissionPayload[label]['phonenumber'],
+			submissionPayload[label]['firstname'], submissionPayload[label]['lastname']
 			], function(response) {
 				if (response.payload.result != undefined ) {
 					devless_main.doneProcessing();
