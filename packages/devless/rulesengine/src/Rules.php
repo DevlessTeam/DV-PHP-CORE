@@ -24,6 +24,7 @@ class Rules
     public $status_code = 1000;
     public $message = '';
     public $payload = [];
+    public $sharedStore = null;
 
     private $stopAndOutputCalled = false;
     private $answered = false;

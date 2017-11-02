@@ -176,7 +176,8 @@ class devless
     public function addData($serviceName, $table, $data)
     {
         $service = new service();
-        $output = DS::service($serviceName, $table, $service)->addData([$data]);
+        $data = (isset($data[0]))? $data : [$data]; 
+        $output = DS::service($serviceName, $table, $service)->addData($data);
         return $output;
     }
 
@@ -373,4 +374,5 @@ class devless
         $actionClass = new ActionClass();
         return $actionClass->help($serviceInstance, $methodToGetDocsFor = null);   
     }
+
 }

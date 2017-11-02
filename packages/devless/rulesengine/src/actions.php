@@ -397,6 +397,15 @@ EOT;
         return $this;
     }
 
+    public function using($data) 
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+
+        $this->sharedStore = $data;
+        return $this;
+    }
 
 
     /**

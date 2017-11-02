@@ -53,7 +53,7 @@ trait collectionLib
 	}
 
 	public function appendCollectionTo($superArray, $subArray, $superKey, $subKey, 
-			$resultingKey="merged_result", $addToRelated=false)
+		$resultingKey="merged_result", $addToRelated=false)
 	{	
 		if (!$this->execOrNot) {
 			return $this;
@@ -69,7 +69,7 @@ trait collectionLib
 				if(!isset($superArray[$count]['related'][$resultingKey]) && $addToRelated ){$superArray[$count]['related'][$resultingKey] = [];}
 				if($superArray[$count][$superKey] == $singleObj[$subKey]){
 					($addToRelated)?array_push($superArray[$count]['related'][$resultingKey], $singleObj):
-						array_push($superArray[$count][$resultingKey],$singleObj);
+					array_push($superArray[$count][$resultingKey],$singleObj);
 				}
 			}
 		}
@@ -90,7 +90,7 @@ trait collectionLib
 			return $this;
 		}
 		$this->results = (isset($this->results[$nth-1]))
-			?$this->results[$nth-1]:[];
+		?$this->results[$nth-1]:[];
 		$this->cleanOutput();
 		return $this;
 	}
@@ -148,7 +148,7 @@ trait collectionLib
 			}
 			$mutatedValue = $this->results;
 			if($newKey) {
-		 		$input[$i][$newKey] = $mutatedValue;
+				$input[$i][$newKey] = $mutatedValue;
 			} else {
 				$input[$i][$key] = $mutatedValue;
 			}
@@ -249,7 +249,41 @@ trait collectionLib
 		$this->results = collect($collectionOne)->diff(collect($collectionTwo));
 		$this->cleanOutput();
 		return $this;
-	
+
+	}
+
+	public function expandCollection($collection) 
+	{
+		if (!$this->execOrNot) {
+			return $this;
+		}
+		$output = [];
+		$template = [];
+		(is_array($collection) && $this->isAssoc($collection))? '':$this->failWith('Sorry but you need to pass in a key value pair `->using(["category"=>category])->mock(template)`');
+
+		foreach ($collection as $key => $data) {
+			$push_to_array  = function() use (&$output, &$eachValue, &$template, &$key ) {
+				$innerTemplate = $template;
+				$innerTemplate[$key] = $eachValue;
+				$output[] = $innerTemplate;
+
+			};
+			if( !is_scalar($data) ) {
+				
+				foreach ($data as $index => $eachValue) {
+					(isset($output[$index]))? 
+					$output[$index][$key] = $eachValue :
+					$push_to_array();
+
+				}	
+			} else {
+					for($i=0; $i< count($output); $i++) {
+						$output[$i][$key] = $data;
+					}
+			}
+		}
+		$this->results = $output;
+		return $this;
 	}
 
 	public function addAnElementToCollection($element)
