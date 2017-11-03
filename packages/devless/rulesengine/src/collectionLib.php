@@ -286,6 +286,7 @@ trait collectionLib
 		return $this;
 	}
 
+
 	public function addAnElementToCollection($element)
 	{
 		//
