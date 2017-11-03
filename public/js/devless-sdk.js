@@ -640,22 +640,24 @@ scriptEngine.profile = function() {
 			devless_main.coreLib.notify(response.payload.error.message);
 		} else {
 			data = response.payload.result;
-			data.firstname = data.first_name;
-			data.lastname = data.last_name;
-			data.phonenumber = data.phone_number;
-			delete(data.first_name)
-			delete(data.last_name);
-			delete(data.phone_number);
-			QueryPayload[label] = data;
-			devless_main.processing();
-			QueryPayload = (typeof dvInterceptQueryResponse != "undefined")?
-			dvInterceptSubmission(QueryPayload):QueryPayload;
-			if(typeof QueryPayload == "undefined"){
-				throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
+			if(data != undefined) {
+				data.firstname = data.first_name;
+				data.lastname = data.last_name;
+				data.phonenumber = data.phone_number;
+				delete(data.first_name)
+				delete(data.last_name);
+				delete(data.phone_number);
+				QueryPayload[label] = data;
+				devless_main.processing();
+				QueryPayload = (typeof dvInterceptQueryResponse != "undefined")?
+				dvInterceptSubmission(QueryPayload):QueryPayload;
+				if(typeof QueryPayload == "undefined"){
+					throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
+				}
+				
+				devless_main.coreLib.render(component, [QueryPayload[label]])
+				devless_main.doneProcessing();
 			}
-			
-			devless_main.coreLib.render(component, [QueryPayload[label]])
-			devless_main.doneProcessing();
 		}
 	})
 }
@@ -672,14 +674,16 @@ scriptEngine.updateProfile = function() {
 			devless_main.coreLib.notify(response.payload.error.message);
 		} else {
 			data = response.payload.result;
-			data.firstname = data.first_name;
-			data.lastname = data.last_name;
-			data.phonenumber = data.phone_number;
-			delete(data.first_name)
-			delete(data.last_name);
-			delete(data.phone_number);
-			scriptEngine.populateForm(component,
-				data);
+			if(data != undefined) {
+				data.firstname = data.first_name;
+				data.lastname = data.last_name;
+				data.phonenumber = data.phone_number;
+				delete(data.first_name)
+				delete(data.last_name);
+				delete(data.phone_number);
+				scriptEngine.populateForm(component,
+					data);
+			}
 		}
 		devless_main.doneProcessing();
 

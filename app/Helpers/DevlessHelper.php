@@ -146,9 +146,10 @@ class DevlessHelper extends Helper
      * Script template generated for rules in each new service
      * @return string
      */
-    public static function script_template()
+    public static function script_template($template_type = 'default')
     {
-        return 
+        $templates = [
+            'default' =>
                 '
 /**
 * <?
@@ -176,7 +177,22 @@ class DevlessHelper extends Helper
  -> afterUpdating()
  -> afterDeleting()
  -> afterCreating()
- ';
- 
+ ',
+
+ 'devless' =>
+                 '
+/**
+* <?
+* Rules allow you to establish control over the flow of 
+* your data in and out of the database.
+* For example if you will like to change the output message 
+* your users receive after quering for data,
+* its as easy as `afterQuerying()->mutateResponseMessage("to something else")`. 
+* To view the list of callable method append ->help() to a 
+* flow statement ie ->beforeQuering()->help() and view from your app.
+**/
+ -> onTable("")
+'];
+ return $templates[$template_type];
     }
 }

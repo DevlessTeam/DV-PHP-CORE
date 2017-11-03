@@ -27,6 +27,7 @@ $devless_object_keys = [
     'port'         =>  null,
 ];
 
+
 foreach ($devless_object_keys as $key => $value)
 {
     $devless_payload->$key = $value;

@@ -18,6 +18,11 @@ class RpcController extends Controller
      */
     public function index($payload)
     {
+
+        $raw_request = json_decode(file_get_contents('php://input'), true);
+        $raw_request['params'] = $payload['params'];
+        $edited_request = $raw_request;
+        
         $service = $payload['service_name'];
         $method = Helper::query_string()['action'][0];
 
@@ -32,7 +37,7 @@ class RpcController extends Controller
             return Helper::interrupt(604);
         }
 
-        $server = new Server();
+        $server = new Server(json_encode($edited_request, true) ) ;
 
         $class = new \ReflectionClass($service);
 

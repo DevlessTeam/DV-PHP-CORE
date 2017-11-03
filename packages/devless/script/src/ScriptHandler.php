@@ -48,7 +48,9 @@ class ScriptHandler
             'results_payload' => (isset($payload['response_payload']))?$payload['response_payload']:null,
         ];
         
-        if (isset($payload['params'][0]['field'])) {
+        if ($Dvresource == 'rpc'){
+            $EVENT['params'] = $payload['params'];
+        }elseif (isset($payload['params'][0]['field'])) {
             $EVENT['params'] = $payload['params'][0]['field'][0];
         } elseif (isset($payload['params'][0]['params'][0]['data'][0])) {
             $EVENT['params'] = $payload['params'][0]['params'][0]['data'][0];
@@ -80,7 +82,7 @@ EOT;
 
             extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
             $rules->accessRights = $EVENT['access_rights'];
-            $rules->EVENT['user_id'] = $EVENT['user_id'];
+            $rules->EVENT = $EVENT;
             
             $rules->request_phase = ($EVENT['request_phase'] == 'after')?'after':'before';
             if($rules->request_phase == 'after') {
@@ -128,12 +130,15 @@ EOT;
                 }
 
             }
-
             return $EVENT;
         };
 
         $params = $exec();
-        if (isset($payload['params'][0]['field'])) {
+        if($Dvresource == 'rpc'){
+            $payload['params'] = $params['params'];
+            $payload['ex_params'] = $params['ex_params'];
+        }
+        elseif (isset($payload['params'][0]['field'])) {
             $payload['params'][0]['field'][0] = $params['params'];
             $payload['ex_params'] = $params['ex_params'];
         }
@@ -158,7 +163,6 @@ EOT;
             }
     
         }
-        
         return $results;
     }
 }

@@ -62,9 +62,10 @@ trait service_assignment
                         'params' => $parameters,
                     ];
                     // run script before assigning to method
-                    if ($resource != 'view' && $resource != 'rpc') {
-                        $newServiceElements = $this->before_assigning_service_action($resource, $payload);
                     
+                    if ($resource != 'view' && ($resource != 'rpc' || (isset($payload['service_name']) && strtolower($payload['service_name']) == 'devless') ) ) {
+                        $newServiceElements = $this->before_assigning_service_action($resource, $payload);
+                        
                         $resource = $newServiceElements['resource'];
                         $payload = $newServiceElements['payload'];
 
@@ -97,7 +98,7 @@ trait service_assignment
                     case 'rpc':
                         ($method != 'POST') ? Helper::interrupt(639) : true;
                         $rpc = new Rpc();
-
+                        // dd($payload);
                         return $rpc->index($payload);
                     case 'endNow':
                         return [

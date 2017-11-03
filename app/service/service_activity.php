@@ -40,10 +40,13 @@ trait service_activity
      *
      * @return array|mixed
      */
-    public function get_params($method, $request)
+    public function get_params($method, $request, $resource=null)
     {
-        if (in_array($method, ['POST', 'DELETE', 'PATCH'])) {
-            $parameters = $request['resource'];
+        if($resource == 'rpc')
+        {
+            $parameters = $request['params'];
+        }elseif (in_array($method, ['POST', 'DELETE', 'PATCH'])) {
+            $parameters = $request['resource'];            
         } elseif ($method == 'GET') {
             $parameters = Helper::query_string();
         } else {
@@ -115,6 +118,7 @@ trait service_activity
         $output['payload'] = $payload;
 
         $script_output = $this->script_executioner($resource, $payload);
+
         return ($script_output)?:$output;
 
     }

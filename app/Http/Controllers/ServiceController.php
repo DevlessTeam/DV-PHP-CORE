@@ -57,11 +57,11 @@ class ServiceController extends Controller
         $service_name_from_form = str_replace('-', '_', $service_name_from_form);
         $service_name = $service_name_from_form;
         $is_keyword = $this->is_service_name_php_keyword($service_name);
-
-        $validator = Validator::make(
+        $service_name = $template_type = (strtolower($service_name) == 'devless')? strtolower($service_name) : 'default';
+        $validator = Validator::make( 
             ['Service Name' => $service_name, 'Devless' => 'devless'],
             [
-                'Service Name' => 'required|unique:services,name|min:3|max:15|different:Devless',
+                'Service Name' => 'required|unique:services,name|min:3|max:15',
             ]
         );
 
@@ -83,8 +83,8 @@ class ServiceController extends Controller
         $service->resource_access_right =
             '{"query":1,"create":1,"update":1,"delete":1,"schema":0,"script":0, "view":0}';
         $service->active = 1;
-        $service->raw_script = DLH::script_template();
-        $compiled_script  = $scriptHandler->compile_script(DLH::script_template());
+        $service->raw_script = DLH::script_template($template_type);
+        $compiled_script  = $scriptHandler->compile_script(DLH::script_template($template_type));
         $service->script = $compiled_script['script'];        
         $db = new Db();
         if ( !$db->check_db_connection($connection) ) {
@@ -251,8 +251,9 @@ class ServiceController extends Controller
         if ($internal_access == true) {
             $parameters = $request['resource'];
         } else {
-            $parameters = $this->get_params($method, $request);
+            $parameters = $this->get_params($method, $request, $resource);
         }
+        
         return $this->assign_to_service(
             $service_name,
             $resource,
