@@ -9,7 +9,7 @@ trait devlessAuth
 		if (! $this->execOrNot) {
 			return $this;
 		}
-		dd($EVENT);
+		dd($this->EVENT);
 		return $this;
 	}
 
