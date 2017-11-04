@@ -60,7 +60,7 @@ If you will need help setting up you may check out the Laravel [installation](ht
 
 Alternatively, you can deploy your own copy unto Heroku😎 
 
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/DevlessTeam/DV-PHP-CORE/tree/heroku2)
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/DevlessTeam/DV-PHP-CORE/tree/heroku3)
 
 Checkout out the [docs](https://devless.gitbooks.io/devless-docs-1-3-0/content/why-devless.html)
 
