@@ -57,7 +57,8 @@ class ServiceController extends Controller
         $service_name_from_form = str_replace('-', '_', $service_name_from_form);
         $service_name = $service_name_from_form;
         $is_keyword = $this->is_service_name_php_keyword($service_name);
-        $service_name = $template_type = (strtolower($service_name) == 'devless')? strtolower($service_name) : 'default';
+        $service_name = (strtolower($service_name) == 'devless')? strtolower($service_name) : $service_name;
+        $template_type = (strtolower($service_name) == 'devless')? strtolower($service_name) : 'default';
         $validator = Validator::make( 
             ['Service Name' => $service_name, 'Devless' => 'devless'],
             [

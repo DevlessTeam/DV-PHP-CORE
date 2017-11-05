@@ -72,7 +72,6 @@ class ApiTest extends TestCase
         }';
 
         $schemaObj = json_decode($schemaStruct, true);
-
         $this->json('POST', $url . $serviceName . '/schema', $schemaObj)
             ->seeJsonEquals(['message' => 'Created table successfully',
                 'payload' => [], 'status_code' => 606]);
