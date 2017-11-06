@@ -48,16 +48,20 @@ class devless
         $first_name = null,
         $last_name = null,
         $remember_token = null,
-        $role = null
+        $role = null, 
+        $extraParams = null
     ) {
     
         $payload = get_defined_vars();
         
         $payload = self::getSetParams($payload);
-       
+        $coreParams = array_slice($payload, 0, 8);
         $auth = $this->auth;
-       
         $output = $auth->signup($payload);
+        if($extraParams){
+            $extraParams[]['users_id'] = $extraParams[]['devless_user_id'] = $output['profile']->id;
+        }
+        $this->addExtraUserDetails($extraParams);
         return $output;
         
        
@@ -71,7 +75,6 @@ class devless
     public function login($username = null, $email = null, $phone_number = null, $password = null)
     {
         $payload = get_defined_vars();
-       
         $payload = self::getSetParams($payload);
        
         $auth = $this->auth;
@@ -263,7 +266,10 @@ class devless
         }
         $profile = DB::table('users')->where('id', $id)->get();
         if($profile) {
-            return (array)$profile[0];
+            $userProfile = (array)$profile[0];
+            $extraDetails = $this->getExtraUserDetails($userProfile['id']);
+            $completeUserProfile = $userProfile + $extraDetails;
+            return $completeUserProfile;
         }
         return [];
     }
@@ -279,7 +285,7 @@ class devless
             [
                 "id", "username", "email", "first_name", "last_name", "phone_number", "status"
             ]
-        )->get();
+        )->join('devless_profile', 'users.id', '=', 'devless_profile.user_id')->get();
     }
 
     /**
@@ -375,4 +381,33 @@ class devless
         return $actionClass->help($serviceInstance, $methodToGetDocsFor = null);   
     }
 
+    public function getExtraUserDetails($id) 
+    {
+        $service = new service();
+        $output = DS::service('devless', 'user_profile', $service)->where('users_id', $id)->getData()['payload']['results'];
+        if(!isset($output[0])){return [];}
+        $newOutput = (array)$output[0];
+        unset($newOutput['id'], $newOutput['devless_user_id'], $newOutput['users_id']);
+        return $newOutput;
+    }
+
+    public function addExtraUserDetails($extraDetails) 
+    {
+        $service = new service();
+        $flattendDetails = [];
+
+        for ($i=0; $i < count($extraDetails); $i++) { 
+            $key = array_keys($extraDetails[$i]);
+            $value = array_values($extraDetails[$i]);
+            $flattendDetails[$key[0]] = $value[0];
+        }
+        $output = DS::service('devless', 'user_profile', $service)->addData([$flattendDetails]);
+
+        if($output['status_code'] !== 609) {
+            DB::table('users')->where('id', $flattendDetails['users_id'])->delete();
+        }
+        return $output;   
+    }
+
+   
 }

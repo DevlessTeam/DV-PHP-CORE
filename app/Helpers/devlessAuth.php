@@ -7,6 +7,8 @@ use Session;
 use App\User as user;
 use App\Helpers\Jwt as jwt;
 use App\Helpers\DataStore;
+use App\Http\Controllers\ServiceController as service;
+use App\Helpers\DataStore as DS;
 trait devlessAuth
 {
 
@@ -115,8 +117,12 @@ trait devlessAuth
                     'remember_token'
                 )
                 ->first();
-
-            return $user_data;
+             $service = new service();
+            $output = DS::service('devless', 'user_profile', $service)->where('users_id', $token['id'])->getData()['payload']['results'];
+            if(!isset($output[0])){return array_merge((array)$user_data, []);}
+            $newOutput = (array)$output[0];
+            unset($newOutput['id'], $newOutput['devless_user_id'], $newOutput['users_id']);
+            return  array_merge((array)$user_data , $newOutput);
         }
 
         return false;

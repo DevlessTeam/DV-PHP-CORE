@@ -81,7 +81,7 @@ trait service_assignment
                         $db = new Db();
 
                         $response = $db->access_db($payload);
-                        if ($resource != 'view' && $resource != 'rpc') {
+                        if ($resource != 'view' && $resource != 'rpc' ) {
                               return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload']);
 
                         } 
@@ -98,8 +98,9 @@ trait service_assignment
                     case 'rpc':
                         ($method != 'POST') ? Helper::interrupt(639) : true;
                         $rpc = new Rpc();
-                        // dd($payload);
-                        return $rpc->index($payload);
+                        $response = $rpc->index($payload);
+                        return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload']);
+
                     case 'endNow':
                         return [
                             'status_code' => $payload['status_code'],

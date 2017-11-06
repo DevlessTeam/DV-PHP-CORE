@@ -2,113 +2,120 @@
 
 namespace Devless\RulesEngine;
 
+use App\Helpers\Helper;
+
 trait devlessAuth 
 {
-	public function extendUsersTableWith()
+	public function extendUsersTableWith($service_name, $table_name)
 	{
 		if (! $this->execOrNot) {
 			return $this;
 		}
-		dd($this->EVENT);
 		return $this;
 	}
 
 	public function beforeSigning() 
 	{
-		dd($this->EVENT);
-		if (! $this->execOrNot) {
-			return $this;
-		}
+
+		$this->execOrNot = 
+			($this->request_phase_is('before') and $this->action_type_is('login') );
 		return $this;	
 	}
 
 	public function beforeSigningUp() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = 
+			($this->request_phase_is('before') and $this->action_type_is('signUp') );
 		return $this;	
 	}
 
 	public function beforeQueryingProfile() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = 
+			($this->request_phase_is('before') and $this->action_type_is('profile') );
 		return $this;	
 	}	
 
 	public function beforeUpdatingProfile() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = 
+			($this->request_phase_is('before') and $this->action_type_is('updateProfile') );
 		return $this;	
 	}
 
 
 	public function onSigning() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = 
+			($this->action_type_is('login') );
 		return $this;	
 	}
 
 	public function onSigningUp() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
-		return $this;	
+		$this->execOrNot = 
+			($this->action_type_is('signUp') );
+
+		return $this;
 	}
 
 	public function onQueringProfile() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
-		return $this;	
+		$this->execOrNot = 
+			($this->action_type_is('profile') );
+
+		return $this;
 	}
 
 	public function onProfileUpdate() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = 
+			($this->action_type_is('updateProfile') );
+
 		return $this;	
 	}
 
 	public function afterSigning() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = 
+			($this->request_phase_is('after') and $this->action_type_is('login') );
+
 		return $this;	
 	}
 
 	public function afterSigningUp() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = 
+			($this->request_phase_is('after') and $this->action_type_is('signUp') );
+
 		return $this;	
 	}
 
 	public function afterQueryingProfile() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = 
+			($this->request_phase_is('after') and $this->action_type_is('profile') );
+
 		return $this;	
 	}
 
 	public function afterUpdatingProfile() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
-		return $this;	
+		$this->execOrNot = 
+			($this->request_phase_is('after') and $this->action_type_is('updatProfile') );
+
+		return $this;
+	}
+ 
+	private function action_type_is($type) 
+	{
+		if(!isset(Helper::query_string()['action']) && !isset(Helper::query_string()['action'][0]))return false;
+		return (Helper::query_string()['action'][0] == $type);
+	}
+
+	private function request_phase_is($type) 
+	{
+		return ($this->EVENT['request_phase'] == $type);
 	}
 }
 
