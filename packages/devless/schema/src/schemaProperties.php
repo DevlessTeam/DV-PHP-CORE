@@ -20,5 +20,4 @@ trait schemaProperties
         'base64' => 'binary',
         'phone_number' => 'string'
     ];
-
 }

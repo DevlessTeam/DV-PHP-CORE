@@ -35,7 +35,8 @@ trait createTable
         ) {
             \Schema::connection('DYNAMIC_DB_CONFIG')->
             create(
-                $table_name, function (Blueprint
+                $table_name,
+                function (Blueprint
                     $table
                 ) use (&$new_payload, $db_type, $service_name) {
                     //default field
@@ -49,7 +50,7 @@ trait createTable
                         $field['field_type'] = strtolower($field['field_type']);
 
                         //check if users table is being referenced
-                        if ($field['field_type'] == 'reference' 
+                        if ($field['field_type'] == 'reference'
                             && strpos($field['ref_table'], '_devless_users')== true
                         ) {
                             $field['ref_table'] = 'users';

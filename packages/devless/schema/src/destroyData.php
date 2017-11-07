@@ -20,7 +20,7 @@ trait destroyData
      * @internal param string $resource
      */
     public function destroy($payload)
-    {  
+    {
         $db = $this->connect_to_db($payload);
         //check if table name is set
         $service_name = $payload['service_name'];
@@ -46,7 +46,7 @@ trait destroyData
         
         $output = $this->drop_table($param_list, $table_name, $task, $tasked);
         
-        if($tasked =='dropped') {
+        if ($tasked =='dropped') {
             return $output;
         }
         $this->set_id_of_record_to_delete($param_list, $destroy_query, $task);
@@ -58,28 +58,24 @@ trait destroyData
         (is_object($result))?Helper::interrupt(615):false;
 
         return $this->response_from_delete_action($result, $task);
-        
     }
 
     private function response_from_delete_action($result, $task)
     {
-       $element = 'row';
-        if ( ($result == 0 && $task != "truncate") ) {
+        $element = 'row';
+        if (($result == 0 && $task != "truncate")) {
             Helper::interrupt(614, 'could not '.$task.' '.$element);
         }
 
-        return Response::respond(636);   
+        return Response::respond(636);
     }
 
     private function check_userbased_destroy($payload, $base_query)
     {
         if ($payload['user_id'] !== '') {
             $user_id = $payload['user_id'];
-            return $base_query.'->where("devless_user_id",'.$user_id.')';    
+            return $base_query.'->where("devless_user_id",'.$user_id.')';
         }
         return $base_query;
-        
     }
-
-
 }

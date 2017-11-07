@@ -78,7 +78,8 @@ trait tableMeta
             if (!\Schema::connection('DYNAMIC_DB_CONFIG')->hasTable($field['ref_table'])
             ) {
                 Helper::interrupt(
-                    601, 'referenced table '
+                    601,
+                    'referenced table '
                     .$field['ref_table'].' does not exist'
                 );
             }

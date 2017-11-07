@@ -76,7 +76,8 @@ class SchemaEdit
         $compTableName = $dbHandler->devlessTableName($serviceName, $tableName);
         $tableMeta = $dbHandler->get_tableMeta($compTableName);
         \Schema::table(
-            $compTableName, function (Blueprint $table) use (
+            $compTableName,
+            function (Blueprint $table) use (
                 $oldName,
                 $newName,
                 $dbHandler,
@@ -124,7 +125,8 @@ class SchemaEdit
         );
         $tableMeta = $dbHandler->get_tableMeta($compTableName);
         \Schema::table(
-            $compTableName, function (Blueprint $table) use (
+            $compTableName,
+            function (Blueprint $table) use (
                 $fieldName,
                 $tableName,
                 $fieldType,
@@ -161,16 +163,17 @@ class SchemaEdit
         }
 
         \Schema::table(
-            $compTableName, function (Blueprint $table) use ($fieldName, &$tableMeta) {
+            $compTableName,
+            function (Blueprint $table) use ($fieldName, &$tableMeta) {
                     $table->dropColumn($fieldName);
                     $count = 0;
-                    foreach ($tableMeta['schema']['field'] as $field) {
-                        if ($field['name'] == $fieldName) {
-                            unset($tableMeta['schema']['field'][$count]);
-                            $tableMeta['schema']['field'] = array_values($tableMeta['schema']['field']);
-                        }
-                        ++$count;
+                foreach ($tableMeta['schema']['field'] as $field) {
+                    if ($field['name'] == $fieldName) {
+                        unset($tableMeta['schema']['field'][$count]);
+                        $tableMeta['schema']['field'] = array_values($tableMeta['schema']['field']);
                     }
+                    ++$count;
+                }
             }
         );
         $dbHandler->update_table_meta($serviceName, $tableName, $tableMeta);

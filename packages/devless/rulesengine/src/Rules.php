@@ -65,9 +65,9 @@ class Rules
 
     public function __construct()
     {
-        $this->then = $this->also = 
-        $this->firstly = $this->secondly = 
-        $this->thirdly = $this->beSureTo = 
+        $this->then = $this->also =
+        $this->firstly = $this->secondly =
+        $this->thirdly = $this->beSureTo =
         $this->next = $this->lastly = $this;
     }
 
@@ -83,8 +83,8 @@ class Rules
 
     public function __call($method, $args)
     {
-        if(!method_exists($this, $method)) {
-            $closestMethod = 
+        if (!method_exists($this, $method)) {
+            $closestMethod =
                 DevlessHelper::find_closest_word($method, get_class_methods($this));
             $failMessage = 'There is no such method `'.$method.'';
             $failMessage .= (strlen($closestMethod) > 0)? '` perharps you meant '.$closestMethod. '?' : '';
@@ -93,7 +93,7 @@ class Rules
     }
 
      /**
-     * use result from previous method as a param 
+     * use result from previous method as a param
      * if argument is not provided
      *
      * @param $args
@@ -108,20 +108,19 @@ class Rules
 
     public function validateInputType($input)
     {
-        if( !is_scalar($input) && !is_iterable($input) ){
+        if (!is_scalar($input) && !is_iterable($input)) {
             Helper::interrupt(1111, 'sorry but your data is not a string, boolean, decimals, integer or a collection ');
         }
     }
 
     public function cleanOutput()
     {
-        if(is_array($this->results)){
+        if (is_array($this->results)) {
             $collection = $this->results;
             $newCollection = [];
             $this->objToArray($collection, $newCollection);
             $this->results = $newCollection;
         }
-        
     }
 
 
@@ -130,6 +129,4 @@ class Rules
         unset($input_var);
         return $this;
     }
-
-    
 }

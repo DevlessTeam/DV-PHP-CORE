@@ -13,7 +13,7 @@ trait mathLib
      * @return $this
      */
     public function calculate($expression)
-    {  
+    {
         if (!$this->execOrNot) {
                 return $this;
         }
@@ -28,7 +28,7 @@ trait mathLib
      *
      * @return $this
      */
-    public function sumUp($num=0)
+    public function sumUp($num = 0)
     {
         if (!$this->execOrNot) {
                 return $this;
@@ -36,7 +36,7 @@ trait mathLib
 
         $this->results = array_sum(func_get_args());
         return $this;
-    }    
+    }
 
     /**
      * subtract a bunch of numbers. eg: `->beforeQuerying()->subtract(3,4,5,6,7)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)` also `->beforeQuerying()->from(5)->subtract(3)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
@@ -49,7 +49,7 @@ trait mathLib
             return $this;
         }
 
-        if(count(func_get_args()) == 1) {
+        if (count(func_get_args()) == 1) {
              $this->results = ($this->results - func_get_args()[0]);
         } else {
             foreach (func_get_args() as $key => $number) {
@@ -72,8 +72,7 @@ trait mathLib
         }
         $this->results = array_product(func_get_args());
         return $this;
-
-    } 
+    }
 
     /**
      * divide a range of numbers.eg: `->beforeQuerying()->divide(6,2)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
@@ -86,7 +85,7 @@ trait mathLib
             return $this;
         }
         
-        if(count(func_get_args()) < 2) {
+        if (count(func_get_args()) < 2) {
             $this->results = 0;
             return $this;
         } else {
@@ -97,12 +96,12 @@ trait mathLib
         }
         $this->cleanOutput();
         return $this;
-    }    
+    }
 
     /**
      * This picks results from your earlier computation and divides it by a given number. eg: `->beforeQuerying()->sumUp(3,4,5,6,7)->divdeBy(6)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
      *
-     * @param  $number 
+     * @param  $number
      * @return $this
      */
     public function divideBy($number)
@@ -124,7 +123,7 @@ trait mathLib
      */
     public function findSquareRootOf($number)
     {
-        if(!$this->execOrNot) {
+        if (!$this->execOrNot) {
             return $this;
         }
         $this->results = sqrt($number);
@@ -138,7 +137,7 @@ trait mathLib
      */
     public function getSquareRoot()
     {
-        if(!$this->execOrNot) {
+        if (!$this->execOrNot) {
             return $this;
         }
         $this->results = sqrt($this->results);
@@ -152,11 +151,11 @@ trait mathLib
      * @param  integer $precision
      * @return $this
      */
-    public function roundUp($number, $precision=1)
+    public function roundUp($number, $precision = 1)
     {
-        if(!$this->execOrNot) {
+        if (!$this->execOrNot) {
             return $this;
-        } 
+        }
         $this->results = round($number, $precision);
         $this->cleanOutput();
         return $this;
@@ -169,7 +168,7 @@ trait mathLib
      */
     public function percentOf($number)
     {
-        if(!$this->execOrNot) {
+        if (!$this->execOrNot) {
             return $this;
         }
         $percentage = ($this->results/100);

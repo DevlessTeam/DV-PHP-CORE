@@ -38,7 +38,7 @@ trait tableActions
         return $this;
     }
     /**
-     * Check if data is being deleted from a table. This will run code attached to it before and after its being run 
+     * Check if data is being deleted from a table. This will run code attached to it before and after its being run
      *
      * @return $this
      */
@@ -103,10 +103,9 @@ trait tableActions
         $this->execOrNot = $this->isCurrentDBAction = ($this->request_phase == 'after' && $this->actionType == 'GET');
 
         return $this;
-        
     }
     /**
-     * Runs code attached to this method after the data has been added to the DB. This allows you to perform actions such as `afterCreating()->whenever($rules->status_code == 625)->mutateResponseMessage("the response message has been altered") 
+     * Runs code attached to this method after the data has been added to the DB. This allows you to perform actions such as `afterCreating()->whenever($rules->status_code == 625)->mutateResponseMessage("the response message has been altered")
      *
      * @return $this
      */
@@ -149,5 +148,4 @@ trait tableActions
         $this->execOrNot = $this->isCurrentDBAction = true;
         return $this;
     }
-
 }

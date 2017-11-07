@@ -9,7 +9,7 @@ trait generators
      * @param $length
      * @return $this
      */
-    public function generateRandomInteger($length=100000000000000000000)
+    public function generateRandomInteger($length = 100000000000000000000)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -23,7 +23,7 @@ trait generators
      * generates random alphanumeric values. This may be used for generating order Ids. eg `->beforeCreating()->generateRandomAlphanums()->storeAs($order_id)->assign($order_id)->to($input_order_id)`
      * @return $this
      */
-    public function generateRandomAlphanums($length=5)
+    public function generateRandomAlphanums($length = 5)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -44,7 +44,7 @@ trait generators
      * @param $length
      * @return $this
      */
-    public function generateRandomString($length=10)
+    public function generateRandomString($length = 10)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -64,7 +64,7 @@ trait generators
      * generates unique Id.This generates unique Id . eg `->beforeCreating()->generateUniqueId()->storeAs($user_id)->assign($user_id)->to($input_id)`
      * @param $length
      * @return $this
-     */    
+     */
     public function generateUniqueId()
     {
         if (!$this->execOrNot) {
@@ -72,6 +72,6 @@ trait generators
         }
         $this->results = uniqid();
         $this->cleanOutput();
-        return $this;    
+        return $this;
     }
 }

@@ -27,7 +27,8 @@ trait relation
         foreach ($results as $eachResult) {
             $eachResult->related = [];
             array_walk(
-                $tables, function ($table) use ($eachResult, &$output, $service) {
+                $tables,
+                function ($table) use ($eachResult, &$output, $service) {
                     $refTable = ($table != '_devless_users') ? $service.'_'.$table : 'users';
                     $refField = $refTable.'_id';
                     $referenceId = (isset($eachResult->$refField)) ? $eachResult->$refField :
@@ -65,7 +66,8 @@ trait relation
         $relatedTables = [];
         $schema = $this->get_tableMeta($tableName);
         array_walk(
-            $schema['schema']['field'], function ($field) use ($tableName, &$relatedTables) {
+            $schema['schema']['field'],
+            function ($field) use ($tableName, &$relatedTables) {
                 if ($field['field_type'] == 'reference') {
                     array_push($relatedTables, $field['ref_table']);
                 }

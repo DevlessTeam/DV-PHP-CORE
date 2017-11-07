@@ -38,7 +38,7 @@ trait columns
         $unique  = ($field['is_unique'] == 'true')?'unique':'';
         $nullable  = ($field['required'] == 'true')?'':'nullable';
 
-        //for relationships 
+        //for relationships
         if ($column_type == 4) {
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
                 ->unsigned()->$unique();
@@ -46,7 +46,7 @@ trait columns
             $table->foreign($field['ref_table'].'_id')->references('id')
                 ->on($field['ref_table'])->onDelete('cascade');
 
-        //relationship with a default        
+        //relationship with a default
         } elseif ($column_type == 3) {
             $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
                 ->unsigned()->$unique();
@@ -55,15 +55,14 @@ trait columns
                 ->on($field['ref_table'])->default($field['default'])
                 ->onDelete('cascade');
 
-        //field with a default        
+        //field with a default
         } elseif ($column_type == 2) {
             $table->$db_type[$field['field_type']]
             ($field['name'])->default($field['default'])->onDelete('cascade');
 
-        //field without a default        
+        //field without a default
         } elseif ($column_type == 1) {
-            $table->{$db_type[$field['field_type']]}
-            ($field['name'])->onDelete('cascade')->$unique()->$nullable();
+            $table->{$db_type[$field['field_type']]}($field['name'])->onDelete('cascade')->$unique()->$nullable();
         } else {
             Helper::interrupt(
                 602,

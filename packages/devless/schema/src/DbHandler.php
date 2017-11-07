@@ -1,8 +1,10 @@
 <?php
 namespace Devless\Schema;
+
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ServiceController as Service;
+
 class DbHandler
 {
     use columns, connector, tableMeta, relation,
@@ -83,9 +85,10 @@ class DbHandler
 
     private function check_table_existence($service, $table)
     {
-        if(strlen($service) == 0 ) {
+        if (strlen($service) == 0) {
             $table_to_delete = $table;
-        } else { $table_to_delete = $service.'_'.$table; 
+        } else {
+            $table_to_delete = $service.'_'.$table;
         }
         
         if (!\Schema::connection('DYNAMIC_DB_CONFIG')->hasTable($table_to_delete)
@@ -132,13 +135,16 @@ class DbHandler
             foreach ($field_unit as $field => $field_value) {
                 foreach ($schema['field'] as $fields) {
                     if ($fields['name'] == $field) {
-                        if ($check_password == true 
+                        if ($check_password == true
                             && strtolower($fields['field_type']) == 'password'
                         ) {
                             $table_data[$count]['password'] =
                                 Helper::password_hash($table_data[$count]['password']);
                         }
-                        if( strtolower($fields['field_type']) == 'timestamp' ){$field_value = $table_data[$count][$fields['name']] = time();;}
+                        if (strtolower($fields['field_type']) == 'timestamp') {
+                            $field_value = $table_data[$count][$fields['name']] = time();
+                            ;
+                        }
                         if (!Helper::field_check($field_value, $fields['field_type'])) {
                             Helper::interrupt(616, 'The field '.$fields['name'].' cannot  be set to `'.$field_value.'`. It\'s '.$fields['field_type']);
                         }

@@ -42,20 +42,21 @@ trait addData
             );
 
             //assigning autheticated user id
-	   for($i = 0; count($table_data) > $i; $i++) {
-	            $table_data[$i]['devless_user_id'] = $payload['user_id'];
-            		$output = $db->table($service_name.'_'.$table['name'])->insertGetId($table_data[$i]);
-	   }
-            
+            for ($i = 0; count($table_data) > $i; $i++) {
+                $table_data[$i]['devless_user_id'] = $payload['user_id'];
+                    $output = $db->table($service_name.'_'.$table['name'])->insertGetId($table_data[$i]);
+            }
         }
         return ['entry_id' => $output];
-    }    
+    }
    
     private function add_record_response($table_name, $payload)
     {
         return Response::respond(
-            609, 'Data has been added to '.$table_name
-            .' table successfully', $payload
+            609,
+            'Data has been added to '.$table_name
+            .' table successfully',
+            $payload
         );
     }
 

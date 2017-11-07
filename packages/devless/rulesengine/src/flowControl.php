@@ -18,10 +18,12 @@ trait flowControl
             return $this;
         }
 
-        if( ($this->onTableCalled) && (!$this->onCurrentTable) ) {
+        if (($this->onTableCalled) && (!$this->onCurrentTable)) {
             return $this;
         }
-        if($this->stopAndOutputCalled) {return $this;}
+        if ($this->stopAndOutputCalled) {
+            return $this;
+        }
 
         $this->assertion['whenever'] = ($assert);
         $this->called['whenever'] = true;
@@ -37,16 +39,17 @@ trait flowControl
      */
     public function elseWhenever($assert)
     {
-        if(!$this->isCurrentDBAction) {return $this;
+        if (!$this->isCurrentDBAction) {
+            return $this;
         }
 
         
-	if($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
+        if ($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
             $this->execOrNot = false;
             return $this;
         }
         
-	$this->assertion['elseWhenever'] = ($assert);
+        $this->assertion['elseWhenever'] = ($assert);
         $this->called['elseWhenever'] = true;
         $this->execOrNot = ($assert);
 
@@ -59,13 +62,14 @@ trait flowControl
      */
     public function otherwise()
     {
-        if(!$this->isCurrentDBAction) {return $this;
-        }   
+        if (!$this->isCurrentDBAction) {
+            return $this;
+        }
         
-	if($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
+        if ($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
             $this->execOrNot = false;
             return $this;
-        }  
+        }
         
         $this->called['otherwise'] = true;
         $this->execOrNot = true;
@@ -80,23 +84,21 @@ trait flowControl
      */
     public function done()
     {
-        if(!$this->isCurrentDBAction) {return $this;
-        }   
-	
+        if (!$this->isCurrentDBAction) {
+            return $this;
+        }
+    
         
-	    $this->execOrNot = true;
+        $this->execOrNot = true;
 
-        return $this;   
+        return $this;
     }
 
 
 
-  public function end()
-  { 
-	$this->done();
-	return $this;
-
-   }
-
-
+    public function end()
+    {
+        $this->done();
+        return $this;
+    }
 }

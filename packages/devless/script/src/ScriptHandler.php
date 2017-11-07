@@ -8,7 +8,6 @@ use App\Helpers\DevlessHelper;
 use App\Helpers\Assert as Assert;
 use App\Http\Controllers\ServiceController as Service;
 
-
 class ScriptHandler
 {
     use compiler;
@@ -48,9 +47,9 @@ class ScriptHandler
             'results_payload' => (isset($payload['response_payload']))?$payload['response_payload']:null,
         ];
         
-        if ($Dvresource == 'rpc'){
+        if ($Dvresource == 'rpc') {
             $EVENT['params'] = $payload['params'];
-        }elseif (isset($payload['params'][0]['field'])) {
+        } elseif (isset($payload['params'][0]['field'])) {
             $EVENT['params'] = $payload['params'][0]['field'][0];
         } elseif (isset($payload['params'][0]['params'][0]['data'][0])) {
             $EVENT['params'] = $payload['params'][0]['params'][0]['data'][0];
@@ -67,7 +66,7 @@ $payload[script];
 EOT;
         $_____service_name = $payload['service_name'];
         $_____init_vars = $payload['script_init_vars'];
-        $exec = function () use ($code, $rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {   
+        $exec = function () use ($code, $rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {
 
             //store script params temporally
             $_____midRules = $rules;
@@ -85,10 +84,10 @@ EOT;
             $rules->EVENT = $EVENT;
             
             $rules->request_phase = ($EVENT['request_phase'] == 'after')?'after':'before';
-            if($rules->request_phase == 'after') {
+            if ($rules->request_phase == 'after') {
                 $rules->status_code = $EVENT['status_code'];
                 $rules->message = $EVENT['message'];
-                $rules->payload = $EVENT['results_payload'];    
+                $rules->payload = $EVENT['results_payload'];
             }
             
             
@@ -98,7 +97,7 @@ EOT;
             $footer  = '';
             $finalCode = (strpos($code, 'use App\Helpers\Assert')!==false)? $code : $headers.$code.$footer;
         
-            if($EVENT['request_phase'] == 'after' && isset($payload['ex_params'])){
+            if ($EVENT['request_phase'] == 'after' && isset($payload['ex_params'])) {
                 extract($payload['ex_params'], EXTR_PREFIX_ALL, 'input');
             }
         
@@ -108,7 +107,8 @@ EOT;
             $EVENT['status_code']  = $rules->status_code;
             $EVENT['message']  =  $rules->message;
             $EVENT['results_payload']  =  $rules->payload;
-            $EVENT['user_id'] = $rules->EVENT['user_id'];;
+            $EVENT['user_id'] = $rules->EVENT['user_id'];
+            ;
             
 
             foreach ($EVENT['params'] as $key => $value) {
@@ -117,35 +117,32 @@ EOT;
 
             $EVENT['ex_params'] = [];
             foreach (get_defined_vars() as $key => $value) {
-                if( strpos($key,'input_') === 0 ){
-                    if(isset($EVENT['params'][$key])){
+                if (strpos($key, 'input_') === 0) {
+                    if (isset($EVENT['params'][$key])) {
                         $EVENT['params'][$key] = ${'input_'.$key};
                     } else {
                         $var_split = explode('_', $key);
                         unset($var_split[0]);
                         $key = implode($var_split, "_");
-                        $EVENT['ex_params'][$key] = $value;    
+                        $EVENT['ex_params'][$key] = $value;
                     }
-                    
                 }
-
             }
             return $EVENT;
         };
 
         $params = $exec();
-        if($Dvresource == 'rpc'){
+        if ($Dvresource == 'rpc') {
             $payload['params'] = $params['params'];
             $payload['ex_params'] = $params['ex_params'];
-        }
-        elseif (isset($payload['params'][0]['field'])) {
+        } elseif (isset($payload['params'][0]['field'])) {
             $payload['params'][0]['field'][0] = $params['params'];
             $payload['ex_params'] = $params['ex_params'];
         }
     
          (strpos(error_get_last()['file'], 'ScriptHandler.php') !=false)?dd():'';
 
-        if($EVENT['request_phase'] == 'after') {
+        if ($EVENT['request_phase'] == 'after') {
             $results['status_code'] = $EVENT['status_code'];
             $results['message'] = $EVENT['message'];
             $results['payload'] = $EVENT['results_payload'];
@@ -154,14 +151,12 @@ EOT;
             $results['payload'] = $payload;
             $results['resource'] = $Dvresource;
             
-            if($rules->request_phase == 'endNow') {
+            if ($rules->request_phase == 'endNow') {
                 $results['resource'] = 'endNow';
                 $results['payload']['status_code'] = $EVENT['status_code'];
                 $results['payload']['message'] = $EVENT['message'];
                 $results['payload']['results'] = $EVENT['results_payload'];
-                
             }
-    
         }
         return $results;
     }

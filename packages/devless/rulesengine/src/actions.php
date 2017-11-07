@@ -8,7 +8,7 @@ use App\Helpers\ActionClass;
 trait actions
 {
     /**
-     * Checks if the  db action to be conducted around one of the tables. Eg beforeQuerying()->onTable('register', 'subscription')->succeedWith("yes"). In the example above yes will be outputted incase data is being queried from either regiter or subscription table. 
+     * Checks if the  db action to be conducted around one of the tables. Eg beforeQuerying()->onTable('register', 'subscription')->succeedWith("yes"). In the example above yes will be outputted incase data is being queried from either regiter or subscription table.
      *
      * @param string $expectedTableName
      *
@@ -25,17 +25,17 @@ trait actions
         $this->execOrNot = (in_array($this->tableName, $expectedTableNames));
         $this->onCurrentTable = $this->execOrNot;
         $this->onTableCalled = true;
-	    return $this;
+        return $this;
     }
 
-   public function getCurrentTable()
-  {
-	if(!$this->execOrNot) {
-		return $this;
-	}
-	$this->results = $this->tableName;
-	return $this;
-  }
+    public function getCurrentTable()
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        $this->results = $this->tableName;
+        return $this;
+    }
 
     /**
          * Stop execution with an exception and output the message provided. Eg. afterQuering()->succeedWith("I will show up after quering")
@@ -53,7 +53,6 @@ trait actions
         $msg  = (is_array($msg))? json_encode($msg):$msg;
         Helper::interrupt(1000, $msg);
         return $this;
-
     }
 
     /**
@@ -96,7 +95,6 @@ trait actions
         }
         $this->cleanOutput();
         return $this;
-
     }
 
     /**
@@ -110,12 +108,13 @@ trait actions
          *
          * @return $this
          */
-    public function makeExternalRequest($method, $url, $data='{}', $headers=[])
+    public function makeExternalRequest($method, $url, $data = '{}', $headers = [])
     {
         $curl = curl_init();
 
         curl_setopt_array(
-            $curl, array(
+            $curl,
+            array(
                 CURLOPT_URL => $url,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
@@ -126,7 +125,7 @@ trait actions
                 CURLOPT_POSTFIELDS => $data,
                 CURLOPT_HTTPHEADER => $headers,
                 )
-            );
+        );
 
         $response = curl_exec($curl);
         $err = curl_error($curl);
@@ -137,13 +136,12 @@ trait actions
             $this->results = $err;
         } else {
             $this->results =  json_decode($response, true);
-
         }
         $this->cleanOutput();
         return $this;
     }
     /**
-         * one of the ways to store results from a method with output is by using the `getResults` method. This will allow you to the output of a method 
+         * one of the ways to store results from a method with output is by using the `getResults` method. This will allow you to the output of a method
          *
          * @param $input_var
          *
@@ -184,7 +182,7 @@ trait actions
         if (!$this->execOrNot) {
             return $this;
         }
-        $this->results = $input;    
+        $this->results = $input;
         $this->cleanOutput();
         return $this;
     }
@@ -222,10 +220,10 @@ trait actions
     /**
          * Set parameters for method from which you will like to run
          * eg: usingService('devless')->callMethod('getUserProfile')->  withParams(1)->getResults($output)->succeedWith($output)
-         * @param can have n number of parameters 
+         * @param can have n number of parameters
          * @return $this
          */
-    public function withParams($withoutParams=false)
+    public function withParams($withoutParams = false)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -245,7 +243,7 @@ trait actions
     public function withoutParams()
     {
         $this->withParams(true);
-        return $this;   
+        return $this;
     }
     public function checkRunConstructs($service, $method)
     {
@@ -266,7 +264,7 @@ trait actions
         if (!$this->execOrNot) {
             return $this;
         }
-	    $this->cleanOutput();
+        $this->cleanOutput();
         $output = $this->results;
 
         return $this;
@@ -293,7 +291,7 @@ trait actions
          * Behaves just like the `assign` method but has a much shorter construct. where you will assign say the string "edmond" to variable $name using `assign`  `assign("edmond")->to($name)` , `assignValue("edmond", $name)` provides a much shorter construct but loses its redability.
          *
          * @param $input
-         * @param $output  
+         * @param $output
          *
          * @return $this
          */
@@ -303,7 +301,7 @@ trait actions
             return $this;
         }
 
-        $output = $input;    
+        $output = $input;
         return $this;
     }
 
@@ -311,8 +309,8 @@ trait actions
          * Should you perform some rules and based on that will like to exit earlier with a response before the actual db command completes you will want to use `stopAndOutput` eg: beforeQuerying()->usingService('devless')->callMethod('getUserProfile')->withParams(1)->storeAs($profile)->stopAndOutput(1000, 'got profile successfully', $profile).
          *
          * @param $status_code
-         * @param $message 
-         * @param $payload 
+         * @param $message
+         * @param $payload
          *
          * @return $this
          */
@@ -336,7 +334,7 @@ trait actions
          * @param $methodToGetDocsFor
          * @return $this
          */
-    public function help($methodToGetDocsFor=null)
+    public function help($methodToGetDocsFor = null)
     {
 
         $methods = get_class_methods($this);
@@ -345,45 +343,43 @@ trait actions
         $methodList = [];
         $rules = new Rules();
         $getMethodDocs = function ($methodName) use ($exemptedMethods, $rules) {
-            if(!in_array($methodName, $exemptedMethods)) {
-                $method = new \ReflectionMethod($rules, $methodName); 
+            if (!in_array($methodName, $exemptedMethods)) {
+                $method = new \ReflectionMethod($rules, $methodName);
                 $methodDocs = str_replace("*/", "", $method->getDocComment());
                 $methodDocs = str_replace("/**", "", $methodDocs);
                 return $methodDocs = str_replace("* *", "||", $methodDocs);
-            } else { return false;
+            } else {
+                return false;
             }
         };
-        if($methodToGetDocsFor) {
+        if ($methodToGetDocsFor) {
             $docs = $getMethodDocs($methodToGetDocsFor);
-            if($docs) {
-               $methodList[$methodToGetDocsFor] = $docs;
-           }
-       } else {
-        $count = 0;
-        foreach ($methods as $methodName) {
-            $methodDocs = $getMethodDocs($methodName);
-            if($methodDocs) {
-
-                $methodList["*".$count."*"] = "**********************************************************************************************************";
-
-                $methodList[$methodName] = $methodDocs;  
-
+            if ($docs) {
+                $methodList[$methodToGetDocsFor] = $docs;
             }
-            $count++;
+        } else {
+            $count = 0;
+            foreach ($methods as $methodName) {
+                $methodDocs = $getMethodDocs($methodName);
+                if ($methodDocs) {
+                    $methodList["*".$count."*"] = "**********************************************************************************************************";
+
+                    $methodList[$methodName] = $methodDocs;
+                }
+                $count++;
+            }
         }
+
+
+        $this->stopAndOutput(1000, 'Help on methods', $methodList);
+        return $this;
     }
-
-
-    $this->stopAndOutput(1000, 'Help on methods', $methodList);
-    return $this;
-
-}
     /**
          * Evaluate PHP expressions eg:beforeQuering()->evaluate("\DB::table('users')->get()")->storeAs($output)->stopAndOutput(1001, 'got users successfully', $output)
-         * @param $expression 
+         * @param $expression
          * @return $this
          */
-    public function evaluate($expression, $variables=[])
+    public function evaluate($expression, $variables = [])
     {
         if (!$this->execOrNot) {
             return $this;
@@ -397,7 +393,7 @@ EOT;
         return $this;
     }
 
-    public function using($data) 
+    public function using($data)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -415,15 +411,12 @@ EOT;
          */
     public function set($input)
     {
-        $this->assign($input);     
-        return $this;       
+        $this->assign($input);
+        return $this;
     }
 
     public function read()
     {
         return $this;
     }
-
-
-
 }

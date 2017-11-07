@@ -17,7 +17,6 @@ trait stringLib
         $strings = func_get_args();
         $this->results = implode("", $strings);
         return $this;
-
     }
 
     /**
@@ -25,7 +24,7 @@ trait stringLib
      * @param $string
      * @return $this
      * */
-    public function getFirstCharacter($string=null)
+    public function getFirstCharacter($string = null)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -40,7 +39,7 @@ trait stringLib
      * @param $string
      * @return $this
      * */
-    public function getSecondCharacter($string=null)
+    public function getSecondCharacter($string = null)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -55,7 +54,7 @@ trait stringLib
      * @param $string
      * @return $this
      * */
-    public function getThirdCharacter($string=null)
+    public function getThirdCharacter($string = null)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -71,7 +70,7 @@ trait stringLib
      * @param $string
      * @return $this
      * */
-    public function getCharacter($nth, $string=null)
+    public function getCharacter($nth, $string = null)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -86,7 +85,7 @@ trait stringLib
      * @param $string
      * @return $this
      * */
-    public function getLastCharacter($string=null)
+    public function getLastCharacter($string = null)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -98,11 +97,11 @@ trait stringLib
     }
 
     /**
-     * Get last but one character eg: `->beforeCreating()->getLastButOneCharacter("Hello")->storeAs($last_but_one_char)->succeedWith($last_but_one_char)` 
+     * Get last but one character eg: `->beforeCreating()->getLastButOneCharacter("Hello")->storeAs($last_but_one_char)->succeedWith($last_but_one_char)`
      * @param $string
      * @return $this
      * */
-    public function getLastButOneCharacter($string=null)
+    public function getLastButOneCharacter($string = null)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -118,7 +117,7 @@ trait stringLib
     @param $string
     @return $this
      */
-    public function reverseString($string=null)
+    public function reverseString($string = null)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -150,7 +149,7 @@ trait stringLib
      * @param $string
      * @return $this
      * */
-    public function convertToUpperCase($string=null)
+    public function convertToUpperCase($string = null)
     {
     
         if (!$this->execOrNot) {
@@ -167,7 +166,7 @@ trait stringLib
      * @param $string
      * @return $this
      * */
-    public function convertToLowerCase($string=null)
+    public function convertToLowerCase($string = null)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -185,7 +184,7 @@ trait stringLib
      * @param $trimMaker
      * @return $this
      * */
-    public function truncateString($len, $string=null, $trimMaker=null)
+    public function truncateString($len, $string = null, $trimMaker = null)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -195,7 +194,6 @@ trait stringLib
         $this->results = mb_strimwidth($string, 0, $len, $trimMaker);
         $this->cleanOutput();
         return $this;
-
     }
 
     /**
@@ -216,7 +214,7 @@ trait stringLib
 
     /**
      * Find the number of characters in a word or sentence eg: `->beforeCreating()->onTable('users')->countCharacters($input_name)->storeAs($name_length)->whenever($name_length <= 0)->failWith("name seems to be empty")`
-     * @param word 
+     * @param word
      * @return $this
      */
     public function countCharacters($word)
@@ -230,6 +228,3 @@ trait stringLib
         return $this;
     }
 }
-
-
-

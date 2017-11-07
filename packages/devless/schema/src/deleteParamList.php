@@ -7,13 +7,12 @@ use App\Helpers\Response as Response;
 trait deleteParamList
 {
     private function drop_table($param_list, $table_name, &$task, &$tasked)
-    {    
+    {
         if (isset($param_list['drop']) && $param_list['drop'] == true) {
                 (Helper::is_admin_login()) ?\Schema::connection('DYNAMIC_DB_CONFIG')->dropIfExists($table_name): Helper::interrupt(620);
                    \DB::table('table_metas')->where('table_name', $table_name)->delete();
                 $tasked ='dropped';
                 return Response::respond(613, 'dropped table successfully');
-                
         }
          $task = 'drop';
     }
@@ -33,9 +32,9 @@ trait deleteParamList
     {
 
         if (isset($param_list['truncate']) && $param_list['truncate'] == true) {
-                if(!Helper::is_admin_login()) {
-                    Helper::interrupt(645);
-                }
+            if (!Helper::is_admin_login()) {
+                Helper::interrupt(645);
+            }
 
                 $destroy_query = $destroy_query.'->truncate()';
                 $tasked = 'truncated';

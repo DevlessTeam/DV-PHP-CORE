@@ -1,6 +1,7 @@
 <?php
 
 namespace Devless\Schema;
+
 use App\Helpers\Helper;
 
 trait queryParamList
@@ -41,7 +42,7 @@ trait queryParamList
                         .'->orderByRaw("RAND()")';
     }
 
-    private function related(&$complete_query, &$payload, $table_name, &$related_fetch  )
+    private function related(&$complete_query, &$payload, $table_name, &$related_fetch)
     {
         $related_set = true;
         $service_name = $payload['service_name'];
@@ -71,37 +72,34 @@ trait queryParamList
     {
         $params = explode(',', $payload['params']['between'][0]);
          $complete_query = $complete_query
-                        .'->whereBetween("'.$params[0].'",['.$params[1].','.$params[2].' ])';  
-                         
+                        .'->whereBetween("'.$params[0].'",['.$params[1].','.$params[2].' ])';
     }
 
     private function greaterThan(&$complete_query, &$payload)
     {
          $params = explode(',', $payload['params']['greaterThan'][0]);
          $complete_query = $complete_query
-                        .'->where("'.$params[0].'",">","'.$params[1].'")';     
-                        
+                        .'->where("'.$params[0].'",">","'.$params[1].'")';
     }
 
     private function greaterThanEqual(&$complete_query, &$payload)
     {
          $params = explode(',', $payload['params']['greaterThanEqual'][0]);
          $complete_query = $complete_query
-                        .'->where("'.$params[0].'",">=","'.$params[1].'")';     
-                        
+                        .'->where("'.$params[0].'",">=","'.$params[1].'")';
     }
     private function lessThan(&$complete_query, &$payload)
     {
          $params = explode(',', $payload['params']['lessThan'][0]);
          $complete_query = $complete_query
-                        .'->where("'.$params[0].'","<","'.$params[1].'")';     
+                        .'->where("'.$params[0].'","<","'.$params[1].'")';
     }
 
     private function lessThanEqual(&$complete_query, &$payload)
     {
          $params = explode(',', $payload['params']['lessThanEqual'][0]);
          $complete_query = $complete_query
-                        .'->where("'.$params[0].'","<=","'.$params[1].'")';     
+                        .'->where("'.$params[0].'","<=","'.$params[1].'")';
     }
 
     private function orderBy(&$complete_query, &$payload)
@@ -112,10 +110,10 @@ trait queryParamList
 
     private function where(&$complete_query, $payload)
     {
-        $this->where_and_orWhere_builder('where', $complete_query, $payload); 
+        $this->where_and_orWhere_builder('where', $complete_query, $payload);
     }
 
-    private function orWhere(&$complete_query, $payload) 
+    private function orWhere(&$complete_query, $payload)
     {
         $this->where_and_orWhere_builder('orWhere', $complete_query, $payload);
     }
@@ -131,6 +129,6 @@ trait queryParamList
             } else {
                 Helper::interrupt(612);
             }
-        } 
+        }
     }
 }

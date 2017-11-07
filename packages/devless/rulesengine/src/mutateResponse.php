@@ -3,6 +3,7 @@
 namespace Devless\RulesEngine;
 
 use App\Helpers\Helper;
+
 trait mutateResponse
 {
     /**
@@ -45,12 +46,13 @@ trait mutateResponse
 
         $newPayload = (is_array($newPayload))? $newPayload : [$newPayload];
         
-        if ( (!$this->execOrNot) ) {return $this;}
+        if ((!$this->execOrNot)) {
+            return $this;
+        }
         
         $this->commonMutationTask();
         $this->payload = $newPayload;
         return $this;
-
     }
     
 
@@ -58,7 +60,7 @@ trait mutateResponse
      * execute common mutation tasks.
      */
     private function commonMutationTask()
-    {    
+    {
         
         ($this->request_phase == 'before')? Helper::interrupt(642, "Mutating Response prior to a query is impossible. If you still wish to end with a custom response use  `->stopAndOutput('status_code', 'message', 'payload')`"): '';
     }

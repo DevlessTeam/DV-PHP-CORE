@@ -27,7 +27,8 @@ trait queryData
         $related_fetch = null;
         $results = [];
         //check if table name is set
-        if (!isset($payload['params']['table'][0])) {Helper::interrupt(611);
+        if (!isset($payload['params']['table'][0])) {
+            Helper::interrupt(611);
         }
 
         $this->check_table_existence($service_name, $payload['params']['table'][0]);
@@ -37,7 +38,7 @@ trait queryData
         $base_query = '$db->table("'.$table_name.'")';
         $complete_query = $base_query;
          ($payload['user_id'] !== '') ?
-        $complete_query = $base_query.'->where("devless_user_id",'.$payload['user_id'].')' : ''; 
+        $complete_query = $base_query.'->where("devless_user_id",'.$payload['user_id'].')' : '';
 
         $complete_query = $this->set_query_options(
             $complete_query,
@@ -56,10 +57,9 @@ trait queryData
         
         $queried_results = (is_null($queried_results))?[]:$queried_results;
         return $this->respond_with_query_data($queried_results, $count);
-        
     }
 
-    private function set_query_options(&$complete_query, &$payload, $table_name,  &$size_count, &$related_fetch)
+    private function set_query_options(&$complete_query, &$payload, $table_name, &$size_count, &$related_fetch)
     {
 
         $query_args_list = [
@@ -69,7 +69,6 @@ trait queryData
 
         unset($payload['params']['table']);
         foreach ($payload['params'] as $param_name => $param_value) {
-            
             (!isset($this->query_params[$param_name]))?Helper::interrupt(610, "Query parameter $param_name does not exist"):'';
             
             $param_name = $this->query_params[$param_name];
@@ -85,11 +84,12 @@ trait queryData
     private function respond_with_query_data($results, $total_count)
     {
         return Response::respond(
-            625, null, [
+            625,
+            null,
+            [
             'results' => $results,
             'properties' => ['count' => $total_count, 'current_count' => count($results)]
             ]
         );
     }
-
 }

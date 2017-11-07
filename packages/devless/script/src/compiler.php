@@ -6,13 +6,14 @@ use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter;
 
-trait compiler 
-{	
-	public $firstly = null;
+trait compiler
+{
+   
+    public $firstly = null;
 
-	 public function compile_script($code)
+    public function compile_script($code)
     {
-        //check for syntax, methods and also if attributes exists 
+        //check for syntax, methods and also if attributes exists
         $code = ('<?php $rules'.$code.';');
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $traverser = new NodeTraverser;
@@ -22,10 +23,9 @@ trait compiler
             $stmts = $parser->parse($code);
             $stmts = $traverser->traverse($stmts);
             $code = substr($prettyPrinter->prettyPrint($stmts), 6);
-         
         } catch (Error $e) {
-        	$compiled_script['error_message'] = $e->getMessage();
-            $compiled_script['successful'] = false; 
+            $compiled_script['error_message'] = $e->getMessage();
+            $compiled_script['successful'] = false;
             return $compiled_script;
         }
         
@@ -45,5 +45,5 @@ trait compiler
         $compiled_script['script'] = $code;
         $compiled_script['successful'] = true;
         return $compiled_script;
-    }   
+    }
 }

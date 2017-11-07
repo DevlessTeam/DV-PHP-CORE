@@ -7,11 +7,12 @@ use PhpParser\NodeVisitorAbstract;
 
 class Transverser extends NodeVisitorAbstract
 {
-	use Preprocessor;
+    use Preprocessor;
 
-	public function enterNode( Node $node) {
-		$node = $this->checkIfRuleExists($node);
-		$node = $this->convertConstToVars($node);
-		return $node;
-	}
+    public function enterNode(Node $node)
+    {
+        $node = $this->checkIfRuleExists($node);
+        $node = $this->convertConstToVars($node);
+        return $node;
+    }
 }
