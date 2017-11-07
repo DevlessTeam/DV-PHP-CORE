@@ -54,15 +54,15 @@ class devless
     
         $payload = get_defined_vars();
         
+        $payload = array_slice($payload, 0, 8);
         $payload = self::getSetParams($payload);
-        $coreParams = array_slice($payload, 0, 8);
         $auth = $this->auth;
         $output = $auth->signup($payload);
         if($extraParams){
             $extraParams[]['users_id'] = $extraParams[]['devless_user_id'] = $output['profile']->id;
         }
-        $this->addExtraUserDetails($extraParams);
-        return $output;
+        $extProfile = $this->addExtraUserDetails($extraParams);
+        return (array)$output['profile'] + $extProfile ;
         
        
     }
@@ -120,19 +120,19 @@ class devless
         $phone_number = null,
         $first_name = null,
         $last_name = null,
-        $remember_token = null
+        $remember_token = null,
+        $extraParams = null
     ) {
     
         $payload = get_defined_vars();
-       
-        foreach ($payload as $key => $value) {
-            if ($value == null) {
-                unset($payload[$key]);
-            }
-        }
+        $payload = array_slice($payload, 0, 8);
+        $payload = self::getSetParams($payload);
         $auth = $this->auth;
-       
         $output = $auth->update_profile($payload);
+        if($extraParams){
+            $extraParams[]['users_id'] = $output['profile']->id;
+        }
+        $this->editExtraUserDetails($extraParams);
         return $output;
         
        
@@ -406,7 +406,23 @@ class devless
         if($output['status_code'] !== 609) {
             DB::table('users')->where('id', $flattendDetails['users_id'])->delete();
         }
-        return $output;   
+        unset($flattendDetails['users_id'], $flattendDetails['devless_user_id']);
+        return $flattendDetails;   
+    }
+
+    public function editExtraUserDetails($extraDetails) {
+        $service = new service();
+        $flattendDetails = [];
+
+        for ($i=0; $i < count($extraDetails); $i++) { 
+            $key = array_keys($extraDetails[$i]);
+            $value = array_values($extraDetails[$i]);
+            $flattendDetails[$key[0]] = $value[0];
+        }
+        $id = $extraDetails['users_id'];
+        unlink($extraDetails['users_id']);
+        $output = DS::service('devless', 'user_profile', $service)->where('id', $id)->update([$flattendDetails]);
+        return $output;
     }
 
    
