@@ -14,7 +14,6 @@ class DbhandlerTest extends TestCase
         parent::setUp();
         $this->dbHandler = new Schema\DbHandler();
         $this->createSchemaResponse = $this->dbHandler->create_schema($this->inputForCreateSchema());
-
     }
     /**
      * @test
@@ -36,7 +35,6 @@ class DbhandlerTest extends TestCase
         $this->withSession(['user' => 1]);
         $response = $this->dbHandler->access_db($payload);
         $this->assertEquals(609, $response["status_code"]);
-
     }
 
     /**
@@ -255,7 +253,6 @@ class DbhandlerTest extends TestCase
                 ],
             ],
         ];
-
     }
 
     public function inputForCreateSchema()

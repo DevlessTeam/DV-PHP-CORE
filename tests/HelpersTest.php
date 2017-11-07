@@ -32,8 +32,6 @@ class HelpersTest extends TestCase
         $assetAgainst = ($stack > 600)? 'string' : 'NULL';
 
         $this->assertEquals($assetAgainst, $outputType);
-
-
     }
 
 

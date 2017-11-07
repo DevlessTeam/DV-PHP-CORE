@@ -50,6 +50,5 @@ class assertTest extends TestCase
 
             $this->assertEquals($method['state'], $state);
         }
-
     }
 }

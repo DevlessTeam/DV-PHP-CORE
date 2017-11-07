@@ -34,7 +34,6 @@ class DataStoreTest extends TestCase
             $this->assertEquals($payload['params']['table'][0], $this->serviceTable);
 
             return $dataStore;
-
     }
 
     /**
@@ -51,7 +50,6 @@ class DataStoreTest extends TestCase
 
             $this->assertTrue(isset($params['size']));
             $this->assertEquals($params['size'][0], $size);
-
     }
 
     /**
@@ -98,7 +96,6 @@ class DataStoreTest extends TestCase
         
         $this->assertEquals($results['app']->name, 'Set app name');
         $this->assertEquals($results['admin']->username, 'Add username here');
-    
     }
     
     /**
