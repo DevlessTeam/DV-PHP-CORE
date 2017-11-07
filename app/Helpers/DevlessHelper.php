@@ -82,7 +82,8 @@ class DevlessHelper extends Helper
         $docComment = $property->getDocComment();
 
         $access_type = function () use ($docComment) {
-            if(self::is_admin_login()) {return true;
+            if (self::is_admin_login()) {
+                return true;
             }
             (strpos(($docComment), '@ACL private')) ? Helper::interrupt(627) :
                 (strpos($docComment, '@ACL protected')) ? Helper::get_authenticated_user_cred(2) :
@@ -126,7 +127,7 @@ class DevlessHelper extends Helper
     public static function find_closest_word($word, $options)
     {
         $best_closesness = -1;
-        $closest_word = null;        
+        $closest_word = null;
         
         foreach ($options as $each_option) {
             $lev = levenshtein($word, $each_option);
@@ -179,7 +180,7 @@ class DevlessHelper extends Helper
  -> afterCreating()
  ',
 
- 'devless' =>
+        'devless' =>
                  '
 /**
 * <?
@@ -193,6 +194,6 @@ class DevlessHelper extends Helper
 **/
  -> onTable("")
 '];
- return $templates[$template_type];
+        return $templates[$template_type];
     }
 }

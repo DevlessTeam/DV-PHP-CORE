@@ -109,8 +109,6 @@
             //run methods from classes directly using the open-api (this is to control the increasing number of routes)
             Route::get('open-render/{page}/{file}/{method}/{params}', 'OpenController@render');
             Route::get('open-api/{file}/{method}/{params}', 'OpenController@gateway');
-           Route::get('open-download/{page}/{file}/{method}/{params}', 'OpenController@downloadFile');
-
-
+            Route::get('open-download/{page}/{file}/{method}/{params}', 'OpenController@downloadFile');
         }
     );

@@ -5,7 +5,6 @@ namespace App\Helpers;
 use App\User;
 use Validator;
 
-
 trait messageStack
 {
     /**

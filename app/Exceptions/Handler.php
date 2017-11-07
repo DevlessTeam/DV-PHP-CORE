@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         } elseif ($e instanceof HttpException) {
-            if($e->getStatusCode() == 404){
+            if ($e->getStatusCode() == 404) {
                 Helper::interrupt(647);
             }
             if ($e->getTrace()[0]['function'] == 'interrupt') {
@@ -69,4 +69,3 @@ class Handler extends ExceptionHandler
         return response()->json($response);
     }
 }
-

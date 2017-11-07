@@ -63,36 +63,34 @@ trait service_assignment
                     ];
                     // run script before assigning to method
                     
-                    if ($resource != 'view' && ($resource != 'rpc' || (isset($payload['service_name']) && strtolower($payload['service_name']) == 'devless') ) ) {
-                        $newServiceElements = $this->before_assigning_service_action($resource, $payload);
+                if ($resource != 'view' && ($resource != 'rpc' || (isset($payload['service_name']) && strtolower($payload['service_name']) == 'devless') )) {
+                    $newServiceElements = $this->before_assigning_service_action($resource, $payload);
                         
-                        $resource = $newServiceElements['resource'];
-                        $payload = $newServiceElements['payload'];
-
-                    }
+                    $resource = $newServiceElements['resource'];
+                    $payload = $newServiceElements['payload'];
+                }
                 
-                    //keep names of resources in the singular 
+                    //keep names of resources in the singular
                     /**
-                * NB: all resource names from the frontend are converted to lower case meaning before case runs 
+                * NB: all resource names from the frontend are converted to lower case meaning before case runs
                 * meaning if you make a resource name uppercase within the case it will not be available outside but only useable within here . Looking @ you "endNow"
                 */
-                    switch ($resource) {
+                switch ($resource) {
                     case 'db':
                         $db = new Db();
 
                         $response = $db->access_db($payload);
-                        if ($resource != 'view' && $resource != 'rpc' ) {
+                        if ($resource != 'view' && $resource != 'rpc') {
                               return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload']);
-
-                        } 
+                        }
                         return $response;
                       
-                        break;
+                    break;
                     case 'schema':
                         $db = new Db();
 
                         return $db->create_schema($payload);
-                        break;
+                    break;
                     case 'view':
                         return $payload;
                     case 'rpc':
@@ -103,16 +101,15 @@ trait service_assignment
 
                     case 'endNow':
                         return [
-                            'status_code' => $payload['status_code'],
-                            'message' => $payload['message'],
-                            'payload' => $payload['results'],
-                        ];
+                        'status_code' => $payload['status_code'],
+                        'message' => $payload['message'],
+                        'payload' => $payload['results'],
+                            ];
                     default:
                         Helper::interrupt(605);
                         break;
-                    }
+                }
             } else {
-
                 Helper::interrupt(624);
             }
         }

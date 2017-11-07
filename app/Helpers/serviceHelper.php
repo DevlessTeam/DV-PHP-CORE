@@ -78,8 +78,7 @@ trait serviceHelper
             $old_service_id = $service['id'];
             $service_name[$old_service_id] = $service['name'];
             unset($service['id']);
-            if(!isset($service['raw_script']))
-            {
+            if (!isset($service['raw_script'])) {
                 $service['raw_script'] = $service['script'];
             }
             \DB::table('services')->insert($service);

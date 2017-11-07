@@ -24,11 +24,11 @@ class HubController extends Controller
     public function get_service(Request $request)
     {
         $main_url  = $request['url'];
-        $urls = explode(',',$request['dep']);
+        $urls = explode(',', $request['dep']);
         array_push($urls, $main_url);
-        foreach( $urls as $url ){
-            if(strlen($url)>0){
-               $status = $this->install_service($url);           
+        foreach ($urls as $url) {
+            if (strlen($url)>0) {
+                $status = $this->install_service($url);
             }
         }
         return ($status) ? ['status' => 'true'] : ['status' => 'false'];

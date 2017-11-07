@@ -37,7 +37,7 @@ class RpcController extends Controller
             return Helper::interrupt(604);
         }
 
-        $server = new Server(json_encode($edited_request, true) ) ;
+        $server = new Server(json_encode($edited_request, true)) ;
 
         $class = new \ReflectionClass($service);
 

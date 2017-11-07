@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Service;
 use Illuminate\Http\Request;
 use App\Helpers\DevlessHelper as DH;
+
 class OpenApiController extends Controller
 {
 
@@ -14,8 +15,5 @@ class OpenApiController extends Controller
         include base_path()."/app/OpenApis/$file.php";
         $class = new $file();
         return $class->$method(...$params);
-
     }
-
-    
 }

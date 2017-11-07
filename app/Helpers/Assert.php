@@ -20,7 +20,7 @@ class Assert extends Helper
      *
      * @return $this
      */
-    public static function anInteger($value) 
+    public static function anInteger($value)
     {
         return (is_int($value))?:false;
     }
@@ -204,9 +204,11 @@ class Assert extends Helper
      */
     public static function notEmpty($value)
     {
-        if(is_array($value)) {return (sizeof($value) != 0)?:false;
+        if (is_array($value)) {
+            return (sizeof($value) != 0)?:false;
         }
-        if(is_string($value)) {return (strlen($value) != 0)?:false;
+        if (is_string($value)) {
+            return (strlen($value) != 0)?:false;
         }
         return false;
     }

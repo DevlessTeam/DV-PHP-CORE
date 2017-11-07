@@ -31,10 +31,10 @@ class UserController extends Controller
         return view('users.index', compact('users', 'menuName'));
     }
 
-    public function update_user(Request $request) 
+    public function update_user(Request $request)
     {
-        if($request->password == '') {
-            if(DB::table('users')->where('id', $request->id)                ->update(
+        if ($request->password == '') {
+            if (DB::table('users')->where('id', $request->id)                ->update(
                 [
                 'username'      => $request->username,
                 'first_name'    => $request->first_name,
@@ -47,7 +47,7 @@ class UserController extends Controller
                 return json_encode(true);
             }
         } else {
-            if(DB::table('users')->where('id', $request->id)                ->update(
+            if (DB::table('users')->where('id', $request->id)                ->update(
                 [
                 'username'      => $request->username,
                 'first_name'    => $request->first_name,
@@ -66,7 +66,7 @@ class UserController extends Controller
 
     public function remove_user(Request $request)
     {
-        if(DB::table('users')->whereIn('id', $request->data)->delete()) {
+        if (DB::table('users')->whereIn('id', $request->data)->delete()) {
             return json_encode(true);
         }
 
@@ -100,8 +100,8 @@ class UserController extends Controller
         'app_token' => md5(uniqid(1, true)),
          ];
         if ($params = helper::query_string()) {
-            if (isset($params['url_install']) && isset($params['url_install']) 
-                && isset($params['username']) && isset($params['password']) 
+            if (isset($params['url_install']) && isset($params['url_install'])
+                && isset($params['username']) && isset($params['password'])
                 && isset($params['app_name']) && isset($params['email']) && !(\DB::table('apps')->get())
             ) {
                 $username = $params['username'][0];
@@ -140,6 +140,4 @@ class UserController extends Controller
             return back()->withInput();
         }
     }
-
-
 }

@@ -9,6 +9,7 @@ use App\Helpers\Jwt as jwt;
 use App\Helpers\DataStore;
 use App\Http\Controllers\ServiceController as service;
 use App\Helpers\DataStore as DS;
+
 trait devlessAuth
 {
 
@@ -65,10 +66,10 @@ trait devlessAuth
         $user->session_token = $session_token = md5(uniqid(1, true));
         
         //check if either username or email and password is set
-        if(!(isset($user->password))){
+        if (!(isset($user->password))) {
             if (!isset($user->username) || isset($user->email) || !isset($user->phone_number)) {
-            return false;
-        }    
+                return false;
+            }
         }
         
 
@@ -119,10 +120,12 @@ trait devlessAuth
                 ->first();
              $service = new service();
             $output = DS::service('devless', 'user_profile', $service)->where('users_id', $token['id'])->getData()['payload']['results'];
-            if(!isset($output[0])){return array_merge((array)$user_data, []);}
+            if (!isset($output[0])) {
+                return array_merge((array)$user_data, []);
+            }
             $newOutput = (array)$output[0];
             unset($newOutput['id'], $newOutput['devless_user_id'], $newOutput['users_id']);
-            return  array_merge((array)$user_data , $newOutput);
+            return  array_merge((array)$user_data, $newOutput);
         }
 
         return false;
@@ -157,7 +160,8 @@ trait devlessAuth
             return false;
         }
         if ($user_data !== null) {
-            if(!$user_data->status) {Helper::interrupt(643);
+            if (!$user_data->status) {
+                Helper::interrupt(643);
             }
             $correct_password =
                    (Helper::compare_hash($password, $user_data->password)) ? true : false;
@@ -219,7 +223,7 @@ trait devlessAuth
             if (isset($payload['password'])) {
                 $payload['password'] = Helper::password_hash($payload['password']);
             }
-            foreach($payload as $field_name => $value) {
+            foreach ($payload as $field_name => $value) {
                 $expected_field = $this->expected_fields[$field_name];
                 $valid = Helper::field_check($value, $expected_field);
                 ($valid !== true)?Helper::interrupt(616, 'There is something wrong with your '.$field_name):false;
@@ -312,11 +316,11 @@ trait devlessAuth
 
         $payload = json_encode($payload);
 
-        if(DB::table('users')->where('id', $user_id)->update(['session_time' => Helper::session_timestamp()])) {
+        if (DB::table('users')->where('id', $user_id)->update(['session_time' => Helper::session_timestamp()])) {
             return $jwt->encode($payload, $secret);
         } else {
             return false;
-        }   
+        }
     }
 
     public function generate_email_verification_code($user_id)
@@ -342,6 +346,4 @@ trait devlessAuth
     {
         return true;//file_get_contents('http://localhost:6060/status');
     }
-
-
 }

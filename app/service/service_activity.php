@@ -40,13 +40,12 @@ trait service_activity
      *
      * @return array|mixed
      */
-    public function get_params($method, $request, $resource=null)
+    public function get_params($method, $request, $resource = null)
     {
-        if($resource == 'rpc')
-        {
+        if ($resource == 'rpc') {
             $parameters = $request['params'];
-        }elseif (in_array($method, ['POST', 'DELETE', 'PATCH'])) {
-            $parameters = $request['resource'];            
+        } elseif (in_array($method, ['POST', 'DELETE', 'PATCH'])) {
+            $parameters = $request['resource'];
         } elseif ($method == 'GET') {
             $parameters = Helper::query_string();
         } else {
@@ -120,7 +119,6 @@ trait service_activity
         $script_output = $this->script_executioner($resource, $payload);
 
         return ($script_output)?:$output;
-
     }
 
     /**
@@ -144,7 +142,7 @@ trait service_activity
 
 
     /**
-     * script execution engine 
+     * script execution engine
      *
      * @param  string $resource
      * @param  array  $payload
@@ -154,9 +152,9 @@ trait service_activity
     public function script_executioner($resource, $payload)
     {
         $output = false;
-        if ($resource != 'schema' ) {
+        if ($resource != 'schema') {
             $output = ( new script() )->run_script($resource, $payload);
-        }   
+        }
         return $output;
     }
 
@@ -166,7 +164,5 @@ trait service_activity
         $keywords = ['__halt_compiler', 'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected', 'public', 'require', 'require_once', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor','__CLASS__', '__DIR__', '__FILE__', '__FUNCTION__', '__LINE__', '__METHOD__', '__NAMESPACE__', '__TRAIT__'];
 
         return in_array(strtolower($service_name), $keywords);
-
     }
-    
 }

@@ -59,7 +59,7 @@ class ServiceController extends Controller
         $is_keyword = $this->is_service_name_php_keyword($service_name);
         $service_name = (strtolower($service_name) == 'devless')? strtolower($service_name) : $service_name;
         $template_type = (strtolower($service_name) == 'devless')? strtolower($service_name) : 'default';
-        $validator = Validator::make( 
+        $validator = Validator::make(
             ['Service Name' => $service_name, 'Devless' => 'devless'],
             [
                 'Service Name' => 'required|unique:services,name|min:3|max:15',
@@ -86,9 +86,9 @@ class ServiceController extends Controller
         $service->active = 1;
         $service->raw_script = DLH::script_template($template_type);
         $compiled_script  = $scriptHandler->compile_script(DLH::script_template($template_type));
-        $service->script = $compiled_script['script'];        
+        $service->script = $compiled_script['script'];
         $db = new Db();
-        if ( !$db->check_db_connection($connection) ) {
+        if (!$db->check_db_connection($connection)) {
             DLH::flash('Sorry connection could not be made to Database', 'error');
         } else {
             //create initial views for service
@@ -154,14 +154,13 @@ class ServiceController extends Controller
                 $scriptHandler = new script();
                 $service->raw_script = $script;
                 $compiled_script  = $scriptHandler->compile_script($script);
-                if(!$compiled_script['successful']) {
+                if (!$compiled_script['successful']) {
                     return Response::respond(1001, $compiled_script['error_message']);
                 }
                 $service->script_init_vars = $compiled_script['var_init'];
                 $service->script = $compiled_script['script'];
                 $service->save();
-                return Response::respond(626);    
-                
+                return Response::respond(626);
             }
             $connection = [];
             $serviceFields = ['description', 'username', 'password',

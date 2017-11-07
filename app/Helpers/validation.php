@@ -52,7 +52,8 @@ trait validation
                 //convert each rule and re-combine
                 if (!isset(self::$validator_type[$rule])) {
                     self::interrupt(
-                        618, 'validator type '.$rule.
+                        618,
+                        'validator type '.$rule.
                         ' does not exist'
                     );
                 }
@@ -64,7 +65,8 @@ trait validation
 
             if (!isset(self::$validator_type[$check_against])) {
                 self::interrupt(
-                    618, 'validator type '.$check_against.
+                    618,
+                    'validator type '.$check_against.
                     ' does not exist'
                 );
             }

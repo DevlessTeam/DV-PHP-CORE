@@ -1,6 +1,8 @@
 <?php
 namespace App\Helpers;
+
 use Devless\SDK\SDK;
+
 /**
  * Internal ActionClass execution
  */
@@ -22,7 +24,7 @@ class ActionClass
 
          
         /**
- * @var TYPE_NAME $serviceMethodPath 
+ * @var TYPE_NAME $serviceMethodPath
 */
         (file_exists($serviceMethodPath))?
             include_once $serviceMethodPath : false;
@@ -44,11 +46,10 @@ class ActionClass
      * @param $token
      * @return mixed|string
      */
-    public static function remoteExecute($service, $method, $params = null, $url, $token )
+    public static function remoteExecute($service, $method, $params = null, $url, $token)
     {
         $devless = new SDK($url, $token);
         return $devless->call($service, $method, $params);
-
     }
 
 
@@ -68,33 +69,31 @@ class ActionClass
         $methodList = [];
         
         $getMethodDocs = function ($methodName) use ($exemptedMethods, $serviceInstance) {
-            if(!in_array($methodName, $exemptedMethods)) {
-                $method = new \ReflectionMethod($serviceInstance, $methodName); 
+            if (!in_array($methodName, $exemptedMethods)) {
+                $method = new \ReflectionMethod($serviceInstance, $methodName);
                 $methodDocs = str_replace("*/", "", $method->getDocComment());
                 $methodDocs = str_replace("/**", "", $methodDocs);
                 return $methodDocs = str_replace("* *", "||", $methodDocs);
-            } else { return false;
+            } else {
+                return false;
             }
         };
 
-        if($methodToGetDocsFor) {
-
+        if ($methodToGetDocsFor) {
             $docs = $getMethodDocs($methodToGetDocsFor);
-            if($docs) {
+            if ($docs) {
                  $methodList[$methodToGetDocsFor] = $docs;
             }
         } else {
             foreach ($methods as $methodName) {
                 $methodDocs = $getMethodDocs($methodName);
-                if($methodDocs) {
-                    $methodList[$methodName] = $methodDocs;  
+                if ($methodDocs) {
+                    $methodList[$methodName] = $methodDocs;
                 }
             }
         }
         
         
         return [1000, 'List of callable methods', $methodList];
-        
-
     }
 }
