@@ -496,6 +496,13 @@ scriptEngine.populateForm = function(formReference, data) {
 	})
 }
 scriptEngine.oneof = function(service, table) {
+	label = 'nameless';
+	var classList = devless_main.singleCourier.element.classList;
+	for(var i= 0; classList.length>i; i++ ){
+		if(classList[i].startsWith('dv-label') ) {
+			 label = classList[i].split(':')[1]
+		}
+	}
 	update = function(data, callback) {
 		if (data.id == undefined) {
 			throw " id could not be found in the form. Try adding <input type=\"hidden\" name=\"id\" /> to the update form "
@@ -503,11 +510,13 @@ scriptEngine.oneof = function(service, table) {
 		devless_main.processing();
 		var submissionPayload = {};
 		
-		 data = (typeof dvInterceptSubmission != "undefined")?
+		data = (typeof dvInterceptSubmission != "undefined")?
 		dvInterceptSubmission(submissionPayload):submissionPayload;
 		if(typeof data == "undefined"){
 			throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
 		}
+
+
 
 		SDK.updateData(service, table, "id", data[label].id, data[label], function(response) {
 			(response.status_code == 619) ? devless_main.coreLib.notify(response.message, 1):
@@ -604,7 +613,7 @@ scriptEngine.signin = function(record) {
 		SDK.call('devless', 'login', [submissionPayload[label]['username'], submissionPayload[label]['email'], submissionPayload[label]['phonenumber'],
 			submissionPayload[label]['password']
 			], function(response) {
-				if (response.payload.result !== false) {
+				if (response.payload !== undefined || response.payload.result !== false) {
 					SDK.setToken(response.payload.result['token']);
 					devless_main.doneProcessing();
 					devless_main.coreLib.notify("Log in successfully", 1);
