@@ -9,13 +9,11 @@ trait devlessAuth
 		if (! $this->execOrNot) {
 			return $this;
 		}
-		dd($this->EVENT);
 		return $this;
 	}
 
 	public function beforeSigning() 
 	{
-		dd($this->EVENT);
 		if (! $this->execOrNot) {
 			return $this;
 		}

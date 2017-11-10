@@ -98,7 +98,6 @@ trait service_assignment
                     case 'rpc':
                         ($method != 'POST') ? Helper::interrupt(639) : true;
                         $rpc = new Rpc();
-                        // dd($payload);
                         return $rpc->index($payload);
                     case 'endNow':
                         return [
