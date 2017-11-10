@@ -496,20 +496,30 @@ scriptEngine.populateForm = function(formReference, data) {
 	})
 }
 scriptEngine.oneof = function(service, table) {
+	var classList = devless_main.singleCourier.element.classList;
+	for(var i= 0; classList.length>i; i++ ){
+		if(classList[i].startsWith('dv-label') ) {
+			 label = classList[i].split(':')[1]
+		}
+	}
 	update = function(data, callback) {
 		if (data.id == undefined) {
 			throw " id could not be found in the form. Try adding <input type=\"hidden\" name=\"id\" /> to the update form "
 		}
 		devless_main.processing();
 		var submissionPayload = {};
-		
-		 data = (typeof dvInterceptSubmission != "undefined")?
+
+		var label = 'nameless';
+		submissionPayload[label] = data;
+		devless_main.processing();
+		submissionPayload = (typeof dvInterceptSubmission != "undefined")?
 		dvInterceptSubmission(submissionPayload):submissionPayload;
-		if(typeof data == "undefined"){
+		if(typeof submissionPayload == "undefined"){
 			throw 'Hmmm seems you forgot to return the response in dvInterceptSubmission';
 		}
 
-		SDK.updateData(service, table, "id", data[label].id, data[label], function(response) {
+
+		SDK.updateData(service, table, "id", submissionPayload[label].id, submissionPayload[label], function(response) {
 			(response.status_code == 619) ? devless_main.coreLib.notify(response.message, 1):
 			devless_main.coreLib.notify(response.message, 0);
 			devless_main.doneProcessing();

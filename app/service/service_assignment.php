@@ -96,7 +96,6 @@ trait service_assignment
                         $rpc = new Rpc();
                         $response = $rpc->index($payload);
                         return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload']);
-
                     case 'endNow':
                         return [
                         'status_code' => $payload['status_code'],
