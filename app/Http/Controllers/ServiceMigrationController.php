@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\App;
-use App\Helpers\DevlessHelper as DLH;
-use App\Helpers\Migration as Migration;
 use App\Service;
 use App\ServiceMigration;
 use Illuminate\Http\Request;
+use App\Helpers\DevlessHelper as DLH;
+use App\Helpers\Migration as Migration;
 
 class ServiceMigrationController extends Controller
 {

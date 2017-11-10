@@ -34,6 +34,23 @@ foreach ($devless_object_keys as $key => $value)
 } 
 
 return[
+  'devless_profile_schema'=> [
+       [
+         "name" => "user_profile",
+         "description" => "Table for storing DevLess extended profiles",
+         "field" => [
+           [
+             "name" => "devless__devless_users_id",
+             "field_type" => "reference",
+             "ref_table" => "_devless_users",
+             "default" => null,
+             "required" => false,
+             "validation" => false,
+             "is_unique" => true,
+           ],
+         ],
+       ],
+     ],
   'assets_route_name'     => 'service_views',
   'assets_directory_name' => 'assets',  
   'helpers'               => base_path().'/app/Helpers/', 

@@ -121,15 +121,16 @@ class devless
     ) {
     
         $payload = get_defined_vars();
-        $payload = array_slice($payload, 0, 8);
+        $payload = array_slice($payload, 0, 7);
+        
         $payload = self::getSetParams($payload);
         $auth = $this->auth;
         $output = $auth->update_profile($payload);
         if ($extraParams) {
-            $extraParams[]['users_id'] = $output['profile']->id;
+            $extraParams[]['users_id'] = $output->id;
         }
-        $this->editExtraUserDetails($extraParams);
-        return $output;
+        $extraOutput = $this->editExtraUserDetails($extraParams);
+        return (array)$output + (array)$extraOutput;
     }
 
     /**
@@ -415,9 +416,14 @@ class devless
             $value = array_values($extraDetails[$i]);
             $flattendDetails[$key[0]] = $value[0];
         }
-        $id = $extraDetails['users_id'];
-        unlink($extraDetails['users_id']);
-        $output = DS::service('devless', 'user_profile', $service)->where('id', $id)->update([$flattendDetails]);
-        return $output;
+        
+        $id = $flattendDetails['users_id'];
+        unset($flattendDetails['users_id']);
+
+        $output = DS::service('devless', 'user_profile', $service)->where('users_id', $id)->update($flattendDetails);
+        if ($output['status_code'] ==  619) {
+            return DS::service('devless', 'user_profile', $service)->where('users_id', $id)->getData()['payload']['results'][0];
+        }
+        return [];
     }
 }

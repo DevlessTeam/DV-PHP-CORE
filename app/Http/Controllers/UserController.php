@@ -8,10 +8,11 @@ use App\App;
 use App\User;
 use Session;
 use Illuminate\Http\Request;
-use App\Helpers\DevlessHelper as DLH;
-use App\Helpers\Helper as helper;
 use App\Jobs\RegisterUserJob;
+use App\Helpers\Helper as helper;
+use App\Helpers\DevlessHelper as DLH;
 use App\Http\Requests\RegisterUserRequest;
+use App\Http\Controllers\ServiceController as Service;
 
 class UserController extends Controller
 {
@@ -131,8 +132,9 @@ class UserController extends Controller
         try {
             $user = $this->dispatch(new RegisterUserJob($request));
             $request->session()->put('user', $user->id);
+            $service = new Service();
+            $service->create_service('devless');
             DLH::flash('Setup successful. Welcome to Devless', 'success');
-
             return redirect('services');
         } catch (\Exception $e) {
             DLH::flash('Error setting up', 'error');

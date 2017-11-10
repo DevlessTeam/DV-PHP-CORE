@@ -207,7 +207,7 @@ trait directoryHelper
      */
     public static function recurse_copy($src, $dst)
     {
-        if (!file_exists($src)) {
+        if(!file_exists($src)){
              $views = new views();
              $split_string = explode("/", $src);
              $service_name = $split_string[count($split_string)-1];
@@ -298,11 +298,9 @@ trait directoryHelper
         $folder_name = basename($service_folder_path);
 
         $archive = $zippy->create(
-            $service_folder_path.'.zip',
-            array(
+            $service_folder_path.'.zip', array(
             $folder_name => $service_folder_path,
-            ),
-            true
+            ), true
         );
 
         rename($service_folder_path.'.zip', $service_folder_path.$dvext);

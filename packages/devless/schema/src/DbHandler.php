@@ -52,6 +52,7 @@ class DbHandler
      */
     public function store(Request $request)
     {
+        dd($request['resourvce']);
         $this->create_schema($request['resource']);
     }
     /**

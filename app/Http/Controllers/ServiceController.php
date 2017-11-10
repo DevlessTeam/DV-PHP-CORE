@@ -50,59 +50,10 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        $service = new Service();
-        $scriptHandler = new script();
-        $service_name_from_form = $request->input('name');
-        $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
-        $service_name_from_form = str_replace('-', '_', $service_name_from_form);
-        $service_name = $service_name_from_form;
-        $is_keyword = $this->is_service_name_php_keyword($service_name);
-        $service_name = (strtolower($service_name) == 'devless')? strtolower($service_name) : $service_name;
-        $template_type = (strtolower($service_name) == 'devless')? strtolower($service_name) : 'default';
-        $validator = Validator::make(
-            ['Service Name' => $service_name, 'Devless' => 'devless'],
-            [
-                'Service Name' => 'required|unique:services,name|min:3|max:15',
-            ]
-        );
 
-        if ($validator->fails() || $is_keyword) {
-            $errors = $validator->messages();
-            $message = ($validator->fails())?"Sorry but service could not be created":"Sorry but $service_name is a keyword and can't be used as a `service name`";
-            DLH::flash($message, 'error');
-
-            return redirect()->route('services.create')->with('errors', $errors)->withInput();
-        }
-        $service->name = $service_name;
-        $serviceFields = ['description', 'username', 'password',
-                'database', 'password', 'database', 'hostname', 'driver', 'port', ];
-        foreach ($serviceFields as $serviceField) {
-            $service->{$serviceField} = $request->input($serviceField);
-            $connection[$serviceField] = $service->{$serviceField};
-        }
-        $service->script_init_vars = '$rules = null;';
-        $service->resource_access_right =
-            '{"query":1,"create":1,"update":1,"delete":1,"schema":0,"script":0, "view":0}';
-        $service->active = 1;
-        $service->raw_script = DLH::script_template($template_type);
-        $compiled_script  = $scriptHandler->compile_script(DLH::script_template($template_type));
-        $service->script = $compiled_script['script'];
-        $db = new Db();
-        if (!$db->check_db_connection($connection)) {
-            DLH::flash('Sorry connection could not be made to Database', 'error');
-        } else {
-            //create initial views for service
-            $views = new DvViews();
-            $type = 'init';
-            $payload['serviceName'] = $service_name;
-            $views_created = $views->create_views($service_name, $type);
-            ($service->save() && $views_created)
-                ?
-                DLH::flash('Service created successfully', 'success') :
-                DLH::flash('Service could not be created', 'error');
-        }
-
-        return $this->edit($service->id);
+        $state = $this->create_service_from_request($request);
+        return ($state[0])? $this->edit($state[1]->id) :
+             redirect()->route('services.create')->with('errors', $state[1])->withInput();
     }
     /**
      * Display the specified resource.

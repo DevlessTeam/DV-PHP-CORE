@@ -48,7 +48,9 @@ trait columns
 
         //relationship with a default
         } elseif ($column_type == 3) {
-            $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
+            
+            $table->$db_type[$field['field_type']]
+            ($field['ref_table'].'_id')
                 ->unsigned()->$unique();
 
             $table->foreign($field['ref_table'].'_id')->references('id')

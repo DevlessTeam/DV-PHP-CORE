@@ -43,7 +43,6 @@ trait service_assignment
             if ($is_it_public == 0 || $is_admin == true) {
                 $resource_access_right =
                   $this->_get_resource_access_right($current_service, $accessed_internally);
-
                 $payload =
                     [
                         'id' => $current_service->id,
@@ -88,7 +87,6 @@ trait service_assignment
                     break;
                     case 'schema':
                         $db = new Db();
-
                         return $db->create_schema($payload);
                     break;
                     case 'view':

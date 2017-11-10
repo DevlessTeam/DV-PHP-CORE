@@ -181,7 +181,7 @@ class DevlessHelper extends Helper
  ',
 
         'devless' =>
-                 '
+                 ' 
 /**
 * <?
 * Rules allow you to establish control over the flow of 
@@ -192,7 +192,21 @@ class DevlessHelper extends Helper
 * To view the list of callable method append ->help() to a 
 * flow statement ie ->beforeQuering()->help() and view from your app.
 **/
- -> onTable("")
+ -> beforeSigning()
+ -> beforeSigningUp()
+ -> beforeQueryingProfile()
+ -> beforeUpdatingProfile()
+ 
+ -> onAnyRequest() 
+ 
+ -> onSigning()
+ -> onSigningUp() 
+ -> onQueringProfile() 
+ 
+ -> afterSigning()
+ -> afterSigningUp()
+ -> afterQueryingProfile()
+ -> afterUpdatingProfile()
 '];
         return $templates[$template_type];
     }
