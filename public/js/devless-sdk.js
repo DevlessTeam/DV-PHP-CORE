@@ -496,7 +496,7 @@ scriptEngine.populateForm = function(formReference, data) {
 	})
 }
 scriptEngine.oneof = function(service, table) {
-	label = 'nameless';
+	var label = 'nameless';
 	var classList = devless_main.singleCourier.element.classList;
 	for(var i= 0; classList.length>i; i++ ){
 		if(classList[i].startsWith('dv-label') ) {
