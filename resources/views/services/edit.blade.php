@@ -335,12 +335,12 @@
                                     <?php $count++; ?>
                                     @endforeach
                                  @else
-                                <h3 class="text-center alert alert-info">Empty!</h3>
+                                <h3 class="text-center alert alert-info">{{ $service->name }} has no tables :(</h3>
                                 @endif
                             </tbody>
                         </table>
                         <br>
-                        <button type="button" class="btn btn-info " data-toggle="modal" data-target="#schema-table"><i class="fa fa-table"></i> New Table</button>
+                        <button type="button" class="btn btn-info " data-toggle="modal" data-target="#schema-table"><i class="fa fa-table"></i> Add A Table</button>
                     </div>
                 </section>
                                     </div>
