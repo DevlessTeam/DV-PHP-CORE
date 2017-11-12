@@ -40,7 +40,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
                 ->type('password', 'password')
                 ->type('password', 'password_confirmation')
                 ->press('Create App')
-                ->see('Setup successful. Welcome to Devless');
+                ->see('DevLess Service contains most of DevLess configs');
 
 
         //login to Devless
@@ -67,6 +67,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     public function tearDown()
     {
         DLH::deleteDirectory(config('devless')['views_directory'].$this->serviceName);
+        DLH::deleteDirectory(config('devless')['views_directory'].'devless');
 
         //tear down table in devless-rec after creating for test
         $query = 'DROP TABLE '.$this->serviceName.'_'.$this->serviceTable;

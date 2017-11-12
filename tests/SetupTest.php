@@ -23,7 +23,7 @@ class SetupTest extends TestCase
             ->type('password', 'password')
             ->type('password', 'password_confirmation')
             ->press('Create App')
-            ->see('Setup successful. Welcome to Devless');
+            ->see('DevLess Service contains most of DevLess configs');
 
         //login to Devless
         $this->click('Logout')
