@@ -6,7 +6,9 @@
         <h3>
             Data Table
         </h3>
-        <button type="button" id="addbtn" class="btn btn-primary pull-right" style="position: relative; bottom: 23px;" disabled="true"><i class="fa fa-plus"></i> Add Data</button>
+        <button type="button" id="addbtn" class="btn btn-primary pull-right" style="position: relative; bottom: 23px; margin-left: 2%" disabled="true"><i class="fa fa-plus"></i> Add Data</button>
+        <button type="button" onclick="refreshTable()" class="btn btn-primary pull-right" style="position: relative; bottom: 23px;" ><i class="fa fa-repeat"></i> Refresh</button>
+        
         <span class="sub-title">Data Table/</span>
     </div>
 @endsection

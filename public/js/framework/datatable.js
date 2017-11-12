@@ -87,6 +87,18 @@ window.onload(
       tableCall(table_entries);
     });
 
+    window.refreshTable = function() {
+       if($("#service option:selected").text() !== " -- select a service -- ") {
+          var service_name = $("#service option:selected").text();
+          var table_name   = $("#table_name option:selected").text();
+          var devless_table_name = service_name+"_"+table_name;
+          $("#dataOne").remove();
+          $("#dataOne_wrapper").remove();
+          return tableCall(table_entries);
+       } 
+       window.location = window.location;
+    }
+
     // Handle table creation with row & columns
     function buildHtmlTable(data, metaData) {
       var table =
