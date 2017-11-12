@@ -180,7 +180,6 @@ trait service_activity
             $errors = $validator->messages();
             $message = (!$validator->fails() )?"Sorry but service could not be created":"Sorry but $service_name is a keyword and can't be used as a `service name`";
             DLH::flash($message, 'error');
-
             return [false,$errors];
         }
         $service->name = $service_name;
@@ -193,7 +192,7 @@ trait service_activity
 
         $service->script_init_vars = '$rules = null;';
         $service->resource_access_right = ($template_type == 'default') ? '{"query":1,"create":1,"update":1,"delete":1,"schema":0,"script":0, "view":0}'
-                        : '{"query":0,"create":0,"update":0,"delete":0,"schema":0,"script":0, "view":0}';
+                        : '{"query":2,"create":0,"update":2,"delete":0,"schema":0,"script":0, "view":0}';
         $service->active = 1;
         $service->raw_script = DLH::script_template($template_type);
         $compiled_script  = $scriptHandler->compile_script(DLH::script_template($template_type));
@@ -222,7 +221,7 @@ trait service_activity
     {
 
         $params  = [$request->input('name'), $request->input('description'),  $request->input('database'), $request->input('username'), $request->input('password'), $request->input('hostname'),$request->input('driver'), $request->input('port')];
-        $this->create_service(...$params);
+        return $this->create_service(...$params);
     }
 
     /**

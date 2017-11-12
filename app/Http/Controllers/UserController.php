@@ -133,7 +133,7 @@ class UserController extends Controller
             $user = $this->dispatch(new RegisterUserJob($request));
             $request->session()->put('user', $user->id);
             $service = new Service();
-            $service->create_service('devless');
+            $service->create_service('DevLess','DevLess Service contains most of DevLess configs', '', '', '',   '', 'default','')create_service('devless');
             DLH::flash('Setup successful. Welcome to Devless', 'success');
             return redirect('services');
         } catch (\Exception $e) {
