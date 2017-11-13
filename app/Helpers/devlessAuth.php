@@ -186,7 +186,6 @@ trait devlessAuth
                     $service = new service();
                     
                     if(\Schema::hasTable('devless_user_profile')){
-                        dd("stp");
                         $extra_profile = DS::service('devless', 'user_profile', $service)->where('users_id', $user_obj['profile']->id)->getData()['payload']['results'];
 
                     }
