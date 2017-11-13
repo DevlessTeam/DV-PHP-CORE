@@ -88,7 +88,7 @@ trait devlessAuth
                 'profile' => $profile,
                 'token' => $prepared_token,
                 ];
-
+                
                 return $user_obj;
         } else {
             return false;

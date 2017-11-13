@@ -58,11 +58,12 @@ class devless
         $auth = $this->auth;
         $output = $auth->signup($payload);
         $extProfile = [];
-        if ($extraParams) {
+        if ($extraParams && Schema::hasTable('devless_user_profile')) {
             $extraParams[]['users_id'] = $extraParams[]['devless_user_id'] = $output['profile']->id;
             $extProfile = $this->addExtraUserDetails($extraParams);
         }
-        return (array)$output['profile'] + $extProfile ;
+        
+        return (array)$output + $extProfile ;
     }
 
 
