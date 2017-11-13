@@ -59,7 +59,7 @@ trait directoryHelper
         $serviceName = $payload['serviceName'];
 
         $instanceInfo = DataStore::instanceInfo();
-
+        
         $username = $instanceInfo['admin']->username;
         $files = ['ActionClass.php'];
         $time = date('jS \of F Y h:i:s A');
