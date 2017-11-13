@@ -119,7 +119,11 @@ trait devlessAuth
                 )
                 ->first();
              $service = new service();
-            $output = DS::service('devless', 'user_profile', $service)->where('users_id', $token['id'])->getData()['payload']['results'];
+             $output = [];
+             if(\Schema::hasTable('devless_user_profile')) {
+               $output = DS::service('devless', 'user_profile', $service)->where('users_id', $token['id'])->getData()['payload']['results'];
+                
+             }
             if (!isset($output[0])) {
                 return array_merge((array)$user_data, []);
             }

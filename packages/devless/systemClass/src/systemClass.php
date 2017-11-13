@@ -131,7 +131,11 @@ class devless
         if ($extraParams) {
             $extraParams[]['users_id'] = $output->id;
         }
-        $extraOutput = $this->editExtraUserDetails($extraParams);
+        $extraOutput = [];
+        if(\Schema::hasTable('devless_user_profile')){
+            $extraOutput = $this->editExtraUserDetails($extraParams);
+            
+        }
         return (array)$output + (array)$extraOutput;
     }
 
