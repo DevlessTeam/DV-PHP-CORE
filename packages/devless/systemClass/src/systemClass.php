@@ -57,10 +57,11 @@ class devless
         $payload = self::getSetParams($payload);
         $auth = $this->auth;
         $output = $auth->signup($payload);
+        $extProfile = [];
         if ($extraParams) {
             $extraParams[]['users_id'] = $extraParams[]['devless_user_id'] = $output['profile']->id;
+            $extProfile = $this->addExtraUserDetails($extraParams);
         }
-        $extProfile = $this->addExtraUserDetails($extraParams);
         return (array)$output['profile'] + $extProfile ;
     }
 
