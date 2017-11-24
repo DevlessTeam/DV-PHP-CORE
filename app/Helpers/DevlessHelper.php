@@ -192,7 +192,7 @@ class DevlessHelper extends Helper
 * To view the list of callable method append ->help() to a 
 * flow statement ie ->beforeQuering()->help() and view from your app.
 **/
- -> beforeSigning()
+ -> beforeSigningIn()
  -> beforeSigningUp()
  -> beforeQueryingProfile()
  -> beforeUpdatingProfile()
@@ -203,7 +203,7 @@ class DevlessHelper extends Helper
  -> onSigningUp() 
  -> onQueringProfile() 
  
- -> afterSigning()
+ -> afterSigningIn()
  -> afterSigningUp()
  -> afterQueryingProfile()
  -> afterUpdatingProfile()
