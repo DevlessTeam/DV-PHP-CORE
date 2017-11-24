@@ -7,108 +7,97 @@ use App\Helpers\Helper;
 trait devlessAuth
 {
 
-	public function extendUsersTableWith()
+	public function beforeSigningIn() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
-		return $this;
-	}
+		$this->execOrNot = ($this->EVENT['request_phase'] == 'before' 
+			&& $this->getAuthAction() ==  'login');
 
-	public function beforeSigning() 
-	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
 		return $this;	
 	}
 
 	public function beforeSigningUp() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = ($this->EVENT['request_phase'] == 'before' 
+			&& $this->getAuthAction() ==  'signUp');
+
 		return $this;	
 	}
 
 	public function beforeQueryingProfile() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = ($this->EVENT['request_phase'] == 'before' 
+			&& $this->getAuthAction() ==  'getProfile');
+
 		return $this;	
 	}	
 
 	public function beforeUpdatingProfile() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = ($this->EVENT['request_phase'] == 'before' 
+			&& $this->getAuthAction() ==  'updateProfile');
 		return $this;	
 	}
 
 
-	public function onSigning() 
-	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+	public function onSigningIn() 
+	{	
+		$this->execOrNot = ($this->getAuthAction() == 'login');
 		return $this;	
 	}
 
 	public function onSigningUp() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = ($this->getAuthAction() == 'signUp');
 		return $this;	
 	}
 
 	public function onQueringProfile() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = ($this->getAuthAction() =='getProfile');
 		return $this;	
 	}
 
 	public function onProfileUpdate() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = ($this->getAuthAction() =='updateProfile');
 		return $this;	
 	}
 
-	public function afterSigning() 
+	public function afterSigningIn()
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
+		$this->execOrNot = ($this->EVENT['request_phase'] == 'after' 
+			&& $this->getAuthAction() ==  'login');
 		return $this;	
 	}
 
-	public function afterSigningUp() 
+	public function afterSigningUp()
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
-		return $this;	
+		$this->execOrNot = ($this->EVENT['request_phase'] == 'after' 
+			&& $this->getAuthAction() ==  'signUp');
+		return $this;
 	}
 
 	public function afterQueryingProfile() 
 	{
-		if (! $this->execOrNot) {
-			return $this;
-		}
-		return $this;	
+		$this->execOrNot = ($this->EVENT['request_phase'] == 'after' 
+			&& $this->getAuthAction() ==  'getProfile');
+		return $this;
 	}
 
-	public function afterUpdatingProfile() 
+	public function afterUpdatingProfile()
 	{
-		if (! $this->execOrNot) {
-			return $this;
+		$this->execOrNot = ($this->EVENT['request_phase'] == 'after' 
+			&& $this->getAuthAction() ==  'updateProfile');
+		return $this;
+	}
+
+	private function getAuthAction()
+	{
+		if (isset(Helper::query_string()['action'])) {
+			$action = Helper::query_string()['action'][0];
+			return $action;
+		} else {
+			$this->stopAndOutput(700, 'Hmm seems you are trying to use auth actions in a normal service.', []);
 		}
-		return $this;	
 	}
 }
