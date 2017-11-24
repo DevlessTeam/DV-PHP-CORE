@@ -100,8 +100,11 @@ EOT;
             if ($EVENT['request_phase'] == 'after' && isset($payload['ex_params'])) {
                 extract($payload['ex_params'], EXTR_PREFIX_ALL, 'input');
             }
-        
-            eval($finalCode);
+            try {
+                eval($finalCode);
+            } catch (Exception $e) {
+                var_dump($e);
+            }
 
             $EVENT['access_rights'] = $rules->accessRights;
             $EVENT['status_code']  = $rules->status_code;
