@@ -397,6 +397,7 @@ scriptEngine.all = function(service, table) {
 	var reference = devless_main.singleCourier;
 	var queryParams = SDK.queryParams;
 	SDK.queryData(service, table, SDK.queryParams, function(response) {
+		var status_code = response.status_code;
 		if (response.payload) {
 			if(!response.payload.results){return false;}
 			var properties = response.payload.properties;
@@ -414,8 +415,7 @@ scriptEngine.all = function(service, table) {
 
 		devless_main.coreLib.render(reference, responseObj[reference.label], service, 
 			table, properties);
-
-		(response.status_code != 625) ? devless_main.coreLib.notify(response.message, 0): '';
+		(status_code != 625) ? devless_main.coreLib.notify(response.message, 0): '';
 
 	});
 	SDK.queryParams = {};
