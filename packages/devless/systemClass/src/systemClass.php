@@ -197,7 +197,6 @@ class devless
         $service = new service();
 
         $queryBuilder =  DS::service($serviceName, $table, $service);
-
         if ($queryParams) {
             foreach ($queryParams as $eachParamName => $eachParamArgs) {
                 if (is_array($eachParamArgs)) {

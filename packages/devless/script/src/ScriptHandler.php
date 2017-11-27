@@ -66,6 +66,7 @@ $payload[script];
 EOT;
         $_____service_name = $payload['service_name'];
         $_____init_vars = $payload['script_init_vars'];
+        
         $exec = function () use ($code, $rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {
 
             //store script params temporally
@@ -100,11 +101,8 @@ EOT;
             if ($EVENT['request_phase'] == 'after' && isset($payload['ex_params'])) {
                 extract($payload['ex_params'], EXTR_PREFIX_ALL, 'input');
             }
-            try {
-                eval($finalCode);
-            } catch (Exception $e) {
-                var_dump($e);
-            }
+        
+            eval($finalCode);
 
             $EVENT['access_rights'] = $rules->accessRights;
             $EVENT['status_code']  = $rules->status_code;

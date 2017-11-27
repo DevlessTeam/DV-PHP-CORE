@@ -25,6 +25,9 @@ class Rules
     public $message = '';
     public $payload = [];
     public $sharedStore = null;
+    private $imports = [];
+    private $importedClassInstance;
+    
 
     private $stopAndOutputCalled = false;
     private $answered = false;
@@ -84,11 +87,19 @@ class Rules
     public function __call($method, $args)
     {
         if (!method_exists($this, $method)) {
-            $closestMethod =
-                DevlessHelper::find_closest_word($method, get_class_methods($this));
-            $failMessage = 'There is no such method `'.$method.'';
-            $failMessage .= (strlen($closestMethod) > 0)? '` perharps you meant '.$closestMethod. '?' : '';
-            Helper::interrupt(642, $failMessage);
+            $imported_methods = array_keys($this->imports);
+            if (!in_array($method, $imported_methods)) {
+                $closestMethod =
+                DevlessHelper::find_closest_word($method, array_merge(get_class_methods($this), $imported_methods));
+                $failMessage = 'There is no such method `'.$method.'';
+                $failMessage .= (strlen($closestMethod) > 0)? '` perharps you meant '.$closestMethod. '?' : '';
+                Helper::interrupt(642, $failMessage);
+            } else {
+                $className = $this->imports[$method];
+                $this->results = $this->importedClassInstance[$className]
+                       ->$method(...$args);
+                return $this;
+            }
         }
     }
 
@@ -128,5 +139,29 @@ class Rules
     {
         unset($input_var);
         return $this;
+    }
+
+    public function import($className)
+    {
+        foreach (func_get_args() as $className) {
+            $classLocation = (strtolower($className) == config('devless')['name']) ?
+                            config('devless')['system_class'] :
+                            config('devless')['views_directory'].$className.'/ActionClass.php';
+            $class = $this->getClassInstance($className, $classLocation);
+            $methods = get_class_methods($class);
+            $this->imports = array_fill_keys($methods, $className) + $this->imports ;
+            $this->importedClassInstance[$className] = $class;
+        }
+        return $this;
+    }
+
+    private function getClassInstance($className, $classLocation)
+    {
+        if (!file_exists($classLocation)) {
+            DevlessHelper::interrupt(604);
+        }
+        include_once($classLocation);
+
+        return new $className();
     }
 }
