@@ -5,9 +5,8 @@
  * @author eddymens <eddymens@devless.io>
  */
 
-$devless_payload = new stdClass();
 
-$devless_object_keys = [
+$devless_payload = [
     'id'           => 0,
     'name' => 'devless', 
     'database'     =>  'default', 
@@ -26,12 +25,6 @@ $devless_object_keys = [
     'password'     =>  '',
     'port'         =>  null,
 ];
-
-
-foreach ($devless_object_keys as $key => $value)
-{
-    $devless_payload->$key = $value;
-} 
 
 return[
   'devless_profile_schema'=> [

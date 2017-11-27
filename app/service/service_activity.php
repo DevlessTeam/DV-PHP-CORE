@@ -25,8 +25,8 @@ trait service_activity
         if ($current_service = serviceModel::where('name', $service_name)->where('active', 1)->first()
         ) {
             return $current_service;
-        } elseif (config('devless')['devless_service']->name == $service_name) {
-            $current_service = config('devless')['devless_service'];
+        } elseif (config('devless')['devless_service']['name'] == $service_name) {
+            $current_service = (object)config('devless')['devless_service'];
 
             return $current_service;
         } else {
