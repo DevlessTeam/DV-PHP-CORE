@@ -149,13 +149,13 @@ trait service_activity
      * @param object $request
      *
      */
-    public function create_service($service_name, $description='', $database='', $username='', $password='',   $hostname='', $driver='default', $port='')
+    public function create_service($service_name, $description = '', $database = '', $username = '', $password = '', $hostname = '', $driver = 'default', $port = '')
     {
         $service = new Service();
         $scriptHandler = new script();
         $service_name_from_form = $service_name;
 
-        //service name clean up 
+        //service name clean up
         $service_name_from_form = preg_replace('/\s*/', '', $service_name_from_form);
         $service_name_from_form = str_replace('-', '_', $service_name_from_form);
         $service_name = $service_name_from_form;
@@ -185,7 +185,7 @@ trait service_activity
         $service->name = $service_name;
         $serviceFields = ['description'=> $description, 'username'=>$username, 'password'=>$password,
                 'database' => $database, 'password' => $password, 'hostname'=> $hostname, 'driver'=>$driver, 'port'=>$port];
-        foreach ($serviceFields as  $fiieldname => $serviceField) {
+        foreach ($serviceFields as $fiieldname => $serviceField) {
             $service->{$fiieldname} = $serviceField;
             $connection[$fiieldname] = $serviceField;
         }
@@ -214,10 +214,9 @@ trait service_activity
         }
 
         return [true,$service];
-
     }
 
-    public function create_service_from_request($request,$natural_request=true)
+    public function create_service_from_request($request, $natural_request = true)
     {
 
         $params  = [$request->input('name'), $request->input('description'),  $request->input('database'), $request->input('username'), $request->input('password'), $request->input('hostname'),$request->input('driver'), $request->input('port')];
@@ -237,21 +236,21 @@ trait service_activity
         $output = false;
         if ($resource != 'schema') {
             $output = ( new script() )->run_script($resource, $payload);
-    }
+        }
         return $output;
     }
 
-    public function create_devless_profile_table() 
+    public function create_devless_profile_table()
     {
         $schema = config()['devless']['devless_profile_schema'];
 
-       return  $this->assign_to_service('devless','schema','POST',$schema, true);
+        return  $this->assign_to_service('devless', 'schema', 'POST', $schema, true);
     }
 
     /**
     * list of PHP keywords
-    * @param string $word 
-    * @return bol 
+    * @param string $word
+    * @return bol
     */
     public function is_service_name_php_keyword($word)
     {

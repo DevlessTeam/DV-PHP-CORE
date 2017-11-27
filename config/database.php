@@ -6,16 +6,16 @@ $username = "";
 $password = "";
 $database = "";
 if ($url !== false) {
-	$url = parse_url($url);
-	$host = $url["host"];
-	$username = $url["user"];
-	$password = $url["pass"];
+    $url = parse_url($url);
+    $host = $url["host"];
+    $username = $url["user"];
+    $password = $url["pass"];
     $port = $url["port"];
-	$database = substr($url["path"], 1);
+    $database = substr($url["path"], 1);
 } else {
-	$host =     env('DB_HOST', 'localhost');
-	$username = env('DB_USERNAME', 'forge');
-	$password = env('DB_PASSWORD', '');
+    $host =     env('DB_HOST', 'localhost');
+    $username = env('DB_USERNAME', 'forge');
+    $password = env('DB_PASSWORD', '');
     $database = env('DB_DATABASE', 'forge');
     $port     = env('DB_PORT', '5432');
 }

@@ -120,10 +120,9 @@ trait devlessAuth
                 ->first();
              $service = new service();
              $output = [];
-             if(\Schema::hasTable('devless_user_profile')) {
-               $output = DS::service('devless', 'user_profile', $service)->where('users_id', $token['id'])->getData()['payload']['results'];
-                
-             }
+            if (\Schema::hasTable('devless_user_profile')) {
+                $output = DS::service('devless', 'user_profile', $service)->where('users_id', $token['id'])->getData()['payload']['results'];
+            }
             if (!isset($output[0])) {
                 return array_merge((array)$user_data, []);
             }
@@ -189,11 +188,10 @@ trait devlessAuth
                     $extra_profile  = [];
                     $service = new service();
                     
-                    if(\Schema::hasTable('devless_user_profile')){
+                    if (\Schema::hasTable('devless_user_profile')) {
                         $extra_profile = DS::service('devless', 'user_profile', $service)->where('users_id', $user_obj['profile']->id)->getData()['payload']['results'];
-
                     }
-                   $user_obj['profile'] = (array)$user_obj['profile'] + $extra_profile;
+                    $user_obj['profile'] = (array)$user_obj['profile'] + $extra_profile;
                     return $user_obj;
             } else {
                 return false;
