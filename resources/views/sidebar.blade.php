@@ -6,7 +6,7 @@
         <!--logo and logo icon start-->
         <div class="logo dark-logo-bg hidden-xs hidden-sm">
             <a href="/">
-                <img src="{{asset('/img/logo.png')}}" alt="Devless">
+                <img src="{{secure_asset('/img/logo.png')}}" alt="Devless">
                 <sup>{{config('devless')['version']}}</sup>
             </a>
         </div>
