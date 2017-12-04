@@ -9,8 +9,14 @@
         </div>
     </div>
 </div>
+@if(Request::secure())
+<script src="{{secure_asset('/js/jquery-1.10.2.min.js')}}"></script>
+<script src="{{secure_asset('/js/bootstrap.min.js')}}"></script>
+@else
 <script src="{{asset('/js/jquery-1.10.2.min.js')}}"></script>
 <script src="{{asset('/js/bootstrap.min.js')}}"></script>
+
+@endif
 <script charset="utf-8">
         $(function modal() {
             $('#flash_msg').modal({
@@ -33,7 +39,11 @@
     <div class="wrapper">
       <div class="row">
         <a href="https://devless.io">
-          <img src="{{asset('/img/logo.png')}}" class="login-logo" alt="Devless">
+            @if(Request::secure())
+                <img src="{{secure_asset('/img/logo.png')}}" class="login-logo" alt="Devless">
+            @else
+                <img src="{{asset('/img/logo.png')}}" class="login-logo" alt="Devless">
+            @endif
         </a>
           <center>
         <div class="col-lg-6 col-md-6 " style="margin-left:24%;margin-right:24%;">

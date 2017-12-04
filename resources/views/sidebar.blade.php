@@ -6,7 +6,11 @@
         <!--logo and logo icon start-->
         <div class="logo dark-logo-bg hidden-xs hidden-sm">
             <a href="/">
-                <img src="{{secure_asset('/img/logo.png')}}" alt="Devless">
+                @if(Request::secure())
+                    <img src="{{secure_asset('/img/logo.png')}}" alt="Devless">
+                @else
+                    <img src="{{asset('/img/logo.png')}}" alt="Devless">
+                @endif
                 <sup>{{config('devless')['version']}}</sup>
             </a>
         </div>
@@ -34,7 +38,7 @@
             <li>
                 <h3 class="navigation-title">Menu</h3>
             </li>
-            
+
             <li class="<?=($menuName =='app')? 'active': ''?>"><a href="{{route('app.index')}}"><i class="fa fa-desktop "></i><span>App</span></a></li>
             <li class="menu-list <?=($menuName =='all_services')? 'active': ''?>"  >
                 <a href="#"><i class="fa fa-gears"></i><span>Services</span></a>

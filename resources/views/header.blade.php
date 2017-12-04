@@ -1,7 +1,7 @@
 <?php
 use App\Helpers\DataStore;
   $app = DataStore::instanceInfo()['app'];
-  
+
  ?>
 
 <!DOCTYPE html>
@@ -13,33 +13,12 @@ use App\Helpers\DataStore;
   <meta name="author" content="DevLess">
   <meta name="keyword" content="DevLess, opensource, BAAS, Backend as a service, robust, php, laravel, postgresql, mysql">
 
-  <link rel="shortcut icon" href="{{ secure_asset('favico.png') }}" type="image/png">
 
   <title>DevLess {{config('devless')['version']}}</title>
 
-  <!--right slidebar-->
-  <link href="{{ secure_asset('/css/slidebars.css') }}" rel="stylesheet">
+    @include('stylesheet')
 
-  <!--switchery-->
-  <link href="{{ secure_asset('/js/switchery/switchery.min.css')}}" rel="stylesheet" type="text/css" media="screen" />
-
-  <!--Form Wizard-->
-  <link rel="stylesheet" type="text/css" href="{{ secure_asset('/css/jquery.steps.css') }}" />
-
-  <!-- datatables css -->
-  <link href="{{ secure_asset('/css/jquery.dataTables.min.css') }}" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.dataTables.min.css" rel="stylesheet">
-
-  <!--common style-->
-  <link href="{{ secure_asset('/css/style.css') }}" rel="stylesheet">
-  <link href="{{ secure_asset('/css/style-responsive.css') }}" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="{{ secure_asset('/css/custom.css') }}">
-  @if( \Request::path() == 'privacy' || \Request::path() == 'datatable' || \Request::path() == 'services')
-  <link rel="stylesheet" href="{{ secure_asset('/css/helper.css') }}" media="screen" title="no title" charset="utf-8">
-  <script src="{{ secure_asset('/js/jquery-1.10.2.min.js') }}"></script>
-  <script src="{{ secure_asset('/js/bootstrap.min.js') }}"></script>
-  @endif
-  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
@@ -71,7 +50,7 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
         <!--toggle button end-->
       </div>
       <!-- header section end-->
-      
+
     <div class="modal fade" id="sdk-connect" tabindex="-1" role="dialog" aria-labelledby="quickGuideLabel">
      <div class="modal-dialog" role="document">
        <div class="modal-content">
