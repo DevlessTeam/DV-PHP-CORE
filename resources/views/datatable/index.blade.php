@@ -8,7 +8,7 @@
         </h3>
         <button type="button" id="addbtn" class="btn btn-primary pull-right" style="position: relative; bottom: 23px; margin-left: 2%" disabled="true"><i class="fa fa-plus"></i> Add Data</button>
         <button type="button" onclick="refreshTable()" class="btn btn-primary pull-right" style="position: relative; bottom: 23px;" ><i class="fa fa-repeat"></i> Refresh</button>
-        
+
         <span class="sub-title">Data Table/</span>
     </div>
 @endsection
@@ -109,6 +109,6 @@ td {
 
 ?>
 <script src="{{URL('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="<?= $app->token ?>"></script>
-<script src="{{ Request::secure(Request::root()).'/js/framework/datatable.js' }}"></script>
+<script src="{{URL('/')}}/js/framework/datatable.js"></script>
 
 @endsection
