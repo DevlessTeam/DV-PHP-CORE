@@ -95,6 +95,9 @@ class Rules
                 $failMessage .= (strlen($closestMethod) > 0)? '` perharps you meant '.$closestMethod. '?' : '';
                 Helper::interrupt(642, $failMessage);
             } else {
+                if (!$this->execOrNot) {
+                    return $this;
+                }
                 $className = $this->imports[$method];
                 $this->results = $this->importedClassInstance[$className]
                        ->$method(...$args);

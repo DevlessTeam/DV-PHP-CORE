@@ -11,7 +11,6 @@ class Transverser extends NodeVisitorAbstract
 
     public function enterNode(Node $node)
     {
-        $node = $this->checkIfRuleExists($node);
         $node = $this->convertConstToVars($node);
         return $node;
     }

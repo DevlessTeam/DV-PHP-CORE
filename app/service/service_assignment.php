@@ -77,8 +77,13 @@ trait service_assignment
                 switch ($resource) {
                     case 'db':
                         $db = new Db();
-
+                       try{
                         $response = $db->access_db($payload);
+                        } catch (\Exception $e) {
+                            $response['message'] = $e->getMessage(); 
+                            $response['status_code'] = $e->getCode(); 
+                            $response['payload'] = []; 
+                        }
                         if ($resource != 'view' && $resource != 'rpc') {
                               return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload']);
                         }

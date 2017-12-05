@@ -54,6 +54,17 @@ trait mutateResponse
         $this->payload = $newPayload;
         return $this;
     }
+
+    public function mutateResponse($status_code, $message, $payload)
+    {
+        if ((!$this->execOrNot)) {
+            return $this;
+        }
+        $this->mutateStatusCode($status_code);
+        $this->mutateResponseMessage($message);
+        $this->mutateResponsePayload($payload);
+        return $this;
+    }
     
 
     /**
