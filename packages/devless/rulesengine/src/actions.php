@@ -110,6 +110,11 @@ trait actions
          */
     public function makeExternalRequest($method, $url, $data = '{}', $headers = [])
     {
+
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        
         $curl = curl_init();
 
         curl_setopt_array(
