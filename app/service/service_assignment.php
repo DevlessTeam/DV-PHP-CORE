@@ -99,7 +99,16 @@ trait service_assignment
                     case 'rpc':
                         ($method != 'POST') ? Helper::interrupt(639) : true;
                         $rpc = new Rpc();
-                        $response = $rpc->index($payload);
+                        try{
+                            $response = $rpc->index($payload);
+                        } catch (\Exception $e) {
+                            $response['message'] = $e->getMessage(); 
+                            $response['status_code'] = $e->getCode(); 
+                            $response['payload'] = []; 
+                        } catch (\Exception $e) {
+
+
+                        }
                         return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload']);
                     case 'endNow':
                         return [
