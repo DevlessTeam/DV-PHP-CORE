@@ -121,12 +121,12 @@ class devless
         $remember_token = null,
         $extraParams = null
     ) {
-    
         $payload = get_defined_vars();
         $payload = array_slice($payload, 0, 7);
         
         $payload = self::getSetParams($payload);
         $auth = $this->auth;
+
         $output = $auth->update_profile($payload);
         if ($extraParams) {
             $extraParams[]['users_id'] = $output->id;
@@ -421,6 +421,9 @@ class devless
             $flattendDetails[$key[0]] = $value[0];
         }
         
+        if(!isset($flattendDetails['users_id'])) {
+            return [];
+        }
         $id = $flattendDetails['users_id'];
         unset($flattendDetails['users_id']);
 
