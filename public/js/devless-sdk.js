@@ -127,6 +127,17 @@ devless_main.coreLib.render = function(component, data, service, table, properti
 		_jql(template)[0].className = 'devless-wrapper-' + uniqueId;
 		_jql(template)[0].style.display = 'block';
 
+		_jql(template).find('[class*=set-]').each(function() {
+			var splitClassNames = this.className.split(' ');
+			for(var i=0; splitClassNames.length > i; i++) {
+				if(splitClassNames[i].startsWith('set-')) {
+					var setValues = splitClassNames[i].replace("set-", "");
+					var params 	  = setValues.split(":");
+					this[params[0]] = record[params[1].replace('var-', '')];
+				}
+			}
+		}); 	
+
 		var screenPainter = function(field, value) {
 			if (field !== 'devless_user_id') {
 				_jql(template).find('.var-' + field).each(function() {
@@ -245,7 +256,7 @@ devless_main.coreLib.form = function(component, callback) {
 }
     //get all tags
     devless_main.tags = function() {
-    	return _jql('html').find('[class^= dv]');
+    	return _jql('html').find('[class*= dv]');
     }
 
 //get all queries from tags
