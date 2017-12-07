@@ -28,6 +28,13 @@ trait actions
         return $this;
     }
 
+    
+    public function endOnTable()
+    {
+        $this->end();
+        return $this;
+    }
+
     public function getCurrentTable()
     {
         if (!$this->execOrNot) {

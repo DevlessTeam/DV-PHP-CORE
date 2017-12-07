@@ -101,4 +101,21 @@ trait flowControl
         $this->done();
         return $this;
     }
+
+    public function endWhenever()
+    {
+        $this->assertion = [
+        'elseWhenever' => false,
+        'whenever' => false,
+        'otherwise' => false,
+        ];
+        $this->called = [
+            'elseWhenever' => false,
+            'whenever' => false,
+            'otherwise' => false,
+        ];
+        
+        $this->end();
+        return $this;
+    }
 }
