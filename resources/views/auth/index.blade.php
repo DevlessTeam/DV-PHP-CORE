@@ -10,8 +10,8 @@
     </div>
 </div>
 @if(Request::secure())
-<script src="{{secure_asset('/js/jquery-1.10.2.min.js')}}"></script>
-<script src="{{secure_asset('/js/bootstrap.min.js')}}"></script>
+<script src="{{Request::secure(Request::path()).'/js/jquery-1.10.2.min.js'}}"></script>
+<script src="{{Request::secure(Request::path()).'/js/bootstrap.min.js'}}"></script>
 @else
 <script src="{{asset('/js/jquery-1.10.2.min.js')}}"></script>
 <script src="{{asset('/js/bootstrap.min.js')}}"></script>
@@ -40,7 +40,7 @@
       <div class="row">
         <a href="https://devless.io">
             @if(Request::secure())
-                <img src="{{secure_asset('/img/logo.png')}}" class="login-logo" alt="Devless">
+                <img src="{{Request::secure(Request::path()).'/img/logo.png'}}" class="login-logo" alt="Devless">
             @else
                 <img src="{{asset('/img/logo.png')}}" class="login-logo" alt="Devless">
             @endif
