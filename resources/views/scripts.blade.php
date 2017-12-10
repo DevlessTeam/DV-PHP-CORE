@@ -1,24 +1,44 @@
-  <link rel="shortcut icon" href="{{Request::secure(Request::path()).'/favico.png'}}" type="image/png">
-  <!--right slidebar-->
+<!-- Placed js at the end of the document so the pages load faster -->
+<script src="{{ Request::secure(Request::path()).'/js/jquery-1.10.2.min.js' }}"></script>
+<script src="{{ Request::secure(Request::path()).'/js/jquery-migrate.js' }}"></script>
+<script src="{{ Request::secure(Request::path()).'/js/bootstrap.min.js' }}"></script>
+<!--notification pan-->
+<script src="{{ Request::secure(Request::path()).'/js/modernizr.min.js' }}"></script>
 
-  <link href="{{Request::secure(Request::path()).'/css/slidebars.css'}}" rel="stylesheet"/>
+<!-- datatable -->
+<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 
-  <!--switchery-->
-  <link href="{{Request::secure(Request::path()).'/js/switchery/switchery.min.css'}}" rel="stylesheet" type="text/css" media="screen" />
+<!--Nice Scroll-->
+<script src="{{ Request::secure(Request::path()).'/js/jquery.nicescroll.js' }}" type="text/javascript"></script>
 
-  <!--Form Wizard-->
-  <link rel="stylesheet" type="text/css" href="{{Request::secure(Request::path()).'/css/jquery.steps.css'}}" />
+<!--right slidebar-->
+<script src="{{ Request::secure(Request::path()).'/js/slidebars.min.js' }}"></script>
 
-  <!-- datatables css -->
-  <link href="{{Request::secure(Request::path()).'/css/jquery.dataTables.min.css'}}" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.dataTables.min.css" rel="stylesheet">
+<!--switchery-->
+<script src="{{ Request::secure(Request::path()).'/js/switchery/switchery.min.js' }}"></script>
+<script src="{{ Request::secure(Request::path()).'/js/switchery/switchery-init.js' }}"></script>
 
-  <!--common style-->
-  <link href="{{Request::secure(Request::path()).'/css/style.css'}}" rel="stylesheet">
-  <link href="{{Request::secure(Request::path()).'/css/style-responsive.css'}}" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="{{Request::secure(Request::path()).'/css/custom.css'}}">
-  @if( \Request::path() == 'privacy' || \Request::path() == 'datatable' || \Request::path() == 'services')
-  <link rel="stylesheet" href="{{Request::secure(Request::path()).'/css/helper.css'}}" media="screen" title="no title" charset="utf-8">
-  <script src="{{Request::secure(Request::path()).'/js/jquery-1.10.2.min.js'}}"></script>
-  <script src="{{Request::secure(Request::path()).'/js/bootstrap.min.js'}}"></script>
-  @endif
+<!--Sparkline Chart-->
+<script src="{{ Request::secure(Request::path()).'/js/sparkline/jquery.sparkline.js' }}"></script>
+<script src="{{ Request::secure(Request::path()).'/js/sparkline/sparkline-init.js' }}"></script>
+
+<!--Form Validation-->
+<script src="{{ Request::secure(Request::path()).'/js/bootstrap-validator.min.js' }}" type="text/javascript"></script>
+
+<!--Form Wizard-->
+<script src="{{ Request::secure(Request::path()).'/js/jquery.steps.min.js' }}" type="text/javascript"></script>
+<script src="{{ Request::secure(Request::path()).'/js/jquery.validate.min.js' }}" type="text/javascript"></script>
+
+<!--wizard initialization-->
+<script src="{{ Request::secure(Request::path()).'/js/wizard-init.js'}}" type="text/javascript"></script>
+
+
+<!--common scripts for all pages-->
+<script src="{{ Request::secure(Request::path()).'/js/scripts.js' }}"></script>
+<!-- Ace Editor -->
+@if(\Request::path() != 'console')
+<script src="{{ Request::secure(Request::path()).'/js/ace/ace.js' }}" type="text/javascript" ></script>
+<script src="{{ Request::secure(Request::path()).'/js/ace/theme-github.js' }}" type="text/javascript" ></script>
+<script src="{{ Request::secure(Request::path()).'/js/ace/mode-php.js' }}" type="text/javascript" ></script>
+<script src="{{ Request::secure(Request::path()).'/js/ace/jquery-ace.min.js' }}" type="text/javascript" ></script>
+@endif
