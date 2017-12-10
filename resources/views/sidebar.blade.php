@@ -7,7 +7,7 @@
         <div class="logo dark-logo-bg hidden-xs hidden-sm">
             <a href="/">
                 @if(Request::secure())
-                    <img src="{{secure_asset('/img/logo.png')}}" alt="Devless">
+                    <img src="{{Request::secure(Request::path()).'/img/logo.png'}}" alt="Devless">
                 @else
                     <img src="{{asset('/img/logo.png')}}" alt="Devless">
                 @endif
