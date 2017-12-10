@@ -97,7 +97,7 @@ trait devlessAuth
             $action = Helper::query_string()['action'][0];
             return $action;
         } else {
-            $this->stopAndOutput(700, 'Hmm seems you are trying to use auth actions in a normal service.', []);
+            // $this->stopAndOutput(700, 'Hmm seems you are trying to use auth actions in a normal service.', []);
         }
     }
 }
