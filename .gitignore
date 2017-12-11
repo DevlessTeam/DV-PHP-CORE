@@ -11,3 +11,5 @@ snippet.php
 /nbproject
 .idea
 .phpintel/*
+.DS_Store
+
