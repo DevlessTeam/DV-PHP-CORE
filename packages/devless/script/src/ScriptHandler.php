@@ -42,6 +42,8 @@ class ScriptHandler
             'request_phase' =>$payload['request_phase'],
             'access_rights' => $payload['resource_access_right'],
             'requestPayload' => (isset($payload['ex_params']))?$payload['ex_params']:null,
+            'importedClassInstance' => (isset($payload['importedClassInstance']))?$payload['importedClassInstance']:[],
+            'imports' => (isset($payload['imports']))?$payload['imports']:[],
             'status_code'   => (isset($payload['response_status_code']))?$payload['response_status_code']:null,
             'message'      => (isset($payload['response_message']))?$payload['response_message']:null,
             'results_payload' => (isset($payload['response_payload']))?$payload['response_payload']:null,
@@ -84,15 +86,15 @@ EOT;
             $rules->accessRights = $EVENT['access_rights'];
             $rules->EVENT = $EVENT;
             
+            
             $rules->request_phase = ($EVENT['request_phase'] == 'after')?'after':'before';
             if ($rules->request_phase == 'after') {
+                $rules->imports = $EVENT['imports'];
+                $rules->importedClassInstance = $EVENT['importedClassInstance'];
                 $rules->status_code = $EVENT['status_code'];
                 $rules->message = $EVENT['message'];
                 $rules->payload = $EVENT['results_payload'];
             }
-            
-            
-            
             $imports = "use App\Helpers\Assert as assertIts;use App\Helpers\Assert as  assertIt;";
             $headers = $imports.'$rules';
             $footer  = '';
@@ -101,7 +103,7 @@ EOT;
             if ($EVENT['request_phase'] == 'after' && isset($payload['ex_params'])) {
                 extract($payload['ex_params'], EXTR_PREFIX_ALL, 'input');
             }
-        
+            
             eval($finalCode);
 
             $EVENT['access_rights'] = $rules->accessRights;
@@ -109,7 +111,6 @@ EOT;
             $EVENT['message']  =  $rules->message;
             $EVENT['results_payload']  =  $rules->payload;
             $EVENT['user_id'] = $rules->EVENT['user_id'];
-            ;
             
 
             foreach ($EVENT['params'] as $key => $value) {
@@ -129,6 +130,8 @@ EOT;
                     }
                 }
             }
+            $EVENT['imports'] = $rules->imports; 
+            $EVENT['importedClassInstance'] = $rules->importedClassInstance; 
             return $EVENT;
         };
 
@@ -140,7 +143,10 @@ EOT;
             $payload['params'][0]['field'][0] = $params['params'];
             $payload['ex_params'] = $params['ex_params'];
         }
-    
+   
+         $payload['imports'] = $params['imports'];
+         $payload['importedClassInstance'] = $params['importedClassInstance'];
+         
          (strpos(error_get_last()['file'], 'ScriptHandler.php') !=false)?dd():'';
 
         if ($EVENT['request_phase'] == 'after') {
@@ -159,6 +165,7 @@ EOT;
                 $results['payload']['results'] = $EVENT['results_payload'];
             }
         }
+
         return $results;
     }
 }

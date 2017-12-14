@@ -31,7 +31,7 @@
       <div class="row">
         <a href="https://devless.io">
           @if(Request::secure())
-                <img src="{{secure_asset('/img/logo.png')}}" class="setup-logo" alt="Devless">
+                <img src="{{Request::secure(Request::path()).'/img/logo.png'}}" class="setup-logo" alt="Devless">
             @else
                 <img src="{{asset('/img/logo.png')}}" class="setup-logo" alt="Devless">
             @endif

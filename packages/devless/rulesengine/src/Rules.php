@@ -25,8 +25,8 @@ class Rules
     public $message = '';
     public $payload = [];
     public $sharedStore = null;
-    private $imports = [];
-    private $importedClassInstance;
+    public $imports = [];
+    public $importedClassInstance;
     
 
     private $stopAndOutputCalled = false;
@@ -88,6 +88,7 @@ class Rules
     {
         if (!method_exists($this, $method)) {
             $imported_methods = array_keys($this->imports);
+
             if (!in_array($method, $imported_methods)) {
                 $closestMethod =
                 DevlessHelper::find_closest_word($method, array_merge(get_class_methods($this), $imported_methods));
@@ -145,7 +146,11 @@ class Rules
     }
 
     public function import($className)
-    {
+    {  
+
+        if(class_exists($className)){
+            return $this;
+        }
         foreach (func_get_args() as $className) {
             $classLocation = (strtolower($className) == config('devless')['name']) ?
                             config('devless')['system_class'] :
