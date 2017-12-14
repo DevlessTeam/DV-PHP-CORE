@@ -28,7 +28,7 @@ $service = new $payload['service_name']();
 
   require(['vs/editor/editor.main'], function() {
     window.editor = monaco.editor.create(document.getElementById('container'), {
-      value: `<?=$service->getCode()?>`,
+      value:`<?=$service->getCode()?>`,
       language: 'php'
     });
   });
@@ -51,6 +51,14 @@ function save() {
      }
   })
 }
+
+//save script
+document.addEventListener("keydown", function(e) {
+    if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        save();
+    }
+});
 </script>
 </body>
 </html>

@@ -21,6 +21,14 @@ class PHPClass
 {
     public $serviceName = 'PHPClass';
 
+    public function __construct()
+    {
+        $output = ds::service($this->serviceName, 'class')->getData();
+        ($output['payload']['properties']['count'])?eval($output['payload']['results'][0]->script):"";     
+        
+        (strpos(error_get_last()['file'], 'ActionClass.php') !=false)?dd():'';
+
+    }
     /**
      * Methods decorated with `@ACL protected` are only available to users who are logged in . You may access the method via any of the SDKs.
      * @ACL private
@@ -43,7 +51,7 @@ class PHPClass
     {
         $output = ds::service($this->serviceName, 'class')->getData();
         return ($output['payload']['properties']['count'])?
-                $output['payload']['results'][0]->script:'<?php
+                '<?php '.addslashes($output['payload']['results'][0]->script):'<?php
 class sampleClass {
      public function hello()
      {
@@ -60,12 +68,6 @@ class sampleClass {
      */
     public function execute($class, $method, $args=[])
     {
-        $output = ds::service($this->serviceName, 'class')->getData();
-
-        ($output['payload']['properties']['count'])?eval($output['payload']['results'][0]->script):"";     
-        
-        (strpos(error_get_last()['file'], 'ActionClass.php') !=false)?dd():'';
-
         return (new $class())->{$method}(...$args);
     }
 
