@@ -331,6 +331,9 @@ trait actions
         if (!$this->execOrNot) {
             return $this;
         }
+        if($this->stopAndOutputCalled) {
+            return $this;
+        }
 
         $this->request_phase = 'endNow';
         $this->status_code = $status_code;
