@@ -328,10 +328,8 @@ trait actions
          */
     public function stopAndOutput($status_code, $message, $payload)
     {
-        if (!$this->execOrNot) {
-            return $this;
-        }
-        if($this->stopAndOutputCalled) {
+
+        if(!$this->execOrNot || $this->stopAndOutputCalled) {
             return $this;
         }
 
