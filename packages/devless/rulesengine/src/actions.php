@@ -56,7 +56,7 @@ trait actions
         if (!$this->execOrNot) {
             return $this;
         }
-
+        $this->stopAndOutputCalled = true;
         $msg  = (is_array($msg))? json_encode($msg):$msg;
         Helper::interrupt(1000, $msg);
         return $this;
@@ -74,6 +74,7 @@ trait actions
         if (!$this->execOrNot) {
             return $this;
         }
+        $this->stopAndOutputCalled = true;
         $msg  = (is_array($msg))? json_encode($msg):$msg;
         Helper::interrupt(1001, $msg);
         return $this;
