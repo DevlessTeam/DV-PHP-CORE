@@ -88,6 +88,9 @@ trait flowControl
             return $this;
         }
         
+        if (($this->onTableCalled) && (!$this->onCurrentTable)) {
+            return $this;
+        }
         
         $this->execOrNot = true;
 
