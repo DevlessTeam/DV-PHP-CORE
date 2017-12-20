@@ -283,12 +283,12 @@ trait actions
     }
 
     /**
-         * `to` keyword should be used together with `assign` to assign either variables or values to a new variable
-         *
-         * @param $output
-         *
-         * @return $this
-         */
+     * `to` keyword should be used together with `assign` to assign either variables or values to a new variable
+     *
+     * @param $output
+     *
+     * @return $this
+     */
     public function to(&$output)
     {
         if (!$this->execOrNot) {
