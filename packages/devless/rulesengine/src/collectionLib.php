@@ -145,6 +145,25 @@ trait collectionLib
         return $this;
     }
 
+    public function apply($method, $params = [])
+    {
+         if (!$this->execOrNot) {
+            return $this;
+        }
+        $data = $this->results;
+        $newOutput = [];
+        if(is_scalar($data)) {
+           return $this->$method(... $params);
+        }
+        foreach ($data as $key => $value) {
+            $this->results = $value;
+            $this->$method(... $params);
+            $newOutput[] = $this->results;
+        }
+        $this->results = $newOutput;
+        return $this;
+    }
+
     public function onTheCollectionApplyMethod($method, $key = null, $newKey = null)
     {
         if (!$this->execOrNot) {
@@ -168,6 +187,12 @@ trait collectionLib
         }
         $this->results = $input;
         $this->cleanOutput();
+        return $this;
+    }
+
+    public function applyOnElement($method, $key = null, $newKey = null)
+    {
+        $this->onTheCollectionApplyMethod($method, $key, $newKey);
         return $this;
     }
 
@@ -294,15 +319,23 @@ trait collectionLib
         return $this;
     }
 
-
-    public function addAnElementToCollection($element)
+    public function addElementToCollection($element, $key)
     {
-        //
+        if (!$this->execOrNot) {
+            return $this;
+        }
+
+        $this->results = collect($this->results)->prepend($element, $key);
+        return $this;   
     }
 
-    public function removeElementFromCollection($key)
+    public function removeElementFromCollection($elementKey)
     {
-        //
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        unset($this->results[$elementKey]);
+        return $this;
     }
 
     public function isAssoc(array $arr)
