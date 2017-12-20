@@ -281,14 +281,14 @@ class devless
         if (Schema::hasTable('devless_user_profile')) {
              DB::table('users')->select(
             [
-                 "username", "email", "first_name", "last_name", "phone_number", "status"
+                 "username", "email", "first_name", "last_name", "phone_number", "status", 'role'
             ]
             )->join('devless_user_profile', 'users.id', '=', 'devless_user_profile.users_id')->get();
     
         }
         return DB::table('users')->select(
             [
-                 "username", "email", "first_name", "last_name", "phone_number", "status"
+                 "username", "email", "first_name", "last_name", "phone_number", "status", 'role'
             ])->get();
     }
 
@@ -318,14 +318,14 @@ class devless
      */
     public function updateUserProfile(
         $id,
-        $email = null,
-        $password = null,
-        $username = null,
-        $phone_number = null,
-        $first_name = null,
-        $last_name = null,
-        $remember_token = null,
-        $status = null
+        $email = '',
+        $password = '',
+        $username = '',
+        $phone_number = '',
+        $first_name = '',
+        $last_name = '',
+        $remember_token = '',
+        $status = ''
     ) {
         $profileUpdate =array_filter(
             get_defined_vars(),
@@ -334,7 +334,6 @@ class devless
             }
         );
         unset($profileUpdate['id']);
-        
         return (DB::table('users')->where('id', $id)->update($profileUpdate))?true:false;
     }
 
