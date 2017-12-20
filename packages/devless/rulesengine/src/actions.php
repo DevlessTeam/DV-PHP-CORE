@@ -17,9 +17,6 @@ trait actions
     public function onTable()
     {
         $expectedTableNames = func_get_args();
-        if (!$this->execOrNot) {
-            return $this;
-        }
 
         $this->tableName = (is_array($this->tableName)) ? $this->tableName[0] : $this->tableName;
         $this->execOrNot = (in_array($this->tableName, $expectedTableNames));
@@ -28,6 +25,20 @@ trait actions
         return $this;
     }
 
+    public function wheneverOnTable()
+    {
+        $expectedTableNames = func_get_args();
+        
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        
+        $this->tableName = (is_array($this->tableName)) ? $this->tableName[0] : $this->tableName;
+        $this->execOrNot = (in_array($this->tableName, $expectedTableNames));
+        $this->onCurrentTable = $this->execOrNot;
+        $this->onTableCalled = true;
+        return $this;
+    }
     
     public function endOnTable()
     {
