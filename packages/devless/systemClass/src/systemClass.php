@@ -1,11 +1,9 @@
 <?php
-
 use App\Helpers\Helper;
 use App\Helpers\ActionClass;
 use App\Helpers\DataStore as DS;
 use App\Helpers\DevlessHelper as DVH;
 use App\Http\Controllers\ServiceController as service;
-
 /**
  * Created by Devless.
  * User: eddymens
@@ -13,8 +11,6 @@ use App\Http\Controllers\ServiceController as service;
  * @Service: event
  * @Version: 1.0
  */
-
-
 //Action method for serviceName
 class devless
 {
@@ -25,7 +21,6 @@ class devless
     {
         $this->auth = new DVH();
     }
-
     /**
      * Sample DevLess Method
      * @ACL public
@@ -34,7 +29,6 @@ class devless
     {
         return 'Hello World!';
     }
-
     /**
      * method for handling user signup
      * @ACL public
@@ -65,8 +59,6 @@ class devless
         
         return (array)$output + $extProfile ;
     }
-
-
     /**
      * method for handling user login
      * @ACL public
@@ -126,7 +118,6 @@ class devless
         
         $payload = self::getSetParams($payload);
         $auth = $this->auth;
-
         $output = $auth->update_profile($payload);
         if ($extraParams) {
             $extraParams[]['users_id'] = $output->id;
@@ -137,7 +128,6 @@ class devless
         }
         return (array)$output + (array)$extraOutput;
     }
-
     /**
      * reset user account password
      * @ACL public
@@ -148,7 +138,6 @@ class devless
         $state  = $auth->reset_users_password($token);
         return $state;
     }
-
     /**
      * verify newly registered emails
      * @ACL public
@@ -168,7 +157,6 @@ class devless
         }
         return $payload;
     }
-
     /**
      * @param $serviceName
      * @param $table
@@ -183,7 +171,6 @@ class devless
         $output = DS::service($serviceName, $table, $service)->addData($data);
         return $output;
     }
-
     /**
      * Get data from a table belonging to a service
      * @param $serviceName
@@ -194,7 +181,6 @@ class devless
     public function queryData($serviceName, $table, $queryParams = null, $getRelated = true)
     {
         $service = new service();
-
         $queryBuilder =  DS::service($serviceName, $table, $service);
         if ($queryParams) {
             foreach ($queryParams as $eachParamName => $eachParamArgs) {
@@ -217,7 +203,6 @@ class devless
         }
         return $output;
     }
-
     /**
      * @param $serviceName
      * @param $table
@@ -231,7 +216,6 @@ class devless
         $output = DS::service($serviceName, $table, $service)->where($whereKey, $whereValue)->update($data);
         return $output;
     }
-
     /**
      * @param $serviceName
      * @param $table
@@ -245,7 +229,6 @@ class devless
         $output = DS::service($serviceName, $table, $service)->where('id', $id)->delete();
         return $output;
     }
-
     /**
      * @param $serviceName
      * @param $table
@@ -270,7 +253,6 @@ class devless
         }
         return [];
     }
-
     /**
      * Get all users within the system
      * @return array
@@ -291,7 +273,6 @@ class devless
                "users.id",  "username", "email", "first_name", "last_name", "phone_number", "status"
             ])->get();
     }
-
     /**
      * Delete a users profile
      * @return bool
@@ -301,8 +282,6 @@ class devless
     {
         return (\DB::table('users')->where('id', $id)->delete())?true:false;
     }
-
-
     /**
      * Update a users profile
      * @param $email
@@ -336,7 +315,6 @@ class devless
         unset($profileUpdate['id']);
         return (DB::table('users')->where('id', $id)->update($profileUpdate))?true:false;
     }
-
     /**
      * Login users with username and password
      * @param $username
@@ -348,7 +326,6 @@ class devless
     {
         return $this->login($username, null, null, $password);
     }
-
     /**
      * Login users with email and password
      * @param $email
@@ -360,7 +337,6 @@ class devless
     {
         return $this->login(null, $email, null, $password);
     }
-
     /**
      * Login users with phone number and password
      * @param $phone_number
@@ -372,7 +348,6 @@ class devless
     {
         return $this->login(null, null, $phone_number, $password);
     }
-
     /**
      * Lists and explains what each method is used for
      * @return array
@@ -384,7 +359,6 @@ class devless
         $actionClass = new ActionClass();
         return $actionClass->help($serviceInstance, $methodToGetDocsFor = null);
     }
-
     public function getExtraUserDetails($id)
     {
         $service = new service();
@@ -396,31 +370,26 @@ class devless
         unset($newOutput['id'], $newOutput['devless_user_id'], $newOutput['users_id']);
         return $newOutput;
     }
-
     public function addExtraUserDetails($extraDetails)
     {
         $service = new service();
         $flattendDetails = [];
-
         for ($i=0; $i < count($extraDetails); $i++) {
             $key = array_keys($extraDetails[$i]);
             $value = array_values($extraDetails[$i]);
             $flattendDetails[$key[0]] = $value[0];
         }
         $output = DS::service('devless', 'user_profile', $service)->addData([$flattendDetails]);
-
         if ($output['status_code'] !== 609) {
             DB::table('users')->where('id', $flattendDetails['users_id'])->delete();
         }
         unset($flattendDetails['users_id'], $flattendDetails['devless_user_id']);
         return $flattendDetails;
     }
-
     public function editExtraUserDetails($extraDetails)
     {
         $service = new service();
         $flattendDetails = [];
-
         for ($i=0; $i < count($extraDetails); $i++) {
             $key = array_keys($extraDetails[$i]);
             $value = array_values($extraDetails[$i]);
@@ -432,7 +401,6 @@ class devless
         }
         $id = $flattendDetails['users_id'];
         unset($flattendDetails['users_id']);
-
         $output = DS::service('devless', 'user_profile', $service)->where('users_id', $id)->update($flattendDetails);
         if ($output['status_code'] ==  619) {
             return DS::service('devless', 'user_profile', $service)->where('users_id', $id)->getData()['payload']['results'][0];
