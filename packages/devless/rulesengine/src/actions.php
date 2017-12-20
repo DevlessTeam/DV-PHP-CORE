@@ -16,6 +16,12 @@ trait actions
      */
     public function onTable()
     {
+
+          
+        if (!$this->isCurrentDBAction) {
+            return $this;
+        }
+
         $expectedTableNames = func_get_args();
 
         $this->tableName = (is_array($this->tableName)) ? $this->tableName[0] : $this->tableName;
