@@ -281,14 +281,14 @@ class devless
         if (Schema::hasTable('devless_user_profile')) {
              DB::table('users')->select(
             [
-                 "username", "email", "first_name", "last_name", "phone_number", "status", 'role'
+                "users.id", "username", "email", "first_name", "last_name", "phone_number", "status"
             ]
             )->join('devless_user_profile', 'users.id', '=', 'devless_user_profile.users_id')->get();
     
         }
         return DB::table('users')->select(
             [
-                 "username", "email", "first_name", "last_name", "phone_number", "status", 'role'
+               "users.id",  "username", "email", "first_name", "last_name", "phone_number", "status"
             ])->get();
     }
 

@@ -84,10 +84,13 @@ trait flowControl
      */
     public function done()
     {
-        if (!$this->isCurrentDBAction) {
+        if (!$this->isCurrentDBAction || $this->stopAndOutputCalled) {
             return $this;
         }
-    
+        
+        if (($this->onTableCalled) && (!$this->onCurrentTable)) {
+            return $this;
+        }
         
         $this->execOrNot = true;
 

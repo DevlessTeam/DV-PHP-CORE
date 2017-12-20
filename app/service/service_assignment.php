@@ -78,7 +78,7 @@ trait service_assignment
                     case 'db':
                         $db = new Db();
                        try{
-                        $response = $db->access_db($payload);
+                            $response = $db->access_db($payload);
                         } catch (\Exception $e) {
                             $response['message'] = $e->getMessage(); 
                             $response['status_code'] = $e->getCode(); 
@@ -105,9 +105,6 @@ trait service_assignment
                             $response['message'] = $e->getMessage(); 
                             $response['status_code'] = $e->getCode(); 
                             $response['payload'] = []; 
-                        } catch (\Exception $e) {
-
-
                         }
                         return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload']);
                     case 'endNow':
