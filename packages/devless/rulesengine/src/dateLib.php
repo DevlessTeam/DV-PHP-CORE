@@ -28,7 +28,7 @@ trait dateLib
         if (!$this->execOrNot) {
                 return $this;
         }
-        $word = ($word)'y'?'Y';
+        $word = ($word)?'y':'Y';
         $this->results = date($word);
         $this->cleanOutput();
         return $this;
@@ -44,7 +44,7 @@ trait dateLib
         if (!$this->execOrNot) {
                 return $this;
         }
-        $word = ($word)'M'?'m';
+        $word = ($word)?'M':'m';
         $this->results = date($word);
         $this->cleanOutput();
         return $this;
@@ -60,7 +60,7 @@ trait dateLib
         if (!$this->execOrNot) {
                 return $this;
         }
-        $word = ($word)'D'?'d';
+        $word = ($word)?'D':'d';
         $this->results = date($word);
         $this->cleanOutput();
         return $this;
