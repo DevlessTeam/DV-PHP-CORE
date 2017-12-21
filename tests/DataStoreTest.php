@@ -23,6 +23,7 @@ class DataStoreTest extends TestCase
      */
     public function it_should_initialize_a_devless_service()
     {
+        
             $serviceMock = Mockery::mock('App\Http\Controllers\ServiceController');
             $serviceMock->shouldReceive('assign_to_service')->with()->andReturn("eddymens");
 

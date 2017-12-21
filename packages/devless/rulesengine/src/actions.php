@@ -16,6 +16,12 @@ trait actions
      */
     public function onTable()
     {
+
+          
+        if (!$this->isCurrentDBAction) {
+            return $this;
+        }
+
         $expectedTableNames = func_get_args();
 
         $this->tableName = (is_array($this->tableName)) ? $this->tableName[0] : $this->tableName;
@@ -277,12 +283,12 @@ trait actions
     }
 
     /**
-         * `to` keyword should be used together with `assign` to assign either variables or values to a new variable
-         *
-         * @param $output
-         *
-         * @return $this
-         */
+     * `to` keyword should be used together with `assign` to assign either variables or values to a new variable
+     *
+     * @param $output
+     *
+     * @return $this
+     */
     public function to(&$output)
     {
         if (!$this->execOrNot) {

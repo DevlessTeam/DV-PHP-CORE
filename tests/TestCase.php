@@ -12,6 +12,8 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     public $baseUrl = 'http://localhost:8000 ';
     public $serviceName = 'testservice';
     public $serviceTable = 'serviceTable';
+    public $adminPassword = 'password';
+    public $adminEmail = 'test@test.com';
 
     /**
      * Creates the application.
@@ -36,8 +38,8 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         //setup Devless
         $this->visit('/setup')
-                ->type('test@test.com', 'email')
-                ->type('password', 'password')
+                ->type($this->adminEmail, 'email')
+                ->type($this->adminPassword, 'password')
                 ->type('password', 'password_confirmation')
                 ->press('Create App')
                 ->see('DevLess Service contains most of DevLess configs');

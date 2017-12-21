@@ -82,7 +82,7 @@ trait devlessAuth
 
                 $prepared_token = $this->set_session_token($token_payload, $user->id);
                 $profile = \DB::table('users')->where('id', $user->id)
-                ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'status'])
+                ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'status', 'role'])
                 ->first();
                 $user_obj = [
                 'profile' => $profile,
@@ -113,6 +113,7 @@ trait devlessAuth
                     'first_name',
                     'last_name',
                     'status',
+                    'role',
                     'created_at',
                     'updated_at',
                     'remember_token'

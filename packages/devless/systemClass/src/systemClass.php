@@ -297,14 +297,14 @@ class devless
      */
     public function updateUserProfile(
         $id,
-        $email = null,
-        $password = null,
-        $username = null,
-        $phone_number = null,
-        $first_name = null,
-        $last_name = null,
-        $remember_token = null,
-        $status = null
+        $email = '',
+        $password = '',
+        $username = '',
+        $phone_number = '',
+        $first_name = '',
+        $last_name = '',
+        $remember_token = '',
+        $status = ''
     ) {
         $profileUpdate =array_filter(
             get_defined_vars(),
@@ -313,7 +313,6 @@ class devless
             }
         );
         unset($profileUpdate['id']);
-        
         return (DB::table('users')->where('id', $id)->update($profileUpdate))?true:false;
     }
     /**
