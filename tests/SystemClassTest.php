@@ -1,6 +1,7 @@
 <?php
 
 use Devless\Schema\DbHandler;
+
 class SystemClassTest extends TestCase
 {
 
@@ -27,13 +28,19 @@ class SystemClassTest extends TestCase
         $user = $devless->signUp(
             $this->email,
             $this->password,
-            null,null,null,null,null,
-            null,null);
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
         $this->assertNotEmpty($user);
         $this->assertArrayHasKey('profile', $user);
         $this->assertArrayHasKey('token', $user);
         $this->assertNotEmpty($user['profile']);
-        $this->assertTrue( strlen($user['token']) > 0 );
+        $this->assertTrue(strlen($user['token']) > 0);
         $this->assertEquals('object', gettype($user['profile']));
     }
 
@@ -50,7 +57,6 @@ class SystemClassTest extends TestCase
         $users = $devless->getAllUsers();
         $this->assertEquals("array", gettype($users));
         $this->assertEquals(1, count($users));
-
     }
 
 
@@ -62,15 +68,13 @@ class SystemClassTest extends TestCase
     {
         require_once config('devless')['system_class'];
         $devless = new devless();
-        $user = $devless->login(null, $this->adminEmail,null, $this->adminPassword);
+        $user = $devless->login(null, $this->adminEmail, null, $this->adminPassword);
         $this->assertNotEmpty($user);
         $this->assertArrayHasKey('profile', $user);
         $this->assertArrayHasKey('token', $user);
         $this->assertNotEmpty($user['profile']);
-        $this->assertTrue( strlen($user['token']) > 0 );
+        $this->assertTrue(strlen($user['token']) > 0);
         $this->assertEquals('array', gettype($user['profile']));
-
-
     }
 
 
@@ -98,7 +102,15 @@ class SystemClassTest extends TestCase
         require_once config('devless')['system_class'];
         $devless = new devless();
         $user = $devless->updateProfile(
-        'test2@mail.com',null,'kofi','0000000000','james','rich',null,null);
+            'test2@mail.com',
+            null,
+            'kofi',
+            '0000000000',
+            'james',
+            'rich',
+            null,
+            null
+        );
 
         $this->assertNotEmpty($user);
         $this->assertEquals('array', gettype($user));
@@ -118,8 +130,17 @@ class SystemClassTest extends TestCase
     {
         require_once config('devless')['system_class'];
         $devless = new devless();
-        $user = $devless->updateUserProfile(1,
-        'testt@mail.com','','aba','0000000003','go','rch','','');
+        $user = $devless->updateUserProfile(
+            1,
+            'testt@mail.com',
+            '',
+            'aba',
+            '0000000003',
+            'go',
+            'rch',
+            '',
+            ''
+        );
 
         $this->assertNotEmpty($user);
         $this->assertTrue($user);
@@ -134,12 +155,12 @@ class SystemClassTest extends TestCase
     {
         require_once config('devless')['system_class'];
         $devless = new devless();
-        $user = $devless->usernameLogin('Add username here','password');
+        $user = $devless->usernameLogin('Add username here', 'password');
         $this->assertNotEmpty($user);
         $this->assertArrayHasKey('profile', $user);
         $this->assertArrayHasKey('token', $user);
         $this->assertNotEmpty($user['profile']);
-        $this->assertTrue( strlen($user['token']) > 0 );
+        $this->assertTrue(strlen($user['token']) > 0);
         $this->assertEquals('array', gettype($user['profile']));
     }
 
@@ -151,15 +172,24 @@ class SystemClassTest extends TestCase
     {
         require_once config('devless')['system_class'];
         $devless = new devless();
-         $user = $devless->updateUserProfile(1,
-        'testt@mail.com','','aba','0000000003','go','rch','','');
-        $user = $devless->usernameLogin('aba','password');
+         $user = $devless->updateUserProfile(
+             1,
+             'testt@mail.com',
+             '',
+             'aba',
+             '0000000003',
+             'go',
+             'rch',
+             '',
+             ''
+         );
+        $user = $devless->usernameLogin('aba', 'password');
         $user = $devless->phoneNumberLogin('0000000003', 'password');
         $this->assertNotEmpty($user);
         $this->assertArrayHasKey('profile', $user);
         $this->assertArrayHasKey('token', $user);
         $this->assertNotEmpty($user['profile']);
-        $this->assertTrue( strlen($user['token']) > 0 );
+        $this->assertTrue(strlen($user['token']) > 0);
         $this->assertEquals('array', gettype($user['profile']));
     }
 
@@ -212,7 +242,6 @@ class SystemClassTest extends TestCase
         $this->assertArrayHasKey('message', $output);
         $this->assertArrayHasKey('payload', $output);
         $this->assertEquals(619, $output['status_code']);
-       
     }
 
     /**
@@ -231,20 +260,19 @@ class SystemClassTest extends TestCase
         $this->assertArrayHasKey('message', $output);
         $this->assertArrayHasKey('payload', $output);
         $this->assertEquals(636, $output['status_code']);
-       
     }
-    private function getPayload() 
+    private function getPayload()
     {
-        return 
-    [
-      "id" => "2",
-      "service_name" => "testservice",
-      "database" => "",
-      "driver" => "default",
-      "hostname" => "",
-      "username" => "",
-      "password" => "",
-      "resource_access_right" =>  [
+        return
+        [
+        "id" => "2",
+        "service_name" => "testservice",
+        "database" => "",
+        "driver" => "default",
+        "hostname" => "",
+        "username" => "",
+        "password" => "",
+        "resource_access_right" =>  [
         "query" => 1,
         "update" => 1,
         "delete" => 1,
@@ -252,11 +280,11 @@ class SystemClassTest extends TestCase
         "schema" => 1,
         "create" => 1,
         "view" => 1,
-      ],
-      "script" => "->beforeQuerying()->beforeUpdating()->beforeDeleting()->beforeCreating()->onQuery()->onUpdate()->onDelete()->onCreate()->onAnyRequest()->afterQuerying()->afterUpdating()->afterDeleting()->afterCreating();",
-      "port" => "",
-      "method" => "POST",
-      "params" => [
+        ],
+        "script" => "->beforeQuerying()->beforeUpdating()->beforeDeleting()->beforeCreating()->onQuery()->onUpdate()->onDelete()->onCreate()->onAnyRequest()->afterQuerying()->afterUpdating()->afterDeleting()->afterCreating();",
+        "port" => "",
+        "method" => "POST",
+        "params" => [
          [
           "name" => "serviceTable",
           "description" => "demo table",
@@ -269,8 +297,8 @@ class SystemClassTest extends TestCase
               "is_unique" => true,
               "ref_table" => "",
               "validation" => true,
-            ],
-            [
+             ],
+             [
               "name" => "password",
               "field_type" => "password",
               "default" => null,
@@ -278,14 +306,11 @@ class SystemClassTest extends TestCase
               "is_unique" => false,
               "ref_table" => "",
               "validation" => true,
-            ]
+             ]
           ]
-        ]
-      ],
-      "request_phase" => "before",
-];
-
+         ]
+        ],
+        "request_phase" => "before",
+        ];
     }
-
-   
 }
