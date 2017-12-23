@@ -219,6 +219,18 @@ class devless
     }
 
     /**
+     * Get data from a table belonging to a service
+     * @param $serviceName
+     * @param $table
+     * @return mixed
+     * @ACL private
+     */
+    public function getData($serviceName, $table, $queryParams = null, $getRelated = true)
+    {
+        return $this->queryData($serviceName, $table, $queryParams, $getRelated);
+    }
+
+    /**
      * @param $serviceName
      * @param $table
      * @param $id
