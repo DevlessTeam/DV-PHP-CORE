@@ -23,12 +23,13 @@ trait dateLib
      *
      * @return $this
      */
-    public function getCurrentYear()
+    public function getCurrentYear($word = false)
     {
         if (!$this->execOrNot) {
                 return $this;
         }
-        $this->results = date('Y');
+        $word = ($word)?'y':'Y';
+        $this->results = date($word);
         $this->cleanOutput();
         return $this;
     }
@@ -38,12 +39,13 @@ trait dateLib
      *
      * @return $this
      */
-    public function getCurrentMonth()
+    public function getCurrentMonth($word = false)
     {
         if (!$this->execOrNot) {
                 return $this;
         }
-        $this->results = date('M');
+        $word = ($word)?'M':'m';
+        $this->results = date($word);
         $this->cleanOutput();
         return $this;
     }
@@ -53,12 +55,13 @@ trait dateLib
      *
      * @return $this
      */
-    public function getCurrentDay()
+    public function getCurrentDay($word = false)
     {
         if (!$this->execOrNot) {
                 return $this;
         }
-        $this->results = date('D');
+        $word = ($word)?'D':'d';
+        $this->results = date($word);
         $this->cleanOutput();
         return $this;
     }
