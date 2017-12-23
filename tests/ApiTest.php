@@ -101,6 +101,14 @@ class ApiTest extends TestCase
                 'payload'=>['entry_id' => 1], 'status_code' => 609,]);
 
 
+      
+    }
+
+    /*
+    * @test
+    */
+    public function it_should_drop_tables()
+    {
         $url = $this->subUrl;
 
         $dbAction = $this->dbUrl;
