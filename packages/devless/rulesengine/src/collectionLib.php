@@ -147,13 +147,13 @@ trait collectionLib
 
     public function apply($method, $params = [])
     {
-         if (!$this->execOrNot) {
+        if (!$this->execOrNot) {
             return $this;
         }
         $data = $this->results;
         $newOutput = [];
-        if(is_scalar($data)) {
-           return $this->$method(... $params);
+        if (is_scalar($data)) {
+            return $this->$method(... $params);
         }
         foreach ($data as $key => $value) {
             $this->results = $value;
@@ -326,7 +326,7 @@ trait collectionLib
         }
 
         $this->results = collect($this->results)->prepend($element, $key);
-        return $this;   
+        return $this;
     }
 
     public function removeElementFromCollection($elementKey)

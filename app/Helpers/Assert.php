@@ -314,7 +314,7 @@ class Assert extends Helper
     }
 
     
-    private function __construct()
+    public function __construct()
     {
     }
 }

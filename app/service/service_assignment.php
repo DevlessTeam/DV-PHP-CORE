@@ -77,12 +77,12 @@ trait service_assignment
                 switch ($resource) {
                     case 'db':
                         $db = new Db();
-                       try{
+                        try {
                             $response = $db->access_db($payload);
                         } catch (\Exception $e) {
-                            $response['message'] = $e->getMessage(); 
-                            $response['status_code'] = $e->getCode(); 
-                            $response['payload'] = []; 
+                            $response['message'] = $e->getMessage();
+                            $response['status_code'] = $e->getCode();
+                            $response['payload'] = [];
                         }
                         if ($resource != 'view' && $resource != 'rpc') {
                               return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload']);
@@ -99,12 +99,12 @@ trait service_assignment
                     case 'rpc':
                         ($method != 'POST') ? Helper::interrupt(639) : true;
                         $rpc = new Rpc();
-                        try{
+                        try {
                             $response = $rpc->index($payload);
                         } catch (\Exception $e) {
-                            $response['message'] = $e->getMessage(); 
-                            $response['status_code'] = $e->getCode(); 
-                            $response['payload'] = []; 
+                            $response['message'] = $e->getMessage();
+                            $response['status_code'] = $e->getCode();
+                            $response['payload'] = [];
                         }
                         return $this->after_resource_process_order($resource, $payload, $response['status_code'], $response['message'], $response['payload']);
                     case 'endNow':

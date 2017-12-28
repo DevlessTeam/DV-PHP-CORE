@@ -23,7 +23,7 @@ trait dateLib
      *
      * @return $this
      */
-    public function getCurrentYear($word=false)
+    public function getCurrentYear($word = false)
     {
         if (!$this->execOrNot) {
                 return $this;
@@ -39,7 +39,7 @@ trait dateLib
      *
      * @return $this
      */
-    public function getCurrentMonth($word=false)
+    public function getCurrentMonth($word = false)
     {
         if (!$this->execOrNot) {
                 return $this;
@@ -55,7 +55,7 @@ trait dateLib
      *
      * @return $this
      */
-    public function getCurrentDay($word=false)
+    public function getCurrentDay($word = false)
     {
         if (!$this->execOrNot) {
                 return $this;
