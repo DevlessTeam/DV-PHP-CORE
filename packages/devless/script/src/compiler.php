@@ -31,7 +31,7 @@ trait compiler
         
         $declarationString = '';
         $tokens = token_get_all('<?php '.$code);
-
+        
         foreach ($tokens as $token) {
             if (is_array($token)) {
                 $start = 1;
