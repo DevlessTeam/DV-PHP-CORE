@@ -5,7 +5,7 @@ namespace Devless\RulesEngine;
 trait stringLib
 {
     /**
-     * Concatenate strings together eg: `->beforeCreating()->concatenate("user_",$input_name)`
+     * Concatenate strings together eg: `->beforeQuerying()->concatenate("user_","edmond")->storeAs($string)->succeedWith($string) #user_edmond"`
      * @param n number of params
      * @return $this
      * */
@@ -20,7 +20,7 @@ trait stringLib
     }
 
     /**
-     * Get first character eg: `->beforeCreating()->getFirstCharacter("Hello")->storeAs($first_char)->succeedWith($first_char)`
+     * Get first character eg: `->beforeCreating()->getFirstCharacter("Hello")->storeAs($first_char)->succeedWith($first_char) #H`
      * @param $string
      * @return $this
      * */
@@ -35,7 +35,7 @@ trait stringLib
     }
 
     /**
-     * Get second character eg: `->beforeCreating()->getSecondCharacter("Hello")->storeAs($second_char)->succeedWith($second_char)`
+     * Get second character eg: `->beforeCreating()->getSecondCharacter("Hello")->storeAs($second_char)->succeedWith($second_char) #e`
      * @param $string
      * @return $this
      * */
@@ -50,7 +50,7 @@ trait stringLib
     }
 
     /**
-     * Get third character eg: `->beforeCreating()->getThirdCharacter("Hello")->storeAs($third_char)->succeedWith($third_char)`
+     * Get third character eg: `->beforeCreating()->getThirdCharacter("Hello")->storeAs($third_char)->succeedWith($third_char) #l`
      * @param $string
      * @return $this
      * */
@@ -65,7 +65,7 @@ trait stringLib
     }
 
     /**
-     * Get nth character eg: `->beforeCreating()->getCharacter(5, "Hello")->storeAs($nth_char)->succeedWith($nth_char)`
+     * Get nth character eg: `->beforeCreating()->getCharacter(4, "Hello")->storeAs($nth_char)->succeedWith($nth_char) #o`
      * @param $nth integer
      * @param $string
      * @return $this
@@ -81,7 +81,7 @@ trait stringLib
     }
 
     /**
-     * Get last character eg: `->beforeCreating()->getLastCharacter("Hello")->storeAs($last_char)->succeedWith($last_char)`
+     * Get last character eg: `->beforeCreating()->getLastCharacter("Hello")->storeAs($last_char)->succeedWith($last_char) #o`
      * @param $string
      * @return $this
      * */
@@ -97,7 +97,7 @@ trait stringLib
     }
 
     /**
-     * Get last but one character eg: `->beforeCreating()->getLastButOneCharacter("Hello")->storeAs($last_but_one_char)->succeedWith($last_but_one_char)`
+     * Get last but one character eg: `->beforeCreating()->getLastButOneCharacter("Hello")->storeAs($last_but_one_char)->succeedWith($last_but_one_char) #l`
      * @param $string
      * @return $this
      * */
@@ -111,7 +111,7 @@ trait stringLib
         return $this;
     }
     /**
-     * Reverse a string eg: ->beforeQuerying()->assign("nan")->to($string)->reverseString()->storeAs($reverseString)
+     * Reverse a string eg: `->beforeQuerying()->assign("nan")->to($string)->reverseString()->storeAs($reverseString)
  ->whenever(assertIts::equal($string, $reverseString))->succeedWith("Its a palindrome :)")
  ->otherwise()->failWith("Its not a palindrom :(")
     @param $string
@@ -128,7 +128,7 @@ trait stringLib
     }
 
     /**
-     * replace a string with another eg `->beforeCreating()->findNReplace("{{name}}", $input_name, $input_message)->storeAs($input_message)`
+     * replace a string with another eg `->beforeCreating()->findNReplace("{{name}}", "John", "welcome {{name}}")->storeAs($message)->succeedWith($message) #welcome John``
      * @param $string
      * @param $replacement
      * @param $subject
@@ -145,7 +145,7 @@ trait stringLib
     }
 
     /**
-     * change string to uppercase eg: `->beforeCreating()->convertToUpperCase($input_name)->storeAs($input_name)`
+     * change string to uppercase eg: `->beforeCreating()->convertToUpperCase("John")->storeAs($name)->succeedWith($name) #JOHN`
      * @param $string
      * @return $this
      * */
@@ -162,7 +162,7 @@ trait stringLib
     }
 
     /**
-     * change string to lowercase eg: `->beforeCreating()->convertToLowerCase($input_name)->storeAs($input_name)`
+     * change string to lowercase eg: `->beforeCreating()->convertToLowerCase("JOHN")->storeAs($name)->succeedWith($name) #john`
      * @param $string
      * @return $this
      * */
@@ -178,26 +178,27 @@ trait stringLib
     }
 
     /**
-     * Truncate a string to some length eg `->beforeCreating()->truncateString(4, $input_desc)->getResults($trucatedString)->storeAs($stub)`
+     * Truncate a string to some length eg `->beforeCreating()->truncateString(11, "some long text", "...")->storeAs($truncatedString)->succeedWith($truncatedString)
+ #some lon...`
      * @param $len
      * @param $string
-     * @param $trimMaker
+     * @param $trimMarker
      * @return $this
      * */
-    public function truncateString($len, $string = null, $trimMaker = null)
+    public function truncateString($len, $string = null, $trimMarker = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
         $string = $this->useArgsOrPrevOutput($string);
-        $trimMaker = ($trimMaker != null)?$trimMaker:'...';
-        $this->results = mb_strimwidth($string, 0, $len, $trimMaker);
+        $trimMarker = ($trimMarker != null)?$trimMarker:'...';
+        $this->results = mb_strimwidth($string, 0, $len, $trimMarker);
         $this->cleanOutput();
         return $this;
     }
 
     /**
-     * Count the number of words in a sentence eg: `->beforeCreating()->onTable('users')->countWords($input_description)->storeAs($desc_length)->whenever($desc_length <= 5)->failWith("Your product description is very short")`
+     * Count the number of words in a sentence eg: `->beforeCreating()->countWords("text here")->storeAs($desc_length)->whenever($desc_length <= 5)->failWith("Your product description is very short") #Your product description is very short`
      * @param $sentence
      * @return $this
      */
@@ -213,7 +214,7 @@ trait stringLib
     }
 
     /**
-     * Find the number of characters in a word or sentence eg: `->beforeCreating()->onTable('users')->countCharacters($input_name)->storeAs($name_length)->whenever($name_length <= 0)->failWith("name seems to be empty")`
+     * Find the number of characters in a word or sentence eg: `->beforeCreating()->countCharacters("")->storeAs($name_length)->whenever($name_length <= 0)->failWith("name seems to be empty")($input_name)->storeAs($name_length)->whenever($name_length <= 0)->failWith("name seems to be empty") #name seems to be empty`
      * @param word
      * @return $this
      */
