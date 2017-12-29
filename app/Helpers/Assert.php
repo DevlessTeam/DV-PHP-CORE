@@ -214,6 +214,23 @@ class Assert extends Helper
     }
 
     /**
+     * check if $value is  an empty array or empty string eg: `->beforeCreating()->whenever(assertIt::isEmpty("some text"))->then->stopAndOutput(1001,'message', 'its  empty')`
+     *
+     * @param $value
+     *
+     * @return $this
+     */
+    public static function isEmpty($value)
+    {
+        if (is_array($value)) {
+            return (sizeof($value) == 0)?:false;
+        }
+        if (is_string($value)) {
+            return (strlen($value) == 0)?:false;
+        }
+        return false;
+    }
+    /**
      * check if $value is contains $subString eg: `->beforeCreating()->whenever(assertIt::contains("edmond@devless.io", "edmond"))->then->stopAndOutput(1001,'message', 'email containes edmond')`
      *
      * @param $value
