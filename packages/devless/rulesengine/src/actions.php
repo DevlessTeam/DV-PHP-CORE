@@ -332,6 +332,16 @@ trait actions
         return $this;
     }
 
+    public function find($input)
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        $this->assign($input);
+        return $this;
+
+    }
+
     /**
          * Behaves just like the `assign` method but has a much shorter construct. where you will assign say the string "edmond" to variable $name using `assign`  `assign("edmond")->to($name)` , `assignValue("edmond", $name)` provides a much shorter construct but loses its redability.
          *
