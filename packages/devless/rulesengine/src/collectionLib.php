@@ -135,6 +135,21 @@ trait collectionLib
         $this->cleanOutput();
         return $this;
     }
+    public function fetchAllWithout($key, $value)
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        $newCollection = [];
+        foreach ($this->results as $index => $subCollection) {
+            if(isset($subCollection[$key]) && $subCollection[$key] == $value) {
+                $newCollection[] = $subCollection;
+            }
+        }
+        $this->results = $newCollection;
+        return $this;
+    }
+
     public function fetchOnly($keys)
     {
         if (!$this->execOrNot) {
@@ -335,6 +350,24 @@ trait collectionLib
             return $this;
         }
         unset($this->results[$elementKey]);
+        return $this;
+    }
+
+    public function useCollectionAsKeys($collection)
+    {
+         if (!$this->execOrNot) {
+            return $this;
+        }
+        $this->results = collect(array_combine($collection,$this->results));
+        return $this;
+    }
+
+    public function checkIfCollectionContains($key, $value=null)
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        $this->results = collect($this->results)->contains($key, $value);
         return $this;
     }
 

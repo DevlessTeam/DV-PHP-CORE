@@ -248,6 +248,21 @@ trait actions
     }
 
     /**
+     * The with keyword holds values that may be used by a method. Its another way of passing in values to a method 
+     * eg:with($names)->removeElementFromCollection("name")
+     * @param $methodName
+     * @return $this
+     */
+    public function with($variable)
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        $this->assign($variable);
+        return $this;
+    }
+
+    /**
          * Set parameters for method from which you will like to run
          * eg: usingService('devless')->callMethod('getUserProfile')->  withParams(1)->getResults($output)->succeedWith($output)
          * @param can have n number of parameters
@@ -315,6 +330,16 @@ trait actions
 
         $this->assign($output);
         return $this;
+    }
+
+    public function find($input)
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        $this->assign($input);
+        return $this;
+
     }
 
     /**
