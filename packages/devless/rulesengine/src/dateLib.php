@@ -5,7 +5,7 @@ namespace Devless\RulesEngine;
 trait dateLib
 {
     /**
-     * The `getTimestamp` method returns the current timestamp. eg: beforeQuerying()->getTimestamp()->storeAs($timestamp)->succeedWith($timestamp)
+     * The `getTimestamp` method returns the current timestamp. eg: `->beforeQuerying()->getTimestamp()->storeAs($timestamp)->succeedWith($timestamp) #1514656911`
      * @return $this
      */
     public function getTimestamp()
@@ -19,7 +19,7 @@ trait dateLib
     }
 
     /**
-     * Get the current year using the `getCurrentYear` method eg:beforeQuering()->getCurrentYear()->storeAs($currentYear)succeedWith($currentYear)
+     * Get the current year using the `getCurrentYear` method eg:`->beforeQuerying()->getCurrentYear()->storeAs($currentYear)->succeedWith($currentYear) #2017`
      *
      * @return $this
      */
@@ -35,7 +35,7 @@ trait dateLib
     }
 
     /**
-     *Get the current month using the `getCurrentMonth` method eg:beforeQuering()->getCurrentMonth()->storeAs($currentMonth)->succeedWith($currentMonth)
+     *Get the current month using the `getCurrentMonth` method eg:`->beforeQuerying()->getCurrentMonth()->storeAs($currentMonth)->succeedWith($currentMonth) #12`
      *
      * @return $this
      */
@@ -51,7 +51,7 @@ trait dateLib
     }
 
     /**
-     * Get the current day using the `getCurrentDay` method eg:beforeQuering()->getCurrentDay()->storeAs($currentDay)->succeedWith($currentDay)
+     * Get the current day using the `getCurrentDay` method eg:`->beforeQuerying()->getCurrentDay()->storeAs($currentDay)->succeedWith($currentDay) #30`
      *
      * @return $this
      */
@@ -67,7 +67,7 @@ trait dateLib
     }
 
     /**
-     Get the current hour using the `getCurrentHour` method eg:beforeQuering()->getCurrentHour()->storeAs($currentHour)->succeedWith($currentHour)
+     Get the current hour using the `getCurrentHour` method eg:`->beforeQuerying()->getCurrentHour()->storeAs($currentHour)->succeedWith($currentHour) #06`
      *
      * @return $this
      */
@@ -82,7 +82,7 @@ trait dateLib
     }
 
     /**
-     * Get the current minute using the `getCurrentMinute` method eg:beforeQuering()->getCurrentMinute()->storeAs($currentMinute)->succeedWith($currentMinute)
+     * Get the current minute using the `getCurrentMinute` method eg:`->beforeQuerying()->getCurrentMinute()->storeAs($currentMinute)->succeedWith($currentMinute) #27`
      *
      * @return $this
      */
@@ -97,7 +97,7 @@ trait dateLib
     }
 
     /**
-    * Get the current second using the `getCurrentSecond` method eg:beforeQuering()->getCurrentSecond()->storeAs($currentSecond)->succeedWith($currentSecond)
+    * Get the current second using the `getCurrentSecond` method eg:`->beforeQuerying()->getCurrentSecond()->storeAs($currentSecond)->succeedWith($currentSecond) #02`
      *
      * @return $this
      */
@@ -112,7 +112,7 @@ trait dateLib
     }
 
     /**
-     * Get the human readable date using `getFormattedDate` method eg:beforeQuering()->getFormattedDate()->storeAs($formattedDate)->succeedWith($formatedDate)
+     * Get the human readable date using `getFormattedDate` method eg:->beforeQuerying()->getFormattedDate()->storeAs($formattedDate)->succeedWith($formattedDate) #Saturday 30th of December 2017 06:28:35 PM
      *
      * @return $this
      */
