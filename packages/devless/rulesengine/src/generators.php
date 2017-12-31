@@ -5,7 +5,7 @@ namespace Devless\RulesEngine;
 trait generators
 {
     /**
-     * generates random integers. This may be used for invitation or promotional code generation. eg `->beforeCreating()->generateRandomInteger(10)->storeAs($promo_code)->assign($promo_code)->to($input_promo)`
+     * generates random integers. This may be used for invitation or promotional code generation. eg `->beforeCreating()->generateRandomInteger($max=10)->storeAs($promo_code)->succeedWith($promo_code) #7`
      * @param $length
      * @return $this
      */
@@ -20,7 +20,7 @@ trait generators
     }
 
     /**
-     * generates random alphanumeric values. This may be used for generating order Ids. eg `->beforeCreating()->generateRandomAlphanums()->storeAs($order_id)->assign($order_id)->to($input_order_id)`
+     * generates random alphanumeric values. This may be used for generating order Ids. eg `->beforeCreating()->generateRandomAlphanums($length = 5)->storeAs($order_id)->succeedWith($order_id) #QJXIS`
      * @return $this
      */
     public function generateRandomAlphanums($length = 5)
@@ -40,7 +40,7 @@ trait generators
     }
 
     /**
-     * generates random string.This generates random string codes. eg `->beforeCreating()->generateRandomInteger(10)->storeAs($promo_code)->assign($promo_code)->to($input_promo)`
+     * generates random string.This generates random string codes. eg `->beforeCreating()->generateRandomString($length = 10)->storeAs($promo_code)->succeedWith($promo_code) #vXJNKuBaWK`
      * @param $length
      * @return $this
      */
@@ -61,7 +61,7 @@ trait generators
     }
 
     /**
-     * generates unique Id.This generates unique Id . eg `->beforeCreating()->generateUniqueId()->storeAs($user_id)->assign($user_id)->to($input_id)`
+     *generates unique Id.This generates unique Id . eg `->beforeCreating()->generateUniqueId()->storeAs($user_id)->succeedWith($user_id) #5a48b44ca776c`
      * @param $length
      * @return $this
      */

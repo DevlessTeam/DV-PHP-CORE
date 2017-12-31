@@ -19,7 +19,7 @@ trait dateLib
     }
 
     /**
-     * Get the current year using the `getCurrentYear` method eg:`->beforeQuerying()->getCurrentYear()->storeAs($currentYear)->succeedWith($currentYear) #2017`
+     * Get the current year using the `getCurrentYear` method eg:`->beforeQuerying()->getCurrentYear($word = false)->storeAs($currentYear)->succeedWith($currentYear) #2017`
      *
      * @return $this
      */
@@ -35,7 +35,7 @@ trait dateLib
     }
 
     /**
-     *Get the current month using the `getCurrentMonth` method eg:`->beforeQuerying()->getCurrentMonth()->storeAs($currentMonth)->succeedWith($currentMonth) #12`
+     *Get the current month using the `getCurrentMonth` method eg:`->beforeQuerying()->getCurrentMonth($word = false)->storeAs($currentMonth)->succeedWith($currentMonth) #12`
      *
      * @return $this
      */
@@ -51,7 +51,7 @@ trait dateLib
     }
 
     /**
-     * Get the current day using the `getCurrentDay` method eg:`->beforeQuerying()->getCurrentDay()->storeAs($currentDay)->succeedWith($currentDay) #30`
+     * Get the current day using the `getCurrentDay` method eg:`->beforeQuerying()->getCurrentDay($word = false)->storeAs($currentDay)->succeedWith($currentDay) #30`
      *
      * @return $this
      */
