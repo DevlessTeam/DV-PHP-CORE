@@ -18,7 +18,7 @@ class Assert extends Helper
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function anInteger($value)
     {
@@ -30,7 +30,7 @@ class Assert extends Helper
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function aString($value)
     {
@@ -42,7 +42,7 @@ class Assert extends Helper
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function aBoolean($value)
     {
@@ -54,7 +54,7 @@ class Assert extends Helper
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function aFloat($value)
     {
@@ -68,7 +68,7 @@ class Assert extends Helper
      * @param $min
      * @param $max
      *
-     * @return $this
+     * @return bool
      */
     public static function withinRange($value, $min, $max)
     {
@@ -80,7 +80,7 @@ class Assert extends Helper
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function upperCase($value)
     {
@@ -97,7 +97,7 @@ class Assert extends Helper
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function lowerCase($value)
     {
@@ -114,7 +114,7 @@ class Assert extends Helper
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function alphanumeric($value)
     {
@@ -131,7 +131,7 @@ class Assert extends Helper
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function alphabets($value)
     {
@@ -149,7 +149,7 @@ class Assert extends Helper
      * @param $value
      * @param $prefix
      *
-     * @return $this
+     * @return bool
      */
     public static function startsWith($value, $prefix)
     {
@@ -162,7 +162,7 @@ class Assert extends Helper
      * @param $value
      * @param $suffix
      *
-     * @return $this
+     * @return bool
      */
     public static function endsWith($value, $suffix)
     {
@@ -175,7 +175,7 @@ class Assert extends Helper
      * @param $value
      * @param $pattern
      *
-     * @return $this
+     * @return bool
      */
     public static function matchesRegex($value, $pattern)
     {
@@ -187,7 +187,7 @@ class Assert extends Helper
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function anEmail($value)
     {
@@ -200,7 +200,7 @@ class Assert extends Helper
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function notEmpty($value)
     {
@@ -218,7 +218,7 @@ class Assert extends Helper
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function isEmpty($value)
     {
@@ -236,7 +236,7 @@ class Assert extends Helper
      * @param $value
      * @param $subString
      *
-     * @return $this
+     * @return bool
      */
     public static function contains($value, $subString)
     {
@@ -249,7 +249,7 @@ class Assert extends Helper
      * @param $value
      * @param $value1
      *
-     * @return $this
+     * @return bool
      */
     public static function equal($value, $value1)
     {
@@ -262,7 +262,7 @@ class Assert extends Helper
      * @param $value
      * @param $value1
      *
-     * @return $this
+     * @return bool
      */
     public static function notEqual($value, $value1)
     {
@@ -273,7 +273,7 @@ class Assert extends Helper
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function greaterThan($value, $value1)
     {
@@ -286,7 +286,7 @@ class Assert extends Helper
      * @param $value
      * @param $value1
      *
-     * @return $this
+     * @return bool
      */
     public static function lessThan($value, $value1)
     {
@@ -299,7 +299,7 @@ class Assert extends Helper
      * @param $value
      * @param $value1
      *
-     * @return $this
+     * @return bool
      */
     public static function greaterThanOrEqualTo($value, $value1)
     {
@@ -312,7 +312,7 @@ class Assert extends Helper
      * @param $value
      * @param $value1
      *
-     * @return $this
+     * @return bool
      */
     public static function lessThanOrEqualTo($value, $value1)
     {
