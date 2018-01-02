@@ -3,6 +3,13 @@ namespace Devless\RulesEngine;
 
 trait collectionLib
 {
+    /**
+     *convert an array into a collection eg: `->beforeCreating()->fromTheCollectionOf(["name"=>"mike", "age"=>29])->getAllKeys()->storeAs($keys)->stopAndOutput(1000, "got response", $keys) #["name", "age"]`
+     *
+     * @param $collection
+     *
+     * @return $this
+     */
     public function fromTheCollectionOf($collection)
     {
         if (!$this->execOrNot) {
@@ -15,6 +22,14 @@ trait collectionLib
         $this->cleanOutput();
         return $this;
     }
+
+    /**
+     *convert an array into a collection eg: `->beforeCreating()->collect(["name"=>"mike", "age"=>29])->getAllKeys()->storeAs($keys)->stopAndOutput(1000, "got response", $keys) #["name", "age"]`
+     *
+     * @param $collection
+     *
+     * @return $this
+     */
     public function collect($collection)
     {
         if (!$this->execOrNot) {
@@ -23,36 +38,75 @@ trait collectionLib
         $this->fromTheCollectionOf($collection);
         return $this;
     }
-    public function getValuesWithoutKeys()
-    {
-        if (!$this->execOrNot) {
-            return $this;
-        }
-        $this->results = collect($this->results)->flatten()->toArray();
-        $this->cleanOutput();
-        return $this;
-    }
-    public function getAllKeys()
-    {
-        if (!$this->execOrNot) {
-            return $this;
-        }
-        $this->results = (is_array($this->results[0]))?$this->results[0]:$this->results;
 
-        $this->results = collect($this->results)->flip()->flatten()->toArray();
-        $this->cleanOutput();
-        return $this;
-    }
-    public function getFirstElement()
+    /**
+     *gets all the values in a collection eg: `->beforeCreating()->collect(["name"=>"mike", "age"=>29])->getValuesWithoutKeys()->storeAs($values)->stopAndOutput(1000, "got response", $values) # ["mike",29]`
+     *
+     * @param $collection
+     *
+     * @return $this
+     */
+    public function getValuesWithoutKeys($collection = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
-        $this->results = collect($this->results)->first();
+        $collection = $this->useArgsOrPrevOutput($collection);
+        $this->results = collect($collection)->flatten()->toArray();
         $this->cleanOutput();
         return $this;
     }
 
+    /**
+     *convert an array into a collection eg: `->beforeCreating()->fromTheCollectionOf(["name"=>"mike", "age"=>29])->getAllKeys()->storeAs($keys)->stopAndOutput(1000, "got response", $keys) #["name", "age"]`
+     *
+     * @param $collection
+     *
+     * @return $this
+     */
+    public function getAllKeys($collection = null)
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        $collection = $this->useArgsOrPrevOutput($collection);
+        $collection = (is_array($collection))?$collection:$collection;
+
+        $this->results = collect($collection)->flip()->flatten()->toArray();
+        $this->cleanOutput();
+        return $this;
+    }
+
+     /**
+     *convert an array into a collection eg: `->beforeCreating()->fromTheCollectionOf(["name"=>"mike", "age"=>29])->getFirstElement()->storeAs($element)->stopAndOutput(1000, "got response", $element) #["mike"]`
+     *
+     * @param $collection
+     *
+     * @return $this
+     */
+    public function getFirstElement($collection = null)
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        $collection = $this->useArgsOrPrevOutput($collection);
+        $this->results = collect($collection)->first();
+        $this->cleanOutput();
+        return $this;
+    }
+
+    /**
+     *Match up and pair collections eg: `->beforeCreating()->collect(["name"=>"mike", "age"=>29])->appendCollectionTo($superArray=[["id"=>1,"name"=>"sam"],["id"=>2,"name"=>"josh"]], $subArray=[["id"=>2,"age"=>20],["id"=>1,"age"=>12]], $subArray="id",$subKey="id", $resultingKey="result" )->storeAs($element)->stopAndOutput(1000, "got response", $element) `
+     *
+     * @param $superArray
+     * @param $subArray
+     * @param $superKey
+     * @param $subKey
+     * @param $resultingKey
+     * @param $addToRelated
+     *
+     * @return $this
+     */
     public function appendCollectionTo(
         $superArray,
         $subArray,
@@ -91,58 +145,118 @@ trait collectionLib
         return $this;
     }
 
+    /**
+     *match up and pair collections eg: `->beforeCreating()->collect(["name"=>"mike", "age"=>29])->appendCollectionToRelated($superArray=[["id"=>1,"name"=>"sam"],["id"=>2,"name"=>"josh"]], $subArray=[["id"=>2,"age"=>20],["id"=>1,"age"=>12]], $subArray="id",$subKey="id", $resultingKey="result" )->storeAs($element)->stopAndOutput(1000, "got response", $element) `
+     *
+     * @param $superArray
+     * @param $subArray
+     * @param $superKey
+     * @param $subKey
+     * @param $resultingKey
+     * @param $addToRelated
+     *
+     * @return $this
+     */
     public function appendCollectionToRelated($superArray, $subArray, $superKey, $subKey, $resultingKey)
     {
         $this->appendCollectionTo($superArray, $subArray, $superKey, $subKey, $resultingKey, true);
         return $this;
     }
 
-    public function getElement($nth)
+     /**
+     *get the nth element in a collections eg: `->beforeCreating()->collect(["Joe", "Sam", "Mike"])->getElement(1)->storeAs($element)->stopAndOutput(1000, "got response", $element) #Joe`
+     *
+     * @param $nth
+     * @param $collection
+     *
+     * @return $this
+     */
+    public function getElement($nth, $collection = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
-        $this->results = (isset($this->results[$nth-1]))
-        ?$this->results[$nth-1]:[];
+        $collection = $this->useArgsOrPrevOutput($collection);
+        $collection = (isset($collection[$nth-1]))
+        ?$collection[$nth-1]:[];
+        $this->results = $collection;
         $this->cleanOutput();
         return $this;
     }
-    public function getLastElement()
+
+    /**
+     *get the last element in a collections eg: `->beforeCreating()->collect(["Joe", "Sam", "Mike"])->getLastElement()->storeAs($element)->stopAndOutput(1000, "got response", $element) #Mike`
+     *
+     * @param $collection
+     *
+     * @return $this
+     */
+    public function getLastElement($collection = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
-        $this->results = collect($this->results)->last();
+        $collection = $this->useArgsOrPrevOutput($collection);
+        $this->results = collect($collection)->last();
         $this->cleanOutput();
         return $this;
     }
+
+    /**
+     *count the number of elements in a collections eg: `->beforeCreating()->collect(["Joe", "Sam", "Mike"])->countTheNumberOfElements()->storeAs($count)->stopAndOutput(1000, "got response", $count) #3`
+     *
+     * @param $collection
+     *
+     * @return $this
+     */
     public function countTheNumberOfElements($collection = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
-        $this->results = collect($this->useArgsOrPrevOutput())->count();
+
+        $this->results = collect($this->useArgsOrPrevOutput($collection))->count();
         $this->cleanOutput();
         return $this;
     }
-    public function fetchAllWith($key, $value)
+
+    /**
+     *Fetch all elements whos key are of a particular value eg: `->beforeCreating()->collect([["item"=>"soap", "quantity"=>5],["item"=>"milk", "quantity"=>3],["item"=>"book", "quantity"=>5]])->fetchAllWith("quantity", 5)->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #[["item"=>"soap", "quantity"=>5],["item"=>"book", "quantity"=>5]]`
+     *
+     * @param $key
+     * @param $value
+     * @param $collection
+     *
+     * @return $this
+     */
+    public function fetchAllWith($key, $value, $collection = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
 
-        $this->results = collect($this->results)->where($key, $value)->all();
+        $this->results = collect($this->useArgsOrPrevOutput($collection))->where($key, $value)->all();
         $this->cleanOutput();
         return $this;
     }
-    public function fetchAllWithout($key, $value)
+
+    /**
+     *Fetch all elements whos key are of a particular value eg: `->beforeCreating()->collect([["item"=>"soap", "quantity"=>5],["item"=>"milk", "quantity"=>3],["item"=>"book", "quantity"=>5]])->fetchAllWithout("quantity", 5)->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #[["item"=>"milk", "quantity"=>3]]`
+     *
+     * @param $key
+     * @param $value
+     * @param $collection
+     *
+     * @return $this
+     */
+    public function fetchAllWithout($key, $value, $collection = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
         $newCollection = [];
-        foreach ($this->results as $index => $subCollection) {
-            if(isset($subCollection[$key]) && $subCollection[$key] == $value) {
+        foreach ($this->useArgsOrPrevOutput($collection) as $index => $subCollection) {
+            if(isset($subCollection[$key]) && $subCollection[$key] != $value) {
                 $newCollection[] = $subCollection;
             }
         }
@@ -150,16 +264,34 @@ trait collectionLib
         return $this;
     }
 
-    public function fetchOnly($keys)
+    /**
+     *get a new collection of only a particular key value pair eg: `->beforeCreating()->collect([["item"=>"soap", "quantity"=>5],["item"=>"milk", "quantity"=>3],["item"=>"book", "quantity"=>5]])->fetchOnly("quantity", 5)->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #[5,3,5]`
+     *
+     * @param $key
+     * @param $value
+     * @param $collection
+     *
+     * @return $this
+     */
+    public function fetchOnly($keys, $collection = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
-        $this->results = array_column($this->results, $keys);
+        $collection = $this->useArgsOrPrevOutput($collection);
+        $this->results = array_column($collection, $keys);
         $this->cleanOutput();
         return $this;
     }
 
+    /**
+     *apply a method to a collection eg: `->beforeCreating()->collect(["Joe", "Mike"])->apply("convertToUpperCase", $params = [])->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["JOE","MIKE"]`
+     *
+     * @param $method
+     * @param $params
+     *
+     * @return $this
+     */
     public function apply($method, $params = [])
     {
         if (!$this->execOrNot) {
@@ -179,6 +311,8 @@ trait collectionLib
         return $this;
     }
 
+
+   
     public function onTheCollectionApplyMethod($method, $key = null, $newKey = null)
     {
         if (!$this->execOrNot) {
@@ -205,6 +339,14 @@ trait collectionLib
         return $this;
     }
 
+     /**
+     *apply a method to a key in the collection eg: `->beforeCreating()->collect([["name"=>"Joe", "age"=>12],["name"=>"Mark", "age"=>23]])->applyOnElement("convertToUpperCase", "name" )->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #[["name"=>"JOE", "age"=>12],["name"=>"MARK", "age"=>23]]`
+     *
+     * @param $method
+     * @param $params
+     *
+     * @return $this
+     */
     public function applyOnElement($method, $key = null, $newKey = null)
     {
         $this->onTheCollectionApplyMethod($method, $key, $newKey);
@@ -242,6 +384,13 @@ trait collectionLib
         return $this;
     }
 
+    /**
+     *reverse the order of a collection eg: `->beforeCreating()->collect(["Joe", "Mike"])->reverseTheCollection()->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["Mike","Joe"]`
+     *
+     * @param $collection
+     *
+     * @return $this
+     */
     public function reverseTheCollection($collection = null)
     {
         if (!$this->execOrNot) {
@@ -251,47 +400,94 @@ trait collectionLib
         $this->cleanOutput();
         return $this;
     }
-    public function sortCollectionBy($key)
+
+    /**
+     *sort the order of a collection by a key eg: `->beforeCreating()->collect(["Zina", "Adam"])->sortCollectionBy("name")->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["Adam","Zina"]`
+     *
+     * @param $key
+     * @param $collection
+     *
+     * @return $this
+     */
+    public function sortCollectionBy($key, $collection = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
-
-        $this->results = collect($this->results)->sortBy($key);
+        $collection = $this->useArgsOrPrevOutput($collection);
+        sort($collection);
+        $this->results = $collection;
         $this->cleanOutput();
         return $this;
     }
 
-    public function offsetCollectionBy($offset)
+    /**
+     * offsets N number of elements eg: `->beforeCreating()->collect(["Adam", "Ben", "Zina"])->offsetCollectionBy(1)->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["Ben","Zina"]`
+     *
+     * @param $offset
+     * @param $collection
+     *
+     * @return $this
+     */
+    public function offsetCollectionBy($offset, $collection = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
-        $this->results = array_splice($this->results, $offset);
+        $collection = $this->useArgsOrPrevOutput($collection);
+        $this->results = array_splice($collection, $offset);
         $this->cleanOutput();
         return $this;
     }
 
-    public function reduceNumberOfElementsTo($size)
+
+    /**
+     * reduce the number of elements to N eg: `->beforeCreating()->collect(["Adam", "Ben", "Zina"])->reduceNumberOfElementsTo(1)->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["Adam"]`
+     *
+     * @param $size
+     * @param $collection
+     *
+     * @return $this
+     */
+    public function reduceNumberOfElementsTo($size, $collection = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
-        $this->results = array_splice($this->results, 0, $size);
+        $collection = $this->useArgsOrPrevOutput($collection);
+        $this->results = array_splice($collection, 0, $size);
         $this->cleanOutput();
         return $this;
     }
 
-    public function paginateCollection($offset, $size)
+    /**
+     * offset N elements and get Y elements eg: `->beforeCreating()->collect(["Adam", "Ben", "Zina"])->paginateCollection(1, 1)->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["Ben"]`
+     *
+     * @param $offset
+     * @param $size
+     * @param $collection
+     *
+     * @return $this
+     */
+    public function paginateCollection($offset, $size, $collection = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
-        $this->results = array_splice($this->results, $offset, $size);
+        $collection = $this->useArgsOrPrevOutput($collection);
+        $this->results = array_splice($collection, $offset, $size);
         $this->cleanOutput();
         return $this;
     }
 
+    /**
+     * find the difference between two collections eg: `->beforeCreating()->findCollectionDiffs(["name"=>"Mark", "age"=>45], ["name"=>"Mark"])->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #  ["age": 45]`
+     *
+     * @param $collectionOne
+     * @param $collectionTwo
+     *
+     * @return $this
+     */
     public function findCollectionDiffs($collectionOne, $collectionTwo)
     {
         
@@ -303,16 +499,23 @@ trait collectionLib
         return $this;
     }
 
-    public function expandCollection($collection)
+    /**
+     * expand and flatten a collection eg: `->beforeCreating()->expandCollection(["name"=>["Mark", "zowy"], "age"=>45])->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #[["name"=>"Mark","age"=>45],["name"=>"zowy","age"=>45]]`
+     *
+     * @param $collection
+     
+     *
+     * @return $this
+     */
+    public function expandCollection($collection = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
         $output = [];
         $template = [];
-        (is_array($collection) && $this->isAssoc($collection))? '':$this->failWith('Sorry but you need to pass in a key value pair `->using(["category"=>category])->mock(template)`');
-
-        foreach ($collection as $key => $data) {
+    
+        foreach ($this->useArgsOrPrevOutput($collection) as $key => $data) {
             $push_to_array  = function () use (&$output, &$eachValue, &$template, &$key) {
                 $innerTemplate = $template;
                 $innerTemplate[$key] = $eachValue;
@@ -334,7 +537,14 @@ trait collectionLib
         return $this;
     }
 
-    public function addElementToCollection($element, $key)
+     /**
+     * add an element to a collection eg: `->beforeCreating()->collect(["name"=>"mike"])->addElementToCollection(23,"age")->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["name"=>"mike","age"=>23] #["age"=>23,"name"=>"mike"]`
+     *
+     * @param $element
+     * @param $key
+     * @return $this
+     */
+    public function addElementToCollection($element, $key = null)
     {
         if (!$this->execOrNot) {
             return $this;
@@ -344,15 +554,30 @@ trait collectionLib
         return $this;
     }
 
-    public function removeElementFromCollection($elementKey)
+    /**
+     * remove an element from collection  eg: `->beforeCreating()->collect(["age"=>23,"name"=>"mike"])->removeELementFromCollection("age")->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["name"=>"mike","age"=>23] #["name"=>"mike"]`
+     *
+     * @param $elementKey
+     * @param $collection
+     * @return $this
+     */
+    public function removeElementFromCollection($elementKey, $collection = null)
     {
         if (!$this->execOrNot) {
             return $this;
         }
-        unset($this->results[$elementKey]);
+        $collection = $this->useArgsOrPrevOutput($collection);
+        unset($collection[$elementKey]);
+        $this->results = $collection;
         return $this;
     }
 
+    /**
+     * create key value pairs from two collections  eg: `->beforeCreating()->collect(["Mark",23])->useCollectionAsKeys(["name", "age"])->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["name"=>"Mark","age"=>23]`
+     *
+     * @param $collection
+     * @return $this
+     */
     public function useCollectionAsKeys($collection)
     {
          if (!$this->execOrNot) {
@@ -362,6 +587,13 @@ trait collectionLib
         return $this;
     }
 
+    /**
+     * check if a collection contains a key or value  eg: `->beforeCreating()->collect(["Mark",23])->checkIfCollectionContains(["Mark"])->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #true`
+     *
+     * @param $key
+     * @param $value
+     * @return $this
+     */
     public function checkIfCollectionContains($key, $value=null)
     {
         if (!$this->execOrNot) {
