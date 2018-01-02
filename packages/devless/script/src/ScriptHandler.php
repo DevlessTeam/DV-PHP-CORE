@@ -25,8 +25,8 @@ class ScriptHandler
     public function run_script($Dvresource, $payload)
     {
         $service = new Service();
-        $rules = new Rules();
-        $rules->requestType($payload);
+        $__devless__rules = new Rules();
+        $__devless__rules->requestType($payload);
         $user_cred = Helper::get_authenticated_user_cred(false);
         $user_cred = (empty($user_cred)) ? ['id' => '', 'token' => ''] : $user_cred;
         $accessed_table = DevlessHelper::get_tablename_from_payload($payload);
@@ -67,48 +67,48 @@ EOT;
         $_____service_name = $payload['service_name'];
         $_____init_vars = $payload['script_init_vars'];
         
-        $exec = function () use ($code, $rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {
+        $exec = function () use ($code, $__devless__rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {
 
             //store script params temporally
-            $_____midRules = $rules;
+            $_____midRules = $__devless__rules;
             $_____midEvent = $EVENT;
 
             //get declared vars
             $declarationString = $_____init_vars;
             eval($declarationString);
             //restore script params
-            $rules = $_____midRules;
+            $__devless__rules = $_____midRules;
             $EVENT = $_____midEvent;
 
             extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
-            $rules->accessRights = $EVENT['access_rights'];
-            $rules->EVENT = $EVENT;
+            $__devless__rules->accessRights = $EVENT['access_rights'];
+            $__devless__rules->EVENT = $EVENT;
             
-            $rules->request_phase = ($EVENT['request_phase'] == 'after')?'after':'before';
-            if ($rules->request_phase == 'after') {
-                $rules->status_code = $EVENT['status_code'];
-                $rules->message = $EVENT['message'];
-                $rules->payload = $EVENT['results_payload'];
+            $__devless__rules->request_phase = ($EVENT['request_phase'] == 'after')?'after':'before';
+            if ($__devless__rules->request_phase == 'after') {
+                $__devless__rules->status_code = $EVENT['status_code'];
+                $__devless__rules->message = $EVENT['message'];
+                $__devless__rules->payload = $EVENT['results_payload'];
             }
             
             
             
             $imports = "use App\Helpers\Assert as assertIts;use App\Helpers\Assert as  assertIt;";
-            $headers = $imports.'$rules';
+            $headers = $imports.'$__devless__rules';
             $footer  = '';
             $finalCode = (strpos($code, 'use App\Helpers\Assert')!==false)? $code : $headers.$code.$footer;
         
             if ($EVENT['request_phase'] == 'after' && isset($payload['ex_params'])) {
                 extract($payload['ex_params'], EXTR_PREFIX_ALL, 'input');
             }
-        
-            eval($finalCode);
+            
+            {eval($finalCode);}
 
-            $EVENT['access_rights'] = $rules->accessRights;
-            $EVENT['status_code']  = $rules->status_code;
-            $EVENT['message']  =  $rules->message;
-            $EVENT['results_payload']  =  $rules->payload;
-            $EVENT['user_id'] = $rules->EVENT['user_id'];
+            $EVENT['access_rights'] = $__devless__rules->accessRights;
+            $EVENT['status_code']  = $__devless__rules->status_code;
+            $EVENT['message']  =  $__devless__rules->message;
+            $EVENT['results_payload']  =  $__devless__rules->payload;
+            $EVENT['user_id'] = $__devless__rules->EVENT['user_id'];
             ;
             
 
@@ -152,7 +152,7 @@ EOT;
             $results['payload'] = $payload;
             $results['resource'] = $Dvresource;
             
-            if ($rules->request_phase == 'endNow') {
+            if ($__devless__rules->request_phase == 'endNow') {
                 $results['resource'] = 'endNow';
                 $results['payload']['status_code'] = $EVENT['status_code'];
                 $results['payload']['message'] = $EVENT['message'];
