@@ -78,7 +78,7 @@ trait collectionLib
     }
 
      /**
-     *convert an array into a collection eg: `->beforeCreating()->fromTheCollectionOf(["name"=>"mike", "age"=>29])->getFirstElement()->storeAs($element)->stopAndOutput(1000, "got response", $element) #["mike"]`
+     *get the first element in a collection eg: `->beforeCreating()->fromTheCollectionOf(["name"=>"mike", "age"=>29])->getFirstElement()->storeAs($element)->stopAndOutput(1000, "got response", $element) #["mike"]`
      *
      * @param $collection
      *
@@ -146,7 +146,7 @@ trait collectionLib
     }
 
     /**
-     *match up and pair collections eg: `->beforeCreating()->collect(["name"=>"mike", "age"=>29])->appendCollectionToRelated($superArray=[["id"=>1,"name"=>"sam"],["id"=>2,"name"=>"josh"]], $subArray=[["id"=>2,"age"=>20],["id"=>1,"age"=>12]], $subArray="id",$subKey="id", $resultingKey="result" )->storeAs($element)->stopAndOutput(1000, "got response", $element) `
+     *match up and pair collections but store results in related. eg: `->beforeCreating()->collect(["name"=>"mike", "age"=>29])->appendCollectionToRelated($superArray=[["id"=>1,"name"=>"sam"],["id"=>2,"name"=>"josh"]], $subArray=[["id"=>2,"age"=>20],["id"=>1,"age"=>12]], $subArray="id",$subKey="id", $resultingKey="result" )->storeAs($element)->stopAndOutput(1000, "got response", $element) `
      *
      * @param $superArray
      * @param $subArray
