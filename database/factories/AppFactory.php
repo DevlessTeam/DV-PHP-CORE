@@ -6,7 +6,7 @@
  * Time: 10:46 PM
  */
 
-$factory->define(\App\App::class, function(Faker\Generator $faker) {
+$factory->define(\App\App::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'description' => $faker->paragraph,
