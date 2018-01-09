@@ -1,3 +1,0 @@
-[submodule "resources/views/service_views/notify"]
-	path = resources/views/service_views/notify
-	url = https://github.com/eddymens/notify
