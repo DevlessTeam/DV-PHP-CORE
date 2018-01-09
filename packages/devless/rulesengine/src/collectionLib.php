@@ -284,6 +284,21 @@ trait collectionLib
         return $this;
     }
 
+    public function dot($array, $prepend = '')
+    {
+        $results = [];
+
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $results = array_merge($results, static::dot($value, $prepend.$key.'.'));
+            } else {
+                $results[$prepend.$key] = $value;
+            }
+            $results[$key] = $value;
+        }
+
+        return $results;
+    }
     /**
      *apply a method to a collection eg: `->beforeCreating()->collect(["Joe", "Mike"])->apply("convertToUpperCase", $params = [])->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["JOE","MIKE"]`
      *
@@ -294,9 +309,23 @@ trait collectionLib
      */
     public function apply($method, $params = [])
     {
+        
         if (!$this->execOrNot) {
             return $this;
         }
+        $parseParams = function ($params, $counter) {
+            foreach ($params as $key => $value) {
+                if (gettype($value) == 'array' && $value[0] = "#ITR") {
+                        $data = $value[1];
+                        $value[2] = str_replace('#counter', $counter, $value[2]);
+                        $itrData = $this->dot($data)[$value[2]];
+                        $params[$key] = $itrData;
+                }
+            }
+            return $params;
+        };
+        
+
         $data = $this->results;
         $newOutput = [];
         if (is_scalar($data)) {
@@ -304,7 +333,7 @@ trait collectionLib
         }
         foreach ($data as $key => $value) {
             $this->results = $value;
-            $this->$method(... $params);
+            $this->$method(... $parseParams($params, $key));
             $newOutput[] = $this->results;
         }
         $this->results = $newOutput;

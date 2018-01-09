@@ -61,13 +61,13 @@ class ScriptHandler
         $actual_action = $EVENT['method'];
 
         //NB: position matters here
-        $code = <<<EOT
+        $___code = <<<EOT
 $payload[script];   
 EOT;
         $_____service_name = $payload['service_name'];
         $_____init_vars = $payload['script_init_vars'];
         
-        $exec = function () use ($code, $__devless__rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {
+        $exec = function () use ($___code, $__devless__rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {
 
             //store script params temporally
             $_____midRules = $__devless__rules;
@@ -92,17 +92,20 @@ EOT;
             }
             
             
-            
-            $imports = "use App\Helpers\Assert as assertIts;use App\Helpers\Assert as  assertIt;";
-            $headers = $imports.'$__devless__rules';
-            $footer  = '';
-            $finalCode = (strpos($code, 'use App\Helpers\Assert')!==false)? $code : $headers.$code.$footer;
+            $___imports = "use App\Helpers\Assert as assertIts;use App\Helpers\Assert as  assertIt;";
+            $___headers = $___imports.'$__devless__rules';
+            $___footer  = '';
+            $___finalCode = (strpos($___code, 'use App\Helpers\Assert')!==false)? $___code : $___headers.$___code.$___footer;
         
             if ($EVENT['request_phase'] == 'after' && isset($payload['ex_params'])) {
                 extract($payload['ex_params'], EXTR_PREFIX_ALL, 'input');
             }
+            $ITR = function ($data, $index) {
+                    return ["#ITR",$data, $index];
+            };
             
-            {eval($finalCode);}
+            
+            {eval($___finalCode);}
 
             $EVENT['access_rights'] = $__devless__rules->accessRights;
             $EVENT['status_code']  = $__devless__rules->status_code;
