@@ -6,7 +6,7 @@ trait mathLib
 {
 
     /**
-     * Perform mathematical operations eg: `->beforeQuerying()->calculate(3*5)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
+     *Perform mathematical operations eg: `->beforeQuerying()->calculate(3*5)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans) #15`
      *
      * @param mathmatical expression
      *
@@ -22,7 +22,7 @@ trait mathLib
         return $this;
     }
     /**
-     * find the sum of numbers. eg: `->beforeQuerying()->sumUp(3,4,5,6,7)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
+     *find the sum of numbers. eg: `->beforeQuerying()->sumUp(3,4,5,6,7)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans) #25`
      *
      * @param integer $num
      *
@@ -39,7 +39,7 @@ trait mathLib
     }
 
     /**
-     * subtract a bunch of numbers. eg: `->beforeQuerying()->subtract(3,4,5,6,7)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)` also `->beforeQuerying()->from(5)->subtract(3)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
+     * subtract a bunch of numbers. eg: `->beforeQuerying()->subtract(3,4,5,6,7)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans) #19` also `->beforeQuerying()->from(5)->subtract(3)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)#2`
      *
      * @return $this
      */
@@ -61,7 +61,7 @@ trait mathLib
     }
 
     /**
-     * find the product of numbers.eg: `->beforeQuerying()->multiply(3,4,5,6,7)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
+     *find the product of numbers.eg: `->beforeQuerying()->multiply(3,4,5,6,7)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)#2520`
      *
      * @return $this
      */
@@ -75,7 +75,7 @@ trait mathLib
     }
 
     /**
-     * divide a range of numbers.eg: `->beforeQuerying()->divide(6,2)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
+     * divide a range of numbers.eg: `->beforeQuerying()->divide(6,2)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans) #3`
      *
      * @return $this
      */
@@ -99,7 +99,7 @@ trait mathLib
     }
 
     /**
-     * This picks results from your earlier computation and divides it by a given number. eg: `->beforeQuerying()->sumUp(3,4,5,6,7)->divdeBy(6)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans)`
+     * This picks results from your earlier computation and divides it by a given number. eg: `->beforeQuerying()->sumUp(3,4,5,6,7)->divideBy(6)->storeAs($ans)->stopAndOutput(1001,'got answer successfully', $ans) #4.1666666666667`
      *
      * @param  $number
      * @return $this
@@ -115,7 +115,7 @@ trait mathLib
         return $this;
     }
     /**
-     * Find the square root of a number. eg:`->beforeQuerying()->findSquareRoot($number)->storeAs($input_root)`
+     *  Find the square root of a number. eg:`->beforeQuerying()->findSquareRootOf(4)->storeAs($root)->succeedWith($root) #2`
      *
      * @param integer $num
      *
@@ -132,7 +132,7 @@ trait mathLib
     }
 
     /**
-     * Get the squareRoot of the result of the preceeding computation eg: `->beforeQuerying()->divide(20, 40)->getSquareRoot()->storeAs($output)->succeedWith($output)`
+     * Get the squareRoot of the result of the preceeding computation eg: `->beforeQuerying()->divide(20, 40)->getSquareRoot()->storeAs($output)->succeedWith($output) #0.70710678118655`
      * return $this
      */
     public function getSquareRoot()
@@ -145,7 +145,7 @@ trait mathLib
         return $this;
     }
     /**
-     * round up a number.eg: `->beforeCreating()->roundUp($input_milage, 1)->storeAs($input_milage)`
+     *round up a number.eg: `->beforeQuerying()->roundUp(3.3445, 1)->storeAs($answer)->succeedWith($answer) #3.3`
      *
      * @param  integer $number
      * @param  integer $precision
@@ -162,7 +162,7 @@ trait mathLib
     }
 
     /**
-     * Find the percent of a number eg: `->beforeQuerying()->find(10)->percentOf(200)->storeAs($input_discount)`
+     * Find the percent of a number eg: `->beforeQuerying()->find(10)->percentOf(200)->storeAs($discount)->succeedWith($discount) #20`  
      * @param $number
      * @return $this
      */

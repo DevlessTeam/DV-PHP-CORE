@@ -30,7 +30,19 @@ class devless
         return 'Hello World!';
     }
     /**
-     * method for handling user signup
+     * Signup new users  `->beforeCreating()->run('devless','signUp', [$email = "team@devless.io",$password = "pass",$username = null,$phone_number = "020198475",$first_name = "John",$last_name = "Doe",$remember_token = null,$role = 5,$extraParams = null])->storeAs($output)->stopAndOutput(1000, "Created Profile Successfully",$output)`
+     *
+     * @param $email
+     * @param $password
+     * @param $username
+     * @param $phone_number
+     * @param $first_name
+     * @param $last_name
+     * @param $remember_token
+     * @param $role
+     * @param $extraParams []
+     *
+     * @return array
      * @ACL public
      */
     public function signUp(
@@ -60,7 +72,14 @@ class devless
         return (array)$output + $extProfile ;
     }
     /**
-     * method for handling user login
+     * login users  `->beforeCreating()->run('devless','login', [$username = null, $email = "team@devless.io", $phone_number = null, $password = "pass"])->storeAs($output)->stopAndOutput(1000, "login user Successfully")`
+     *
+     * @param $username
+     * @param $email
+     * @param $phone_number
+     * @param $password
+     *
+     * @return array
      * @ACL public
      */
     public function login($username = null, $email = null, $phone_number = null, $password = null)
@@ -77,6 +96,7 @@ class devless
     /**
      * get user profile
      * @ACL public
+     * @return array
     */
     public function profile()
     {
@@ -158,6 +178,7 @@ class devless
         return $payload;
     }
     /**
+     * add data to a service `->import('devless')->beforeCreating()->addData('service_name','table_name',["name"=>"mike"])->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $serviceName
      * @param $table
      * @param $fields
@@ -172,7 +193,7 @@ class devless
         return $output;
     }
     /**
-     * Get data from a table belonging to a service
+     * Get data from a service table `->import('devless')->beforeCreating()->queryData('service_name','table_name',["where"=>["id,1"]])->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $serviceName
      * @param $table
      * @return mixed
@@ -204,7 +225,7 @@ class devless
         return $output;
     }
     /**
-     * Get data from a table belonging to a service
+     * Get data from a service table `->import('devless')->beforeCreating()->getData('service_name','table_name',["where"=>["id,1"]])->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $serviceName
      * @param $table
      * @return mixed
@@ -216,6 +237,7 @@ class devless
     }
 
     /**
+     * update data in a service table `->import('devless')->beforeCreating()->updateData('service_name','table_name', "id", 1, ["name"=>"mike"])->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $serviceName
      * @param $table
      * @param $id
@@ -229,6 +251,7 @@ class devless
         return $output;
     }
     /**
+     * delete record from a service table `->import('devless')->beforeCreating()->deleteData('test','sample', 1)->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $serviceName
      * @param $table
      * @param $id
@@ -242,9 +265,10 @@ class devless
         return $output;
     }
     /**
+     * get user profile by id `->import('devless')->beforeCreating()->getUserProfile(2)->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $serviceName
      * @param $table
-     * @param $id
+     * @param $input int
      * @return array
      * @ACL private
      */
@@ -266,7 +290,7 @@ class devless
         return [];
     }
     /**
-     * Get all users within the system
+     * Get all users `->import('devless')->beforeCreating()->getAllUsers(2)->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @return array
      * @ACL private
      */
@@ -286,7 +310,7 @@ class devless
         )->get();
     }
     /**
-     * Delete a users profile
+     * Delete a users profile `->import('devless')->beforeCreating()->deleteUserProfile(9)->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @return bool
      * @ACL private
      */
@@ -295,7 +319,7 @@ class devless
         return (\DB::table('users')->where('id', $id)->delete())?true:false;
     }
     /**
-     * Update a users profile
+     * Update a users profile `->import('devless')->beforeCreating()->updateUserProfile($id=1,$email = '',$password = '',$username = 'eddymens',$phone_number = '',$first_name = '',$last_name = '')->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $email
      * @param $password
      * @param $username

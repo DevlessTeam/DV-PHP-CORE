@@ -100,11 +100,8 @@ class ServiceController extends Controller
         if ($service = Service::findOrFail($id)) {
             if ($request->input('call_type') == 'solo') {
                 $script = $request->input('script');
-                $service_name = $service->name;
-                $db = new DataStore();
-                $scriptHandler = new script();
                 $service->raw_script = $script;
-                $compiled_script  = $scriptHandler->compile_script($script);
+                $compiled_script  = (new script())->compile_script($script);
                 if (!$compiled_script['successful']) {
                     return Response::respond(1001, $compiled_script['error_message']);
                 }

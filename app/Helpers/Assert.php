@@ -14,11 +14,11 @@ class Assert extends Helper
 {
    
     /**
-     * check if $value is an integer. eg `->beforeCreating()->whenever(assertIts::anInteger(3))->then->stopAndOutput(1001,'message', 'its an integer')`
+     * check if $value is an integer. eg `->beforeCreating()->whenever(assertIts::anInteger(3))->then->stopAndOutput(1001,'message', 'its an integer') #its an integer`
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function anInteger($value)
     {
@@ -26,11 +26,11 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is a string. eg: `->beforeCreating()->whenever(assertIts::aString("Hello"))->then->stopAndOutput(1001,'message', 'its a string')`
+     * check if $value is a string. eg: `->beforeCreating()->whenever(assertIts::aString("Hello"))->then->stopAndOutput(1001,'message', 'its a string') #its a string`
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function aString($value)
     {
@@ -38,11 +38,11 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is a  boolean eg: `->beforeCreating()->whenever(assertIts::aBoolean(true))->then->stopAndOutput(1001,'message', 'its a boolean')`
+     * check if $value is a  boolean eg: `->beforeCreating()->whenever(assertIts::aBoolean(1 == 1))->then->stopAndOutput(1001,'message', 'its a boolean') #its a boolean`
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function aBoolean($value)
     {
@@ -50,11 +50,11 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is a float eg: `->beforeCreating()->whenever(assertIts::aFloat(3.034))->then->stopAndOutput(1001,'message', 'its a float')`
+     * check if $value is a float eg: `->beforeCreating()->whenever(assertIts::aFloat(3.034))->then->stopAndOutput(1001,'message', 'its a float') #its a float`
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function aFloat($value)
     {
@@ -62,13 +62,13 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is within th range $min $max eg: `->beforeCreating()->whenever(assertIts::withinRange($input_value, 1,4))->then->stopAndOutput(1001,'message', 'its within range')`
+     *  check if $value is within th range $min $max eg: `->beforeCreating()->whenever(assertIts::withinRange($value=2, $min=1, $max=4))->then->stopAndOutput(1001,'message', 'its within range') #its within range`
      *
      * @param $value
      * @param $min
      * @param $max
      *
-     * @return $this
+     * @return bool
      */
     public static function withinRange($value, $min, $max)
     {
@@ -76,11 +76,11 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is upppercase eg: `->beforeCreating()->whenever(assertIts::upperCase("HELLO"))->then->stopAndOutput(1001,'message', 'its upper case')`
+     *  check if $value is upppercase eg: `->beforeCreating()->whenever(assertIts::upperCase("HELLO"))->then->stopAndOutput(1001,'message', 'its upper case') #its upper case`
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function upperCase($value)
     {
@@ -93,11 +93,11 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is lowercase. eg: `->beforeCreating()->whenever(assertIts::lowerCase("hello"))->then->stopAndOutput(1001,'message', 'its lower case ')`
+     * check if $value is lowercase. eg: `->beforeCreating()->whenever(assertIts::lowerCase("hello"))->then->stopAndOutput(1001,'message', 'its lower case ') #its lower case`
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function lowerCase($value)
     {
@@ -110,11 +110,11 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is alphanumeric. eg: `->beforeCreating()->whenever(assertIts::alphanumeric("E23D"))->then->stopAndOutput(1001,'message', 'its alphanumeric')`
+     * check if $value is alphanumeric. eg: `->beforeCreating()->whenever(assertIts::alphanumeric("E23D"))->then->stopAndOutput(1001,'message', 'its alphanumeric') #its alphanumeric`
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function alphanumeric($value)
     {
@@ -127,11 +127,11 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value are alphabets eg: `->beforeCreating()->whenever(assertIts::alphanumeric("abcd"))->then->stopAndOutput(1001,'message', 'its alphabets')`
+     * check if $value are alphabets eg: `->beforeCreating()->whenever(assertIts::alphabets("abcd"))->then->stopAndOutput(1001,'message', 'its alphabets') #its alphabets`
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function alphabets($value)
     {
@@ -144,12 +144,12 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value startswith $prefix eg: `->beforeCreating()->whenever(assertIts::startsWith("E23D", "E"))->then->stopAndOutput(1001,'message', 'its starts with E')`
+     * check if $value startswith $prefix eg: `->beforeCreating()->whenever(assertIts::startsWith("E23D", "E"))->then->stopAndOutput(1001,'message', 'it starts with E') #it starts with E`
      *
      * @param $value
      * @param $prefix
      *
-     * @return $this
+     * @return bool
      */
     public static function startsWith($value, $prefix)
     {
@@ -157,12 +157,12 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value ends with $suffix eg: `->beforeCreating()->whenever(assertIts::endsWith("E23D", "D"))->then->stopAndOutput(1001,'message', 'its ends with D')`
+     *check if $value ends with $suffix eg: `->beforeCreating()->whenever(assertIts::endsWith("E23D", "D"))->then->stopAndOutput(1001,'message', 'it ends with D') #it ends with D`
      *
      * @param $value
      * @param $suffix
      *
-     * @return $this
+     * @return bool
      */
     public static function endsWith($value, $suffix)
     {
@@ -170,12 +170,12 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is matched regex eg: `->beforeCreating()->whenever(assertIt::matchesRegex("edmond@devless.io", "<email-regex-goes-here"))->then->stopAndOutput(1001,'message', 'its matches the email regex')`
+     * check if $value is matched regex eg: `->beforeCreating()->whenever(assertIt::matchesRegex("edmond@devless.io", "<email-regex-goes-here>"))->then->stopAndOutput(1001,'message', 'it matches the email regex')`
      *
      * @param $value
      * @param $pattern
      *
-     * @return $this
+     * @return bool
      */
     public static function matchesRegex($value, $pattern)
     {
@@ -183,11 +183,11 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is an email eg: `->beforeCreating()->whenever(assertIts::email("edmond@devless.io"))->then->stopAndOutput(1001,'message', 'its an email')`
+     * check if $value is an email eg: `->beforeCreating()->whenever(assertIts::anEmail("edmond@devless.io"))->then->stopAndOutput(1001,'message', 'its an email') #its an email`
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function anEmail($value)
     {
@@ -196,11 +196,11 @@ class Assert extends Helper
 
 
     /**
-     * check if $value is not an empty array or empty string eg: `->beforeCreating()->whenever(assertIt::notEmpty("some text"))->then->stopAndOutput(1001,'message', 'its not empty')`
+     *  check if $value is not an empty array or empty string eg: `->beforeCreating()->whenever(assertIt::notEmpty("some text"))->then->stopAndOutput(1001,'message', 'its not empty') #its not empty`
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function notEmpty($value)
     {
@@ -214,12 +214,29 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is contains $subString eg: `->beforeCreating()->whenever(assertIt::contains("edmond@devless.io", "edmond"))->then->stopAndOutput(1001,'message', 'email containes edmond')`
+     *check if $value is  an empty array or empty string eg: `->beforeCreating()->whenever(assertIt::isEmpty(""))->then->stopAndOutput(1001,'message', 'its  empty') #its  empty`
+     *
+     * @param $value
+     *
+     * @return bool
+     */
+    public static function isEmpty($value)
+    {
+        if (is_array($value)) {
+            return (sizeof($value) == 0)?:false;
+        }
+        if (is_string($value)) {
+            return (strlen($value) == 0)?:false;
+        }
+        return false;
+    }
+    /**
+     * check if $value is contains $subString eg: `->beforeCreating()->whenever(assertIt::contains("edmond@devless.io", "edmond"))->then->stopAndOutput(1001,'message', 'email containes edmond') #email containes edmond`
      *
      * @param $value
      * @param $subString
      *
-     * @return $this
+     * @return bool
      */
     public static function contains($value, $subString)
     {
@@ -227,12 +244,12 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value equals $value1 eg: `->beforeCreating()->whenever(assertIts::equal("a", "a"))->then->stopAndOutput(1001,'message', 'a is equal to a :)')`
+     * check if $value equals $value1 eg: `->beforeCreating()->whenever(assertIts::equal("a", "a"))->then->stopAndOutput(1001,'message', 'a is equal to a :)') #a is equal to a :)`
      *
      * @param $value
      * @param $value1
      *
-     * @return $this
+     * @return bool
      */
     public static function equal($value, $value1)
     {
@@ -240,23 +257,23 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is not equal to $value1 eg: `->beforeCreating()->whenever(assertIts::notEqual("a", "b"))->then->stopAndOutput(1001,'message', 'a is not equal to b ')`
+     *check if $value is not equal to $value1 eg: `->beforeCreating()->whenever(assertIts::notEqual("a", "b"))->then->stopAndOutput(1001,'message', 'a is not equal to b ') #a is not equal to b `
      *
      * @param $value
      * @param $value1
      *
-     * @return $this
+     * @return bool
      */
     public static function notEqual($value, $value1)
     {
-        return ($value =! $value1)?:false;
+        return ($value != $value1)?:false;
     }
     /**
-     * check if $value is greater than $value1 eg: `->beforeCreating()->whenever(assertIt::greaterThan(45, 12))->then->stopAndOutput(1001,'message', '45 is greater than 12')`
+     * check if $value is greater than $value1 eg: `->beforeCreating()->whenever(assertIt::greaterThan(45, 12))->then->stopAndOutput(1001,'message', '45 is greater than 12') #45 is greater than 12`
      *
      * @param $value
      *
-     * @return $this
+     * @return bool
      */
     public static function greaterThan($value, $value1)
     {
@@ -264,12 +281,12 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is less than $value1 eg: `->beforeCreating()->whenever(assertIt::lessThan(12, 45))->then->stopAndOutput(1001,'message', '12 is less than 45')`
+     * check if $value is less than $value1 eg: `->beforeCreating()->whenever(assertIt::lessThan(12, 45))->then->stopAndOutput(1001,'message', '12 is less than 45') #12 is less than 45`
      *
      * @param $value
      * @param $value1
      *
-     * @return $this
+     * @return bool
      */
     public static function lessThan($value, $value1)
     {
@@ -277,12 +294,12 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is greater than or equal to $value1 eg: `->beforeCreating()->whenever(assertIt::greaterThanOrEqualTo(45, 45))->then->stopAndOutput(1001,'message', '45 is greater than or equal to 45')`
+     * check if $value is greater than or equal to $value1 eg: `->beforeCreating()->whenever(assertIt::greaterThanOrEqualTo(45, 45))->then->stopAndOutput(1001,'message', '45 is greater than or equal to 45') #45 is greater than or equal to 45`
      *
      * @param $value
      * @param $value1
      *
-     * @return $this
+     * @return bool
      */
     public static function greaterThanOrEqualTo($value, $value1)
     {
@@ -290,12 +307,12 @@ class Assert extends Helper
     }
 
     /**
-     * check if $value is less than or equal to $value1  `->beforeCreating()->whenever(assertIt::lessThanOrEqualTo(45, 45))->then->stopAndOutput(1001,'message', '45 is less than or equal to 45')`
+     * check if $value is less than or equal to $value1  `->beforeCreating()->whenever(assertIt::lessThanOrEqualTo($v=45, $v1=45))->then->stopAndOutput(1001,'message', "$v is less than or equal to $v1") #45 is less than or equal to 45`
      *
      * @param $value
      * @param $value1
      *
-     * @return $this
+     * @return bool
      */
     public static function lessThanOrEqualTo($value, $value1)
     {
@@ -314,7 +331,7 @@ class Assert extends Helper
     }
 
     
-    private function __construct()
+    public function __construct()
     {
     }
 }
