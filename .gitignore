@@ -5,6 +5,7 @@ database/devless-rec.sqlite3
 /storage
 /node_modules
 Homestead.yaml
+/public/storage
 Homestead.json
 snippet.php
 .env
