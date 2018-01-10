@@ -5,32 +5,32 @@ use App\Helpers\Assert;
 class assertTest extends TestCase
 {
     private $methods = [
-        array('name'=>'aString', 'params'=>array('string'), 'state'=>true),
-        array('name'=>'aString', 'params'=>array(12), 'state'=>false),
-        array('name'=>'aString', 'params'=>array(''), 'state'=>true),
+        ['name'=>'aString', 'params'=>['string'], 'state'=>true],
+        ['name'=>'aString', 'params'=>[12], 'state'=>false],
+        ['name'=>'aString', 'params'=>[''], 'state'=>true],
 
-        array('name'=>'anInteger', 'params'=>array('string'), 'state'=>false),
-        array('name'=>'anInteger', 'params'=>array(1), 'state'=>true),
-        array('name'=>'anInteger', 'params'=>array(''), 'state'=>false),
-        array('name'=>'anInteger', 'params'=>array(1.2), 'state'=>false),
+        ['name'=>'anInteger', 'params'=>['string'], 'state'=>false],
+        ['name'=>'anInteger', 'params'=>[1], 'state'=>true],
+        ['name'=>'anInteger', 'params'=>[''], 'state'=>false],
+        ['name'=>'anInteger', 'params'=>[1.2], 'state'=>false],
 
-        array('name'=>'aFloat', 'params'=>array(1), 'state'=>false),
-        array('name'=>'aFloat', 'params'=>array(1.2), 'state'=>true),
-        array('name'=>'aFloat', 'params'=>array(''), 'state'=>false),
-        array('name'=>'aFloat', 'params'=>array('string'), 'state'=>false),
+        ['name'=>'aFloat', 'params'=>[1], 'state'=>false],
+        ['name'=>'aFloat', 'params'=>[1.2], 'state'=>true],
+        ['name'=>'aFloat', 'params'=>[''], 'state'=>false],
+        ['name'=>'aFloat', 'params'=>['string'], 'state'=>false],
 
 
-        array('name'=>'aBoolean', 'params'=>array(true), 'state'=>true),
-        array('name'=>'aBoolean', 'params'=>array(false), 'state'=>true),
-        array('name'=>'aBoolean', 'params'=>array(''), 'state'=>false),
-        array('name'=>'aBoolean', 'params'=>array('string'), 'state'=>false),
-        array('name'=>'aBoolean', 'params'=>array(0), 'state'=>false),
-        array('name'=>'aBoolean', 'params'=>array(1), 'state'=>false),
-        array('name'=>'aBoolean', 'params'=>array('true'), 'state'=>false),
-        array('name'=>'aBoolean', 'params'=>array('false'), 'state'=>false),
+        ['name'=>'aBoolean', 'params'=>[true], 'state'=>true],
+        ['name'=>'aBoolean', 'params'=>[false], 'state'=>true],
+        ['name'=>'aBoolean', 'params'=>[''], 'state'=>false],
+        ['name'=>'aBoolean', 'params'=>['string'], 'state'=>false],
+        ['name'=>'aBoolean', 'params'=>[0], 'state'=>false],
+        ['name'=>'aBoolean', 'params'=>[1], 'state'=>false],
+        ['name'=>'aBoolean', 'params'=>['true'], 'state'=>false],
+        ['name'=>'aBoolean', 'params'=>['false'], 'state'=>false],
         
-        array('name'=>'notEmpty', 'params'=>array([]), 'state'=>false),
-        array('name'=>'notEmpty', 'params'=>array([1,2]), 'state'=>true),
+        ['name'=>'notEmpty', 'params'=>[[]], 'state'=>false],
+        ['name'=>'notEmpty', 'params'=>[[1,2]], 'state'=>true],
 
        
         

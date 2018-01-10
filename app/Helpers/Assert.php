@@ -324,7 +324,7 @@ class Assert extends Helper
     {
         if ($name == 'empty') {
             $method = '_empty';
-            return call_user_func_array(array('static', $method), $args);
+            return call_user_func_array(['static', $method], $args);
         }
 
         throw new BadMethodCallException('No such method: '.$name);
