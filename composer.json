@@ -53,8 +53,7 @@
         ],
         "post-install-cmd": [
             "php -r \"copy('.env.example', '.env');\"",
-            "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "php artisan optimize"
+            "Illuminate\\Foundation\\ComposerScripts::postInstall"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate"
