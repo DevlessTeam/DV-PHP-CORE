@@ -12,7 +12,7 @@ class DevlessDump extends Migration
      */
     public function up()
     {
-       Schema::create('devless_dump', function ($table) {
+        Schema::create('devless_dump', function ($table) {
             $table->increments('id');
             $table->string('key')->unique();
             $table->text('value');
