@@ -46,7 +46,7 @@ class assertTest extends TestCase
     {
 
         foreach ($this->methods as $method) {
-            $state = forward_static_call_array(['App\Helpers\Assert', $method['name']], $method['params']);
+            $state = forward_static_call_array([\App\Helpers\Assert::class, $method['name']], $method['params']);
 
             $this->assertEquals($method['state'], $state);
         }
