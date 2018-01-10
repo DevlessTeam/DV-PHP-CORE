@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
              'datetime',
                 function ($expression) {
                     return "<?php echo with{$expression}->format('m/d/Y H:i'); ?>";
-             }
+                }
          );
     }
 

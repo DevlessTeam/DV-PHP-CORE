@@ -299,9 +299,9 @@ trait directoryHelper
 
         $archive = $zippy->create(
             $service_folder_path.'.zip',
-            array(
+            [
             $folder_name => $service_folder_path,
-            ),
+            ],
             true
         );
 

@@ -1,7 +1,10 @@
 {
     "name": "devless/devless",
     "description": "The Devless Framework.",
-    "keywords": ["framework", "devless"],
+    "keywords": [
+        "framework",
+        "devless"
+    ],
     "license": "Apache",
     "type": "project",
     "require": {
@@ -24,7 +27,6 @@
         "classmap": [
             "database",
             "app/Helpers/view.php"
-
         ],
         "psr-4": {
             "App\\": "app/",
@@ -32,7 +34,6 @@
             "Devless\\Script\\": "packages/devless/script/src",
             "Devless\\RulesEngine\\": "packages/devless/rulesengine/src",
             "Devless\\SDK\\": "devless/php-sdk/src"
-
         }
     },
     "autoload-dev": {

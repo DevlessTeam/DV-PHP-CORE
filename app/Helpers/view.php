@@ -40,7 +40,7 @@ function DvAssetPath($payload, $partialAssetPath)
  */
 function DvAdminOnly($message = "Sorry you don't have access to this page")
 {
-    $helper = app('App\Helpers\Helper');
+    $helper = app(\App\Helpers\Helper::class);
     $is_admin = $helper->is_admin_login();
 
     ($is_admin) ? true : $helper->interrupt(1001, $message);

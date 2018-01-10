@@ -9,6 +9,12 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      *
      * @var string
      */
+    protected $baseUrl = 'http://localhost';
+    /**
+     * The base URL to use while testing the application.
+     *
+     * @var string
+     */
     public $baseUrl = 'http://localhost:8000 ';
     public $serviceName = 'testservice';
     public $serviceTable = 'serviceTable';
