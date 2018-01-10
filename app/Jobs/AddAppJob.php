@@ -3,9 +3,8 @@
 namespace App\Jobs;
 
 use App\App;
-use Illuminate\Contracts\Bus\SelfHandling;
 
-class AddAppJob extends Job implements SelfHandling
+class AddAppJob extends Job
 {
     /**
      * Create a new job instance.

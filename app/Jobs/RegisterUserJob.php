@@ -7,10 +7,9 @@ use Illuminate\Http\Request;
 use App\User;
 use App\App;
 use App\Jobs\AddAppJob;
-use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
-class RegisterUserJob extends Job implements SelfHandling
+class RegisterUserJob extends Job
 {
     use DispatchesJobs;
 
