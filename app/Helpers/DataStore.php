@@ -302,7 +302,7 @@ class DataStore extends Helper
     public static function setDump($key, $value, $updateIfSet = false)
     {
         try {
-            \DB::table('devless_dump')->insert(['key' => $key, 'value' => $value]);    
+            return \DB::table('devless_dump')->insert(['key' => $key, 'value' => $value]);    
         } catch(\Exception $exception) {
             return ($updateIfSet) ? self::updateDump($key, $value) : null;
         }
