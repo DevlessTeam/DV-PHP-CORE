@@ -96,7 +96,7 @@ trait collectionLib
     }
 
     /**
-     *Match up and pair collections eg: `->beforeCreating()->collect(["name"=>"mike", "age"=>29])->appendCollectionTo($superArray=[["id"=>1,"name"=>"sam"],["id"=>2,"name"=>"josh"]], $subArray=[["id"=>2,"age"=>20],["id"=>1,"age"=>12]], $subArray="id",$subKey="id", $resultingKey="result" )->storeAs($element)->stopAndOutput(1000, "got response", $element) `
+     *Match up and pair collections eg: `->beforeCreating()->collect(["name"=>"mike", "age"=>29])->appendCollectionTo($superArray=[["id"=>1,"name"=>"sam"],["id"=>2,"name"=>"josh"]], $subArray=[["id"=>2,"age"=>20],["id"=>1,"age"=>12]], $superKey="id",$subKey="id", $resultingKey="result" )->storeAs($element)->stopAndOutput(1000, "got response", $element) `
      *
      * @param $superArray
      * @param $subArray
@@ -265,7 +265,7 @@ trait collectionLib
     }
 
     /**
-     *get a new collection of only a particular key value pair eg: `->beforeCreating()->collect([["item"=>"soap", "quantity"=>5],["item"=>"milk", "quantity"=>3],["item"=>"book", "quantity"=>5]])->fetchOnly("quantity", 5)->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #[5,3,5]`
+     *get a new collection of only a particular key value pair eg: `->beforeCreating()->collect([["item"=>"soap", "quantity"=>5],["item"=>"milk", "quantity"=>3],["item"=>"book", "quantity"=>5]])->fetchOnly("quantity")->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #[5,3,5]`
      *
      * @param $key
      * @param $value
@@ -279,7 +279,7 @@ trait collectionLib
             return $this;
         }
         $collection = $this->useArgsOrPrevOutput($collection);
-        $this->results = array_column($collection, $keys);
+        $this->results = array_column((array)$collection, $keys);
         $this->cleanOutput();
         return $this;
     }

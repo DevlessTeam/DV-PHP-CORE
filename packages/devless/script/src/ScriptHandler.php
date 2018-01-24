@@ -33,6 +33,7 @@ class ScriptHandler
         //available internal params
 
         $EVENT = [
+            'service_name' => $payload['service_name'],
             'method' => $payload['method'],
             'params' => [],
             'script' => $payload['script'],
