@@ -56,6 +56,8 @@ class ScriptHandler
             $EVENT['params'] = $payload['params'][0]['params'][0]['data'][0];
         } elseif (isset($payload['params'][0])) {
             $EVENT['params'] = $payload['params'][0];
+        } elseif ($payload['params']) {
+            $EVENT['params'] = $payload['params'];
         }
 
         $devlessHelper = new DevlessHelper();
@@ -142,6 +144,9 @@ EOT;
             $payload['ex_params'] = $params['ex_params'];
         } elseif (isset($payload['params'][0]['field'])) {
             $payload['params'][0]['field'][0] = $params['params'];
+            $payload['ex_params'] = $params['ex_params'];
+        } elseif ($payload['params']) {
+            $payload['params'] = $EVENT['params'];
             $payload['ex_params'] = $params['ex_params'];
         }
     
