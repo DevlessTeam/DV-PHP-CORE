@@ -162,7 +162,7 @@ trait mathLib
     }
 
     /**
-     * Find the percent of a number eg: `->beforeQuerying()->find(10)->percentOf(200)->storeAs($discount)->succeedWith($discount) #20`  
+     * Find the percent of a number eg: `->beforeQuerying()->find(10)->percentOf(200)->storeAs($discount)->succeedWith($discount) #20`
      * @param $number
      * @return $this
      */
