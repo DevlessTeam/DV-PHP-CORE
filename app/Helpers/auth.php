@@ -63,7 +63,7 @@ trait auth
         if (self::is_admin_login() && $force_auth == true) {
             $admin = User::where('role', 1)->first();
             $user_cred['id'] = $admin->id;
-            $user_cred['token'] = 'non for admin';
+            $user_cred['token'] = null;
         } elseif ($user_token != null && $user_token != 'null'
             && ($force_auth == true || $force_auth == false)
         ) {

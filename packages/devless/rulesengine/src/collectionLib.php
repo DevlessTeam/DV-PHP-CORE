@@ -256,7 +256,7 @@ trait collectionLib
         }
         $newCollection = [];
         foreach ($this->useArgsOrPrevOutput($collection) as $index => $subCollection) {
-            if(isset($subCollection[$key]) && $subCollection[$key] != $value) {
+            if (isset($subCollection[$key]) && $subCollection[$key] != $value) {
                 $newCollection[] = $subCollection;
             }
         }
@@ -532,7 +532,7 @@ trait collectionLib
      * expand and flatten a collection eg: `->beforeCreating()->expandCollection(["name"=>["Mark", "zowy"], "age"=>45])->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #[["name"=>"Mark","age"=>45],["name"=>"zowy","age"=>45]]`
      *
      * @param $collection
-     
+
      *
      * @return $this
      */
@@ -609,10 +609,10 @@ trait collectionLib
      */
     public function useCollectionAsKeys($collection)
     {
-         if (!$this->execOrNot) {
+        if (!$this->execOrNot) {
             return $this;
         }
-        $this->results = collect(array_combine($collection,$this->results));
+        $this->results = collect(array_combine($collection, $this->results));
         return $this;
     }
 
@@ -623,7 +623,7 @@ trait collectionLib
      * @param $value
      * @return $this
      */
-    public function checkIfCollectionContains($key, $value=null)
+    public function checkIfCollectionContains($key, $value = null)
     {
         if (!$this->execOrNot) {
             return $this;

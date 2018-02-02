@@ -248,7 +248,7 @@ trait actions
     }
 
     /**
-     * The with keyword holds values that may be used by a method. Its another way of passing in values to a method 
+     * The with keyword holds values that may be used by a method. Its another way of passing in values to a method
      * eg:with($names)->removeElementFromCollection("name")
      * @param $methodName
      * @return $this
@@ -339,7 +339,6 @@ trait actions
         }
         $this->assign($input);
         return $this;
-
     }
 
     /**
