@@ -116,10 +116,17 @@ class collectionLib extends TestCase
         $this->assertEquals(["Adam","Zina"], $this->rules->results);
     }
 
-    public function testOffsetCollectionBy() 
+    public function testOffsetCollectionBy()
     {
-       $this->rules->collect(["Adam", "Ben", "Zina"])->offsetCollectionBy(1);
+$this->rules->collect(["Adam", "Ben", "Zina"])->offsetCollectionBy(1);
        $this->assertEquals(["Ben","Zina"], $this->rules->results);
+
+    }
+
+    public function testReduceNumberOfElementsTo()
+    {
+       $this->rules->collect(["Adam", "Ben", "Zina"])->reduceNumberOfElementsTo(1);
+       $this->assertEquals(["Adam"], $this->rules->results);
 
     }
 }
