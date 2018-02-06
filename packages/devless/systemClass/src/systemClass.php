@@ -348,6 +348,7 @@ class devless
                 return $value !== '';
             }
         );
+        $profileUpdate['password'] = Helper::password_hash($profileUpdate['password']);
         unset($profileUpdate['id']);
         return (DB::table('users')->where('id', $id)->update($profileUpdate))?true:false;
     }

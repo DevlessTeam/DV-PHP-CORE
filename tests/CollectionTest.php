@@ -96,4 +96,37 @@ class collectionLib extends TestCase
         $this->rules->collect(["Joe", "Mike"])->apply("convertToUpperCase", $params = []);
         $this->assertEquals(["JOE","MIKE"], $this->rules->results);
     }
+
+    public function testApplyOnElement()
+    {
+        $this->rules->collect([["name"=>"Joe", "age"=>12],["name"=>"Mark", "age"=>23]])->applyOnElement("convertToUpperCase", "name" );
+
+        $this->assertEquals([["name"=>"JOE", "age"=>12],["name"=>"MARK", "age"=>23]], $this->rules->results);
+    }
+
+    public function testReverseTheCollection()
+    {
+        $this->rules->collect(["Joe", "Mike"])->reverseTheCollection();
+        $this->assertEquals(["Mike","Joe"], $this->rules->results);
+    }
+
+    public function testSortCollectionBy()
+    {
+        $this->rules->collect(["Zina", "Adam"])->sortCollectionBy("name");
+        $this->assertEquals(["Adam","Zina"], $this->rules->results);
+    }
+
+    public function testOffsetCollectionBy()
+    {
+$this->rules->collect(["Adam", "Ben", "Zina"])->offsetCollectionBy(1);
+       $this->assertEquals(["Ben","Zina"], $this->rules->results);
+
+    }
+
+    public function testReduceNumberOfElementsTo()
+    {
+       $this->rules->collect(["Adam", "Ben", "Zina"])->reduceNumberOfElementsTo(1);
+       $this->assertEquals(["Adam"], $this->rules->results);
+
+    }
 }
