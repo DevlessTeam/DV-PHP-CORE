@@ -129,4 +129,40 @@ $this->rules->collect(["Adam", "Ben", "Zina"])->offsetCollectionBy(1);
        $this->assertEquals(["Adam"], $this->rules->results);
 
     }
+
+    public function testPaginationCollection()
+    {
+       $this->rules->collect(["Adam", "Ben", "Zina"])->paginateCollection(1, 1);
+       $this->assertEquals(["Ben"], $this->rules->results);
+    }
+
+    public function testFindCollectionDiffers()
+    {
+       $this->rules->findCollectionDiffs(["name"=>"Mark", "age"=>45], ["name"=>"Mark"]);
+       $this->assertEquals(collect(["age" => 45]), $this->rules->results);
+    }
+
+    public function testExpandCollection()
+    {
+       $this->rules->expandCollection(["name"=>["Mark", "zowy"], "age"=>45]);
+       $this->assertEquals([["name"=>"Mark","age"=>45],["name"=>"zowy","age"=>45]], $this->rules->results);
+    }
+
+    public function testAddElementToCollection()
+    {
+       $this->rules->collect(["name"=>"mike"])->addElementToCollection(23,"age");
+       $this->assertEquals(collect(["name"=>"mike","age"=>23])->all(), $this->rules->results->all());
+    }
+
+    public function testRemoveElementFromCollection()
+    {
+       $this->rules->collect(["age"=>23,"name"=>"mike"])->removeELementFromCollection("age");
+       $this->assertEquals(["name"=>"mike"], $this->rules->results);
+    }
+
+    public function testUseCollectionAsKeys()
+    {
+       $this->rules->collect(["Mark",23])->useCollectionAsKeys(["name", "age"]);
+       $this->assertEquals(collect(["name"=>"Mark","age"=>23])->all(), $this->rules->results->all());
+    }
 }
