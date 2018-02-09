@@ -297,7 +297,7 @@ class devless
     public function getAllUsers()
     {
         if (Schema::hasTable('devless_user_profile')) {
-             DB::table('users')->select(
+             return DB::table('users')->select(
                  [
                  "users.id", "username", "email", "first_name", "last_name", "phone_number", "status"
                  ]

@@ -510,7 +510,7 @@ trait collectionLib
     }
 
     /**
-     * find the difference between two collections eg: `->beforeCreating()->findCollectionDiffs(["name"=>"Mark", "age"=>45], ["name"=>"Mark"])->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #  ["age": 45]`
+     * find the difference between two collections eg: `->beforeCreating()->findCollectionDiffs(["name"=>"Mark", "age"=>45], ["name"=>"Mark"])->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #  ["age"=> 45]`
      *
      * @param $collectionOne
      * @param $collectionTwo
@@ -563,11 +563,12 @@ trait collectionLib
             }
         }
         $this->results = $output;
+        $this->cleanOutput();
         return $this;
     }
 
      /**
-     * add an element to a collection eg: `->beforeCreating()->collect(["name"=>"mike"])->addElementToCollection(23,"age")->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["name"=>"mike","age"=>23] #["age"=>23,"name"=>"mike"]`
+     * add an element to a collection eg: `->beforeCreating()->collect(["name"=>"mike"])->addElementToCollection(23,"age")->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["name"=>"mike","age"=>23]`
      *
      * @param $element
      * @param $key
@@ -580,6 +581,7 @@ trait collectionLib
         }
 
         $this->results = collect($this->results)->prepend($element, $key);
+        $this->cleanOutput();
         return $this;
     }
 
@@ -598,6 +600,7 @@ trait collectionLib
         $collection = $this->useArgsOrPrevOutput($collection);
         unset($collection[$elementKey]);
         $this->results = $collection;
+        $this->cleanOutput();
         return $this;
     }
 
@@ -613,6 +616,7 @@ trait collectionLib
             return $this;
         }
         $this->results = collect(array_combine($collection, $this->results));
+        $this->cleanOutput();
         return $this;
     }
 
@@ -629,6 +633,7 @@ trait collectionLib
             return $this;
         }
         $this->results = collect($this->results)->contains($key, $value);
+        $this->cleanOutput();
         return $this;
     }
 
@@ -642,6 +647,8 @@ trait collectionLib
         }
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
+
+    
     public function objToArray($obj, &$arr)
     {
         if (!$this->execOrNot) {

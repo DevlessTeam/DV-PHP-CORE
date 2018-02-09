@@ -67,7 +67,7 @@ trait tableAuth
         if (!$this->execOrNot) {
             return $this;
         }
-
+        $this->EVENT['user_id'] = ($this->EVENT['user_id'] == "")? 1 : $this->EVENT['user_id'];
          (!\DB::table('users')->where('id', $this->EVENT['user_id'])->where('role', 1)->first() && !Helper::is_admin_login() )?Helper::interrupt(628) : '';
 
         return $this;
