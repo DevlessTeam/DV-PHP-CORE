@@ -296,18 +296,26 @@ class devless
      */
     public function getAllUsers()
     {
-        if (Schema::hasTable('devless_user_profile')) {
-             return DB::table('users')->select(
-                 [
-                 "users.id", "username", "email", "first_name", "last_name", "phone_number", "status"
-                 ]
-             )->join('devless_user_profile', 'users.id', '=', 'devless_user_profile.users_id')->get();
-        }
-        return DB::table('users')->select(
+         $profile = DB::table('users')->select(
             [
                "users.id",  "username", "email", "first_name", "last_name", "phone_number", "status"
             ]
         )->get();
+    
+        if (Schema::hasTable('devless_user_profile')) {
+            $extProfile = DB::table('devless_user_profile')->get();
+        }
+
+        foreach ($extProfile as $index => $fields) {
+            if(collect($profile)->where('id', $extProfile[$index]->users_id)->count() > 0 ) {
+                foreach($fields as $key => $value) {
+                    if($key == 'id') continue;
+                    $profile[$index]->$key = $value;
+                }
+            }
+        }
+
+        return $profile;
     }
     /**
      * Delete a users profile `->import('devless')->beforeCreating()->deleteUserProfile(9)->storeAs($output)->stopAndOutput(1000, "output", $output)`
