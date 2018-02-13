@@ -304,16 +304,17 @@ class devless
     
         if (Schema::hasTable('devless_user_profile')) {
             $extProfile = DB::table('devless_user_profile')->get();
+            foreach ($extProfile as $index => $fields) {
+                if(collect($profile)->where('id', $extProfile[$index]->users_id)->count() > 0 ) {
+                    foreach($fields as $key => $value) {
+                        if($key == 'id') continue;
+                        $profile[$index]->$key = $value;
+                    }
+                }
         }
 
-        foreach ($extProfile as $index => $fields) {
-            if(collect($profile)->where('id', $extProfile[$index]->users_id)->count() > 0 ) {
-                foreach($fields as $key => $value) {
-                    if($key == 'id') continue;
-                    $profile[$index]->$key = $value;
-                }
-            }
         }
+
 
         return $profile;
     }
