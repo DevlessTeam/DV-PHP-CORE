@@ -323,10 +323,10 @@ class devless
         if (Schema::hasTable('devless_user_profile')) {
             $extProfile = DB::table('devless_user_profile')->get();
             foreach ($extProfile as $index => $fields) {
-                if(collect($profile)->where('id', $extProfile[$index]->users_id)->count() > 0 ) {
+                if($profileIndex = collect($profile)->where('id', $extProfile[$index]->users_id)->keys() ) {
                     foreach($fields as $key => $value) {
                         if($key == 'id') continue;
-                        $profile[$index]->$key = $value;
+                        $profile[$profileIndex[0]]->$key = $value;
                     }
                 }
         }
