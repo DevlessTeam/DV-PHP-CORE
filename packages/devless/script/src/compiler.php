@@ -31,11 +31,10 @@ trait compiler
         
         $declarationString = '';
         $tokens = token_get_all('<?php '.$code);
-        
         foreach ($tokens as $token) {
             if (is_array($token)) {
                 $start = 1;
-                if ($token[0] == 312) {
+                if ($token[0] == 320 || $token[0] == 312) {
                     $variable = substr($token[1], $start);
                     $declarationString .= "$$variable = null;";
                 }

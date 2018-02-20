@@ -27,7 +27,7 @@
     Route::get(config('devless')['assets_route_name'].'/{sublevels?}', 'ViewController@static_files')->where('sublevels', '.*');
 
 
-//routes for only endpoints
+// endpoints routes 
     Route::group(
         ['prefix' => 'api/v1', 'middleware' => 'cors'],
         function () {

@@ -297,22 +297,23 @@ class devless
     public function getAllUsers()
     {
          $profile = DB::table('users')->select(
-            [
+             [
                "users.id",  "username", "email", "first_name", "last_name", "phone_number", "status"
-            ]
-        )->get();
+             ]
+         )->get();
     
         if (Schema::hasTable('devless_user_profile')) {
             $extProfile = DB::table('devless_user_profile')->get();
             foreach ($extProfile as $index => $fields) {
-                if($profileIndex = collect($profile)->where('id', $extProfile[$index]->users_id)->keys() ) {
-                    foreach($fields as $key => $value) {
-                        if($key == 'id') continue;
+                if ($profileIndex = collect($profile)->where('id', $extProfile[$index]->users_id)->keys()) {
+                    foreach ($fields as $key => $value) {
+                        if ($key == 'id') {
+                            continue;
+                        }
                         $profile[$profileIndex[0]]->$key = $value;
                     }
                 }
-        }
-
+            }
         }
 
 
@@ -357,7 +358,7 @@ class devless
                 return $value !== '';
             }
         );
-        if(isset($profileUpdate['password'])) {
+        if (isset($profileUpdate['password'])) {
             $profileUpdate['password'] = Helper::password_hash($profileUpdate['password']);
         }
         unset($profileUpdate['id']);
