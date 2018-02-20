@@ -12,4 +12,4 @@ snippet.php
 .idea
 .phpintel/*
 .DS_Store
-
+composer.lock

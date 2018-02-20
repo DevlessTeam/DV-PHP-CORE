@@ -46,8 +46,14 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
         <a class="toggle-btn"><i class="fa fa-outdent"></i></a>
         <br>
         <button class="btn btn-sm btn-info pull-right" data-toggle="modal" data-target="#sdk-connect" style="margin-right: 20%"> <i class="fa fa-plug"></i> Connect to App</button>
-        <a class="btn btn-sm btn-warning pull-right" data-toggle="modal" href="https://devless.gitbooks.io/devless-docs-1-3-0/html_sdk.html" target="blank" style="margin-right: 2%"><i class="fa fa-book"></i> Quick Guide</a>
+        <a class="btn btn-sm btn-warning pull-right" data-toggle="modal" href="https://devless.gitbooks.io/devless-docs-1-3-0/html_sdk.html" target="blank" style="margin-right: 2%">&nbsp;&nbsp;&nbsp; <i class="fa fa-book"></i> Docs &nbsp;&nbsp;&nbsp;</a>
         <!--toggle button end-->
+        <!-- Button trigger modal -->
+        <button type="button"  style="margin-right: 2%" class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#quick-demo">
+        <i class="fa fa-play"></i>  Getting Started
+        </button>
+
+
       </div>
       <!-- header section end-->
 
@@ -74,7 +80,7 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
 
         </div>
         <div class="tab-pane" id="android"><center>NA</center></div>
-        <div class="tab-pane" id="raw"><center>
+        <div class="tab-pane" id="raw"><center></center>nter>
           Domain URL: {{URL::to('/')}}<br>
           Token: {{$app->token}}
         </center></div>
@@ -84,4 +90,38 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
   </div>
 </div>
 </div>
+@endif
+
+<!-- Modal -->
+<div class="modal fade" id="quick-demo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Getting Started</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+          <div class="row">
+             <div class="col-lg-4"><a href="https://www.youtube.com/watch?v=sEFu4_124vQ" target="blank" class="btn btn-primary"><i class="fa fa-fast-forward"></i> Quick Video</a></div>
+             <div class="col-lg-4"><a href="http://devless.io/tutorials.html" target="blank" class="btn btn-success"><i class="fa fa-youtube"></i> Tutorial Collection</a></div>
+             <div class="col-lg-4"><a href="https://devless.gitbooks.io/devless-docs-1-3-0/html_sdk.html" target="blank" class="btn btn-warning">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-book"></i> Docs &nbsp;&nbsp;&nbsp;</a></div>
+          </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<?php $menuName = (isset($menuName))? $menuName : ''; ?>
+@if($menuName == 'all_services' && ! count($services) >= 2)
+<script>
+   $(function () {
+
+    $('#quick-demo').modal({
+      keyboard: true
+   });
+   $('.modal-backdrop').removeClass("modal-backdrop");
+});
+</script>
 @endif
