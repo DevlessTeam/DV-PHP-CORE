@@ -40,7 +40,7 @@ trait columns
 
         //for relationships
         if ($column_type == 4) {
-            $table->$db_type[$field['field_type']]($field['ref_table'].'_id')
+            $table->{$db_type[$field['field_type']]}($field['ref_table'].'_id')
                 ->unsigned()->$unique();
 
             $table->foreign($field['ref_table'].'_id')->references('id')
@@ -48,8 +48,8 @@ trait columns
 
         //relationship with a default
         } elseif ($column_type == 3) {
-            $table->$db_type[$field['field_type']]
-            ($field['ref_table'].'_id')
+            // dd($db_type[$field['field_type']]);
+            $table->{$db_type[$field['field_type']]}($field['ref_table'].'_id')
                 ->unsigned()->$unique();
 
             $table->foreign($field['ref_table'].'_id')->references('id')
@@ -58,7 +58,7 @@ trait columns
 
         //field with a default
         } elseif ($column_type == 2) {
-            $table->$db_type[$field['field_type']]
+            $table->{$db_type[$field['field_type']]}
             ($field['name'])->default($field['default'])->onDelete('cascade');
 
         //field without a default
