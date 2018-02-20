@@ -114,7 +114,7 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
   </div>
 </div>
 <?php $menuName = (isset($menuName))? $menuName : ''; ?>
-<?php $services = (isset($services))? $service : ''; ?>
+<?php $services = (isset($services))? $service : []; ?>
 @if($menuName == 'all_services' && ! count($services) >= 2)
 <script>
    $(function () {
