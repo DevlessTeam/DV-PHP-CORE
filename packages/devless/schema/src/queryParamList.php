@@ -9,6 +9,8 @@ trait queryParamList
     //be sure to update this array when you add a new method else it wont be accessible to the user
     public $query_params = [
         'orderBy' => 'orderBy',
+        'asc' => 'asc',
+        'desc' => 'desc',
         'size' => 'size',
         'where' => 'where',
         'orWhere' => 'orWhere',
@@ -106,6 +108,18 @@ trait queryParamList
     {
         $complete_query = $complete_query
                         .'->orderBy("'.$payload['params']['orderBy'][0].'" )';
+    }
+
+    private function asc(&$complete_query, &$payload)
+    {
+        $complete_query = $complete_query
+                        .'->orderBy("'.$payload['params']['asc'][0].'", "asc" )';
+    }
+
+    private function desc(&$complete_query, &$payload)
+    {
+        $complete_query = $complete_query
+                        .'->orderBy("'.$payload['params']['desc'][0].'", "desc" )';
     }
 
     private function where(&$complete_query, $payload)
