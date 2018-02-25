@@ -4348,7 +4348,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "7.0.22"
+        "php": "7.0.27"
     },
     "platform-dev": []
 }
