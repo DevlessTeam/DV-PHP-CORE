@@ -19,14 +19,9 @@
         <code class="language-php">$numbers</code> which is an array of user numbers and <code class="language-php">$message</code> which is a string of the message to be sent to the users. <br><br>The code below shows how to call the method in your scripts.
         </P>
         <div class="code">        
-            <pre class="language-php line-numbers"><code>use App\Helpers\Assert as Assert;  
- $rules
- -> onQuery()
- -> onUpdate()
- -> onDelete()
- -> onCreate()
-    ->whenever(true)
-    ->run('notify', 'sms',[['+233540420521'],'Welcome to our world'])
+            <pre class="language-php line-numbers"><code>
+    -> import('notify')
+    ->sms(['+233540420521'],'Welcome to our world')
             </code>
         </pre>
         </div>
@@ -45,16 +40,11 @@
         <br>The code below shows how to call the method in your scripts.
         </P>
         <div class="code">        
-            <pre class="language-php line-numbers"><code>use App\Helpers\Assert as Assert;  
- $rules
- -> onQuery()
- -> onUpdate()
- -> onDelete()
- -> onCreate()
-        ->whenever(true)
-        ->run('notify', 'smsFromRecords',['Hello @usernames. your email : @email and number : @phone is not valid',
+            <pre class="language-php line-numbers"><code>
+        -> import('notify')
+        ->smsFromRecords('Hello @usernames. your email : @email and number : @phone is not valid',
         'username,id,phone,email',
-        'sample_service','myappuser','phone',['username!=maxwell'],1]);
+        'sample_service','myappuser','phone',['username!=maxwell'],1)
             </code>
         </pre>
         </div>
@@ -72,14 +62,9 @@
          <code class="language-php">$message</code> which the message body of the email. <br><br>The code below shows how to call the method in your scripts.
         </P>
         <div class="code">        
-            <pre class="language-php line-numbers"><code>use App\Helpers\Assert as Assert;  
- $rules
- -> onQuery()
- -> onUpdate()
- -> onDelete()
- -> onCreate()
-        ->whenever(true)
-        ->run('notify', 'email',[['fizzbuzz@gmail.com','foobar@gmail.com'],'just trying','email working hurrey'])
+            <pre class="language-php line-numbers"><code>
+        -> import('notify')
+        ->email(['fizzbuzz@gmail.com','foobar@gmail.com'],'just trying','email working hurrey')
             </code>
         </pre>
         </div>
@@ -99,16 +84,11 @@
         <br>The code below shows how to call the method in your scripts.
         </P>
         <div class="code">        
-            <pre class="language-php line-numbers"><code>use App\Helpers\Assert as Assert;  
- $rules
- -> onQuery()
- -> onUpdate()
- -> onDelete()
- -> onCreate()
-        ->whenever(true)
-        ->run('notify', 'emailFromRecords',['sample subject','Hello @usernames. your email : @email and number : @phone is not valid',
+            <pre class="language-php line-numbers"><code>
+        -> import('notify')
+        ->emailFromRecords('sample subject','Hello @usernames. your email : @email and number : @phone is not valid',
         'username,id,phone,email',
-        'sample_service','myappuser','email',['id=1'],1]);
+        'sample_service','myappuser','email',['id=1'],1)
             </code>
         </pre>
         </div>
@@ -126,14 +106,9 @@
          <code class="language-php">$message</code> which is the message body of the push notification. <br><br>The code below shows how to call the method in your scripts.
         </P>
         <div class="code">        
-            <pre class="language-php line-numbers"><code>use App\Helpers\Assert as Assert;  
- $rules
- -> onQuery()
- -> onUpdate()
- -> onDelete()
- -> onCreate()
-        ->whenever(true)
-        ->run('notify', 'push',['my-channel','my-event','sample message'])
+            <pre class="language-php line-numbers"><code>
+        -> import('notify')
+        ->push('my-channel','my-event','sample message')
             </code>
         </pre>
         </div>
@@ -155,16 +130,11 @@
         <br>The code below shows how to call the method in your scripts.
         </P>
         <div class="code">        
-            <pre class="language-php line-numbers"><code>use App\Helpers\Assert as Assert;  
- $rules
- -> onQuery()
- -> onUpdate()
- -> onDelete()
- -> onCreate()
-        ->whenever(true)
-        ->run('notify', 'pushFromRecords',['app-passwordChangeEvent',
+            <pre class="language-php line-numbers"><code>
+        -> import('notify')
+        ->pushFromRecords('app-passwordChangeEvent',
         'Hello @usernames. your email : @email and number : @phone is not valid',
-        'usernames,id,phone,email','notify','myappuser','pusherid',['username!=james'],1])
+        'usernames,id,phone,email','notify','myappuser','pusherid',['username!=james'],1)
             </code>
         </pre>
         </div>
