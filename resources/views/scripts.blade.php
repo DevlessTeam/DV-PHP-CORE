@@ -7,6 +7,7 @@
 
 <!-- datatable -->
 <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
 
 <!--Nice Scroll-->
 <script src="{{ Request::secure(Request::path()).'/js/jquery.nicescroll.js' }}" type="text/javascript"></script>

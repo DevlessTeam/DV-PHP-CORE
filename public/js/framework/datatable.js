@@ -175,7 +175,7 @@ window.onload(
       };
     }
 
-    // Handles the form creation with data when a row is clicked
+    // Handles the form update with data when a row is clicked
     $(document).on("click", "#dtRow", function() {
       // grab row id
       element_id = $(this).find("tr").context._DT_RowIndex;

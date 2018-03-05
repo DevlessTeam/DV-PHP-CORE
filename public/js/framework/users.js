@@ -14,16 +14,25 @@ $(document).ready(function () {
             targets: 0
         }],
         select: {
-            style: "multi"
+            style:    'os',
+            selector: 'td:first-child'
         },
         order: [
             [1, "asc"]
         ]
     });
 
-    $("tbody tr td:not(:first-child)").click(function () {
-        $("#udModal").modal("show");
-        element_id = $(this).context._DT_CellIndex.row;
+    $(document).on("click", "#dtRow", function() {
+        // grab row id
+        element_id = $(this).find("tr").context._DT_RowIndex;
+
+        // hide modal
+        $('.alert').hide();
+
+        $("#udModal").modal({
+            "backdrop": "static"
+          });
+
         rowData = Datatable.row(this).data();
         user_id = rowData[1];
         status = rowData[7];
@@ -40,13 +49,13 @@ $(document).ready(function () {
         var id = Datatable.data()[0] !== undefined ?
             parseInt(Datatable.data()[0][1]) + 1 :
             1;
-        var username = $("#username").val();
-        var phone_number = $("#phone_number").val();
-        var email = $("#email").val();
-        var fname = $("#first_name").val();
-        var lname = $("#last_name").val();
-        var password = $("#password").val();
-        var con_password = $("#confirm_password").val();
+        var username = $("#add_username").val();
+        var phone_number = $("#add_phone_number").val();
+        var email = $("#add_email").val();
+        var fname = $("#add_first_name").val();
+        var lname = $("#add_last_name").val();
+        var password = $("#add_password").val();
+        var con_password = $("#add_confirm_password").val();
 
         if (password === con_password) {
             SDK.call(
@@ -57,13 +66,13 @@ $(document).ready(function () {
                         Datatable.row
                             .add([
                                 "",
-                                id,
+                                res.payload.result.profile.id,
                                 username,
                                 fname,
                                 lname,
                                 phone_number,
                                 email,
-                                "true"
+                                res.payload.result.profile.status
                             ])
                             .draw();
                         $(".alert").show();
@@ -158,7 +167,7 @@ $(document).ready(function () {
                     active: payload.active
                 }
             }).done(function (res) {
-                if (res) {
+                if (res === 'true') {
                     active = (payload.active === "on") ? true : false;
 
                     Datatable.row(element_id).data([
@@ -228,3 +237,9 @@ authForm.save = function () {
     });
 };
 authForm.populate();
+
+//hide modal
+function hideModal () {
+    $('#udModal').modal('hide');
+    $('tr').removeClass('selected');
+}
