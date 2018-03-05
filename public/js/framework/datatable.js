@@ -221,7 +221,12 @@ window.onload(
 
     // Handle submission of data to the backend
     $(function() {
-      $("form").submit(function(e) {
+      
+      var $form = $("form");
+      var submitActor = null;
+      var $submitActors = $form.find('button[type=submit]');
+
+      $form.submit(function(e) {
         e.preventDefault();
         payload = $(this).serializeObject();
 
@@ -232,7 +237,7 @@ window.onload(
           table_array.push(v);
         });
 
-        switch ($(this).find("button:focus")[0].innerText) {
+        switch (submitActor.name) {
           case "Cancel":
             alertHandle();
             break;
@@ -305,6 +310,10 @@ window.onload(
         }
 
         return false;
+      });
+
+      $submitActors.click(function(event) {
+        submitActor = this;
       });
     });
 

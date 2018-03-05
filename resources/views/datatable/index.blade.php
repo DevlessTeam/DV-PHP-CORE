@@ -69,9 +69,9 @@ td {
         <form id="modalform" action="" method="post">
           <div class="form-group" id="formData">
           </div>
-          <button type="submit" class="btn btn-default">Update</button>
-          <button type="submit" class="btn btn-danger">Delete</button>
-          <button type="submit" class="btn btn-warning" id="cancel">Cancel</button>
+          <button type="submit" class="btn btn-default" name="Update">Update</button>
+          <button type="submit" class="btn btn-danger" name="Delete">Delete</button>
+          <button type="submit" class="btn btn-warning" name="Cancel" id="cancel">Cancel</button>
         </form>
       </div>
     </div>
@@ -85,8 +85,8 @@ td {
         <form id="modaladd" action="" method="post">
           <div class="form-group" id="addform">
           </div>
-          <button type="submit" class="btn btn-default">Submit</button>
-          <button type="submit" class="btn btn-warning">Cancel</button>
+          <button type="submit" id="submit" class="btn btn-default" name="Submit">Submit</button>
+          <button type="submit" class="btn btn-warning" name="Cancel">Cancel</button>
         </form>
       </div>
     </div>
