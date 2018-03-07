@@ -15,7 +15,7 @@ class EnforceHTTPS
      */
     public function handle($request, Closure $next)
     {
-        if (!$request->secure() or (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'http')) {
+        if (!$request->secure()) {
             return redirect()->secure($request->path());
         }
 
