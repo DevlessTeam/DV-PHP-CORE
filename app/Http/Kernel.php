@@ -21,7 +21,6 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\PayloadValidator::class,
         \App\Http\Middleware\BeforeMiddleware::class,
         \App\Http\Middleware\AfterMiddleware::class,
-        \App\Http\Middleware\EnforceHTTPS::class,
 
     ];
 
