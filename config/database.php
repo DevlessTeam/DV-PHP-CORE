@@ -14,9 +14,9 @@ if ($url !== false) {
     $database = substr($url["path"], 1);
 } else {
     $host =     env('DB_HOST', 'localhost');
-    $username = env('DB_USERNAME', 'forge');
-    $password = env('DB_PASSWORD', '');
-    $database = env('DB_DATABASE', 'forge');
+    $username = env('DB_USERNAME', 'postgres');
+    $password = env('DB_PASSWORD', 'password');
+    $database = env('DB_DATABASE', 'devless');
     $port     = env('DB_PORT', '5432');
 }
 

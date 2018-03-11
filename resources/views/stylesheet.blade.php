@@ -11,7 +11,8 @@
 
   <!-- datatables css -->
   <link href="{{Request::secure(Request::path()).'/css/jquery.dataTables.min.css'}}" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.dataTables.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
 
   <!--common style-->
   <link href="{{Request::secure(Request::path()).'/css/style.css'}}" rel="stylesheet">

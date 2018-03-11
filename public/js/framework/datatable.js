@@ -9,6 +9,7 @@ window.onload(
     var module_name;
     var module_table;
     var table_entries;
+    var rows = [];
 
     $(window).load(function() {
       /* Handles Service and table name build when view data is click from the Service Panel */
@@ -116,8 +117,42 @@ window.onload(
       }
       $(".loader").remove();
       Datatable = $("#dataOne").DataTable({
+        dom: 'Bfrtip',
         responsive: true,
-        scrollX: true
+        scrollX: true,
+        buttons: [
+          'excelHtml5',
+          'csvHtml5',
+          {
+            text: 'JSON',
+            action: function ( e, dt, button, config ) {
+              console.log(dt.header())
+              var heads = [];
+              
+              $("thead").find("th").each(function () {
+                heads.push($(this).text().trim());
+              });
+
+              var data = Datatable
+                .rows()
+                .data();
+              
+              data.map((v, i) => {
+                var cur = {}
+                v.map((val, idx) => {
+                  cur[heads[idx]] = val
+                })
+                rows.push(cur)
+                cur = {}
+              })
+
+              $.fn.dataTable.fileSave(
+                  new Blob( [ JSON.stringify( rows ) ] ),
+                  `${module_name}_${module_table}.json`
+              );
+            }
+          }
+        ]
       });
     }
 
@@ -175,7 +210,7 @@ window.onload(
       };
     }
 
-    // Handles the form creation with data when a row is clicked
+    // Handles the form update with data when a row is clicked
     $(document).on("click", "#dtRow", function() {
       // grab row id
       element_id = $(this).find("tr").context._DT_RowIndex;
@@ -221,7 +256,12 @@ window.onload(
 
     // Handle submission of data to the backend
     $(function() {
-      $("form").submit(function(e) {
+      
+      var $form = $("form");
+      var submitActor = null;
+      var $submitActors = $form.find('button[type=submit]');
+
+      $form.submit(function(e) {
         e.preventDefault();
         payload = $(this).serializeObject();
 
@@ -232,7 +272,7 @@ window.onload(
           table_array.push(v);
         });
 
-        switch ($(this).find("button:focus")[0].innerText) {
+        switch (submitActor.name) {
           case "Cancel":
             alertHandle();
             break;
@@ -305,6 +345,10 @@ window.onload(
         }
 
         return false;
+      });
+
+      $submitActors.click(function(event) {
+        submitActor = this;
       });
     });
 
