@@ -466,3 +466,7 @@ window.onload(
     }
   })()
 );
+
+function init() {
+  console.log("Datatable page rendered");
+}
