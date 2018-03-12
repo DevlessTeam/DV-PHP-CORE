@@ -89,16 +89,16 @@ window.onload(
     });
 
     window.refreshTable = function() {
-       if($("#service option:selected").text() !== " -- select a service -- ") {
-          var service_name = $("#service option:selected").text();
-          var table_name   = $("#table_name option:selected").text();
-          var devless_table_name = service_name+"_"+table_name;
-          $("#dataOne").remove();
-          $("#dataOne_wrapper").remove();
-          return tableCall(table_entries);
-       } 
-       window.location = window.location;
-    }
+      if ($("#service option:selected").text() !== " -- select a service -- ") {
+        var service_name = $("#service option:selected").text();
+        var table_name = $("#table_name option:selected").text();
+        var devless_table_name = service_name + "_" + table_name;
+        $("#dataOne").remove();
+        $("#dataOne_wrapper").remove();
+        return tableCall(table_entries);
+      }
+      window.location = window.location;
+    };
 
     // Handle table creation with row & columns
     function buildHtmlTable(data, metaData) {
@@ -117,38 +117,42 @@ window.onload(
       }
       $(".loader").remove();
       Datatable = $("#dataOne").DataTable({
-        dom: 'Bfrtip',
+        dom: "Bfrtip",
         responsive: true,
         scrollX: true,
         buttons: [
-          'excelHtml5',
-          'csvHtml5',
+          "excelHtml5",
+          "csvHtml5",
           {
-            text: 'JSON',
-            action: function ( e, dt, button, config ) {
-              console.log(dt.header())
+            text: "JSON",
+            action: function(e, dt, button, config) {
+              console.log(dt.header());
               var heads = [];
-              
-              $("thead").find("th").each(function () {
-                heads.push($(this).text().trim());
+
+              $("thead")
+                .find("th")
+                .each(function() {
+                  heads.push(
+                    $(this)
+                      .text()
+                      .trim()
+                  );
+                });
+
+              var data = Datatable.rows().data();
+
+              data.map((v, i) => {
+                var cur = {};
+                v.map((val, idx) => {
+                  cur[heads[idx]] = val;
+                });
+                rows.push(cur);
+                cur = {};
               });
 
-              var data = Datatable
-                .rows()
-                .data();
-              
-              data.map((v, i) => {
-                var cur = {}
-                v.map((val, idx) => {
-                  cur[heads[idx]] = val
-                })
-                rows.push(cur)
-                cur = {}
-              })
-
               $.fn.dataTable.fileSave(
-                  new Blob( [ JSON.stringify( rows ) ] ),
-                  `${module_name}_${module_table}.json`
+                new Blob([JSON.stringify(rows)]),
+                `${module_name}_${module_table}.json`
               );
             }
           }
@@ -256,10 +260,9 @@ window.onload(
 
     // Handle submission of data to the backend
     $(function() {
-      
       var $form = $("form");
       var submitActor = null;
-      var $submitActors = $form.find('button[type=submit]');
+      var $submitActors = $form.find("button[type=submit]");
 
       $form.submit(function(e) {
         e.preventDefault();
@@ -292,7 +295,8 @@ window.onload(
                 $(new_row).attr("id", "dtRow");
               } else {
                 $("#error_flash").modal("show");
-                $("#error_display").text(JSON.stringify(data.message));
+                $("pre").text(JSON.stringify(data, null, 4));
+                // $("#error_display").text(JSON.stringify(data));
               }
             });
             break;
@@ -323,7 +327,8 @@ window.onload(
                 Datatable.row(element_id).data(update_array);
               } else {
                 $("#error_flash").modal("show");
-                $("#error_display").text(JSON.stringify(data.message));
+                $("pre").text(JSON.stringify(data, null, 4));
+                // $("#error_display").text(JSON.stringify(data));
               }
             });
             break;
@@ -338,7 +343,8 @@ window.onload(
                   .draw();
               } else {
                 $("#error_flash").modal("show");
-                $("#error_display").text(JSON.stringify(data));
+                $("pre").text(JSON.stringify(data, null, 4));
+                // $("#error_display").text(JSON.stringify(data));
               }
             });
             break;
