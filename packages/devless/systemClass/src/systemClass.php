@@ -283,13 +283,12 @@ class devless
 
     /**
      * get user profile by id `->import('devless')->beforeCreating()->getUserProfile(2)->storeAs($output)->stopAndOutput(1000, "output", $output)`
-     * @param $serviceName
-     * @param $table
-     * @param $input int
+     * @param $id
+     * @param $key
      * @return array
      * @ACL private
      */
-    public function getUserProfile($input)
+    public function getUserProfile($input, $key='id')
     {
         (empty($input))? Helper::interrupt(628):false;
         if (is_array($input)) {
@@ -297,7 +296,7 @@ class devless
         } else {
             $id = $input;
         }
-        $profile = DB::table('users')->where('id', $id)->get();
+        $profile = DB::table('users')->where($key, $id)->get();
         if ($profile) {
             $userProfile = (array)$profile[0];
             $extraDetails = $this->getExtraUserDetails($userProfile['id']);
@@ -306,6 +305,86 @@ class devless
         }
         return [];
     }
+
+    /**
+     * get user profile by key `->import('devless')->beforeCreating()->getUserWhere("username", "foo")->storeAs($output)->stopAndOutput(1000, "output", $output)`
+     * @param $key
+     * @param $value
+     * @return array
+     * @ACL private
+     */
+    public function getUserWhere($key, $value)
+    {
+        return $this->getUserProfile($value, $key);
+    }
+
+    /**
+     * Deactivate user account `->import('devless')->beforeCreating()->deactivateUserAccount("username", "foo")->storeAs($output)->stopAndOutput(1000, "output", $output)`
+     * @param $key
+     * @param $value
+     * @return array
+     * @ACL private
+     */
+    public function deactivateUserAccount($value, $key='id') 
+    {
+        return $this->changeUserStatus(0, $value, $key);
+    }
+
+     /**
+     * Activate User Account`->import('devless')->beforeCreating()->activateUserAccount("username", "foo")->storeAs($output)->stopAndOutput(1000, "output", $output)`
+     * @param $key
+     * @param $value
+     * @return array
+     * @ACL private
+     */
+    public function activateUserAccount($value, $key='id')
+    {
+        return $this->changeUserStatus(1, $value, $key);
+    }
+
+      /**
+     * Toggle User Account Status`->import('devless')->beforeCreating()->toggleUserAccountState(0, "username", "foo")->storeAs($output)->stopAndOutput(1000, "output", $output)`
+     * @param bol $state
+     * @param $key
+     * @param $value
+     * @return array
+     * @ACL private
+     */
+    public function toggleUserAccountState($value, $key) 
+    {
+        $user = $this->getUserWhere($key, $value);
+        if(isset($user['status'])){return [];}
+        if($user['status'] == 0 ) {return $this->activateUserAccount($value, $key);}
+        return $this->deativateUserAccount($value, $key);
+    }
+
+   /**
+     * changeUserStatus`->import('devless')->beforeCreating()->changeUserStatus(0, "username", "foo")->storeAs($output)->stopAndOutput(1000, "output", $output)`
+     * @param bol $state
+     * @param $key
+     * @param $value
+     * @return array
+     * @ACL private
+     */
+    public function changeUserStatus($state, $value, $key='id')
+    {
+        $user = $this->getUserWhere($key, $value);
+
+        if(! isset($user['id'])){return false;}
+
+        return  $this->updateUserProfile(
+        $user['id'],
+        $email = '',
+        $password = '',
+        $username = '',
+        $phone_number = '',
+        $first_name = '',
+        $last_name = '',
+        $remember_token = '',
+        $status = $state
+        );
+    }
+
 
     /**
      * Get all users `->import('devless')->beforeCreating()->getAllUsers(2)->storeAs($output)->stopAndOutput(1000, "output", $output)`
@@ -437,7 +516,9 @@ class devless
     public function getExtraUserDetails($id)
     {
         $service = new service();
-        $output = DS::service('devless', 'user_profile', $service)->where('users_id', $id)->getData()['payload']['results'];
+        $output = DS::service('devless', 'user_profile', $service)->where('users_id', $id)->getData();
+        if(! isset($output['payload']['results'])) {return [];}
+        $output = $output['payload']['results'];
         if (!isset($output[0])) {
             return [];
         }
