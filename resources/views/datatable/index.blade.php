@@ -95,8 +95,9 @@ td {
 
 <div id="error_flash" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
-        <textarea id="error_display" cols="30" rows="5" wrap="hard"></textarea>
+    <div class="modal-content col-md-12">
+        {{--  <textarea id="error_display" cols="30" rows="5" wrap="hard"></textarea>  --}}
+        <pre style="margin-top: 10px; padding: 20px; border: 0px; background: #f5f5f5"></pre>
     </div>
   </div>
 </div>
