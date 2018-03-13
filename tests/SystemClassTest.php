@@ -92,6 +92,105 @@ class SystemClassTest extends TestCase
         $this->assertEquals(11, count($user));
     }
 
+    /**
+     * @test
+     * it should get user profile  .
+     */
+    public function it_should_get_user_profile_internal()
+    {
+        require_once config('devless')['system_class'];
+        $devless = new devless();
+        $user = $devless->getUserProfile(1);
+        $this->assertNotEmpty($user);
+        $this->assertEquals('array', gettype($user));
+        $this->assertEquals(14, count($user));
+    }
+
+    /**
+     * @test
+     * it should get user profile  .
+     */
+    public function it_should_get_user_profile_where()
+    {
+        require_once config('devless')['system_class'];
+        $devless = new devless();
+        $user = $devless->getUserWhere("username", "Add username here");
+        $this->assertNotEmpty($user);
+        $this->assertEquals('array', gettype($user));
+        $this->assertEquals(14, count($user));
+    }
+
+     /**
+     * @test
+     * it should change user status .
+     */
+    public function it_should_change_user_status()
+    {
+        require_once config('devless')['system_class'];
+        $devless = new devless();
+        $devless->changeUserStatus(0, "test@test.com", "email");
+        $user = $devless->getUserWhere("email", "test@test.com");
+        
+        $this->assertNotEmpty($user);
+        $this->assertEquals('array', gettype($user));
+        $this->assertEquals(14, count($user));
+        $this->assertEquals(0, $user['status']);
+    }
+
+    /**
+     * @test
+     * it should make user active .
+     */
+    public function it_should_make_user_active()
+    {
+        require_once config('devless')['system_class'];
+        $devless = new devless();
+        $devless->activateUserAccount("test@test.com", "email");
+        $user = $devless->getUserWhere("email", "test@test.com");
+        
+        $this->assertNotEmpty($user);
+        $this->assertEquals('array', gettype($user));
+        $this->assertEquals(14, count($user));
+        $this->assertEquals(1, $user['status']);
+    }
+
+
+    /**
+     * @test
+     * it should make user inactive .
+     */
+    public function it_should_make_user_inactive()
+    {
+        require_once config('devless')['system_class'];
+        $devless = new devless();
+        $devless->deactivateUserAccount("test@test.com", "email");
+        $user = $devless->getUserWhere("email", "test@test.com");
+        
+        $this->assertNotEmpty($user);
+        $this->assertEquals('array', gettype($user));
+        $this->assertEquals(14, count($user));
+        $this->assertEquals(0, $user['status']);
+    }
+
+
+    /**
+     * @test
+     * it should toggle user state
+     */
+    public function it_should_toggle_user_state()
+    {
+        require_once config('devless')['system_class'];
+        $devless = new devless();
+        $user = $devless->getUserWhere("email", "test@test.com");
+        $userStatus = $user['status'];
+        $devless->toggleUserAccountState("test@test.com", "email");
+        $user = $devless->getUserWhere("email", "test@test.com");
+        $this->assertNotEmpty($user);
+        $this->assertEquals('array', gettype($user));
+        $this->assertEquals(14, count($user));
+        $this->assertEquals(($userStatus == 0)? 0:1, $user['status']);
+    }
+
 
      /**
      * @test
