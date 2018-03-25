@@ -601,6 +601,16 @@ scriptEngine.signup = function() {
 	devless_main.coreLib.form(devless_main.singleCourier, register);
 }
 
+scriptEngine.mustLogin = function() {
+	var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
+	actionUrl = (actionUrl != undefined) ? actionUrl : '#';
+	SDK.call('devless', 'profile', [], function (response) {
+		if (response.payload.result == undefined) {
+			window.location.href = window.location.origin + '/' + actionUrl;
+		} 
+	})
+	console.log('must login called');
+}
 scriptEngine.signin = function(record) {
 	var actionUrl = _jql(devless_main.singleCourier.element).attr('action');
 	var actionUrl = (actionUrl != undefined) ? actionUrl : '#';
