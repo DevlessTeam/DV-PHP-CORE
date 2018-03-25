@@ -626,7 +626,7 @@ scriptEngine.signin = function(record) {
 		SDK.call('devless', 'login', [submissionPayload[label]['username'], submissionPayload[label]['email'], submissionPayload[label]['phonenumber'],
 			submissionPayload[label]['password']
 			], function(response) {
-				if (response.payload !== undefined || response.payload.result !== false) {
+				if (response.payload !== undefined && response.payload.result !== false) {
 					SDK.setToken(response.payload.result['token']);
 					devless_main.doneProcessing();
 					devless_main.coreLib.notify("Log in successfully", 1);

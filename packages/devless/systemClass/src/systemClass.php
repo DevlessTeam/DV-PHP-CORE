@@ -307,7 +307,7 @@ class devless
     }
 
     /**
-     * get user profile by key `->import('devless')->beforeCreating()->getUserWhere("username", "foo")->storeAs($output)->stopAndOutput(1000, "output", $output)`
+     * get user profile using a field `->import('devless')->beforeCreating()->getUserWhere("username", "foo")->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $key
      * @param $value
      * @return array
