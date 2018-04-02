@@ -44,13 +44,27 @@
                         <div  class="form-group">
                             <label for="field-type">Field Type</label>
 
-                            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'IMAGE', 'PHONE_NUMBER', 'TIMESTAMP'] ?>
+                            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'IMAGE', 'PHONE_NUMBER', 'REFERENCE', 'TIMESTAMP'] ?>
                             <select class="form-control"  name="field-type" id="fieldType">
                                 @foreach($options as  $option)
                                     <option value="{{$option}}">{{$option}}</option>
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="field-type">Related Field</label> 
+                          <select class="form-control"  id="refField" >
+                            <option value="none" selected>No Relationship</option>
+                            @foreach($table_meta as $table_data)
+                            <option value="{{$table_data['name']}}">{{$table_data['name']}}</option>
+                            @endforeach
+                            <option value="_devless_users">DevLess User</option>
+                        </select>
+                        </div> 
+                        {{--  <div class="form-group">
+                            <label for="addDefault">Default</label>
+                            <input type="text" class="form-control" id="addDefault" placeholder="Default">
+                        </div>  --}}
                         <input type="hidden" id="add-serviceName">
                         <input type="hidden" id="add-tableName">
                         <div class="pull-right">
@@ -132,7 +146,7 @@
             <div style="display:block;" >
             <label forƒ="field-reference">Referenced Table</label>
             <select class="form-control"  name="field-reference" id="field-reference" >
-                <option value="none" selected>None</option>
+                <option value="none" selected>No Relationship</option>
                 @foreach($table_meta as $table_data)
                 <option value="{{$table_data['name']}}">{{$table_data['name']}}</option>
                 @endforeach
