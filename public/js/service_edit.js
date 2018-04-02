@@ -276,7 +276,7 @@ function addNewField() {
 	var newFieldName = $('#newFieldName')[0].value;
     var fieldType = $('#fieldType')[0].value;
     var referencedField = $('#refField')[0].value;
-    var addDefault = $('#addDefault')[0].value;
+    var addDefault ='' //$('#addDefault')[0].value;
 	var action 	= 'addField';
     var params = newFieldName + '-:-' + fieldType + '-:-' + referencedField + '-:-' +addDefault;
 	SchemaEdit(action, service, table, params);
