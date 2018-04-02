@@ -111,35 +111,57 @@ class SchemaEdit
      *
      * @return bool
      */
-    public function addField($serviceName, $tableName, $fieldName, $fieldType)
+    public function addField($serviceName, $tableName, $fieldName, $fieldType, $refTable, $default)
     {
-        if ($fieldType == 'reference') {
-            return false;
-        }
         $dbHandler = new DbHandler();
         $compTableName = $dbHandler->devlessTableName($serviceName, $tableName);
         $newField = json_decode(
             '{"name":"'.$fieldName.'","field_type":"'.$fieldType.'","ref_table":
-        "_devless_users","default":null,"required":false,"validation":false,
-        "is_unique":false}'
-        );
-        $tableMeta = $dbHandler->get_tableMeta($compTableName);
-        \Schema::table(
-            $compTableName,
-            function (Blueprint $table) use (
-                $fieldName,
-                $tableName,
-                $fieldType,
-                $dbHandler,
-                &$tableMeta,
-                $newField
-            ) {
-                $fieldType = $dbHandler->db_types[$fieldType];
-                array_push($tableMeta['schema']['field'], $newField);
-                $table->$fieldType($fieldName)->nullable();
-            }
-        );
-        $dbHandler->update_table_meta($serviceName, $tableName, $tableMeta);
+                "_devless_users","default":null,"required":false,"validation":false,
+                "is_unique":false}'
+            );
+            
+            $tableMeta = $dbHandler->get_tableMeta($compTableName);
+            \Schema::table(
+                $compTableName,
+                function (Blueprint $table) use (
+                    $fieldName,
+                    $tableName,
+                    $fieldType,
+                    $dbHandler,
+                    &$tableMeta,
+                    $newField,
+                    $refTable,
+                    $serviceName, 
+                    $default
+                    ) {
+                        $isReference = $fieldType;
+                        $fieldType = $dbHandler->db_types[$fieldType];
+                        if ($isReference == 'reference') {
+                            if($refTable == '_devless_users') {
+                                $refTable = $fieldName = 'users';
+                                $refTableName = '_devless_users';
+                            } else {
+                                $refTableName = $refTable;
+                                $refTable = $serviceName.'_'.$refTable;
+                            }
+                            
+
+                            $table->{$dbHandler->db_types[$fieldType]}($refTable.'_id')
+                            ->unsigned()->nullable();
+                            
+                            $refFieldMeta = json_decode('{"name":"'.$refTable.'_id","field_type":"reference","ref_table":"'.$refTableName.'","default":null,"required":false,"validation":false,"is_unique":false}');
+                            array_push($tableMeta['schema']['field'], $refFieldMeta);
+                            
+                            $table->foreign($refTable.'_id')->references('id')
+                            ->on($refTable)->onDelete('cascade');
+                    } else {
+                        array_push($tableMeta['schema']['field'], $newField);
+                        $table->$fieldType($fieldName)->nullable();
+                    }
+                }
+            );
+            $dbHandler->update_table_meta($serviceName, $tableName, $tableMeta);
 
         return true;
     }

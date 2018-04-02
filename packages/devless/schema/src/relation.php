@@ -31,6 +31,7 @@ trait relation
                 function ($table) use ($eachResult, &$output, $service) {
                     $refTable = ($table != '_devless_users') ? $service.'_'.$table : 'users';
                     $refField = $refTable.'_id';
+                    if($eachResult->$refField == null){return;}
                     $referenceId = (isset($eachResult->$refField)) ? $eachResult->$refField :
                     Helper::interrupt(640);
                     $relatedData = ($table != '_devless_users') ? \DB::table($refTable)->where('id', $referenceId)
