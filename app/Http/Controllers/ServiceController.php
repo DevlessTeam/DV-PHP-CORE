@@ -238,10 +238,10 @@ class ServiceController extends Controller
         };
 
         $addField = function () use ($se, $service, $table, $params) {
-            if (!sizeof($params) == 2) {
+            if (!sizeof($params) == 3) {
                 return ['status' => 'failed'];
             }
-            $se->addField($service, $table, $params[0], strtolower($params[1]));
+            $se->addField($service, $table, $params[0], strtolower($params[1]), $params[2], $params[3]=null);
 
             return ['status' => 'ok'];
         };
