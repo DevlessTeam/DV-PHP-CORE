@@ -52,7 +52,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="field-type">Related Field</label> 
+                            <label for="field-type">Related Table</label> 
                           <select class="form-control"  id="refField" >
                             <option value="none" selected>No Relationship</option>
                             @foreach($table_meta as $table_data)
