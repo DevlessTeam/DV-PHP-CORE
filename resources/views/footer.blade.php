@@ -44,6 +44,7 @@ function copyToBoard(text){
 		//user_lastname : "lastname", /*Optional : input your user lastname for better statistics*/
 		//user_email : "email", /*Optional : input your user email for better statistics*/
 	};
+	$('[data-tooltip="tooltip"]').tooltip();
 </script>
 <script type="text/javascript" src="https://app.getbeamer.com/js/beamer-embed.js"></script>
 					
