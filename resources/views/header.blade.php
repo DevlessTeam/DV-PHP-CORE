@@ -73,7 +73,7 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
                 </button>
               </li>
               <li class="d-none">
-                <button class="btn btn-sm btn-warning btn-circle" data-toggle="tooltip" data-placement="bottom" title="Go to Documentation" href="https://devless.gitbooks.io/devless-docs-1-3-0/html_sdk.html" target="blank"><i class="fa fa-book" style="font-weight: 800;"></i></button>
+                <button class="btn btn-sm btn-warning btn-circle" data-toggle="tooltip" data-placement="bottom" title="Go to Documentation" onclick="window.open('https://devless.gitbooks.io/devless-docs-1-3-0/html_sdk.html', '_blank')"><i class="fa fa-book" style="font-weight: 800;"></i></button>
               </li>
               <li class="d-none">
                   <button class="btn btn-sm btn-info btn-circle" data-toggle="tooltip" data-placement="bottom" title="Show Notifications" id="beamer-notification"> <i class="fa fa-bullhorn" style="font-weight: 800;"></i> </button>

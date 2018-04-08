@@ -19,7 +19,8 @@ Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
 
 <script>
 $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();
+	$('[data-toggle="tooltip"]').tooltip();
+	$('[data-tooltip="tooltip"]').tooltip();
 });
 function copyToBoard(text){
 	prompt("Ctrl/CMD+c to copy", text);
@@ -44,7 +45,6 @@ function copyToBoard(text){
 		//user_lastname : "lastname", /*Optional : input your user lastname for better statistics*/
 		//user_email : "email", /*Optional : input your user email for better statistics*/
 	};
-	$('[data-tooltip="tooltip"]').tooltip();
 </script>
 <script type="text/javascript" src="https://app.getbeamer.com/js/beamer-embed.js"></script>
 					
