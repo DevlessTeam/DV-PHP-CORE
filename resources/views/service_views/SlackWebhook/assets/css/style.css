@@ -1,0 +1,12 @@
+body {
+    font-size: 14px;
+}
+
+.logo {
+    font-size: 25px;
+  font-weight: 700;
+}
+
+.brk {
+    word-break: break-all;
+}
