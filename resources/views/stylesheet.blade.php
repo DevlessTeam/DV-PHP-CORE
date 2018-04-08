@@ -24,3 +24,6 @@
   <script src="{{Request::secure(Request::path()).'/js/bootstrap.min.js'}}"></script>
   @endif
 
+  <!-- Toastr -->
+  <link rel="stylesheet" type="text/css" href="{{Request::secure(Request::path()).'/css/toastr.css'}}" />
+

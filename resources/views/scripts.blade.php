@@ -22,10 +22,6 @@
 <script src="{{ Request::secure(Request::path()).'/js/switchery/switchery.min.js' }}"></script>
 <script src="{{ Request::secure(Request::path()).'/js/switchery/switchery-init.js' }}"></script>
 
-<!--Sparkline Chart-->
-<script src="{{ Request::secure(Request::path()).'/js/sparkline/jquery.sparkline.js' }}"></script>
-<script src="{{ Request::secure(Request::path()).'/js/sparkline/sparkline-init.js' }}"></script>
-
 <!--Form Validation-->
 <script src="{{ Request::secure(Request::path()).'/js/bootstrap-validator.min.js' }}" type="text/javascript"></script>
 
@@ -46,3 +42,6 @@
 <script src="{{ Request::secure(Request::path()).'/js/ace/mode-php.js' }}" type="text/javascript" ></script>
 <script src="{{ Request::secure(Request::path()).'/js/ace/jquery-ace.min.js' }}" type="text/javascript" ></script>
 @endif
+
+<!-- Toastr -->
+<script src="{{ Request::secure(Request::path()).'/js/toastr.js'}}" type="text/javascript"></script>
