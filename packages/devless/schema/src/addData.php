@@ -62,7 +62,8 @@ trait addData
 
     private function validate_payload($payload)
     {
-        (isset($payload['params'][0]['name']) && count($payload['params'][0]['name']) > 0
+        (isset($payload['params'][0]['name'])
+            &&(gettype($payload['params'][0]['name']) != 'array' || count($payload['params'][0]['name']) > 0)
             && gettype($payload['params'][0]['field']) == 'array' || isset($payload['params'][0]['field'][0])) ? true :
             Helper::interrupt(641);
     }
