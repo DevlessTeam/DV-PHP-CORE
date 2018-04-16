@@ -22,10 +22,6 @@
 <script src="{{ Request::secure(Request::path()).'/js/switchery/switchery.min.js' }}"></script>
 <script src="{{ Request::secure(Request::path()).'/js/switchery/switchery-init.js' }}"></script>
 
-<!--Sparkline Chart-->
-<script src="{{ Request::secure(Request::path()).'/js/sparkline/jquery.sparkline.js' }}"></script>
-<script src="{{ Request::secure(Request::path()).'/js/sparkline/sparkline-init.js' }}"></script>
-
 <!--Form Validation-->
 <script src="{{ Request::secure(Request::path()).'/js/bootstrap-validator.min.js' }}" type="text/javascript"></script>
 
@@ -33,16 +29,22 @@
 <script src="{{ Request::secure(Request::path()).'/js/jquery.steps.min.js' }}" type="text/javascript"></script>
 <script src="{{ Request::secure(Request::path()).'/js/jquery.validate.min.js' }}" type="text/javascript"></script>
 
-<!--wizard initialization-->
-<script src="{{ Request::secure(Request::path()).'/js/wizard-init.js'}}" type="text/javascript"></script>
+{{-- <!--wizard initialization-->
+<script src="{{ Request::secure(Request::path()).'/js/wizard-init.js'}}" type="text/javascript"></script> --}}
 
 
 <!--common scripts for all pages-->
 <script src="{{ Request::secure(Request::path()).'/js/scripts.js' }}"></script>
 <!-- Ace Editor -->
-@if(\Request::path() != 'console')
-<script src="{{ Request::secure(Request::path()).'/js/ace/ace.js' }}" type="text/javascript" ></script>
-<script src="{{ Request::secure(Request::path()).'/js/ace/theme-github.js' }}" type="text/javascript" ></script>
-<script src="{{ Request::secure(Request::path()).'/js/ace/mode-php.js' }}" type="text/javascript" ></script>
-<script src="{{ Request::secure(Request::path()).'/js/ace/jquery-ace.min.js' }}" type="text/javascript" ></script>
+@if(Request::path() != 'console')
+  <script src="{{ Request::secure(Request::path()).'/js/ace/ace.js' }}" type="text/javascript" ></script>
+  <script src="{{ Request::secure(Request::path()).'/js/ace/theme-github.js' }}" type="text/javascript" ></script>
+  <script src="{{ Request::secure(Request::path()).'/js/ace/mode-php.js' }}" type="text/javascript" ></script>
+  <script src="{{ Request::secure(Request::path()).'/js/ace/jquery-ace.min.js' }}" type="text/javascript" ></script>
+@else
+  <script src="{{ Request::secure(Request::path()).'/js/src-min-noconflict/ace.js' }}" type="text/javascript" charset="utf-8"></script>
+  <script src="{{ Request::secure(Request::path()).'/js/framework/api-console.js' }}" type="text/javascript" charset="utf-8"></script>
 @endif
+
+<!-- Toastr -->
+<script src="{{ Request::secure(Request::path()).'/js/toastr.js'}}" type="text/javascript"></script>
