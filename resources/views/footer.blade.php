@@ -19,7 +19,8 @@ Smooch.init({ appToken: '9wokwlxqcy4n953mn3l2zz9y7' });
 
 <script>
 $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();
+	$('[data-toggle="tooltip"]').tooltip();
+	$('[data-tooltip="tooltip"]').tooltip();
 });
 function copyToBoard(text){
 	prompt("Ctrl/CMD+c to copy", text);

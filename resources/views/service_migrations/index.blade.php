@@ -72,7 +72,7 @@
                       <label for="g-title" class="col-lg-2 col-sm-2 control-label">Pick Service to import</label>
                       <div class="col-lg-10">
                         <input class="form-control" name="service_file" id="g-title"
-                        placeholder="service name" type="file">
+                        placeholder="service name" type="file" required>
                         @if($errors->has("service_import"))
                           <span class="help-block">{{ $errors->first("service_import") }}</span>
                         @endif
