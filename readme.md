@@ -1,6 +1,7 @@
 [![Build Status](https://api.travis-ci.org/DevlessTeam/DV-PHP-CORE.svg?branch=master)](https://travis-ci.org/DevlessTeam/DV-PHP-CORE) 
 [![Docker Pulls](https://img.shields.io/docker/pulls/eddymens/devless.svg)](https://hub.docker.com/r/eddymens/devless/) 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cb7072312ffb482ebb57ca2b6e5cf3a9)](https://www.codacy.com/app/EDDYMENS/DV-PHP-CORE?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DevlessTeam/DV-PHP-CORE&amp;utm_campaign=Badge_Grade)
+[![Open Source Helpers](https://www.codetriage.com/devlessteam/dv-php-core/badges/users.svg)](https://www.codetriage.com/devlessteam/dv-php-core)
 
 ## Devless is a tool for ready-made back-end for development of web or mobile applications. It is fully open source under the permissive Apache v2 license. This means that you can develop your front end without worrying about neither back-end code or the business risk of a propitiatory backend-as-a-service.
  

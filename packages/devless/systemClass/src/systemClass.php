@@ -1,4 +1,9 @@
 <?php
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> v1.3
 use App\Helpers\Helper;
 use App\Helpers\ActionClass;
 use App\Helpers\DataStore as DS;
@@ -273,7 +278,7 @@ class devless
      */
     public function getUserProfile($input, $key='id')
     {
-        (empty($input))? Helper::interrupt(628):false;
+        (empty($input))? Helper::interrupt(641):false;
         if (is_array($input)) {
             $id = $input['id'];
         } else {

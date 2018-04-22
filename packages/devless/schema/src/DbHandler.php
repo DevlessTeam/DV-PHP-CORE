@@ -142,7 +142,7 @@ class DbHandler
                                 Helper::password_hash($table_data[$count]['password']);
                         }
                         if (strtolower($fields['field_type']) == 'timestamp') {
-                            $field_value = $table_data[$count][$fields['name']] = time();
+                            $field_value = $table_data[$count][$fields['name']] = date("Y-m-d H:i:s");
                             ;
                         }
                         if (!Helper::field_check($field_value, $fields['field_type'])) {
