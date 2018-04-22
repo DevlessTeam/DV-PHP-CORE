@@ -290,7 +290,7 @@ class devless
      */
     public function getUserProfile($input, $key='id')
     {
-        (empty($input))? Helper::interrupt(628):false;
+        (empty($input))? Helper::interrupt(641):false;
         if (is_array($input)) {
             $id = $input['id'];
         } else {
