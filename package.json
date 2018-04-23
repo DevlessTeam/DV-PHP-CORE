@@ -4,7 +4,15 @@
     "gulp": "^3.8.8"
   },
   "dependencies": {
+    "bootstrap-sass": "^3.0.0",
     "laravel-elixir": "^4.0.0",
-    "bootstrap-sass": "^3.0.0"
+    "opencollective": "^1.0.3"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/DV-PHP-CORE"
+  },
+  "scripts": {
+    "postinstall": "opencollective postinstall"
   }
 }

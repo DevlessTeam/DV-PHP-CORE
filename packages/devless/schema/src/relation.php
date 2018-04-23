@@ -18,35 +18,27 @@ trait relation
      */
     private function _get_related_data($payload, $results, $primaryTable, $tables)
     {
+        require_once config('devless')['system_class'];
+
         $serviceTables = $this->_get_all_service_tables($payload);
         $tables = (in_array('*', $tables)) ?
             $this->_get_all_related_tables($primaryTable) : $tables;
         $output = [];
         $service = $payload['service_name'];
         //loop over list of tables check if exist
+        $systemClass = new \devless();
         foreach ($results as $eachResult) {
             $eachResult->related = [];
             array_walk(
                 $tables,
-                function ($table) use ($eachResult, &$output, $service) {
+                function ($table) use ($eachResult, &$output, $service, $systemClass) {
                     $refTable = ($table != '_devless_users') ? $service.'_'.$table : 'users';
                     $refField = $refTable.'_id';
                     if($eachResult->$refField == null){return;}
                     $referenceId = (isset($eachResult->$refField)) ? $eachResult->$refField :
                     Helper::interrupt(640);
                     $relatedData = ($table != '_devless_users') ? \DB::table($refTable)->where('id', $referenceId)
-                    ->get() : \DB::table($refTable)->where('id', $referenceId)
-                    ->select(
-                        'username',
-                        'first_name',
-                        'last_name',
-                        'email',
-                        'phone_number',
-                        'status',
-                        'phone_number',
-                        'role'
-                    )
-                    ->get();
+                    ->get() : collect($systemClass->getUserProfile($referenceId))->except(['password', 'session_token', 'session_time']) ;
                     $eachResult->related[$table] = $relatedData;
                 }
             );
