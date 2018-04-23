@@ -254,7 +254,10 @@ window.onload(
         }
         getOptions(field_names, module_name, thArray);
       });
-      $("#flash_msg").modal({ show: true, backdrop: "static" });
+      $("#flash_msg").modal({
+        show: true,
+        backdrop: "static"
+      });
       jQExtn();
     });
 
@@ -295,7 +298,7 @@ window.onload(
                 $(new_row).attr("id", "dtRow");
               } else {
                 $("#error_flash").modal("show");
-                $("pre").text(JSON.stringify(data, null, 4));
+                $("pre").text(JSON.stringify(res, null, 4));
                 // $("#error_display").text(JSON.stringify(data));
               }
             });
@@ -305,7 +308,12 @@ window.onload(
               resource: [
                 {
                   name: module_table,
-                  params: [{ where: "id," + c[0], data: [payload] }]
+                  params: [
+                    {
+                      where: "id," + c[0],
+                      data: [payload]
+                    }
+                  ]
                 }
               ]
             };
@@ -377,7 +385,10 @@ window.onload(
 
       getOptions(field_names, module_name);
 
-      $("#add_form").modal({ show: true, backdrop: "static" });
+      $("#add_form").modal({
+        show: true,
+        backdrop: "static"
+      });
       jQExtn();
     });
 
