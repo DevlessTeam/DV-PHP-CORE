@@ -1,9 +1,4 @@
 <?php
-<<<<<<< HEAD
-=======
-
-
->>>>>>> v1.3
 use App\Helpers\Helper;
 use App\Helpers\ActionClass;
 use App\Helpers\DataStore as DS;
