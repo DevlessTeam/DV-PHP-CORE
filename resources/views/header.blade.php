@@ -53,6 +53,10 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
      mixpanel.track(JSON.stringify(userObj));
    }
 </script>
+
+<!-- HelpHero -->
+<script src="//app.helphero.co/embed/hoPRoUjR1So"></script>
+
   <body onload="init()" class="sticky-header">
     <section>
       @if(\Request::path() != '/' && \Request::path() != 'setup' && \Request::path() != 'recover_password')
@@ -146,7 +150,7 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
 <?php $menuName = (isset($menuName))? $menuName : ''; ?>
 <?php $services = (isset($services))? $services : []; ?>
 @if($menuName == 'all_services' && ! count($services) >= 2)
-<script>
+{{-- <script>
    $(function () {
 
     $('#quick-demo').modal({
@@ -154,5 +158,9 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
    });
    $('.modal-backdrop').removeClass("modal-backdrop");
 });
+</script> --}}
+<script>
+  HelpHero.identify("<?php URL() ?>", {});
+  HelpHero.startTour('8om7TSdcNaH')
 </script>
 @endif
