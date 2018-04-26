@@ -53,6 +53,10 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
      mixpanel.track(JSON.stringify(userObj));
    }
 </script>
+
+<!-- HelpHero -->
+<script src="//app.helphero.co/embed/hoPRoUjR1So"></script>
+
   <body onload="init()" class="sticky-header">
     <section>
       @if(\Request::path() != '/' && \Request::path() != 'setup' && \Request::path() != 'recover_password')
@@ -81,22 +85,6 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
             </ul>
           </div>
         </div>
-        
-        {{-- <button class="btn btn-sm btn-info pull-right" id="beamer-notification" > <i class="fa fa-bullhorn"></i> Notifications</button> --}}
-        
-        {{-- <a  style="margin-right: 2%" data-toggle="modal" data-target="#sdk-connect"  class="btn btn-sm btn-primary pull-right" >
-              <i class="fa fa-plug"></i>  Connect to App 
-        </a> --}}
-          
-        {{-- <a class="btn btn-sm btn-warning pull-right" data-toggle="modal" href="https://devless.gitbooks.io/devless-docs-1-3-0/html_sdk.html" target="blank" style="margin-right: 2%">&nbsp;&nbsp;&nbsp; <i class="fa fa-book"></i> Docs &nbsp;&nbsp;&nbsp;</a> --}}
-        
-        <!--toggle button end-->
-        <!-- Button trigger modal -->
-        
-        {{-- <button type="button"  style="margin-right: 2%" class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#quick-demo">
-            <i class="fa fa-play"></i>  Getting Started
-        </button> --}}
-        
        
       </div>
       <!-- header section end-->
@@ -162,7 +150,7 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
 <?php $menuName = (isset($menuName))? $menuName : ''; ?>
 <?php $services = (isset($services))? $services : []; ?>
 @if($menuName == 'all_services' && ! count($services) >= 2)
-<script>
+{{-- <script>
    $(function () {
 
     $('#quick-demo').modal({
@@ -170,5 +158,9 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
    });
    $('.modal-backdrop').removeClass("modal-backdrop");
 });
+</script> --}}
+<script>
+  HelpHero.identify("<?php URL() ?>", {});
+  HelpHero.startTour('8om7TSdcNaH')
 </script>
 @endif

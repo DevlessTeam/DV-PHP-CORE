@@ -13,7 +13,7 @@ trait schemaProperties
         'password' => 'string',
         'percentage' => 'integer',
         'url' => 'string',
-        'timestamp' => 'dateTime',
+    'timestamp' => 'dateTime',
         'boolean' => 'boolean',
         'email' => 'string',
         'reference' => 'integer',
