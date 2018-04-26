@@ -119,8 +119,8 @@ trait collectionLib
             return $this;
         }
 
-        $superArray = collect($superArray)->all();
-        $subArray = collect($subArray)->all();
+        $superArray = json_decode(json_encode($superArray),true);
+        $subArray = json_decode(json_encode($subArray), true);
         
         for ($count=0; $count < count($superArray); $count++) {
             foreach ($subArray as $singleObj) {
