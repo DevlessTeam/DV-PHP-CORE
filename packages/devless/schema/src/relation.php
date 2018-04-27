@@ -27,18 +27,20 @@ trait relation
         $service = $payload['service_name'];
         //loop over list of tables check if exist
         $systemClass = new \devless();
+        $allUsers = [];
+        if(in_array('_devless_users', $tables)) { $allUsers =  $systemClass->getAllUsers();}
         foreach ($results as $eachResult) {
             $eachResult->related = [];
             array_walk(
                 $tables,
-                function ($table) use ($eachResult, &$output, $service, $systemClass) {
+                function ($table) use ($eachResult, &$output, $service, $systemClass, $allUsers) {
                     $refTable = ($table != '_devless_users') ? $service.'_'.$table : 'users';
                     $refField = $refTable.'_id';
                     if($eachResult->$refField == null){return;}
                     $referenceId = (isset($eachResult->$refField)) ? $eachResult->$refField :
                     Helper::interrupt(640);
                     $relatedData = ($table != '_devless_users') ? \DB::table($refTable)->where('id', $referenceId)
-                    ->get() : collect($systemClass->getUserProfile($referenceId))->except(['password', 'session_token', 'session_time']) ;
+                    ->get() : collect(collect($allUsers)->where('id',2)[0])->except(['password', 'session_token', 'session_time']) ;
                     $eachResult->related[$table] = $relatedData;
                 }
             );

@@ -43,11 +43,21 @@ trait actions
      */
     public function createRelationship($mainTable, $relatedTable, $mainKey, $foreignId)
     {
-        $this->onTable($mainTable);
-
+        
+        
         if (!$this->execOrNot) {
             return $this;
         }
+        $this->onTable($mainTable);
+        if (!$this->execOrNot) {
+           return $this;
+        }
+        $this->afterQuerying();
+        if (!$this->execOrNot) {
+           Helper::interrupt(642, "You can only use createRelationship in the afterQuerying block");
+        }
+
+        
         if (isset($this->payload['results'])) {
             $mainData = (array) $this->payload['results'];
             $serviceName = $this->EVENT['service_name'];
