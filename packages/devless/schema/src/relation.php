@@ -40,7 +40,7 @@ trait relation
                     $referenceId = (isset($eachResult->$refField)) ? $eachResult->$refField :
                     Helper::interrupt(640);
                     $relatedData = ($table != '_devless_users') ? \DB::table($refTable)->where('id', $referenceId)
-                    ->get() : collect(collect($allUsers)->where('id',$referenceId)[0])->except(['password', 'session_token', 'session_time']) ;
+                    ->get() : collect(collect($allUsers)->where('id',$referenceId)->first())->except(['password', 'session_token', 'session_time']) ;
                     $eachResult->related[$table] = $relatedData;
                 }
             );
