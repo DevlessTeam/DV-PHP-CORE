@@ -66,7 +66,7 @@ trait queryParamList
         $search_key = $split_query[0];
         $search_words = explode(' ', $split_query[1]);
         foreach ($search_words as $search_word) {
-            $complete_query = $complete_query.'->orWhere("'.$search_key.'","LIKE","%'.$search_word.'%")';
+            $complete_query = $complete_query.'->orWhere("'.$search_key.'","ILIKE","%'.$search_word.'%")';
         }
     }
 
