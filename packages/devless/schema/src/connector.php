@@ -29,9 +29,6 @@ trait connector
         $prefix = '',
         $collation = 'utf8_unicode_ci'
     ) {
-        if ($driver == 'sqlite') {
-            $database = database_path('devless-rec.sqlite3');
-        }
         $conn = [
             'driver' => $driver,
             'host' => $host,
