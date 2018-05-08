@@ -27,7 +27,6 @@ trait relation
         $service = $payload['service_name'];
         //loop over list of tables check if exist
         $systemClass = new \devless();
-        $allUsers = [];
         
         $relIds = $this->get_all_related_ids($results, $service, $tables);
         $allRelated = $this->get_all_related_data($relIds);

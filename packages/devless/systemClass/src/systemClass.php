@@ -1,8 +1,8 @@
 <?php
-use App\Helpers\Helper;
 use App\Helpers\ActionClass;
 use App\Helpers\DataStore as DS;
 use App\Helpers\DevlessHelper as DVH;
+use App\Helpers\Helper;
 use App\Http\Controllers\ServiceController as service;
 
 /**
@@ -13,13 +13,12 @@ use App\Http\Controllers\ServiceController as service;
  * @Version: 1.0
  */
 
-
 //Action method for serviceName
 class devless
 {
     public $serviceName = 'dvauth';
     private $auth;
-    
+
     public function __construct()
     {
         $this->auth = new DVH();
@@ -61,22 +60,22 @@ class devless
         $role = null,
         $extraParams = null
     ) {
-    
+
         $payload = get_defined_vars();
-        
+
         $payload = array_slice($payload, 0, 8);
         $payload = self::getSetParams($payload);
         $auth = $this->auth;
+        // die(var_dump($extraParams));
         $output = $auth->signup($payload);
         $extProfile = [];
         if ($extraParams && \Schema::hasTable('devless_user_profile')) {
             $extraParams[]['users_id'] = $extraParams[]['devless_user_id'] = $output['profile']->id;
             $extProfile = $this->addExtraUserDetails($extraParams);
         }
-        
-        return (array)$output + $extProfile ;
-    }
 
+        return (array) $output + $extProfile;
+    }
 
     /**
      * login users  `->beforeCreating()->run('devless','login', [$username = null, $email = "team@devless.io", $phone_number = null, $password = "pass"])->storeAs($output)->stopAndOutput(1000, "login user Successfully")`
@@ -93,27 +92,27 @@ class devless
     {
         $payload = get_defined_vars();
         $payload = self::getSetParams($payload);
-       
+
         $auth = $this->auth;
-       
+
         $output = $auth->login($payload);
         return $output;
     }
-    
+
     /**
      * get user profile
      * @ACL public
      * @return array
-    */
+     */
     public function profile()
     {
         $auth = $this->auth;
-        
+
         $profile = $auth->get_profile();
-        
+
         return $profile;
     }
-    
+
     /**
      * logout
      * @ACL public
@@ -122,14 +121,14 @@ class devless
     {
         $auth = $this->auth;
         $logState = $auth->logOut();
-        
+
         return $logState;
     }
-    
+
     /**
      * method for handling user login
      * @ACL public
-    */
+     */
     public function updateProfile(
         $email = null,
         $password = null,
@@ -142,7 +141,7 @@ class devless
     ) {
         $payload = get_defined_vars();
         $payload = array_slice($payload, 0, 7);
-        
+
         $payload = self::getSetParams($payload);
         $auth = $this->auth;
 
@@ -154,28 +153,28 @@ class devless
         if (\Schema::hasTable('devless_user_profile')) {
             $extraOutput = $this->editExtraUserDetails($extraParams);
         }
-        return (array)$output + (array)$extraOutput;
+        return (array) $output + (array) $extraOutput;
     }
 
     /**
      * reset user account password
      * @ACL public
-    */
+     */
     public function reset_users_password($token)
     {
         $auth = $this->auth;
-        $state  = $auth->reset_users_password($token);
+        $state = $auth->reset_users_password($token);
         return $state;
     }
 
     /**
      * verify newly registered emails
      * @ACL public
-    */
+     */
     public function verify_users_email($token)
     {
-        $user_id = DS::getDump($token.'_'.$user_id);
-        $status  = (\DB::table('users')->where('id', $user_id)->update(['status'=>1]))?true:false;
+        $user_id = DS::getDump($token . '_' . $user_id);
+        $status = (\DB::table('users')->where('id', $user_id)->update(['status' => 1])) ? true : false;
         return $status;
     }
     private static function getSetParams($payload)
@@ -199,7 +198,7 @@ class devless
     public function addData($serviceName, $table, $data)
     {
         $service = new service();
-        $data = (isset($data[0]))? $data : [$data];
+        $data = (isset($data[0])) ? $data : [$data];
         $output = DS::service($serviceName, $table, $service)->addData($data);
         return $output;
     }
@@ -215,7 +214,7 @@ class devless
     {
         $service = new service();
 
-        $queryBuilder =  DS::service($serviceName, $table, $service);
+        $queryBuilder = DS::service($serviceName, $table, $service);
         if ($queryParams) {
             foreach ($queryParams as $eachParamName => $eachParamArgs) {
                 if (is_array($eachParamArgs)) {
@@ -287,9 +286,9 @@ class devless
      * @return array
      * @ACL private
      */
-    public function getUserProfile($input, $key='id')
+    public function getUserProfile($input, $key = 'id')
     {
-        (empty($input))? Helper::interrupt(641):false;
+        (empty($input)) ? Helper::interrupt(641) : false;
         if (is_array($input)) {
             $id = $input['id'];
         } else {
@@ -297,7 +296,7 @@ class devless
         }
         $profile = DB::table('users')->where($key, $id)->get();
         if ($profile) {
-            $userProfile = (array)$profile[0];
+            $userProfile = (array) $profile[0];
             $extraDetails = $this->getExtraUserDetails($userProfile['id']);
             $completeUserProfile = $userProfile + $extraDetails;
             return $completeUserProfile;
@@ -318,30 +317,50 @@ class devless
     }
 
     /**
+     * Search for users users were the input matches either username, phone number, first name , last name or emails ->import('devless')-> beforeQuerying()->searchUserProfile("3284324343")>storeAs($users)->stopAndOutput(1000, 'list of users',$users)`
+     * @param $input
+     * @return array
+     * @ACL private
+     */
+
+    public function searchUserProfile($input)
+    {
+        return \DB::table('users')
+            ->where('status', 1)
+            ->where(function ($query) use ($input) {
+                $query->where('email', $input)
+                    ->orWhere('username', $input)
+                    ->orWhere('phone_number', $input)
+                    ->orWhere('first_name', $input)
+                    ->orWhere('last_name', $input);
+            })->get();
+    }
+
+    /**
      * Deactivate user account `->import('devless')->beforeCreating()->deactivateUserAccount("username", "foo")->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $key
      * @param $value
      * @return array
      * @ACL private
      */
-    public function deactivateUserAccount($value, $key='id') 
+    public function deactivateUserAccount($value, $key = 'id')
     {
         return $this->changeUserStatus(0, $value, $key);
     }
 
-     /**
+    /**
      * Activate User Account`->import('devless')->beforeCreating()->activateUserAccount("username", "foo")->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $key
      * @param $value
      * @return array
      * @ACL private
      */
-    public function activateUserAccount($value, $key='id')
+    public function activateUserAccount($value, $key = 'id')
     {
         return $this->changeUserStatus(1, $value, $key);
     }
 
-      /**
+    /**
      * Toggle User Account Status`->import('devless')->beforeCreating()->toggleUserAccountState(0, "username", "foo")->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param bol $state
      * @param $key
@@ -349,15 +368,15 @@ class devless
      * @return array
      * @ACL private
      */
-    public function toggleUserAccountState($value, $key) 
+    public function toggleUserAccountState($value, $key)
     {
         $user = $this->getUserWhere($key, $value);
-        if(isset($user['status'])){return [];}
-        if($user['status'] == 0 ) {return $this->activateUserAccount($value, $key);}
+        if (isset($user['status'])) {return [];}
+        if ($user['status'] == 0) {return $this->activateUserAccount($value, $key);}
         return $this->deativateUserAccount($value, $key);
     }
 
-   /**
+    /**
      * changeUserStatus`->import('devless')->beforeCreating()->changeUserStatus(0, "username", "foo")->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param bol $state
      * @param $key
@@ -365,25 +384,24 @@ class devless
      * @return array
      * @ACL private
      */
-    public function changeUserStatus($state, $value, $key='id')
+    public function changeUserStatus($state, $value, $key = 'id')
     {
         $user = $this->getUserWhere($key, $value);
 
-        if(! isset($user['id'])){return false;}
+        if (!isset($user['id'])) {return false;}
 
-        return  $this->updateUserProfile(
-        $user['id'],
-        $email = '',
-        $password = '',
-        $username = '',
-        $phone_number = '',
-        $first_name = '',
-        $last_name = '',
-        $remember_token = '',
-        $status = $state
+        return $this->updateUserProfile(
+            $user['id'],
+            $email = '',
+            $password = '',
+            $username = '',
+            $phone_number = '',
+            $first_name = '',
+            $last_name = '',
+            $remember_token = '',
+            $status = $state
         );
     }
-
 
     /**
      * Get all users `->import('devless')->beforeCreating()->getAllUsers(2)->storeAs($output)->stopAndOutput(1000, "output", $output)`
@@ -392,12 +410,12 @@ class devless
      */
     public function getAllUsers()
     {
-         $profile = DB::table('users')->select(
-             [
-               "users.id",  "username", "email", "first_name", "last_name", "phone_number", "status"
-             ]
-         )->get();
-    
+        $profile = DB::table('users')->select(
+            [
+                "users.id", "username", "email", "first_name", "last_name", "phone_number", "status",
+            ]
+        )->get();
+
         if (Schema::hasTable('devless_user_profile')) {
             $extProfile = DB::table('devless_user_profile')->get();
             foreach ($extProfile as $index => $fields) {
@@ -412,7 +430,6 @@ class devless
             }
         }
 
-
         return $profile;
     }
 
@@ -423,9 +440,8 @@ class devless
      */
     public function deleteUserProfile($id)
     {
-        return (\DB::table('users')->where('id', $id)->delete())?true:false;
+        return (\DB::table('users')->where('id', $id)->delete()) ? true : false;
     }
-
 
     /**
      * Update a users profile `->import('devless')->beforeCreating()->updateUserProfile($id=1,$email = '',$password = '',$username = 'eddymens',$phone_number = '',$first_name = '',$last_name = '')->storeAs($output)->stopAndOutput(1000, "output", $output)`
@@ -451,7 +467,7 @@ class devless
         $remember_token = '',
         $status = ''
     ) {
-        $profileUpdate =array_filter(
+        $profileUpdate = array_filter(
             get_defined_vars(),
             function ($value) {
                 return $value !== '';
@@ -461,7 +477,7 @@ class devless
             $profileUpdate['password'] = Helper::password_hash($profileUpdate['password']);
         }
         unset($profileUpdate['id']);
-        return (DB::table('users')->where('id', $id)->update($profileUpdate))?true:false;
+        return (DB::table('users')->where('id', $id)->update($profileUpdate)) ? true : false;
     }
 
     /**
@@ -516,12 +532,12 @@ class devless
     {
         $service = new service();
         $output = DS::service('devless', 'user_profile', $service)->where('users_id', $id)->getData();
-        if(! isset($output['payload']['results'])) {return [];}
+        if (!isset($output['payload']['results'])) {return [];}
         $output = $output['payload']['results'];
         if (!isset($output[0])) {
             return [];
         }
-        $newOutput = (array)$output[0];
+        $newOutput = (array) $output[0];
         unset($newOutput['id'], $newOutput['devless_user_id'], $newOutput['users_id']);
         return $newOutput;
     }
@@ -531,11 +547,12 @@ class devless
         $service = new service();
         $flattendDetails = [];
 
-        for ($i=0; $i < count($extraDetails); $i++) {
+        for ($i = 0; $i < count($extraDetails); $i++) {
             $key = array_keys($extraDetails[$i]);
             $value = array_values($extraDetails[$i]);
             $flattendDetails[$key[0]] = $value[0];
         }
+        // die(var_dump($extraDetails));
         $output = DS::service('devless', 'user_profile', $service)->addData([$flattendDetails]);
 
         if ($output['status_code'] !== 609) {
@@ -550,12 +567,12 @@ class devless
         $service = new service();
         $flattendDetails = [];
 
-        for ($i=0; $i < count($extraDetails); $i++) {
+        for ($i = 0; $i < count($extraDetails); $i++) {
             $key = array_keys($extraDetails[$i]);
             $value = array_values($extraDetails[$i]);
             $flattendDetails[$key[0]] = $value[0];
         }
-        
+
         if (!isset($flattendDetails['users_id'])) {
             return [];
         }
@@ -563,7 +580,7 @@ class devless
         unset($flattendDetails['users_id']);
 
         $output = DS::service('devless', 'user_profile', $service)->where('users_id', $id)->update($flattendDetails);
-        if ($output['status_code'] ==  619) {
+        if ($output['status_code'] == 619) {
             return DS::service('devless', 'user_profile', $service)->where('users_id', $id)->getData()['payload']['results'][0];
         }
         return [];
