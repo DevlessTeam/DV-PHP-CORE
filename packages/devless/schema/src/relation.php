@@ -22,24 +22,26 @@ trait relation
 
         $serviceTables = $this->_get_all_service_tables($payload);
         $tables = (in_array('*', $tables)) ?
-            $this->_get_all_related_tables($primaryTable) : $tables;
+        $this->_get_all_related_tables($primaryTable) : $tables;
         $output = [];
         $service = $payload['service_name'];
         //loop over list of tables check if exist
         $systemClass = new \devless();
+        
+        $relIds = $this->get_all_related_ids($results, $service, $tables);
+        $allRelated = $this->get_all_related_data($relIds);
+        
         foreach ($results as $eachResult) {
             $eachResult->related = [];
             array_walk(
                 $tables,
-                function ($table) use ($eachResult, &$output, $service, $systemClass) {
-                    $refTable = ($table != '_devless_users') ? $service.'_'.$table : 'users';
-                    $refField = $refTable.'_id';
-                    if($eachResult->$refField == null){return;}
+                function ($table) use ($eachResult, &$output, $service, $systemClass, $allRelated) {
+                    $refTable = ($table != '_devless_users') ? $service . '_' . $table : 'users';
+                    $refField = $refTable . '_id';
+                    if ($eachResult->$refField == null) {return;}
                     $referenceId = (isset($eachResult->$refField)) ? $eachResult->$refField :
                     Helper::interrupt(640);
-                    $relatedData = ($table != '_devless_users') ? \DB::table($refTable)->where('id', $referenceId)
-                    ->get() : collect($systemClass->getUserProfile($referenceId))->except(['password', 'session_token', 'session_time']) ;
-                    $eachResult->related[$table] = $relatedData;
+                    $eachResult->related[$table] = [collect($allRelated[$refTable])->where('id', $referenceId)->first()]; 
                 }
             );
             array_push($output, $eachResult);
@@ -47,10 +49,50 @@ trait relation
 
         return $output;
     }
+
+    private function get_all_related_data($relIds) 
+    {
+        $relatedData = [];
+        foreach ($relIds as $table => $ids) {
+            if($table == 'users') {
+                $userData = \DB::table('users')->whereIn('id', $ids)->get(); 
+                $relatedData['users'] = collect($userData)->map(function ($item)  {
+                    return collect($item)->except(['password', 'session_token', 'session_time']);
+                });
+            } else {
+                $relatedData[$table] = \DB::table($table)->whereIn('id', $ids)->get(); 
+            }
+        }
+        return $relatedData;
+    }
+
+    /**
+     *Get all related ids for a table.
+     *
+     *@param $results
+     *@param $service
+     *@param $tableName
+     *
+     *@return array
+     */
+    private function get_all_related_ids($results, $service, $tables)
+    {
+        $relationIds = [];
+        // die(var_dump($results));
+        foreach ($tables as $table) {
+            $relationKey = ($table == '_devless_users') ? 'users' : $service . '_' . $table ;
+            $relIds = collect($results)->map(function ($item) use ($service, $table, $relationKey) {
+                return $item->{$relationKey.'_id'};
+            });
+            $relationIds[$relationKey] = $relIds;
+        }
+        return $relationIds;
+
+    }
     /**
      *Get all related tables for a service.
      *
-     *@param $stableName
+     *@param $tableName
      *
      *@return array
      */

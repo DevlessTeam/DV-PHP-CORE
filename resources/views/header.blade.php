@@ -54,9 +54,6 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
    }
 </script>
 
-<!-- HelpHero -->
-<script src="//app.helphero.co/embed/hoPRoUjR1So"></script>
-
   <body onload="init()" class="sticky-header">
     <section>
       @if(\Request::path() != '/' && \Request::path() != 'setup' && \Request::path() != 'recover_password')
@@ -149,7 +146,7 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
 </div>
 <?php $menuName = (isset($menuName))? $menuName : ''; ?>
 <?php $services = (isset($services))? $services : []; ?>
-@if($menuName == 'all_services' && ! count($services) >= 2)
+@if($menuName == 'all_services' && count($services) == 1)
 {{-- <script>
    $(function () {
 
@@ -159,8 +156,11 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
    $('.modal-backdrop').removeClass("modal-backdrop");
 });
 </script> --}}
+
+<!-- HelpHero -->
+<script src="https://app.helphero.co/embed/hoPRoUjR1So"></script>
 <script>
   HelpHero.identify("<?php URL() ?>", {});
-  HelpHero.startTour('8om7TSdcNaH')
+  HelpHero.startTour('8om7TSdcNaH', { skipIfAlreadySeen: true })
 </script>
 @endif
