@@ -16,7 +16,7 @@ trait collectionLib
             return $this;
         }
         $arr = [];
-        $collection = (is_null($collection))?[]:$collection;
+        $collection = (is_null($collection)) ? [] : $collection;
         $arr = $this->objToArray($collection, $arr);
         $this->results = $arr;
         $this->cleanOutput();
@@ -70,14 +70,14 @@ trait collectionLib
             return $this;
         }
         $collection = $this->useArgsOrPrevOutput($collection);
-        $collection = (is_array($collection))?$collection:$collection;
+        $collection = (is_array($collection)) ? $collection : $collection;
 
         $this->results = collect($collection)->flip()->flatten()->toArray();
         $this->cleanOutput();
         return $this;
     }
 
-     /**
+    /**
      *get the first element in a collection eg: `->beforeCreating()->fromTheCollectionOf(["name"=>"mike", "age"=>29])->getFirstElement()->storeAs($element)->stopAndOutput(1000, "got response", $element) #["mike"]`
      *
      * @param $collection
@@ -119,10 +119,10 @@ trait collectionLib
             return $this;
         }
 
-        $superArray = json_decode(json_encode($superArray),true);
+        $superArray = json_decode(json_encode($superArray), true);
         $subArray = json_decode(json_encode($subArray), true);
-        
-        for ($count=0; $count < count($superArray); $count++) {
+
+        for ($count = 0; $count < count($superArray); $count++) {
             foreach ($subArray as $singleObj) {
                 if (!isset($superArray[$count][$resultingKey]) && !$addToRelated) {
                     $superArray[$count][$resultingKey] = [];
@@ -134,13 +134,13 @@ trait collectionLib
                     $superArray[$count]['related'][$resultingKey] = [];
                 }
                 if ($superArray[$count][$superKey] == $singleObj[$subKey]) {
-                    ($addToRelated)?array_push($superArray[$count]['related'][$resultingKey], $singleObj):
+                    ($addToRelated) ? array_push($superArray[$count]['related'][$resultingKey], $singleObj) :
                     array_push($superArray[$count][$resultingKey], $singleObj);
                 }
             }
         }
         $this->results = collect($superArray);
-        ;
+
         $this->cleanOutput();
         return $this;
     }
@@ -163,7 +163,7 @@ trait collectionLib
         return $this;
     }
 
-     /**
+    /**
      *get the nth element in a collections eg: `->beforeCreating()->collect(["Joe", "Sam", "Mike"])->getElement(1)->storeAs($element)->stopAndOutput(1000, "got response", $element) #Joe`
      *
      * @param $nth
@@ -177,8 +177,8 @@ trait collectionLib
             return $this;
         }
         $collection = $this->useArgsOrPrevOutput($collection);
-        $collection = (isset($collection[$nth-1]))
-        ?$collection[$nth-1]:[];
+        $collection = (isset($collection[$nth - 1]))
+        ? $collection[$nth - 1] : [];
         $this->results = $collection;
         $this->cleanOutput();
         return $this;
@@ -265,10 +265,9 @@ trait collectionLib
     }
 
     /**
-     *get a new collection of only a particular key value pair eg: `->beforeCreating()->collect([["item"=>"soap", "quantity"=>5],["item"=>"milk", "quantity"=>3],["item"=>"book", "quantity"=>5]])->fetchOnly("quantity")->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #[5,3,5]`
+     * get a new collection of only a particular key value pair eg: `->beforeCreating()->collect([["item"=>"soap", "quantity"=>5],["item"=>"milk", "quantity"=>3],["item"=>"book", "quantity"=>5]])->fetchOnly("quantity")->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #[5,3,5]`
      *
      * @param $key
-     * @param $value
      * @param $collection
      *
      * @return $this
@@ -278,10 +277,54 @@ trait collectionLib
         if (!$this->execOrNot) {
             return $this;
         }
-        $collection = $this->useArgsOrPrevOutput($collection);
-        $this->results = array_column((array)$collection, $keys);
+        $keyList = [];
+        $keyList[] = $keys;
+        $newCollection = [];
+        $collection = (array) $this->useArgsOrPrevOutput($collection);
+        if (is_array($keys)) {
+            $keyList = $keys;
+            foreach ($collection as $element) {
+                $element = (array) $element;
+                foreach ($keyList as $key) {
+                    $newElement[$key] = $element[$key];
+                }
+                $newCollection[] = $newElement;
+            }
+
+        } else {
+            $newCollection = array_column(json_decode(json_encode($collection, true), true), $keys);
+        }
+        $this->results = $newCollection;
         $this->cleanOutput();
         return $this;
+
+    }
+    /**
+     * get a new collection containing all keys except a choosen few pair eg: `->import('devless')->beforeQuerying()->getAllUsers()->fetchExcept("first_name")->storeAs($collection)->stopAndOutput(1000, "got response", $collection)`
+     *
+     * @param $key
+     * @param $collection
+     *
+     * @return $this
+     */
+
+    public function fetchExcept($keys, $collection = null)
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        $keyList = [];
+        $keyList[] = $keys;
+        $newCollection = [];
+        $collection = (array) $this->useArgsOrPrevOutput($collection);
+        $keyList = $keys;
+        foreach ($collection as $element) {
+            $newCollection[] = collect($element)->except($keyList)->toArray();
+        }
+        $this->results = $newCollection;
+        $this->cleanOutput();
+        return $this;
+
     }
 
     public function dot($array, $prepend = '')
@@ -290,9 +333,9 @@ trait collectionLib
 
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $results = array_merge($results, static::dot($value, $prepend.$key.'.'));
+                $results = array_merge($results, static::dot($value, $prepend . $key . '.'));
             } else {
-                $results[$prepend.$key] = $value;
+                $results[$prepend . $key] = $value;
             }
             $results[$key] = $value;
         }
@@ -309,39 +352,36 @@ trait collectionLib
      */
     public function apply($method, $params = [])
     {
-        
+
         if (!$this->execOrNot) {
             return $this;
         }
         $parseParams = function ($params, $counter) {
             foreach ($params as $key => $value) {
                 if (gettype($value) == 'array' && $value[0] = "#ITR") {
-                        $data = $value[1];
-                        $value[2] = str_replace('#counter', $counter, $value[2]);
-                        $itrData = $this->dot($data)[$value[2]];
-                        $params[$key] = $itrData;
+                    $data = $value[1];
+                    $value[2] = str_replace('#counter', $counter, $value[2]);
+                    $itrData = $this->dot($data)[$value[2]];
+                    $params[$key] = $itrData;
                 }
             }
             return $params;
         };
-        
 
         $data = $this->results;
         $newOutput = [];
         if (is_scalar($data)) {
-            return $this->$method(... $params);
+            return $this->$method(...$params);
         }
         foreach ($data as $key => $value) {
             $this->results = $value;
-            $this->$method(... $parseParams($params, $key));
+            $this->$method(...$parseParams($params, $key));
             $newOutput[] = $this->results;
         }
         $this->results = $newOutput;
         return $this;
     }
 
-
-   
     public function onTheCollectionApplyMethod($method, $key = null, $newKey = null)
     {
         if (!$this->execOrNot) {
@@ -350,7 +390,7 @@ trait collectionLib
         $params = func_get_args();
         unset($params[0], $params[1]);
         $input = $this->results;
-        for ($i=0; $i < count($input); $i++) {
+        for ($i = 0; $i < count($input); $i++) {
             if ($key) {
                 $this->$method($input[$i][$key]);
             } else {
@@ -368,7 +408,7 @@ trait collectionLib
         return $this;
     }
 
-     /**
+    /**
      *apply a method to a key in the collection eg: `->beforeCreating()->collect([["name"=>"Joe", "age"=>12],["name"=>"Mark", "age"=>23]])->applyOnElement("convertToUpperCase", "name" )->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #[["name"=>"JOE", "age"=>12],["name"=>"MARK", "age"=>23]]`
      *
      * @param $method
@@ -391,7 +431,7 @@ trait collectionLib
         $eachOne = $items;
         foreach ($eachOne as $key => $value) {
             extract($variables);
-            eval('$this->'.$script.';');
+            eval('$this->' . $script . ';');
         }
         $this->results = $eachOne;
         $this->cleanOutput();
@@ -469,7 +509,6 @@ trait collectionLib
         return $this;
     }
 
-
     /**
      * reduce the number of elements to N eg: `->beforeCreating()->collect(["Adam", "Ben", "Zina"])->reduceNumberOfElementsTo(1)->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["Adam"]`
      *
@@ -519,7 +558,7 @@ trait collectionLib
      */
     public function findCollectionDiffs($collectionOne, $collectionTwo)
     {
-        
+
         if (!$this->execOrNot) {
             return $this;
         }
@@ -543,21 +582,21 @@ trait collectionLib
         }
         $output = [];
         $template = [];
-    
+
         foreach ($this->useArgsOrPrevOutput($collection) as $key => $data) {
-            $push_to_array  = function () use (&$output, &$eachValue, &$template, &$key) {
+            $push_to_array = function () use (&$output, &$eachValue, &$template, &$key) {
                 $innerTemplate = $template;
                 $innerTemplate[$key] = $eachValue;
                 $output[] = $innerTemplate;
             };
             if (!is_scalar($data)) {
                 foreach ($data as $index => $eachValue) {
-                    (isset($output[$index]))?
+                    (isset($output[$index])) ?
                     $output[$index][$key] = $eachValue :
                     $push_to_array();
                 }
             } else {
-                for ($i=0; $i< count($output); $i++) {
+                for ($i = 0; $i < count($output); $i++) {
                     $output[$i][$key] = $data;
                 }
             }
@@ -567,7 +606,7 @@ trait collectionLib
         return $this;
     }
 
-     /**
+    /**
      * add an element to a collection eg: `->beforeCreating()->collect(["name"=>"mike"])->addElementToCollection(23,"age")->storeAs($collection)->stopAndOutput(1000, "got response", $collection) #["name"=>"mike","age"=>23]`
      *
      * @param $element
@@ -648,7 +687,6 @@ trait collectionLib
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
-    
     public function objToArray($obj, &$arr)
     {
         if (!$this->execOrNot) {
