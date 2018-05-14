@@ -44,18 +44,3 @@
 
 <!-- Toastr -->
 <script src="{{ Request::secure(Request::path()).'/js/toastr.js'}}" type="text/javascript"></script>
-
-<!-- Chatra {literal} -->
-<script>
-    (function(d, w, c) {
-        w.ChatraID = 'gkhabyT7T2KQndYsf';
-        var s = d.createElement('script');
-        w[c] = w[c] || function() {
-            (w[c].q = w[c].q || []).push(arguments);
-        };
-        s.async = true;
-        s.src = 'https://call.chatra.io/chatra.js';
-        if (d.head) d.head.appendChild(s);
-    })(document, window, 'Chatra');
-</script>
-<!-- /Chatra {/literal} -->

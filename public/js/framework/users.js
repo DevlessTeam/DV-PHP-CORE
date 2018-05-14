@@ -1,6 +1,6 @@
+var Datatable;
 $(document).ready(function () {
     var dataSet = [];
-    var Datatable;
     var user_id;
     var rowData;
     var element_id;
@@ -14,7 +14,7 @@ $(document).ready(function () {
             targets: 0
         }],
         select: {
-            style:    'os',
+            style:    'multi',
             selector: 'td:first-child'
         },
         order: [
@@ -22,7 +22,11 @@ $(document).ready(function () {
         ]
     });
 
-    $(document).on("click", "#dtRow", function() {
+    $(document).on("click", "#dtRow", function(e) {
+        //suppose not to show modal when the checkbox is selected
+        $cell = $(e.target).closest('td')
+        if ($cell.index() < 1) return;
+        
         // grab row id
         element_id = $(this).find("tr").context._DT_RowIndex;
 
@@ -75,6 +79,9 @@ $(document).ready(function () {
                                 res.payload.result.profile.status
                             ])
                             .draw();
+                        var row_index = Datatable.row([Datatable.data().length - 1]);
+                        var new_row = Datatable.row(row_index).node();
+                        $(new_row).attr("id", "dtRow");
                         $(".alert").show();
                     } else {
                         alert("User creation failed");
@@ -152,6 +159,10 @@ $(document).ready(function () {
 
         var payload = $(this).serializeObject();
 
+        payload.username = (payload.username !== '') ? payload.username : null;
+        payload.phone_number = (payload.phone_number !== '') ? payload.phone_number : null;
+        payload.email = (payload.email !== '') ? payload.email : null;
+
         if (payload.password === payload.confirm_password) {
             $.ajax({
                 url: "update_user",
@@ -167,9 +178,9 @@ $(document).ready(function () {
                     active: payload.active
                 }
             }).done(function (res) {
-                if (res === 'true') {
+                res = JSON.parse(res);
+                if (res === true) {
                     active = (payload.active === "on") ? true : false;
-
                     Datatable.row(element_id).data([
                         "",
                         user_id,
@@ -180,16 +191,40 @@ $(document).ready(function () {
                         payload.email,
                         active
                     ]);
-                    $(".alert").show();
+                    // $(".alert").show();
+                    flash('success', 'User updated successfully.');
                 } else {
-                    alert("Error updating user info");
+                    flash('error', 'User update failed.');
                 }
             });
         } else {
-            alert("Password doesn't match");
+            flash('error', 'Password doesn\'t match');
         }
     });
 });
+
+function flash(alert, message) {
+    toastr.options = {
+        closeButton: true,
+        debug: false,
+        progressBar: true,
+        positionClass: "toast-top-right",
+        onclick: null,
+        showDuration: "3000",
+        hideDuration: "3000",
+        timeOut: "5000",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut"
+    };
+    if (alert == "success") {
+        toastr["success"](message, "Success Alert");
+    } else {
+        toastr["error"](message, "Error Alert");
+    }
+}
 
 var authSettings = {};
 authSettings.get = function (callback) {
@@ -241,5 +276,8 @@ authForm.populate();
 //hide modal
 function hideModal () {
     $('#udModal').modal('hide');
-    $('tr').removeClass('selected');
+}
+
+function init() {
+    console.log('console logs are expensive')
 }
