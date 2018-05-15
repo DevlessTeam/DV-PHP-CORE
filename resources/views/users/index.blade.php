@@ -45,8 +45,8 @@
             </thead>
             <tbody>
                 @foreach($users as $user)
-                <tr>
-                    <td id="dtRow"></td>
+                <tr id="dtRow">
+                    <td></td>
                     <td>{{$user->id}}</td>
                     <td>{{$user->username}}</td>
                     <td>{{$user->first_name}}</td>
@@ -152,9 +152,6 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                         <h4 class="modal-title" id="myModalLabel">
                             <b>Update User</b>
                         </h4>
@@ -234,7 +231,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="sumbit" class="btn btn-primary" id="update">Update User</button>
-                        <button class="btn btn-danger" onclick="hideModal()">Cancel</button>
+                        <button type="button" class="btn btn-danger" onclick="hideModal()">Cancel</button>
                     </div>
                     </form>
                 </div>

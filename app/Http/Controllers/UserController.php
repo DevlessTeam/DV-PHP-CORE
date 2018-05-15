@@ -34,27 +34,29 @@ class UserController extends Controller
 
     public function update_user(Request $request)
     {
+        $db = false;
+
         if ($request->password == '') {
-            if (DB::table('users')->where('id', $request->id)                ->update(
+            if ($db = DB::table('users')->where('id', $request->id)->update(
                 [
-                'username'      => $request->username,
+                'username'      => ($request->username !== "") ? $request->username : null,
                 'first_name'    => $request->first_name,
                 'last_name'     => $request->last_name,
-                'phone_number'  => $request->phone_number,
-                'email'         => $request->email,
+                'phone_number'  => ($request->phone_number !== "") ? $request->phone_number : null,
+                'email'         => ($request->email !== "") ? $request->email : null,
                 'status'        => ($request->active == 'on') ? 1 : 0
                 ]
             )) {
                 return json_encode(true);
             }
         } else {
-            if (DB::table('users')->where('id', $request->id)                ->update(
+            if ($db = DB::table('users')->where('id', $request->id)->update(
                 [
-                'username'      => $request->username,
+                'username'      => ($request->username !== "") ? $request->username : null,
                 'first_name'    => $request->first_name,
                 'last_name'     => $request->last_name,
-                'phone_number'  => $request->phone_number,
-                'email'         => $request->email,
+                'phone_number'  => ($request->phone_number !== "") ? $request->phone_number : null,
+                'email'         => ($request->email !== "") ? $request->email : null,
                 'password'      => bcrypt($request->password),
                 'status'        => ($request->active == 'on') ? 1 : 0
                 ]
