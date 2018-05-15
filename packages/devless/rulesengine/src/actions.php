@@ -61,7 +61,8 @@ trait actions
         if (isset($this->payload['results'])) {
             $mainData = (array) $this->payload['results'];
             $serviceName = $this->EVENT['service_name'];
-            $relatedData = (array)\DB::table($serviceName.'_'.$relatedTable)->get();
+            $tableName = ($relatedTable  == 'devless_users')? 'users': $serviceName.'_'.$relatedTable;
+            $relatedData = (array)\DB::table($tableName)->get();
             $this->appendCollectionToRelated($mainData, $relatedData, $mainKey, $foreignId, $relatedTable);
             $newResults =  ['results' => $this->results];
             if(isset($this->payload['properties'])) {$newResults['properties'] = $this->payload['properties'];}
