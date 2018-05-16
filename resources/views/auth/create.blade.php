@@ -74,7 +74,7 @@
                   </div>
                 </div>
 
-                    <input type="hidden" id="app_name-field" name="app_name" value="Set app name" class="form-control" required="">
+                    <input type="hidden" id="app_name-field" name="app_name" value="Set__app_name" class="form-control" required="">
 
                         <textarea class="form-control" id="app_description-field"  rows="3" type="hidden" name="app_description" style="display: none;">Add description here</textarea>
 
