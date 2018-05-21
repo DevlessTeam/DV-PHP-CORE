@@ -165,4 +165,10 @@ $this->rules->collect(["Adam", "Ben", "Zina"])->offsetCollectionBy(1);
        $this->rules->collect(["Mark",23])->useCollectionAsKeys(["name", "age"]);
        $this->assertEquals(collect(["name"=>"Mark","age"=>23])->all(), $this->rules->results->all());
     }
+
+    public function testmergeCollection()
+    {
+       $this->rules->collect([1,2])->mergeCollectionWith([3,4]);
+       $this->assertEquals(collect([1,2,3])->all(), $this->rules->results->all());
+    }
 }
