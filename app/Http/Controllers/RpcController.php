@@ -34,7 +34,7 @@ class RpcController extends Controller
         if (file_exists($serviceMethodPath)) {
             include_once $serviceMethodPath;
         } else {
-            return Helper::interrupt(604);
+            return Helper::interrupt(604, "The Service $service does not exist or you just misspelt it. Also be sure the service is set to active");
         }
 
         $server = new Server(json_encode($edited_request, true)) ;
