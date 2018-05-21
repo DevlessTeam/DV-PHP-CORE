@@ -78,7 +78,7 @@ class HelpersTest extends TestCase
                 'url'        => 'devless.io/#!/main',
                 'base64'     => 'random string',
                 'image'      => 1,
-                'phone_number' => 'Silence is golden'
+                'phone_number' => 'Silence is golden',
                 'user_timestamp' => 'Silence is golden'
 
             ];
