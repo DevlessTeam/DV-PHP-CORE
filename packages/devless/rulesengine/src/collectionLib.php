@@ -290,14 +290,12 @@ trait collectionLib
                 }
                 $newCollection[] = $newElement;
             }
-
         } else {
             $newCollection = array_column(json_decode(json_encode($collection, true), true), $keys);
         }
         $this->results = $newCollection;
         $this->cleanOutput();
         return $this;
-
     }
     /**
      * get a new collection containing all keys except a choosen few pair eg: `->import('devless')->beforeQuerying()->getAllUsers()->fetchExcept("first_name")->storeAs($collection)->stopAndOutput(1000, "got response", $collection)`
@@ -324,7 +322,6 @@ trait collectionLib
         $this->results = $newCollection;
         $this->cleanOutput();
         return $this;
-
     }
 
     public function dot($array, $prepend = '')
@@ -352,7 +349,6 @@ trait collectionLib
      */
     public function apply($method, $params = [])
     {
-
         if (!$this->execOrNot) {
             return $this;
         }
@@ -424,7 +420,6 @@ trait collectionLib
 
     public function forEachOneIn($items, $script, $variables = [])
     {
-
         if (!$this->execOrNot) {
             return $this;
         }
@@ -558,7 +553,6 @@ trait collectionLib
      */
     public function findCollectionDiffs($collectionOne, $collectionTwo)
     {
-
         if (!$this->execOrNot) {
             return $this;
         }
@@ -675,7 +669,21 @@ trait collectionLib
         $this->cleanOutput();
         return $this;
     }
-
+    /**
+     * merge two collections together eg: ` -> beforeQuerying()->assign([5,6,7,8])->to($collectionOne)->assign([1,2,3,4])->to($collectionTwo)->mergeCollectionWith($collectionOne)->storeAs($mergedCollection)->stopAndOutput(111, 'output', [$mergedCollection])#[1,2,3,4,5,6,7,8]`
+     * @param $collectionTwo
+     * @return $this
+     */
+    public function mergeCollectionWith($collectionTwo)
+    {
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        $collectionOne = $this->results;
+        $mergedCollection = collect($collectionOne)->merge($collectionTwo);
+        $this->results = $mergedCollection;
+        return $this;
+    }
     public function isAssoc(array $arr)
     {
         if (!$this->execOrNot) {

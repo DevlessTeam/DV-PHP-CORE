@@ -16,7 +16,6 @@ trait actions
      */
     public function onTable()
     {
-
         if (!$this->isCurrentDBAction) {
             return $this;
         }
@@ -43,18 +42,16 @@ trait actions
      */
     public function createRelationship($mainTable, $relatedTable, $mainKey, $foreignId)
     {
-        
-        
         if (!$this->execOrNot) {
             return $this;
         }
         $this->onTable($mainTable);
         if (!$this->execOrNot) {
-           return $this;
+            return $this;
         }
         $this->afterQuerying();
         if (!$this->execOrNot) {
-           Helper::interrupt(642, "You can only use createRelationship in the afterQuerying block");
+            Helper::interrupt(642, "You can only use createRelationship in the afterQuerying block");
         }
 
         
@@ -65,7 +62,9 @@ trait actions
             $relatedData = (array)\DB::table($tableName)->get();
             $this->appendCollectionToRelated($mainData, $relatedData, $mainKey, $foreignId, $relatedTable);
             $newResults =  ['results' => $this->results];
-            if(isset($this->payload['properties'])) {$newResults['properties'] = $this->payload['properties'];}
+            if (isset($this->payload['properties'])) {
+                $newResults['properties'] = $this->payload['properties'];
+            }
             $this->payload = $newResults;
         }
         return $this;
@@ -174,7 +173,6 @@ trait actions
      */
     public function makeExternalRequest($method, $url, $data = '{}', $headers = [])
     {
-
         if (!$this->execOrNot) {
             return $this;
         }
@@ -331,7 +329,6 @@ trait actions
     }
     public function checkRunConstructs($service, $method)
     {
-
         (!$service || !$method) ? $this->stopAndOutput(1111, 'Rule Error', ['suggestion' => 'To call on a method within a Service try `usingService("serviceName")->callMethod("methodName")->withParams("a", "b")']) : '';
         return $this;
     }
@@ -409,7 +406,6 @@ trait actions
      */
     public function stopAndOutput($status_code, $message, $payload)
     {
-
         if (!$this->execOrNot || $this->stopAndOutputCalled) {
             return $this;
         }
@@ -430,7 +426,6 @@ trait actions
      */
     public function help($methodToGetDocsFor = null)
     {
-
         $methods = get_class_methods($this);
 
         $exemptedMethods = ['__construct', 'requestType', '__call', 'useArgsOrPrevOutput', 'read', 'commonMutationTask', 'set', 'from'];
@@ -509,6 +504,13 @@ EOT;
 
     public function read()
     {
+        return $this;
+    }
+
+    public function async()
+    {
+        $this->results = file_get_contents('http://localhost:8080/api/v1/status
+');
         return $this;
     }
 }
