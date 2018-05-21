@@ -26,6 +26,7 @@ class Rules
     public $payload = [];
     public $sharedStore = null;
     private $imports = [];
+    private $timezone;
     private $importedClassInstance;
     
 
