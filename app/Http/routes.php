@@ -21,6 +21,9 @@
     Route::get('setup', 'UserController@get_register');
     Route::post('setup', 'UserController@post_register');
 
+    Route::get('public-api/deferRunner/{method}/{params}', 'OpenController@openGateway');
+
+
 //lean views route
     Route::resource('service/{service}/{resource}/{template}/', 'ViewController@access_views');
 
