@@ -30,7 +30,7 @@ trait service_activity
 
             return $current_service;
         } else {
-            Helper::interrupt(604);
+            Helper::interrupt(604, "The Service $service_name does not exist or you just misspelt it. Also be sure the service is set to active");
         }
     }
 

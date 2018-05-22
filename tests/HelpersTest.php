@@ -55,6 +55,7 @@ class HelpersTest extends TestCase
                 'text'       => 'string',
                 'textarea'   => 'string',
                 'timestamp'  => '2018-04-22 17:10:22',
+                'user_timestamp'  => '2018-04-22 17:10:22',
                 'url'        => 'https://devless.io/#!/main',
                 'base64'     => 'abcd1234',
                 'image'      =>  'https://devless.io/#!/main',
@@ -77,7 +78,8 @@ class HelpersTest extends TestCase
                 'url'        => 'devless.io/#!/main',
                 'base64'     => 'random string',
                 'image'      => 1,
-                'phone_number' => 'Silence is golden'
+                'phone_number' => 'Silence is golden',
+                'user_timestamp' => 'Silence is golden'
 
             ];
 

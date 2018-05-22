@@ -26,6 +26,7 @@ class Rules
     public $payload = [];
     public $sharedStore = null;
     private $imports = [];
+    private $timezone;
     private $importedClassInstance;
     
 
@@ -161,7 +162,7 @@ class Rules
     private function getClassInstance($className, $classLocation)
     {
         if (!file_exists($classLocation)) {
-            DevlessHelper::interrupt(604);
+            DevlessHelper::interrupt(604, "The Service $className does not exist or you just misspelt it. Also be sure the service is set to active");
         }
         include_once($classLocation);
 
