@@ -54,14 +54,13 @@ trait actions
             Helper::interrupt(642, "You can only use createRelationship in the afterQuerying block");
         }
 
-        
         if (isset($this->payload['results'])) {
             $mainData = (array) $this->payload['results'];
             $serviceName = $this->EVENT['service_name'];
-            $tableName = ($relatedTable  == 'devless_users')? 'users': $serviceName.'_'.$relatedTable;
-            $relatedData = (array)\DB::table($tableName)->get();
+            $tableName = ($relatedTable == 'devless_users') ? 'users' : $serviceName . '_' . $relatedTable;
+            $relatedData = (array) \DB::table($tableName)->get();
             $this->appendCollectionToRelated($mainData, $relatedData, $mainKey, $foreignId, $relatedTable);
-            $newResults =  ['results' => $this->results];
+            $newResults = ['results' => $this->results];
             if (isset($this->payload['properties'])) {
                 $newResults['properties'] = $this->payload['properties'];
             }
@@ -507,10 +506,51 @@ EOT;
         return $this;
     }
 
-    public function async()
+    /**
+     * In the event where you need to make say an api call the `makeExternalRequest` method becomes handy. eg beforeUpdating()->makeExternalRequest('GET', 'https://www.calcatraz.com/calculator/api?c=3%2A3')->storeAs($ans)
+     * ->succeedWith($ans)
+     *
+     * @param STRING $method
+     * @param STRING $url
+     * @param JSON   $data    (opt)
+     * @param JSON   $headers (optional)
+     *
+     * @return $this
+     */
+    public function deferTask($method, $params = [])
     {
-        $this->results = file_get_contents('http://localhost:8080/api/v1/status
-');
+        if (!$this->execOrNot) {
+            return $this;
+        }
+        // $this->succeedWith( $_SERVER['SERVER_ADDR'].'/open-api/deferRunner/run/'.json_encode(['method'=>$method, 'params'=>$params], true));
+        $curl = curl_init();
+
+        curl_setopt_array(
+            $curl,
+            array(
+                CURLOPT_URL => $_SERVER['SERVER_ADDR'] . '/public-api/deferRunner/run/' . json_encode(['method' => $method, 'params' => $params], true),
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_PORT => $_SERVER['SERVER_PORT'],
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 1,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'GET',
+            )
+        );
+        // session_write_close();
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            $this->results = $err;
+        } else {
+            $this->results = $response;
+            // $this->results = json_decode($response, true);
+        }
+        $this->cleanOutput();
         return $this;
     }
 }

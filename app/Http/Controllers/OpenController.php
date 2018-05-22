@@ -8,15 +8,22 @@ use App\Helpers\DevlessHelper as DH;
 
 class OpenController extends Controller
 {
-
     public function gateway(Request $request, $file, $method, $params)
     {
+        if ($file == 'deferRunner' && $_SERVER['REMOTE_ADDR'] != $_SERVER['SERVER_ADDR']) {
+            return ['results' => 'unauthorised access'];
+        }
+
         $params = array_values(json_decode($params, true));
         include base_path()."/app/OpenApis/$file.php";
         $class = new $file();
         return $class->$method(...$params);
     }
 
+    public function openGateWay(Request $request, $method, $params)
+    {
+        return $this->gateway($request, 'deferRunner', $method, $params);
+    }
     public function downloadFile(Request $request, $file, $method, $page, $params)
     {
         $params = array_values(json_decode($params, true));
@@ -25,7 +32,7 @@ class OpenController extends Controller
         $results = $class->$method(...$params);
         $html = view($page)->with($results)->render();
         file_put_contents($params[0].'_'.$params[1].'.html', $html);
-         return \Response::download(
+        return \Response::download(
              $params[0].'_'.$params[1].'.html',
              $params[0].'_'.$params[1].'.html'
          )->deleteFileAfterSend(true);
