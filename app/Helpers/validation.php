@@ -27,7 +27,8 @@ trait validation
         'url' => 'url',
         'base64' => 'alphanum',
         'phone_number' => 'digits_between:9,15',
-        'user_timestamp' => 'date_format:Y-m-d H:i:s'
+        'user_timestamp' => 'date_format:Y-m-d H:i:s',
+        'json' => 'json'
 
     ];
 
@@ -44,11 +45,11 @@ trait validation
     {
         //convert check against to field_name for err_msg
         $field_name = $check_against;
-
+        
         //check if multiple rules are used
         if (strpos($check_against, '|')) {
             $rules = explode('|', $check_against);
-
+            
             foreach ($rules as $rule) {
                 //convert each rule and re-combine
                 if (!isset(self::$validator_type[$rule])) {
@@ -63,7 +64,7 @@ trait validation
         } else {
             //single validator rule convert field type to lowercase
             $check_against = strtolower($check_against);
-
+            
             if (!isset(self::$validator_type[$check_against])) {
                 self::interrupt(
                     618,
@@ -73,7 +74,7 @@ trait validation
             }
             $check_against = self::$validator_type[$check_against];
         }
-
+      
         $state = Validator::make(
             [$field_name => $field_value],
             [$field_name => $check_against]

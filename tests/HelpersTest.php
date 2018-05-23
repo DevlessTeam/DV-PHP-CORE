@@ -60,6 +60,7 @@ class HelpersTest extends TestCase
                 'base64'     => 'abcd1234',
                 'image'      =>  'https://devless.io/#!/main',
                 'phone_number' => '0540659430239',
+                'json' => '{"name":"edmond"}',
 
             ];
 
@@ -79,7 +80,8 @@ class HelpersTest extends TestCase
                 'base64'     => 'random string',
                 'image'      => 1,
                 'phone_number' => 'Silence is golden',
-                'user_timestamp' => 'Silence is golden'
+                'user_timestamp' => 'Silence is golden',
+                'json' => 'Silence is golden'
 
             ];
 
