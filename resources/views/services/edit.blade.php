@@ -44,7 +44,7 @@
                         <div  class="form-group">
                             <label for="field-type">Field Type</label>
 
-                            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'IMAGE', 'PHONE_NUMBER', 'REFERENCE', 'TIMESTAMP', 'USER_TIMESTAMP'] ?>
+                            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'IMAGE', 'PHONE_NUMBER', 'REFERENCE', 'TIMESTAMP', 'USER_TIMESTAMP', 'JSON'] ?>
                             <select class="form-control"  name="field-type" id="fieldType">
                                 @foreach($options as  $option)
                                     <option value="{{$option}}">{{$option}}</option>
@@ -135,7 +135,7 @@
            <div  class="form-group">
             <label for="field-type">Field Type</label>
 
-            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'IMAGE', 'PHONE_NUMBER', 'REFERENCE', 'TIMESTAMP', 'USER_TIMESTAMP'] ?>
+            <?php /*'REFERENCE'*/$options = ['TEXT','TEXTAREA','INTEGER','DECIMALS','PASSWORD','URL','EMAIL', 'BASE64', 'IMAGE', 'PHONE_NUMBER', 'REFERENCE', 'TIMESTAMP', 'USER_TIMESTAMP', 'JSON'] ?>
             <select class="form-control"  name="field-type" id="field-type">
                 @foreach($options as  $option)
                 <option value="{{$option}}">{{$option}}</option>

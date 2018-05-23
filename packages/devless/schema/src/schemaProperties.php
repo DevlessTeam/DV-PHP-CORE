@@ -20,5 +20,6 @@ trait schemaProperties
         'reference' => 'integer',
         'base64' => 'binary',
         'phone_number' => 'string',
+        'json' => 'json',
     ];
 }
