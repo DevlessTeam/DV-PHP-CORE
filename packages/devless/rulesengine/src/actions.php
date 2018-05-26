@@ -522,7 +522,6 @@ EOT;
         if (!$this->execOrNot) {
             return $this;
         }
-        // $this->succeedWith( $_SERVER['SERVER_ADDR'].'/open-api/deferRunner/run/'.json_encode(['method'=>$method, 'params'=>$params], true));
         $curl = curl_init();
 
         curl_setopt_array(
