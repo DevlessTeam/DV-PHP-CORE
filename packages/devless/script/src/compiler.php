@@ -13,6 +13,7 @@ trait compiler
 
     public function compile_script($code)
     {
+        $init_code = $code;
         //check for syntax, methods and also if attributes exists
         $code = ('<?php $rules'.$code.';');
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
@@ -41,7 +42,7 @@ trait compiler
             }
         };
         $compiled_script['var_init'] = $declarationString;
-        $compiled_script['script'] = $code;
+        $compiled_script['script'] = str_replace('->', "\n->", $code);
         $compiled_script['successful'] = true;
         return $compiled_script;
     }

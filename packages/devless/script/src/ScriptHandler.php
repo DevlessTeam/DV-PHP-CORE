@@ -2,11 +2,10 @@
 
 namespace Devless\Script;
 
-use App\Helpers\Helper;
-use Devless\RulesEngine\Rules;
 use App\Helpers\DevlessHelper;
-use App\Helpers\Assert as Assert;
+use App\Helpers\Helper;
 use App\Http\Controllers\ServiceController as Service;
+use Devless\RulesEngine\Rules;
 
 class ScriptHandler
 {
@@ -40,12 +39,12 @@ class ScriptHandler
             'user_id' => $user_cred['id'],
             'user_token' => $user_cred['token'],
             'request_type' => $Dvresource,
-            'request_phase' =>$payload['request_phase'],
+            'request_phase' => $payload['request_phase'],
             'access_rights' => $payload['resource_access_right'],
-            'requestPayload' => (isset($payload['ex_params']))?$payload['ex_params']:null,
-            'status_code'   => (isset($payload['response_status_code']))?$payload['response_status_code']:null,
-            'message'      => (isset($payload['response_message']))?$payload['response_message']:null,
-            'results_payload' => (isset($payload['response_payload']))?$payload['response_payload']:null,
+            'requestPayload' => (isset($payload['ex_params'])) ? $payload['ex_params'] : null,
+            'status_code' => (isset($payload['response_status_code'])) ? $payload['response_status_code'] : null,
+            'message' => (isset($payload['response_message'])) ? $payload['response_message'] : null,
+            'results_payload' => (isset($payload['response_payload'])) ? $payload['response_payload'] : null,
         ];
         if ($Dvresource == 'rpc') {
             $EVENT['params'] = $payload['params'];
@@ -64,11 +63,11 @@ class ScriptHandler
 
         //NB: position matters here
         $___code = <<<EOT
-$payload[script];   
+$payload[script];
 EOT;
         $_____service_name = $payload['service_name'];
         $_____init_vars = $payload['script_init_vars'];
-        
+
         $exec = function () use ($___code, $__devless__rules, &$EVENT, $_____service_name, $_____init_vars, $payload) {
 
             //store script params temporally
@@ -85,47 +84,44 @@ EOT;
             extract($EVENT['params'], EXTR_PREFIX_ALL, 'input');
             $__devless__rules->accessRights = $EVENT['access_rights'];
             $__devless__rules->EVENT = $EVENT;
-            
-            $__devless__rules->request_phase = ($EVENT['request_phase'] == 'after')?'after':'before';
+
+            $__devless__rules->request_phase = ($EVENT['request_phase'] == 'after') ? 'after' : 'before';
             if ($__devless__rules->request_phase == 'after') {
                 $__devless__rules->status_code = $EVENT['status_code'];
                 $__devless__rules->message = $EVENT['message'];
                 $__devless__rules->payload = $EVENT['results_payload'];
             }
-            
-            
+
             $___imports = "use App\Helpers\Assert as assertIts;use App\Helpers\Assert as  assertIt;";
-            $___headers = $___imports.'$__devless__rules';
-            $___footer  = '';
-            $___finalCode = (strpos($___code, 'use App\Helpers\Assert')!==false)? $___code : $___headers.$___code.$___footer;
-        
+            $___headers = $___imports . '$__devless__rules';
+            $___footer = '';
+            $___finalCode = (strpos($___code, 'use App\Helpers\Assert') !== false) ? $___code : $___headers . $___code . $___footer;
+
             if ($EVENT['request_phase'] == 'after' && isset($payload['ex_params'])) {
                 extract($payload['ex_params'], EXTR_PREFIX_ALL, 'input');
             }
             $ITR = function ($data, $index) {
-                    return ["#ITR",$data, $index];
+                return ["#ITR", $data, $index];
             };
-            
-            
+
+            \Config::set('current_script', explode("->", $___finalCode));
             {eval($___finalCode);}
 
             $EVENT['access_rights'] = $__devless__rules->accessRights;
-            $EVENT['status_code']  = $__devless__rules->status_code;
-            $EVENT['message']  =  $__devless__rules->message;
-            $EVENT['results_payload']  =  $__devless__rules->payload;
+            $EVENT['status_code'] = $__devless__rules->status_code;
+            $EVENT['message'] = $__devless__rules->message;
+            $EVENT['results_payload'] = $__devless__rules->payload;
             $EVENT['user_id'] = $__devless__rules->EVENT['user_id'];
-            ;
-            
 
             foreach ($EVENT['params'] as $key => $value) {
-                $EVENT['params'][$key] = ${'input_'.$key};
+                $EVENT['params'][$key] = ${'input_' . $key};
             }
 
             $EVENT['ex_params'] = [];
             foreach (get_defined_vars() as $key => $value) {
                 if (strpos($key, 'input_') === 0) {
                     if (isset($EVENT['params'][$key])) {
-                        $EVENT['params'][$key] = ${'input_'.$key};
+                        $EVENT['params'][$key] = ${'input_' . $key};
                     } else {
                         $var_split = explode('_', $key);
                         unset($var_split[0]);
@@ -148,8 +144,8 @@ EOT;
             $payload['params'] = $EVENT['params'];
             $payload['ex_params'] = $params['ex_params'];
         }
-    
-         (strpos(error_get_last()['file'], 'ScriptHandler.php') !=false)?dd():'';
+
+        (strpos(error_get_last()['file'], 'ScriptHandler.php') != false) ? dd() : '';
 
         if ($EVENT['request_phase'] == 'after') {
             $results['status_code'] = $EVENT['status_code'];
@@ -159,7 +155,7 @@ EOT;
             $payload['resource_access_right'] = $EVENT['access_rights'];
             $results['payload'] = $payload;
             $results['resource'] = $Dvresource;
-            
+
             if ($__devless__rules->request_phase == 'endNow') {
                 $results['resource'] = 'endNow';
                 $results['payload']['status_code'] = $EVENT['status_code'];

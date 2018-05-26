@@ -60,10 +60,10 @@ class Handler extends ExceptionHandler
                 $statusCode = $e->getTrace()[0]['args'][0];
             }
         }
-
+        // dd(\Config('current_script')[$e->getLine()-1]);
         $payload = ($statusCode == 700) ?
                 ['file' => $e->getFile(), 'line' => $e->getLine()] : [];
-
+        if(strpos($e->getFile(), 'ScriptHandler.php') !== false) {$payload['faulty_line'] = \Config('current_script')[$e->getLine()-1];}
         $response = Response::respond($statusCode, $e->getMessage(), $payload);
 
         return response()->json($response);
