@@ -2,19 +2,19 @@
 
 namespace App\Helpers;
 
+use App\Helpers\DataStore;
+use App\Helpers\DataStore as DS;
+use App\Helpers\Jwt as jwt;
+use App\Http\Controllers\ServiceController as service;
+use App\User as user;
 use DB;
 use Session;
-use App\User as user;
-use App\Helpers\Jwt as jwt;
-use App\Helpers\DataStore;
-use App\Http\Controllers\ServiceController as service;
-use App\Helpers\DataStore as DS;
 
 trait devlessAuth
 {
 
     public $expected_fields =
-    [
+        [
         'email' => 'email',
         'username' => 'text',
         'password' => 'password',
@@ -36,17 +36,17 @@ trait devlessAuth
     {
         $auth_settings = json_decode(DevlessHelper::get_user_auth_settings(), true);
         $verify_email = $auth_settings['verify_email'];
-        
+
         $username = (isset($payload['username'])) ? $payload['username'] : '';
 
         $email = (isset($payload['email'])) ? $payload['email'] : '';
         $phone_number = (isset($payload['phone_number'])) ? $payload['phone_number'] : '';
 
         $existing_users = \DB::table('users')->orWhere('username', $username)->whereNotIn('username', [''])
-                ->orWhere('email', $email)->whereNotIn('email', [''])
-                ->orWhere('phone_number', $phone_number)->whereNotIn('phone_number', [''])
-                ->first();
-        
+            ->orWhere('email', $email)->whereNotIn('email', [''])
+            ->orWhere('phone_number', $phone_number)->whereNotIn('phone_number', [''])
+            ->first();
+
         if ($existing_users != null) {
             return Helper::interrupt(644);
         }
@@ -59,37 +59,36 @@ trait devlessAuth
             return $token;
         }
 
-        $user->status = ($verify_email)?0:1;
-        
-        ($verify_email)?$this->generate_email_verification_code($user->id):'';
+        $user->status = ($verify_email) ? 0 : 1;
+
+        ($verify_email) ? $this->generate_email_verification_code($user->id) : '';
 
         $user->session_token = $session_token = md5(uniqid(1, true));
-        
+
         //check if either username or email and password is set
         if (!(isset($user->password))) {
             if (!isset($user->username) || isset($user->email) || !isset($user->phone_number)) {
                 return false;
             }
         }
-        
 
         if ($user->save()) {
             $token_payload =
                 [
-                    'token' => $session_token,
+                'token' => $session_token,
 
-                ];
+            ];
 
-                $prepared_token = $this->set_session_token($token_payload, $user->id);
-                $profile = \DB::table('users')->where('id', $user->id)
+            $prepared_token = $this->set_session_token($token_payload, $user->id);
+            $profile = \DB::table('users')->where('id', $user->id)
                 ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'status', 'role'])
                 ->first();
-                $user_obj = [
+            $user_obj = [
                 'profile' => $profile,
                 'token' => $prepared_token,
-                ];
+            ];
 
-                return $user_obj;
+            return $user_obj;
         } else {
             return false;
         }
@@ -119,17 +118,17 @@ trait devlessAuth
                     'remember_token'
                 )
                 ->first();
-             $service = new service();
-             $output = [];
+            $service = new service();
+            $output = [];
             if (\Schema::hasTable('devless_user_profile')) {
                 $output = DS::service('devless', 'user_profile', $service)->where('users_id', $token['id'])->getData()['payload']['results'];
             }
             if (!isset($output[0])) {
-                return array_merge((array)$user_data, []);
+                return array_merge((array) $user_data, []);
             }
-            $newOutput = (array)$output[0];
+            $newOutput = (array) $output[0];
             unset($newOutput['id'], $newOutput['devless_user_id'], $newOutput['users_id']);
-            return  array_merge((array)$user_data, $newOutput);
+            return array_merge((array) $user_data, $newOutput);
         }
 
         return false;
@@ -168,32 +167,32 @@ trait devlessAuth
                 Helper::interrupt(643);
             }
             $correct_password =
-                   (Helper::compare_hash($password, $user_data->password)) ? true : false;
+            (Helper::compare_hash($password, $user_data->password)) ? true : false;
             $user_data->session_token = $session_token = md5(uniqid(1, true));
 
             if ($correct_password && $user_data->save()) {
                 $token_payload =
                     [
-                        'token' => $session_token,
+                    'token' => $session_token,
 
-                    ];
+                ];
 
-                    $prepared_token = $this->set_session_token($token_payload, $user_data->id);
-                    $profile = \DB::table('users')->where('id', $user_data->id)
+                $prepared_token = $this->set_session_token($token_payload, $user_data->id);
+                $profile = \DB::table('users')->where('id', $user_data->id)
                     ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'role'])
                     ->first();
-                    $user_obj = [
+                $user_obj = [
                     'profile' => $profile,
                     'token' => $prepared_token,
-                    ];
-                    $extra_profile  = [];
-                    $service = new service();
-                    
-                    if (\Schema::hasTable('devless_user_profile')) {
-                        $extra_profile = DS::service('devless', 'user_profile', $service)->where('users_id', $user_obj['profile']->id)->getData()['payload']['results'];
-                    }
-                    $user_obj['profile'] = (array)$user_obj['profile'] + $extra_profile;
-                    return $user_obj;
+                ];
+                $extra_profile = [];
+                $service = new service();
+
+                if (\Schema::hasTable('devless_user_profile')) {
+                    $extra_profile = DS::service('devless', 'user_profile', $service)->where('users_id', $user_obj['profile']->id)->getData()['payload']['results'];
+                }
+                $user_obj['profile'] = (array) $user_obj['profile'] + $extra_profile;
+                return $user_obj;
             } else {
                 return false;
             }
@@ -236,12 +235,12 @@ trait devlessAuth
             foreach ($payload as $field_name => $value) {
                 $expected_field = $this->expected_fields[$field_name];
                 $valid = Helper::field_check($value, $expected_field);
-                ($valid !== true)?Helper::interrupt(616, 'There is something wrong with your '.$field_name):false;
+                ($valid !== true) ? Helper::interrupt(616, 'There is something wrong with your ' . $field_name) : false;
             }
             if ($user::where('id', $token['id'])->update($payload)) {
                 return \DB::table('users')->where('id', $token['id'])
-                ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'status'])
-                ->first();
+                    ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'status'])
+                    ->first();
             }
         }
 
@@ -289,14 +288,14 @@ trait devlessAuth
      */
     public function auth_fields_handler($fields, $user)
     {
-    
+
         foreach ($fields as $field => $value) {
             $field = strtolower($field);
 
             if (isset($this->expected_fields[$field])) {
                 $valid = Helper::field_check($value, $this->expected_fields[$field]);
                 if ($valid !== true) {
-                    Helper::interrupt(616, 'There is something wrong with your '.$field);
+                    Helper::interrupt(616, 'There is something wrong with your ' . $field);
                 }
                 if ($field == 'password') {
                     $user->$field = Helper::password_hash($value);
@@ -354,6 +353,17 @@ trait devlessAuth
 
     public static function recover_password($recover_email)
     {
-        return true;//file_get_contents('http://localhost:6060/status');
+        return true;
+    }
+
+    public function generateRandomAlphanums($length = 5)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }

@@ -72,7 +72,28 @@ class devless
 
         return (array) $output + $extProfile;
     }
-
+    public function activatePasswordRecovery($userId)
+    {
+        $token = $this->auth->generateRandomAlphanums(24);
+        $stored = DS::setDump($token, 'recovery_' . $userId);
+        if (!$stored) {
+            $stored = DS::updateDump($token, 'recovery_', $userId);
+        }
+        if (!$stored) {
+            return false;
+        }
+        return $token;
+    }
+    public function recoverPassword($token, $newPassword)
+    {
+        $userIDMeta = DS::getDump($token);
+        if(!$userIDMeta){return false;}
+        $explosion = explode('_', $userIDMeta);
+        $userId = $explosion[1];
+        $output = $this->updateUserProfile($userId, '', $newPassword, '', '', '', '', '', '');
+        if ($output) {DS::destroyDump($token);}
+        return $output;
+    }
     /**
      * login users  `->beforeCreating()->run('devless','login', [$username = null, $email = "team@devless.io", $phone_number = null, $password = "pass"])->storeAs($output)->stopAndOutput(1000, "login user Successfully")`
      *
