@@ -66,7 +66,6 @@ class devless
         $payload = array_slice($payload, 0, 8);
         $payload = self::getSetParams($payload);
         $auth = $this->auth;
-        // die(var_dump($extraParams));
         $output = $auth->signup($payload);
         $extProfile = [];
         if ($extraParams && \Schema::hasTable('devless_user_profile')) {
@@ -76,7 +75,17 @@ class devless
 
         return (array) $output + $extProfile;
     }
-    public function activatePasswordRecovery($userId)
+
+    /**
+     * Activate password recovery `->beforeCreating()->run('devless','generatePasswordRecoveryToken', [$userId])->storeAs($output)->stopAndOutput(1000, "recovery token". $output)`
+     *
+     * @param $token
+     * @param $newPassword
+     * @return array
+     * @ACL private
+     */
+
+    public function generatePasswordRecoveryToken($userId)
     {
         $token = $this->auth->generateRandomAlphanums(24);
         $stored = DS::setDump($token, 'recovery_' . $userId);
@@ -88,10 +97,20 @@ class devless
         }
         return $token;
     }
-    public function recoverPassword($token, $newPassword)
+
+    /**
+     * Recover users password `->beforeCreating()->run('devless','resetPassword', [$token = '', $newPassword = ''])->storeAs($output)->stopAndOutput(1000, "password reset", $output)`
+     *
+     * @param $token
+     * @param $newPassword
+     * @return array
+     * @ACL public
+     */
+
+    public function resetPassword($token, $newPassword)
     {
         $userIDMeta = DS::getDump($token);
-        if(!$userIDMeta){return false;}
+        if (!$userIDMeta) {return false;}
         $explosion = explode('_', $userIDMeta);
         $userId = $explosion[1];
         $output = $this->updateUserProfile($userId, '', $newPassword, '', '', '', '', '', '');
@@ -99,7 +118,7 @@ class devless
         return $output;
     }
     /**
-     * login users  `->beforeCreating()->run('devless','login', [$username = null, $email = "team@devless.io", $phone_number = null, $password = "pass"])->storeAs($output)->stopAndOutput(1000, "login user Successfully")`
+     * login users  `->beforeCreating()->run('devless','login', [$username = null, $email = "team@devless.io", $phone_number = null, $password = "pass"])->storeAs($output)->stopAndOutput(1000, "login user Successfully", $output)`
      *
      * @param $username
      * @param $email
