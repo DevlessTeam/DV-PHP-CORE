@@ -185,7 +185,7 @@
             <!--body wrapper start-->
             <div class="wrapper no-pad">
                 <div class="profile-desk">
-                    <aside class="p-short-info">
+                <aside class="p-short-info" id="info-bar">
                         <div class="widget">
                             <div class="title">
                                 <h1>Service Details</h1>
@@ -361,7 +361,7 @@
                                                                    <div class="tab-pane" id="jtab">
 
 
-<textarea  class="code-box" id="code-box" name="script" rows="20" style="width: 100%">
+<textarea  class="code-box" id="code-box" name="script" rows="200" col="3000" style="width: 100%">
 @if(strlen($service->raw_script) < 1)
   {{$service->script}}
 @else
@@ -370,7 +370,8 @@
 </textarea>
                                                                        <br>
 
-                                                                       <button class="btn btn-info " onclick="run_script()" type="button"> Save </button><br><br>
+                                                                       <button class="btn btn-info " onclick="expandScript()" type="button"> <i class="fa fa-expand"></i> <span class="expEditorbtn">Expand Editor</span> </button>
+                                                                       <button class="btn btn-info " onclick="run_script()" type="button"> <i class="fa fa-save"></i> Save Script</button><br><br>
 <span id="code-console" class="code-console" style="background-color:black;margin-left:14%;width:400px;height:300px;color:greenyellow">
    </span>
                                     </div>
@@ -382,6 +383,16 @@
             </div><!--body wrapper end-->
 
 <!--body wrapper end-->
+<style>
+#code-box {
+    width: 60%; height: 80%;
+    position: absolute; top: 0; left: 0;
+}
+.hide-profile {
+    display: none !important;
+}
+
+</style>
 <script type="text/javascript">
     window.devless_edit_url = window.location.origin+'/services/'+{{$id}}+'/edit';
 </script>
