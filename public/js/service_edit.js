@@ -358,7 +358,9 @@ function SchemaEdit(action, service, table, params) {
 
 function expandScript() {
     var el = document.getElementById('info-bar');
-    var state = el.classList.toggle('hide-profile')
+    var el2 = document.getElementsByClassName('page-head')[0];
+    var state = el.classList.toggle('hide-profile');
+    el2.classList.toggle('hide-profile');
     var editorBtnText = (state) ? 'Collapse Editor' : 'Expand Editor';
     document.getElementsByClassName('expEditorbtn')[0].textContent = editorBtnText;
 }
