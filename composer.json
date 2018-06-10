@@ -1,11 +1,14 @@
 {
     "name": "devless/devless",
     "description": "The Devless Framework.",
-    "keywords": ["framework", "devless"],
+    "keywords": [
+        "framework",
+        "devless"
+    ],
     "license": "Apache",
     "type": "project",
     "require": {
-        "php": "7.0.27",
+        "php": "^7.0.27",
         "laravel/framework": "5.1.*",
         "jeroen-g/laravel-packager": "^1.4",
         "alchemy/zippy": "^0.3.5",
@@ -23,7 +26,6 @@
         "classmap": [
             "database",
             "app/Helpers/view.php"
-
         ],
         "psr-4": {
             "App\\": "app/",
@@ -31,7 +33,6 @@
             "Devless\\Script\\": "packages/devless/script/src",
             "Devless\\RulesEngine\\": "packages/devless/rulesengine/src",
             "Devless\\SDK\\": "devless/php-sdk/src"
-
         }
     },
     "autoload-dev": {
