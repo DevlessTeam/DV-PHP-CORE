@@ -31,7 +31,6 @@
                 <label for="service" class="col-lg-2 col-sm-2 control-label">Service</label>
                 <div class="col-lg-10">
                   <select id="service" class="form-control m-b-10" required>
-                    <option disabled selected value> -- select a service -- </option>
                     @foreach($services as $service)
                     <option value="{{$service->id}}">{{$service->name}}</option>
                     @endforeach

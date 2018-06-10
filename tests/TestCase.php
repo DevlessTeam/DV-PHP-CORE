@@ -23,8 +23,8 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     public function createApplication()
     {
         putenv('DB_CONNECTION=sqlite_testing');
-        
-        $app = require __DIR__.'/../bootstrap/app.php';
+
+        $app = require __DIR__ . '/../bootstrap/app.php';
 
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
@@ -38,11 +38,11 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         //setup Devless
         $this->visit('/setup')
-                ->type($this->adminEmail, 'email')
-                ->type($this->adminPassword, 'password')
-                ->type('password', 'password_confirmation')
-                ->press('Create App')
-                ->see('DevLess Service contains most of DevLess configs');
+            ->type($this->adminEmail, 'email')
+            ->type($this->adminPassword, 'password')
+            ->type('password', 'password_confirmation')
+            ->press('Create App')
+            ->see('DevLess Service contains most of DevLess configs');
 
 
         //login to Devless
@@ -55,24 +55,24 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
                 'test@test.com',
                 'email'
             )
-         ->press('Login')
-         ->see('Welcome Back');
+            ->press('Login')
+            ->see('Welcome Back');
 
          //create service
-         $this->visit('/services/create')
-             ->see('ADD SERVICE')
-             ->type($this->serviceName, 'name')
-             ->press('Create')
-             ->see('Service Created Successfully');
+        $this->visit('/services/create')
+            ->see('ADD SERVICE')
+            ->type($this->serviceName, 'name')
+            ->press('Create')
+            ->see('Service Created Successfully');
     }
 
     public function tearDown()
     {
-        DLH::deleteDirectory(config('devless')['views_directory'].$this->serviceName);
-        DLH::deleteDirectory(config('devless')['views_directory'].'devless');
+        DLH::deleteDirectory(config('devless')['views_directory'] . $this->serviceName);
+        DLH::deleteDirectory(config('devless')['views_directory'] . 'devless');
 
         //tear down table in devless-rec after creating for test
-        $query = 'DROP TABLE '.$this->serviceName.'_'.$this->serviceTable;
+        $query = 'DROP TABLE ' . $this->serviceName . '_' . $this->serviceTable;
         $db = new SQLite3(database_path('devless-rec.sqlite3'));
         try {
             $db->exec($query);
