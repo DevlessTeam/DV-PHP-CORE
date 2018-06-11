@@ -281,6 +281,7 @@ function addNewField() {
 }
 
 function updateFieldName(id) {
+    if(!confirm('Are you sure you want to update this field?')) {return false;}
     var service = $('#ef-serviceName')[0].value;
     var table = $('#ef-tableName')[0].value;
     var newFieldName = $("input[name=" + id + "]").val();
@@ -292,6 +293,7 @@ function updateFieldName(id) {
 
 
 function deleteFieldName(id) {
+    if (!confirm('Are you sure you want to delete this field')) { return false; }
     var service = $('#ef-serviceName')[0].value;
     var table = $('#ef-tableName')[0].value;
     var fieldName = id;
