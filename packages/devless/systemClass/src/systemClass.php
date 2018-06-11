@@ -72,7 +72,7 @@ class devless
             $extraParams[]['users_id'] = $extraParams[]['devless_user_id'] = $output['profile']->id;
             $extProfile = $this->addExtraUserDetails($extraParams);
         }
-
+       
         return (array) $output + $extProfile;
     }
 
@@ -592,11 +592,11 @@ class devless
             $value = array_values($extraDetails[$i]);
             $flattendDetails[$key[0]] = $value[0];
         }
-        // die(var_dump($extraDetails));
         $output = DS::service('devless', 'user_profile', $service)->addData([$flattendDetails]);
-
-        if ($output['status_code'] !== 609) {
+        if ($output['status_code'] != 609) {
             DB::table('users')->where('id', $flattendDetails['users_id'])->delete();
+            return Helper::interrupt(644, $output['message']);
+
         }
         unset($flattendDetails['users_id'], $flattendDetails['devless_user_id']);
         return $flattendDetails;
