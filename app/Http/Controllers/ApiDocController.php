@@ -23,7 +23,7 @@ class ApiDocController extends Controller
     private $service;
 
     /**
-     * Holds the TableMeta Resopitory instance.
+     * Holds the TableMeta Repository instance.
      *
      * @var TableMeta
      */
@@ -57,11 +57,14 @@ class ApiDocController extends Controller
     }
 
     /**
-     *Get schema to generate request payload.
+     * Get schema to generate request payload.
+     *
+     * @param integer $service_id
+     * @param string $service_name
+     * @param string $table_name
      *
      * @return Response
      */
-
     public function schema($service_id, $service_name, $table_name)
     {
         $schema = $this->table_meta->getSchema(
@@ -75,7 +78,7 @@ class ApiDocController extends Controller
     /**
      * Show the form for editing Table Meta data.
      *
-     * @param int $id
+     * @param int $service_id
      *
      * @return Response
      */
