@@ -2,12 +2,12 @@
 
 namespace App\Exceptions;
 
-use Exception;
-use App\Helpers\Response as Response;
 use App\Helpers\Helper;
+use App\Helpers\Response as Response;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
@@ -48,8 +48,8 @@ class Handler extends ExceptionHandler
     {
         $statusCode = 700;
         $emptyClass = new \stdClass();
-        $payload = ( empty($payload) )? $emptyClass : $payload;
-        
+        $payload = (empty($payload)) ? $emptyClass : $payload;
+
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         } elseif ($e instanceof HttpException) {
@@ -62,8 +62,12 @@ class Handler extends ExceptionHandler
         }
         // dd(\Config('current_script')[$e->getLine()-1]);
         $payload = ($statusCode == 700) ?
-                ['file' => $e->getFile(), 'line' => $e->getLine()] : [];
-        if(strpos($e->getFile(), 'ScriptHandler.php') !== false) {$payload['faulty_line'] = \Config('current_script')[$e->getLine()-1];}
+        ['file' => $e->getFile(), 'line' => $e->getLine()] : [];
+        if (strpos($e->getFile(), 'ScriptHandler.php') !== false) {
+            if (isset(\Config('current_script')[$e->getLine() - 1])) {
+                $payload['faulty_line'] = \Config('current_script')[$e->getLine() - 1];
+            }
+        }
         $response = Response::respond($statusCode, $e->getMessage(), $payload);
 
         return response()->json($response);

@@ -13,7 +13,7 @@ trait flowControl
      */
     public function whenever($assert)
     {
-        
+
         if (!$this->isCurrentDBAction) {
             return $this;
         }
@@ -22,6 +22,9 @@ trait flowControl
             return $this;
         }
         if ($this->stopAndOutputCalled) {
+            return $this;
+        }
+        if (!$this->execOrNot) {
             return $this;
         }
 
@@ -43,12 +46,11 @@ trait flowControl
             return $this;
         }
 
-        
         if ($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
             $this->execOrNot = false;
             return $this;
         }
-        
+
         $this->assertion['elseWhenever'] = ($assert);
         $this->called['elseWhenever'] = true;
         $this->execOrNot = ($assert);
@@ -65,12 +67,12 @@ trait flowControl
         if (!$this->isCurrentDBAction) {
             return $this;
         }
-        
+
         if ($this->assertion['whenever'] || $this->assertion['elseWhenever']) {
             $this->execOrNot = false;
             return $this;
         }
-        
+
         $this->called['otherwise'] = true;
         $this->execOrNot = true;
 
@@ -87,17 +89,15 @@ trait flowControl
         if (!$this->isCurrentDBAction || $this->stopAndOutputCalled) {
             return $this;
         }
-        
+
         if (($this->onTableCalled) && (!$this->onCurrentTable)) {
             return $this;
         }
-        
+
         $this->execOrNot = true;
 
         return $this;
     }
-
-
 
     public function end()
     {
@@ -108,16 +108,16 @@ trait flowControl
     public function endWhenever()
     {
         $this->assertion = [
-        'elseWhenever' => false,
-        'whenever' => false,
-        'otherwise' => false,
+            'elseWhenever' => false,
+            'whenever' => false,
+            'otherwise' => false,
         ];
         $this->called = [
             'elseWhenever' => false,
             'whenever' => false,
             'otherwise' => false,
         ];
-        
+
         $this->end();
         return $this;
     }
