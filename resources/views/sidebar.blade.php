@@ -6,7 +6,7 @@
         <!--logo and logo icon start-->
         <div class="logo dark-logo-bg hidden-xs hidden-sm">
             <a href="/">
-                <img src="/img/logo.png')}}" alt="Devless">
+                <img src="{{Request::secure(Request::path()).'/img/logo.png'}}" alt="Devless">
                 <!-- @if(Request::secure())
                     <img src="{{Request::secure(Request::path()).'/img/logo.png'}}" alt="Devless">
                 @else
