@@ -61,7 +61,7 @@ class devless
         $extraParams = null
     ) {
         $payload = get_defined_vars();
-        
+
         $payload = array_slice($payload, 0, 8);
         $payload = self::getSetParams($payload);
         $auth = $this->auth;
@@ -70,7 +70,7 @@ class devless
         if ($extraParams && \Schema::hasTable('devless_user_profile')) {
             $extraParams[]['users_id'] = $extraParams[]['devless_user_id'] = $output['profile']->id;
             $extProfile = $this->addExtraUserDetails($extraParams);
-        } 
+        }
         return (array) $output + $extProfile;
     }
 
@@ -302,6 +302,10 @@ class devless
         return $output;
     }
 
+    public function force_update($serviceName, $table, $whereKey, $whereValue, $data)
+    {
+        \DB::table($serviceName . '_' . $table)->where($whereKey, $whereValue)->update($data);
+    }
     /**
      * delete record from a service table `->import('devless')->beforeCreating()->deleteData('test','sample', 1)->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $serviceName
@@ -592,10 +596,10 @@ class devless
         }
         $output = DS::service('devless', 'user_profile', $service)->addData([$flattendDetails]);
         if ($output['status_code'] != 609) {
-            
+
             DB::table('users')->where('id', $flattendDetails['users_id'])->delete();
             return Helper::interrupt(644, $output['message']);
-            
+
         }
         unset($flattendDetails['users_id'], $flattendDetails['devless_user_id']);
         return $flattendDetails;
