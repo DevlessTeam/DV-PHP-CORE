@@ -292,9 +292,12 @@ class devless
         $output = DS::service($serviceName, $table, $service)->where($whereKey, $whereValue)->update($data);
         return $output;
     }
-    public function force_update($serviceName, $table, $whereKey, $whereValue, $data)
+
+    public function force_updateData($serviceName, $table, $whereKey, $whereValue, $data)
     {
-        \DB::table($serviceName . '_' . $table)->where($whereKey, $whereValue)->update($data);
+        $output = \DB::table($serviceName . '_' . $table)->where($whereKey, $whereValue)->update($data);
+        return ($output)? ['status_code'=>619, 'message'=>'Table was updated successfully','payload'=>[]]:
+                ['status_code'=>620, 'message'=>'Table could not be created','payload'=>[]];
     }
     /**
      * delete record from a service table `->import('devless')->beforeCreating()->deleteData('test','sample', 1)->storeAs($output)->stopAndOutput(1000, "output", $output)`
