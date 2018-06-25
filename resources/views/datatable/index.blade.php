@@ -109,7 +109,7 @@ td {
     $app  = $instance['app'];
 
 ?>
-<script src="{{URL('/')}}/js/devless-sdk.js" class="devless-connection" devless-con-token="<?= $app->token ?>"></script>
-<script src="{{URL('/')}}/js/framework/datatable.js"></script>
+<script src="/js/devless-sdk.js" class="devless-connection" devless-con-token="<?= $app->token ?>"></script>
+<script src="/js/framework/datatable.js"></script>
 
 @endsection

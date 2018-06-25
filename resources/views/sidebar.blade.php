@@ -6,11 +6,12 @@
         <!--logo and logo icon start-->
         <div class="logo dark-logo-bg hidden-xs hidden-sm">
             <a href="/">
-                @if(Request::secure())
+                <img src="/img/logo.png')}}" alt="Devless">
+                <!-- @if(Request::secure())
                     <img src="{{Request::secure(Request::path()).'/img/logo.png'}}" alt="Devless">
                 @else
                     <img src="{{asset('/img/logo.png')}}" alt="Devless">
-                @endif
+                @endif -->
                 <sup>{{config('devless')['version']}}</sup>
             </a>
         </div>
