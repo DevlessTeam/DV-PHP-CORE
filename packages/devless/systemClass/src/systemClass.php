@@ -310,10 +310,10 @@ class devless
      * @return mixed
      * @ACL private
      */
-    public function deleteData($serviceName, $table, $id)
+    public function deleteData($serviceName, $table, $id, $key = 'id')
     {
         $service = new service();
-        $output = DS::service($serviceName, $table, $service)->where('id', $id)->delete();
+        $output = DS::service($serviceName, $table, $service)->where($key, $id)->delete();
         return $output;
     }
 
