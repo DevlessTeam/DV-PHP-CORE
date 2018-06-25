@@ -354,7 +354,7 @@ trait collectionLib
         }
         $parseParams = function ($params, $counter) {
             foreach ($params as $key => $value) {
-                if (gettype($value) == 'array' && $value[0] = "#ITR") {
+                if (gettype($value) == 'array' && isset($value[0]) && $value[0] == "#ITR") {
                     $data = $value[1];
                     $value[2] = str_replace('#counter', $counter, $value[2]);
                     $itrData = $this->dot($data)[$value[2]];
