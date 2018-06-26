@@ -278,6 +278,11 @@ class devless
         return $this->queryData($serviceName, $table, $queryParams, $getRelated);
     }
 
+    public function force_getData($service, $table, $queryParams = []) 
+    {
+        return \DB::table($service.'_'.$table)->get();
+    }
+
     /**
      * update data in a service table `->import('devless')->beforeCreating()->updateData('service_name','table_name', "id", 1, ["name"=>"mike"])->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $serviceName
