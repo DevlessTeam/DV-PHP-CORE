@@ -12,7 +12,6 @@ use App\Http\Controllers\ServiceController as service;
  * @Service: event
  * @Version: 1.0
  */
-
 //Action method for serviceName
 class devless
 {
@@ -23,7 +22,6 @@ class devless
     {
         $this->auth = new DVH();
     }
-
     /**
      * Sample DevLess Method
      * @ACL public
@@ -32,7 +30,6 @@ class devless
     {
         return 'Hello World!';
     }
-
     /**
      * Signup new users  `->beforeCreating()->run('devless','signUp', [$email = "team@devless.io",$password = "pass",$username = null,$phone_number = "020198475",$first_name = "John",$last_name = "Doe",$remember_token = null,$role = 5,$extraParams = null])->storeAs($output)->stopAndOutput(1000, "Created Profile Successfully",$output)`
      *
@@ -182,7 +179,6 @@ class devless
 
         $payload = self::getSetParams($payload);
         $auth = $this->auth;
-
         $output = $auth->update_profile($payload);
         if ($extraParams) {
             $extraParams[]['users_id'] = $output->id;
@@ -193,7 +189,6 @@ class devless
         }
         return (array) $output + (array) $extraOutput;
     }
-
     /**
      * reset user account password
      * @ACL public
@@ -204,7 +199,6 @@ class devless
         $state = $auth->reset_users_password($token);
         return $state;
     }
-
     /**
      * verify newly registered emails
      * @ACL public
@@ -224,7 +218,6 @@ class devless
         }
         return $payload;
     }
-
     /**
      * add data to a service `->import('devless')->beforeCreating()->addData('service_name','table_name',["name"=>"mike"])->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $serviceName
@@ -241,6 +234,13 @@ class devless
         return $output;
     }
 
+    public function force_addData($serviceName, $table, $data)
+    {
+        $output = \DB::table($serviceName . '_' . $table)->update($data);
+        return ($output) ? ['status_code' => 609, 'message' => 'Data has been added to table successfully', 'payload' => []] :
+        ['status_code' => 700, 'message' => 'Data could not be added', 'payload' => [$output]];
+
+    }
     /**
      * Get data from a service table `->import('devless')->beforeCreating()->queryData('service_name','table_name',["where"=>["id,1"]])->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $serviceName
@@ -274,7 +274,6 @@ class devless
         }
         return $output;
     }
-
     /**
      * Get data from a service table `->import('devless')->beforeCreating()->getData('service_name','table_name',["where"=>["id,1"]])->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $serviceName
@@ -287,9 +286,9 @@ class devless
         return $this->queryData($serviceName, $table, $queryParams, $getRelated);
     }
 
-    public function force_getData($service, $table, $queryParams = []) 
+    public function force_getData($service, $table, $queryParams = [])
     {
-        return \DB::table($service.'_'.$table)->get();
+        return \DB::table($service . '_' . $table)->get();
     }
 
     /**
@@ -310,8 +309,8 @@ class devless
     public function force_updateData($serviceName, $table, $whereKey, $whereValue, $data)
     {
         $output = \DB::table($serviceName . '_' . $table)->where($whereKey, $whereValue)->update($data);
-        return ($output)? ['status_code'=>619, 'message'=>'Table was updated successfully','payload'=>[]]:
-                ['status_code'=>620, 'message'=>'Table could not be created','payload'=>[]];
+        return ($output) ? ['status_code' => 619, 'message' => 'Table was updated successfully', 'payload' => []] :
+        ['status_code' => 620, 'message' => 'Table could not be created', 'payload' => []];
     }
     /**
      * delete record from a service table `->import('devless')->beforeCreating()->deleteData('test','sample', 1)->storeAs($output)->stopAndOutput(1000, "output", $output)`
@@ -327,7 +326,6 @@ class devless
         $output = DS::service($serviceName, $table, $service)->where($key, $id)->delete();
         return $output;
     }
-
     /**
      * get user profile by id `->import('devless')->beforeCreating()->getUserProfile(2)->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $id
@@ -352,7 +350,6 @@ class devless
         }
         return [];
     }
-
     /**
      * get user profile using a field `->import('devless')->beforeCreating()->getUserWhere("username", "foo")->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $key
@@ -481,7 +478,6 @@ class devless
 
         return $profile;
     }
-
     /**
      * Delete a users profile `->import('devless')->beforeCreating()->deleteUserProfile(9)->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @return bool
@@ -491,7 +487,6 @@ class devless
     {
         return (\DB::table('users')->where('id', $id)->delete()) ? true : false;
     }
-
     /**
      * Update a users profile `->import('devless')->beforeCreating()->updateUserProfile($id=1,$email = '',$password = '',$username = 'eddymens',$phone_number = '',$first_name = '',$last_name = '')->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $email
@@ -528,7 +523,6 @@ class devless
         unset($profileUpdate['id']);
         return (DB::table('users')->where('id', $id)->update($profileUpdate)) ? true : false;
     }
-
     /**
      * Login users with username and password
      * @param $username
@@ -540,7 +534,6 @@ class devless
     {
         return $this->login($username, null, null, $password);
     }
-
     /**
      * Login users with email and password
      * @param $email
@@ -552,7 +545,6 @@ class devless
     {
         return $this->login(null, $email, null, $password);
     }
-
     /**
      * Login users with phone number and password
      * @param $phone_number
@@ -564,7 +556,6 @@ class devless
     {
         return $this->login(null, null, $phone_number, $password);
     }
-
     /**
      * Lists and explains what each method is used for
      * @return array
@@ -576,7 +567,6 @@ class devless
         $actionClass = new ActionClass();
         return $actionClass->help($serviceInstance, $methodToGetDocsFor = null);
     }
-
     public function getExtraUserDetails($id)
     {
         $service = new service();
@@ -590,7 +580,6 @@ class devless
         unset($newOutput['id'], $newOutput['devless_user_id'], $newOutput['users_id']);
         return $newOutput;
     }
-
     public function addExtraUserDetails($extraDetails)
     {
         $service = new service();
@@ -601,6 +590,7 @@ class devless
             $value = array_values($extraDetails[$i]);
             $flattendDetails[$key[0]] = $value[0];
         }
+        // die(var_dump($extraDetails));
         $output = DS::service('devless', 'user_profile', $service)->addData([$flattendDetails]);
         if ($output['status_code'] != 609) {
 
@@ -611,7 +601,6 @@ class devless
         unset($flattendDetails['users_id'], $flattendDetails['devless_user_id']);
         return $flattendDetails;
     }
-
     public function editExtraUserDetails($extraDetails)
     {
         $service = new service();
@@ -628,7 +617,6 @@ class devless
         }
         $id = $flattendDetails['users_id'];
         unset($flattendDetails['users_id']);
-
         $output = DS::service('devless', 'user_profile', $service)->where('users_id', $id)->update($flattendDetails);
         if ($output['status_code'] != 619) {
             return Helper::interrupt(629, $output['message']);
