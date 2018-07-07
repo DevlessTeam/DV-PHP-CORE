@@ -236,7 +236,7 @@ class devless
 
     public function force_addData($serviceName, $table, $data)
     {
-        $output = \DB::table($serviceName . '_' . $table)->update($data);
+        $output = \DB::table($serviceName . '_' . $table)->insert($data);
         return ($output) ? ['status_code' => 609, 'message' => 'Data has been added to table successfully', 'payload' => []] :
         ['status_code' => 700, 'message' => 'Data could not be added', 'payload' => [$output]];
 
