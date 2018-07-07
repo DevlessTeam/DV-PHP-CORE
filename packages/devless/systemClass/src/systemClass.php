@@ -233,6 +233,14 @@ class devless
         $output = DS::service($serviceName, $table, $service)->addData($data);
         return $output;
     }
+
+    public function force_addData($serviceName, $table, $data)
+    {
+        $output = \DB::table($serviceName . '_' . $table)->update($data);
+        return ($output) ? ['status_code' => 609, 'message' => 'Data has been added to table successfully', 'payload' => []] :
+        ['status_code' => 700, 'message' => 'Data could not be added', 'payload' => [$output]];
+
+    }
     /**
      * Get data from a service table `->import('devless')->beforeCreating()->queryData('service_name','table_name',["where"=>["id,1"]])->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $serviceName
@@ -278,9 +286,9 @@ class devless
         return $this->queryData($serviceName, $table, $queryParams, $getRelated);
     }
 
-    public function force_getData($service, $table, $queryParams = []) 
+    public function force_getData($service, $table, $queryParams = [])
     {
-        return \DB::table($service.'_'.$table)->get();
+        return \DB::table($service . '_' . $table)->get();
     }
 
     /**
@@ -301,8 +309,8 @@ class devless
     public function force_updateData($serviceName, $table, $whereKey, $whereValue, $data)
     {
         $output = \DB::table($serviceName . '_' . $table)->where($whereKey, $whereValue)->update($data);
-        return ($output)? ['status_code'=>619, 'message'=>'Table was updated successfully','payload'=>[]]:
-                ['status_code'=>620, 'message'=>'Table could not be created','payload'=>[]];
+        return ($output) ? ['status_code' => 619, 'message' => 'Table was updated successfully', 'payload' => []] :
+        ['status_code' => 620, 'message' => 'Table could not be created', 'payload' => []];
     }
     /**
      * delete record from a service table `->import('devless')->beforeCreating()->deleteData('test','sample', 1)->storeAs($output)->stopAndOutput(1000, "output", $output)`
