@@ -326,6 +326,14 @@ class devless
         $output = DS::service($serviceName, $table, $service)->where($key, $id)->delete();
         return $output;
     }
+
+    public function force_delete($serviceName, $table, $whereKey, $whereValue)
+    {
+        $output = \DB::table($serviceName . '_' . $table)->where($whereKey, $whereValue)->delete();
+        return ($output) ? ['status_code' => 636, 'message' => 'Data / table / field has been deleted', 'payload' => []] :
+        ['status_code' => 620, 'message' => 'Data could not be deleted', 'payload' => []];
+
+    }
     /**
      * get user profile by id `->import('devless')->beforeCreating()->getUserProfile(2)->storeAs($output)->stopAndOutput(1000, "output", $output)`
      * @param $id
