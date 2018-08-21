@@ -24,8 +24,7 @@ $service = new $payload['service_name']();
 <script  src="https://unpkg.com/monaco-editor@0.10.1/min/vs/loader.js"></script>
 
 <script>
-  require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@0.10.1/min/vs/' }});
-
+  require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@0.13.1/min/vs' }});
   require(['vs/editor/editor.main'], function() {
     window.editor = monaco.editor.create(document.getElementById('container'), {
       value:`<?=$service->getCode()?>`,
