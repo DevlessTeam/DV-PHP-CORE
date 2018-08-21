@@ -105,11 +105,15 @@ class devless
     public function resetPassword($token, $newPassword)
     {
         $userIDMeta = DS::getDump($token);
-        if (!$userIDMeta) {return false;}
+        if (!$userIDMeta) {
+            return false;
+        }
         $explosion = explode('_', $userIDMeta);
         $userId = $explosion[1];
         $output = $this->updateUserProfile($userId, '', $newPassword, '', '', '', '', '', '');
-        if ($output) {DS::destroyDump($token);}
+        if ($output) {
+            DS::destroyDump($token);
+        }
         return $output;
     }
     /**
@@ -239,7 +243,6 @@ class devless
         $output = \DB::table($serviceName . '_' . $table)->insert($data);
         return ($output) ? ['status_code' => 609, 'message' => 'Data has been added to table successfully', 'payload' => []] :
         ['status_code' => 700, 'message' => 'Data could not be added', 'payload' => [$output]];
-
     }
     /**
      * Get data from a service table `->import('devless')->beforeCreating()->queryData('service_name','table_name',["where"=>["id,1"]])->storeAs($output)->stopAndOutput(1000, "output", $output)`
@@ -288,7 +291,11 @@ class devless
 
     public function force_getData($service, $table, $queryParams = [])
     {
-        return \DB::table($service . '_' . $table)->get();
+        $queryBuilder = \DB::table($service . '_' . $table);
+        foreach ($queryParams as $query => $params) {
+            $queryBuilder->$query(...$params);
+        }
+        return $queryBuilder->get();
     }
 
     /**
@@ -299,16 +306,21 @@ class devless
      * @return mixed
      * @ACL private
      */
-    public function updateData($serviceName, $table, $whereKey, $whereValue, $data)
+    public function updateData($serviceName, $table, $whereKey, $whereValue, $data, $extraParams = [])
     {
         $service = new service();
         $output = DS::service($serviceName, $table, $service)->where($whereKey, $whereValue)->update($data);
         return $output;
     }
 
-    public function force_updateData($serviceName, $table, $whereKey, $whereValue, $data)
+    public function force_updateData($serviceName, $table, $whereKey, $whereValue, $data, $queryParams = [])
     {
-        $output = \DB::table($serviceName . '_' . $table)->where($whereKey, $whereValue)->update($data);
+        $queryBuilder = \DB::table($serviceName . '_' . $table)->where($whereKey, $whereValue);
+        foreach ($queryParams as $query => $params) {
+            $queryBuilder->$query(...$params);
+        }
+
+        $output = $queryBuilder->update($data);
         return ($output) ? ['status_code' => 619, 'message' => 'Table was updated successfully', 'payload' => []] :
         ['status_code' => 620, 'message' => 'Table could not be created', 'payload' => []];
     }
@@ -327,12 +339,16 @@ class devless
         return $output;
     }
 
-    public function force_delete($serviceName, $table, $whereKey, $whereValue)
+    public function force_delete($serviceName, $table, $whereKey, $whereValue, $queryParams = [])
     {
-        $output = \DB::table($serviceName . '_' . $table)->where($whereKey, $whereValue)->delete();
+        $queryBuilder = \DB::table($serviceName . '_' . $table)->where($whereKey, $whereValue);
+        foreach ($queryParams as $query => $params) {
+            $queryBuilder->$query(...$params);
+        }
+
+        $output = $queryBuilder->delete();
         return ($output) ? ['status_code' => 636, 'message' => 'Data / table / field has been deleted', 'payload' => []] :
         ['status_code' => 620, 'message' => 'Data could not be deleted', 'payload' => []];
-
     }
     /**
      * get user profile by id `->import('devless')->beforeCreating()->getUserProfile(2)->storeAs($output)->stopAndOutput(1000, "output", $output)`
@@ -396,7 +412,6 @@ class devless
             return $completeUserProfile;
         }
         return [];
-
     }
 
     /**
@@ -434,8 +449,12 @@ class devless
     public function toggleUserAccountState($value, $key)
     {
         $user = $this->getUserWhere($key, $value);
-        if (isset($user['status'])) {return [];}
-        if ($user['status'] == 0) {return $this->activateUserAccount($value, $key);}
+        if (isset($user['status'])) {
+            return [];
+        }
+        if ($user['status'] == 0) {
+            return $this->activateUserAccount($value, $key);
+        }
         return $this->deativateUserAccount($value, $key);
     }
 
@@ -451,7 +470,9 @@ class devless
     {
         $user = $this->getUserWhere($key, $value);
 
-        if (!isset($user['id'])) {return false;}
+        if (!isset($user['id'])) {
+            return false;
+        }
 
         return $this->updateUserProfile(
             $user['id'],
@@ -588,7 +609,9 @@ class devless
     {
         $service = new service();
         $output = DS::service('devless', 'user_profile', $service)->where('users_id', $id)->getData();
-        if (!isset($output['payload']['results'])) {return [];}
+        if (!isset($output['payload']['results'])) {
+            return [];
+        }
         $output = $output['payload']['results'];
         if (!isset($output[0])) {
             return [];
@@ -610,10 +633,8 @@ class devless
         // die(var_dump($extraDetails));
         $output = DS::service('devless', 'user_profile', $service)->addData([$flattendDetails]);
         if ($output['status_code'] != 609) {
-
             DB::table('users')->where('id', $flattendDetails['users_id'])->delete();
             return Helper::interrupt(644, $output['message']);
-
         }
         unset($flattendDetails['users_id'], $flattendDetails['devless_user_id']);
         return $flattendDetails;
