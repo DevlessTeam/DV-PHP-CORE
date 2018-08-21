@@ -379,7 +379,7 @@ class devless
 
     public function searchUserProfile($input)
     {
-        return \DB::table('users')
+        $profile = \DB::table('users')
             ->where('status', 1)
             ->where(function ($query) use ($input) {
                 $query->where('email', $input)
@@ -388,6 +388,15 @@ class devless
                     ->orWhere('first_name', $input)
                     ->orWhere('last_name', $input);
             })->get();
+
+        if ($profile) {
+            $userProfile = (array) $profile[0];
+            $extraDetails = $this->getExtraUserDetails($userProfile['id']);
+            $completeUserProfile = $userProfile + $extraDetails;
+            return $completeUserProfile;
+        }
+        return [];
+
     }
 
     /**
