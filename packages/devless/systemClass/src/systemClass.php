@@ -387,6 +387,34 @@ class devless
     }
 
     /**
+     * get user profile using a field `->import('devless')->beforeCreating()->getUserUsingExtraParamsWhere(["location" => "foo"])->storeAs($output)->stopAndOutput(1000, "output", $output)`
+     * @param $where
+     * @return array
+     * @ACL private
+     */
+    public function getUserUsingExtraParamsWhere($where)
+    {
+        (!is_array($where)) ? Helper::interrupt(641) : false;
+
+        if (Schema::hasTable('devless_user_profile')) {
+            $excepts = ['password', 'role', 'session_token', 'session_time', 'devless_user_id', 'users_id', 'updated_at', 'created_at'];
+            $profiles = DB::table('users')
+                ->join('devless_user_profile', 'users.id', '=', 'devless_user_profile.users_id')
+                ->where($where)->get();
+            if ($profiles) {
+                foreach ($profiles as $profile) {
+                    foreach ($excepts as $except) {
+                        unset($profile->{$except});
+                    }
+                }
+                return $profiles;
+            }
+            return [];
+        }
+        return Helper::interrupt(617, 'Table user_profile isn\'t associated with the DevLess module');
+    }
+
+    /**
      * Search for users users were the input matches either username, phone number, first name , last name or emails ->import('devless')-> beforeQuerying()->searchUserProfile("3284324343")>storeAs($users)->stopAndOutput(1000, 'list of users',$users)`
      * @param $input
      * @return array
