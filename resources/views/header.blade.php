@@ -1,6 +1,7 @@
 <?php
 use App\Helpers\DataStore;
   $app = DataStore::instanceInfo()['app'];
+  $email = isset(DataStore::instanceInfo()['admin']->email) ? DataStore::instanceInfo()['admin']->email : "";
  ?>
 
 <!DOCTYPE html>
@@ -67,7 +68,7 @@ mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
   mixpanel.track(JSON.stringify({
     url: location.origin,
     version: "<?php echo config('devless')['version']; ?>",
-    email: "<?php echo DataStore::instanceInfo()['admin']->email; ?>"
+    email: "<?php echo $email; ?>"
   }));
    function registerUser(){
      email =  document.getElementsByName('email')[0].value;
