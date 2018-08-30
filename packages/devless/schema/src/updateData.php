@@ -63,7 +63,7 @@ trait updateData
         if ($outcome) {
             return Response::respond(
                 619,
-                'table '.$table_name.' updated successfuly'
+                'table '.$table_name.' updated successfully'
             );
         }
         Helper::interrupt(629, 'Table '.$table_name.' could not be updated');
