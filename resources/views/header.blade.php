@@ -1,6 +1,7 @@
 <?php
 use App\Helpers\DataStore;
   $app = DataStore::instanceInfo()['app'];
+
  ?>
 
 <!DOCTYPE html>
@@ -64,11 +65,7 @@ use App\Helpers\DataStore;
 for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
 mixpanel.init("ce7dd2fc4b5246ae1fa7c9d00cec362a");</script><!-- end Mixpanel -->
 <script type="text/javascript">
-  mixpanel.track(JSON.stringify({
-    url: location.origin,
-    version: "<?php echo config('devless')['version']; ?>",
-    email: "<?php echo DataStore::instanceInfo()['admin']->email; ?>"
-  }));
+  mixpanel.track(location.origin);
    function registerUser(){
      email =  document.getElementsByName('email')[0].value;
      userObj = {}
