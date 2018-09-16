@@ -11,7 +11,6 @@ trait devlessAuth
     {
         $this->execOrNot = $this->isCurrentDBAction = ($this->EVENT['request_phase'] == 'before'
             && $this->getAuthAction() == 'login');
-
         return $this;
     }
 
