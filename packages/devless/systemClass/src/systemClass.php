@@ -381,9 +381,30 @@ class devless
      * @return array
      * @ACL private
      */
-    public function getUserWhere($key, $value)
+    public function getUserWhere($key, $value, $table="users")
     {
-        return $this->getUserProfile($value, $key);
+        if($table == "users") {
+            return $this->getUserProfile($value, $key);
+        }
+
+        $service = new service();
+        $output = DS::service('devless', 'user_profile', $service)->where($key, $value)->getData();
+        if (!isset($output['payload']['results'])) {
+            return [];
+        }
+        $output = $output['payload']['results'];
+        if (!isset($output[0])) {
+            return [];
+        }
+        
+        $newOutput = (array) $output;
+        
+        $profiles = [];
+
+        foreach ($newOutput as $user) {
+            array_push($profiles, $this->getUserProfile($user->users_id));
+        }
+        return $profiles;
     }
 
     /**
