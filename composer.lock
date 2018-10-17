@@ -678,7 +678,7 @@
         },
         {
             "name": "devless/json-rpc",
-            "version": "@stable",
+            "version": "1.2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fguillot/JsonRPC.git",
