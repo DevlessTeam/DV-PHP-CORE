@@ -676,14 +676,6 @@
             ],
             "time": "2018-01-09T20:05:19+00:00"
         },
-        {
-            "name": "devless/json-rpc",
-            "version": "1.2.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/DevlessTeam/json-rpc.git",
-                "reference": "fa075cc89c1ae5f0c4123d27772e5caeac045946"
-            },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/fguillot/JsonRPC/zipball/fa075cc89c1ae5f0c4123d27772e5caeac045946",

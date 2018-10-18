@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+include config('devless')['json_rpc'].'/Server.php';
 use App\Helpers\DevlessHelper;
 use JsonRPC\Server;
+
 use App\Helpers\Helper;
 use App\Helpers\Response;
 
@@ -30,7 +32,6 @@ class RpcController extends Controller
          $serviceMethodPath = (strtolower($service) == config('devless')['name']) ?
                             config('devless')['system_class'] :
                             config('devless')['views_directory'].$service.'/ActionClass.php';
-
         if (file_exists($serviceMethodPath)) {
             include_once $serviceMethodPath;
         } else {
