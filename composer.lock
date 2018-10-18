@@ -784,14 +784,6 @@
             ],
             "time": "2014-09-09T13:34:57+00:00"
         },
-        {
-            "name": "fguillot/json-rpc",
-            "version": "v1.2.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fguillot/JsonRPC.git",
-                "reference": "ea2720b13e986bbf23e832b135c84c91ead7259f"
-            },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/fguillot/JsonRPC/zipball/ea2720b13e986bbf23e832b135c84c91ead7259f",

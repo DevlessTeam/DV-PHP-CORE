@@ -9,7 +9,6 @@
         "laravel/framework": "5.1.*",
         "jeroen-g/laravel-packager": "^1.4",
         "alchemy/zippy": "^0.3.5",
-        "fguillot/json-rpc": "@stable",
         "devless/php-sdk": "v1.0.0",
         "doctrine/dbal": "^2.5"
     },
