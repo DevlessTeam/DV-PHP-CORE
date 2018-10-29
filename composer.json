@@ -27,6 +27,7 @@
         "psr-4": {
             "App\\": "app/",
             "Devless\\Schema\\": "packages/devless/schema/src",
+            "JsonRPC\\": "packages/JsonRPC/JsonRPC/src",
             "Devless\\Script\\": "packages/devless/script/src",
             "Devless\\RulesEngine\\": "packages/devless/rulesengine/src",
             "Devless\\SDK\\": "devless/php-sdk/src"
