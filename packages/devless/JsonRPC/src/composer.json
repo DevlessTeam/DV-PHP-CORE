@@ -1,0 +1,13 @@
+{
+    "name": "jsonRPC/jsonRPC",
+    "description": "All devless external libs",
+    "license": "apache",
+    "authors": [
+        {
+            "name": "eddymens",
+            "email": "edmond@devless.io"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

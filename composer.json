@@ -5,11 +5,10 @@
     "license": "Apache",
     "type": "project",
     "require": {
-        "php": "7.0.27",
+        "php": "5.6.30",
         "laravel/framework": "5.1.*",
         "jeroen-g/laravel-packager": "^1.4",
         "alchemy/zippy": "^0.3.5",
-        "fguillot/json-rpc": "@stable",
         "devless/php-sdk": "v1.0.0",
         "doctrine/dbal": "^2.5"
     },
@@ -28,6 +27,7 @@
         "psr-4": {
             "App\\": "app/",
             "Devless\\Schema\\": "packages/devless/schema/src",
+            "JsonRPC\\": "packages/JsonRPC/JsonRPC/src",
             "Devless\\Script\\": "packages/devless/script/src",
             "Devless\\RulesEngine\\": "packages/devless/rulesengine/src",
             "Devless\\SDK\\": "devless/php-sdk/src"
