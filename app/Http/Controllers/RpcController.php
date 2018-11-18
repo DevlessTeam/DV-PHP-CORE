@@ -38,7 +38,6 @@ class RpcController extends Controller
         $class = new \ReflectionClass($service);
         DevlessHelper::rpcMethodAccessibility($class, $method);
         $server->getProcedureHandler()->withClassAndMethod($service, $service, $method);
-        return  Response::respond(637, '', json_decode($server->execute()));
         $output = json_decode($server->execute());
         unset($output->jsonrpc);
         if (isset($output->error)) {
@@ -54,7 +53,6 @@ class RpcController extends Controller
             $message = 'Invalid credentials provided';
             $payload = null;
         }
-        dd($status_code, $message, $payload);
         return Response::respond($status_code, $message, $payload);
     }
 }
