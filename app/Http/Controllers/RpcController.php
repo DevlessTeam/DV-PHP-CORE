@@ -32,7 +32,7 @@ class RpcController extends Controller
         if (file_exists($serviceMethodPath)) {
             include_once $serviceMethodPath;
         } else {
-            return Helper::interrupt(604, "The Service $service does not exist or you just misspelt it. Also be sure the service is set to active");
+            return Helper::interrupt(1001, "The Service $service does not exist or you just misspelt it. Also be sure the service is set to active");
         }
         $server = new Server(json_encode($edited_request, true));
         $class = new \ReflectionClass($service);
@@ -54,7 +54,7 @@ class RpcController extends Controller
             $message = 'Invalid credentials provided';
             $payload = null;
         }
-
+        dd($status_code, $message, $payload);
         return Response::respond($status_code, $message, $payload);
     }
 }
