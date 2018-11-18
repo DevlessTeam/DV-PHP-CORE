@@ -68,7 +68,8 @@ class devless
             $extraParams[]['users_id'] = $extraParams[]['devless_user_id'] = $output['profile']->id;
             $extProfile = $this->addExtraUserDetails($extraParams);
         }
-        return (array) $output + $extProfile;
+        $output['profile'] = ((array)$output['profile'])+ $extProfile;
+        return (array) $output;
     }
 
     /**
