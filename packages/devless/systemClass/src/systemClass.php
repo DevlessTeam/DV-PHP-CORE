@@ -184,8 +184,13 @@ class devless
         $payload = self::getSetParams($payload);
         $auth = $this->auth;
         $output = $auth->update_profile($payload);
+        $userObj = Helper::get_authenticated_user_cred(true);
+        if(! $userObj ) {
+            return false;
+        }
+        $userId = $userObj['id'];
         if ($extraParams) {
-            $extraParams[]['users_id'] = $output->id;
+            $extraParams[]['users_id'] = $userId;
         }
         $extraOutput = [];
         if (\Schema::hasTable('devless_user_profile')) {
