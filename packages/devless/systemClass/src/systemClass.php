@@ -184,7 +184,7 @@ class devless
         $payload = self::getSetParams($payload);
         $auth = $this->auth;
         $output = $auth->update_profile($payload);
-        $userObj = Helper::get_authenticated_user_cred(true);
+        $userObj = Helper::get_authenticated_user_cred(false);
         if(! $userObj ) {
             return false;
         }

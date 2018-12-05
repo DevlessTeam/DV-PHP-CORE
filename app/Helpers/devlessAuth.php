@@ -179,7 +179,8 @@ trait devlessAuth
 
                 $prepared_token = $this->set_session_token($token_payload, $user_data->id);
                 $profile = \DB::table('users')->where('id', $user_data->id)
-                    ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'role'])
+                    ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'role', 'created_at',
+                        'updated_at'])
                     ->first();
                 $user_obj = [
                     'profile' => $profile,
@@ -194,7 +195,7 @@ trait devlessAuth
                 if (isset($extra_profile[0])) {
                     $extra_profile = $extra_profile[0];
                 }
-                $user_obj['profile'] = (array) $user_obj['profile'] + (array)$extra_profile;
+                $user_obj['profile'] = (array) $user_obj['profile'] + (array) $extra_profile;
                 return $user_obj;
             } else {
                 return false;
@@ -242,7 +243,8 @@ trait devlessAuth
             }
             if ($user::where('id', $token['id'])->update($payload)) {
                 return \DB::table('users')->where('id', $token['id'])
-                    ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'status'])
+                    ->select(['username', 'first_name', 'last_name', 'phone_number', 'id', 'email', 'status', 'created_at',
+                        'updated_at'])
                     ->first();
             }
         }
