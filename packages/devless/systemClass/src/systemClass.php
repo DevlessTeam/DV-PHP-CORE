@@ -185,7 +185,7 @@ class devless
         $auth = $this->auth;
         $output = $auth->update_profile($payload);
         $userObj = Helper::get_authenticated_user_cred(false);
-        if(! $userObj ) {
+        if (!$userObj) {
             return false;
         }
         $userId = $userObj['id'];
@@ -221,7 +221,7 @@ class devless
     private static function getSetParams($payload)
     {
         foreach ($payload as $key => $value) {
-            if ($value == null) {
+            if ($value == null || $value == 'null') {
                 unset($payload[$key]);
             }
         }
@@ -660,6 +660,7 @@ class devless
         }
         $id = $flattendDetails['users_id'];
         unset($flattendDetails['users_id']);
+        $flattendDetails = self::getSetParams($flattendDetails);
         $output = DS::service('devless', 'user_profile', $service)->where('users_id', $id)->update($flattendDetails);
         if ($output['status_code'] != 619) {
             return Helper::interrupt(629, $output['message']);

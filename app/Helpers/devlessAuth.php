@@ -12,7 +12,6 @@ use Session;
 
 trait devlessAuth
 {
-
     public $expected_fields =
         [
         'email' => 'email',
@@ -168,7 +167,10 @@ trait devlessAuth
             }
             $correct_password =
             (Helper::compare_hash($password, $user_data->password)) ? true : false;
-            $user_data->session_token = $session_token = md5(uniqid(1, true));
+            $current_token = $this->get_session_token($user_data->id)[0]->session_token;
+            $new_token = ($current_token) ? $current_token : md5(uniqid(1, true));
+
+            $user_data->session_token = $session_token = $new_token;
 
             if ($correct_password && $user_data->save()) {
                 $token_payload =
@@ -293,7 +295,6 @@ trait devlessAuth
      */
     public function auth_fields_handler($fields, $user)
     {
-
         foreach ($fields as $field => $value) {
             $field = strtolower($field);
 
@@ -329,12 +330,26 @@ trait devlessAuth
         $secret = config('app')['key'];
 
         $payload = json_encode($payload);
-
         if (DB::table('users')->where('id', $user_id)->update(['session_time' => Helper::session_timestamp()])) {
             return $jwt->encode($payload, $secret);
         } else {
             return false;
         }
+    }
+
+    /**
+     * get session token.
+     *
+     * @param $user_id
+     *
+     * @return array
+     *
+     * @internal param type $request
+     */
+
+    public function get_session_token($user_id)
+    {
+        return DB::table('users')->where('id', $user_id)->get(['session_token']);
     }
 
     public function generate_email_verification_code($user_id)
