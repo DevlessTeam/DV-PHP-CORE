@@ -88,7 +88,7 @@ trait queryData
             null,
             [
             'results' => $results,
-            'properties' => ['count' => $total_count, 'current_count' => count($results)]
+            'properties' => ['total_count' => $total_count, 'current_count' => count($results)]
             ]
         );
     }
