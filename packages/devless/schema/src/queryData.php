@@ -58,7 +58,7 @@ trait queryData
             $related_fetch
         );
 
-        $count = eval('return $queried_results = ' . $complete_query . '->count();');
+        $count = eval('return $queried_results = ' . $count_query . '->count();');
         $queried_results = eval('return $queried_results = ' . $complete_query . '->get();');
 
         $queried_results = ($related_fetch) ? $related_fetch($queried_results) : $queried_results;
