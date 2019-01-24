@@ -3,8 +3,8 @@
 namespace Devless\Schema;
 
 use App\Helpers\Helper;
-use Illuminate\Http\Request;
 use App\Helpers\Response as Response;
+use Illuminate\Http\Request;
 
 trait queryData
 {
@@ -35,10 +35,10 @@ trait queryData
 
         $table_name = $this->devlessTableName($service_name, $payload['params']['table'][0]);
 
-        $base_query = '$db->table("'.$table_name.'")';
+        $base_query = '$db->table("' . $table_name . '")';
         $complete_query = $base_query;
-         ($payload['user_id'] !== '') ?
-        $complete_query = $base_query.'->where("devless_user_id",'.$payload['user_id'].')' : '';
+        ($payload['user_id'] !== '') ?
+        $complete_query = $base_query . '->where("devless_user_id",' . $payload['user_id'] . ')' : '';
 
         $complete_query = $this->set_query_options(
             $complete_query,
@@ -47,34 +47,41 @@ trait queryData
             $size_count,
             $related_fetch
         );
-        
-        $count = $db->table($table_name)->count();
-        
-        $queried_results = eval('return $queried_results = '.$complete_query.'->get();');
-    
-        $queried_results = ($related_fetch)? $related_fetch($queried_results):$queried_results;
-    
-        
-        $queried_results = (is_null($queried_results))?[]:$queried_results;
+        $count_payload = $payload;
+        unset($count_payload['params']['size']);
+        unset($count_payload['params']['offset']);
+        $count_query = $this->set_query_options(
+            $complete_query,
+            $count_payload,
+            $table_name,
+            $size_count,
+            $related_fetch
+        );
+
+        $count = eval('return $queried_results = ' . $complete_query . '->count();');
+        $queried_results = eval('return $queried_results = ' . $complete_query . '->get();');
+
+        $queried_results = ($related_fetch) ? $related_fetch($queried_results) : $queried_results;
+
+        $queried_results = (is_null($queried_results)) ? [] : $queried_results;
         return $this->respond_with_query_data($queried_results, $count);
     }
 
     private function set_query_options(&$complete_query, &$payload, $table_name, &$size_count, &$related_fetch)
     {
-
         $query_args_list = [
-                'related' => [&$complete_query, &$payload, $table_name, &$related_fetch],
-                'size' => [&$complete_query, &$payload, &$size_count, &$related_fetch],
+            'related' => [ & $complete_query, &$payload, $table_name, &$related_fetch],
+            'size' => [ & $complete_query, &$payload, &$size_count, &$related_fetch],
         ];
 
         unset($payload['params']['table']);
         foreach ($payload['params'] as $param_name => $param_value) {
-            (!isset($this->query_params[$param_name]))?Helper::interrupt(610, "Query parameter $param_name does not exist"):'';
-            
+            (!isset($this->query_params[$param_name])) ? Helper::interrupt(610, "Query parameter $param_name does not exist") : '';
+
             $param_name = $this->query_params[$param_name];
 
-            $query_args = ($param_name != 'related' && $param_name != 'size') ? [&$complete_query, &$payload] : $query_args_list[$param_name];
-            
+            $query_args = ($param_name != 'related' && $param_name != 'size') ? [ & $complete_query, &$payload] : $query_args_list[$param_name];
+
             $this->$param_name(...$query_args);
         }
 
@@ -87,8 +94,8 @@ trait queryData
             625,
             null,
             [
-            'results' => $results,
-            'properties' => ['total_count' => $total_count, 'current_count' => count($results)]
+                'results' => $results,
+                'properties' => ['total_count' => $total_count, 'current_count' => count($results)],
             ]
         );
     }
