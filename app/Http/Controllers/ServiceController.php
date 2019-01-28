@@ -175,7 +175,7 @@ class ServiceController extends Controller
     {
         $this->_devlessCheckHeaders($request);
         $serviceOutput = $this->resource($request, $service, $resource);
-        return response()->json($serviceOutput, 200, []);
+        return response()->json($serviceOutput, 200, [], JSON_NUMERIC_CHECK);
     }
     /**
      * Refer request to the right service and resource.
