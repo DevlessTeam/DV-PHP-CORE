@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Validator;
-use App\Service;
-use App\Helpers\Helper;
-use App\Helpers\DataStore;
-use Illuminate\Http\Request;
-use Devless\Schema\SchemaEdit;
-use Devless\Schema\DbHandler as Db;
 use App\Helpers\DevlessHelper as DLH;
+use App\Helpers\Helper;
 use App\Helpers\Response as Response;
+use App\Service;
+use Devless\Schema\DbHandler as Db;
+use Devless\Schema\SchemaEdit;
 use Devless\Script\ScriptHandler as script;
-use App\Http\Controllers\ViewController as DvViews;
+use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
@@ -52,8 +49,8 @@ class ServiceController extends Controller
     {
 
         $state = $this->create_service_from_request($request);
-        return ($state[0])? $this->edit($state[1]->id) :
-             redirect()->route('services.create')->with('errors', $state[1])->withInput();
+        return ($state[0]) ? $this->edit($state[1]->id) :
+        redirect()->route('services.create')->with('errors', $state[1])->withInput();
     }
     /**
      * Display the specified resource.
@@ -101,7 +98,7 @@ class ServiceController extends Controller
             if ($request->input('call_type') == 'solo') {
                 $script = $request->input('script');
                 $service->raw_script = $script;
-                $compiled_script  = (new script())->compile_script($script);
+                $compiled_script = (new script())->compile_script($script);
                 if (!$compiled_script['successful']) {
                     return Response::respond(1001, $compiled_script['error_message']);
                 }
@@ -112,7 +109,7 @@ class ServiceController extends Controller
             }
             $connection = [];
             $serviceFields = ['description', 'username', 'password',
-                'database', 'password', 'database', 'hostname', 'driver', 'port', 'active', ];
+                'database', 'password', 'database', 'hostname', 'driver', 'port', 'active'];
             foreach ($serviceFields as $serviceField) {
                 $service->{$serviceField} = $request->input($serviceField);
                 $connection[$serviceField] = $service->{$serviceField};
@@ -122,7 +119,7 @@ class ServiceController extends Controller
                 DLH::flash('Sorry connection could not be made to Database', 'error');
             } else {
                 ($service->save()) ? DLH::flash('Service updated successfully', 'success') :
-                    DLH::flash('Changes did not take effect', 'error');
+                DLH::flash('Changes did not take effect', 'error');
             }
         }
 
@@ -140,7 +137,7 @@ class ServiceController extends Controller
         $service = Service::findOrFail($id);
         $service_name = $service->name;
         $view_path = config('devless')['views_directory'];
-        $assets_path = $view_path.$service_name;
+        $assets_path = $view_path . $service_name;
 
         $table_meta = \App\TableMeta::where('service_id', $id)->orderBy('id', 'desc')->get();
 
@@ -152,11 +149,11 @@ class ServiceController extends Controller
         $payload['delete'] = '__onDelete';
         $execOutput = DLH::execOnServiceStar($payload);
         if (DLH::deleteDirectory($assets_path) && $service->delete()) {
-            DLH::flash('Service deleted successfully '.$execOutput, 'success');
+            DLH::flash('Service deleted successfully ' . $execOutput, 'success');
         } else {
             DLH::flash('Service could not be deleted', 'error');
         }
-        
+
         return redirect()->route('services.index');
     }
 
@@ -175,7 +172,7 @@ class ServiceController extends Controller
     {
         $this->_devlessCheckHeaders($request);
         $serviceOutput = $this->resource($request, $service, $resource);
-        return response()->json($serviceOutput, 200, [], JSON_NUMERIC_CHECK);
+        return response()->json($serviceOutput, 200, [], JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES);
     }
     /**
      * Refer request to the right service and resource.
@@ -193,7 +190,7 @@ class ServiceController extends Controller
     {
         $resource = strtolower($resource);
         ($internal_access == true) ? $method = $request['method'] :
-            $method = $request->method();
+        $method = $request->method();
         $method = strtoupper($method);
         // check method type and get payload accordingly
         if ($internal_access == true) {
@@ -201,7 +198,7 @@ class ServiceController extends Controller
         } else {
             $parameters = $this->get_params($method, $request, $resource);
         }
-        
+
         return $this->assign_to_service(
             $service_name,
             $resource,
@@ -241,7 +238,7 @@ class ServiceController extends Controller
             if (!sizeof($params) == 3) {
                 return ['status' => 'failed'];
             }
-            $se->addField($service, $table, $params[0], strtolower($params[1]), $params[2], $params[3]=null);
+            $se->addField($service, $table, $params[0], strtolower($params[1]), $params[2], $params[3] = null);
 
             return ['status' => 'ok'];
         };
