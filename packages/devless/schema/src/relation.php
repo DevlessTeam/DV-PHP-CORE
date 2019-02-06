@@ -55,9 +55,15 @@ trait relation
         $relatedData = [];
         foreach ($relIds as $table => $ids) {
             if($table == 'users') {
-                $userData = \DB::table('users')->whereIn('id', $ids)->get(); 
+                try {
+                    $userData = \DB::table('users')->whereIn('users.id', $ids)
+                     ->join('devless_user_profile', 'users.id', '=', 'devless_user_profile.users_id')->get(); 
+
+                } catch(\Exception $e) {
+                    dd($e);
+                }
                 $relatedData['users'] = collect($userData)->map(function ($item)  {
-                    return collect($item)->except(['password', 'session_token', 'session_time']);
+                    return collect($item)->except(['password', 'session_token', 'session_time', 'tags', 'settings', 'payment_token']);
                 });
             } else {
                 $relatedData[$table] = \DB::table($table)->whereIn('id', $ids)->get(); 
