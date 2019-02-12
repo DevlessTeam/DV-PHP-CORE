@@ -60,11 +60,11 @@ trait relation
                 try {
                     $userData = \DB::table('devless_user_profile')->whereIn('users.id', $ids)
                         ->join('users', 'users.id', '=', 'devless_user_profile.users_id')
-                        ->select('*', 'devless_user_profile.id as mm')->get();
+                        ->select('*', 'devless_user_profile.id as m')->get();
                 } catch (\Exception $e) {
                 }
                 $relatedData['users'] = collect($userData)->map(function ($item) {
-                    return collect($item)->except(['password', 'session_token', 'session_time', 'tags', 'settings', 'payment_token', 'users_id']);
+                    return collect($item)->except(['password', 'session_token', 'session_time', 'tags', 'settings', 'payment_token', 'users_id', 'm']);
                 });
             } else {
                 $relatedData[$table] = \DB::table($table)->whereIn('id', $ids)->get();
