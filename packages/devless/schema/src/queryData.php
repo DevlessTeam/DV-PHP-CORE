@@ -36,9 +36,9 @@ trait queryData
         $table_name = $this->devlessTableName($service_name, $payload['params']['table'][0]);
 
         $base_query = '$db->table("' . $table_name . '")';
-        $complete_query = $base_query;
+        $count_query = $complete_query = $base_query;
         ($payload['user_id'] !== '') ?
-        $complete_query = $base_query . '->where("devless_user_id",' . $payload['user_id'] . ')' : '';
+        $count_query = $complete_query = $base_query . '->where("devless_user_id",' . $payload['user_id'] . ')' : '';
 
         $complete_query = $this->set_query_options(
             $complete_query,
@@ -50,14 +50,17 @@ trait queryData
         $count_payload = $payload;
         unset($count_payload['params']['size']);
         unset($count_payload['params']['offset']);
+
+        unset($count_payload['ex_params']['offset']);
+        unset($count_payload['ex_params']['size']);
+
         $count_query = $this->set_query_options(
-            $complete_query,
+            $count_query,
             $count_payload,
             $table_name,
             $size_count,
             $related_fetch
         );
-
         $count = eval('return $queried_results = ' . $count_query . '->count();');
         $queried_results = eval('return $queried_results = ' . $complete_query . '->get();');
 
